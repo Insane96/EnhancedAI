@@ -1,0 +1,12 @@
+{
+  "creeper_cena_fuse": {
+    "category": "hostile",
+    "subtitle": "enhancedai.subtitle.creeper_cena_fuse",
+    "sounds": [ "enhancedai:creeper_cena_fuse" ]
+  },
+  "creeper_cena_explode": {
+    "category": "hostile",
+    "subtitle": "enhancedai.subtitle.creeper_cena_explode",
+    "sounds": [ "enhancedai:creeper_cena_explode" ]
+  }
+}
