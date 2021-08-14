@@ -10,6 +10,7 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.RangedBowAttackGoal;
 import net.minecraft.entity.monster.AbstractSkeletonEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -18,23 +19,29 @@ import java.util.ArrayList;
 @Label(name = "Skeleton Shoot", description = "Skeletons are more precise when shooting, can hit a target from 64 blocks and try to stay away from the target.")
 public class SkeletonAIFeature extends Feature {
 
-	//private final ForgeConfigSpec.ConfigValue<Double> spammerChanceConfig;
+	private final ForgeConfigSpec.ConfigValue<Double> avoidPlayerChanceConfig;
+	private final ForgeConfigSpec.ConfigValue<Double> arrowInaccuracyConfig;
 
-	//public double spammerChance = 0.01d;
+	public double avoidPlayerChance = 1d;
+	public double arrowInaccuracy = 0;
 
 	public SkeletonAIFeature(Module module) {
 		super(Config.builder, module);
-		/*Config.builder.comment(this.getDescription()).push(this.getName());
-		spammerChanceConfig = Config.builder
-				.comment("Chance for a Skeleton to spawn as a spammer")
-				.defineInRange("Spammer chance", spammerChance, 0d, 1d);
-		Config.builder.pop();*/
+		Config.builder.comment(this.getDescription()).push(this.getName());
+		avoidPlayerChanceConfig = Config.builder
+				.comment("Chance for a Skeleton to spawn with the ability to avoid the player")
+				.defineInRange("Avoid Player chance", this.avoidPlayerChance, 0d, 1d);
+		arrowInaccuracyConfig = Config.builder
+				.comment("How much inaccuracy does the arrow fired by skeletons have. Vanilla skeletons have 10/6/2 inaccuracy in easy/normal/hard difficulty.")
+				.defineInRange("Arrow Inaccuracy", this.arrowInaccuracy, 0d, 30d);
+		Config.builder.pop();
 	}
 
 	@Override
 	public void loadConfig() {
 		super.loadConfig();
-		//spammerChance = spammerChanceConfig.get();
+		this.avoidPlayerChance = this.avoidPlayerChanceConfig.get();
+		this.arrowInaccuracy = this.arrowInaccuracyConfig.get();
 	}
 
 	//TODO Zombies with Ender Pearls
@@ -58,8 +65,9 @@ public class SkeletonAIFeature extends Feature {
 		AIRangedBowAttackGoal<AbstractSkeletonEntity> rangedBowAttackGoal = new AIRangedBowAttackGoal<>(skeleton, 1.0d, 20, 64.0f);
 		skeleton.goalSelector.addGoal(2, rangedBowAttackGoal);
 
-		AIAvoidEntityGoal<PlayerEntity> avoidEntityGoal = new AIAvoidEntityGoal<>(skeleton, PlayerEntity.class, 12.0f, 1.8d, 1.4d);
-		//avoidEntityGoal.setAlwaysRun(true);
-		skeleton.goalSelector.addGoal(1, avoidEntityGoal);
+		if (skeleton.world.rand.nextDouble() < this.avoidPlayerChance) {
+			AIAvoidEntityGoal<PlayerEntity> avoidEntityGoal = new AIAvoidEntityGoal<>(skeleton, PlayerEntity.class, 12.0f, 1.8d, 1.4d);
+			skeleton.goalSelector.addGoal(1, avoidEntityGoal);
+		}
 	}
 }

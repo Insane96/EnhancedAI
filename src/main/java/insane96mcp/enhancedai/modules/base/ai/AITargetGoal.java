@@ -131,7 +131,7 @@ public abstract class AITargetGoal extends Goal {
 	 */
 	private boolean canEasilyReach(LivingEntity target) {
 		this.targetSearchDelay = 10 + this.goalOwner.getRNG().nextInt(5);
-		Path path = this.goalOwner.getNavigator().getPathToEntity(target, 0);
+		Path path = this.goalOwner.getNavigator().pathfind(target, 0);
 		if (path == null) {
 			return false;
 		} else {

@@ -1,7 +1,7 @@
 package insane96mcp.enhancedai.setup;
 
 import insane96mcp.enhancedai.EnhancedAI;
-import insane96mcp.enhancedai.base.Modules;
+import insane96mcp.enhancedai.modules.Modules;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;

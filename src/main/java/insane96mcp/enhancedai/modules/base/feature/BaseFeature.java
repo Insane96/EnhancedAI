@@ -8,11 +8,11 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@Label(name = "Base", description = "Disabling this has no effect. It's required for the mod to work.")
+@Label(name = "Base")
 public class BaseFeature extends Feature {
 
 	public BaseFeature(Module module) {
-		super(Config.builder, module);
+		super(Config.builder, module, true, false);
 		//Config.builder.comment(this.getDescription()).push(this.getName());
 		//Config.builder.pop();
 	}

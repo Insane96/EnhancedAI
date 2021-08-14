@@ -33,7 +33,6 @@ public class AvoidExplosionsFeature extends Feature {
 
 		CreatureEntity creatureEntity = (CreatureEntity) event.getEntity();
 
-		//TODO skeletons run away if too near the player
 		/*boolean hasTargetGoal = false;
 
 		ArrayList<Goal> goalsToRemove = new ArrayList<>();

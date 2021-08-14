@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.base;
+package insane96mcp.enhancedai.modules;
 
 import insane96mcp.enhancedai.modules.base.BaseModule;
 import insane96mcp.enhancedai.modules.creeper.CreeperModule;

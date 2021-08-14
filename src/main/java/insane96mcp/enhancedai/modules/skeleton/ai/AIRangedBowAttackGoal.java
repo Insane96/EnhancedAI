@@ -14,7 +14,6 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 
 import java.util.EnumSet;
-import java.util.UUID;
 
 public class AIRangedBowAttackGoal<T extends MonsterEntity & IRangedAttackMob> extends Goal {
 	private final T entity;
@@ -26,8 +25,6 @@ public class AIRangedBowAttackGoal<T extends MonsterEntity & IRangedAttackMob> e
 	private boolean strafingClockwise;
 	private boolean strafingBackwards;
 	private int strafingTime = -1;
-
-	private final UUID RUN_FROM_TARGET_MODIFIER_UUID = UUID.fromString("16c35012-5150-40b5-ae4f-fd738ec3a638");
 
 	public AIRangedBowAttackGoal(T mob, double moveSpeedAmpIn, int attackCooldownIn, float maxAttackDistanceIn) {
 		this.entity = mob;
@@ -97,12 +94,15 @@ public class AIRangedBowAttackGoal<T extends MonsterEntity & IRangedAttackMob> e
 			} else {
 				--this.seeTime;
 			}
+			if (distanceFromTarget > (double)this.maxAttackDistance)
+				this.entity.getNavigator().tryMoveToEntityLiving(livingentity, this.moveSpeedAmp);
+			//else
+				//this.entity.getNavigator().clearPath();
 
-			if (!(distanceFromTarget > (double)this.maxAttackDistance) && this.seeTime >= 20) {
+			if (distanceFromTarget <= (double)this.maxAttackDistance && this.seeTime >= 20) {
 				//this.entity.getNavigator().clearPath();
 				++this.strafingTime;
 			} else {
-				//this.entity.getNavigator().tryMoveToEntityLiving(livingentity, this.moveSpeedAmp);
 				this.strafingTime = -1;
 			}
 
@@ -158,9 +158,6 @@ public class AIRangedBowAttackGoal<T extends MonsterEntity & IRangedAttackMob> e
 		double distanceY = target.getPosY() - entity.getPosY();
 		float f = distanceFactor / 20.0F;
 		f = (f * f + f * 2.0F) / 3.0F;
-		//TODO Reflection
-		//AbstractArrowEntity abstractarrowentity = entity.fireArrow(itemstack, distanceFactor);
-		//AbstractArrowEntity abstractarrowentity = (AbstractArrowEntity) Reflection.invokeWithReturn(Reflection.FIRE_ARROW, entity, itemstack, distanceFactor);
 		AbstractArrowEntity abstractarrowentity = ProjectileHelper.fireArrow(entity, itemstack, f);
 		if (entity.getHeldItemMainhand().getItem() instanceof net.minecraft.item.BowItem)
 			abstractarrowentity = ((net.minecraft.item.BowItem)entity.getHeldItemMainhand().getItem()).customArrow(abstractarrowentity);
@@ -173,7 +170,7 @@ public class AIRangedBowAttackGoal<T extends MonsterEntity & IRangedAttackMob> e
 		double d1 = yPos - abstractarrowentity.getPosY();
 		EnhancedAI.LOGGER.info(yPos + " " + d1 + " " + distanceXZ + " " + distanceY + " " + this.strafingTime + " " + this.strafingBackwards);
 		//abstractarrowentity.shoot(d0, d1 + distanceXZ * (double)0.2F, d2, 1.6F, (float)(14 - entity.world.getDifficulty().getId() * 4));
-		abstractarrowentity.shoot(d0, d1 + distanceXZ * 0.2d, d2, f * 1.2f + ((float)distance / 32f) + (float)Math.max(distanceY / 48d, 0f), 0);
+		abstractarrowentity.shoot(d0, d1 + distanceXZ * 0.2d, d2, f * 1.1f + ((float)distance / 32f) + (float)Math.max(distanceY / 48d, 0f), 0);
 		//abstractarrowentity.setGlowing(true);
 		entity.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (entity.getRNG().nextFloat() * 0.4F + 0.8F));
 		entity.world.addEntity(abstractarrowentity);

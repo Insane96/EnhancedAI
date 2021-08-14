@@ -59,7 +59,7 @@ public class AINearestAttackableTargetGoal<T extends LivingEntity> extends Targe
 
 	protected void findNearestTarget() {
 		if (this.targetClass != PlayerEntity.class && this.targetClass != ServerPlayerEntity.class) {
-			this.nearestTarget = this.goalOwner.world.func_225318_b(this.targetClass, this.targetEntitySelector, this.goalOwner, this.goalOwner.getPosX(), this.goalOwner.getPosYEye(), this.goalOwner.getPosZ(), this.getTargetableArea(this.getTargetDistance()));
+			this.nearestTarget = this.goalOwner.world.getClosestEntity(this.targetClass, this.targetEntitySelector, this.goalOwner, this.goalOwner.getPosX(), this.goalOwner.getPosYEye(), this.goalOwner.getPosZ(), this.getTargetableArea(this.getTargetDistance()));
 		}
 		else {
 			this.nearestTarget = this.goalOwner.world.getClosestPlayer(this.targetEntitySelector, this.goalOwner, this.goalOwner.getPosX(), this.goalOwner.getPosYEye(), this.goalOwner.getPosZ());
@@ -85,6 +85,6 @@ public class AINearestAttackableTargetGoal<T extends LivingEntity> extends Targe
 
 	public void setXray(boolean xray) {
 		this.xray = xray;
-		this.targetEntitySelector.setLineOfSiteRequired();
+		this.targetEntitySelector.setIgnoresLineOfSight();
 	}
 }
