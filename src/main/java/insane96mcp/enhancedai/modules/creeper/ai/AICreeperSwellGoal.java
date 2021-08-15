@@ -41,7 +41,7 @@ public class AICreeperSwellGoal extends Goal {
 		}
 
 		return this.swellingCreeper.getCreeperState() > 0 ||
-				ignoreWalls && target != null && Math.sqrt(this.swellingCreeper.getDistanceSq(target)) < this.explosionSize * 1.5d ||
+				ignoreWalls && target != null && this.swellingCreeper.getDistanceSq(target) < (this.explosionSize * 1.5d * this.explosionSize * 1.5d) ||
 				target != null && this.swellingCreeper.getDistance(target) < this.explosionSize;
 	}
 
@@ -71,7 +71,7 @@ public class AICreeperSwellGoal extends Goal {
 			this.swellingCreeper.setCreeperState(-1);
 		//else if (this.swellingCreeper.getNavigator().getPath() != null && this.swellingCreeper.getNavigator().getPath().isFinished())
 			//this.swellingCreeper.setCreeperState(1);
-		else if (this.swellingCreeper.getDistance(this.creeperAttackTarget) > this.explosionSize * 2)
+		else if (this.swellingCreeper.getDistanceSq(this.creeperAttackTarget) > (this.explosionSize * 2d * this.explosionSize * 2d))
 			this.swellingCreeper.setCreeperState(-1);
 		else if (!this.swellingCreeper.getEntitySenses().canSee(this.creeperAttackTarget) && !ignoreWalls)
 			this.swellingCreeper.setCreeperState(-1);
