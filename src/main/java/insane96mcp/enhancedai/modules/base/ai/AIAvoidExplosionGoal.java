@@ -42,7 +42,7 @@ public class AIAvoidExplosionGoal extends Goal {
 			do {
 				vector3d = RandomPositionGenerator.findRandomTargetBlockAwayFrom(this.entity, 16, 7, this.avoidTarget.getPositionVec());
 				t++;
-			} while (vector3d == null && t < 10);
+			} while (vector3d == null && t < 5);
 			if (vector3d == null)
 				return false;
 			this.path = this.navigation.pathfind(vector3d.x, vector3d.y, vector3d.z, 0);

@@ -20,7 +20,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
 
-@Label(name = "Creeper Swell", description = "Various changes to Creepers exploding.")
+@Label(name = "Creeper Swell", description = "Various changes to Creepers exploding. Ignoring Walls, Walking Fuse and smarter exploding based off explosion size")
 public class CreeperAIFeature extends Feature {
 
 	private final ForgeConfigSpec.ConfigValue<Double> cenaChanceConfig;
@@ -30,8 +30,8 @@ public class CreeperAIFeature extends Feature {
 	private final ForgeConfigSpec.ConfigValue<Boolean> tntLikeConfig;
 
 	public double cenaChance = 0.01d;
-	public double walkingFuseChance = 0.05d;
-	public double ignoreWalls = 0.05d;
+	public double walkingFuseChance = 0.1d;
+	public double ignoreWalls = 0.1d;
 	//public double breach = 0.05;
 	public boolean tntLike = false;
 
