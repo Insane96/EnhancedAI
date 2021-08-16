@@ -7,9 +7,11 @@ import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.goal.PrioritizedGoal;
 import net.minecraft.entity.ai.goal.RangedBowAttackGoal;
 import net.minecraft.entity.monster.AbstractSkeletonEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Items;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -55,17 +57,22 @@ public class SkeletonAIFeature extends Feature {
 
 		AbstractSkeletonEntity skeleton = (AbstractSkeletonEntity) event.getEntity();
 
+		boolean hasRangedGoal = false;
 		ArrayList<Goal> goalsToRemove = new ArrayList<>();
-		skeleton.goalSelector.goals.forEach(prioritizedGoal -> {
-			if (prioritizedGoal.getGoal() instanceof RangedBowAttackGoal)
-				goalsToRemove.add(prioritizedGoal.getGoal());
-		});
+		for (PrioritizedGoal pGoal : skeleton.goalSelector.goals) {
+			if (pGoal.getGoal() instanceof RangedBowAttackGoal) {
+				hasRangedGoal = true;
+				goalsToRemove.add(pGoal.getGoal());
+			}
+		}
 
-		goalsToRemove.forEach(skeleton.goalSelector::removeGoal);
-		AIRangedBowAttackGoal<AbstractSkeletonEntity> rangedBowAttackGoal = new AIRangedBowAttackGoal<>(skeleton, 1.0d, 20, 64.0f);
-		skeleton.goalSelector.addGoal(2, rangedBowAttackGoal);
+		if (hasRangedGoal) {
+			goalsToRemove.forEach(skeleton.goalSelector::removeGoal);
+			AIRangedBowAttackGoal<AbstractSkeletonEntity> rangedBowAttackGoal = new AIRangedBowAttackGoal<>(skeleton, 1.0d, 20, 64.0f);
+			skeleton.goalSelector.addGoal(2, rangedBowAttackGoal);
+		}
 
-		if (skeleton.world.rand.nextDouble() < this.avoidPlayerChance) {
+		if (skeleton.world.rand.nextDouble() < this.avoidPlayerChance && skeleton.getHeldItemMainhand().getItem() == Items.BOW) {
 			AIAvoidEntityGoal<PlayerEntity> avoidEntityGoal = new AIAvoidEntityGoal<>(skeleton, PlayerEntity.class, 12.0f, 1.8d, 1.4d);
 			skeleton.goalSelector.addGoal(1, avoidEntityGoal);
 		}
