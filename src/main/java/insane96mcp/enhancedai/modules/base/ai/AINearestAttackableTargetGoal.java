@@ -18,7 +18,7 @@ public class AINearestAttackableTargetGoal<T extends LivingEntity> extends Targe
 	protected int targetChance;
 	protected LivingEntity nearestTarget;
 	/** This filter is applied to the Entity search. Only matching entities will be targeted. */
-	protected EntityPredicate targetEntitySelector;
+	public EntityPredicate targetEntitySelector;
 
 	private boolean xray;
 

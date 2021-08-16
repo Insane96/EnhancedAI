@@ -101,6 +101,13 @@ public class TargetingFeature extends Feature {
 			ModifiableAttributeInstance followRangeAttribute = mobEntity.getAttribute(Attributes.FOLLOW_RANGE);
 			if (followRangeAttribute != null) {
 				followRangeAttribute.setBaseValue(this.followRange);
+
+				for (PrioritizedGoal pGoal : mobEntity.targetSelector.goals) {
+					if (pGoal.getGoal() instanceof AINearestAttackableTargetGoal) {
+						AINearestAttackableTargetGoal nearestAttackableTargetGoal = (AINearestAttackableTargetGoal) pGoal.getGoal();
+						nearestAttackableTargetGoal.targetEntitySelector.setDistance(mobEntity.getAttributeValue(Attributes.FOLLOW_RANGE));
+					}
+				}
 			}
 		}
 	}
