@@ -90,7 +90,7 @@ public class TargetingFeature extends Feature {
 
 		goalsToRemove.forEach(mobEntity.goalSelector::removeGoal);
 
-		AINearestAttackableTargetGoal<PlayerEntity> targetPlayer = new AINearestAttackableTargetGoal<>(mobEntity, PlayerEntity.class, true, false, predicate);
+		AINearestAttackableTargetGoal<PlayerEntity> targetPlayer = new AINearestAttackableTargetGoal<PlayerEntity>(mobEntity, PlayerEntity.class, true, false, predicate);
 		if (RandomHelper.getDouble(mobEntity.world.rand, 0d, 1d) < this.xray)
 			targetPlayer.setXray(true);
 
