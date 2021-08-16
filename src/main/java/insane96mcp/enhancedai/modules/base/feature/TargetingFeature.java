@@ -7,6 +7,8 @@ import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.utils.RandomHelper;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.ai.goal.PrioritizedGoal;
@@ -21,15 +23,20 @@ import java.util.function.Predicate;
 @Label(name = "Targeting", description = "Change how mobs target players")
 public class TargetingFeature extends Feature {
 
+	private final ForgeConfigSpec.ConfigValue<Integer> followRangeConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> xrayConfig;
 	private final ForgeConfigSpec.ConfigValue<Boolean> instaTargetConfig;
 
+	public int followRange = 64;
 	public double xray = 0.25d;
 	public boolean instaTarget = true;
 
 	public TargetingFeature(Module module) {
 		super(Config.builder, module);
 		Config.builder.comment(this.getDescription()).push(this.getName());
+		followRangeConfig = Config.builder
+				.comment("How far away can the mobs see the player. This overrides the vanilla value (16 for most mobs). Setting to 0 will leave the follow range as vanilla.")
+				.defineInRange("Follow Range Override", this.followRange, 0, 128);
 		xrayConfig = Config.builder
 				.comment("Chance for a mob to be able to see players through blocks.")
 				.defineInRange("XRay Chance", xray, 0d, 1d);
@@ -42,8 +49,9 @@ public class TargetingFeature extends Feature {
 	@Override
 	public void loadConfig() {
 		super.loadConfig();
-		xray = this.xrayConfig.get();
-		instaTarget = this.instaTargetConfig.get();
+		this.followRange = this.followRangeConfig.get();
+		this.xray = this.xrayConfig.get();
+		this.instaTarget = this.instaTargetConfig.get();
 	}
 
 	@SubscribeEvent
@@ -88,5 +96,12 @@ public class TargetingFeature extends Feature {
 
 		targetPlayer.setInstaTarget(this.instaTarget);
 		mobEntity.targetSelector.addGoal(2, targetPlayer);
+
+		if (followRange != 0) {
+			ModifiableAttributeInstance followRangeAttribute = mobEntity.getAttribute(Attributes.FOLLOW_RANGE);
+			if (followRangeAttribute != null) {
+				followRangeAttribute.setBaseValue(this.followRange);
+			}
+		}
 	}
 }
