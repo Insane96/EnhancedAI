@@ -26,13 +26,13 @@ public class CreeperAIFeature extends Feature {
 	private final ForgeConfigSpec.ConfigValue<Double> cenaChanceConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> walkingFuseConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> ignoreWallsConfig;
-	//private final ForgeConfigSpec.ConfigValue<Double> breachConfig;
+	private final ForgeConfigSpec.ConfigValue<Double> breachConfig;
 	private final ForgeConfigSpec.ConfigValue<Boolean> tntLikeConfig;
 
 	public double cenaChance = 0.01d;
 	public double walkingFuseChance = 0.1d;
 	public double ignoreWalls = 0.1d;
-	//public double breach = 0.05;
+	public double breach = 0.05;
 	public boolean tntLike = false;
 
 	public CreeperAIFeature(Module module) {
@@ -47,9 +47,9 @@ public class CreeperAIFeature extends Feature {
 		ignoreWallsConfig = Config.builder
 				.comment("Percentage chance for a Creeper to ignore walls while targeting a player. This means that a creeper will be able to explode if it's in the correct range from a player even if there's a wall between.")
 				.defineInRange("Ignore Walls Chance", ignoreWalls, 0d, 1d);
-		/*breachConfig = Config.builder
-				.comment("Percentage chance for a Creeper to breach walls.")
-				.defineInRange("Breach Chance", breach, 0d, 1d);*/
+		breachConfig = Config.builder
+				.comment("Breaching creepers will try to open an hole in the wall to let mobs in.")
+				.defineInRange("Breach Chance", breach, 0d, 1d);
 		tntLikeConfig = Config.builder
 				.comment("If true creepers will ignite if damaged by an explosion.")
 				.define("TNT Like", tntLike);
@@ -62,7 +62,7 @@ public class CreeperAIFeature extends Feature {
 		cenaChance = cenaChanceConfig.get();
 		walkingFuseChance = walkingFuseConfig.get();
 		ignoreWalls = ignoreWallsConfig.get();
-		//breach = breachConfig.get();
+		breach = breachConfig.get();
 		tntLike = tntLikeConfig.get();
 	}
 
@@ -93,8 +93,7 @@ public class CreeperAIFeature extends Feature {
 
 		CreeperEntity creeper = (CreeperEntity) explosion.getExploder();
 
-		CompoundNBT compoundNBT = new CompoundNBT();
-		creeper.writeAdditional(compoundNBT);
+		CompoundNBT compoundNBT = creeper.getPersistentData();
 		if (compoundNBT.getBoolean("ExplosionFire"))
 			explosion.causesFire = true;
 	}
@@ -118,8 +117,8 @@ public class CreeperAIFeature extends Feature {
 		goalsToRemove.forEach(creeper.goalSelector::removeGoal);
 
 		AICreeperSwellGoal swellGoal = new AICreeperSwellGoal(creeper);
-		swellGoal.setWalkingFuse(Math.random() < this.walkingFuseChance);
-		if (Math.random() < this.cenaChance) {
+		swellGoal.setWalkingFuse(creeper.world.rand.nextDouble() < this.walkingFuseChance);
+		if (creeper.world.rand.nextDouble() < this.cenaChance) {
 			creeper.setCustomName(new StringTextComponent("Creeper Cena"));
 			CompoundNBT compoundNBT = new CompoundNBT();
 			compoundNBT.putShort("Fuse", (short)34);
@@ -128,7 +127,8 @@ public class CreeperAIFeature extends Feature {
 			creeper.getPersistentData().putBoolean("ExplosionFire", true);
 			swellGoal.setCena(true);
 		}
-		swellGoal.setIgnoreWalls(Math.random() < this.ignoreWalls);
+		swellGoal.setIgnoreWalls(creeper.world.rand.nextDouble() < this.ignoreWalls);
+		swellGoal.setBreaching(creeper.world.rand.nextDouble() < this.breach);
 		creeper.goalSelector.addGoal(2, swellGoal);
 	}
 
