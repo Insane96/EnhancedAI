@@ -15,7 +15,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Label(name = "Skeleton Shoot", description = "Skeletons are more precise when shooting, can hit a target from 64 blocks and try to stay away from the target.")
+@Label(name = "Skeleton Shoot", description = "Skeletons are more precise when shooting and strafing is removed, can hit a target from 64 blocks and try to stay away from the target.")
 public class SkeletonAIFeature extends Feature {
 
 	private final ForgeConfigSpec.ConfigValue<Double> avoidPlayerChanceConfig;

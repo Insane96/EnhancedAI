@@ -142,7 +142,7 @@ public class AIRangedBowAttackGoal<T extends MonsterEntity & IRangedAttackMob> e
 				} else if (canSeeTarget) {
 					if (i >= 20) {
 						this.entity.resetActiveHand();
-						attackEntityWithRangedAttack(this.entity, livingentity, Math.min(20, i));
+						attackEntityWithRangedAttack(this.entity, livingentity, 20);
 						this.attackTime = this.attackCooldown;
 					}
 				}
