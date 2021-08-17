@@ -8,7 +8,7 @@ import insane96mcp.insanelib.base.Module;
 @Label(name = "Skeleton")
 public class SkeletonModule extends Module {
 
-	SkeletonAIFeature skeletonAIFeature;
+	public SkeletonAIFeature skeletonAIFeature;
 
 	public SkeletonModule() {
 		super(Config.builder);

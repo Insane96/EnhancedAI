@@ -28,7 +28,7 @@ public class TargetingFeature extends Feature {
 	private final ForgeConfigSpec.ConfigValue<Boolean> instaTargetConfig;
 
 	public int followRange = 64;
-	public double xray = 0.25d;
+	public double xray = 0.20d;
 	public boolean instaTarget = true;
 
 	public TargetingFeature(Module module) {

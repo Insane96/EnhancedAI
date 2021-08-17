@@ -1,15 +1,18 @@
 buildscript {
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
         jcenter()
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
+        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
@@ -54,6 +57,7 @@ minecraft {
             // You can set various levels here.
             // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
             property 'forge.logging.console.level', 'debug'
+            arg "-mixin.config=enhancedai.mixins.json"
 
             mods {
                 enhancedai {
@@ -71,6 +75,7 @@ minecraft {
             // "REGISTRIES": For firing of registry events.
             // "REGISTRYDUMP": For getting the contents of all registries.
             property 'forge.logging.markers', 'REGISTRIES'
+            arg "-mixin.config=enhancedai.mixins.json"
 
             // Recommended logging level for the console
             // You can set various levels here.
@@ -120,6 +125,10 @@ repositories {
     }
 }
 
+mixin {
+    add sourceSets.main, "enhancedai.refmap.json"
+}
+
 dependencies {
     // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
@@ -130,6 +139,7 @@ dependencies {
     compile fg.deobf("blank:InsaneLib:${lib_version}-mc${mc_version}")
     // compile "some.group:artifact:version:classifier"
     // compile "some.group:artifact:version"
+    annotationProcessor 'org.spongepowered:mixin:0.8:processor'
 
     // Real examples
     // compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
@@ -157,7 +167,8 @@ jar {
             "Implementation-Title": project.name,
             "Implementation-Version": "${mod_version}",
             "Implementation-Vendor" :"insane96mcp",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+            "MixinConfigs": "modid.mixins.json"
         ])
     }
 }

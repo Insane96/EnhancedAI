@@ -43,7 +43,7 @@ public class AIRangedBowAttackGoal<T extends MonsterEntity & IRangedAttackMob> e
 	 * method as well.
 	 */
 	public boolean shouldExecute() {
-		return this.entity.getAttackTarget() == null ? false : this.isBowInMainhand();
+		return this.entity.getAttackTarget() != null && this.isBowInMainhand();
 	}
 
 	protected boolean isBowInMainhand() {
