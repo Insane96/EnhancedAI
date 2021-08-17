@@ -1,11 +1,13 @@
 package insane96mcp.enhancedai.modules.creeper.ai;
 
+import insane96mcp.enhancedai.modules.creeper.utils.CreeperUtils;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.monster.CreeperEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
@@ -14,13 +16,13 @@ import java.util.EnumSet;
 
 public class AICreeperLaunchGoal extends Goal {
 
-	protected final CreeperEntity swellingCreeper;
+	protected final CreeperEntity launchingCreeper;
 	private LivingEntity creeperAttackTarget;
 
 	private int ticksBeforeLaunching;
 
 	public AICreeperLaunchGoal(CreeperEntity entitycreeperIn) {
-		this.swellingCreeper = entitycreeperIn;
+		this.launchingCreeper = entitycreeperIn;
 		this.setMutexFlags(EnumSet.of(Flag.MOVE));
 	}
 
@@ -29,33 +31,33 @@ public class AICreeperLaunchGoal extends Goal {
 	 * method as well.
 	 */
 	public boolean shouldExecute() {
-		LivingEntity target = this.swellingCreeper.getAttackTarget();
+		LivingEntity target = this.launchingCreeper.getAttackTarget();
 		if (target == null)
 			return false;
 
-		if (!this.swellingCreeper.getEntitySenses().canSee(target))
+		if (!this.launchingCreeper.getEntitySenses().canSee(target))
 			return false;
 
-		if (this.swellingCreeper.world.getBlockState(this.swellingCreeper.getPosition().up(3)).getBlock() != Blocks.AIR)
+		if (this.launchingCreeper.world.getBlockState(this.launchingCreeper.getPosition().up(3)).getBlock() != Blocks.AIR)
 			return false;
 
-		double yDistance = this.swellingCreeper.getPosY() - target.getPosY();
-		double d0 = target.getPosX() - this.swellingCreeper.getPosX();
-		double d2 = target.getPosZ() - this.swellingCreeper.getPosZ();
-		double xzDistance = d0 * d0 + d2 * d2;
+		double yDistance = this.launchingCreeper.getPosY() - target.getPosY();
+		double x = target.getPosX() - this.launchingCreeper.getPosX();
+		double z = target.getPosZ() - this.launchingCreeper.getPosZ();
+		double xzDistance = x * x + z * z;
 
-		return xzDistance < 32 * 32 && yDistance < 4 && this.swellingCreeper.isOnGround();
+		return xzDistance < activationDistance() && yDistance < CreeperUtils.getExplosionSize(this.launchingCreeper) * 2 && this.launchingCreeper.isOnGround();
 	}
 
 	/**
 	 * Execute a one shot task or start executing a continuous task
 	 */
 	public void startExecuting() {
-		this.swellingCreeper.getNavigator().clearPath();
-		this.creeperAttackTarget = this.swellingCreeper.getAttackTarget();
-		this.swellingCreeper.ignite();
-		double distance = this.swellingCreeper.getDistance(this.creeperAttackTarget);
-		ticksBeforeLaunching = (int) (10 + (32 - distance) / 2);
+		this.launchingCreeper.getNavigator().clearPath();
+		this.creeperAttackTarget = this.launchingCreeper.getAttackTarget();
+		this.launchingCreeper.ignite();
+		double distance = this.launchingCreeper.getDistance(this.creeperAttackTarget);
+		this.ticksBeforeLaunching = (int) Math.max((50 - distance) * 0.4d, 1);
 	}
 
 	public boolean shouldContinueExecuting() {
@@ -63,19 +65,22 @@ public class AICreeperLaunchGoal extends Goal {
 	}
 
 	public void tick() {
-		this.swellingCreeper.faceEntity(this.creeperAttackTarget, 30.0F, 30.0F);
+		this.launchingCreeper.faceEntity(this.creeperAttackTarget, 30.0F, 30.0F);
 		if (--ticksBeforeLaunching != 0)
 			return;
 
-		if (!this.swellingCreeper.world.isRemote)
-			for(ServerPlayerEntity serverplayerentity : ((ServerWorld) this.swellingCreeper.world).getPlayers())
-				((ServerWorld) this.swellingCreeper.world).spawnParticle(serverplayerentity, ParticleTypes.CLOUD, true, this.swellingCreeper.getPosX(), this.swellingCreeper.getPosY(), this.swellingCreeper.getPosZ(), 100, 0.5d, 0.5d, 0.5d, 0.2d);
-		double distanceY = this.creeperAttackTarget.getPosY() - this.swellingCreeper.getPosY();
-		double d0 = this.creeperAttackTarget.getPosX() - this.swellingCreeper.getPosX();
-		double d2 = this.creeperAttackTarget.getPosZ() - this.swellingCreeper.getPosZ();
+		if (!this.launchingCreeper.world.isRemote)
+			for(ServerPlayerEntity serverplayerentity : ((ServerWorld) this.launchingCreeper.world).getPlayers()) {
+				((ServerWorld) this.launchingCreeper.world).spawnParticle(serverplayerentity, ParticleTypes.CLOUD, true, this.launchingCreeper.getPosX(), this.launchingCreeper.getPosY(), this.launchingCreeper.getPosZ(), 100, 0.5d, 0.5d, 0.5d, 0.2d);
+			}
+
+		this.launchingCreeper.playSound(SoundEvents.ENTITY_FIREWORK_ROCKET_LAUNCH, 6.0f, 0.5f);
+		double distanceY = this.creeperAttackTarget.getPosY() - this.launchingCreeper.getPosY();
+		double d0 = this.creeperAttackTarget.getPosX() - this.launchingCreeper.getPosX();
+		double d2 = this.creeperAttackTarget.getPosZ() - this.launchingCreeper.getPosZ();
 		double distanceXZ = MathHelper.sqrt(d0 * d0 + d2 * d2);
-		Vector3d motion = new Vector3d(d0 * 0.16d, distanceY / 12d + distanceXZ / 40d, d2 * 0.16d);
-		this.swellingCreeper.setMotion(motion);
+		Vector3d motion = new Vector3d(d0 * 0.15d, Math.max(distanceY, 6d) / 12d + distanceXZ / 80d, d2 * 0.15d);
+		this.launchingCreeper.setMotion(motion);
 	}
 
 	/**
@@ -83,5 +88,10 @@ public class AICreeperLaunchGoal extends Goal {
 	 */
 	public void resetTask() {
 		this.creeperAttackTarget = null;
+	}
+
+	private float activationDistance() {
+		float explosionSize = CreeperUtils.getExplosionSize(this.launchingCreeper) * 5;
+		return explosionSize * explosionSize;
 	}
 }
