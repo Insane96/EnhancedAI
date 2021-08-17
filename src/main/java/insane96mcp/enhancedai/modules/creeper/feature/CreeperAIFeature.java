@@ -1,5 +1,6 @@
 package insane96mcp.enhancedai.modules.creeper.feature;
 
+import insane96mcp.enhancedai.modules.creeper.ai.AICreeperLaunchGoal;
 import insane96mcp.enhancedai.modules.creeper.ai.AICreeperSwellGoal;
 import insane96mcp.enhancedai.setup.Config;
 import insane96mcp.enhancedai.setup.ModSounds;
@@ -131,7 +132,7 @@ public class CreeperAIFeature extends Feature {
 		swellGoal.setBreaching(creeper.world.rand.nextDouble() < this.breach);
 		creeper.goalSelector.addGoal(2, swellGoal);
 
-		//creeper.goalSelector.addGoal(1, new AICreeperLaunchGoal(creeper));
+		creeper.goalSelector.addGoal(1, new AICreeperLaunchGoal(creeper));
 	}
 
 	@SubscribeEvent
