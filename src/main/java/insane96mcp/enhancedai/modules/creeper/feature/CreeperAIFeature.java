@@ -130,6 +130,8 @@ public class CreeperAIFeature extends Feature {
 		swellGoal.setIgnoreWalls(creeper.world.rand.nextDouble() < this.ignoreWalls);
 		swellGoal.setBreaching(creeper.world.rand.nextDouble() < this.breach);
 		creeper.goalSelector.addGoal(2, swellGoal);
+
+		//creeper.goalSelector.addGoal(1, new AICreeperLaunchGoal(creeper));
 	}
 
 	@SubscribeEvent

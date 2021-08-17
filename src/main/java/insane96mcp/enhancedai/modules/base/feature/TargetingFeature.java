@@ -74,7 +74,7 @@ public class TargetingFeature extends Feature {
 			if (!prioritizedGoal.getGoal().getClass().equals(NearestAttackableTargetGoal.class))
 				continue;
 
-			NearestAttackableTargetGoal goal = (NearestAttackableTargetGoal) prioritizedGoal.getGoal();
+			NearestAttackableTargetGoal<?> goal = (NearestAttackableTargetGoal<?>) prioritizedGoal.getGoal();
 
 			if (goal.targetClass != PlayerEntity.class)
 				continue;
