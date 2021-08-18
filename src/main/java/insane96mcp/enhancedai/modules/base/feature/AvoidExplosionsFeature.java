@@ -6,8 +6,11 @@ import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 import net.minecraft.entity.CreatureEntity;
+import net.minecraft.entity.item.TNTEntity;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+
+import java.util.List;
 
 @Label(name = "Avoid Explosions", description = "Mobs will run away from exploding creepers / TNT")
 public class AvoidExplosionsFeature extends Feature {
@@ -28,32 +31,32 @@ public class AvoidExplosionsFeature extends Feature {
 		if (!this.isEnabled())
 			return;
 
+		addAvoidAI(event);
+		alertTNT(event);
+	}
+
+	private void addAvoidAI(EntityJoinWorldEvent event) {
 		if (!(event.getEntity() instanceof CreatureEntity))
 			return;
 
 		CreatureEntity creatureEntity = (CreatureEntity) event.getEntity();
 
-		/*boolean hasTargetGoal = false;
+		creatureEntity.goalSelector.addGoal(1, new AIAvoidExplosionGoal(creatureEntity, 1.75d, 1.3d));
+	}
 
-		ArrayList<Goal> goalsToRemove = new ArrayList<>();
-		for (PrioritizedGoal prioritizedGoal : creatureEntity.targetSelector.goals) {
-			if (!(prioritizedGoal.getGoal() instanceof NearestAttackableTargetGoal))
-				continue;
-
-			NearestAttackableTargetGoal goal = (NearestAttackableTargetGoal) prioritizedGoal.getGoal();
-
-			if (goal.targetClass != PlayerEntity.class)
-				continue;
-
-			goalsToRemove.add(prioritizedGoal.getGoal());
-			hasTargetGoal = true;
-		}
-
-		if (!hasTargetGoal)
+	private void alertTNT(EntityJoinWorldEvent event) {
+		if (!(event.getEntity() instanceof TNTEntity))
 			return;
 
-		goalsToRemove.forEach(creatureEntity.goalSelector::removeGoal);
-*/
-		creatureEntity.goalSelector.addGoal(1, new AIAvoidExplosionGoal(creatureEntity, 1.75d, 1.3d));
+		TNTEntity tnt = (TNTEntity) event.getEntity();
+		List<CreatureEntity> creaturesNearby = tnt.world.getEntitiesWithinAABB(CreatureEntity.class, tnt.getBoundingBox().grow(8d));
+		for (CreatureEntity creatureEntity : creaturesNearby) {
+			creatureEntity.goalSelector.goals.forEach(prioritizedGoal -> {
+				if (prioritizedGoal.getGoal() instanceof AIAvoidExplosionGoal) {
+					AIAvoidExplosionGoal aiAvoidExplosionGoal = (AIAvoidExplosionGoal) prioritizedGoal.getGoal();
+					aiAvoidExplosionGoal.run(tnt, 8d);
+				}
+			});
+		}
 	}
 }

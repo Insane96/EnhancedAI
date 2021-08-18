@@ -1,11 +1,10 @@
 package insane96mcp.enhancedai.modules.base.ai;
 
 import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.EnumSet;
@@ -14,10 +13,9 @@ public class AIAvoidExplosionGoal extends Goal {
 	protected final CreatureEntity entity;
 	private final double farSpeed;
 	private final double nearSpeed;
-	protected MobEntity avoidTarget;
+	protected Entity avoidTarget;
 	protected double explosionRadius;
 	protected Path path;
-	protected final PathNavigator navigation;
 
 	private boolean run = false;
 	//private boolean alwaysRun = false;
@@ -26,8 +24,6 @@ public class AIAvoidExplosionGoal extends Goal {
 		this.entity = entityIn;
 		this.farSpeed = farSpeedIn;
 		this.nearSpeed = nearSpeedIn;
-		this.navigation = entityIn.getNavigator();
-		//TODO Check if this causes problems
 		this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE));
 	}
 
@@ -45,7 +41,7 @@ public class AIAvoidExplosionGoal extends Goal {
 			} while (vector3d == null && t < 5);
 			if (vector3d == null)
 				return false;
-			this.path = this.navigation.pathfind(vector3d.x, vector3d.y, vector3d.z, 0);
+			this.path = this.entity.getNavigator().pathfind(vector3d.x, vector3d.y, vector3d.z, 0);
 			return this.path != null;
 		}
 		return false;
@@ -55,14 +51,14 @@ public class AIAvoidExplosionGoal extends Goal {
 	 * Returns whether an in-progress EntityAIBase should continue executing
 	 */
 	public boolean shouldContinueExecuting() {
-		return !this.navigation.noPath() && this.avoidTarget != null && !this.avoidTarget.dead;
+		return this.avoidTarget != null && !this.avoidTarget.isAlive();
 	}
 
 	/**
 	 * Execute a one shot task or start executing a continuous task
 	 */
 	public void startExecuting() {
-		this.navigation.setPath(this.path, this.farSpeed);
+		this.entity.getNavigator().setPath(this.path, this.farSpeed);
 	}
 
 	/**
@@ -83,9 +79,23 @@ public class AIAvoidExplosionGoal extends Goal {
 		} else {
 			this.entity.getNavigator().setSpeed(this.farSpeed);
 		}
+
+		//TODO Make them run again if too near the explosion
+		/*if (this.entity.getNavigator().noPath()) {
+			Vector3d vector3d;
+			int t = 0;
+			do {
+				vector3d = RandomPositionGenerator.findRandomTargetBlockAwayFrom(this.entity, 16, 7, this.avoidTarget.getPositionVec());
+				t++;
+			} while (vector3d == null && t < 5);
+			if (vector3d != null) {
+				this.path = this.entity.getNavigator().pathfind(vector3d.x, vector3d.y, vector3d.z, 0);
+				this.entity.getNavigator().setPath(this.path, this.farSpeed);
+			}
+		}*/
 	}
 
-	public void run(MobEntity avoidTarget, double explosionRadius) {
+	public void run(Entity avoidTarget, double explosionRadius) {
 		this.run = true;
 		this.avoidTarget = avoidTarget;
 		this.explosionRadius = explosionRadius;

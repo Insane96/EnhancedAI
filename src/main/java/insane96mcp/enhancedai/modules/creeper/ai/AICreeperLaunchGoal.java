@@ -61,7 +61,7 @@ public class AICreeperLaunchGoal extends Goal {
 	}
 
 	public boolean shouldContinueExecuting() {
-		return this.creeperAttackTarget != null && !this.creeperAttackTarget.dead;
+		return this.creeperAttackTarget != null && this.creeperAttackTarget.isAlive();
 	}
 
 	public void tick() {

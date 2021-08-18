@@ -72,7 +72,7 @@ public class AICreeperSwellGoal extends Goal {
 	 * Keep ticking a continuous task that has already been started
 	 */
 	public void tick() {
-		if (this.creeperAttackTarget == null || this.creeperAttackTarget.dead)
+		if (this.creeperAttackTarget == null || !this.creeperAttackTarget.isAlive())
 			this.swellingCreeper.setCreeperState(-1);
 		//else if (this.swellingCreeper.getNavigator().getPath() != null && this.swellingCreeper.getNavigator().getPath().isFinished())
 			//this.swellingCreeper.setCreeperState(1);

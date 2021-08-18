@@ -91,7 +91,8 @@ public class AIRangedBowAttackGoal<T extends MonsterEntity & IRangedAttackMob> e
 
 			if (canSeeTarget) {
 				++this.seeTime;
-			} else {
+			}
+			else {
 				--this.seeTime;
 			}
 			if (distanceFromTarget > (double)this.maxAttackDistance)
@@ -99,7 +100,7 @@ public class AIRangedBowAttackGoal<T extends MonsterEntity & IRangedAttackMob> e
 			//else
 				//this.entity.getNavigator().clearPath();
 
-			if (distanceFromTarget <= (double)this.maxAttackDistance && this.seeTime >= 20) {
+			/*if (distanceFromTarget <= (double)this.maxAttackDistance && this.seeTime >= 20) {
 				//this.entity.getNavigator().clearPath();
 				++this.strafingTime;
 			} else {
@@ -116,7 +117,7 @@ public class AIRangedBowAttackGoal<T extends MonsterEntity & IRangedAttackMob> e
 				}
 
 				this.strafingTime = 0;
-			}
+			}*/
 
 			int i = this.entity.getItemInUseMaxCount();
 			if (i > 12) {
@@ -124,17 +125,17 @@ public class AIRangedBowAttackGoal<T extends MonsterEntity & IRangedAttackMob> e
 				this.entity.faceEntity(livingentity, 30.0F, 30.0F);
 				this.entity.getLookController().setLookPositionWithEntity(livingentity, 30.0F, 30.0F);
 			}
-			if (this.strafingTime > -1) {
+			/*if (this.strafingTime > -1) {
 				if (distanceFromTarget > (double)(this.maxAttackDistance * 0.9F)) {
 					this.strafingBackwards = false;
 				} else if (distanceFromTarget < (double)(this.maxAttackDistance * 0.8F)) {
 					this.strafingBackwards = true;
 				}
 
-				//this.entity.getMoveHelper().strafe(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F);
+				this.entity.getMoveHelper().strafe(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F);
 			} else {
-				//this.entity.getLookController().setLookPositionWithEntity(livingentity, 30.0F, 30.0F);
-			}
+				this.entity.getLookController().setLookPositionWithEntity(livingentity, 30.0F, 30.0F);
+			}*/
 
 			if (this.entity.isHandActive()) {
 				if (!canSeeTarget && this.seeTime < -60) {
@@ -146,7 +147,8 @@ public class AIRangedBowAttackGoal<T extends MonsterEntity & IRangedAttackMob> e
 						this.attackTime = this.attackCooldown;
 					}
 				}
-			} else if (--this.attackTime <= 0 && this.seeTime >= -60) {
+			}
+			else if (--this.attackTime <= 0 && this.seeTime >= -60) {
 				this.entity.setActiveHand(ProjectileHelper.getHandWith(this.entity, Items.BOW));
 			}
 		}

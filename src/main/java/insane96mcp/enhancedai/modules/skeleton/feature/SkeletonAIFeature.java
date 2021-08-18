@@ -62,7 +62,7 @@ public class SkeletonAIFeature extends Feature {
 			skeleton.goalSelector.addGoal(2, rangedBowAttackGoal);
 
 			if (skeleton.world.rand.nextDouble() < this.avoidPlayerChance) {
-				AIAvoidEntityGoal<PlayerEntity> avoidEntityGoal = new AIAvoidEntityGoal<>(skeleton, PlayerEntity.class, 12.0f, 1.8d, 1.4d);
+				AIAvoidEntityGoal<PlayerEntity> avoidEntityGoal = new AIAvoidEntityGoal<>(skeleton, PlayerEntity.class, 12.0f, 1.6d, 1.3d);
 				skeleton.goalSelector.addGoal(1, avoidEntityGoal);
 			}
 		}
