@@ -4,6 +4,7 @@ import insane96mcp.enhancedai.modules.creeper.ai.AICreeperLaunchGoal;
 import insane96mcp.enhancedai.modules.creeper.ai.AICreeperSwellGoal;
 import insane96mcp.enhancedai.setup.Config;
 import insane96mcp.enhancedai.setup.ModSounds;
+import insane96mcp.enhancedai.setup.Strings;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
@@ -28,12 +29,14 @@ public class CreeperAIFeature extends Feature {
 	private final ForgeConfigSpec.ConfigValue<Double> walkingFuseConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> ignoreWallsConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> breachConfig;
+	private final ForgeConfigSpec.ConfigValue<Double> launchConfig;
 	private final ForgeConfigSpec.ConfigValue<Boolean> tntLikeConfig;
 
 	public double cenaChance = 0.01d;
 	public double walkingFuseChance = 0.1d;
 	public double ignoreWalls = 0.1d;
 	public double breach = 0.05;
+	public double launch = 0.02;
 	public boolean tntLike = false;
 
 	public CreeperAIFeature(Module module) {
@@ -51,6 +54,9 @@ public class CreeperAIFeature extends Feature {
 		breachConfig = Config.builder
 				.comment("Breaching creepers will try to open an hole in the wall to let mobs in.")
 				.defineInRange("Breach Chance", breach, 0d, 1d);
+		launchConfig = Config.builder
+				.comment("Launching creepers will try ignite and throw themselves at the player.")
+				.defineInRange("Launch Chance", this.launch, 0d, 1d);
 		tntLikeConfig = Config.builder
 				.comment("If true creepers will ignite if damaged by an explosion.")
 				.define("TNT Like", tntLike);
@@ -64,6 +70,7 @@ public class CreeperAIFeature extends Feature {
 		walkingFuseChance = walkingFuseConfig.get();
 		ignoreWalls = ignoreWallsConfig.get();
 		breach = breachConfig.get();
+		launch = this.launchConfig.get();
 		tntLike = tntLikeConfig.get();
 	}
 
@@ -79,7 +86,7 @@ public class CreeperAIFeature extends Feature {
 
 		CreeperEntity creeper = (CreeperEntity) e.getExploder();
 
-		if (creeper.hasCustomName() && creeper.getCustomName().getString().equals("Creeper Cena"))
+		if (creeper.getPersistentData().getBoolean(Strings.Tags.JOHN_CENA))
 			creeper.playSound(ModSounds.CREEPER_CENA_EXPLODE.get(), 4.0f, 1.0f);
 	}
 
@@ -95,7 +102,7 @@ public class CreeperAIFeature extends Feature {
 		CreeperEntity creeper = (CreeperEntity) explosion.getExploder();
 
 		CompoundNBT compoundNBT = creeper.getPersistentData();
-		if (compoundNBT.getBoolean("ExplosionFire"))
+		if (compoundNBT.getBoolean(Strings.Tags.EXPLOSION_CAUSES_FIRE))
 			explosion.causesFire = true;
 	}
 
@@ -126,14 +133,17 @@ public class CreeperAIFeature extends Feature {
 			compoundNBT.putByte("ExplosionRadius", (byte)5);
 			compoundNBT.putBoolean("powered", creeper.isCharged());
 			creeper.readAdditional(compoundNBT);
-			creeper.getPersistentData().putBoolean("ExplosionFire", true);
-			swellGoal.setCena(true);
+			creeper.getPersistentData().putBoolean(Strings.Tags.EXPLOSION_CAUSES_FIRE, true);
+			creeper.getPersistentData().putBoolean(Strings.Tags.JOHN_CENA, true);
 		}
 		swellGoal.setIgnoreWalls(creeper.world.rand.nextDouble() < this.ignoreWalls);
 		swellGoal.setBreaching(creeper.world.rand.nextDouble() < this.breach);
 		creeper.goalSelector.addGoal(2, swellGoal);
 
-		creeper.goalSelector.addGoal(1, new AICreeperLaunchGoal(creeper));
+		if (creeper.world.rand.nextDouble() < this.launch) {
+			creeper.goalSelector.addGoal(1, new AICreeperLaunchGoal(creeper));
+			creeper.getPersistentData().putBoolean(Strings.Tags.LAUNCH, true);
+		}
 	}
 
 	@SubscribeEvent

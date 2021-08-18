@@ -2,7 +2,6 @@ package insane96mcp.enhancedai.modules.creeper.ai;
 
 import insane96mcp.enhancedai.modules.base.ai.AIAvoidExplosionGoal;
 import insane96mcp.enhancedai.modules.creeper.utils.CreeperUtils;
-import insane96mcp.enhancedai.setup.ModSounds;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
@@ -16,7 +15,6 @@ public class AICreeperSwellGoal extends Goal {
 	protected final CreeperEntity swellingCreeper;
 	private LivingEntity creeperAttackTarget;
 
-	private boolean isCena = false;
 	private boolean walkingFuse = false;
 	private boolean ignoreWalls = false;
 	private boolean breaching = false;
@@ -60,8 +58,6 @@ public class AICreeperSwellGoal extends Goal {
 		if (!walkingFuse)
 			this.swellingCreeper.getNavigator().clearPath();
 		this.creeperAttackTarget = this.swellingCreeper.getAttackTarget();
-		if (isCena)
-			this.swellingCreeper.playSound(ModSounds.CREEPER_CENA_FUSE.get(), 4.0f, 1.0f);
 	}
 
 	/**
@@ -98,10 +94,6 @@ public class AICreeperSwellGoal extends Goal {
 				});
 			}
 		}
-	}
-
-	public void setCena(boolean isCena) {
-		this.isCena = isCena;
 	}
 
 	public void setIgnoreWalls(boolean ignoreWalls) {
