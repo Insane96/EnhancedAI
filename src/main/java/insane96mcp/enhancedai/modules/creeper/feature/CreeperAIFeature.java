@@ -124,8 +124,7 @@ public class CreeperAIFeature extends Feature {
 
 		goalsToRemove.forEach(creeper.goalSelector::removeGoal);
 
-		AICreeperSwellGoal swellGoal = new AICreeperSwellGoal(creeper);
-		swellGoal.setWalkingFuse(creeper.world.rand.nextDouble() < this.walkingFuseChance);
+		AICreeperSwellGoal swellGoal = new AICreeperSwellGoal(creeper, creeper.world.rand.nextDouble() < this.walkingFuseChance);
 		if (creeper.world.rand.nextDouble() < this.cenaChance) {
 			creeper.setCustomName(new StringTextComponent("Creeper Cena"));
 			CompoundNBT compoundNBT = new CompoundNBT();

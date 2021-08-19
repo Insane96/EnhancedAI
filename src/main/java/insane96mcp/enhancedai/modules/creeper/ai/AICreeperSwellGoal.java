@@ -19,14 +19,11 @@ public class AICreeperSwellGoal extends Goal {
 	private boolean ignoreWalls = false;
 	private boolean breaching = false;
 
-	/**
-	 * When true the creeper has started an explosion that can't be stopped unless the target dies
-	 */
-	private boolean forceExplosion = false;
+	private boolean isBreaching = false;
 
-	public AICreeperSwellGoal(CreeperEntity entitycreeperIn) {
+	public AICreeperSwellGoal(CreeperEntity entitycreeperIn, boolean walkingFuse) {
 		this.swellingCreeper = entitycreeperIn;
-		this.setMutexFlags(EnumSet.of(Flag.MOVE));
+		setWalkingFuse(walkingFuse);
 	}
 
 	/**
@@ -39,11 +36,11 @@ public class AICreeperSwellGoal extends Goal {
 			return false;
 
 		double yDistance = this.swellingCreeper.getPosY() - target.getPosY();
-		boolean canBreach = breaching && this.swellingCreeper.getNavigator().noPath() && !this.swellingCreeper.getEntitySenses().canSee(target) && this.swellingCreeper.getDistanceSq(target) < 12 * 12 && yDistance > -CreeperUtils.getExplosionSize(this.swellingCreeper) - 2;
+		boolean canBreach = breaching && (this.swellingCreeper.getNavigator().noPath() || this.swellingCreeper.getNavigator().func_244428_t()) && !this.swellingCreeper.getEntitySenses().canSee(target) && this.swellingCreeper.isInWater() && this.swellingCreeper.getDistanceSq(target) < 12 * 12 && yDistance > -CreeperUtils.getExplosionSize(this.swellingCreeper) - 2;
 		boolean ignoresWalls = ignoreWalls && this.swellingCreeper.getDistanceSq(target) < (CreeperUtils.getExplosionSizeSq(this.swellingCreeper) * 1.5d * 1.5d);
 
 		if (canBreach)
-			forceExplosion = true;
+			isBreaching = true;
 
 		return (this.swellingCreeper.getCreeperState() > 0) ||
 				ignoresWalls ||
@@ -65,7 +62,7 @@ public class AICreeperSwellGoal extends Goal {
 	 */
 	public void resetTask() {
 		this.creeperAttackTarget = null;
-		this.forceExplosion = false;
+		this.isBreaching = false;
 	}
 
 	/**
@@ -74,11 +71,11 @@ public class AICreeperSwellGoal extends Goal {
 	public void tick() {
 		if (this.creeperAttackTarget == null || !this.creeperAttackTarget.isAlive())
 			this.swellingCreeper.setCreeperState(-1);
-		//else if (this.swellingCreeper.getNavigator().getPath() != null && this.swellingCreeper.getNavigator().getPath().isFinished())
-			//this.swellingCreeper.setCreeperState(1);
-		else if (this.swellingCreeper.getDistanceSq(this.creeperAttackTarget) > (CreeperUtils.getExplosionSizeSq(this.swellingCreeper) * 2d * 2d) && !forceExplosion)
+		if (this.isBreaching && this.swellingCreeper.getDistanceSq(this.creeperAttackTarget) >= 14 * 14)
 			this.swellingCreeper.setCreeperState(-1);
-		else if (!this.swellingCreeper.getEntitySenses().canSee(this.creeperAttackTarget) && !ignoreWalls && !forceExplosion)
+		else if (this.swellingCreeper.getDistanceSq(this.creeperAttackTarget) > (CreeperUtils.getExplosionSizeSq(this.swellingCreeper) * 2d * 2d) && !isBreaching)
+			this.swellingCreeper.setCreeperState(-1);
+		else if (!this.swellingCreeper.getEntitySenses().canSee(this.creeperAttackTarget) && !ignoreWalls && !isBreaching)
 			this.swellingCreeper.setCreeperState(-1);
 		else {
 			this.swellingCreeper.setCreeperState(1);
