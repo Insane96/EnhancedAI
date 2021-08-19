@@ -51,7 +51,7 @@ public class AIAvoidExplosionGoal extends Goal {
 	 * Returns whether an in-progress EntityAIBase should continue executing
 	 */
 	public boolean shouldContinueExecuting() {
-		return this.avoidTarget != null && !this.avoidTarget.isAlive();
+		return this.avoidTarget != null && this.avoidTarget.isAlive() && this.entity.getDistanceSq(this.avoidTarget) < this.explosionRadius * this.explosionRadius && this.entity.getNavigator().hasPath();
 	}
 
 	/**

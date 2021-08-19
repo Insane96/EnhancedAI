@@ -1,5 +1,9 @@
 # Changelog
 
+## Upcoming
+* Fixed Mobs running away from explosion seemingly losing AI if the target died
+* Creepers will no longer try to breach when in water
+
 ## Alpha 1.0.2
 * Creepers now Swell from the correct distance
 * Increased Breach range (10 -> 12 blocks from the player)
