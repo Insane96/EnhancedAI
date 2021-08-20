@@ -11,24 +11,24 @@ import insane96mcp.insanelib.base.Module;
 @Label(name = "Base")
 public class BaseModule extends Module {
 
-	BaseFeature baseFeature;
-	TargetingFeature targetingFeature;
-	AvoidExplosionsFeature avoidExplosionsFeature;
+	BaseFeature base;
+	TargetingFeature targeting;
+	AvoidExplosionsFeature avoidExplosions;
 
 	public BaseModule() {
 		super(Config.builder);
 		this.pushConfig(Config.builder);
-		baseFeature = new BaseFeature(this);
-		targetingFeature = new TargetingFeature(this);
-		avoidExplosionsFeature = new AvoidExplosionsFeature(this);
+		base = new BaseFeature(this);
+		targeting = new TargetingFeature(this);
+		avoidExplosions = new AvoidExplosionsFeature(this);
 		Config.builder.pop();
 	}
 
 	@Override
 	public void loadConfig() {
 		super.loadConfig();
-		baseFeature.loadConfig();
-		targetingFeature.loadConfig();
-		avoidExplosionsFeature.loadConfig();
+		base.loadConfig();
+		targeting.loadConfig();
+		avoidExplosions.loadConfig();
 	}
 }

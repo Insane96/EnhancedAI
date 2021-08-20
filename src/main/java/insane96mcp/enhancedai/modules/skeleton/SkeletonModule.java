@@ -8,18 +8,18 @@ import insane96mcp.insanelib.base.Module;
 @Label(name = "Skeleton")
 public class SkeletonModule extends Module {
 
-	public SkeletonAIFeature skeletonAIFeature;
+	public SkeletonAIFeature skeletonAI;
 
 	public SkeletonModule() {
 		super(Config.builder);
 		this.pushConfig(Config.builder);
-		skeletonAIFeature = new SkeletonAIFeature(this);
+		skeletonAI = new SkeletonAIFeature(this);
 		Config.builder.pop();
 	}
 
 	@Override
 	public void loadConfig() {
 		super.loadConfig();
-		skeletonAIFeature.loadConfig();
+		skeletonAI.loadConfig();
 	}
 }

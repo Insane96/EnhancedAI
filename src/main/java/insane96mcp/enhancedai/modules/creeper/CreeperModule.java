@@ -8,18 +8,18 @@ import insane96mcp.insanelib.base.Module;
 @Label(name = "Creeper")
 public class CreeperModule extends Module {
 
-	CreeperAIFeature creeperAIFeature;
+	CreeperAIFeature creeperAI;
 
 	public CreeperModule() {
 		super(Config.builder);
 		this.pushConfig(Config.builder);
-		creeperAIFeature = new CreeperAIFeature(this);
+		creeperAI = new CreeperAIFeature(this);
 		Config.builder.pop();
 	}
 
 	@Override
 	public void loadConfig() {
 		super.loadConfig();
-		creeperAIFeature.loadConfig();
+		creeperAI.loadConfig();
 	}
 }

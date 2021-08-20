@@ -3,22 +3,26 @@ package insane96mcp.enhancedai.modules;
 import insane96mcp.enhancedai.modules.base.BaseModule;
 import insane96mcp.enhancedai.modules.creeper.CreeperModule;
 import insane96mcp.enhancedai.modules.skeleton.SkeletonModule;
+import insane96mcp.enhancedai.modules.zombie.ZombieModule;
 
 public class Modules {
 
-	public static BaseModule baseModule;
-	public static CreeperModule creeperModule;
-	public static SkeletonModule skeletonModule;
+	public static BaseModule base;
+	public static CreeperModule creeper;
+	public static SkeletonModule skeleton;
+	public static ZombieModule zombie;
 
 	public static void init() {
-		baseModule = new BaseModule();
-		creeperModule = new CreeperModule();
-		skeletonModule = new SkeletonModule();
+		base = new BaseModule();
+		creeper = new CreeperModule();
+		skeleton = new SkeletonModule();
+		zombie = new ZombieModule();
 	}
 
 	public static void loadConfig() {
-		baseModule.loadConfig();
-		creeperModule.loadConfig();
-		skeletonModule.loadConfig();
+		base.loadConfig();
+		creeper.loadConfig();
+		skeleton.loadConfig();
+		zombie.loadConfig();
 	}
 }

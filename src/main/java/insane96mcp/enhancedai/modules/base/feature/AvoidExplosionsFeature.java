@@ -41,7 +41,7 @@ public class AvoidExplosionsFeature extends Feature {
 
 		CreatureEntity creatureEntity = (CreatureEntity) event.getEntity();
 
-		creatureEntity.goalSelector.addGoal(1, new AIAvoidExplosionGoal(creatureEntity, 1.75d, 1.3d));
+		creatureEntity.goalSelector.addGoal(1, new AIAvoidExplosionGoal(creatureEntity, 1.6d, 1.3d));
 	}
 
 	private void alertTNT(EntityJoinWorldEvent event) {
