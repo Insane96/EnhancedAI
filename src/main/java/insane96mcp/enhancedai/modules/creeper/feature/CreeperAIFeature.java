@@ -36,7 +36,7 @@ public class CreeperAIFeature extends Feature {
 	public double walkingFuseChance = 0.1d;
 	public double ignoreWalls = 0.1d;
 	public double breach = 0.05;
-	public double launch = 0.02;
+	public double launch = 0.05;
 	public boolean tntLike = false;
 
 	public CreeperAIFeature(Module module) {
