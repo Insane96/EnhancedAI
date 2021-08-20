@@ -88,6 +88,7 @@ public class AICreeperLaunchGoal extends Goal {
 	 */
 	public void resetTask() {
 		this.creeperAttackTarget = null;
+		this.launchingCreeper.getDataManager().set(CreeperEntity.IGNITED, false);
 	}
 
 	private float activationDistance() {
