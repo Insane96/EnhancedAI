@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## Beta 1.0.3
 * Zombies can now mine. 5% chance to spawn with the miner AI with which they can break blocks to reach the player. If they have the right tools in the *Off Hand* then they'll mine faster.
 * Fixed Mobs running away from explosion seemingly losing AI if the target died
 * Creepers will no longer try to breach when in water
