@@ -1,6 +1,5 @@
 package insane96mcp.enhancedai.modules.skeleton.ai;
 
-import insane96mcp.enhancedai.EnhancedAI;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
@@ -167,10 +166,10 @@ public class AIRangedBowAttackGoal<T extends MonsterEntity & IRangedAttackMob> e
 		double d2 = target.getPosZ() - entity.getPosZ();
 		double distanceXZ = MathHelper.sqrt(d0 * d0 + d2 * d2);
 		double yPos = target.getPosYHeight(0d);
-		if (distanceY <= 1d || distanceY > distanceXZ)
-			yPos += target.getEyeHeight(target.getPose()) * 0.5 + (distanceY / distanceXZ);
+		//if (distanceY <= 0d || distanceY > distanceXZ)
+			yPos += target.getEyeHeight() * 0.5 + (distanceY / distanceXZ);
 		double d1 = yPos - abstractarrowentity.getPosY();
-		EnhancedAI.LOGGER.info(yPos + " " + d1 + " " + distanceXZ + " " + distanceY + " " + this.strafingTime + " " + this.strafingBackwards);
+		//EnhancedAI.LOGGER.info(yPos + " " + d1 + " " + distanceXZ + " " + distanceY + " " + this.strafingTime + " " + this.strafingBackwards);
 		//abstractarrowentity.shoot(d0, d1 + distanceXZ * (double)0.2F, d2, 1.6F, (float)(14 - entity.world.getDifficulty().getId() * 4));
 		abstractarrowentity.shoot(d0, d1 + distanceXZ * 0.2d, d2, f * 1.1f + ((float)distance / 32f) + (float)Math.max(distanceY / 48d, 0f), 0);
 		//abstractarrowentity.setGlowing(true);

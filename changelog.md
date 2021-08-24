@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.4
+* Fixed server crash on skeleton spawn
+* Zombies now consume less bandwidth when mining
+
 ## Beta 1.0.3
 * Zombies can now mine. 5% chance to spawn with the miner AI with which they can break blocks to reach the player. If they have the right tools in the *Off Hand* then they'll mine faster.
 * Fixed Mobs running away from explosion seemingly losing AI if the target died

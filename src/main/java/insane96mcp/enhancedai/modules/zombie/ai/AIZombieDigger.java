@@ -23,6 +23,7 @@ import java.util.List;
 
 public class AIZombieDigger extends Goal {
 
+	//TODO Add a few seconds before starting mining to prevent instant mining as soon as the player moves
 	private final ZombieEntity digger;
 	private PlayerEntity targetPlayer;
 	private final double reachDistance;
@@ -30,6 +31,7 @@ public class AIZombieDigger extends Goal {
 	private int tickToBreak = 0;
 	private int breakingTick = 0;
 	private BlockState blockState = null;
+	private int prevBreakProgress = 0;
 
 	public AIZombieDigger(ZombieEntity digger){
 		this.digger = digger;
@@ -45,12 +47,10 @@ public class AIZombieDigger extends Goal {
 		return (this.digger.getNavigator().noPath() || this.digger.getNavigator().func_244428_t()) && this.digger.getDistanceSq(target) > 1.5d;
 	}
 
-	@Override
 	public boolean shouldContinueExecuting() {
-		return !this.targetBlocks.isEmpty() && this.targetPlayer != null && this.targetPlayer.isAlive() && this.targetBlocks.get(0).distanceSq(this.digger.getPosition()) < this.reachDistance * this.reachDistance && this.digger.getNavigator().noPath();
+		return !this.targetBlocks.isEmpty() && this.targetPlayer != null && this.targetPlayer.isAlive() && this.targetBlocks.get(0).distanceSq(this.digger.getPosition()) < this.reachDistance * this.reachDistance && this.digger.getNavigator().noPath() && !this.digger.world.getBlockState(this.targetBlocks.get(0)).isAir();
 	}
 
-	@Override
 	public void startExecuting() {
 		this.targetPlayer = (PlayerEntity) this.digger.getAttackTarget();
 		fillTargetBlocks();
@@ -58,7 +58,6 @@ public class AIZombieDigger extends Goal {
 			initBlockBreak();
 	}
 
-	@Override
 	public void resetTask() {
 		this.targetPlayer = null;
 		if (!this.targetBlocks.isEmpty()) {
@@ -68,6 +67,7 @@ public class AIZombieDigger extends Goal {
 		this.tickToBreak = 0;
 		this.breakingTick = 0;
 		this.blockState = null;
+		this.prevBreakProgress = 0;
 	}
 
 	public void tick() {
@@ -75,8 +75,10 @@ public class AIZombieDigger extends Goal {
 			return;
 		this.breakingTick++;
 		this.digger.getLookController().setLookPosition(this.targetBlocks.get(0).getX() + 0.5d, this.targetBlocks.get(0).getY() + 0.5d, this.targetBlocks.get(0).getZ() + 0.5d);
-		//TODO cache block break progress to send progress only when changes
-		this.digger.world.sendBlockBreakProgress(this.digger.getEntityId(), targetBlocks.get(0), (int) ((this.breakingTick / (float) this.tickToBreak) * 10));
+		if (this.prevBreakProgress != (int) ((this.breakingTick / (float) this.tickToBreak) * 10)) {
+			this.digger.world.sendBlockBreakProgress(this.digger.getEntityId(), targetBlocks.get(0), this.prevBreakProgress);
+			this.prevBreakProgress = (int) ((this.breakingTick / (float) this.tickToBreak) * 10);
+		}
 		if (this.breakingTick % 6 == 0) {
 			this.digger.swingArm(Hand.MAIN_HAND);
 		}
