@@ -129,7 +129,7 @@ public class CreeperAIFeature extends Feature {
 			creeper.setCustomName(new StringTextComponent("Creeper Cena"));
 			CompoundNBT compoundNBT = new CompoundNBT();
 			compoundNBT.putShort("Fuse", (short)34);
-			compoundNBT.putByte("ExplosionRadius", (byte)5);
+			compoundNBT.putByte("ExplosionRadius", (byte)6);
 			compoundNBT.putBoolean("powered", creeper.isCharged());
 			creeper.readAdditional(compoundNBT);
 			creeper.getPersistentData().putBoolean(Strings.Tags.EXPLOSION_CAUSES_FIRE, true);
