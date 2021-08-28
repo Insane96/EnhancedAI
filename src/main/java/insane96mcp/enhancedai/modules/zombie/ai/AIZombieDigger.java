@@ -108,6 +108,7 @@ public class AIZombieDigger extends Goal {
 		}
 		if (this.breakingTick >= this.tickToBreak) {
 			this.digger.world.destroyBlock(targetBlocks.get(0), true, this.digger);
+			this.digger.world.sendBlockBreakProgress(this.digger.getEntityId(), targetBlocks.get(0), -1);
 			this.targetBlocks.remove(0);
 			if (!this.targetBlocks.isEmpty())
 				initBlockBreak();
