@@ -23,7 +23,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.ArrayList;
 
 @Label(name = "Creeper Swell", description = "Various changes to Creepers exploding. Ignoring Walls, Walking Fuse and smarter exploding based off explosion size")
-public class CreeperAIFeature extends Feature {
+public class CreeperSwellFeature extends Feature {
 
 	private final ForgeConfigSpec.ConfigValue<Double> cenaChanceConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> walkingFuseConfig;
@@ -39,7 +39,7 @@ public class CreeperAIFeature extends Feature {
 	public double launch = 0.05;
 	public boolean tntLike = false;
 
-	public CreeperAIFeature(Module module) {
+	public CreeperSwellFeature(Module module) {
 		super(Config.builder, module);
 		Config.builder.comment(this.getDescription()).push(this.getName());
 		cenaChanceConfig = Config.builder
