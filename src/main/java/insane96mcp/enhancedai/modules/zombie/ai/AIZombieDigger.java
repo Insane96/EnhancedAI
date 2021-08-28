@@ -209,6 +209,10 @@ public class AIZombieDigger extends Goal {
 				continue;
 
 			BlockState state = this.digger.world.getBlockState(rayTraceResult.getPos());
+
+			if (state.hasTileEntity())
+				continue;
+
 			//Check for black/whitelist
 			boolean isInWhitelist = false;
 			boolean isInBlacklist = false;

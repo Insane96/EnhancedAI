@@ -20,6 +20,7 @@ public class DiggerZombieFeature extends Feature {
 	private final ForgeConfigSpec.ConfigValue<Double> diggerChanceConfig;
 	private final ForgeConfigSpec.ConfigValue<Boolean> diggerToolOnlyConfig;
 	private final ForgeConfigSpec.ConfigValue<Boolean> diggerProperToolOnlyConfig;
+	private final ForgeConfigSpec.ConfigValue<Boolean> blacklistTileEntitiesConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> miningSpeedMultiplierConfig;
 	private final BlacklistConfig blockBlacklistConfig;
 
@@ -27,6 +28,7 @@ public class DiggerZombieFeature extends Feature {
 	public boolean diggerToolOnly = false;
 	public boolean diggerProperToolOnly = false;
 	public double miningSpeedMultiplier = 1d;
+	public boolean blacklistTileEntities = false;
 	public ArrayList<IdTagMatcher> blockBlacklist;
 	public boolean blockBlacklistAsWhitelist;
 
@@ -45,6 +47,9 @@ public class DiggerZombieFeature extends Feature {
 		miningSpeedMultiplierConfig = Config.builder
 				.comment("Multiplier for digger zombies mining speed. E.g. with this set to 2, zombies will take twice the time to mine a block.")
 				.defineInRange("Digger Speed Multiplier", this.miningSpeedMultiplier, 0d, 128d);
+		blacklistTileEntitiesConfig = Config.builder
+				.comment("Zombies with Digger AI will not be able to break tile entities")
+				.define("Blacklist Tile Entities", this.blacklistTileEntities);
 		blockBlacklistConfig = new BlacklistConfig(Config.builder, "Block Blacklist", "Blocks in here will not be minable by zombies (or will be the only minable in case it's whitelist)", Collections.emptyList(), false);
 		Config.builder.pop();
 	}
@@ -56,6 +61,7 @@ public class DiggerZombieFeature extends Feature {
 		this.diggerToolOnly = this.diggerToolOnlyConfig.get();
 		this.diggerProperToolOnly = this.diggerProperToolOnlyConfig.get();
 		this.miningSpeedMultiplier = this.miningSpeedMultiplierConfig.get();
+		this.blacklistTileEntities = this.blacklistTileEntitiesConfig.get();
 		this.blockBlacklist = IdTagMatcher.parseStringList(this.blockBlacklistConfig.listConfig.get());
 		this.blockBlacklistAsWhitelist = this.blockBlacklistConfig.listAsWhitelistConfig.get();
 	}

@@ -1,10 +1,14 @@
 # Changelog
 
 ## Upcoming
+* Requires InsaneLib 1.2.0
 * Added Tool only and proper tool only options to zombie digger
 * Added Digging Speed Multiplier for digger zombies
+* Added "Blacklist Tile Entities" for Digger Zombies. Will prevent Zombies from breaking tile entities
+* Added Block Black/Whitelist to zombie diggers
 * Zombies no longer start mining as soon as their path is finished
 * Creeper Cena explosion radius has been increased back to 6 instead of 5
+* Increased Creeper Breaching (5% -> 7.5%) and Creeper Cena (1% -> 2%) chance 
 * Fixed break animation staying after a zombie broke a block
 
 ## 1.0.4
