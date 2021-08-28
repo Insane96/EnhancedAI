@@ -5,7 +5,10 @@ import insane96mcp.enhancedai.setup.Config;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
+import insane96mcp.insanelib.config.BlacklistConfig;
+import insane96mcp.insanelib.utils.IdTagMatcher;
 import insane96mcp.insanelib.utils.RandomHelper;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
@@ -18,6 +21,7 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.function.Predicate;
 
 @Label(name = "Targeting", description = "Change how mobs target players")
@@ -26,10 +30,13 @@ public class TargetingFeature extends Feature {
 	private final ForgeConfigSpec.ConfigValue<Integer> followRangeConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> xrayConfig;
 	private final ForgeConfigSpec.ConfigValue<Boolean> instaTargetConfig;
+	private final BlacklistConfig entityBlacklistConfig;
 
 	public int followRange = 64;
 	public double xray = 0.20d;
 	public boolean instaTarget = true;
+	public ArrayList<IdTagMatcher> entityBlacklist;
+	public boolean entityBlacklistAsWhitelist = true;
 
 	public TargetingFeature(Module module) {
 		super(Config.builder, module);
@@ -43,6 +50,7 @@ public class TargetingFeature extends Feature {
 		instaTargetConfig = Config.builder
 				.comment("Mobs will no longer take random time to target a player.")
 				.define("Instant Target", instaTarget);
+		entityBlacklistConfig = new BlacklistConfig(Config.builder, "Entity Blacklist", "Entities in here will not have the TargetAI changed", Collections.emptyList(), false);
 		Config.builder.pop();
 	}
 
@@ -52,6 +60,8 @@ public class TargetingFeature extends Feature {
 		this.followRange = this.followRangeConfig.get();
 		this.xray = this.xrayConfig.get();
 		this.instaTarget = this.instaTargetConfig.get();
+		this.entityBlacklist = IdTagMatcher.parseStringList(this.entityBlacklistConfig.listConfig.get());
+		this.entityBlacklistAsWhitelist = this.entityBlacklistConfig.listAsWhitelistConfig.get();
 	}
 
 	@SubscribeEvent
@@ -64,9 +74,25 @@ public class TargetingFeature extends Feature {
 
 		MobEntity mobEntity = (MobEntity) event.getEntity();
 
+		//Check for black/whitelist
+		boolean isInWhitelist = false;
+		boolean isInBlacklist = false;
+		for (IdTagMatcher blacklistEntry : this.entityBlacklist) {
+			if (!this.entityBlacklistAsWhitelist && blacklistEntry.matchesEntity(mobEntity)) {
+				isInBlacklist = true;
+				break;
+			}
+			else if (blacklistEntry.matchesEntity(mobEntity)) {
+				isInWhitelist = true;
+				break;
+			}
+		}
+		if (isInBlacklist || (!isInWhitelist && this.entityBlacklistAsWhitelist))
+			return;
+
 		boolean hasTargetGoal = false;
 
-		Predicate predicate = null;
+		Predicate<LivingEntity> predicate = null;
 
 		ArrayList<Goal> goalsToRemove = new ArrayList<>();
 		for (PrioritizedGoal prioritizedGoal : mobEntity.targetSelector.goals) {
@@ -90,7 +116,7 @@ public class TargetingFeature extends Feature {
 
 		goalsToRemove.forEach(mobEntity.goalSelector::removeGoal);
 
-		AINearestAttackableTargetGoal<PlayerEntity> targetPlayer = new AINearestAttackableTargetGoal<PlayerEntity>(mobEntity, PlayerEntity.class, true, false, predicate);
+		AINearestAttackableTargetGoal<PlayerEntity> targetPlayer = new AINearestAttackableTargetGoal<>(mobEntity, PlayerEntity.class, true, false, predicate);
 		if (RandomHelper.getDouble(mobEntity.world.rand, 0d, 1d) < this.xray)
 			targetPlayer.setXray(true);
 
