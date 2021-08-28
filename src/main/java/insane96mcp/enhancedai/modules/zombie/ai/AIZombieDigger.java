@@ -1,5 +1,6 @@
 package insane96mcp.enhancedai.modules.zombie.ai;
 
+import insane96mcp.enhancedai.modules.Modules;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -8,6 +9,7 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ToolItem;
 import net.minecraft.potion.EffectUtils;
 import net.minecraft.potion.Effects;
 import net.minecraft.tags.FluidTags;
@@ -23,7 +25,7 @@ import java.util.List;
 
 public class AIZombieDigger extends Goal {
 
-	//TODO Add a few seconds before starting mining to prevent instant mining as soon as the player moves
+	//TODO Add a few ticks before checking for no path to prevent instant mining as soon as the player moves
 	private final ZombieEntity digger;
 	private PlayerEntity targetPlayer;
 	private final double reachDistance;
@@ -32,23 +34,39 @@ public class AIZombieDigger extends Goal {
 	private int breakingTick = 0;
 	private BlockState blockState = null;
 	private int prevBreakProgress = 0;
+	private final boolean toolOnly;
+	private final boolean properToolOnly;
 
-	public AIZombieDigger(ZombieEntity digger){
+	public AIZombieDigger(ZombieEntity digger, boolean toolOnly, boolean properToolOnly){
 		this.digger = digger;
 		this.reachDistance = 4;
+		this.toolOnly = toolOnly;
+		this.properToolOnly = properToolOnly;
 		this.setMutexFlags(EnumSet.of(Flag.LOOK, Flag.MOVE));
 	}
 
 	public boolean shouldExecute() {
+		if (this.toolOnly && !(this.digger.getHeldItemOffhand().getItem() instanceof ToolItem))
+			return false;
+
 		LivingEntity target = digger.getAttackTarget();
 		if (!(target instanceof PlayerEntity))
 			return false;
 
-		return (this.digger.getNavigator().noPath() || this.digger.getNavigator().func_244428_t()) && this.digger.getDistanceSq(target) > 1.5d;
+		return (this.digger.getNavigator().noPath() || this.digger.getNavigator().func_244428_t())
+				&& this.digger.getDistanceSq(target) > 1.5d;
 	}
 
 	public boolean shouldContinueExecuting() {
-		return !this.targetBlocks.isEmpty() && this.targetPlayer != null && this.targetPlayer.isAlive() && this.targetBlocks.get(0).distanceSq(this.digger.getPosition()) < this.reachDistance * this.reachDistance && this.digger.getNavigator().noPath() && !this.digger.world.getBlockState(this.targetBlocks.get(0)).isAir();
+		if (this.properToolOnly && this.blockState != null && !this.canHarvestBlock())
+			return false;
+
+		return !this.targetBlocks.isEmpty()
+				&& this.targetPlayer != null
+				&& this.targetPlayer.isAlive()
+				&& this.targetBlocks.get(0).distanceSq(this.digger.getPosition()) < this.reachDistance * this.reachDistance
+				&& this.digger.getNavigator().noPath()
+				&& !this.digger.world.getBlockState(this.targetBlocks.get(0)).isAir();
 	}
 
 	public void startExecuting() {
@@ -72,6 +90,8 @@ public class AIZombieDigger extends Goal {
 
 	public void tick() {
 		if (this.targetBlocks.isEmpty())
+			return;
+		if (this.properToolOnly && this.blockState != null && !this.canHarvestBlock())
 			return;
 		this.breakingTick++;
 		this.digger.getLookController().setLookPosition(this.targetBlocks.get(0).getX() + 0.5d, this.targetBlocks.get(0).getY() + 0.5d, this.targetBlocks.get(0).getZ() + 0.5d);
@@ -102,7 +122,8 @@ public class AIZombieDigger extends Goal {
 
 	private int computeTickToBreak() {
 		int canHarvestBlock = this.canHarvestBlock() ? 30 : 100;
-		return MathHelper.ceil(1f / (this.getDigSpeed() / this.blockState.getBlockHardness(this.digger.world, this.targetBlocks.get(0)) / canHarvestBlock));
+		double diggingSpeed = this.getDigSpeed() / this.blockState.getBlockHardness(this.digger.world, this.targetBlocks.get(0)) / canHarvestBlock;
+		return MathHelper.ceil((1f / diggingSpeed) * Modules.zombie.diggerZombie.miningSpeedMultiplier);
 	}
 
 	private float getDigSpeed() {

@@ -1,5 +1,9 @@
 # Changelog
 
+## Upcoming
+* Added Tool only and proper tool only options to zombie digger
+* Added Digging Speed Multiplier for digger zombies
+
 ## 1.0.4
 * Fixed server crash on skeleton spawn
 * Zombies now consume less bandwidth when mining
