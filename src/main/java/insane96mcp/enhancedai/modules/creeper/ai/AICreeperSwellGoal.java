@@ -37,7 +37,7 @@ public class AICreeperSwellGoal extends Goal {
 
 		double yDistance = this.swellingCreeper.getPosY() - target.getPosY();
 		boolean canBreach = breaching && (this.swellingCreeper.getNavigator().noPath() || this.swellingCreeper.getNavigator().func_244428_t()) && !this.swellingCreeper.getEntitySenses().canSee(target) && this.swellingCreeper.isInWater() && this.swellingCreeper.getDistanceSq(target) < 12 * 12 && yDistance > -CreeperUtils.getExplosionSize(this.swellingCreeper) - 2;
-		boolean ignoresWalls = ignoreWalls && this.swellingCreeper.getDistanceSq(target) < (CreeperUtils.getExplosionSizeSq(this.swellingCreeper) * 1.5d * 1.5d);
+		boolean ignoresWalls = ignoreWalls && this.swellingCreeper.getDistanceSq(target) < (CreeperUtils.getExplosionSizeSq(this.swellingCreeper) * 1d * 1d);
 
 		if (canBreach)
 			isBreaching = true;
