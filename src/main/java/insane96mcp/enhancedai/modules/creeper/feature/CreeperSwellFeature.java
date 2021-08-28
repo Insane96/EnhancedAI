@@ -35,7 +35,7 @@ public class CreeperSwellFeature extends Feature {
 	public double cenaChance = 0.02d;
 	public double walkingFuseChance = 0.1d;
 	public double ignoreWalls = 0.1d;
-	public double breach = 0.05;
+	public double breach = 0.075;
 	public double launch = 0.05;
 	public boolean tntLike = false;
 
