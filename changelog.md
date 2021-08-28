@@ -3,6 +3,9 @@
 ## Upcoming
 * Added Tool only and proper tool only options to zombie digger
 * Added Digging Speed Multiplier for digger zombies
+* Zombies no longer start mining as soon as their path is finished
+* Creeper Cena explosion radius has been increased back to 6 instead of 5
+* Fixed break animation staying after a zombie broke a block
 
 ## 1.0.4
 * Fixed server crash on skeleton spawn

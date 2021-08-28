@@ -25,7 +25,6 @@ import java.util.List;
 
 public class AIZombieDigger extends Goal {
 
-	//TODO Add a few ticks before checking for no path to prevent instant mining as soon as the player moves
 	private final ZombieEntity digger;
 	private PlayerEntity targetPlayer;
 	private final double reachDistance;
@@ -36,6 +35,8 @@ public class AIZombieDigger extends Goal {
 	private int prevBreakProgress = 0;
 	private final boolean toolOnly;
 	private final boolean properToolOnly;
+
+	private int ticksWithNoPath = 0;
 
 	public AIZombieDigger(ZombieEntity digger, boolean toolOnly, boolean properToolOnly){
 		this.digger = digger;
@@ -53,7 +54,12 @@ public class AIZombieDigger extends Goal {
 		if (!(target instanceof PlayerEntity))
 			return false;
 
-		return (this.digger.getNavigator().noPath() || this.digger.getNavigator().func_244428_t())
+		if (this.digger.getNavigator().noPath() || this.digger.getNavigator().func_244428_t())
+			this.ticksWithNoPath++;
+		else if (this.ticksWithNoPath > 0)
+			this.ticksWithNoPath--;
+
+		return ticksWithNoPath >= 20
 				&& this.digger.getDistanceSq(target) > 1.5d;
 	}
 
@@ -86,6 +92,7 @@ public class AIZombieDigger extends Goal {
 		this.breakingTick = 0;
 		this.blockState = null;
 		this.prevBreakProgress = 0;
+		this.ticksWithNoPath = 0;
 	}
 
 	public void tick() {
