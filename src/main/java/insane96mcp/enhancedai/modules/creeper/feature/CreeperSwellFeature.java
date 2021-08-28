@@ -32,7 +32,7 @@ public class CreeperSwellFeature extends Feature {
 	private final ForgeConfigSpec.ConfigValue<Double> launchConfig;
 	private final ForgeConfigSpec.ConfigValue<Boolean> tntLikeConfig;
 
-	public double cenaChance = 0.01d;
+	public double cenaChance = 0.02d;
 	public double walkingFuseChance = 0.1d;
 	public double ignoreWalls = 0.1d;
 	public double breach = 0.05;
