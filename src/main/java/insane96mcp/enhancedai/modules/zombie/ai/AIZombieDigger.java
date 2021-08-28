@@ -1,6 +1,7 @@
 package insane96mcp.enhancedai.modules.zombie.ai;
 
 import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.insanelib.utils.IdTagMatcher;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -179,8 +180,7 @@ public class AIZombieDigger extends Goal {
 		return digSpeed;
 	}
 
-	private boolean canHarvestBlock()
-	{
+	private boolean canHarvestBlock() {
 		if (!this.blockState.getRequiresTool())
 			return true;
 
@@ -206,6 +206,27 @@ public class AIZombieDigger extends Goal {
 				continue;
 			double distance = this.digger.getDistanceSq(rayTraceResult.getHitVec());
 			if (distance > this.reachDistance * this.reachDistance)
+				continue;
+
+			BlockState state = this.digger.world.getBlockState(rayTraceResult.getPos());
+			//Check for black/whitelist
+			boolean isInWhitelist = false;
+			boolean isInBlacklist = false;
+			for (IdTagMatcher blacklistEntry : Modules.zombie.diggerZombie.blockBlacklist) {
+				if (!Modules.zombie.diggerZombie.blockBlacklistAsWhitelist) {
+					if (blacklistEntry.matchesBlock(state.getBlock())) {
+						isInBlacklist = true;
+						break;
+					}
+				}
+				else {
+					if (blacklistEntry.matchesBlock(state.getBlock())) {
+						isInWhitelist = true;
+						break;
+					}
+				}
+			}
+			if (isInBlacklist || (!isInWhitelist && Modules.zombie.diggerZombie.blockBlacklistAsWhitelist))
 				continue;
 
 			this.targetBlocks.add(rayTraceResult.getPos());

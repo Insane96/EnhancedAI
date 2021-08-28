@@ -5,10 +5,15 @@ import insane96mcp.enhancedai.setup.Config;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
+import insane96mcp.insanelib.config.BlacklistConfig;
+import insane96mcp.insanelib.utils.IdTagMatcher;
 import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 @Label(name = "Digger Zombie")
 public class DiggerZombieFeature extends Feature {
@@ -16,11 +21,14 @@ public class DiggerZombieFeature extends Feature {
 	private final ForgeConfigSpec.ConfigValue<Boolean> diggerToolOnlyConfig;
 	private final ForgeConfigSpec.ConfigValue<Boolean> diggerProperToolOnlyConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> miningSpeedMultiplierConfig;
+	private final BlacklistConfig blockBlacklistConfig;
 
 	public double diggerChance = 0.05;
 	public boolean diggerToolOnly = false;
 	public boolean diggerProperToolOnly = false;
 	public double miningSpeedMultiplier = 1d;
+	public ArrayList<IdTagMatcher> blockBlacklist;
+	public boolean blockBlacklistAsWhitelist;
 
 	public DiggerZombieFeature(Module module) {
 		super(Config.builder, module);
@@ -37,6 +45,7 @@ public class DiggerZombieFeature extends Feature {
 		miningSpeedMultiplierConfig = Config.builder
 				.comment("Multiplier for digger zombies mining speed. E.g. with this set to 2, zombies will take twice the time to mine a block.")
 				.defineInRange("Digger Speed Multiplier", this.miningSpeedMultiplier, 0d, 128d);
+		blockBlacklistConfig = new BlacklistConfig(Config.builder, "Block Blacklist", "Blocks in here will not be minable by zombies (or will be the only minable in case it's whitelist)", Collections.emptyList(), false);
 		Config.builder.pop();
 	}
 
@@ -47,6 +56,8 @@ public class DiggerZombieFeature extends Feature {
 		this.diggerToolOnly = this.diggerToolOnlyConfig.get();
 		this.diggerProperToolOnly = this.diggerProperToolOnlyConfig.get();
 		this.miningSpeedMultiplier = this.miningSpeedMultiplierConfig.get();
+		this.blockBlacklist = IdTagMatcher.parseStringList(this.blockBlacklistConfig.listConfig.get());
+		this.blockBlacklistAsWhitelist = this.blockBlacklistConfig.listAsWhitelistConfig.get();
 	}
 
 	@SubscribeEvent
