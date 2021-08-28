@@ -11,6 +11,7 @@
 * Creeper Cena explosion radius has been increased back to 6 instead of 5
 * Increased Creeper Breaching (5% -> 7.5%) and Creeper Cena (1% -> 2%) chance 
 * Fixed break animation staying after a zombie broke a block
+* Fixed mod not requiring InsaneLib thus crashing instead of giving "missing dependency" message
 
 ## 1.0.4
 * Fixed server crash on skeleton spawn
