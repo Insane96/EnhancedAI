@@ -27,7 +27,7 @@ public class SkeletonAIFeature extends Feature {
 	private final BlacklistConfig entityBlacklistConfig;
 
 	public double avoidPlayerChance = 1d;
-	public double arrowInaccuracy = 0;
+	public double arrowInaccuracy = 2;
 	public ArrayList<IdTagMatcher> entityBlacklist;
 	public boolean entityBlacklistAsWhitelist;
 
