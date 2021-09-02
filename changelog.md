@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 1.1.1
 * Added Entity Blacklist for skeletons shoot ai and zombies digger. Skeleton Shoot AI blacklist has Quark's fallen by default
 * Arrow inaccuracy for skeletons now defaults to 2 (from 0)
 * Skeletons no longer always shoot from 64 blocks (64 -> 24 to 48 blocks)
