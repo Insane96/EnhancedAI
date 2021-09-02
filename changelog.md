@@ -3,6 +3,9 @@
 ## Upcoming
 * Added Entity Blacklist for skeletons shoot ai and zombies digger
 * Arrow inaccuracy for skeletons now defaults to 2 (from 0)
+* Skeletons no longer always shoot from 64 blocks (64 -> 24 to 48 blocks)
+* Skeletons avoiding target chance has been reduced (every skeleton -> 50% of skeletons)
+* Reduced even further skeleton avoid speed from target
 
 ## 1.1.0
 * Requires InsaneLib 1.2.1
