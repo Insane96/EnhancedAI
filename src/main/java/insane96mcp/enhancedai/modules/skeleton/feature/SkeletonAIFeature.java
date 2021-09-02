@@ -6,12 +6,16 @@ import insane96mcp.enhancedai.setup.Config;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
+import insane96mcp.insanelib.config.BlacklistConfig;
+import insane96mcp.insanelib.utils.IdTagMatcher;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.PrioritizedGoal;
 import net.minecraft.entity.monster.AbstractSkeletonEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.common.ForgeConfigSpec;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,10 +24,12 @@ public class SkeletonAIFeature extends Feature {
 
 	private final ForgeConfigSpec.ConfigValue<Double> avoidPlayerChanceConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> arrowInaccuracyConfig;
-	//private final ForgeConfigSpec.ConfigValue<List<? extends String>> blacklistConfig;
+	private final BlacklistConfig entityBlacklistConfig;
 
 	public double avoidPlayerChance = 1d;
 	public double arrowInaccuracy = 0;
+	public ArrayList<IdTagMatcher> entityBlacklist;
+	public boolean entityBlacklistAsWhitelist;
 
 	public SkeletonAIFeature(Module module) {
 		super(Config.builder, module);
@@ -34,6 +40,7 @@ public class SkeletonAIFeature extends Feature {
 		arrowInaccuracyConfig = Config.builder
 				.comment("How much inaccuracy does the arrow fired by skeletons have. Vanilla skeletons have 10/6/2 inaccuracy in easy/normal/hard difficulty.")
 				.defineInRange("Arrow Inaccuracy", this.arrowInaccuracy, 0d, 30d);
+		entityBlacklistConfig = new BlacklistConfig(Config.builder, "Entity Blacklist", "Entities that shouldn't get the enhanced Shoot AI", Collections.emptyList(), false);
 		Config.builder.pop();
 	}
 
@@ -42,10 +49,27 @@ public class SkeletonAIFeature extends Feature {
 		super.loadConfig();
 		this.avoidPlayerChance = this.avoidPlayerChanceConfig.get();
 		this.arrowInaccuracy = this.arrowInaccuracyConfig.get();
+		this.entityBlacklist = IdTagMatcher.parseStringList(this.entityBlacklistConfig.listConfig.get());
+		this.entityBlacklistAsWhitelist = this.entityBlacklistConfig.listAsWhitelistConfig.get();
 	}
 
 	//TODO Zombies with Ender Pearls
 	public void setCombatTask(AbstractSkeletonEntity skeleton) {
+		//Check for black/whitelist
+		boolean isInWhitelist = false;
+		boolean isInBlacklist = false;
+		for (IdTagMatcher blacklistEntry : this.entityBlacklist) {
+			if (blacklistEntry.matchesEntity(skeleton)) {
+				if (!this.entityBlacklistAsWhitelist)
+					isInBlacklist = true;
+				else
+					isInWhitelist = true;
+				break;
+			}
+		}
+		if (isInBlacklist || (!isInWhitelist && this.entityBlacklistAsWhitelist))
+			return;
+
 		boolean hasAIArrowAttack = false;
 		for (PrioritizedGoal prioritizedGoal : skeleton.goalSelector.goals) {
 			if (prioritizedGoal.getGoal().equals(skeleton.aiArrowAttack))
