@@ -19,7 +19,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,7 +51,7 @@ public class SkeletonAIFeature extends Feature {
 		arrowInaccuracyConfig = Config.builder
 				.comment("How much inaccuracy does the arrow fired by skeletons have. Vanilla skeletons have 10/6/2 inaccuracy in easy/normal/hard difficulty.")
 				.defineInRange("Arrow Inaccuracy", this.arrowInaccuracy, 0d, 30d);
-		entityBlacklistConfig = new BlacklistConfig(Config.builder, "Entity Blacklist", "Entities that shouldn't get the enhanced Shoot AI", Collections.emptyList(), false);
+		entityBlacklistConfig = new BlacklistConfig(Config.builder, "Entity Blacklist", "Entities that shouldn't get the enhanced Shoot AI", Arrays.asList("quark:forgotten"), false);
 		Config.builder.pop();
 	}
 
