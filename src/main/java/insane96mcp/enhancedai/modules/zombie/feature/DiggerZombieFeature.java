@@ -23,6 +23,7 @@ public class DiggerZombieFeature extends Feature {
 	private final ForgeConfigSpec.ConfigValue<Boolean> blacklistTileEntitiesConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> miningSpeedMultiplierConfig;
 	private final BlacklistConfig blockBlacklistConfig;
+	private final BlacklistConfig entityBlacklistConfig;
 
 	public double diggerChance = 0.05;
 	public boolean diggerToolOnly = false;
@@ -31,6 +32,8 @@ public class DiggerZombieFeature extends Feature {
 	public boolean blacklistTileEntities = false;
 	public ArrayList<IdTagMatcher> blockBlacklist;
 	public boolean blockBlacklistAsWhitelist;
+	public ArrayList<IdTagMatcher> entityBlacklist;
+	public boolean entityBlacklistAsWhitelist;
 
 	public DiggerZombieFeature(Module module) {
 		super(Config.builder, module);
@@ -51,6 +54,7 @@ public class DiggerZombieFeature extends Feature {
 				.comment("Zombies with Digger AI will not be able to break tile entities")
 				.define("Blacklist Tile Entities", this.blacklistTileEntities);
 		blockBlacklistConfig = new BlacklistConfig(Config.builder, "Block Blacklist", "Blocks in here will not be minable by zombies (or will be the only minable in case it's whitelist)", Collections.emptyList(), false);
+		entityBlacklistConfig = new BlacklistConfig(Config.builder, "Entity Blacklist", "Entities that shouldn't get the Digger AI", Collections.emptyList(), false);
 		Config.builder.pop();
 	}
 
@@ -64,6 +68,8 @@ public class DiggerZombieFeature extends Feature {
 		this.blacklistTileEntities = this.blacklistTileEntitiesConfig.get();
 		this.blockBlacklist = IdTagMatcher.parseStringList(this.blockBlacklistConfig.listConfig.get());
 		this.blockBlacklistAsWhitelist = this.blockBlacklistConfig.listAsWhitelistConfig.get();
+		this.entityBlacklist = IdTagMatcher.parseStringList(this.entityBlacklistConfig.listConfig.get());
+		this.entityBlacklistAsWhitelist = this.entityBlacklistConfig.listAsWhitelistConfig.get();
 	}
 
 	@SubscribeEvent
@@ -75,6 +81,21 @@ public class DiggerZombieFeature extends Feature {
 			return;
 
 		ZombieEntity zombie = (ZombieEntity) event.getEntity();
+
+		//Check for black/whitelist
+		boolean isInWhitelist = false;
+		boolean isInBlacklist = false;
+		for (IdTagMatcher blacklistEntry : this.entityBlacklist) {
+			if (blacklistEntry.matchesEntity(zombie)) {
+				if (!this.entityBlacklistAsWhitelist)
+					isInBlacklist = true;
+				else
+					isInWhitelist = true;
+				break;
+			}
+		}
+		if (isInBlacklist || (!isInWhitelist && this.entityBlacklistAsWhitelist))
+			return;
 
 		if (event.getWorld().rand.nextDouble() < this.diggerChance)
 			zombie.goalSelector.addGoal(1, new AIZombieDigger(zombie, this.diggerToolOnly, this.diggerProperToolOnly));
