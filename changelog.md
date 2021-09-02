@@ -1,5 +1,9 @@
 # Changelog
 
+## Upcoming
+* Added Entity Blacklist for skeletons shoot ai and zombies digger
+* Arrow inaccuracy for skeletons now defaults to 2 (from 0)
+
 ## 1.1.0
 * Requires InsaneLib 1.2.1
 * Added Tool only and proper tool only options to zombie digger
