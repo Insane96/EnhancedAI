@@ -31,7 +31,7 @@ public class SkeletonAIFeature extends Feature {
 	private final ForgeConfigSpec.ConfigValue<Double> arrowInaccuracyConfig;
 	private final BlacklistConfig entityBlacklistConfig;
 
-	private static final String minMaxShootingRangeDefault = "24, 48";
+	private static final String minMaxShootingRangeDefault = "24,48";
 
 	public Tuple<Integer, Integer> minMaxShootingRange;
 	public double avoidPlayerChance = 0.5d;
@@ -43,7 +43,7 @@ public class SkeletonAIFeature extends Feature {
 		super(Config.builder, module);
 		Config.builder.comment(this.getDescription()).push(this.getName());
 		minMaxShootingRangeConfig = Config.builder
-				.comment("The min and max range from where a skeleton will shoot a player.")
+				.comment("The min and max range from where a skeleton will shoot a player. (NO SPACES)")
 				.define("Min Max Shooting Range", minMaxShootingRangeDefault);
 		avoidPlayerChanceConfig = Config.builder
 				.comment("Chance for a Skeleton to spawn with the ability to avoid the player")
