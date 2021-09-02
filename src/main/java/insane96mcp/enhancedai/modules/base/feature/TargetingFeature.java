@@ -7,7 +7,6 @@ import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.config.BlacklistConfig;
 import insane96mcp.insanelib.utils.IdTagMatcher;
-import insane96mcp.insanelib.utils.RandomHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -116,12 +115,12 @@ public class TargetingFeature extends Feature {
 
 		goalsToRemove.forEach(mobEntity.goalSelector::removeGoal);
 
-		AINearestAttackableTargetGoal<PlayerEntity> targetPlayer = new AINearestAttackableTargetGoal<>(mobEntity, PlayerEntity.class, true, false, predicate);
-		if (RandomHelper.getDouble(mobEntity.world.rand, 0d, 1d) < this.xray)
-			targetPlayer.setXray(true);
+		AINearestAttackableTargetGoal<PlayerEntity> targetGoal = new AINearestAttackableTargetGoal<>(mobEntity, PlayerEntity.class, true, false, predicate);
+		if (mobEntity.world.rand.nextDouble() < this.xray)
+			targetGoal.setXray(true);
 
-		targetPlayer.setInstaTarget(this.instaTarget);
-		mobEntity.targetSelector.addGoal(2, targetPlayer);
+		targetGoal.setInstaTarget(this.instaTarget);
+		mobEntity.targetSelector.addGoal(2, targetGoal);
 
 		if (followRange != 0) {
 			ModifiableAttributeInstance followRangeAttribute = mobEntity.getAttribute(Attributes.FOLLOW_RANGE);
