@@ -26,7 +26,7 @@ public class SkeletonAIFeature extends Feature {
 	private final ForgeConfigSpec.ConfigValue<Double> arrowInaccuracyConfig;
 	private final BlacklistConfig entityBlacklistConfig;
 
-	public double avoidPlayerChance = 1d;
+	public double avoidPlayerChance = 0.5d;
 	public double arrowInaccuracy = 2;
 	public ArrayList<IdTagMatcher> entityBlacklist;
 	public boolean entityBlacklistAsWhitelist;
