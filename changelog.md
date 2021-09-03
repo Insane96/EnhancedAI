@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.2
+* Fixed crash with Moisth server
+* Fixed mod badly crashing the game at startup
+
 ## 1.1.1
 * Added Entity Blacklist for skeletons shoot ai and zombies digger. Skeleton Shoot AI blacklist has Quark's fallen by default
 * Arrow inaccuracy for skeletons now defaults to 2 (from 0)
