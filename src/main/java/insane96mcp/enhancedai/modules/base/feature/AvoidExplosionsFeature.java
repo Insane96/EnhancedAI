@@ -17,8 +17,6 @@ public class AvoidExplosionsFeature extends Feature {
 
 	public AvoidExplosionsFeature(Module module) {
 		super(Config.builder, module);
-		//Config.builder.comment(this.getDescription()).push(this.getName());
-		//Config.builder.pop();
 	}
 
 	@Override
@@ -49,7 +47,7 @@ public class AvoidExplosionsFeature extends Feature {
 			return;
 
 		TNTEntity tnt = (TNTEntity) event.getEntity();
-		List<CreatureEntity> creaturesNearby = tnt.world.getEntitiesWithinAABB(CreatureEntity.class, tnt.getBoundingBox().grow(8d));
+		List<CreatureEntity> creaturesNearby = tnt.world.getLoadedEntitiesWithinAABB(CreatureEntity.class, tnt.getBoundingBox().grow(8d));
 		for (CreatureEntity creatureEntity : creaturesNearby) {
 			creatureEntity.goalSelector.goals.forEach(prioritizedGoal -> {
 				if (prioritizedGoal.getGoal() instanceof AIAvoidExplosionGoal) {
