@@ -44,7 +44,7 @@ public class SkeletonAIFeature extends Feature {
 				.defineInRange("Min Shooting Range", this.minShootingRange, 1, 64);
 		maxShootingRangeConfig = Config.builder
 				.comment("The max range from where a skeleton will shoot a player")
-				.defineInRange("Max Shooting Range", this.minShootingRange, 1, 64);
+				.defineInRange("Max Shooting Range", this.maxShootingRange, 1, 64);
 		avoidPlayerChanceConfig = Config.builder
 				.comment("Chance for a Skeleton to spawn with the ability to avoid the player")
 				.defineInRange("Avoid Player chance", this.avoidPlayerChance, 0d, 1d);
