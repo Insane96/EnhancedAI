@@ -122,6 +122,10 @@ public class TargetingFeature extends Feature {
 		targetGoal.setInstaTarget(this.instaTarget);
 		mobEntity.targetSelector.addGoal(2, targetGoal);
 
+		followRange(mobEntity);
+	}
+
+	private void followRange(MobEntity mobEntity) {
 		if (followRange != 0) {
 			ModifiableAttributeInstance followRangeAttribute = mobEntity.getAttribute(Attributes.FOLLOW_RANGE);
 			if (followRangeAttribute != null) {
@@ -129,7 +133,7 @@ public class TargetingFeature extends Feature {
 
 				for (PrioritizedGoal pGoal : mobEntity.targetSelector.goals) {
 					if (pGoal.getGoal() instanceof AINearestAttackableTargetGoal) {
-						AINearestAttackableTargetGoal nearestAttackableTargetGoal = (AINearestAttackableTargetGoal) pGoal.getGoal();
+						AINearestAttackableTargetGoal<? extends LivingEntity> nearestAttackableTargetGoal = (AINearestAttackableTargetGoal<? extends LivingEntity>) pGoal.getGoal();
 						nearestAttackableTargetGoal.targetEntitySelector.setDistance(mobEntity.getAttributeValue(Attributes.FOLLOW_RANGE));
 					}
 				}

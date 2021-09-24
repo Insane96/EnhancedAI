@@ -21,6 +21,8 @@ public class AICreeperLaunchGoal extends Goal {
 
 	private int ticksBeforeLaunching;
 
+	private int cooldown;
+
 	public AICreeperLaunchGoal(CreeperEntity entitycreeperIn) {
 		this.launchingCreeper = entitycreeperIn;
 		this.setMutexFlags(EnumSet.of(Flag.MOVE));
@@ -33,6 +35,9 @@ public class AICreeperLaunchGoal extends Goal {
 	public boolean shouldExecute() {
 		LivingEntity target = this.launchingCreeper.getAttackTarget();
 		if (target == null)
+			return false;
+
+		if (--cooldown > 0)
 			return false;
 
 		if (!this.launchingCreeper.getEntitySenses().canSee(target))
@@ -61,6 +66,11 @@ public class AICreeperLaunchGoal extends Goal {
 	}
 
 	public boolean shouldContinueExecuting() {
+		if (this.launchingCreeper.timeSinceIgnited == CreeperUtils.getFuse(this.launchingCreeper) - 1 && this.launchingCreeper.getDistanceSq(this.creeperAttackTarget) > (CreeperUtils.getExplosionSizeSq(this.launchingCreeper) * 2d * 2d)) {
+			this.cooldown = 120;
+			return false;
+		}
+
 		return this.creeperAttackTarget != null && this.creeperAttackTarget.isAlive();
 	}
 

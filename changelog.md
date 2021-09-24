@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Launching creepers now cancel the explosion if they didn't reach the target. If that's the case, the launching ability will go on a 6 seconds cooldown.
+
 ## 1.1.2
 * Fixed crash with Moisth server
 * Fixed mod badly crashing the game at startup

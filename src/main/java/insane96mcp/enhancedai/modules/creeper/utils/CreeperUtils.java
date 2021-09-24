@@ -17,6 +17,12 @@ public class CreeperUtils {
 		return explosionSize * explosionSize;
 	}
 
+	public static short getFuse(CreeperEntity creeper) {
+		CompoundNBT compoundNBT = new CompoundNBT();
+		creeper.writeAdditional(compoundNBT);
+		return compoundNBT.getShort("Fuse");
+	}
+
 	public static void setFuseTime(CreeperEntity creeper, short fuse) {
 		CompoundNBT compoundNBT = new CompoundNBT();
 		compoundNBT.putShort("Fuse", fuse);
