@@ -1,5 +1,6 @@
 package insane96mcp.enhancedai.modules.skeleton.ai;
 
+import insane96mcp.enhancedai.modules.base.ai.AIAvoidEntityGoal;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
@@ -21,15 +22,17 @@ public class AIRangedBowAttackGoal<T extends MonsterEntity & IRangedAttackMob> e
 	private final float maxAttackDistance;
 	private int attackTime = -1;
 	private int seeTime;
+	private final boolean canStrafe;
 	private boolean strafingClockwise;
 	private boolean strafingBackwards;
 	private int strafingTime = -1;
 
-	public AIRangedBowAttackGoal(T mob, double moveSpeedAmpIn, int attackCooldownIn, float maxAttackDistanceIn) {
+	public AIRangedBowAttackGoal(T mob, double moveSpeedAmpIn, int attackCooldownIn, float maxAttackDistanceIn, boolean canStrafe) {
 		this.entity = mob;
 		this.moveSpeedAmp = moveSpeedAmpIn;
 		this.attackCooldown = attackCooldownIn;
 		this.maxAttackDistance = maxAttackDistanceIn * maxAttackDistanceIn;
+		this.canStrafe = canStrafe;
 		this.setMutexFlags(EnumSet.of(Goal.Flag.LOOK));
 	}
 
@@ -80,29 +83,31 @@ public class AIRangedBowAttackGoal<T extends MonsterEntity & IRangedAttackMob> e
 	 */
 	public void tick() {
 		LivingEntity livingentity = this.entity.getAttackTarget();
-		if (livingentity != null) {
-			double distanceFromTarget = this.entity.getDistanceSq(livingentity.getPosX(), livingentity.getPosY(), livingentity.getPosZ());
-			boolean canSeeTarget = this.entity.getEntitySenses().canSee(livingentity);
-			boolean flag1 = this.seeTime > 0;
-			if (canSeeTarget != flag1) {
-				this.seeTime = 0;
-			}
+		if (livingentity == null)
+			return;
 
-			if (canSeeTarget) {
-				++this.seeTime;
-			}
-			else {
-				--this.seeTime;
-			}
-			if (distanceFromTarget > (double)this.maxAttackDistance)
-				this.entity.getNavigator().tryMoveToEntityLiving(livingentity, this.moveSpeedAmp);
-			//else
-				//this.entity.getNavigator().clearPath();
+		double distanceFromTarget = this.entity.getDistanceSq(livingentity.getPosX(), livingentity.getPosY(), livingentity.getPosZ());
+		boolean canSeeTarget = this.entity.getEntitySenses().canSee(livingentity);
+		boolean flag1 = this.seeTime > 0;
+		if (canSeeTarget != flag1) {
+			this.seeTime = 0;
+		}
 
-			/*if (distanceFromTarget <= (double)this.maxAttackDistance && this.seeTime >= 20) {
+		if (canSeeTarget) {
+			++this.seeTime;
+		}
+		else {
+			--this.seeTime;
+		}
+		if (distanceFromTarget > (double)this.maxAttackDistance)
+			this.entity.getNavigator().tryMoveToEntityLiving(livingentity, this.moveSpeedAmp);
+		else {
+
+			if (distanceFromTarget <= (double)this.maxAttackDistance && this.seeTime >= 20 && this.canStrafe()) {
 				//this.entity.getNavigator().clearPath();
 				++this.strafingTime;
-			} else {
+			}
+			else {
 				this.strafingTime = -1;
 			}
 
@@ -116,7 +121,7 @@ public class AIRangedBowAttackGoal<T extends MonsterEntity & IRangedAttackMob> e
 				}
 
 				this.strafingTime = 0;
-			}*/
+			}
 
 			int i = this.entity.getItemInUseMaxCount();
 			if (i > 12) {
@@ -124,7 +129,7 @@ public class AIRangedBowAttackGoal<T extends MonsterEntity & IRangedAttackMob> e
 				this.entity.faceEntity(livingentity, 30.0F, 30.0F);
 				this.entity.getLookController().setLookPositionWithEntity(livingentity, 30.0F, 30.0F);
 			}
-			/*if (this.strafingTime > -1) {
+			else if (this.strafingTime > -1 && this.canStrafe()) {
 				if (distanceFromTarget > (double)(this.maxAttackDistance * 0.9F)) {
 					this.strafingBackwards = false;
 				} else if (distanceFromTarget < (double)(this.maxAttackDistance * 0.8F)) {
@@ -132,9 +137,10 @@ public class AIRangedBowAttackGoal<T extends MonsterEntity & IRangedAttackMob> e
 				}
 
 				this.entity.getMoveHelper().strafe(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F);
-			} else {
+			}
+			else {
 				this.entity.getLookController().setLookPositionWithEntity(livingentity, 30.0F, 30.0F);
-			}*/
+			}
 
 			if (this.entity.isHandActive()) {
 				if (!canSeeTarget && this.seeTime < -60) {
@@ -151,6 +157,10 @@ public class AIRangedBowAttackGoal<T extends MonsterEntity & IRangedAttackMob> e
 				this.entity.setActiveHand(ProjectileHelper.getHandWith(this.entity, Items.BOW));
 			}
 		}
+	}
+
+	private boolean canStrafe() {
+		return this.canStrafe && this.entity.goalSelector.getRunningGoals().anyMatch(p -> p.getGoal() instanceof AIAvoidEntityGoal);
 	}
 
 	private void attackEntityWithRangedAttack(T entity, LivingEntity target, float distanceFactor) {

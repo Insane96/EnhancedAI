@@ -2,6 +2,8 @@
 
 ## Upcoming
 * Launching creepers now cancel the explosion if they didn't reach the target. If that's the case, the launching ability will go on a 6 seconds cooldown.
+* Skeletons now have 50% chance to gain back the strafing ability
+* Skeletons no longer shot the player when farther than their attack distance
 
 ## 1.1.2
 * Fixed crash with Moisth server

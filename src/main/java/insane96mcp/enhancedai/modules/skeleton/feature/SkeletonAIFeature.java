@@ -26,12 +26,14 @@ public class SkeletonAIFeature extends Feature {
 	private final ForgeConfigSpec.ConfigValue<Integer> minShootingRangeConfig;
 	private final ForgeConfigSpec.ConfigValue<Integer> maxShootingRangeConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> avoidPlayerChanceConfig;
+	private final ForgeConfigSpec.ConfigValue<Double> strafeChanceConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> arrowInaccuracyConfig;
 	private final BlacklistConfig entityBlacklistConfig;
 
 	public int minShootingRange = 24;
 	public int maxShootingRange = 48;
 	public double avoidPlayerChance = 0.5d;
+	public double strafeChance = 0.5d;
 	public double arrowInaccuracy = 2;
 	public ArrayList<IdTagMatcher> entityBlacklist;
 	public boolean entityBlacklistAsWhitelist;
@@ -48,6 +50,9 @@ public class SkeletonAIFeature extends Feature {
 		avoidPlayerChanceConfig = Config.builder
 				.comment("Chance for a Skeleton to spawn with the ability to avoid the player")
 				.defineInRange("Avoid Player chance", this.avoidPlayerChance, 0d, 1d);
+		strafeChanceConfig = Config.builder
+				.comment("Chance for a Skeleton to spawn with the ability to strafe (like vanilla)")
+				.defineInRange("Strafe chance", this.strafeChance, 0d, 1d);
 		arrowInaccuracyConfig = Config.builder
 				.comment("How much inaccuracy does the arrow fired by skeletons have. Vanilla skeletons have 10/6/2 inaccuracy in easy/normal/hard difficulty.")
 				.defineInRange("Arrow Inaccuracy", this.arrowInaccuracy, 0d, 30d);
@@ -61,6 +66,7 @@ public class SkeletonAIFeature extends Feature {
 		this.minShootingRange = this.minShootingRangeConfig.get();
 		this.maxShootingRange = this.maxShootingRangeConfig.get();
 		this.avoidPlayerChance = this.avoidPlayerChanceConfig.get();
+		this.strafeChance = this.strafeChanceConfig.get();
 		this.arrowInaccuracy = this.arrowInaccuracyConfig.get();
 		this.entityBlacklist = IdTagMatcher.parseStringList(this.entityBlacklistConfig.listConfig.get());
 		this.entityBlacklistAsWhitelist = this.entityBlacklistConfig.listAsWhitelistConfig.get();
@@ -95,7 +101,7 @@ public class SkeletonAIFeature extends Feature {
 
 		avoidEntityGoals.forEach(skeleton.goalSelector::removeGoal);
 		if (hasAIArrowAttack) {
-			AIRangedBowAttackGoal<AbstractSkeletonEntity> rangedBowAttackGoal = new AIRangedBowAttackGoal<>(skeleton, 1.0d, 20, RandomHelper.getInt(skeleton.world.rand, this.minShootingRange, this.maxShootingRange));
+			AIRangedBowAttackGoal<AbstractSkeletonEntity> rangedBowAttackGoal = new AIRangedBowAttackGoal<>(skeleton, 1.0d, 20, RandomHelper.getInt(skeleton.world.rand, this.minShootingRange, this.maxShootingRange), skeleton.world.rand.nextDouble() < this.strafeChance);
 			skeleton.goalSelector.addGoal(2, rangedBowAttackGoal);
 
 			if (skeleton.world.rand.nextDouble() < this.avoidPlayerChance) {
