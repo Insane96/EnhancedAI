@@ -1,7 +1,8 @@
 # Changelog
 
 ## Upcoming
-* Launching creepers now cancel the explosion if they didn't reach the target. If that's the case, the launching ability will go on a 6 seconds cooldown.
+* Added Zombie Pearlers. Zombies with and Ender Pearl in the hand or off hand will throw it to get closer to the player
+* Launching creepers now cancel the explosion if they didn't reach the target. If that's the case, the launching ability will go on a 6 seconds cooldown
 * Skeletons now have 50% chance to gain back the strafing ability
 * Skeletons no longer shot the player when farther than their attack distance
 

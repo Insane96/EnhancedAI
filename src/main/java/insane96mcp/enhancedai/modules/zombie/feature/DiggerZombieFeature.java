@@ -1,7 +1,6 @@
 package insane96mcp.enhancedai.modules.zombie.feature;
 
 import insane96mcp.enhancedai.modules.zombie.ai.AIZombieDigger;
-import insane96mcp.enhancedai.modules.zombie.ai.AIZombiePearler;
 import insane96mcp.enhancedai.setup.Config;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
@@ -100,7 +99,5 @@ public class DiggerZombieFeature extends Feature {
 
 		if (event.getWorld().rand.nextDouble() < this.diggerChance)
 			zombie.goalSelector.addGoal(1, new AIZombieDigger(zombie, this.diggerToolOnly, this.diggerProperToolOnly));
-
-		zombie.goalSelector.addGoal(1, new AIZombiePearler(zombie));
 	}
 }

@@ -60,7 +60,7 @@ public class AIZombieDigger extends Goal {
 		else if (this.ticksWithNoPath > 0)
 			this.ticksWithNoPath--;
 
-		return ticksWithNoPath >= 20
+		return ticksWithNoPath >= 30
 				&& this.digger.getDistanceSq(target) > 1.5d;
 	}
 
