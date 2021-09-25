@@ -9,8 +9,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AbstractSkeletonEntity.class)
 public class AbstractSkeletonEntityMixin {
-	@Inject(at = @At("TAIL"), method = "setCombatTask()V", cancellable = true)
-	public void setCombatTask(CallbackInfo callbackInfo) {
-		Modules.skeleton.skeletonAI.setCombatTask((AbstractSkeletonEntity) (Object) this);
+	@Inject(at = @At("TAIL"), method = "reassessWeaponGoal()V", cancellable = true)
+	public void reassessWeaponGoal(CallbackInfo callbackInfo) {
+		Modules.skeleton.skeletonAI.reassessWeaponGoal((AbstractSkeletonEntity) (Object) this);
 	}
 }

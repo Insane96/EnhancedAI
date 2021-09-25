@@ -72,8 +72,7 @@ public class SkeletonAIFeature extends Feature {
 		this.entityBlacklistAsWhitelist = this.entityBlacklistConfig.listAsWhitelistConfig.get();
 	}
 
-	//TODO Zombies with Ender Pearls
-	public void setCombatTask(AbstractSkeletonEntity skeleton) {
+	public void reassessWeaponGoal(AbstractSkeletonEntity skeleton) {
 		//Check for black/whitelist
 		boolean isInWhitelist = false;
 		boolean isInBlacklist = false;
@@ -90,21 +89,21 @@ public class SkeletonAIFeature extends Feature {
 			return;
 
 		boolean hasAIArrowAttack = false;
-		for (PrioritizedGoal prioritizedGoal : skeleton.goalSelector.goals) {
-			if (prioritizedGoal.getGoal().equals(skeleton.aiArrowAttack))
+		for (PrioritizedGoal prioritizedGoal : skeleton.goalSelector.availableGoals) {
+			if (prioritizedGoal.getGoal().equals(skeleton.bowGoal))
 				hasAIArrowAttack = true;
 		}
-		List<Goal> avoidEntityGoals = skeleton.goalSelector.goals.stream()
+		List<Goal> avoidEntityGoals = skeleton.goalSelector.availableGoals.stream()
 				.map(PrioritizedGoal::getGoal)
 				.filter(g -> g instanceof AIAvoidEntityGoal<?>)
 				.collect(Collectors.toList());
 
 		avoidEntityGoals.forEach(skeleton.goalSelector::removeGoal);
 		if (hasAIArrowAttack) {
-			AIRangedBowAttackGoal<AbstractSkeletonEntity> rangedBowAttackGoal = new AIRangedBowAttackGoal<>(skeleton, 1.0d, 20, RandomHelper.getInt(skeleton.world.rand, this.minShootingRange, this.maxShootingRange), skeleton.world.rand.nextDouble() < this.strafeChance);
+			AIRangedBowAttackGoal<AbstractSkeletonEntity> rangedBowAttackGoal = new AIRangedBowAttackGoal<>(skeleton, 1.0d, 20, RandomHelper.getInt(skeleton.level.random, this.minShootingRange, this.maxShootingRange), skeleton.level.random.nextDouble() < this.strafeChance);
 			skeleton.goalSelector.addGoal(2, rangedBowAttackGoal);
 
-			if (skeleton.world.rand.nextDouble() < this.avoidPlayerChance) {
+			if (skeleton.level.random.nextDouble() < this.avoidPlayerChance) {
 				AIAvoidEntityGoal<PlayerEntity> avoidEntityGoal = new AIAvoidEntityGoal<>(skeleton, PlayerEntity.class, 12.0f, 1.5d, 1.25d);
 				skeleton.goalSelector.addGoal(1, avoidEntityGoal);
 			}

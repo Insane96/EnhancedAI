@@ -30,37 +30,37 @@ public class AICreeperSwellGoal extends Goal {
 	 * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
 	 * method as well.
 	 */
-	public boolean shouldExecute() {
-		LivingEntity target = this.swellingCreeper.getAttackTarget();
+	public boolean canUse() {
+		LivingEntity target = this.swellingCreeper.getTarget();
 		if (target == null)
 			return false;
 
-		double yDistance = this.swellingCreeper.getPosY() - target.getPosY();
-		boolean canBreach = breaching && (this.swellingCreeper.getNavigator().noPath() || this.swellingCreeper.getNavigator().func_244428_t()) && !this.swellingCreeper.getEntitySenses().canSee(target) && this.swellingCreeper.isInWater() && this.swellingCreeper.getDistanceSq(target) < 12 * 12 && yDistance > -CreeperUtils.getExplosionSize(this.swellingCreeper) - 2;
-		boolean ignoresWalls = ignoreWalls && this.swellingCreeper.getDistanceSq(target) < (CreeperUtils.getExplosionSizeSq(this.swellingCreeper) * 1d * 1d);
+		double yDistance = this.swellingCreeper.getY() - target.getY();
+		boolean canBreach = breaching && (this.swellingCreeper.getNavigation().isDone() || this.swellingCreeper.getNavigation().isStuck()) && !this.swellingCreeper.getSensing().canSee(target) && this.swellingCreeper.isInWater() && this.swellingCreeper.distanceToSqr(target) < 12 * 12 && yDistance > -CreeperUtils.getExplosionSize(this.swellingCreeper) - 2;
+		boolean ignoresWalls = ignoreWalls && this.swellingCreeper.distanceToSqr(target) < (CreeperUtils.getExplosionSizeSq(this.swellingCreeper) * 1d * 1d);
 
 		if (canBreach)
 			isBreaching = true;
 
-		return (this.swellingCreeper.getCreeperState() > 0) ||
+		return (this.swellingCreeper.getSwellDir() > 0) ||
 				ignoresWalls ||
-				(this.swellingCreeper.getEntitySenses().canSee(target) && this.swellingCreeper.getDistanceSq(target) < CreeperUtils.getExplosionSizeSq(this.swellingCreeper) * 1.5d * 1.5d) ||
+				(this.swellingCreeper.getSensing().canSee(target) && this.swellingCreeper.distanceToSqr(target) < CreeperUtils.getExplosionSizeSq(this.swellingCreeper) * 1.5d * 1.5d) ||
 				canBreach;
 	}
 
 	/**
 	 * Execute a one shot task or start executing a continuous task
 	 */
-	public void startExecuting() {
+	public void start() {
 		if (!walkingFuse)
-			this.swellingCreeper.getNavigator().clearPath();
-		this.creeperAttackTarget = this.swellingCreeper.getAttackTarget();
+			this.swellingCreeper.getNavigation().stop();
+		this.creeperAttackTarget = this.swellingCreeper.getTarget();
 	}
 
 	/**
 	 * Reset the task's internal state. Called when this task is interrupted by another one
 	 */
-	public void resetTask() {
+	public void stop() {
 		this.creeperAttackTarget = null;
 		this.isBreaching = false;
 	}
@@ -70,20 +70,20 @@ public class AICreeperSwellGoal extends Goal {
 	 */
 	public void tick() {
 		if (this.creeperAttackTarget == null || !this.creeperAttackTarget.isAlive())
-			this.swellingCreeper.setCreeperState(-1);
-		if (this.isBreaching && this.swellingCreeper.getDistanceSq(this.creeperAttackTarget) >= 14 * 14)
-			this.swellingCreeper.setCreeperState(-1);
-		else if (this.swellingCreeper.getDistanceSq(this.creeperAttackTarget) > (CreeperUtils.getExplosionSizeSq(this.swellingCreeper) * 2d * 2d) && !isBreaching)
-			this.swellingCreeper.setCreeperState(-1);
-		else if (!this.swellingCreeper.getEntitySenses().canSee(this.creeperAttackTarget) && !ignoreWalls && !isBreaching)
-			this.swellingCreeper.setCreeperState(-1);
+			this.swellingCreeper.setSwellDir(-1);
+		if (this.isBreaching && this.swellingCreeper.distanceToSqr(this.creeperAttackTarget) >= 14 * 14)
+			this.swellingCreeper.setSwellDir(-1);
+		else if (this.swellingCreeper.distanceToSqr(this.creeperAttackTarget) > (CreeperUtils.getExplosionSizeSq(this.swellingCreeper) * 2d * 2d) && !isBreaching)
+			this.swellingCreeper.setSwellDir(-1);
+		else if (!this.swellingCreeper.getSensing().canSee(this.creeperAttackTarget) && !ignoreWalls && !isBreaching)
+			this.swellingCreeper.setSwellDir(-1);
 		else {
-			this.swellingCreeper.setCreeperState(1);
-			List<CreatureEntity> creaturesNearby = this.swellingCreeper.world.getEntitiesWithinAABB(CreatureEntity.class, this.swellingCreeper.getBoundingBox().grow(CreeperUtils.getExplosionSize(this.swellingCreeper) * 2));
+			this.swellingCreeper.setSwellDir(1);
+			List<CreatureEntity> creaturesNearby = this.swellingCreeper.level.getEntitiesOfClass(CreatureEntity.class, this.swellingCreeper.getBoundingBox().inflate(CreeperUtils.getExplosionSize(this.swellingCreeper) * 2));
 			for (CreatureEntity creatureEntity : creaturesNearby) {
 				if (creatureEntity == this.swellingCreeper)
 					continue;
-				creatureEntity.goalSelector.goals.forEach(prioritizedGoal -> {
+				creatureEntity.goalSelector.availableGoals.forEach(prioritizedGoal -> {
 					if (prioritizedGoal.getGoal() instanceof AIAvoidExplosionGoal) {
 						AIAvoidExplosionGoal aiAvoidExplosionGoal = (AIAvoidExplosionGoal) prioritizedGoal.getGoal();
 						aiAvoidExplosionGoal.run(this.swellingCreeper, CreeperUtils.getExplosionSize(this.swellingCreeper));
@@ -99,9 +99,9 @@ public class AICreeperSwellGoal extends Goal {
 
 	public void setWalkingFuse(boolean walkingFuse) {
 		if (walkingFuse)
-			this.setMutexFlags(EnumSet.noneOf(Goal.Flag.class));
+			this.setFlags(EnumSet.noneOf(Goal.Flag.class));
 		else
-			this.setMutexFlags(EnumSet.of(Flag.MOVE));
+			this.setFlags(EnumSet.of(Flag.MOVE));
 
 		this.walkingFuse = walkingFuse;
 	}

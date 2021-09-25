@@ -47,9 +47,9 @@ public class AvoidExplosionsFeature extends Feature {
 			return;
 
 		TNTEntity tnt = (TNTEntity) event.getEntity();
-		List<CreatureEntity> creaturesNearby = tnt.world.getLoadedEntitiesWithinAABB(CreatureEntity.class, tnt.getBoundingBox().grow(8d));
+		List<CreatureEntity> creaturesNearby = tnt.level.getLoadedEntitiesOfClass(CreatureEntity.class, tnt.getBoundingBox().inflate(8d));
 		for (CreatureEntity creatureEntity : creaturesNearby) {
-			creatureEntity.goalSelector.goals.forEach(prioritizedGoal -> {
+			creatureEntity.goalSelector.availableGoals.forEach(prioritizedGoal -> {
 				if (prioritizedGoal.getGoal() instanceof AIAvoidExplosionGoal) {
 					AIAvoidExplosionGoal aiAvoidExplosionGoal = (AIAvoidExplosionGoal) prioritizedGoal.getGoal();
 					aiAvoidExplosionGoal.run(tnt, 8d);

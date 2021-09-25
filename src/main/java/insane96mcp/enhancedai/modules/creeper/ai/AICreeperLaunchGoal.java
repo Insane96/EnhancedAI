@@ -25,30 +25,30 @@ public class AICreeperLaunchGoal extends Goal {
 
 	public AICreeperLaunchGoal(CreeperEntity entitycreeperIn) {
 		this.launchingCreeper = entitycreeperIn;
-		this.setMutexFlags(EnumSet.of(Flag.MOVE));
+		this.setFlags(EnumSet.of(Flag.MOVE));
 	}
 
 	/**
 	 * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
 	 * method as well.
 	 */
-	public boolean shouldExecute() {
-		LivingEntity target = this.launchingCreeper.getAttackTarget();
+	public boolean canUse() {
+		LivingEntity target = this.launchingCreeper.getTarget();
 		if (target == null)
 			return false;
 
 		if (--cooldown > 0)
 			return false;
 
-		if (!this.launchingCreeper.getEntitySenses().canSee(target))
+		if (!this.launchingCreeper.getSensing().canSee(target))
 			return false;
 
-		if (this.launchingCreeper.world.getBlockState(this.launchingCreeper.getPosition().up(3)).getBlock() != Blocks.AIR)
+		if (this.launchingCreeper.level.getBlockState(this.launchingCreeper.blockPosition().above(3)).getBlock() != Blocks.AIR)
 			return false;
 
-		double yDistance = this.launchingCreeper.getPosY() - target.getPosY();
-		double x = target.getPosX() - this.launchingCreeper.getPosX();
-		double z = target.getPosZ() - this.launchingCreeper.getPosZ();
+		double yDistance = this.launchingCreeper.getY() - target.getY();
+		double x = target.getX() - this.launchingCreeper.getX();
+		double z = target.getZ() - this.launchingCreeper.getZ();
 		double xzDistance = x * x + z * z;
 
 		return xzDistance < activationDistance() && yDistance < CreeperUtils.getExplosionSize(this.launchingCreeper) * 2 && this.launchingCreeper.isOnGround();
@@ -57,16 +57,16 @@ public class AICreeperLaunchGoal extends Goal {
 	/**
 	 * Execute a one shot task or start executing a continuous task
 	 */
-	public void startExecuting() {
-		this.launchingCreeper.getNavigator().clearPath();
-		this.creeperAttackTarget = this.launchingCreeper.getAttackTarget();
+	public void start() {
+			this.launchingCreeper.getNavigation().stop();
+		this.creeperAttackTarget = this.launchingCreeper.getTarget();
 		this.launchingCreeper.ignite();
-		double distance = this.launchingCreeper.getDistance(this.creeperAttackTarget);
+		double distance = this.launchingCreeper.distanceTo(this.creeperAttackTarget);
 		this.ticksBeforeLaunching = (int) Math.max((50 - distance) * 0.4d, 1);
 	}
 
-	public boolean shouldContinueExecuting() {
-		if (this.launchingCreeper.timeSinceIgnited == CreeperUtils.getFuse(this.launchingCreeper) - 1 && this.launchingCreeper.getDistanceSq(this.creeperAttackTarget) > (CreeperUtils.getExplosionSizeSq(this.launchingCreeper) * 2d * 2d)) {
+	public boolean canContinueToUse() {
+		if (this.launchingCreeper.swell == CreeperUtils.getFuse(this.launchingCreeper) - 1 && this.launchingCreeper.distanceToSqr(this.creeperAttackTarget) > (CreeperUtils.getExplosionSizeSq(this.launchingCreeper) * 2d * 2d)) {
 			this.cooldown = 120;
 			return false;
 		}
@@ -75,30 +75,30 @@ public class AICreeperLaunchGoal extends Goal {
 	}
 
 	public void tick() {
-		this.launchingCreeper.faceEntity(this.creeperAttackTarget, 30.0F, 30.0F);
+		this.launchingCreeper.lookAt(this.creeperAttackTarget, 30.0F, 30.0F);
 		if (--ticksBeforeLaunching != 0)
 			return;
 
-		if (!this.launchingCreeper.world.isRemote)
-			for(ServerPlayerEntity serverplayerentity : ((ServerWorld) this.launchingCreeper.world).getPlayers()) {
-				((ServerWorld) this.launchingCreeper.world).spawnParticle(serverplayerentity, ParticleTypes.CLOUD, true, this.launchingCreeper.getPosX(), this.launchingCreeper.getPosY(), this.launchingCreeper.getPosZ(), 100, 0.5d, 0.5d, 0.5d, 0.2d);
+		if (!this.launchingCreeper.level.isClientSide)
+			for(ServerPlayerEntity serverplayerentity : ((ServerWorld) this.launchingCreeper.level).players()) {
+				((ServerWorld) this.launchingCreeper.level).sendParticles(serverplayerentity, ParticleTypes.CLOUD, true, this.launchingCreeper.getX(), this.launchingCreeper.getY(), this.launchingCreeper.getZ(), 100, 0.5d, 0.5d, 0.5d, 0.2d);
 			}
 
-		this.launchingCreeper.playSound(SoundEvents.ENTITY_FIREWORK_ROCKET_LAUNCH, 6.0f, 0.5f);
-		double distanceY = this.creeperAttackTarget.getPosY() - this.launchingCreeper.getPosY();
-		double d0 = this.creeperAttackTarget.getPosX() - this.launchingCreeper.getPosX();
-		double d2 = this.creeperAttackTarget.getPosZ() - this.launchingCreeper.getPosZ();
+		this.launchingCreeper.playSound(SoundEvents.FIREWORK_ROCKET_LAUNCH, 6.0f, 0.5f);
+		double distanceY = this.creeperAttackTarget.getY() - this.launchingCreeper.getY();
+		double d0 = this.creeperAttackTarget.getX() - this.launchingCreeper.getX();
+		double d2 = this.creeperAttackTarget.getZ() - this.launchingCreeper.getZ();
 		double distanceXZ = MathHelper.sqrt(d0 * d0 + d2 * d2);
 		Vector3d motion = new Vector3d(d0 * 0.15d, Math.max(distanceY, 6d) / 12d + distanceXZ / 80d, d2 * 0.15d);
-		this.launchingCreeper.setMotion(motion);
+		this.launchingCreeper.setDeltaMovement(motion);
 	}
 
 	/**
 	 * Reset the task's internal state. Called when this task is interrupted by another one
 	 */
-	public void resetTask() {
+	public void stop() {
 		this.creeperAttackTarget = null;
-		this.launchingCreeper.getDataManager().set(CreeperEntity.IGNITED, false);
+		this.launchingCreeper.getEntityData().set(CreeperEntity.DATA_IS_IGNITED, false);
 	}
 
 	private float activationDistance() {

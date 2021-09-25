@@ -34,8 +34,8 @@ public class AINearestAttackableTargetGoal<T extends LivingEntity> extends Targe
 		super(goalOwnerIn, checkSight, nearbyOnlyIn);
 		this.targetClass = targetClassIn;
 		this.targetChance = 10;
-		this.setMutexFlags(EnumSet.of(Goal.Flag.TARGET));
-		EntityPredicate predicate = (new EntityPredicate()).setDistance(this.getTargetDistance()).setCustomPredicate(targetPredicate);
+		this.setFlags(EnumSet.of(Goal.Flag.TARGET));
+		EntityPredicate predicate = (new EntityPredicate()).range(this.getFollowDistance()).selector(targetPredicate);
 		this.targetEntitySelector = predicate;
 	}
 
@@ -43,8 +43,8 @@ public class AINearestAttackableTargetGoal<T extends LivingEntity> extends Targe
 	 * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
 	 * method as well.
 	 */
-	public boolean shouldExecute() {
-		if (this.targetChance > 0 && this.goalOwner.getRNG().nextInt(this.targetChance) != 0) {
+	public boolean canUse() {
+		if (this.targetChance > 0 && this.mob.getRandom().nextInt(this.targetChance) != 0) {
 			return false;
 		}
 		else {
@@ -54,15 +54,15 @@ public class AINearestAttackableTargetGoal<T extends LivingEntity> extends Targe
 	}
 
 	protected AxisAlignedBB getTargetableArea(double targetDistance) {
-		return this.goalOwner.getBoundingBox().grow(targetDistance, 4.0D, targetDistance);
+		return this.mob.getBoundingBox().inflate(targetDistance, 4.0D, targetDistance);
 	}
 
 	protected void findNearestTarget() {
 		if (this.targetClass != PlayerEntity.class && this.targetClass != ServerPlayerEntity.class) {
-			this.nearestTarget = this.goalOwner.world.getClosestEntity(this.targetClass, this.targetEntitySelector, this.goalOwner, this.goalOwner.getPosX(), this.goalOwner.getPosYEye(), this.goalOwner.getPosZ(), this.getTargetableArea(this.getTargetDistance()));
+			this.nearestTarget = this.mob.level.getNearestLoadedEntity(this.targetClass, this.targetEntitySelector, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ(), this.getTargetableArea(this.getFollowDistance()));
 		}
 		else {
-			this.nearestTarget = this.goalOwner.world.getClosestPlayer(this.targetEntitySelector, this.goalOwner, this.goalOwner.getPosX(), this.goalOwner.getPosYEye(), this.goalOwner.getPosZ());
+			this.nearestTarget = this.mob.level.getNearestPlayer(this.targetEntitySelector, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ());
 		}
 
 	}
@@ -70,13 +70,9 @@ public class AINearestAttackableTargetGoal<T extends LivingEntity> extends Targe
 	/**
 	 * Execute a one shot task or start executing a continuous task
 	 */
-	public void startExecuting() {
-		this.goalOwner.setAttackTarget(this.nearestTarget);
-		super.startExecuting();
-	}
-
-	public void setNearestTarget(@Nullable LivingEntity target) {
-		this.nearestTarget = target;
+	public void start() {
+		this.mob.setTarget(this.nearestTarget);
+		super.start();
 	}
 
 	public void setInstaTarget(boolean instaTarget) {
@@ -85,6 +81,6 @@ public class AINearestAttackableTargetGoal<T extends LivingEntity> extends Targe
 
 	public void setXray(boolean xray) {
 		this.xray = xray;
-		this.targetEntitySelector.setIgnoresLineOfSight();
+		this.targetEntitySelector.allowUnseeable();
 	}
 }

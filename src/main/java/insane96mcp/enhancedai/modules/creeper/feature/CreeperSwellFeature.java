@@ -103,7 +103,7 @@ public class CreeperSwellFeature extends Feature {
 
 		CompoundNBT compoundNBT = creeper.getPersistentData();
 		if (compoundNBT.getBoolean(Strings.Tags.EXPLOSION_CAUSES_FIRE))
-			explosion.causesFire = true;
+			explosion.fire = true;
 	}
 
 	@SubscribeEvent
@@ -117,32 +117,33 @@ public class CreeperSwellFeature extends Feature {
 		CreeperEntity creeper = (CreeperEntity) event.getEntity();
 
 		ArrayList<Goal> goalsToRemove = new ArrayList<>();
-		creeper.goalSelector.goals.forEach(prioritizedGoal -> {
+		creeper.goalSelector.availableGoals.forEach(prioritizedGoal -> {
 			if (prioritizedGoal.getGoal() instanceof CreeperSwellGoal)
 				goalsToRemove.add(prioritizedGoal.getGoal());
 		});
 
 		goalsToRemove.forEach(creeper.goalSelector::removeGoal);
 
-		AICreeperSwellGoal swellGoal = new AICreeperSwellGoal(creeper, creeper.world.rand.nextDouble() < this.walkingFuseChance);
-		if (creeper.world.rand.nextDouble() < this.cenaChance) {
+		AICreeperSwellGoal swellGoal = new AICreeperSwellGoal(creeper, creeper.level.random.nextDouble() < this.walkingFuseChance);
+		if (creeper.level.random.nextDouble() < this.cenaChance) {
 			creeper.setCustomName(new StringTextComponent("Creeper Cena"));
 			CompoundNBT compoundNBT = new CompoundNBT();
 			compoundNBT.putShort("Fuse", (short)34);
 			compoundNBT.putByte("ExplosionRadius", (byte)6);
-			compoundNBT.putBoolean("powered", creeper.isCharged());
-			creeper.readAdditional(compoundNBT);
+			compoundNBT.putBoolean("powered", creeper.isPowered());
+			creeper.readAdditionalSaveData(compoundNBT);
 			creeper.getPersistentData().putBoolean(Strings.Tags.EXPLOSION_CAUSES_FIRE, true);
 			creeper.getPersistentData().putBoolean(Strings.Tags.JOHN_CENA, true);
 		}
-		swellGoal.setIgnoreWalls(creeper.world.rand.nextDouble() < this.ignoreWalls);
-		swellGoal.setBreaching(creeper.world.rand.nextDouble() < this.breach);
+		swellGoal.setIgnoreWalls(creeper.level.random.nextDouble() < this.ignoreWalls);
+		swellGoal.setBreaching(creeper.level.random.nextDouble() < this.breach);
 		creeper.goalSelector.addGoal(2, swellGoal);
 
-		if (creeper.world.rand.nextDouble() < this.launch) {
+		if (creeper.level.random.nextDouble() < this.launch) {
 			creeper.goalSelector.addGoal(1, new AICreeperLaunchGoal(creeper));
 			creeper.getPersistentData().putBoolean(Strings.Tags.LAUNCH, true);
 		}
+
 	}
 
 	@SubscribeEvent

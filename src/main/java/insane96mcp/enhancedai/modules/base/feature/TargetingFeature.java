@@ -94,17 +94,17 @@ public class TargetingFeature extends Feature {
 		Predicate<LivingEntity> predicate = null;
 
 		ArrayList<Goal> goalsToRemove = new ArrayList<>();
-		for (PrioritizedGoal prioritizedGoal : mobEntity.targetSelector.goals) {
+		for (PrioritizedGoal prioritizedGoal : mobEntity.targetSelector.availableGoals) {
 			//Need to do this to prevent entities like enderman to get their neutral goal to be overwritten
 			if (!prioritizedGoal.getGoal().getClass().equals(NearestAttackableTargetGoal.class))
 				continue;
 
 			NearestAttackableTargetGoal<?> goal = (NearestAttackableTargetGoal<?>) prioritizedGoal.getGoal();
 
-			if (goal.targetClass != PlayerEntity.class)
+			if (goal.targetType != PlayerEntity.class)
 				continue;
 
-			predicate = goal.targetEntitySelector.customPredicate;
+			predicate = goal.targetConditions.selector;
 
 			goalsToRemove.add(prioritizedGoal.getGoal());
 			hasTargetGoal = true;
@@ -116,7 +116,7 @@ public class TargetingFeature extends Feature {
 		goalsToRemove.forEach(mobEntity.goalSelector::removeGoal);
 
 		AINearestAttackableTargetGoal<PlayerEntity> targetGoal = new AINearestAttackableTargetGoal<>(mobEntity, PlayerEntity.class, true, false, predicate);
-		if (mobEntity.world.rand.nextDouble() < this.xray)
+		if (mobEntity.level.random.nextDouble() < this.xray)
 			targetGoal.setXray(true);
 
 		targetGoal.setInstaTarget(this.instaTarget);
@@ -131,10 +131,10 @@ public class TargetingFeature extends Feature {
 			if (followRangeAttribute != null) {
 				followRangeAttribute.setBaseValue(this.followRange);
 
-				for (PrioritizedGoal pGoal : mobEntity.targetSelector.goals) {
+				for (PrioritizedGoal pGoal : mobEntity.targetSelector.availableGoals) {
 					if (pGoal.getGoal() instanceof AINearestAttackableTargetGoal) {
 						AINearestAttackableTargetGoal<? extends LivingEntity> nearestAttackableTargetGoal = (AINearestAttackableTargetGoal<? extends LivingEntity>) pGoal.getGoal();
-						nearestAttackableTargetGoal.targetEntitySelector.setDistance(mobEntity.getAttributeValue(Attributes.FOLLOW_RANGE));
+						nearestAttackableTargetGoal.targetEntitySelector.range(mobEntity.getAttributeValue(Attributes.FOLLOW_RANGE));
 					}
 				}
 			}

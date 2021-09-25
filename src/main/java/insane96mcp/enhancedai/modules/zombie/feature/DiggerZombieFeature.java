@@ -97,7 +97,7 @@ public class DiggerZombieFeature extends Feature {
 		if (isInBlacklist || (!isInWhitelist && this.entityBlacklistAsWhitelist))
 			return;
 
-		if (event.getWorld().rand.nextDouble() < this.diggerChance)
+		if (event.getWorld().random.nextDouble() < this.diggerChance)
 			zombie.goalSelector.addGoal(1, new AIZombieDigger(zombie, this.diggerToolOnly, this.diggerProperToolOnly));
 	}
 }

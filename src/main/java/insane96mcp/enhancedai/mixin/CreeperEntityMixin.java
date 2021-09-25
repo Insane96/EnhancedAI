@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(CreeperEntity.class)
 public class CreeperEntityMixin {
-	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/monster/CreeperEntity;playSound(Lnet/minecraft/util/SoundEvent;FF)V"), method = "Lnet/minecraft/entity/monster/CreeperEntity;tick()V")
+	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/monster/CreeperEntity;playSound(Lnet/minecraft/util/SoundEvent;FF)V"), method = "tick()V")
 	public void tickOnPlaySound(CallbackInfo callbackInfo) {
 		CreeperEntity $this = (CreeperEntity) (Object) this;
 		if ($this.getPersistentData().getBoolean(Strings.Tags.JOHN_CENA))

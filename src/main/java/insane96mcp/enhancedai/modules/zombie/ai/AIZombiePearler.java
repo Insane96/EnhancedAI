@@ -25,12 +25,12 @@ public class AIZombiePearler extends Goal {
 		this.pearler = pearler;
 	}
 
-	public boolean shouldExecute() {
-		LivingEntity target = this.pearler.getAttackTarget();
+	public boolean canUse() {
+		LivingEntity target = this.pearler.getTarget();
 		if (!(target instanceof PlayerEntity))
 			return false;
 
-		if (this.pearler.getDistanceSq(target) < 12d * 12d)
+		if (this.pearler.distanceToSqr(target) < 12d * 12d)
 			return false;
 
 		if (--this.cooldown > 0)
@@ -39,37 +39,37 @@ public class AIZombiePearler extends Goal {
 		if (!this.pearler.isOnGround())
 			return false;
 
-		return this.pearler.getHeldItemMainhand().getItem() == Items.ENDER_PEARL || this.pearler.getHeldItemOffhand().getItem() == Items.ENDER_PEARL;
+		return this.pearler.getMainHandItem().getItem() == Items.ENDER_PEARL || this.pearler.getOffhandItem().getItem() == Items.ENDER_PEARL;
 	}
 
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		return this.enderPearlEntity != null && this.enderPearlEntity.isAlive();
 	}
 
-	public void startExecuting() {
-		this.targetPlayer = (PlayerEntity) this.pearler.getAttackTarget();
-		EquipmentSlotType slot = this.pearler.getHeldItemMainhand().getItem() == Items.ENDER_PEARL ? EquipmentSlotType.MAINHAND : EquipmentSlotType.OFFHAND;
-		this.pearler.world.playSound(null, this.pearler.getPosX(), this.pearler.getPosY(), this.pearler.getPosZ(), SoundEvents.ENTITY_ENDER_PEARL_THROW, SoundCategory.NEUTRAL, 1F, 0.4F / (this.pearler.world.rand.nextFloat() * 0.4F + 0.8F));
-		ItemStack stack = this.pearler.getItemStackFromSlot(slot);
-		this.enderPearlEntity = new EnderPearlEntity(this.pearler.world, this.pearler);
-		enderPearlEntity.setPosition(this.pearler.getEyePosition(1f).x, this.pearler.getEyePosition(1f).y, this.pearler.getEyePosition(1f).z);
+	public void start() {
+		this.targetPlayer = (PlayerEntity) this.pearler.getTarget();
+		EquipmentSlotType slot = this.pearler.getMainHandItem().getItem() == Items.ENDER_PEARL ? EquipmentSlotType.MAINHAND : EquipmentSlotType.OFFHAND;
+		this.pearler.level.playSound(null, this.pearler.getX(), this.pearler.getY(), this.pearler.getZ(), SoundEvents.ENDER_PEARL_THROW, SoundCategory.NEUTRAL, 1F, 0.4F / (this.pearler.level.random.nextFloat() * 0.4F + 0.8F));
+		ItemStack stack = this.pearler.getItemBySlot(slot);
+		this.enderPearlEntity = new EnderPearlEntity(this.pearler.level, this.pearler);
+		enderPearlEntity.setPos(this.pearler.getEyePosition(1f).x, this.pearler.getEyePosition(1f).y, this.pearler.getEyePosition(1f).z);
 		enderPearlEntity.setItem(stack);
 		Vector3d vector3d = this.pearler.getEyePosition(1f);
-		double d0 = this.targetPlayer.getPosX() - vector3d.x;
+		double d0 = this.targetPlayer.getX() - vector3d.x;
 		double d1 = this.targetPlayer.getEyePosition(1f).y - vector3d.y;
-		double d2 = this.targetPlayer.getPosZ() - vector3d.z;
+		double d2 = this.targetPlayer.getZ() - vector3d.z;
 		double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
 		double pitch = MathHelper.wrapDegrees((float)(-(MathHelper.atan2(d1, d3) * (double)(180F / (float)Math.PI))));
 		double yaw = MathHelper.wrapDegrees((float)(MathHelper.atan2(d2, d0) * (double)(180F / (float)Math.PI)) - 90.0F);
-		enderPearlEntity.setDirectionAndMovement(this.pearler, (float) (pitch - 3f - d1), (float) (yaw), 0.0F, 1.5F, 5);
-		this.pearler.world.addEntity(enderPearlEntity);
+		enderPearlEntity.shootFromRotation(this.pearler, (float) (pitch - 3f - d1), (float) (yaw), 0.0F, 1.5F, 5);
+		this.pearler.level.addFreshEntity(enderPearlEntity);
 		stack.shrink(1);
 		this.cooldown = 60;
 	}
 
-	public void resetTask() {
+	public void stop() {
 		this.targetPlayer = null;
 		this.enderPearlEntity = null;
-		this.pearler.getNavigator().clearPath();
+		this.pearler.getNavigation().stop();
 	}
 }
