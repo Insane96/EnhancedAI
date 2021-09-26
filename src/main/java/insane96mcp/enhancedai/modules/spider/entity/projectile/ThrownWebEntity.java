@@ -20,6 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -73,7 +74,7 @@ public class ThrownWebEntity extends ProjectileItemEntity {
 		BlockState blockstate = this.level.getBlockState(result.getBlockPos());
 		blockstate.onProjectileHit(this.level, blockstate, result, this);
 		BlockPos spawnCobwebAt = result.getBlockPos().offset(result.getDirection().getNormal());
-		if (this.level.getBlockState(spawnCobwebAt).isAir()) {
+		if (this.level.getBlockState(spawnCobwebAt).isAir() && this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
 			this.level.setBlock(spawnCobwebAt, Blocks.COBWEB.defaultBlockState(), 3);
 			for(int i = 0; i < 32; ++i) {
 				this.level.addParticle(new BlockParticleData(ParticleTypes.BLOCK, Blocks.COBWEB.defaultBlockState()), spawnCobwebAt.getX() + this.random.nextDouble(), spawnCobwebAt.getY() + this.random.nextDouble(), spawnCobwebAt.getZ() + this.random.nextDouble(), 0d, 0D, 0d);
