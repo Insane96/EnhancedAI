@@ -1,5 +1,8 @@
 # Changelog
 
+## Alpha 1.2.1
+* Fixed server startup crash
+
 ## Alpha 1.2.0
 * Added Spider Web Throw. Spiders with this ability will throw Cobwebs at the target, stackingly slowing him down or, if missed, places a cobweb at the block hit
 * Added Zombie Pearlers. Zombies with and Ender Pearl in the hand or off hand will throw it to get closer to the player

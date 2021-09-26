@@ -1,6 +1,9 @@
 package insane96mcp.enhancedai;
 
-import insane96mcp.enhancedai.setup.*;
+import insane96mcp.enhancedai.setup.Config;
+import insane96mcp.enhancedai.setup.EAAttributes;
+import insane96mcp.enhancedai.setup.EAEntities;
+import insane96mcp.enhancedai.setup.EASounds;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -16,8 +19,6 @@ public class EnhancedAI
     
     public EnhancedAI() {
         ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, Config.COMMON_SPEC);
-
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::init);
         
         EASounds.SOUND_EVENTS.register(FMLJavaModLoadingContext.get().getModEventBus());
 		EAAttributes.ATTRIBUTES.register(FMLJavaModLoadingContext.get().getModEventBus());
