@@ -4,6 +4,7 @@
 * Added Spider Web Throw. Spiders with this ability will throw Cobwebs at the target, stackingly slowing him down or, if missed, places a cobweb at the block hit
 * Added Zombie Pearlers. Zombies with and Ender Pearl in the hand or off hand will throw it to get closer to the player
 * Launching creepers now cancel the explosion if they didn't reach the target. If that's the case, the launching ability will go on a 6 seconds cooldown
+* Launching creepers will no longer launch if they're less than 12 blocks away from the target
 * Skeletons now have 50% chance to not be able to shoot the player when avoiding them
 * Skeletons now have 50% chance to gain back the strafing ability
 * Skeletons no longer shot the player when farther than their attack distance

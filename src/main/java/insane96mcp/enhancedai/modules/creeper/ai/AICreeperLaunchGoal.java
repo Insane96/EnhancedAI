@@ -46,12 +46,15 @@ public class AICreeperLaunchGoal extends Goal {
 		if (this.launchingCreeper.level.getBlockState(this.launchingCreeper.blockPosition().above(3)).getBlock() != Blocks.AIR)
 			return false;
 
+		if (this.launchingCreeper.distanceToSqr(target) < 12d * 12d)
+			return false;
+
 		double yDistance = this.launchingCreeper.getY() - target.getY();
 		double x = target.getX() - this.launchingCreeper.getX();
 		double z = target.getZ() - this.launchingCreeper.getZ();
 		double xzDistance = x * x + z * z;
 
-		return xzDistance < activationDistance() && yDistance < CreeperUtils.getExplosionSize(this.launchingCreeper) * 2 && this.launchingCreeper.isOnGround();
+		return xzDistance < activationDistanceSqr() && yDistance < CreeperUtils.getExplosionSize(this.launchingCreeper) * 2 && this.launchingCreeper.isOnGround();
 	}
 
 	/**
@@ -101,7 +104,7 @@ public class AICreeperLaunchGoal extends Goal {
 		this.launchingCreeper.getEntityData().set(CreeperEntity.DATA_IS_IGNITED, false);
 	}
 
-	private float activationDistance() {
+	private float activationDistanceSqr() {
 		float explosionSize = CreeperUtils.getExplosionSize(this.launchingCreeper) * 5;
 		return explosionSize * explosionSize;
 	}
