@@ -22,7 +22,7 @@ public class ThrowingWebFeature extends Feature {
 
 	private final BlacklistConfig entityBlacklistConfig;
 
-	public double webThrowChance = 0.05;
+	public double webThrowChance = 0.1d;
 	public ArrayList<IdTagMatcher> entityBlacklist;
 	public boolean entityBlacklistAsWhitelist;
 
