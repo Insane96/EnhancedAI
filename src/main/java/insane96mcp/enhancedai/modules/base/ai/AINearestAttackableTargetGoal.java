@@ -5,6 +5,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.TargetGoal;
+import net.minecraft.entity.monster.SpiderEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -82,5 +83,20 @@ public class AINearestAttackableTargetGoal<T extends LivingEntity> extends Targe
 	public void setXray(boolean xray) {
 		this.xray = xray;
 		this.targetEntitySelector.allowUnseeable();
+	}
+
+	public static class TargetGoal<T extends LivingEntity> extends AINearestAttackableTargetGoal<T> {
+		public TargetGoal(SpiderEntity goalOwnerIn, Class<T> targetClassIn, boolean checkSight, boolean nearbyOnlyIn, @Nullable Predicate<LivingEntity> targetPredicate) {
+			super(goalOwnerIn, targetClassIn, checkSight, nearbyOnlyIn, targetPredicate);
+		}
+
+		/**
+		 * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
+		 * method as well.
+		 */
+		public boolean canUse() {
+			float f = this.mob.getBrightness();
+			return !(f >= 0.5F) && super.canUse();
+		}
 	}
 }

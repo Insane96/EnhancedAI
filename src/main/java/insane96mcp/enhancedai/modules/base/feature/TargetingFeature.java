@@ -14,13 +14,15 @@ import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.ai.goal.PrioritizedGoal;
+import net.minecraft.entity.monster.SpiderEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Predicate;
 
 @Label(name = "Targeting", description = "Change how mobs target players")
@@ -30,6 +32,8 @@ public class TargetingFeature extends Feature {
 	private final ForgeConfigSpec.ConfigValue<Double> xrayConfig;
 	private final ForgeConfigSpec.ConfigValue<Boolean> instaTargetConfig;
 	private final BlacklistConfig entityBlacklistConfig;
+
+	private final List<String> entityBlacklistDefault = Arrays.asList("minecraft:enderman");
 
 	public int followRange = 64;
 	public double xray = 0.20d;
@@ -49,7 +53,7 @@ public class TargetingFeature extends Feature {
 		instaTargetConfig = Config.builder
 				.comment("Mobs will no longer take random time to target a player.")
 				.define("Instant Target", instaTarget);
-		entityBlacklistConfig = new BlacklistConfig(Config.builder, "Entity Blacklist", "Entities in here will not have the TargetAI changed", Collections.emptyList(), false);
+		entityBlacklistConfig = new BlacklistConfig(Config.builder, "Entity Blacklist", "Entities in here will not have the TargetAI changed", entityBlacklistDefault, false);
 		Config.builder.pop();
 	}
 
@@ -95,8 +99,7 @@ public class TargetingFeature extends Feature {
 
 		ArrayList<Goal> goalsToRemove = new ArrayList<>();
 		for (PrioritizedGoal prioritizedGoal : mobEntity.targetSelector.availableGoals) {
-			//Need to do this to prevent entities like enderman to get their neutral goal to be overwritten
-			if (!prioritizedGoal.getGoal().getClass().equals(NearestAttackableTargetGoal.class))
+			if (!(prioritizedGoal.getGoal() instanceof NearestAttackableTargetGoal))
 				continue;
 
 			NearestAttackableTargetGoal<?> goal = (NearestAttackableTargetGoal<?>) prioritizedGoal.getGoal();
@@ -115,7 +118,12 @@ public class TargetingFeature extends Feature {
 
 		goalsToRemove.forEach(mobEntity.goalSelector::removeGoal);
 
-		AINearestAttackableTargetGoal<PlayerEntity> targetGoal = new AINearestAttackableTargetGoal<>(mobEntity, PlayerEntity.class, true, false, predicate);
+		AINearestAttackableTargetGoal<PlayerEntity> targetGoal;
+
+		if (mobEntity instanceof SpiderEntity)
+			targetGoal = new AINearestAttackableTargetGoal.TargetGoal<>((SpiderEntity) mobEntity, PlayerEntity.class, true, false, predicate);
+		else
+			targetGoal = new AINearestAttackableTargetGoal<>(mobEntity, PlayerEntity.class, true, false, predicate);
 		if (mobEntity.level.random.nextDouble() < this.xray)
 			targetGoal.setXray(true);
 
