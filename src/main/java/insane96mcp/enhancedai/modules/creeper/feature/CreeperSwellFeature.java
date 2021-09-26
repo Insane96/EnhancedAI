@@ -3,7 +3,7 @@ package insane96mcp.enhancedai.modules.creeper.feature;
 import insane96mcp.enhancedai.modules.creeper.ai.AICreeperLaunchGoal;
 import insane96mcp.enhancedai.modules.creeper.ai.AICreeperSwellGoal;
 import insane96mcp.enhancedai.setup.Config;
-import insane96mcp.enhancedai.setup.ModSounds;
+import insane96mcp.enhancedai.setup.EASounds;
 import insane96mcp.enhancedai.setup.Strings;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
@@ -87,7 +87,7 @@ public class CreeperSwellFeature extends Feature {
 		CreeperEntity creeper = (CreeperEntity) e.getExploder();
 
 		if (creeper.getPersistentData().getBoolean(Strings.Tags.JOHN_CENA))
-			creeper.playSound(ModSounds.CREEPER_CENA_EXPLODE.get(), 4.0f, 1.0f);
+			creeper.playSound(EASounds.CREEPER_CENA_EXPLODE.get(), 4.0f, 1.0f);
 	}
 
 	@SubscribeEvent
