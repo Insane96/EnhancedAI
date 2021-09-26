@@ -9,8 +9,6 @@ import insane96mcp.insanelib.config.BlacklistConfig;
 import insane96mcp.insanelib.utils.IdTagMatcher;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.ai.goal.PrioritizedGoal;
@@ -129,23 +127,5 @@ public class TargetingFeature extends Feature {
 
 		targetGoal.setInstaTarget(this.instaTarget);
 		mobEntity.targetSelector.addGoal(2, targetGoal);
-
-		followRange(mobEntity);
-	}
-
-	private void followRange(MobEntity mobEntity) {
-		if (followRange != 0) {
-			ModifiableAttributeInstance followRangeAttribute = mobEntity.getAttribute(Attributes.FOLLOW_RANGE);
-			if (followRangeAttribute != null) {
-				followRangeAttribute.setBaseValue(this.followRange);
-
-				for (PrioritizedGoal pGoal : mobEntity.targetSelector.availableGoals) {
-					if (pGoal.getGoal() instanceof AINearestAttackableTargetGoal) {
-						AINearestAttackableTargetGoal<? extends LivingEntity> nearestAttackableTargetGoal = (AINearestAttackableTargetGoal<? extends LivingEntity>) pGoal.getGoal();
-						nearestAttackableTargetGoal.targetEntitySelector.range(mobEntity.getAttributeValue(Attributes.FOLLOW_RANGE));
-					}
-				}
-			}
-		}
 	}
 }

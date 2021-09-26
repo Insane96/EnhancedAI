@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Now requires InsaneLib 1.3.0
+
 ## Alpha 1.2.1
 * Fixed server startup crash
 
