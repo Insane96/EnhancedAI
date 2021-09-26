@@ -9,6 +9,7 @@ import net.minecraft.pathfinding.Path;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.math.vector.Vector3d;
 
+import java.util.EnumSet;
 import java.util.function.Predicate;
 
 public class AIAvoidEntityGoal<T extends LivingEntity> extends Goal {
@@ -99,5 +100,12 @@ public class AIAvoidEntityGoal<T extends LivingEntity> extends Goal {
 			this.entity.getNavigation().setSpeedModifier(this.farSpeed);
 		}
 
+	}
+
+	public void setAttackWhenRunning(boolean attackWhenRunning) {
+		if (attackWhenRunning)
+			this.setFlags(EnumSet.noneOf(Flag.class));
+		else
+			this.setFlags(EnumSet.of(Flag.LOOK));
 	}
 }

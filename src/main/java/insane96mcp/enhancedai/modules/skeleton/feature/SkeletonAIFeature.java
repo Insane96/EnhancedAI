@@ -26,6 +26,7 @@ public class SkeletonAIFeature extends Feature {
 	private final ForgeConfigSpec.ConfigValue<Integer> minShootingRangeConfig;
 	private final ForgeConfigSpec.ConfigValue<Integer> maxShootingRangeConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> avoidPlayerChanceConfig;
+	private final ForgeConfigSpec.ConfigValue<Double> attackWhenAvoidingChanceConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> strafeChanceConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> arrowInaccuracyConfig;
 	private final BlacklistConfig entityBlacklistConfig;
@@ -33,6 +34,7 @@ public class SkeletonAIFeature extends Feature {
 	public int minShootingRange = 24;
 	public int maxShootingRange = 48;
 	public double avoidPlayerChance = 0.5d;
+	public double attackWhenAvoidingChance = 0.5d;
 	public double strafeChance = 0.5d;
 	public double arrowInaccuracy = 2;
 	public ArrayList<IdTagMatcher> entityBlacklist;
@@ -50,6 +52,9 @@ public class SkeletonAIFeature extends Feature {
 		avoidPlayerChanceConfig = Config.builder
 				.comment("Chance for a Skeleton to spawn with the ability to avoid the player")
 				.defineInRange("Avoid Player chance", this.avoidPlayerChance, 0d, 1d);
+		attackWhenAvoidingChanceConfig = Config.builder
+				.comment("Chance for a Skeleton to attack while running from a player")
+				.defineInRange("Attack When Avoiding Chance", this.attackWhenAvoidingChance, 0d, 1d);
 		strafeChanceConfig = Config.builder
 				.comment("Chance for a Skeleton to spawn with the ability to strafe (like vanilla)")
 				.defineInRange("Strafe chance", this.strafeChance, 0d, 1d);
@@ -66,6 +71,7 @@ public class SkeletonAIFeature extends Feature {
 		this.minShootingRange = this.minShootingRangeConfig.get();
 		this.maxShootingRange = this.maxShootingRangeConfig.get();
 		this.avoidPlayerChance = this.avoidPlayerChanceConfig.get();
+		this.attackWhenAvoidingChance = this.attackWhenAvoidingChanceConfig.get();
 		this.strafeChance = this.strafeChanceConfig.get();
 		this.arrowInaccuracy = this.arrowInaccuracyConfig.get();
 		this.entityBlacklist = IdTagMatcher.parseStringList(this.entityBlacklistConfig.listConfig.get());
@@ -105,6 +111,7 @@ public class SkeletonAIFeature extends Feature {
 
 			if (skeleton.level.random.nextDouble() < this.avoidPlayerChance) {
 				AIAvoidEntityGoal<PlayerEntity> avoidEntityGoal = new AIAvoidEntityGoal<>(skeleton, PlayerEntity.class, 12.0f, 1.5d, 1.25d);
+				avoidEntityGoal.setAttackWhenRunning(skeleton.level.random.nextDouble() < this.attackWhenAvoidingChance);
 				skeleton.goalSelector.addGoal(1, avoidEntityGoal);
 			}
 		}
