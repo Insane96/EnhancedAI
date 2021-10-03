@@ -91,22 +91,6 @@ public class CreeperSwellFeature extends Feature {
 	}
 
 	@SubscribeEvent
-	public void onExplosionStart(ExplosionEvent.Start event) {
-		if (!this.isEnabled())
-			return;
-
-		Explosion explosion = event.getExplosion();
-		if (!(explosion.getExploder() instanceof CreeperEntity))
-			return;
-
-		CreeperEntity creeper = (CreeperEntity) explosion.getExploder();
-
-		CompoundNBT compoundNBT = creeper.getPersistentData();
-		if (compoundNBT.getBoolean(Strings.Tags.EXPLOSION_CAUSES_FIRE))
-			explosion.fire = true;
-	}
-
-	@SubscribeEvent
 	public void eventEntityJoinWorld(EntityJoinWorldEvent event) {
 		if (!this.isEnabled())
 			return;
@@ -132,7 +116,7 @@ public class CreeperSwellFeature extends Feature {
 			compoundNBT.putByte("ExplosionRadius", (byte)6);
 			compoundNBT.putBoolean("powered", creeper.isPowered());
 			creeper.readAdditionalSaveData(compoundNBT);
-			creeper.getPersistentData().putBoolean(Strings.Tags.EXPLOSION_CAUSES_FIRE, true);
+			creeper.getPersistentData().putBoolean(insane96mcp.insanelib.setup.Strings.Tags.EXPLOSION_CAUSES_FIRE, true);
 			creeper.getPersistentData().putBoolean(Strings.Tags.JOHN_CENA, true);
 		}
 		swellGoal.setIgnoreWalls(creeper.level.random.nextDouble() < this.ignoreWalls);

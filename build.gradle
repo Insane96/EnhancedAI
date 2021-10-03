@@ -126,6 +126,7 @@ repositories {
     flatDir {
         dirs "libs"
     }
+    maven { url "https://www.cursemaven.com" }
 }
 
 mixin {
@@ -143,6 +144,9 @@ dependencies {
     // compile "some.group:artifact:version:classifier"
     // compile "some.group:artifact:version"
     annotationProcessor 'org.spongepowered:mixin:0.8.3:processor'
+
+    implementation fg.deobf("curse.maven:savage-and-ravage-381736:3226442")
+    implementation fg.deobf("curse.maven:abnormals_core-382216:3457851")
 
     // Real examples
     // compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
