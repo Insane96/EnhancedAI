@@ -54,7 +54,8 @@ public class ThrownWebEntity extends ProjectileItemEntity {
 
 	protected void onHitEntity(EntityRayTraceResult result) {
 		super.onHitEntity(result);
-		result.getEntity().hurt(DamageSource.thrown(this, this.getOwner()), this.damage);
+		if (!result.getEntity().hurt(DamageSource.thrown(this, this.getOwner()), this.damage))
+			return;
 		for(int i = 0; i < 32; ++i) {
 			this.level.addParticle(new BlockParticleData(ParticleTypes.BLOCK, Blocks.COBWEB.defaultBlockState()), result.getEntity().position().x + this.random.nextDouble() - 0.5d, result.getEntity().position().y + this.random.nextDouble() - 0.5d, result.getEntity().position().z + this.random.nextDouble() - 0.5d, 0d, 0D, 0d);
 		}
