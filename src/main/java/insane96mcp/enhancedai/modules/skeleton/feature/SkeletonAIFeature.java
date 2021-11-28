@@ -36,15 +36,15 @@ public class SkeletonAIFeature extends Feature {
 
 	public int minShootingRange = 24;
 	public int maxShootingRange = 48;
-	public double strafeChance = 0.5d;
+	public double strafeChance = 0.333d;
 	public double arrowInaccuracy = 2;
 	public ArrayList<IdTagMatcher> entityBlacklist;
 	public boolean entityBlacklistAsWhitelist;
 	//Flee from target
 	public double avoidPlayerChance = 0.5d;
 	public double attackWhenAvoidingChance = 0.5d;
-	public double fleeSpeedNear = 1.5d;
-	public double fleeSpeedFar = 1.25d;
+	public double fleeSpeedNear = 1.6d;
+	public double fleeSpeedFar = 1.3d;
 
 	public SkeletonAIFeature(Module module) {
 		super(Config.builder, module);
