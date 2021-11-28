@@ -1,5 +1,7 @@
 package insane96mcp.enhancedai.modules.spider.entity.projectile;
 
+import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.modules.base.feature.BaseFeature;
 import insane96mcp.enhancedai.setup.EAEntities;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -77,6 +79,7 @@ public class ThrownWebEntity extends ProjectileItemEntity {
 		BlockPos spawnCobwebAt = result.getBlockPos().offset(result.getDirection().getNormal());
 		if (this.level.getBlockState(spawnCobwebAt).isAir() && this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
 			this.level.setBlock(spawnCobwebAt, Blocks.COBWEB.defaultBlockState(), 3);
+			BaseFeature.scheduleTickTask(new TemporaryCobwebTask(Modules.spider.throwingWeb.destroyWebAfter, this.level, spawnCobwebAt));
 			for(int i = 0; i < 32; ++i) {
 				this.level.addParticle(new BlockParticleData(ParticleTypes.BLOCK, Blocks.COBWEB.defaultBlockState()), spawnCobwebAt.getX() + this.random.nextDouble(), spawnCobwebAt.getY() + this.random.nextDouble(), spawnCobwebAt.getZ() + this.random.nextDouble(), 0d, 0D, 0d);
 			}
