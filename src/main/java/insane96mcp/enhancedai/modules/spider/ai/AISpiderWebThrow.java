@@ -36,6 +36,8 @@ public class AISpiderWebThrow extends Goal {
 
 	public void start() {
 		this.targetPlayer = (PlayerEntity) this.spider.getTarget();
+		if (!this.spider.canSee(this.targetPlayer))
+			return;
 		double distance = this.spider.distanceTo(this.targetPlayer);
 		double distanceY = this.targetPlayer.getY() - this.spider.getY();
 		float f = 2.0F / 3.0F;
