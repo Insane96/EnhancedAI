@@ -103,7 +103,7 @@ public class AIRangedBowAttackGoal<T extends MonsterEntity & IRangedAttackMob> e
 			this.entity.getNavigation().moveTo(livingentity, this.moveSpeedAmp);
 		else {
 
-			if (distanceFromTarget <= (double)this.maxAttackDistance && this.seeTime >= 20 && this.canStrafe()) {
+			if (distanceFromTarget >= 49d && distanceFromTarget <= (double)this.maxAttackDistance && this.seeTime >= 20 && this.canStrafe()) {
 				//this.entity.getNavigator().clearPath();
 				++this.strafingTime;
 			}
@@ -139,9 +139,7 @@ public class AIRangedBowAttackGoal<T extends MonsterEntity & IRangedAttackMob> e
 
 				this.entity.getMoveControl().strafe(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F);
 			}
-			else {
-				this.entity.getLookControl().setLookAt(livingentity, 30.0F, 30.0F);
-			}
+			this.entity.getLookControl().setLookAt(livingentity, 30.0F, 30.0F);
 
 			if (this.entity.isUsingItem()) {
 				if (!canSeeTarget && this.seeTime < -60) {
@@ -162,7 +160,7 @@ public class AIRangedBowAttackGoal<T extends MonsterEntity & IRangedAttackMob> e
 	}
 
 	private boolean canStrafe() {
-		return this.canStrafe && this.entity.goalSelector.getRunningGoals().anyMatch(p -> p.getGoal() instanceof AIAvoidEntityGoal);
+		return this.canStrafe && this.entity.goalSelector.getRunningGoals().noneMatch(p -> p.getGoal() instanceof AIAvoidEntityGoal);
 	}
 
 	private void attackEntityWithRangedAttack(T entity, LivingEntity target, float distanceFactor) {
