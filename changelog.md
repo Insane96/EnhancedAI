@@ -1,7 +1,10 @@
 # Changelog
 
 ## Upcoming
-* Now requires InsaneLib 1.3.0
+* Now requires InsaneLib 1.4.0
+* Slowness is no longer applied from thrown webs if the player parrys the projectile
+* Fixed spiders throwing webs even they could not see the player
+* Fixed skeletons running from target having faster speed when far away instead of when near. Also made those speeds configurable.
 
 ## Alpha 1.2.1
 * Fixed server startup crash

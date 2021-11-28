@@ -30,6 +30,6 @@ Also His name is John Cena.
 [[dependencies.enhancedai]]
     modId = "insanelib"
     mandatory = true
-    versionRange = "[1.3.0,)"
+    versionRange = "[1.4.0,)"
     ordering = "NONE"
     side = "BOTH"
