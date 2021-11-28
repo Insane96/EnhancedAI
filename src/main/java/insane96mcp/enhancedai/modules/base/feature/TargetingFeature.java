@@ -7,8 +7,10 @@ import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.config.BlacklistConfig;
 import insane96mcp.insanelib.utils.IdTagMatcher;
+import insane96mcp.insanelib.utils.MCUtils;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.ai.goal.PrioritizedGoal;
@@ -90,6 +92,10 @@ public class TargetingFeature extends Feature {
 		}
 		if (isInBlacklist || (!isInWhitelist && this.entityBlacklistAsWhitelist))
 			return;
+
+		if (this.followRange != 0) {
+			MCUtils.setAttributeValue(mobEntity, Attributes.FOLLOW_RANGE, this.followRange);
+		}
 
 		boolean hasTargetGoal = false;
 
