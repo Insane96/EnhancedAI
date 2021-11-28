@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.modules.spider.entity.projectile;
 
-import insane96mcp.enhancedai.utils.ScheduledTickTask;
+import insane96mcp.insanelib.utils.scheduled.ScheduledTickTask;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
