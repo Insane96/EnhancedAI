@@ -20,11 +20,13 @@ public class ThrowingWebFeature extends Feature {
 
 	private final ForgeConfigSpec.ConfigValue<Double> webThrowChanceConfig;
 	private final ForgeConfigSpec.ConfigValue<Integer> destroyWebAfterConfig;
+	private final ForgeConfigSpec.ConfigValue<Double> thrownWebDamageConfig;
 
 	private final BlacklistConfig entityBlacklistConfig;
 
 	public double webThrowChance = 0.1d;
 	public int destroyWebAfter = 100;
+	public double thrownWebDamage = 5d;
 	public ArrayList<IdTagMatcher> entityBlacklist;
 	public boolean entityBlacklistAsWhitelist;
 
@@ -37,6 +39,9 @@ public class ThrowingWebFeature extends Feature {
 		destroyWebAfterConfig = Config.builder
 				.comment("After how many ticks will the web projectile's cobweb be destroyed?")
 				.defineInRange("Destroy Web After", this.destroyWebAfter, 0, 6000);
+		thrownWebDamageConfig = Config.builder
+				.comment("Damage when the projectiles hits a mob. The damage is set for normal difficulty. Hard difficulty gets +50% damage and Easy gets (-50% + 1) damage.")
+				.defineInRange("Web Throw Chance", this.thrownWebDamage, 0d, 128d);
 		entityBlacklistConfig = new BlacklistConfig(Config.builder, "Entity Blacklist", "Entities that shouldn't get the Throwing Web AI", Collections.emptyList(), false);
 		Config.builder.pop();
 	}
@@ -46,6 +51,7 @@ public class ThrowingWebFeature extends Feature {
 		super.loadConfig();
 		this.webThrowChance = this.webThrowChanceConfig.get();
 		this.destroyWebAfter = this.destroyWebAfterConfig.get();
+		this.thrownWebDamage = this.webThrowChanceConfig.get();
 		this.entityBlacklist = IdTagMatcher.parseStringList(this.entityBlacklistConfig.listConfig.get());
 		this.entityBlacklistAsWhitelist = this.entityBlacklistConfig.listAsWhitelistConfig.get();
 	}

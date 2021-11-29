@@ -1,5 +1,6 @@
 package insane96mcp.enhancedai.modules.spider.ai;
 
+import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.modules.spider.entity.projectile.ThrownWebEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
@@ -49,7 +50,7 @@ public class AISpiderWebThrow extends Goal {
 		yPos += this.targetPlayer.getEyeHeight() * 0.5 + (distanceY / distanceXZ);
 		double d1 = yPos - thrownWeb.getY();
 		thrownWeb.shoot(d0, d1 + distanceXZ * 0.2d, d2, f * 1.1f + ((float)distance / 32f) + (float)Math.max(distanceY / 48d, 0f), 0);
-		thrownWeb.setDamage(5f);
+		thrownWeb.setDamage((float) Modules.spider.throwingWeb.thrownWebDamage);
 		thrownWeb.level.addFreshEntity(thrownWeb);
 		this.spider.playSound(SoundEvents.SPIDER_HURT, 1.0F, 2.0F / (this.spider.getRandom().nextFloat() * 0.4F + 0.8F));
 		this.cooldown = 60;
