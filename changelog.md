@@ -4,6 +4,7 @@
 * Now requires InsaneLib 1.4.0
 * Spider Cobweb Throwing
   * Cobweb damage is now configurable and scales with difficulty
+  * Cobweb cooldown is now configurable
   * Cobwebs placed will now disappear after 5 seconds (configurable)
 * Slowness is no longer applied from thrown webs if the player parrys the projectile
 * Fixed spiders throwing webs even they could not see the player

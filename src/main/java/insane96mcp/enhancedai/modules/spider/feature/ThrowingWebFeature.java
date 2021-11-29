@@ -21,12 +21,14 @@ public class ThrowingWebFeature extends Feature {
 	private final ForgeConfigSpec.ConfigValue<Double> webThrowChanceConfig;
 	private final ForgeConfigSpec.ConfigValue<Integer> destroyWebAfterConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> thrownWebDamageConfig;
+	private final ForgeConfigSpec.ConfigValue<Integer> throwingCooldownConfig;
 
 	private final BlacklistConfig entityBlacklistConfig;
 
 	public double webThrowChance = 0.1d;
 	public int destroyWebAfter = 100;
 	public double thrownWebDamage = 5d;
+	public int throwingCooldown = 50;
 	public ArrayList<IdTagMatcher> entityBlacklist;
 	public boolean entityBlacklistAsWhitelist;
 
@@ -42,6 +44,9 @@ public class ThrowingWebFeature extends Feature {
 		thrownWebDamageConfig = Config.builder
 				.comment("Damage when the projectiles hits a mob. The damage is set for normal difficulty. Hard difficulty gets +50% damage and Easy gets (-50% + 1) damage.")
 				.defineInRange("Web Throw Chance", this.thrownWebDamage, 0d, 128d);
+		throwingCooldownConfig = Config.builder
+				.comment("Every how many ticks do spiders throw the projectile")
+				.defineInRange("Projectile cooldown", this.throwingCooldown, 1, 1200);
 		entityBlacklistConfig = new BlacklistConfig(Config.builder, "Entity Blacklist", "Entities that shouldn't get the Throwing Web AI", Collections.emptyList(), false);
 		Config.builder.pop();
 	}
@@ -51,7 +56,8 @@ public class ThrowingWebFeature extends Feature {
 		super.loadConfig();
 		this.webThrowChance = this.webThrowChanceConfig.get();
 		this.destroyWebAfter = this.destroyWebAfterConfig.get();
-		this.thrownWebDamage = this.webThrowChanceConfig.get();
+		this.thrownWebDamage = this.thrownWebDamageConfig.get();
+		this.throwingCooldown = this.throwingCooldownConfig.get();
 		this.entityBlacklist = IdTagMatcher.parseStringList(this.entityBlacklistConfig.listConfig.get());
 		this.entityBlacklistAsWhitelist = this.entityBlacklistConfig.listAsWhitelistConfig.get();
 	}

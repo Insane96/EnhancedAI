@@ -14,7 +14,7 @@ public class AISpiderWebThrow extends Goal {
 	private final SpiderEntity spider;
 	private PlayerEntity targetPlayer;
 
-	private int cooldown = 40;
+	private int cooldown = Modules.spider.throwingWeb.throwingCooldown;
 
 	public AISpiderWebThrow(SpiderEntity spider){
 		this.spider = spider;
@@ -53,7 +53,7 @@ public class AISpiderWebThrow extends Goal {
 		thrownWeb.setDamage((float) Modules.spider.throwingWeb.thrownWebDamage);
 		thrownWeb.level.addFreshEntity(thrownWeb);
 		this.spider.playSound(SoundEvents.SPIDER_HURT, 1.0F, 2.0F / (this.spider.getRandom().nextFloat() * 0.4F + 0.8F));
-		this.cooldown = 60;
+		this.cooldown = Modules.spider.throwingWeb.throwingCooldown;
 	}
 
 	public void stop() {
