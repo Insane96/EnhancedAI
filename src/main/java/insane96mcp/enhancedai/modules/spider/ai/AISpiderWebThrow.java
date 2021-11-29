@@ -25,7 +25,9 @@ public class AISpiderWebThrow extends Goal {
 		if (!(target instanceof PlayerEntity))
 			return false;
 
-		if (this.spider.distanceToSqr(target) < 2.5d * 2.5d)
+		double distance = this.spider.distanceToSqr(target);
+
+		if (distance < Modules.spider.throwingWeb.minDistance * Modules.spider.throwingWeb.minDistance || distance > Modules.spider.throwingWeb.maxDistance * Modules.spider.throwingWeb.maxDistance)
 			return false;
 
 		return --this.cooldown <= 0;

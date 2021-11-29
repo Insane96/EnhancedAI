@@ -22,6 +22,8 @@ public class ThrowingWebFeature extends Feature {
 	private final ForgeConfigSpec.ConfigValue<Integer> destroyWebAfterConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> thrownWebDamageConfig;
 	private final ForgeConfigSpec.ConfigValue<Integer> throwingCooldownConfig;
+	private final ForgeConfigSpec.ConfigValue<Double> minDistanceConfig;
+	private final ForgeConfigSpec.ConfigValue<Double> maxDistanceConfig;
 
 	private final BlacklistConfig entityBlacklistConfig;
 
@@ -29,6 +31,8 @@ public class ThrowingWebFeature extends Feature {
 	public int destroyWebAfter = 100;
 	public double thrownWebDamage = 5d;
 	public int throwingCooldown = 50;
+	public double minDistance = 2.5d;
+	public double maxDistance = 64d;
 	public ArrayList<IdTagMatcher> entityBlacklist;
 	public boolean entityBlacklistAsWhitelist;
 
@@ -47,6 +51,12 @@ public class ThrowingWebFeature extends Feature {
 		throwingCooldownConfig = Config.builder
 				.comment("Every how many ticks do spiders throw the projectile")
 				.defineInRange("Projectile cooldown", this.throwingCooldown, 1, 1200);
+		minDistanceConfig = Config.builder
+				.comment("Minimum distance required for the spider to throw webs. Setting this to 0 will make the spider throw webs even when attacking the player.")
+				.defineInRange("Min Distance", this.minDistance, 0d, 64d);
+		maxDistanceConfig = Config.builder
+				.comment("Maximum distance at which the spider will throw webs.")
+				.defineInRange("Max Distance", this.maxDistance, 0d, 64d);
 		entityBlacklistConfig = new BlacklistConfig(Config.builder, "Entity Blacklist", "Entities that shouldn't get the Throwing Web AI", Collections.emptyList(), false);
 		Config.builder.pop();
 	}
@@ -58,6 +68,8 @@ public class ThrowingWebFeature extends Feature {
 		this.destroyWebAfter = this.destroyWebAfterConfig.get();
 		this.thrownWebDamage = this.thrownWebDamageConfig.get();
 		this.throwingCooldown = this.throwingCooldownConfig.get();
+		this.minDistance = this.minDistanceConfig.get();
+		this.maxDistance = this.maxDistanceConfig.get();
 		this.entityBlacklist = IdTagMatcher.parseStringList(this.entityBlacklistConfig.listConfig.get());
 		this.entityBlacklistAsWhitelist = this.entityBlacklistConfig.listAsWhitelistConfig.get();
 	}
