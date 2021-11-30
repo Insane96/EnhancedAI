@@ -55,7 +55,7 @@ public class AINearestAttackableTargetGoal<T extends LivingEntity> extends Targe
 	}
 
 	protected AxisAlignedBB getTargetableArea(double targetDistance) {
-		return this.mob.getBoundingBox().inflate(targetDistance, 4.0D, targetDistance);
+		return this.mob.getBoundingBox().inflate(targetDistance, targetDistance, targetDistance);
 	}
 
 	protected void findNearestTarget() {

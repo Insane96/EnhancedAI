@@ -14,6 +14,7 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.ai.goal.PrioritizedGoal;
+import net.minecraft.entity.monster.EndermiteEntity;
 import net.minecraft.entity.monster.SpiderEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -133,5 +134,17 @@ public class TargetingFeature extends Feature {
 
 		targetGoal.setInstaTarget(this.instaTarget);
 		mobEntity.targetSelector.addGoal(2, targetGoal);
+
+		AINearestAttackableTargetGoal<EndermiteEntity> targetGoalTest;
+
+		if (mobEntity instanceof SpiderEntity)
+			targetGoalTest = new AINearestAttackableTargetGoal.TargetGoal<>((SpiderEntity) mobEntity, EndermiteEntity.class, true, false, predicate);
+		else
+			targetGoalTest = new AINearestAttackableTargetGoal<>(mobEntity, EndermiteEntity.class, true, false, predicate);
+		if (mobEntity.level.random.nextDouble() < this.xray)
+			targetGoalTest.setXray(true);
+
+		targetGoalTest.setInstaTarget(this.instaTarget);
+		mobEntity.targetSelector.addGoal(2, targetGoalTest);
 	}
 }
