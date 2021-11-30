@@ -1,7 +1,8 @@
 package insane96mcp.enhancedai.modules.creeper.ai;
 
 import insane96mcp.enhancedai.modules.creeper.utils.CreeperUtils;
-import net.minecraft.block.Blocks;
+import insane96mcp.enhancedai.setup.EASounds;
+import insane96mcp.enhancedai.setup.Strings;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.monster.CreeperEntity;
@@ -22,6 +23,7 @@ public class AICreeperLaunchGoal extends Goal {
 	private int ticksBeforeLaunching;
 
 	private int cooldown;
+	private boolean hasLaunched = false;
 
 	public AICreeperLaunchGoal(CreeperEntity entitycreeperIn) {
 		this.launchingCreeper = entitycreeperIn;
@@ -40,10 +42,10 @@ public class AICreeperLaunchGoal extends Goal {
 		if (--cooldown > 0)
 			return false;
 
-		if (!this.launchingCreeper.getSensing().canSee(target))
+		if (!this.launchingCreeper.getSensing().canSee(target) && !this.launchingCreeper.getPersistentData().contains(Strings.Tags.BREACH))
 			return false;
 
-		if (this.launchingCreeper.level.getBlockState(this.launchingCreeper.blockPosition().above(3)).getBlock() != Blocks.AIR)
+		if (this.launchingCreeper.level.getBlockState(this.launchingCreeper.blockPosition().above(3)).getMaterial().blocksMotion())
 			return false;
 
 		if (this.launchingCreeper.distanceToSqr(target) < 12d * 12d)
@@ -61,9 +63,12 @@ public class AICreeperLaunchGoal extends Goal {
 	 * Execute a one shot task or start executing a continuous task
 	 */
 	public void start() {
-			this.launchingCreeper.getNavigation().stop();
+		this.launchingCreeper.getNavigation().stop();
 		this.creeperAttackTarget = this.launchingCreeper.getTarget();
 		this.launchingCreeper.ignite();
+		this.launchingCreeper.playSound(SoundEvents.CREEPER_PRIMED, CreeperUtils.getExplosionSize(this.launchingCreeper), 1f);
+		if (this.launchingCreeper.getPersistentData().contains(Strings.Tags.JOHN_CENA))
+			this.launchingCreeper.playSound(EASounds.CREEPER_CENA_FUSE.get(), CreeperUtils.getExplosionSize(this.launchingCreeper), 1.0f);;
 		double distance = this.launchingCreeper.distanceTo(this.creeperAttackTarget);
 		this.ticksBeforeLaunching = (int) Math.max((50 - distance) * 0.4d, 1);
 	}
@@ -73,6 +78,8 @@ public class AICreeperLaunchGoal extends Goal {
 			this.cooldown = 120;
 			return false;
 		}
+		else if ((this.launchingCreeper.verticalCollision || this.launchingCreeper.horizontalCollision) && this.launchingCreeper.getPersistentData().contains(Strings.Tags.BREACH) && this.hasLaunched && this.launchingCreeper.distanceToSqr(this.creeperAttackTarget) < (CreeperUtils.getExplosionSizeSq(this.launchingCreeper) * 2.5d * 2.5d))
+			this.launchingCreeper.explodeCreeper();
 
 		return this.creeperAttackTarget != null && this.creeperAttackTarget.isAlive();
 	}
@@ -92,8 +99,9 @@ public class AICreeperLaunchGoal extends Goal {
 		double d0 = this.creeperAttackTarget.getX() - this.launchingCreeper.getX();
 		double d2 = this.creeperAttackTarget.getZ() - this.launchingCreeper.getZ();
 		double distanceXZ = MathHelper.sqrt(d0 * d0 + d2 * d2);
-		Vector3d motion = new Vector3d(d0 * 0.15d, Math.max(distanceY, 6d) / 12d + distanceXZ / 80d, d2 * 0.15d);
+		Vector3d motion = new Vector3d(d0 * 0.15d, Math.max(distanceY, 7d) / 12d + distanceXZ / 80d, d2 * 0.15d);
 		this.launchingCreeper.setDeltaMovement(motion);
+		this.hasLaunched = true;
 	}
 
 	/**
@@ -101,6 +109,7 @@ public class AICreeperLaunchGoal extends Goal {
 	 */
 	public void stop() {
 		this.creeperAttackTarget = null;
+		this.hasLaunched = false;
 		this.launchingCreeper.getEntityData().set(CreeperEntity.DATA_IS_IGNITED, false);
 	}
 

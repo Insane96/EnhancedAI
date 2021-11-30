@@ -7,7 +7,8 @@
   * Cobweb cooldown is now configurable
   * Min and max attack distance is now configurable
   * Cobwebs placed will now disappear after 5 seconds (configurable)
-* Slowness is no longer applied from thrown webs if the player parrys the projectile
+  * Slowness is no longer applied from thrown webs if the player parrys the projectile
+* Launching + Breaching creepers will now launch and explode on contact with walls
 * Fixed breaching only working when creepers were in water
 * Fixed spiders throwing webs even they could not see the player
 * Fixed skeletons running from target having faster speed when far away instead of when near. Also made those speeds configurable.

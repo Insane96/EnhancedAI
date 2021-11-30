@@ -120,7 +120,10 @@ public class CreeperSwellFeature extends Feature {
 			creeper.getPersistentData().putBoolean(Strings.Tags.JOHN_CENA, true);
 		}
 		swellGoal.setIgnoreWalls(creeper.level.random.nextDouble() < this.ignoreWalls);
-		swellGoal.setBreaching(creeper.level.random.nextDouble() < this.breach);
+		if (creeper.level.random.nextDouble() < this.breach) {
+			creeper.getPersistentData().putBoolean(Strings.Tags.BREACH, true);
+			swellGoal.setBreaching(true);
+		}
 		creeper.goalSelector.addGoal(2, swellGoal);
 
 		if (creeper.level.random.nextDouble() < this.launch) {
