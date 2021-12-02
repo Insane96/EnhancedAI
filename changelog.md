@@ -5,9 +5,12 @@
 * Spider Cobweb Throwing
   * Cobwebs placed will now disappear after 5 seconds (configurable)
   * Cobweb damage is now configurable and scales with difficulty
-  * Cobweb cooldown is now configurable
+  * Cobweb cooldown is now configurable (also sped up, 60 -> 50 ticks before shoting)
   * Min and max attack distance is now configurable
-  * Slowness is no longer applied from thrown webs if the player parrys the projectile
+  * Slowness 
+    * Is now configurable
+    * Is no longer applied from thrown webs if the player parrys the projectile
+    * Increased Slowness applied to hit entity (5 seconds of one level of slowness stacking up to V -> 6 seconds of 2 levels of slowness stacking up to VI)
 * Launching + Breaching creepers will now launch and explode on contact with walls
 * Slightly adjusted throwing web and skeleton arrows shooting angle
 * Fixed skeletons not taking into account config inaccuracy

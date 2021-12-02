@@ -13,8 +13,6 @@ import net.minecraft.item.Items;
 import net.minecraft.network.IPacket;
 import net.minecraft.particles.BlockParticleData;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
@@ -66,11 +64,7 @@ public class ThrownWebEntity extends ProjectileItemEntity {
 			return;
 
 		LivingEntity entity = (LivingEntity) result.getEntity();
-		EffectInstance slowness = entity.getEffect(Effects.MOVEMENT_SLOWDOWN);
-		if (slowness == null)
-			entity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100, 0, true, true, true));
-		else
-			entity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100, Math.min(slowness.getAmplifier() + 1, 4), true, true, true));
+		Modules.spider.throwingWeb.applySlowness(entity);
 	}
 
 	protected void onHitBlock(BlockRayTraceResult result) {

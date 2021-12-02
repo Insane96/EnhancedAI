@@ -7,7 +7,10 @@ import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.config.BlacklistConfig;
 import insane96mcp.insanelib.utils.IdTagMatcher;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.SpiderEntity;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -24,6 +27,11 @@ public class ThrowingWebFeature extends Feature {
 	private final ForgeConfigSpec.ConfigValue<Integer> throwingCooldownConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> minDistanceConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> maxDistanceConfig;
+	//Slowness
+	private final ForgeConfigSpec.ConfigValue<Integer> slownessTimeConfig;
+	private final ForgeConfigSpec.ConfigValue<Integer> slownessAmplifierConfig;
+	private final ForgeConfigSpec.ConfigValue<Boolean> stackSlownessConfig;
+	private final ForgeConfigSpec.ConfigValue<Integer> maxSlownessConfig;
 
 	private final BlacklistConfig entityBlacklistConfig;
 
@@ -33,6 +41,12 @@ public class ThrowingWebFeature extends Feature {
 	public int throwingCooldown = 50;
 	public double minDistance = 2.5d;
 	public double maxDistance = 64d;
+	//Slowness
+	public int slownessTime = 120;
+	public int slownessAmplifier = 2;
+	public boolean stackSlowness = true;
+	public int maxSlowness = 6;
+
 	public ArrayList<IdTagMatcher> entityBlacklist;
 	public boolean entityBlacklistAsWhitelist;
 
@@ -57,6 +71,22 @@ public class ThrowingWebFeature extends Feature {
 		maxDistanceConfig = Config.builder
 				.comment("Maximum distance at which the spider will throw webs.")
 				.defineInRange("Max Distance", this.maxDistance, 0d, 64d);
+
+		Config.builder.push("Slowness");
+		slownessTimeConfig = Config.builder
+				.comment("How many ticks of slowness are applied to the target hit by the web?")
+				.defineInRange("Slowness Tick", this.slownessTime, 0, 6000);
+		slownessAmplifierConfig = Config.builder
+				.comment("How many levels of slowness are applied to the target hit by the web?")
+				.defineInRange("Slowness Amplifier", this.slownessAmplifier, 0, 128);
+		stackSlownessConfig = Config.builder
+				.comment("Should multiple hits on a target with slowness increase the level of Slowness? (This works with any type of slowness)")
+				.define("Stack Slowness Amplifier", this.stackSlowness);
+		maxSlownessConfig = Config.builder
+				.comment("How many max levels of slowness can be applied to the target?")
+				.defineInRange("Max Slowness Amplifier", this.maxSlowness, 0, 128);
+		Config.builder.pop();
+
 		entityBlacklistConfig = new BlacklistConfig(Config.builder, "Entity Blacklist", "Entities that shouldn't get the Throwing Web AI", Collections.emptyList(), false);
 		Config.builder.pop();
 	}
@@ -70,6 +100,12 @@ public class ThrowingWebFeature extends Feature {
 		this.throwingCooldown = this.throwingCooldownConfig.get();
 		this.minDistance = this.minDistanceConfig.get();
 		this.maxDistance = this.maxDistanceConfig.get();
+		//Slowness
+		this.slownessTime = this.slownessTimeConfig.get();
+		this.slownessAmplifier = this.slownessAmplifierConfig.get();
+		this.stackSlowness = this.stackSlownessConfig.get();
+		this.maxSlowness = this.maxSlownessConfig.get();
+
 		this.entityBlacklist = IdTagMatcher.parseStringList(this.entityBlacklistConfig.listConfig.get());
 		this.entityBlacklistAsWhitelist = this.entityBlacklistConfig.listAsWhitelistConfig.get();
 	}
@@ -101,5 +137,14 @@ public class ThrowingWebFeature extends Feature {
 
 		if (event.getWorld().random.nextDouble() < this.webThrowChance)
 			spider.goalSelector.addGoal(2, new AISpiderWebThrow(spider));
+	}
+
+	public void applySlowness(LivingEntity entity) {
+		EffectInstance slowness = entity.getEffect(Effects.MOVEMENT_SLOWDOWN);
+
+		if (slowness == null)
+			entity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, this.slownessTime, this.slownessAmplifier - 1, true, true, true));
+		else if (this.stackSlowness)
+			entity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, this.slownessTime, Math.min(slowness.getAmplifier() + this.slownessAmplifier, this.maxSlowness - 1), true, true, true));
 	}
 }
