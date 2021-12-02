@@ -176,13 +176,9 @@ public class AIRangedBowAttackGoal<T extends MonsterEntity & IRangedAttackMob> e
 		double d2 = target.getZ() - entity.getZ();
 		double distanceXZ = MathHelper.sqrt(d0 * d0 + d2 * d2);
 		double yPos = target.getY(0d);
-		//if (distanceY <= 0d || distanceY > distanceXZ)
-			yPos += target.getEyeHeight() * 0.5 + (distanceY / distanceXZ);
+		yPos += target.getEyeHeight() * 0.5 + (distanceY / distanceXZ);
 		double d1 = yPos - abstractarrowentity.getY();
-		//EnhancedAI.LOGGER.info(yPos + " " + d1 + " " + distanceXZ + " " + distanceY + " " + this.strafingTime + " " + this.strafingBackwards);
-		//abstractarrowentity.shoot(d0, d1 + distanceXZ * (double)0.2F, d2, 1.6F, (float)(14 - entity.level.getDifficulty().getId() * 4));
-		abstractarrowentity.shoot(d0, d1 + distanceXZ * 0.2d, d2, f * 1.1f + ((float)distance / 32f) + (float)Math.max(distanceY / 48d, 0f), 0);
-		//abstractarrowentity.setGlowing(true);
+		abstractarrowentity.shoot(d0, d1 + distanceXZ * 0.18d, d2, f * 1.1f + ((float)distance / 32f) + (float)Math.max(distanceY / 48d, 0f), 0);
 		entity.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (entity.getRandom().nextFloat() * 0.4F + 0.8F));
 		entity.level.addFreshEntity(abstractarrowentity);
 	}
