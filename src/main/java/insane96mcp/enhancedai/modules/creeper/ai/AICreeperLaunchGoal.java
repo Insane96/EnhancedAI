@@ -1,7 +1,6 @@
 package insane96mcp.enhancedai.modules.creeper.ai;
 
 import insane96mcp.enhancedai.modules.creeper.utils.CreeperUtils;
-import insane96mcp.enhancedai.setup.EASounds;
 import insane96mcp.enhancedai.setup.Strings;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
@@ -66,11 +65,8 @@ public class AICreeperLaunchGoal extends Goal {
 		this.launchingCreeper.getNavigation().stop();
 		this.creeperAttackTarget = this.launchingCreeper.getTarget();
 		this.launchingCreeper.ignite();
-		this.launchingCreeper.playSound(SoundEvents.CREEPER_PRIMED, CreeperUtils.getExplosionSize(this.launchingCreeper), 1f);
-		if (this.launchingCreeper.getPersistentData().contains(Strings.Tags.JOHN_CENA))
-			this.launchingCreeper.playSound(EASounds.CREEPER_CENA_FUSE.get(), CreeperUtils.getExplosionSize(this.launchingCreeper), 1.0f);;
 		double distance = this.launchingCreeper.distanceTo(this.creeperAttackTarget);
-		this.ticksBeforeLaunching = (int) Math.max((50 - distance) * 0.4d, 1);
+		this.ticksBeforeLaunching = (int) Math.max((50 - distance) * 0.33d, 1);
 	}
 
 	public boolean canContinueToUse() {
@@ -99,7 +95,9 @@ public class AICreeperLaunchGoal extends Goal {
 		double d0 = this.creeperAttackTarget.getX() - this.launchingCreeper.getX();
 		double d2 = this.creeperAttackTarget.getZ() - this.launchingCreeper.getZ();
 		double distanceXZ = MathHelper.sqrt(d0 * d0 + d2 * d2);
-		Vector3d motion = new Vector3d(d0 * 0.15d, Math.max(distanceY, 7d) / 12d + distanceXZ / 80d, d2 * 0.15d);
+
+		//TODO better Y speed, right now when creeper Y distance is below 7 you always get 7 which isn't good when the creeper's Ydistance is 0, and when the YDistance is higher than about 25 the creeper will go to space
+		Vector3d motion = new Vector3d(d0 * 0.15d, MathHelper.clamp(distanceY, 7d, 40d) / 10d + distanceXZ / 72d, d2 * 0.15d);
 		this.launchingCreeper.setDeltaMovement(motion);
 		this.hasLaunched = true;
 	}

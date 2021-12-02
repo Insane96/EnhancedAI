@@ -14,6 +14,6 @@ public class CreeperEntityMixin {
 	public void tickOnPlaySound(CallbackInfo callbackInfo) {
 		CreeperEntity $this = (CreeperEntity) (Object) this;
 		if ($this.getPersistentData().getBoolean(Strings.Tags.JOHN_CENA))
-			$this.playSound(EASounds.CREEPER_CENA_FUSE.get(), 4.0f, 1.0f);
+			$this.playSound(EASounds.CREEPER_CENA_FUSE.get(), 5.0f, 1.0f);
 	}
 }

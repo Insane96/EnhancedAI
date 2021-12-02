@@ -1,12 +1,12 @@
 # Changelog
 
 ## Upcoming
-* Now requires InsaneLib 1.4.0
+* Now requires InsaneLib 1.4.1
 * Spider Cobweb Throwing
+  * Cobwebs placed will now disappear after 5 seconds (configurable)
   * Cobweb damage is now configurable and scales with difficulty
   * Cobweb cooldown is now configurable
   * Min and max attack distance is now configurable
-  * Cobwebs placed will now disappear after 5 seconds (configurable)
   * Slowness is no longer applied from thrown webs if the player parrys the projectile
 * Launching + Breaching creepers will now launch and explode on contact with walls
 * Fixed breaching only working when creepers were in water
