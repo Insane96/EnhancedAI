@@ -1,5 +1,6 @@
 package insane96mcp.enhancedai.modules.skeleton.ai;
 
+import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.modules.base.ai.AIAvoidEntityGoal;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.LivingEntity;
@@ -178,7 +179,7 @@ public class AIRangedBowAttackGoal<T extends MonsterEntity & IRangedAttackMob> e
 		double yPos = target.getY(0d);
 		yPos += target.getEyeHeight() * 0.5 + (distanceY / distanceXZ);
 		double d1 = yPos - abstractarrowentity.getY();
-		abstractarrowentity.shoot(d0, d1 + distanceXZ * 0.18d, d2, f * 1.1f + ((float)distance / 32f) + (float)Math.max(distanceY / 48d, 0f), 0);
+		abstractarrowentity.shoot(d0, d1 + distanceXZ * 0.18d, d2, f * 1.1f + ((float)distance / 32f) + (float)Math.max(distanceY / 48d, 0f), (float) Modules.skeleton.skeletonAI.arrowInaccuracy);
 		entity.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (entity.getRandom().nextFloat() * 0.4F + 0.8F));
 		entity.level.addFreshEntity(abstractarrowentity);
 	}
