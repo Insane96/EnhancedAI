@@ -41,7 +41,7 @@ public class AICreeperLaunchGoal extends Goal {
 		if (--cooldown > 0)
 			return false;
 
-		if (!this.launchingCreeper.getSensing().canSee(target) && !this.launchingCreeper.getPersistentData().contains(Strings.Tags.BREACH))
+		if (!this.launchingCreeper.getSensing().canSee(target) && !this.launchingCreeper.getPersistentData().contains(Strings.Tags.Creeper.BREACH))
 			return false;
 
 		if (this.launchingCreeper.level.getBlockState(this.launchingCreeper.blockPosition().above(3)).getMaterial().blocksMotion())
@@ -74,7 +74,7 @@ public class AICreeperLaunchGoal extends Goal {
 			this.cooldown = 120;
 			return false;
 		}
-		else if ((this.launchingCreeper.verticalCollision || this.launchingCreeper.horizontalCollision) && this.launchingCreeper.getPersistentData().contains(Strings.Tags.BREACH) && this.hasLaunched && this.launchingCreeper.distanceToSqr(this.creeperAttackTarget) < (CreeperUtils.getExplosionSizeSq(this.launchingCreeper) * 2.5d * 2.5d))
+		else if ((this.launchingCreeper.verticalCollision || this.launchingCreeper.horizontalCollision) && this.launchingCreeper.getPersistentData().contains(Strings.Tags.Creeper.BREACH) && this.hasLaunched && this.launchingCreeper.distanceToSqr(this.creeperAttackTarget) < (CreeperUtils.getExplosionSizeSq(this.launchingCreeper) * 2.5d * 2.5d))
 			this.launchingCreeper.explodeCreeper();
 
 		return this.creeperAttackTarget != null && this.creeperAttackTarget.isAlive();

@@ -13,7 +13,7 @@ public class CreeperEntityMixin {
 	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/monster/CreeperEntity;playSound(Lnet/minecraft/util/SoundEvent;FF)V"), method = "tick()V")
 	public void tickOnPlaySound(CallbackInfo callbackInfo) {
 		CreeperEntity $this = (CreeperEntity) (Object) this;
-		if ($this.getPersistentData().getBoolean(Strings.Tags.JOHN_CENA))
+		if ($this.getPersistentData().getBoolean(Strings.Tags.Creeper.CENA))
 			$this.playSound(EASounds.CREEPER_CENA_FUSE.get(), 5.0f, 1.0f);
 	}
 }

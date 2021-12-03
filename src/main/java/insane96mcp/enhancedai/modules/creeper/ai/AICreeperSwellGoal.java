@@ -21,9 +21,8 @@ public class AICreeperSwellGoal extends Goal {
 
 	private boolean isBreaching = false;
 
-	public AICreeperSwellGoal(CreeperEntity entitycreeperIn, boolean walkingFuse) {
+	public AICreeperSwellGoal(CreeperEntity entitycreeperIn) {
 		this.swellingCreeper = entitycreeperIn;
-		setWalkingFuse(walkingFuse);
 	}
 
 	/**
