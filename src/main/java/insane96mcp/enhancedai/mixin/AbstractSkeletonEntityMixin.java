@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AbstractSkeletonEntity.class)
 public class AbstractSkeletonEntityMixin {
-	@Inject(at = @At("TAIL"), method = "reassessWeaponGoal()V", cancellable = true)
+	@Inject(at = @At("TAIL"), method = "reassessWeaponGoal()V")
 	public void reassessWeaponGoal(CallbackInfo callbackInfo) {
 		Modules.skeleton.skeletonAI.reassessWeaponGoal((AbstractSkeletonEntity) (Object) this);
 	}

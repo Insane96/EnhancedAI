@@ -2,6 +2,7 @@ package insane96mcp.enhancedai.modules.spider.feature;
 
 import insane96mcp.enhancedai.modules.spider.ai.AISpiderWebThrow;
 import insane96mcp.enhancedai.setup.Config;
+import insane96mcp.enhancedai.setup.Strings;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
@@ -135,7 +136,18 @@ public class ThrowingWebFeature extends Feature {
 		if (isInBlacklist || (!isInWhitelist && this.entityBlacklistAsWhitelist))
 			return;
 
-		if (event.getWorld().random.nextDouble() < this.webThrowChance)
+		boolean processed = spider.getPersistentData().getBoolean(Strings.Tags.PROCESSED);
+
+		boolean webThrower = spider.level.random.nextDouble() < this.webThrowChance;
+
+		if (processed) {
+			webThrower = spider.getPersistentData().getBoolean(Strings.Tags.Spider.WEB_THROWER);
+		}
+		else {
+			spider.getPersistentData().putBoolean(Strings.Tags.Spider.WEB_THROWER, webThrower);
+			spider.getPersistentData().putBoolean(Strings.Tags.PROCESSED, true);
+		}
+		if (webThrower)
 			spider.goalSelector.addGoal(2, new AISpiderWebThrow(spider));
 	}
 

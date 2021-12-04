@@ -134,25 +134,22 @@ public class CreeperSwellFeature extends Feature {
 			breach = creeper.getPersistentData().getBoolean(Strings.Tags.Creeper.BREACH);
 			launch = creeper.getPersistentData().getBoolean(Strings.Tags.Creeper.LAUNCH);
 		}
+		else {
+			creeper.getPersistentData().putBoolean(Strings.Tags.Creeper.WALKING_FUSE, walkingFuse);
+			creeper.getPersistentData().putBoolean(Strings.Tags.Creeper.IGNORE_WALLS, ignoreWalls);
+			creeper.getPersistentData().putBoolean(Strings.Tags.Creeper.BREACH, breach);
+			creeper.getPersistentData().putBoolean(Strings.Tags.Creeper.LAUNCH, launch);
+			creeper.getPersistentData().putBoolean(Strings.Tags.PROCESSED, true);
+		}
 
 		AICreeperSwellGoal swellGoal = new AICreeperSwellGoal(creeper);
-
-		creeper.getPersistentData().putBoolean(Strings.Tags.Creeper.WALKING_FUSE, walkingFuse);
 		swellGoal.setWalkingFuse(walkingFuse);
-
-		creeper.getPersistentData().putBoolean(Strings.Tags.Creeper.IGNORE_WALLS, ignoreWalls);
 		swellGoal.setIgnoreWalls(ignoreWalls);
-
-		creeper.getPersistentData().putBoolean(Strings.Tags.Creeper.BREACH, breach);
 		swellGoal.setBreaching(breach);
-
 		creeper.goalSelector.addGoal(2, swellGoal);
 
-		creeper.getPersistentData().putBoolean(Strings.Tags.Creeper.LAUNCH, launch);
 		if (launch)
 			creeper.goalSelector.addGoal(1, new AICreeperLaunchGoal(creeper));
-
-		creeper.getPersistentData().putBoolean(Strings.Tags.PROCESSED, true);
 	}
 
 	@SubscribeEvent

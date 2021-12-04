@@ -3,6 +3,7 @@ package insane96mcp.enhancedai.modules.skeleton.feature;
 import insane96mcp.enhancedai.modules.base.ai.AIAvoidEntityGoal;
 import insane96mcp.enhancedai.modules.skeleton.ai.AIRangedBowAttackGoal;
 import insane96mcp.enhancedai.setup.Config;
+import insane96mcp.enhancedai.setup.Strings;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
@@ -112,6 +113,24 @@ public class SkeletonAIFeature extends Feature {
 		if (isInBlacklist || (!isInWhitelist && this.entityBlacklistAsWhitelist))
 			return;
 
+		boolean processed = skeleton.getPersistentData().getBoolean(Strings.Tags.PROCESSED);
+
+		boolean strafe = skeleton.level.random.nextDouble() < this.strafeChance;
+		boolean avoidTarget = skeleton.level.random.nextDouble() < this.avoidPlayerChance;
+		boolean attackWhenAvoiding = skeleton.level.random.nextDouble() < this.attackWhenAvoidingChance;
+
+		if (processed) {
+			strafe = skeleton.getPersistentData().getBoolean(Strings.Tags.Skeleton.STRAFE);
+			avoidTarget = skeleton.getPersistentData().getBoolean(Strings.Tags.Skeleton.AVOID_TARGET);
+			attackWhenAvoiding = skeleton.getPersistentData().getBoolean(Strings.Tags.Skeleton.ATTACK_WHEN_AVOIDING);
+		}
+		else {
+			skeleton.getPersistentData().putBoolean(Strings.Tags.Skeleton.STRAFE, strafe);
+			skeleton.getPersistentData().putBoolean(Strings.Tags.Skeleton.AVOID_TARGET, avoidTarget);
+			skeleton.getPersistentData().putBoolean(Strings.Tags.Skeleton.ATTACK_WHEN_AVOIDING, attackWhenAvoiding);
+			skeleton.getPersistentData().putBoolean(Strings.Tags.PROCESSED, true);
+		}
+
 		boolean hasAIArrowAttack = false;
 		for (PrioritizedGoal prioritizedGoal : skeleton.goalSelector.availableGoals) {
 			if (prioritizedGoal.getGoal().equals(skeleton.bowGoal))
@@ -124,12 +143,12 @@ public class SkeletonAIFeature extends Feature {
 
 		avoidEntityGoals.forEach(skeleton.goalSelector::removeGoal);
 		if (hasAIArrowAttack) {
-			AIRangedBowAttackGoal<AbstractSkeletonEntity> rangedBowAttackGoal = new AIRangedBowAttackGoal<>(skeleton, 1.0d, 20, RandomHelper.getInt(skeleton.level.random, this.minShootingRange, this.maxShootingRange), skeleton.level.random.nextDouble() < this.strafeChance);
+			AIRangedBowAttackGoal<AbstractSkeletonEntity> rangedBowAttackGoal = new AIRangedBowAttackGoal<>(skeleton, 1.0d, 20, RandomHelper.getInt(skeleton.level.random, this.minShootingRange, this.maxShootingRange), strafe);
 			skeleton.goalSelector.addGoal(2, rangedBowAttackGoal);
 
-			if (skeleton.level.random.nextDouble() < this.avoidPlayerChance) {
+			if (avoidTarget) {
 				AIAvoidEntityGoal<PlayerEntity> avoidEntityGoal = new AIAvoidEntityGoal<>(skeleton, PlayerEntity.class, 12.0f, this.fleeSpeedFar, this.fleeSpeedNear);
-				avoidEntityGoal.setAttackWhenRunning(skeleton.level.random.nextDouble() < this.attackWhenAvoidingChance);
+				avoidEntityGoal.setAttackWhenRunning(attackWhenAvoiding);
 				skeleton.goalSelector.addGoal(1, avoidEntityGoal);
 			}
 		}

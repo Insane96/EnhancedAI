@@ -13,5 +13,20 @@ public class Strings {
 			public static final String WALKING_FUSE = EnhancedAI.RESOURCE_PREFIX + "walking_fuse";
 			public static final String IGNORE_WALLS = EnhancedAI.RESOURCE_PREFIX + "ignore_walls";
 		}
+
+		public static class Skeleton {
+			public static final String STRAFE = EnhancedAI.RESOURCE_PREFIX + "strafe";
+			public static final String AVOID_TARGET = EnhancedAI.RESOURCE_PREFIX + "avoid_target";
+			public static final String ATTACK_WHEN_AVOIDING = EnhancedAI.RESOURCE_PREFIX + "attack_when_avoiding";
+		}
+
+		public static class Zombie {
+			public static final String MINER = EnhancedAI.RESOURCE_PREFIX + "miner";
+			//public static final String PEARLER = EnhancedAI.RESOURCE_PREFIX + "pearler";
+		}
+
+		public static class Spider {
+			public static final String WEB_THROWER = EnhancedAI.RESOURCE_PREFIX + "web_thrower";
+		}
 	}
 }

@@ -13,6 +13,7 @@
     * Increased Slowness applied to hit entities (5 seconds of one level of slowness stacking up to V -> 6 seconds of 2 levels of slowness stacking up to VI)
 * Launching + Breaching creepers will now launch and try to breach walls, exploding on contact with walls
 * Slightly adjusted throwing web and skeleton arrows shooting angle
+* Added ability tags to all mobs (e.g. Creepers with breaching ability will have the ForgeData.enhancedai:breach tag set to 1b)
 * Fixed skeletons not taking into account config inaccuracy
 * Fixed breaching only working when creepers were in water
 * Fixed spiders throwing webs even they could not see the player

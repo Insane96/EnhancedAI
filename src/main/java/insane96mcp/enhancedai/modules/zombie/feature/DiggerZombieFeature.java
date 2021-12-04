@@ -2,6 +2,7 @@ package insane96mcp.enhancedai.modules.zombie.feature;
 
 import insane96mcp.enhancedai.modules.zombie.ai.AIZombieDigger;
 import insane96mcp.enhancedai.setup.Config;
+import insane96mcp.enhancedai.setup.Strings;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
@@ -97,7 +98,20 @@ public class DiggerZombieFeature extends Feature {
 		if (isInBlacklist || (!isInWhitelist && this.entityBlacklistAsWhitelist))
 			return;
 
-		if (event.getWorld().random.nextDouble() < this.diggerChance)
+		boolean processed = zombie.getPersistentData().getBoolean(Strings.Tags.PROCESSED);
+
+		boolean miner = zombie.level.random.nextDouble() < this.diggerChance;
+
+		if (processed) {
+			miner = zombie.getPersistentData().getBoolean(Strings.Tags.Zombie.MINER);
+		}
+		else {
+			zombie.getPersistentData().putBoolean(Strings.Tags.Zombie.MINER, miner);
+			zombie.getPersistentData().putBoolean(Strings.Tags.PROCESSED, true);
+		}
+
+		if (miner)
 			zombie.goalSelector.addGoal(1, new AIZombieDigger(zombie, this.diggerToolOnly, this.diggerProperToolOnly));
+
 	}
 }
