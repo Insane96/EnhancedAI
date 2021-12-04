@@ -13,11 +13,11 @@
     * Increased Slowness applied to hit entities (5 seconds of one level of slowness stacking up to V -> 6 seconds of 2 levels of slowness stacking up to VI)
 * Launching + Breaching creepers will now launch and try to breach walls, exploding on contact with walls
 * Slightly adjusted throwing web and skeleton arrows shooting angle
-* Added ability tags to all mobs (e.g. Creepers with breaching ability will have the ForgeData.enhancedai:breach tag set to 1b)
+* Added ability tags to all mobs. This means that exiting and re-entering the world (or chunks) will no longer change the mob's abilities (e.g. Creepers with breaching ability will have the ForgeData.enhancedai:breach tag set to 1b)
+* skeletons running from target's speed is now configurable, also fixed having faster speed when far away instead of when near
 * Fixed skeletons not taking into account config inaccuracy
 * Fixed breaching only working when creepers were in water
 * Fixed spiders throwing webs even they could not see the player
-* Fixed skeletons running from target having faster speed when far away instead of when near. Also made those speeds configurable.
 * Fixed skeletons not strafing at all
 
 ## Alpha 1.2.1
