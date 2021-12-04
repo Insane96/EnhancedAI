@@ -11,7 +11,7 @@ displayURL="https://www.curseforge.com/minecraft/mc-mods/enhanced-ai"
 # credits="Thanks for this example mod goes to Java"
 authors="Insane96MCP"
 description='''
-Give more AI variants to mobs, from Creepers breaching to Zombies throwing mobs.
+Give more AI variants to mobs, from Creepers breaching to Zombies mining.
 
 Also His name is John Cena.
 '''
@@ -30,6 +30,6 @@ Also His name is John Cena.
 [[dependencies.enhancedai]]
     modId = "insanelib"
     mandatory = true
-    versionRange = "[1.4.0,)"
+    versionRange = "[1.4.1,)"
     ordering = "NONE"
     side = "BOTH"

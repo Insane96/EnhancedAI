@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 1.2.2
 * Now requires InsaneLib 1.4.1
 * Added Spider Misc Feature
   * Spiders now take -90% fall damage
