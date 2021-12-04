@@ -2,6 +2,8 @@
 
 ## Upcoming
 * Now requires InsaneLib 1.4.1
+* Added Spider Misc Feature
+  * Spiders now take -90% fall damage
 * Spider Cobweb Throwing
   * Cobwebs placed will now disappear after 5 seconds (configurable)
   * Cobweb damage is now configurable and scales with difficulty
