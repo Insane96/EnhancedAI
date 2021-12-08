@@ -22,6 +22,7 @@ public class AICreeperLaunchGoal extends Goal {
 	private int ticksBeforeLaunching;
 
 	private int cooldown;
+	private int fails = 0;
 	private boolean hasLaunched = false;
 
 	public AICreeperLaunchGoal(CreeperEntity entitycreeperIn) {
@@ -71,7 +72,8 @@ public class AICreeperLaunchGoal extends Goal {
 
 	public boolean canContinueToUse() {
 		if (this.launchingCreeper.swell == CreeperUtils.getFuse(this.launchingCreeper) - 1 && this.launchingCreeper.distanceToSqr(this.creeperAttackTarget) > (CreeperUtils.getExplosionSizeSq(this.launchingCreeper) * 2d * 2d)) {
-			this.cooldown = 120;
+			this.fails++;
+			this.cooldown = 60 + (this.fails * 60);
 			return false;
 		}
 		else if ((this.launchingCreeper.verticalCollision || this.launchingCreeper.horizontalCollision) && this.launchingCreeper.getPersistentData().contains(Strings.Tags.Creeper.BREACH) && this.hasLaunched && this.launchingCreeper.distanceToSqr(this.creeperAttackTarget) < (CreeperUtils.getExplosionSizeSq(this.launchingCreeper) * 2.5d * 2.5d))
