@@ -1,5 +1,9 @@
 # Changelog
 
+## Upcoming
+* Launching creepers that go on cooldown now have higher cooldown each time they fail
+* Fixed missing Spider Misc Feature
+
 ## 1.2.2
 * Now requires InsaneLib 1.4.1
 * Added Spider Misc Feature
