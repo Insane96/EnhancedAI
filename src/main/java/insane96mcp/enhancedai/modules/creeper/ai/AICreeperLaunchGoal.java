@@ -76,8 +76,10 @@ public class AICreeperLaunchGoal extends Goal {
 			this.cooldown = 60 + (this.fails * 60);
 			return false;
 		}
-		else if ((this.launchingCreeper.verticalCollision || this.launchingCreeper.horizontalCollision) && this.launchingCreeper.getPersistentData().contains(Strings.Tags.Creeper.BREACH) && this.hasLaunched && this.launchingCreeper.distanceToSqr(this.creeperAttackTarget) < (CreeperUtils.getExplosionSizeSq(this.launchingCreeper) * 2.5d * 2.5d))
+		else if ((this.launchingCreeper.verticalCollision || this.launchingCreeper.horizontalCollision) && this.hasLaunched && AICreeperSwellGoal.canBreach(this.launchingCreeper, this.creeperAttackTarget)) {
 			this.launchingCreeper.explodeCreeper();
+			return false;
+		}
 
 		return this.creeperAttackTarget != null && this.creeperAttackTarget.isAlive();
 	}

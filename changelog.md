@@ -1,6 +1,7 @@
 # Changelog
 
 ## Upcoming
+* Breaching creepers now breach more often
 * Launching creepers that go on cooldown now have higher cooldown each time they fail
 * Fixed missing Spider Misc Feature
 

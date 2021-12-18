@@ -2,6 +2,7 @@ package insane96mcp.enhancedai.modules.creeper.ai;
 
 import insane96mcp.enhancedai.modules.base.ai.AIAvoidExplosionGoal;
 import insane96mcp.enhancedai.modules.creeper.utils.CreeperUtils;
+import insane96mcp.enhancedai.setup.Strings;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
@@ -34,13 +35,7 @@ public class AICreeperSwellGoal extends Goal {
 		if (target == null)
 			return false;
 
-		double yDistance = this.swellingCreeper.getY() - target.getY();
-		boolean canBreach = breaching
-				&& (this.swellingCreeper.getNavigation().isDone() || this.swellingCreeper.getNavigation().isStuck())
-				&& !this.swellingCreeper.getSensing().canSee(target)
-				&& !this.swellingCreeper.isInWater()
-				&& this.swellingCreeper.distanceToSqr(target) < 12 * 12
-				&& yDistance > -CreeperUtils.getExplosionSize(this.swellingCreeper) - 2;
+		boolean canBreach = breaching && canBreach(this.swellingCreeper, target);
 		boolean ignoresWalls = ignoreWalls && this.swellingCreeper.distanceToSqr(target) < (CreeperUtils.getExplosionSizeSq(this.swellingCreeper) * 1d * 1d);
 
 		if (canBreach)
@@ -112,5 +107,19 @@ public class AICreeperSwellGoal extends Goal {
 
 	public void setBreaching(boolean breaching) {
 		this.breaching = breaching;
+	}
+
+	public static boolean canBreach(CreeperEntity creeper, LivingEntity target) {
+		if (!creeper.getPersistentData().contains(Strings.Tags.Creeper.BREACH))
+			return false;
+		double yDistance = creeper.getY() - target.getY();
+		double x = target.getX() - creeper.getX();
+		double z = target.getZ() - creeper.getZ();
+		double xzDistance = x * x + z * z;
+		return (creeper.getNavigation().isDone() || creeper.getNavigation().isStuck())
+				&& !creeper.getSensing().canSee(target)
+				&& !creeper.isInWater()
+				&& xzDistance < (CreeperUtils.getExplosionSizeSq(creeper) * 5d * 5d)
+				&& yDistance > -CreeperUtils.getExplosionSize(creeper) - 2;
 	}
 }
