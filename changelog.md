@@ -3,6 +3,7 @@
 ## Upcoming
 * Breaching creepers now breach more often
 * Launching creepers that go on cooldown now have higher cooldown each time they fail
+* Zombie Pearlers now Pearl from up to 6 blocks instead of 12
 * Fixed missing Spider Misc Feature
 
 ## 1.2.2

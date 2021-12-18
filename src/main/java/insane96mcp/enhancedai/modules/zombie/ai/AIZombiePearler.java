@@ -30,7 +30,7 @@ public class AIZombiePearler extends Goal {
 		if (!(target instanceof PlayerEntity))
 			return false;
 
-		if (this.pearler.distanceToSqr(target) < 12d * 12d)
+		if (this.pearler.distanceToSqr(target) < 6d * 6d)
 			return false;
 
 		if (--this.cooldown > 0)
