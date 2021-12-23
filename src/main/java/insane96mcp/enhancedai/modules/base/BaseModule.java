@@ -11,9 +11,9 @@ import insane96mcp.insanelib.base.Module;
 @Label(name = "Base")
 public class BaseModule extends Module {
 
-	BaseFeature base;
-	TargetingFeature targeting;
-	AvoidExplosionsFeature avoidExplosions;
+	public BaseFeature base;
+	public TargetingFeature targeting;
+	public AvoidExplosionsFeature avoidExplosions;
 
 	public BaseModule() {
 		super(Config.builder);

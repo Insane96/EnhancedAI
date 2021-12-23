@@ -1,9 +1,10 @@
 # Changelog
 
 ## Upcoming
+* Monsters will now be able to despawn when farther than any player by 48 blocks (vanilla is 32) and will instantly despawn when farther away than 80 blocks (vanilla is 128) (configurable in "Base Feature")
 * Breaching creepers now breach more often
 * Launching creepers that go on cooldown now have higher cooldown each time they fail
-* Zombie Pearlers now Pearl from up to 6 blocks instead of 12
+* Zombie Pearlers now Pearl from min 6 blocks instead of 12
 * Fixed missing Spider Misc Feature
 
 ## 1.2.2

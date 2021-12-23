@@ -5,7 +5,8 @@
 	"refmap": "enhancedai.refmap.json",
 	"mixins": [
 		"AbstractSkeletonEntityMixin",
-		"CreeperEntityMixin"
+		"CreeperEntityMixin",
+		"EntityClassificationMixin"
 	],
 	"minVersion": "0.8"
 }
