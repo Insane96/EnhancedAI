@@ -1,6 +1,7 @@
 # Changelog
 
 ## Upcoming
+* Reduced XRay Chance
 * Skeleton
   * Flee Distance changed (12 -> 16 blocks; 7 -> 8 blocks faster flee) and now configurable
 

@@ -37,7 +37,7 @@ public class TargetingFeature extends Feature {
 	private final List<String> entityBlacklistDefault = Arrays.asList("minecraft:enderman");
 
 	public int followRange = 64;
-	public double xray = 0.20d;
+	public double xray = 0.15d;
 	public boolean instaTarget = true;
 	public ArrayList<IdTagMatcher> entityBlacklist;
 	public boolean entityBlacklistAsWhitelist = true;
@@ -73,10 +73,8 @@ public class TargetingFeature extends Feature {
 		if (!this.isEnabled())
 			return;
 
-		if (!(event.getEntity() instanceof Mob))
+		if (!(event.getEntity() instanceof Mob mobEntity))
 			return;
-
-		Mob mobEntity = (Mob) event.getEntity();
 
 		//Check for black/whitelist
 		boolean isInWhitelist = false;
