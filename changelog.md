@@ -1,5 +1,9 @@
 # Changelog
 
+## Upcoming
+* Skeleton
+  * Flee Distance changed (12 -> 16 blocks; 7 -> 8 blocks faster flee) and now configurable
+
 ## 1.2.4
 * Port to 1.18.2, requires InsaneLib 1.4.6
 * Spider Webs are no longer affected by mob griefing, and can also now replace simple blocks like grass

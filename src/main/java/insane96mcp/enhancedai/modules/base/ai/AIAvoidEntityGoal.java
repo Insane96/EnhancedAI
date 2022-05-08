@@ -18,6 +18,7 @@ public class AIAvoidEntityGoal<T extends LivingEntity> extends Goal {
 	private final double nearSpeed;
 	protected T avoidTarget;
 	protected final float avoidDistance;
+	protected final float avoidDistanceNear;
 	protected Path path;
 	/** Class of entity this behavior seeks to avoid */
 	protected final Class<T> classToAvoid;
@@ -25,25 +26,24 @@ public class AIAvoidEntityGoal<T extends LivingEntity> extends Goal {
 	protected final Predicate<LivingEntity> predicateOnAvoidEntity;
 	private final TargetingConditions builtTargetSelector;
 
-	public AIAvoidEntityGoal(PathfinderMob entityIn, Class<T> classToAvoidIn, float avoidDistanceIn, double nearSpeed, double farSpeed) {
-		this(entityIn, classToAvoidIn, (p_200828_0_) -> true, avoidDistanceIn, nearSpeed, farSpeed, EntitySelector.NO_CREATIVE_OR_SPECTATOR::test);
+	public AIAvoidEntityGoal(PathfinderMob entityIn, Class<T> classToAvoidIn, float avoidDistance, float avoidDistanceNear, double nearSpeed, double farSpeed) {
+		this(entityIn, classToAvoidIn, (livingEntity) -> true, avoidDistance, avoidDistanceNear, nearSpeed, farSpeed, EntitySelector.NO_CREATIVE_OR_SPECTATOR::test);
 	}
 
-	public AIAvoidEntityGoal(PathfinderMob entityIn, Class<T> avoidClass, Predicate<LivingEntity> targetPredicate, float distance, double nearSpeedIn, double farSpeedIn, Predicate<LivingEntity> p_i48859_9_) {
+	public AIAvoidEntityGoal(PathfinderMob entityIn, Class<T> avoidClass, Predicate<LivingEntity> targetPredicate, float avoidDistance, float avoidDistanceNear, double nearSpeedIn, double farSpeedIn, Predicate<LivingEntity> p_i48859_9_) {
 		this.entity = entityIn;
 		this.classToAvoid = avoidClass;
 		this.avoidTargetSelector = targetPredicate;
-		this.avoidDistance = distance;
-		this.farSpeed = farSpeedIn;
+		this.avoidDistance = avoidDistance * avoidDistance;
+		this.avoidDistanceNear = avoidDistanceNear * avoidDistanceNear;
 		this.nearSpeed = nearSpeedIn;
+		this.farSpeed = farSpeedIn;
 		this.predicateOnAvoidEntity = p_i48859_9_;
-		this.builtTargetSelector = TargetingConditions.forCombat().range(distance).selector(p_i48859_9_.and(targetPredicate));
+		this.builtTargetSelector = TargetingConditions.forCombat().range(avoidDistance).selector(p_i48859_9_.and(targetPredicate));
 	}
 
-	public AIAvoidEntityGoal(PathfinderMob entityIn, Class<T> avoidClass, float distance, double nearSpeedIn, double farSpeedIn, Predicate<LivingEntity> targetPredicate) {
-		this(entityIn, avoidClass, (p_203782_0_) -> {
-			return true;
-		}, distance, nearSpeedIn, farSpeedIn, targetPredicate);
+	public AIAvoidEntityGoal(PathfinderMob entityIn, Class<T> avoidClass, float avoidDistance, float avoidDistanceNear, double nearSpeedIn, double farSpeedIn, Predicate<LivingEntity> targetPredicate) {
+		this(entityIn, avoidClass, (p_203782_0_) -> true, avoidDistance, avoidDistanceNear, nearSpeedIn, farSpeedIn, targetPredicate);
 	}
 
 	/**

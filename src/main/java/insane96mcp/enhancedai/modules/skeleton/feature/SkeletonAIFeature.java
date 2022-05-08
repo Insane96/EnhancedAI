@@ -19,7 +19,6 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Label(name = "Skeleton Shoot", description = "Skeletons are more precise when shooting and strafing is removed, can hit a target from up to 64 blocks and try to stay away from the target.")
 public class SkeletonAIFeature extends Feature {
@@ -32,8 +31,12 @@ public class SkeletonAIFeature extends Feature {
 	//Flee from target
 	private final ForgeConfigSpec.ConfigValue<Double> avoidPlayerChanceConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> attackWhenAvoidingChanceConfig;
+	private final ForgeConfigSpec.ConfigValue<Double> fleeDistanceConfig;
+	private final ForgeConfigSpec.ConfigValue<Double> fleeDistanceNearConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> fleeSpeedNearConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> fleeSpeedFarConfig;
+
+	private final List<String> defaultBlacklist = Arrays.asList("quark:forgotten");
 
 	public int minShootingRange = 24;
 	public int maxShootingRange = 48;
@@ -44,6 +47,8 @@ public class SkeletonAIFeature extends Feature {
 	//Flee from target
 	public double avoidPlayerChance = 0.5d;
 	public double attackWhenAvoidingChance = 0.5d;
+	public double fleeDistance = 16;
+	public double fleeDistanceNear = 8;
 	public double fleeSpeedNear = 1.6d;
 	public double fleeSpeedFar = 1.3d;
 
@@ -62,7 +67,7 @@ public class SkeletonAIFeature extends Feature {
 		arrowInaccuracyConfig = Config.builder
 				.comment("How much inaccuracy does the arrow fired by skeletons have. Vanilla skeletons have 10/6/2 inaccuracy in easy/normal/hard difficulty.")
 				.defineInRange("Arrow Inaccuracy", this.arrowInaccuracy, 0d, 30d);
-		entityBlacklistConfig = new BlacklistConfig(Config.builder, "Entity Blacklist", "Entities that shouldn't get the enhanced Shoot AI", Arrays.asList("quark:forgotten"), false);
+		entityBlacklistConfig = new BlacklistConfig(Config.builder, "Entity Blacklist", "Entities that shouldn't get the enhanced Shoot AI", defaultBlacklist, false);
 
 		Config.builder.push("Flee from Target");
 		avoidPlayerChanceConfig = Config.builder
@@ -71,14 +76,19 @@ public class SkeletonAIFeature extends Feature {
 		attackWhenAvoidingChanceConfig = Config.builder
 				.comment("Chance for a Skeleton to be able to shoot while running from a player")
 				.defineInRange("Attack When Avoiding Chance", this.attackWhenAvoidingChance, 0d, 1d);
-		fleeSpeedNearConfig = Config.builder
-				.comment("Speed multiplier when the skeleton avoids the player and it's within 7 blocks from him.")
-				.defineInRange("Flee speed Multiplier Near", this.fleeSpeedNear, 0d, 4d);
+		fleeDistanceConfig = Config.builder
+				.comment("Distance from a player that will make the skeleton run away.")
+				.defineInRange("Flee Distance", this.fleeDistance, 0d, 32d);
+		fleeDistanceNearConfig = Config.builder
+				.comment("Distance from a player that counts as near and will make the skeleton run away faster.")
+				.defineInRange("Flee Distance Near", this.fleeDistanceNear, 0d, 32d);
 		fleeSpeedFarConfig = Config.builder
-				.comment("Speed multiplier when the skeleton avoids the player and it's farther than 7 blocks from him.")
+				.comment("Speed multiplier when the skeleton avoids the player and it's farther than 'Flee Distance Near' blocks from him.")
 				.defineInRange("Flee speed Multiplier Far", this.fleeSpeedFar, 0d, 4d);
-		Config.builder.pop();
-		Config.builder.pop();
+		fleeSpeedNearConfig = Config.builder
+				.comment("Speed multiplier when the skeleton avoids the player and it's within 'Flee Distance Near' blocks from him.")
+				.defineInRange("Flee speed Multiplier Near", this.fleeSpeedNear, 0d, 4d);
+		Config.builder.pop(2);
 	}
 
 	@Override
@@ -93,6 +103,8 @@ public class SkeletonAIFeature extends Feature {
 		//Flee from target
 		this.avoidPlayerChance = this.avoidPlayerChanceConfig.get();
 		this.attackWhenAvoidingChance = this.attackWhenAvoidingChanceConfig.get();
+		this.fleeDistance = this.fleeDistanceConfig.get();
+		this.fleeDistanceNear = this.fleeDistanceNearConfig.get();
 		this.fleeSpeedNear = this.fleeSpeedNearConfig.get();
 		this.fleeSpeedFar = this.fleeSpeedFarConfig.get();
 	}
@@ -139,7 +151,7 @@ public class SkeletonAIFeature extends Feature {
 		List<Goal> avoidEntityGoals = skeleton.goalSelector.availableGoals.stream()
 				.map(WrappedGoal::getGoal)
 				.filter(g -> g instanceof AIAvoidEntityGoal<?>)
-				.collect(Collectors.toList());
+				.toList();
 
 		avoidEntityGoals.forEach(skeleton.goalSelector::removeGoal);
 		if (hasAIArrowAttack) {
@@ -147,7 +159,7 @@ public class SkeletonAIFeature extends Feature {
 			skeleton.goalSelector.addGoal(2, rangedBowAttackGoal);
 
 			if (avoidTarget) {
-				AIAvoidEntityGoal<Player> avoidEntityGoal = new AIAvoidEntityGoal<>(skeleton, Player.class, 12.0f, this.fleeSpeedNear, this.fleeSpeedFar);
+				AIAvoidEntityGoal<Player> avoidEntityGoal = new AIAvoidEntityGoal<>(skeleton, Player.class, (float) this.fleeDistance, (float) this.fleeDistanceNear, this.fleeSpeedNear, this.fleeSpeedFar);
 				avoidEntityGoal.setAttackWhenRunning(attackWhenAvoiding);
 				skeleton.goalSelector.addGoal(1, avoidEntityGoal);
 			}
