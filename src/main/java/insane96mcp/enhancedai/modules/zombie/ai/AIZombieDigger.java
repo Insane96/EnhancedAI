@@ -1,23 +1,25 @@
 package insane96mcp.enhancedai.modules.zombie.ai;
 
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.insanelib.utils.IdTagMatcher;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.monster.ZombieEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ToolItem;
-import net.minecraft.potion.EffectUtils;
-import net.minecraft.potion.Effects;
+import insane96mcp.insanelib.util.IdTagMatcher;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.*;
-import net.minecraftforge.common.ToolType;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffectUtil;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.item.DiggerItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,8 +28,8 @@ import java.util.List;
 
 public class AIZombieDigger extends Goal {
 
-	private final ZombieEntity digger;
-	private PlayerEntity targetPlayer;
+	private final Zombie digger;
+	private LivingEntity target;
 	private final double reachDistance;
 	private final List<BlockPos> targetBlocks = new ArrayList<>();
 	private int tickToBreak = 0;
@@ -39,7 +41,7 @@ public class AIZombieDigger extends Goal {
 
 	private int ticksWithNoPath = 0;
 
-	public AIZombieDigger(ZombieEntity digger, boolean toolOnly, boolean properToolOnly){
+	public AIZombieDigger(Zombie digger, boolean toolOnly, boolean properToolOnly){
 		this.digger = digger;
 		this.reachDistance = 4;
 		this.toolOnly = toolOnly;
@@ -48,11 +50,10 @@ public class AIZombieDigger extends Goal {
 	}
 
 	public boolean canUse() {
-		if (this.toolOnly && !(this.digger.getOffhandItem().getItem() instanceof ToolItem))
+		if (this.toolOnly && !(this.digger.getOffhandItem().getItem() instanceof DiggerItem))
 			return false;
 
-		LivingEntity target = digger.getTarget();
-		if (!(target instanceof PlayerEntity))
+		if (digger.getTarget() == null)
 			return false;
 
 		if (this.digger.getNavigation().isDone() || this.digger.getNavigation().isStuck())
@@ -61,7 +62,7 @@ public class AIZombieDigger extends Goal {
 			this.ticksWithNoPath--;
 
 		return ticksWithNoPath >= 30
-				&& this.digger.distanceToSqr(target) > 1.5d;
+				&& this.digger.distanceToSqr(digger.getTarget()) > 1.5d;
 	}
 
 	public boolean canContinueToUse() {
@@ -69,22 +70,22 @@ public class AIZombieDigger extends Goal {
 			return false;
 
 		return !this.targetBlocks.isEmpty()
-				&& this.targetPlayer != null
-				&& this.targetPlayer.isAlive()
+				&& this.target != null
+				&& this.target.isAlive()
 				&& this.targetBlocks.get(0).distSqr(this.digger.blockPosition()) < this.reachDistance * this.reachDistance
 				&& this.digger.getNavigation().isDone()
 				&& !this.digger.level.getBlockState(this.targetBlocks.get(0)).isAir();
 	}
 
 	public void start() {
-		this.targetPlayer = (PlayerEntity) this.digger.getTarget();
+		this.target = this.digger.getTarget();
 		fillTargetBlocks();
 		if (!this.targetBlocks.isEmpty())
 			initBlockBreak();
 	}
 
 	public void stop() {
-		this.targetPlayer = null;
+		this.target = null;
 		if (!this.targetBlocks.isEmpty()) {
 			this.digger.level.destroyBlockProgress(this.digger.getId(), targetBlocks.get(0), -1);
 			this.targetBlocks.clear();
@@ -108,13 +109,14 @@ public class AIZombieDigger extends Goal {
 			this.prevBreakProgress = (int) ((this.breakingTick / (float) this.tickToBreak) * 10);
 		}
 		if (this.breakingTick % 6 == 0) {
-			this.digger.swing(Hand.MAIN_HAND);
+			this.digger.swing(InteractionHand.MAIN_HAND);
 		}
 		if (this.breakingTick % 4 == 0) {
 			SoundType soundType = this.blockState.getSoundType(this.digger.level, this.targetBlocks.get(0), this.digger);
-			this.digger.level.playSound(null, this.targetBlocks.get(0), soundType.getHitSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F);
+			this.digger.level.playSound(null, this.targetBlocks.get(0), soundType.getHitSound(), SoundSource.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F);
 		}
 		if (this.breakingTick >= this.tickToBreak) {
+			//TODO this drops blocks even if the zombie has no mining item (e.g. stone with bare hands drops cobblestone)
 			this.digger.level.destroyBlock(targetBlocks.get(0), true, this.digger);
 			this.digger.level.destroyBlockProgress(this.digger.getId(), targetBlocks.get(0), -1);
 			this.targetBlocks.remove(0);
@@ -132,7 +134,7 @@ public class AIZombieDigger extends Goal {
 	private int computeTickToBreak() {
 		int canHarvestBlock = this.canHarvestBlock() ? 30 : 100;
 		double diggingSpeed = this.getDigSpeed() / this.blockState.getDestroySpeed(this.digger.level, this.targetBlocks.get(0)) / canHarvestBlock;
-		return MathHelper.ceil((1f / diggingSpeed) * Modules.zombie.diggerZombie.miningSpeedMultiplier);
+		return Mth.ceil((1f / diggingSpeed) * Modules.zombie.diggerZombie.miningSpeedMultiplier);
 	}
 
 	private float getDigSpeed() {
@@ -145,13 +147,13 @@ public class AIZombieDigger extends Goal {
 			}
 		}
 
-		if (EffectUtils.hasDigSpeed(this.digger)) {
-			digSpeed *= 1.0F + (float)(EffectUtils.getDigSpeedAmplification(this.digger) + 1) * 0.2F;
+		if (MobEffectUtil.hasDigSpeed(this.digger)) {
+			digSpeed *= 1.0F + (float)(MobEffectUtil.getDigSpeedAmplification(this.digger) + 1) * 0.2F;
 		}
 
-		if (this.digger.hasEffect(Effects.DIG_SLOWDOWN)) {
+		if (this.digger.hasEffect(MobEffects.DIG_SLOWDOWN)) {
 			float miningFatigueAmplifier;
-			switch (this.digger.getEffect(Effects.DIG_SLOWDOWN).getAmplifier()) {
+			switch (this.digger.getEffect(MobEffects.DIG_SLOWDOWN).getAmplifier()) {
 				case 0:
 					miningFatigueAmplifier = 0.3F;
 					break;
@@ -185,22 +187,17 @@ public class AIZombieDigger extends Goal {
 			return true;
 
 		ItemStack stack = this.digger.getOffhandItem();
-		ToolType tool = this.blockState.getHarvestTool();
-		if (stack.isEmpty() || tool == null)
+		if (stack.isEmpty())
 			return false;
 
-		int toolLevel = stack.getHarvestLevel(tool, null, this.blockState);
-		if (toolLevel < 0)
-			return false;
-
-		return toolLevel >= this.blockState.getHarvestLevel();
+		return stack.isCorrectToolForDrops(this.blockState);
 	}
 
 	private void fillTargetBlocks() {
-		int mobHeight = MathHelper.ceil(this.digger.getBbHeight());
+		int mobHeight = Mth.ceil(this.digger.getBbHeight());
 		for (int i = 0; i < mobHeight; i++) {
-			BlockRayTraceResult rayTraceResult = this.digger.level.clip(new RayTraceContext(this.digger.position().add(0, i, 0), this.targetPlayer.getEyePosition(1f).add(0, i, 0), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this.digger));
-			if (rayTraceResult.getType() == RayTraceResult.Type.MISS)
+			BlockHitResult rayTraceResult = this.digger.level.clip(new ClipContext(this.digger.position().add(0, i, 0), this.target.getEyePosition(1f).add(0, i, 0), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.digger));
+			if (rayTraceResult.getType() == HitResult.Type.MISS)
 				continue;
 			if (this.targetBlocks.contains(rayTraceResult.getBlockPos()))
 				continue;
@@ -210,7 +207,7 @@ public class AIZombieDigger extends Goal {
 
 			BlockState state = this.digger.level.getBlockState(rayTraceResult.getBlockPos());
 
-			if (state.hasTileEntity())
+			if (state.hasBlockEntity())
 				continue;
 
 			//Check for black/whitelist
@@ -236,5 +233,9 @@ public class AIZombieDigger extends Goal {
 			this.targetBlocks.add(rayTraceResult.getBlockPos());
 		}
 		Collections.reverse(this.targetBlocks);
+	}
+
+	public boolean requiresUpdateEveryTick() {
+		return true;
 	}
 }

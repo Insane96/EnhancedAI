@@ -8,12 +8,13 @@ import insane96mcp.enhancedai.setup.Strings;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
-import net.minecraft.entity.ai.goal.CreeperSwellGoal;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.monster.CreeperEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.Explosion;
+import insane96mcp.insanelib.setup.ILStrings;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.SwellGoal;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.level.Explosion;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
@@ -81,10 +82,10 @@ public class CreeperSwellFeature extends Feature {
 
 		Explosion e = event.getExplosion();
 
-		if (!(e.getExploder() instanceof CreeperEntity))
+		if (!(e.getExploder() instanceof Creeper))
 			return;
 
-		CreeperEntity creeper = (CreeperEntity) e.getExploder();
+		Creeper creeper = (Creeper) e.getExploder();
 
 		if (creeper.getPersistentData().getBoolean(Strings.Tags.Creeper.CENA))
 			creeper.playSound(EASounds.CREEPER_CENA_EXPLODE.get(), 4.0f, 1.0f);
@@ -95,15 +96,15 @@ public class CreeperSwellFeature extends Feature {
 		if (!this.isEnabled())
 			return;
 
-		if (!(event.getEntity() instanceof CreeperEntity))
+		if (!(event.getEntity() instanceof Creeper))
 			return;
 
-		CreeperEntity creeper = (CreeperEntity) event.getEntity();
+		Creeper creeper = (Creeper) event.getEntity();
 
 		//Remove Creeper Swell Goal
 		ArrayList<Goal> goalsToRemove = new ArrayList<>();
 		creeper.goalSelector.availableGoals.forEach(prioritizedGoal -> {
-			if (prioritizedGoal.getGoal() instanceof CreeperSwellGoal)
+			if (prioritizedGoal.getGoal() instanceof SwellGoal)
 				goalsToRemove.add(prioritizedGoal.getGoal());
 		});
 
@@ -113,13 +114,13 @@ public class CreeperSwellFeature extends Feature {
 
 		//Set creeper cena
 		if (creeper.level.random.nextDouble() < this.cenaChance && !processed) {
-			creeper.setCustomName(new StringTextComponent("Creeper Cena"));
-			CompoundNBT compoundNBT = new CompoundNBT();
+			creeper.setCustomName(new TextComponent("Creeper Cena"));
+			CompoundTag compoundNBT = new CompoundTag();
 			compoundNBT.putShort("Fuse", (short)34);
 			compoundNBT.putByte("ExplosionRadius", (byte)6);
 			compoundNBT.putBoolean("powered", creeper.isPowered());
 			creeper.readAdditionalSaveData(compoundNBT);
-			creeper.getPersistentData().putBoolean(insane96mcp.insanelib.setup.Strings.Tags.EXPLOSION_CAUSES_FIRE, true);
+			creeper.getPersistentData().putBoolean(ILStrings.Tags.EXPLOSION_CAUSES_FIRE, true);
 			creeper.getPersistentData().putBoolean(Strings.Tags.Creeper.CENA, true);
 		}
 
@@ -160,10 +161,10 @@ public class CreeperSwellFeature extends Feature {
 		if (!event.getSource().isExplosion())
 			return;
 
-		if (!(event.getEntityLiving() instanceof CreeperEntity))
+		if (!(event.getEntityLiving() instanceof Creeper))
 			return;
 
-		CreeperEntity creeper = (CreeperEntity) event.getEntityLiving();
+		Creeper creeper = (Creeper) event.getEntityLiving();
 		creeper.ignite();
 	}
 }

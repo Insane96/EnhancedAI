@@ -6,11 +6,11 @@ import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.config.BlacklistConfig;
-import insane96mcp.insanelib.utils.IdTagMatcher;
-import net.minecraft.entity.monster.ZombieEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import insane96mcp.insanelib.util.IdTagMatcher;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -47,7 +47,7 @@ public class PearlerZombieFeature extends Feature {
 		super.loadConfig();
 		this.equipEnderPearlChance = this.equipEnderPearlChanceConfig.get();
 		this.enderPearlAmount = this.enderPearlAmountConfig.get();
-		this.entityBlacklist = IdTagMatcher.parseStringList(this.entityBlacklistConfig.listConfig.get());
+		this.entityBlacklist = (ArrayList<IdTagMatcher>) IdTagMatcher.parseStringList(this.entityBlacklistConfig.listConfig.get());
 		this.entityBlacklistAsWhitelist = this.entityBlacklistConfig.listAsWhitelistConfig.get();
 	}
 
@@ -56,10 +56,8 @@ public class PearlerZombieFeature extends Feature {
 		if (!this.isEnabled())
 			return;
 
-		if (!(event.getEntity() instanceof ZombieEntity))
+		if (!(event.getEntity() instanceof Zombie zombie))
 			return;
-
-		ZombieEntity zombie = (ZombieEntity) event.getEntity();
 
 		//Check for black/whitelist
 		boolean isInWhitelist = false;
@@ -77,7 +75,7 @@ public class PearlerZombieFeature extends Feature {
 			return;
 
 		if (event.getWorld().random.nextDouble() < this.equipEnderPearlChance)
-			zombie.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(Items.ENDER_PEARL, this.enderPearlAmount));
+			zombie.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.ENDER_PEARL, this.enderPearlAmount));
 
 		zombie.goalSelector.addGoal(2, new AIZombiePearler(zombie));
 	}

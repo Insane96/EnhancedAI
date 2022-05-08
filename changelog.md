@@ -1,5 +1,12 @@
 # Changelog
 
+## Upcoming
+* Port to 1.18.2, requires InsaneLib 1.4.6
+* Spider Webs are no longer affected by mob griefing, and can also now replace simple blocks like grass
+* Fixed skeletons running faster from the player when farther instead of near
+* Fixed spiders having wrong config options for Web Throwing
+* Fixed spiders having wrong fall damage reduction (was 10% instead of 90%)
+
 ## 1.2.3
 * Monsters will now be able to despawn when farther than any player by 48 blocks (vanilla is 32) and will instantly despawn when farther away than 80 blocks (vanilla is 128) (configurable in "Base Feature")
 * Breaching creepers now breach more often

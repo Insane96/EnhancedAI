@@ -2,21 +2,20 @@ package insane96mcp.enhancedai.modules.skeleton.ai;
 
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.modules.base.ai.AIAvoidEntityGoal;
-import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.projectile.ProjectileHelper;
-import net.minecraft.item.BowItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.RangedAttackMob;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.item.BowItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 import java.util.EnumSet;
 
-public class AIRangedBowAttackGoal<T extends MonsterEntity & IRangedAttackMob> extends Goal {
+public class AIRangedBowAttackGoal<T extends Monster & RangedAttackMob> extends Goal {
 	private final T entity;
 	private final double moveSpeedAmp;
 	private int attackCooldown;
@@ -50,7 +49,7 @@ public class AIRangedBowAttackGoal<T extends MonsterEntity & IRangedAttackMob> e
 	}
 
 	protected boolean isBowInMainhand() {
-		return this.entity.isHolding(item -> item instanceof BowItem);
+		return this.entity.isHolding(stack -> stack.getItem() instanceof BowItem);
 	}
 
 	/**
@@ -88,7 +87,7 @@ public class AIRangedBowAttackGoal<T extends MonsterEntity & IRangedAttackMob> e
 			return;
 
 		double distanceFromTarget = this.entity.distanceToSqr(livingentity.getX(), livingentity.getY(), livingentity.getZ());
-		boolean canSeeTarget = this.entity.getSensing().canSee(livingentity);
+		boolean canSeeTarget = this.entity.getSensing().hasLineOfSight(livingentity);
 		boolean flag1 = this.seeTime > 0;
 		if (canSeeTarget != flag1) {
 			this.seeTime = 0;
@@ -155,7 +154,7 @@ public class AIRangedBowAttackGoal<T extends MonsterEntity & IRangedAttackMob> e
 				}
 			}
 			else if (--this.attackTime <= 0 && this.seeTime >= -60) {
-				this.entity.startUsingItem(ProjectileHelper.getWeaponHoldingHand(this.entity, item -> item == Items.BOW));
+				this.entity.startUsingItem(ProjectileUtil.getWeaponHoldingHand(this.entity, item -> item == Items.BOW));
 			}
 		}
 	}
@@ -165,22 +164,26 @@ public class AIRangedBowAttackGoal<T extends MonsterEntity & IRangedAttackMob> e
 	}
 
 	private void attackEntityWithRangedAttack(T entity, LivingEntity target, float distanceFactor) {
-		ItemStack itemstack = entity.getProjectile(entity.getItemInHand(ProjectileHelper.getWeaponHoldingHand(entity, item -> item == Items.BOW)));
+		ItemStack itemstack = entity.getProjectile(entity.getItemInHand(ProjectileUtil.getWeaponHoldingHand(entity, item -> item == Items.BOW)));
 		double distance = entity.distanceTo(target);
 		double distanceY = target.getY() - entity.getY();
 		float f = distanceFactor / 20.0F;
 		f = (f * f + f * 2.0F) / 3.0F;
-		AbstractArrowEntity abstractarrowentity = ProjectileHelper.getMobArrow(entity, itemstack, f);
-		if (entity.getMainHandItem().getItem() instanceof net.minecraft.item.BowItem)
-			abstractarrowentity = ((net.minecraft.item.BowItem)entity.getMainHandItem().getItem()).customArrow(abstractarrowentity);
+		AbstractArrow abstractarrowentity = ProjectileUtil.getMobArrow(entity, itemstack, f);
+		if (entity.getMainHandItem().getItem() instanceof net.minecraft.world.item.BowItem)
+			abstractarrowentity = ((net.minecraft.world.item.BowItem)entity.getMainHandItem().getItem()).customArrow(abstractarrowentity);
 		double d0 = target.getX() - entity.getX();
 		double d2 = target.getZ() - entity.getZ();
-		double distanceXZ = MathHelper.sqrt(d0 * d0 + d2 * d2);
+		double distanceXZ = Math.sqrt(d0 * d0 + d2 * d2);
 		double yPos = target.getY(0d);
 		yPos += target.getEyeHeight() * 0.5 + (distanceY / distanceXZ);
 		double d1 = yPos - abstractarrowentity.getY();
 		abstractarrowentity.shoot(d0, d1 + distanceXZ * 0.18d, d2, f * 1.1f + ((float)distance / 32f) + (float)Math.max(distanceY / 48d, 0f), (float) Modules.skeleton.skeletonAI.arrowInaccuracy);
 		entity.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (entity.getRandom().nextFloat() * 0.4F + 0.8F));
 		entity.level.addFreshEntity(abstractarrowentity);
+	}
+
+	public boolean requiresUpdateEveryTick() {
+		return true;
 	}
 }

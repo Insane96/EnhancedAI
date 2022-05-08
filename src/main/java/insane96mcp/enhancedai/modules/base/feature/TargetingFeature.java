@@ -6,17 +6,17 @@ import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.config.BlacklistConfig;
-import insane96mcp.insanelib.utils.IdTagMatcher;
-import insane96mcp.insanelib.utils.MCUtils;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.ai.goal.PrioritizedGoal;
-import net.minecraft.entity.monster.EndermiteEntity;
-import net.minecraft.entity.monster.SpiderEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import insane96mcp.insanelib.util.IdTagMatcher;
+import insane96mcp.insanelib.util.MCUtils;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.WrappedGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.monster.Endermite;
+import net.minecraft.world.entity.monster.Spider;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -64,7 +64,7 @@ public class TargetingFeature extends Feature {
 		this.followRange = this.followRangeConfig.get();
 		this.xray = this.xrayConfig.get();
 		this.instaTarget = this.instaTargetConfig.get();
-		this.entityBlacklist = IdTagMatcher.parseStringList(this.entityBlacklistConfig.listConfig.get());
+		this.entityBlacklist = (ArrayList<IdTagMatcher>) IdTagMatcher.parseStringList(this.entityBlacklistConfig.listConfig.get());
 		this.entityBlacklistAsWhitelist = this.entityBlacklistConfig.listAsWhitelistConfig.get();
 	}
 
@@ -73,10 +73,10 @@ public class TargetingFeature extends Feature {
 		if (!this.isEnabled())
 			return;
 
-		if (!(event.getEntity() instanceof MobEntity))
+		if (!(event.getEntity() instanceof Mob))
 			return;
 
-		MobEntity mobEntity = (MobEntity) event.getEntity();
+		Mob mobEntity = (Mob) event.getEntity();
 
 		//Check for black/whitelist
 		boolean isInWhitelist = false;
@@ -103,13 +103,13 @@ public class TargetingFeature extends Feature {
 		Predicate<LivingEntity> predicate = null;
 
 		ArrayList<Goal> goalsToRemove = new ArrayList<>();
-		for (PrioritizedGoal prioritizedGoal : mobEntity.targetSelector.availableGoals) {
+		for (WrappedGoal prioritizedGoal : mobEntity.targetSelector.availableGoals) {
 			if (!(prioritizedGoal.getGoal() instanceof NearestAttackableTargetGoal))
 				continue;
 
 			NearestAttackableTargetGoal<?> goal = (NearestAttackableTargetGoal<?>) prioritizedGoal.getGoal();
 
-			if (goal.targetType != PlayerEntity.class)
+			if (goal.targetType != Player.class)
 				continue;
 
 			predicate = goal.targetConditions.selector;
@@ -123,24 +123,24 @@ public class TargetingFeature extends Feature {
 
 		goalsToRemove.forEach(mobEntity.goalSelector::removeGoal);
 
-		AINearestAttackableTargetGoal<PlayerEntity> targetGoal;
+		AINearestAttackableTargetGoal<Player> targetGoal;
 
-		if (mobEntity instanceof SpiderEntity)
-			targetGoal = new AINearestAttackableTargetGoal.TargetGoal<>((SpiderEntity) mobEntity, PlayerEntity.class, true, false, predicate);
+		if (mobEntity instanceof Spider)
+			targetGoal = new AINearestAttackableTargetGoal.TargetGoal<>((Spider) mobEntity, Player.class, true, false, predicate);
 		else
-			targetGoal = new AINearestAttackableTargetGoal<>(mobEntity, PlayerEntity.class, true, false, predicate);
+			targetGoal = new AINearestAttackableTargetGoal<>(mobEntity, Player.class, true, false, predicate);
 		if (mobEntity.level.random.nextDouble() < this.xray)
 			targetGoal.setXray(true);
 
 		targetGoal.setInstaTarget(this.instaTarget);
 		mobEntity.targetSelector.addGoal(2, targetGoal);
 
-		AINearestAttackableTargetGoal<EndermiteEntity> targetGoalTest;
+		AINearestAttackableTargetGoal<Endermite> targetGoalTest;
 
-		if (mobEntity instanceof SpiderEntity)
-			targetGoalTest = new AINearestAttackableTargetGoal.TargetGoal<>((SpiderEntity) mobEntity, EndermiteEntity.class, true, false, predicate);
+		if (mobEntity instanceof Spider)
+			targetGoalTest = new AINearestAttackableTargetGoal.TargetGoal<>((Spider) mobEntity, Endermite.class, true, false, predicate);
 		else
-			targetGoalTest = new AINearestAttackableTargetGoal<>(mobEntity, EndermiteEntity.class, true, false, predicate);
+			targetGoalTest = new AINearestAttackableTargetGoal<>(mobEntity, Endermite.class, true, false, predicate);
 		if (mobEntity.level.random.nextDouble() < this.xray)
 			targetGoalTest.setXray(true);
 

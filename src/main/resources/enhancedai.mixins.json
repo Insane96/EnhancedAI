@@ -4,9 +4,9 @@
 	"compatibilityLevel": "JAVA_8",
 	"refmap": "enhancedai.refmap.json",
 	"mixins": [
-		"AbstractSkeletonEntityMixin",
-		"CreeperEntityMixin",
-		"EntityClassificationMixin"
+		"AbstractSkeletonMixin",
+        "CreeperMixin",
+		"MobCategoryMixin"
 	],
 	"minVersion": "0.8"
 }

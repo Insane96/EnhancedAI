@@ -5,9 +5,9 @@ import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.config.BlacklistConfig;
-import insane96mcp.insanelib.utils.IdTagMatcher;
-import net.minecraft.entity.monster.SpiderEntity;
-import net.minecraft.util.DamageSource;
+import insane96mcp.insanelib.util.IdTagMatcher;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.monster.Spider;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -33,7 +33,7 @@ public class MiscFeature extends Feature {
 		fallDamageReductionConfig = Config.builder
 				.comment("Percentage reduction of the fall damage taken by spiders.")
 				.defineInRange("Fall Damage Reduction", this.fallDamageReduction, 0d, 1d);
-		entityBlacklistConfig = new BlacklistConfig(Config.builder, "Entity Blacklist", "Entities that shouldn't get the Throwing Web AI", Collections.emptyList(), false);
+		entityBlacklistConfig = new BlacklistConfig(Config.builder, "Entity Blacklist", "Entities that shouldn't be affected by this feature", Collections.emptyList(), false);
 		Config.builder.pop();
 	}
 
@@ -42,7 +42,7 @@ public class MiscFeature extends Feature {
 		super.loadConfig();
 		this.fallDamageReduction = this.fallDamageReductionConfig.get();
 
-		this.entityBlacklist = IdTagMatcher.parseStringList(this.entityBlacklistConfig.listConfig.get());
+		this.entityBlacklist = (ArrayList<IdTagMatcher>) IdTagMatcher.parseStringList(this.entityBlacklistConfig.listConfig.get());
 		this.entityBlacklistAsWhitelist = this.entityBlacklistConfig.listAsWhitelistConfig.get();
 	}
 
@@ -57,10 +57,8 @@ public class MiscFeature extends Feature {
 		if (!event.getSource().equals(DamageSource.FALL))
 			return;
 
-		if (!(event.getEntity() instanceof SpiderEntity))
+		if (!(event.getEntity() instanceof Spider spider))
 			return;
-
-		SpiderEntity spider = (SpiderEntity) event.getEntity();
 
 		//Check for black/whitelist
 		boolean isInWhitelist = false;
@@ -77,6 +75,6 @@ public class MiscFeature extends Feature {
 		if (isInBlacklist || (!isInWhitelist && this.entityBlacklistAsWhitelist))
 			return;
 
-		event.setAmount((float) (event.getAmount() * this.fallDamageReduction));
+		event.setAmount((float) (event.getAmount() * (1d - this.fallDamageReduction)));
 	}
 }

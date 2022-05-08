@@ -7,11 +7,11 @@ import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.config.BlacklistConfig;
-import insane96mcp.insanelib.utils.IdTagMatcher;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.monster.SpiderEntity;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import insane96mcp.insanelib.util.IdTagMatcher;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Spider;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -62,7 +62,7 @@ public class ThrowingWebFeature extends Feature {
 				.defineInRange("Destroy Web After", this.destroyWebAfter, 0, 6000);
 		thrownWebDamageConfig = Config.builder
 				.comment("Damage when the projectiles hits a mob. The damage is set for normal difficulty. Hard difficulty gets +50% damage and Easy gets (-50% + 1) damage.")
-				.defineInRange("Web Throw Chance", this.thrownWebDamage, 0d, 128d);
+				.defineInRange("Web Damage", this.thrownWebDamage, 0d, 128d);
 		throwingCooldownConfig = Config.builder
 				.comment("Every how many ticks do spiders throw the projectile")
 				.defineInRange("Projectile cooldown", this.throwingCooldown, 1, 1200);
@@ -107,7 +107,7 @@ public class ThrowingWebFeature extends Feature {
 		this.stackSlowness = this.stackSlownessConfig.get();
 		this.maxSlowness = this.maxSlownessConfig.get();
 
-		this.entityBlacklist = IdTagMatcher.parseStringList(this.entityBlacklistConfig.listConfig.get());
+		this.entityBlacklist = (ArrayList<IdTagMatcher>) IdTagMatcher.parseStringList(this.entityBlacklistConfig.listConfig.get());
 		this.entityBlacklistAsWhitelist = this.entityBlacklistConfig.listAsWhitelistConfig.get();
 	}
 
@@ -116,10 +116,8 @@ public class ThrowingWebFeature extends Feature {
 		if (!this.isEnabled())
 			return;
 
-		if (!(event.getEntity() instanceof SpiderEntity))
+		if (!(event.getEntity() instanceof Spider spider))
 			return;
-
-		SpiderEntity spider = (SpiderEntity) event.getEntity();
 
 		//Check for black/whitelist
 		boolean isInWhitelist = false;
@@ -152,11 +150,11 @@ public class ThrowingWebFeature extends Feature {
 	}
 
 	public void applySlowness(LivingEntity entity) {
-		EffectInstance slowness = entity.getEffect(Effects.MOVEMENT_SLOWDOWN);
+		MobEffectInstance slowness = entity.getEffect(MobEffects.MOVEMENT_SLOWDOWN);
 
 		if (slowness == null)
-			entity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, this.slownessTime, this.slownessAmplifier - 1, true, true, true));
+			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, this.slownessTime, this.slownessAmplifier - 1, true, true, true));
 		else if (this.stackSlowness)
-			entity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, this.slownessTime, Math.min(slowness.getAmplifier() + this.slownessAmplifier, this.maxSlowness - 1), true, true, true));
+			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, this.slownessTime, Math.min(slowness.getAmplifier() + this.slownessAmplifier, this.maxSlowness - 1), true, true, true));
 	}
 }

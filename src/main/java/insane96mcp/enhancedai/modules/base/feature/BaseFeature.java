@@ -4,7 +4,7 @@ import insane96mcp.enhancedai.setup.Config;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
-import net.minecraft.entity.EntityClassification;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -36,7 +36,7 @@ public class BaseFeature extends Feature {
 		super.loadConfig();
 		this.monstersDespawningDistance = this.monstersDespawningDistanceConfig.get();
 		this.minMonstersDespawningDistance = this.minMonstersDespawningDistanceConfig.get();
-		EntityClassification.MONSTER.despawnDistance = this.monstersDespawningDistance;
+		MobCategory.MONSTER.despawnDistance = this.monstersDespawningDistance;
 	}
 
 	//@SubscribeEvent

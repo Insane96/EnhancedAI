@@ -1,15 +1,15 @@
 package insane96mcp.enhancedai.modules.spider.entity.projectile;
 
-import insane96mcp.insanelib.utils.scheduled.ScheduledTickTask;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import insane96mcp.insanelib.util.scheduled.ScheduledTickTask;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 public class TemporaryCobwebTask extends ScheduledTickTask {
 
-	World world;
+	Level world;
 	BlockPos pos;
 
-	public TemporaryCobwebTask(int tickDelay, World world, BlockPos pos) {
+	public TemporaryCobwebTask(int tickDelay, Level world, BlockPos pos) {
 		super(tickDelay);
 		this.world = world;
 		this.pos = pos;

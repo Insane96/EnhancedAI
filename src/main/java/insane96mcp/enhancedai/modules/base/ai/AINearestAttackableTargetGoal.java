@@ -1,14 +1,14 @@
 package insane96mcp.enhancedai.modules.base.ai;
 
-import net.minecraft.entity.EntityPredicate;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.TargetGoal;
-import net.minecraft.entity.monster.SpiderEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.target.TargetGoal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.monster.Spider;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.AABB;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -19,25 +19,24 @@ public class AINearestAttackableTargetGoal<T extends LivingEntity> extends Targe
 	protected int targetChance;
 	protected LivingEntity nearestTarget;
 	/** This filter is applied to the Entity search. Only matching entities will be targeted. */
-	public EntityPredicate targetEntitySelector;
+	public TargetingConditions targetEntitySelector;
 
 	private boolean xray;
 
-	public AINearestAttackableTargetGoal(MobEntity goalOwnerIn, Class<T> targetClassIn, boolean checkSight) {
+	public AINearestAttackableTargetGoal(Mob goalOwnerIn, Class<T> targetClassIn, boolean checkSight) {
 		this(goalOwnerIn, targetClassIn, checkSight, false);
 	}
 
-	public AINearestAttackableTargetGoal(MobEntity goalOwnerIn, Class<T> targetClassIn, boolean checkSight, boolean nearbyOnlyIn) {
+	public AINearestAttackableTargetGoal(Mob goalOwnerIn, Class<T> targetClassIn, boolean checkSight, boolean nearbyOnlyIn) {
 		this(goalOwnerIn, targetClassIn, checkSight, nearbyOnlyIn, null);
 	}
 
-	public AINearestAttackableTargetGoal(MobEntity goalOwnerIn, Class<T> targetClassIn, boolean checkSight, boolean nearbyOnlyIn, @Nullable Predicate<LivingEntity> targetPredicate) {
+	public AINearestAttackableTargetGoal(Mob goalOwnerIn, Class<T> targetClassIn, boolean checkSight, boolean nearbyOnlyIn, @Nullable Predicate<LivingEntity> targetPredicate) {
 		super(goalOwnerIn, checkSight, nearbyOnlyIn);
 		this.targetClass = targetClassIn;
 		this.targetChance = 10;
 		this.setFlags(EnumSet.of(Goal.Flag.TARGET));
-		EntityPredicate predicate = (new EntityPredicate()).range(this.getFollowDistance()).selector(targetPredicate);
-		this.targetEntitySelector = predicate;
+		this.targetEntitySelector = TargetingConditions.forCombat().range(this.getFollowDistance()).selector(targetPredicate);
 	}
 
 	/**
@@ -54,13 +53,13 @@ public class AINearestAttackableTargetGoal<T extends LivingEntity> extends Targe
 		}
 	}
 
-	protected AxisAlignedBB getTargetableArea(double targetDistance) {
+	protected AABB getTargetableArea(double targetDistance) {
 		return this.mob.getBoundingBox().inflate(targetDistance, targetDistance, targetDistance);
 	}
 
 	protected void findNearestTarget() {
-		if (this.targetClass != PlayerEntity.class && this.targetClass != ServerPlayerEntity.class) {
-			this.nearestTarget = this.mob.level.getNearestLoadedEntity(this.targetClass, this.targetEntitySelector, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ(), this.getTargetableArea(this.getFollowDistance()));
+		if (this.targetClass != Player.class && this.targetClass != ServerPlayer.class) {
+			this.nearestTarget = this.mob.level.getNearestEntity(this.targetClass, this.targetEntitySelector, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ(), this.getTargetableArea(this.getFollowDistance()));
 		}
 		else {
 			this.nearestTarget = this.mob.level.getNearestPlayer(this.targetEntitySelector, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ());
@@ -82,11 +81,11 @@ public class AINearestAttackableTargetGoal<T extends LivingEntity> extends Targe
 
 	public void setXray(boolean xray) {
 		this.xray = xray;
-		this.targetEntitySelector.allowUnseeable();
+		this.targetEntitySelector.ignoreLineOfSight();
 	}
 
 	public static class TargetGoal<T extends LivingEntity> extends AINearestAttackableTargetGoal<T> {
-		public TargetGoal(SpiderEntity goalOwnerIn, Class<T> targetClassIn, boolean checkSight, boolean nearbyOnlyIn, @Nullable Predicate<LivingEntity> targetPredicate) {
+		public TargetGoal(Spider goalOwnerIn, Class<T> targetClassIn, boolean checkSight, boolean nearbyOnlyIn, @Nullable Predicate<LivingEntity> targetPredicate) {
 			super(goalOwnerIn, targetClassIn, checkSight, nearbyOnlyIn, targetPredicate);
 		}
 

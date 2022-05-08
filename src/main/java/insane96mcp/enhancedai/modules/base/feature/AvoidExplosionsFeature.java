@@ -5,8 +5,8 @@ import insane96mcp.enhancedai.setup.Config;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.item.TNTEntity;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -34,24 +34,20 @@ public class AvoidExplosionsFeature extends Feature {
 	}
 
 	private void addAvoidAI(EntityJoinWorldEvent event) {
-		if (!(event.getEntity() instanceof CreatureEntity))
+		if (!(event.getEntity() instanceof PathfinderMob creatureEntity))
 			return;
-
-		CreatureEntity creatureEntity = (CreatureEntity) event.getEntity();
 
 		creatureEntity.goalSelector.addGoal(1, new AIAvoidExplosionGoal(creatureEntity, 1.6d, 1.3d));
 	}
 
 	private void alertTNT(EntityJoinWorldEvent event) {
-		if (!(event.getEntity() instanceof TNTEntity))
+		if (!(event.getEntity() instanceof PrimedTnt tnt))
 			return;
 
-		TNTEntity tnt = (TNTEntity) event.getEntity();
-		List<CreatureEntity> creaturesNearby = tnt.level.getLoadedEntitiesOfClass(CreatureEntity.class, tnt.getBoundingBox().inflate(8d));
-		for (CreatureEntity creatureEntity : creaturesNearby) {
+		List<PathfinderMob> creaturesNearby = tnt.level.getEntitiesOfClass(PathfinderMob.class, tnt.getBoundingBox().inflate(8d));
+		for (PathfinderMob creatureEntity : creaturesNearby) {
 			creatureEntity.goalSelector.availableGoals.forEach(prioritizedGoal -> {
-				if (prioritizedGoal.getGoal() instanceof AIAvoidExplosionGoal) {
-					AIAvoidExplosionGoal aiAvoidExplosionGoal = (AIAvoidExplosionGoal) prioritizedGoal.getGoal();
+				if (prioritizedGoal.getGoal() instanceof AIAvoidExplosionGoal aiAvoidExplosionGoal) {
 					aiAvoidExplosionGoal.run(tnt, 8d);
 				}
 			});

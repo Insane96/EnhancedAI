@@ -8,12 +8,12 @@ import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.config.BlacklistConfig;
-import insane96mcp.insanelib.utils.IdTagMatcher;
-import insane96mcp.insanelib.utils.RandomHelper;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.PrioritizedGoal;
-import net.minecraft.entity.monster.AbstractSkeletonEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import insane96mcp.insanelib.util.IdTagMatcher;
+import insane96mcp.insanelib.util.RandomHelper;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.WrappedGoal;
+import net.minecraft.world.entity.monster.AbstractSkeleton;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.ArrayList;
@@ -69,7 +69,7 @@ public class SkeletonAIFeature extends Feature {
 				.comment("Chance for a Skeleton to spawn with the ability to avoid the player")
 				.defineInRange("Avoid Player chance", this.avoidPlayerChance, 0d, 1d);
 		attackWhenAvoidingChanceConfig = Config.builder
-				.comment("Chance for a Skeleton to attack while running from a player")
+				.comment("Chance for a Skeleton to be able to shoot while running from a player")
 				.defineInRange("Attack When Avoiding Chance", this.attackWhenAvoidingChance, 0d, 1d);
 		fleeSpeedNearConfig = Config.builder
 				.comment("Speed multiplier when the skeleton avoids the player and it's within 7 blocks from him.")
@@ -88,7 +88,7 @@ public class SkeletonAIFeature extends Feature {
 		this.maxShootingRange = this.maxShootingRangeConfig.get();
 		this.strafeChance = this.strafeChanceConfig.get();
 		this.arrowInaccuracy = this.arrowInaccuracyConfig.get();
-		this.entityBlacklist = IdTagMatcher.parseStringList(this.entityBlacklistConfig.listConfig.get());
+		this.entityBlacklist = (ArrayList<IdTagMatcher>) IdTagMatcher.parseStringList(this.entityBlacklistConfig.listConfig.get());
 		this.entityBlacklistAsWhitelist = this.entityBlacklistConfig.listAsWhitelistConfig.get();
 		//Flee from target
 		this.avoidPlayerChance = this.avoidPlayerChanceConfig.get();
@@ -97,7 +97,7 @@ public class SkeletonAIFeature extends Feature {
 		this.fleeSpeedFar = this.fleeSpeedFarConfig.get();
 	}
 
-	public void reassessWeaponGoal(AbstractSkeletonEntity skeleton) {
+	public void reassessWeaponGoal(AbstractSkeleton skeleton) {
 		//Check for black/whitelist
 		boolean isInWhitelist = false;
 		boolean isInBlacklist = false;
@@ -132,22 +132,22 @@ public class SkeletonAIFeature extends Feature {
 		}
 
 		boolean hasAIArrowAttack = false;
-		for (PrioritizedGoal prioritizedGoal : skeleton.goalSelector.availableGoals) {
+		for (WrappedGoal prioritizedGoal : skeleton.goalSelector.availableGoals) {
 			if (prioritizedGoal.getGoal().equals(skeleton.bowGoal))
 				hasAIArrowAttack = true;
 		}
 		List<Goal> avoidEntityGoals = skeleton.goalSelector.availableGoals.stream()
-				.map(PrioritizedGoal::getGoal)
+				.map(WrappedGoal::getGoal)
 				.filter(g -> g instanceof AIAvoidEntityGoal<?>)
 				.collect(Collectors.toList());
 
 		avoidEntityGoals.forEach(skeleton.goalSelector::removeGoal);
 		if (hasAIArrowAttack) {
-			AIRangedBowAttackGoal<AbstractSkeletonEntity> rangedBowAttackGoal = new AIRangedBowAttackGoal<>(skeleton, 1.0d, 20, RandomHelper.getInt(skeleton.level.random, this.minShootingRange, this.maxShootingRange), strafe);
+			AIRangedBowAttackGoal<AbstractSkeleton> rangedBowAttackGoal = new AIRangedBowAttackGoal<>(skeleton, 1.0d, 20, RandomHelper.getInt(skeleton.level.random, this.minShootingRange, this.maxShootingRange), strafe);
 			skeleton.goalSelector.addGoal(2, rangedBowAttackGoal);
 
 			if (avoidTarget) {
-				AIAvoidEntityGoal<PlayerEntity> avoidEntityGoal = new AIAvoidEntityGoal<>(skeleton, PlayerEntity.class, 12.0f, this.fleeSpeedFar, this.fleeSpeedNear);
+				AIAvoidEntityGoal<Player> avoidEntityGoal = new AIAvoidEntityGoal<>(skeleton, Player.class, 12.0f, this.fleeSpeedNear, this.fleeSpeedFar);
 				avoidEntityGoal.setAttackWhenRunning(attackWhenAvoiding);
 				skeleton.goalSelector.addGoal(1, avoidEntityGoal);
 			}

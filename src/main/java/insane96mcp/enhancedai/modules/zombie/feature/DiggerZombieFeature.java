@@ -7,8 +7,10 @@ import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.config.BlacklistConfig;
-import insane96mcp.insanelib.utils.IdTagMatcher;
-import net.minecraft.entity.monster.ZombieEntity;
+import insane96mcp.insanelib.util.IdTagMatcher;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.monster.Endermite;
+import net.minecraft.world.entity.monster.Zombie;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -16,7 +18,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 
-@Label(name = "Digger Zombie")
+@Label(name = "Digger Zombie", description = "Zombies can mine blocks to reach the target")
 public class DiggerZombieFeature extends Feature {
 	private final ForgeConfigSpec.ConfigValue<Double> diggerChanceConfig;
 	private final ForgeConfigSpec.ConfigValue<Boolean> diggerToolOnlyConfig;
@@ -42,6 +44,7 @@ public class DiggerZombieFeature extends Feature {
 		diggerChanceConfig = Config.builder
 				.comment("Chance for a Zombie to spawn with the digger ability")
 				.defineInRange("Digger Chance", this.diggerChance, 0d, 1d);
+		//TODO Main and off-hand
 		diggerToolOnlyConfig = Config.builder
 				.comment("Zombies with Digger AI will mine only if they have a tool in the off-hand")
 				.define("Digger Tool Only", this.diggerToolOnly);
@@ -67,9 +70,9 @@ public class DiggerZombieFeature extends Feature {
 		this.diggerProperToolOnly = this.diggerProperToolOnlyConfig.get();
 		this.miningSpeedMultiplier = this.miningSpeedMultiplierConfig.get();
 		this.blacklistTileEntities = this.blacklistTileEntitiesConfig.get();
-		this.blockBlacklist = IdTagMatcher.parseStringList(this.blockBlacklistConfig.listConfig.get());
+		this.blockBlacklist = (ArrayList<IdTagMatcher>) IdTagMatcher.parseStringList(this.blockBlacklistConfig.listConfig.get());
 		this.blockBlacklistAsWhitelist = this.blockBlacklistConfig.listAsWhitelistConfig.get();
-		this.entityBlacklist = IdTagMatcher.parseStringList(this.entityBlacklistConfig.listConfig.get());
+		this.entityBlacklist = (ArrayList<IdTagMatcher>) IdTagMatcher.parseStringList(this.entityBlacklistConfig.listConfig.get());
 		this.entityBlacklistAsWhitelist = this.entityBlacklistConfig.listAsWhitelistConfig.get();
 	}
 
@@ -78,10 +81,8 @@ public class DiggerZombieFeature extends Feature {
 		if (!this.isEnabled())
 			return;
 
-		if (!(event.getEntity() instanceof ZombieEntity))
+		if (!(event.getEntity() instanceof Zombie zombie))
 			return;
-
-		ZombieEntity zombie = (ZombieEntity) event.getEntity();
 
 		//Check for black/whitelist
 		boolean isInWhitelist = false;
@@ -113,5 +114,6 @@ public class DiggerZombieFeature extends Feature {
 		if (miner)
 			zombie.goalSelector.addGoal(1, new AIZombieDigger(zombie, this.diggerToolOnly, this.diggerProperToolOnly));
 
+		zombie.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(zombie, Endermite.class, true));
 	}
 }

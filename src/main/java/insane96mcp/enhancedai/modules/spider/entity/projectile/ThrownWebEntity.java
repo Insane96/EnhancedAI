@@ -2,44 +2,42 @@ package insane96mcp.enhancedai.modules.spider.entity.projectile;
 
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.setup.EAEntities;
-import insane96mcp.insanelib.utils.scheduled.ScheduledTasks;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.ProjectileItemEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.network.IPacket;
-import net.minecraft.particles.BlockParticleData;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
+import insane96mcp.insanelib.util.scheduled.ScheduledTasks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FallingBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.NetworkHooks;
 
-public class ThrownWebEntity extends ProjectileItemEntity {
+public class ThrownWebEntity extends ThrowableItemProjectile {
 
 	float damage = 0f;
 
-	public ThrownWebEntity(EntityType<? extends ThrownWebEntity> entityEntityType, World world) {
+	public ThrownWebEntity(EntityType<? extends ThrownWebEntity> entityEntityType, Level world) {
 		super(entityEntityType, world);
 	}
 
-	public ThrownWebEntity(World worldIn, LivingEntity throwerIn) {
+	public ThrownWebEntity(Level worldIn, LivingEntity throwerIn) {
 		super(EAEntities.THROWN_WEB.get(), throwerIn, worldIn);
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public ThrownWebEntity(World worldIn, double x, double y, double z) {
+	public ThrownWebEntity(Level worldIn, double x, double y, double z) {
 		super(EntityType.ENDER_PEARL, x, y, z, worldIn);
 	}
 
@@ -52,42 +50,36 @@ public class ThrownWebEntity extends ProjectileItemEntity {
 		this.damage = damage;
 	}
 
-	protected void onHitEntity(EntityRayTraceResult result) {
+	protected void onHitEntity(EntityHitResult result) {
 		super.onHitEntity(result);
 		if (!result.getEntity().hurt(DamageSource.thrown(this, this.getOwner()).setScalesWithDifficulty(), this.damage))
 			return;
 		for(int i = 0; i < 32; ++i) {
-			this.level.addParticle(new BlockParticleData(ParticleTypes.BLOCK, Blocks.COBWEB.defaultBlockState()), result.getEntity().position().x + this.random.nextDouble() - 0.5d, result.getEntity().position().y + this.random.nextDouble() - 0.5d, result.getEntity().position().z + this.random.nextDouble() - 0.5d, 0d, 0D, 0d);
+			this.level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.COBWEB.defaultBlockState()), result.getEntity().position().x + this.random.nextDouble() - 0.5d, result.getEntity().position().y + this.random.nextDouble() - 0.5d, result.getEntity().position().z + this.random.nextDouble() - 0.5d, 0d, 0D, 0d);
 		}
-		this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.SLIME_SQUISH, SoundCategory.HOSTILE, 1.0f, 0.5f);
-		if (!(result.getEntity() instanceof LivingEntity) || this.level.isClientSide)
+		this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.SLIME_SQUISH, SoundSource.HOSTILE, 1.0f, 0.5f);
+		if (!(result.getEntity() instanceof LivingEntity entity) || this.level.isClientSide)
 			return;
 
-		LivingEntity entity = (LivingEntity) result.getEntity();
 		Modules.spider.throwingWeb.applySlowness(entity);
 	}
 
-	protected void onHitBlock(BlockRayTraceResult result) {
+	protected void onHitBlock(BlockHitResult result) {
 		BlockState blockstate = this.level.getBlockState(result.getBlockPos());
 		blockstate.onProjectileHit(this.level, blockstate, result, this);
 		BlockPos spawnCobwebAt = result.getBlockPos().offset(result.getDirection().getNormal());
-		if (this.level.getBlockState(spawnCobwebAt).isAir() && this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
+		if (FallingBlock.isFree(this.level.getBlockState(spawnCobwebAt)) /*&& this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)*/) {
 			this.level.setBlock(spawnCobwebAt, Blocks.COBWEB.defaultBlockState(), 3);
 			ScheduledTasks.schedule(new TemporaryCobwebTask(Modules.spider.throwingWeb.destroyWebAfter, this.level, spawnCobwebAt));
 			for(int i = 0; i < 32; ++i) {
-				this.level.addParticle(new BlockParticleData(ParticleTypes.BLOCK, Blocks.COBWEB.defaultBlockState()), spawnCobwebAt.getX() + this.random.nextDouble(), spawnCobwebAt.getY() + this.random.nextDouble(), spawnCobwebAt.getZ() + this.random.nextDouble(), 0d, 0D, 0d);
+				this.level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.COBWEB.defaultBlockState()), spawnCobwebAt.getX() + this.random.nextDouble(), spawnCobwebAt.getY() + this.random.nextDouble(), spawnCobwebAt.getZ() + this.random.nextDouble(), 0d, 0D, 0d);
 			}
-			this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.SLIME_SQUISH, SoundCategory.HOSTILE, 1.0f, 0.5f);
+			this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.SLIME_SQUISH, SoundSource.HOSTILE, 1.0f, 0.5f);
 		}
 	}
 
-	protected void onHit(RayTraceResult result) {
+	protected void onHit(HitResult result) {
 		super.onHit(result);
-		this.remove();
-	}
-
-	@Override
-	public IPacket<?> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
+		this.discard();
 	}
 }

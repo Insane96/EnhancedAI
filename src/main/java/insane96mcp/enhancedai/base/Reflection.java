@@ -1,9 +1,9 @@
 package insane96mcp.enhancedai.base;
 
 import insane96mcp.enhancedai.EnhancedAI;
-import net.minecraft.entity.monster.AbstractSkeletonEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraft.world.entity.monster.AbstractSkeleton;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -12,7 +12,7 @@ import java.lang.invoke.MethodHandles;
 
 public class Reflection {
 
-	public static final MethodHandle FIRE_ARROW = createMethodHandle(AbstractSkeletonEntity.class, "func_213624_b", ItemStack.class, float.class);
+	public static final MethodHandle FIRE_ARROW = createMethodHandle(AbstractSkeleton.class, "getArrow", ItemStack.class, float.class);
 
 	private static MethodHandle createMethodHandle(@Nonnull final Class<?> clazz, @Nonnull final String methodName, @Nonnull final Class<?>... parameterTypes) {
 		MethodHandles.Lookup lookup = MethodHandles.lookup();

@@ -2,21 +2,21 @@ package insane96mcp.enhancedai.modules.creeper.ai;
 
 import insane96mcp.enhancedai.modules.creeper.utils.CreeperUtils;
 import insane96mcp.enhancedai.setup.Strings;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.monster.CreeperEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 
 public class AICreeperLaunchGoal extends Goal {
 
-	protected final CreeperEntity launchingCreeper;
+	protected final Creeper launchingCreeper;
 	private LivingEntity creeperAttackTarget;
 
 	private int ticksBeforeLaunching;
@@ -25,7 +25,7 @@ public class AICreeperLaunchGoal extends Goal {
 	private int fails = 0;
 	private boolean hasLaunched = false;
 
-	public AICreeperLaunchGoal(CreeperEntity entitycreeperIn) {
+	public AICreeperLaunchGoal(Creeper entitycreeperIn) {
 		this.launchingCreeper = entitycreeperIn;
 		this.setFlags(EnumSet.of(Flag.MOVE));
 	}
@@ -42,7 +42,7 @@ public class AICreeperLaunchGoal extends Goal {
 		if (--cooldown > 0)
 			return false;
 
-		if (!this.launchingCreeper.getSensing().canSee(target) && !this.launchingCreeper.getPersistentData().contains(Strings.Tags.Creeper.BREACH))
+		if (!this.launchingCreeper.getSensing().hasLineOfSight(target) && !this.launchingCreeper.getPersistentData().contains(Strings.Tags.Creeper.BREACH))
 			return false;
 
 		if (this.launchingCreeper.level.getBlockState(this.launchingCreeper.blockPosition().above(3)).getMaterial().blocksMotion())
@@ -71,7 +71,7 @@ public class AICreeperLaunchGoal extends Goal {
 	}
 
 	public boolean canContinueToUse() {
-		if (this.launchingCreeper.swell == CreeperUtils.getFuse(this.launchingCreeper) - 1 && this.launchingCreeper.distanceToSqr(this.creeperAttackTarget) > (CreeperUtils.getExplosionSizeSq(this.launchingCreeper) * 2d * 2d)) {
+		if (this.launchingCreeper.swell >= CreeperUtils.getFuse(this.launchingCreeper) - 2 && this.launchingCreeper.distanceToSqr(this.creeperAttackTarget) > (CreeperUtils.getExplosionSizeSq(this.launchingCreeper) * 2d * 2d)) {
 			this.fails++;
 			this.cooldown = 60 + (this.fails * 60);
 			return false;
@@ -90,18 +90,18 @@ public class AICreeperLaunchGoal extends Goal {
 			return;
 
 		if (!this.launchingCreeper.level.isClientSide)
-			for(ServerPlayerEntity serverplayerentity : ((ServerWorld) this.launchingCreeper.level).players()) {
-				((ServerWorld) this.launchingCreeper.level).sendParticles(serverplayerentity, ParticleTypes.CLOUD, true, this.launchingCreeper.getX(), this.launchingCreeper.getY(), this.launchingCreeper.getZ(), 100, 0.5d, 0.5d, 0.5d, 0.2d);
+			for(ServerPlayer serverplayerentity : ((ServerLevel) this.launchingCreeper.level).players()) {
+				((ServerLevel) this.launchingCreeper.level).sendParticles(serverplayerentity, ParticleTypes.CLOUD, true, this.launchingCreeper.getX(), this.launchingCreeper.getY(), this.launchingCreeper.getZ(), 100, 0.5d, 0.5d, 0.5d, 0.2d);
 			}
 
 		this.launchingCreeper.playSound(SoundEvents.FIREWORK_ROCKET_LAUNCH, 6.0f, 0.5f);
 		double distanceY = this.creeperAttackTarget.getY() - this.launchingCreeper.getY();
 		double d0 = this.creeperAttackTarget.getX() - this.launchingCreeper.getX();
 		double d2 = this.creeperAttackTarget.getZ() - this.launchingCreeper.getZ();
-		double distanceXZ = MathHelper.sqrt(d0 * d0 + d2 * d2);
+		double distanceXZ = Math.sqrt(d0 * d0 + d2 * d2);
 
-		//TODO better Y speed, right now when creeper Y distance is below 7 you always get 7 which isn't good when the creeper's Ydistance is 0, and when the YDistance is higher than about 25 the creeper will go to space
-		Vector3d motion = new Vector3d(d0 * 0.15d, MathHelper.clamp(distanceY, 7d, 40d) / 10d + distanceXZ / 72d, d2 * 0.15d);
+		//TODO better Y speed, right now when creeper Y distance is below 7 you always get 7 which isn't good when the creeper's Y distance is 0, and when the Y Distance is higher than about 25 the creeper will go to space
+		Vec3 motion = new Vec3(d0 * 0.15d, Mth.clamp(distanceY, 7d, 40d) / 10d + distanceXZ / 72d, d2 * 0.15d);
 		this.launchingCreeper.setDeltaMovement(motion);
 		this.hasLaunched = true;
 	}
@@ -112,11 +112,15 @@ public class AICreeperLaunchGoal extends Goal {
 	public void stop() {
 		this.creeperAttackTarget = null;
 		this.hasLaunched = false;
-		this.launchingCreeper.getEntityData().set(CreeperEntity.DATA_IS_IGNITED, false);
+		this.launchingCreeper.getEntityData().set(Creeper.DATA_IS_IGNITED, false);
 	}
 
 	private float activationDistanceSqr() {
 		float explosionSize = CreeperUtils.getExplosionSize(this.launchingCreeper) * 5;
 		return explosionSize * explosionSize;
+	}
+
+	public boolean requiresUpdateEveryTick() {
+		return true;
 	}
 }

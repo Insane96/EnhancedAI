@@ -1,16 +1,16 @@
 package insane96mcp.enhancedai.modules.base.ai;
 
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.util.DefaultRandomPos;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 
 public class AIAvoidExplosionGoal extends Goal {
-	protected final CreatureEntity entity;
+	protected final PathfinderMob entity;
 	private final double farSpeed;
 	private final double nearSpeed;
 	protected Entity avoidTarget;
@@ -20,7 +20,7 @@ public class AIAvoidExplosionGoal extends Goal {
 	private boolean run = false;
 	//private boolean alwaysRun = false;
 
-	public AIAvoidExplosionGoal(CreatureEntity entityIn, double nearSpeedIn, double farSpeedIn) {
+	public AIAvoidExplosionGoal(PathfinderMob entityIn, double nearSpeedIn, double farSpeedIn) {
 		this.entity = entityIn;
 		this.farSpeed = farSpeedIn;
 		this.nearSpeed = nearSpeedIn;
@@ -32,11 +32,11 @@ public class AIAvoidExplosionGoal extends Goal {
 	 * method as well.
 	 */
 	public boolean canUse() {
-		if (this.run && this.avoidTarget.distanceToSqr(entity) < (explosionRadius * 2 * explosionRadius * 2) && (this.path == null || this.path.isDone())) {
-			Vector3d vector3d;
+		if (this.run && this.avoidTarget.distanceToSqr(entity) < (explosionRadius * explosionRadius * 2d * 2d) && (this.path == null || this.path.isDone())) {
+			Vec3 vector3d;
 			int t = 0;
 			do {
-				vector3d = RandomPositionGenerator.getPosAvoid(this.entity, 16, 7, this.avoidTarget.position());
+				vector3d = DefaultRandomPos.getPosAway(this.entity, 16, 7, this.avoidTarget.position());
 				t++;
 			} while (vector3d == null && t < 5);
 			if (vector3d == null)
@@ -99,6 +99,10 @@ public class AIAvoidExplosionGoal extends Goal {
 		this.run = true;
 		this.avoidTarget = avoidTarget;
 		this.explosionRadius = explosionRadius;
+	}
+
+	public boolean requiresUpdateEveryTick() {
+		return true;
 	}
 
 	/*public void setAlwaysRun(boolean alwaysRun) {

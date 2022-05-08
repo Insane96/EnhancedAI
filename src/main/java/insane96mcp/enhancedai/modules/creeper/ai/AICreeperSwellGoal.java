@@ -3,17 +3,17 @@ package insane96mcp.enhancedai.modules.creeper.ai;
 import insane96mcp.enhancedai.modules.base.ai.AIAvoidExplosionGoal;
 import insane96mcp.enhancedai.modules.creeper.utils.CreeperUtils;
 import insane96mcp.enhancedai.setup.Strings;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.monster.CreeperEntity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.monster.Creeper;
 
 import java.util.EnumSet;
 import java.util.List;
 
 public class AICreeperSwellGoal extends Goal {
 
-	protected final CreeperEntity swellingCreeper;
+	protected final Creeper swellingCreeper;
 	private LivingEntity creeperAttackTarget;
 
 	private boolean walkingFuse = false;
@@ -22,7 +22,7 @@ public class AICreeperSwellGoal extends Goal {
 
 	private boolean isBreaching = false;
 
-	public AICreeperSwellGoal(CreeperEntity entitycreeperIn) {
+	public AICreeperSwellGoal(Creeper entitycreeperIn) {
 		this.swellingCreeper = entitycreeperIn;
 	}
 
@@ -43,7 +43,7 @@ public class AICreeperSwellGoal extends Goal {
 
 		return (this.swellingCreeper.getSwellDir() > 0) ||
 				ignoresWalls ||
-				(this.swellingCreeper.getSensing().canSee(target) && this.swellingCreeper.distanceToSqr(target) < CreeperUtils.getExplosionSizeSq(this.swellingCreeper) * 1.5d * 1.5d) ||
+				(this.swellingCreeper.getSensing().hasLineOfSight(target) && this.swellingCreeper.distanceToSqr(target) < CreeperUtils.getExplosionSizeSq(this.swellingCreeper) * 1.5d * 1.5d) ||
 				canBreach;
 	}
 
@@ -74,17 +74,16 @@ public class AICreeperSwellGoal extends Goal {
 			this.swellingCreeper.setSwellDir(-1);
 		else if (this.swellingCreeper.distanceToSqr(this.creeperAttackTarget) > (CreeperUtils.getExplosionSizeSq(this.swellingCreeper) * 2d * 2d) && !isBreaching)
 			this.swellingCreeper.setSwellDir(-1);
-		else if (!this.swellingCreeper.getSensing().canSee(this.creeperAttackTarget) && !ignoreWalls && !isBreaching)
+		else if (!this.swellingCreeper.getSensing().hasLineOfSight(this.creeperAttackTarget) && !ignoreWalls && !isBreaching)
 			this.swellingCreeper.setSwellDir(-1);
 		else {
 			this.swellingCreeper.setSwellDir(1);
-			List<CreatureEntity> creaturesNearby = this.swellingCreeper.level.getEntitiesOfClass(CreatureEntity.class, this.swellingCreeper.getBoundingBox().inflate(CreeperUtils.getExplosionSize(this.swellingCreeper) * 2));
-			for (CreatureEntity creatureEntity : creaturesNearby) {
+			List<PathfinderMob> creaturesNearby = this.swellingCreeper.level.getEntitiesOfClass(PathfinderMob.class, this.swellingCreeper.getBoundingBox().inflate(CreeperUtils.getExplosionSize(this.swellingCreeper) * 2));
+			for (PathfinderMob creatureEntity : creaturesNearby) {
 				if (creatureEntity == this.swellingCreeper)
 					continue;
 				creatureEntity.goalSelector.availableGoals.forEach(prioritizedGoal -> {
-					if (prioritizedGoal.getGoal() instanceof AIAvoidExplosionGoal) {
-						AIAvoidExplosionGoal aiAvoidExplosionGoal = (AIAvoidExplosionGoal) prioritizedGoal.getGoal();
+					if (prioritizedGoal.getGoal() instanceof AIAvoidExplosionGoal aiAvoidExplosionGoal) {
 						aiAvoidExplosionGoal.run(this.swellingCreeper, CreeperUtils.getExplosionSize(this.swellingCreeper));
 					}
 				});
@@ -109,7 +108,7 @@ public class AICreeperSwellGoal extends Goal {
 		this.breaching = breaching;
 	}
 
-	public static boolean canBreach(CreeperEntity creeper, LivingEntity target) {
+	public static boolean canBreach(Creeper creeper, LivingEntity target) {
 		if (!creeper.getPersistentData().contains(Strings.Tags.Creeper.BREACH))
 			return false;
 		double yDistance = creeper.getY() - target.getY();
@@ -117,9 +116,13 @@ public class AICreeperSwellGoal extends Goal {
 		double z = target.getZ() - creeper.getZ();
 		double xzDistance = x * x + z * z;
 		return (creeper.getNavigation().isDone() || creeper.getNavigation().isStuck())
-				&& !creeper.getSensing().canSee(target)
+				&& !creeper.getSensing().hasLineOfSight(target)
 				&& !creeper.isInWater()
 				&& xzDistance < (CreeperUtils.getExplosionSizeSq(creeper) * 5d * 5d)
 				&& yDistance > -CreeperUtils.getExplosionSize(creeper) - 2;
+	}
+
+	public boolean requiresUpdateEveryTick() {
+		return true;
 	}
 }
