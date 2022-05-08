@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 1.2.4
 * Port to 1.18.2, requires InsaneLib 1.4.6
 * Spider Webs are no longer affected by mob griefing, and can also now replace simple blocks like grass
 * Fixed skeletons running faster from the player when farther instead of near
