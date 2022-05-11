@@ -1,7 +1,7 @@
 package insane96mcp.enhancedai.modules.zombie;
 
-import insane96mcp.enhancedai.modules.zombie.feature.DiggerZombieFeature;
-import insane96mcp.enhancedai.modules.zombie.feature.PearlerZombieFeature;
+import insane96mcp.enhancedai.modules.zombie.feature.DiggerZombie;
+import insane96mcp.enhancedai.modules.zombie.feature.PearlerZombie;
 import insane96mcp.enhancedai.setup.Config;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
@@ -9,14 +9,16 @@ import insane96mcp.insanelib.base.Module;
 @Label(name = "Zombie")
 public class ZombieModule extends Module {
 
-	public DiggerZombieFeature diggerZombie;
-	public PearlerZombieFeature pearlerZombie;
+	public DiggerZombie diggerZombie;
+	public PearlerZombie pearlerZombie;
+	//public FisherZombie fisherZombie;
 
 	public ZombieModule() {
 		super(Config.builder);
 		this.pushConfig(Config.builder);
-		this.diggerZombie = new DiggerZombieFeature(this);
-		this.pearlerZombie = new PearlerZombieFeature(this);
+		this.diggerZombie = new DiggerZombie(this);
+		this.pearlerZombie = new PearlerZombie(this);
+		//this.fisherZombie = new FisherZombie(this);
 		Config.builder.pop();
 	}
 
@@ -25,5 +27,6 @@ public class ZombieModule extends Module {
 		super.loadConfig();
 		this.diggerZombie.loadConfig();
 		this.pearlerZombie.loadConfig();
+		//this.fisherZombie.loadConfig();
 	}
 }

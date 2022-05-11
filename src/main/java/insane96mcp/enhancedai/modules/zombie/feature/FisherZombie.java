@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.modules.zombie.feature;
 
-import insane96mcp.enhancedai.modules.zombie.ai.AIZombiePearler;
+import insane96mcp.enhancedai.modules.zombie.ai.AIZombieFisher;
 import insane96mcp.enhancedai.setup.Config;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
@@ -18,35 +18,29 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 
-@Label(name = "Pearler Zombie", description = "Let zombies use ender pearls. Either put ender pearls in main or off hand and when far enough from the player they will throw it.")
-public class PearlerZombieFeature extends Feature {
-	private final ForgeConfigSpec.ConfigValue<Double> equipEnderPearlChanceConfig;
-	private final ForgeConfigSpec.ConfigValue<Integer> enderPearlAmountConfig;
+@Label(name = "Fisher Zombie", description = "Let zombies use Fishing Rods, reeling players in. Either put a Fishing Rod in main or off hand and when near enough from the player they will throw it.")
+public class FisherZombie extends Feature {
+	private final ForgeConfigSpec.ConfigValue<Double> equipFishingRodChanceConfig;
 	private final BlacklistConfig entityBlacklistConfig;
 
-	public double equipEnderPearlChance = 0.04;
-	public int enderPearlAmount = 2;
+	public double equipFishingRodChance = 0.04;
 	public ArrayList<IdTagMatcher> entityBlacklist;
 	public boolean entityBlacklistAsWhitelist;
 
-	public PearlerZombieFeature(Module module) {
+	public FisherZombie(Module module) {
 		super(Config.builder, module);
 		Config.builder.comment(this.getDescription()).push(this.getName());
-		equipEnderPearlChanceConfig = Config.builder
-				.comment("Chance for a Zombie to spawn with an ender pearl in the off hand. I highly recommend using something like Mobs Properties Randomness to have more control over mobs equipment.")
-				.defineInRange("Equip Ender Pearl Chance", this.equipEnderPearlChance, 0d, 1d);
-		enderPearlAmountConfig = Config.builder
-				.comment("How many ender pearls will Zombies spawn with.")
-				.defineInRange("Ender Pearl Amount", this.enderPearlAmount, 1, 16);
-		entityBlacklistConfig = new BlacklistConfig(Config.builder, "Entity Blacklist", "Entities that shouldn't get the Pearler AI", Collections.emptyList(), false);
+		equipFishingRodChanceConfig = Config.builder
+				.comment("Chance for a Zombie to spawn with a Fishing Rod in the off hand. I highly recommend using something like Mobs Properties Randomness to have more control over mobs equipment.")
+				.defineInRange("Equip Fishing Rod Chance", this.equipFishingRodChance, 0d, 1d);
+		entityBlacklistConfig = new BlacklistConfig(Config.builder, "Entity Blacklist", "Entities that shouldn't get the Fisher AI", Collections.emptyList(), false);
 		Config.builder.pop();
 	}
 
 	@Override
 	public void loadConfig() {
 		super.loadConfig();
-		this.equipEnderPearlChance = this.equipEnderPearlChanceConfig.get();
-		this.enderPearlAmount = this.enderPearlAmountConfig.get();
+		this.equipFishingRodChance = this.equipFishingRodChanceConfig.get();
 		this.entityBlacklist = (ArrayList<IdTagMatcher>) IdTagMatcher.parseStringList(this.entityBlacklistConfig.listConfig.get());
 		this.entityBlacklistAsWhitelist = this.entityBlacklistConfig.listAsWhitelistConfig.get();
 	}
@@ -74,9 +68,9 @@ public class PearlerZombieFeature extends Feature {
 		if (isInBlacklist || (!isInWhitelist && this.entityBlacklistAsWhitelist))
 			return;
 
-		if (event.getWorld().random.nextDouble() < this.equipEnderPearlChance)
-			zombie.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.ENDER_PEARL, this.enderPearlAmount));
+		if (event.getWorld().random.nextDouble() < this.equipFishingRodChance)
+			zombie.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.FISHING_ROD));
 
-		zombie.goalSelector.addGoal(2, new AIZombiePearler(zombie));
+		zombie.goalSelector.addGoal(2, new AIZombieFisher(zombie));
 	}
 }
