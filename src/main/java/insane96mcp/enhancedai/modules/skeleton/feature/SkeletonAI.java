@@ -1,7 +1,7 @@
 package insane96mcp.enhancedai.modules.skeleton.feature;
 
-import insane96mcp.enhancedai.modules.base.ai.AIAvoidEntityGoal;
-import insane96mcp.enhancedai.modules.skeleton.ai.AIRangedBowAttackGoal;
+import insane96mcp.enhancedai.modules.base.ai.EAAvoidEntityGoal;
+import insane96mcp.enhancedai.modules.skeleton.ai.EARangedBowAttackGoal;
 import insane96mcp.enhancedai.setup.Config;
 import insane96mcp.enhancedai.setup.Strings;
 import insane96mcp.insanelib.base.Feature;
@@ -150,16 +150,16 @@ public class SkeletonAI extends Feature {
 		}
 		List<Goal> avoidEntityGoals = skeleton.goalSelector.availableGoals.stream()
 				.map(WrappedGoal::getGoal)
-				.filter(g -> g instanceof AIAvoidEntityGoal<?>)
+				.filter(g -> g instanceof EAAvoidEntityGoal<?>)
 				.toList();
 
 		avoidEntityGoals.forEach(skeleton.goalSelector::removeGoal);
 		if (hasAIArrowAttack) {
-			AIRangedBowAttackGoal<AbstractSkeleton> rangedBowAttackGoal = new AIRangedBowAttackGoal<>(skeleton, 1.0d, 20, RandomHelper.getInt(skeleton.level.random, this.minShootingRange, this.maxShootingRange), strafe);
-			skeleton.goalSelector.addGoal(2, rangedBowAttackGoal);
+			EARangedBowAttackGoal<AbstractSkeleton> EARangedBowAttackGoal = new EARangedBowAttackGoal<>(skeleton, 1.0d, 20, RandomHelper.getInt(skeleton.level.random, this.minShootingRange, this.maxShootingRange), strafe);
+			skeleton.goalSelector.addGoal(2, EARangedBowAttackGoal);
 
 			if (avoidTarget) {
-				AIAvoidEntityGoal<Player> avoidEntityGoal = new AIAvoidEntityGoal<>(skeleton, Player.class, (float) this.fleeDistance, (float) this.fleeDistanceNear, this.fleeSpeedNear, this.fleeSpeedFar);
+				EAAvoidEntityGoal<Player> avoidEntityGoal = new EAAvoidEntityGoal<>(skeleton, Player.class, (float) this.fleeDistance, (float) this.fleeDistanceNear, this.fleeSpeedNear, this.fleeSpeedFar);
 				avoidEntityGoal.setAttackWhenRunning(attackWhenAvoiding);
 				skeleton.goalSelector.addGoal(1, avoidEntityGoal);
 			}

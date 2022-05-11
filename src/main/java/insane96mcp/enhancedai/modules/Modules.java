@@ -1,5 +1,6 @@
 package insane96mcp.enhancedai.modules;
 
+import insane96mcp.enhancedai.modules.animal.AnimalModule;
 import insane96mcp.enhancedai.modules.base.BaseModule;
 import insane96mcp.enhancedai.modules.creeper.CreeperModule;
 import insane96mcp.enhancedai.modules.skeleton.SkeletonModule;
@@ -13,6 +14,7 @@ public class Modules {
 	public static SkeletonModule skeleton;
 	public static ZombieModule zombie;
 	public static SpiderModule spider;
+	public static AnimalModule animal;
 
 	public static void init() {
 		base = new BaseModule();
@@ -20,6 +22,7 @@ public class Modules {
 		skeleton = new SkeletonModule();
 		zombie = new ZombieModule();
 		spider = new SpiderModule();
+		animal = new AnimalModule();
 	}
 
 	public static void loadConfig() {
@@ -28,5 +31,6 @@ public class Modules {
 		skeleton.loadConfig();
 		zombie.loadConfig();
 		spider.loadConfig();
+		animal.loadConfig();
 	}
 }

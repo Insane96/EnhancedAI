@@ -1,7 +1,7 @@
 package insane96mcp.enhancedai.modules.skeleton.ai;
 
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.enhancedai.modules.base.ai.AIAvoidEntityGoal;
+import insane96mcp.enhancedai.modules.base.ai.EAAvoidEntityGoal;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -15,7 +15,7 @@ import net.minecraft.world.item.Items;
 
 import java.util.EnumSet;
 
-public class AIRangedBowAttackGoal<T extends Monster & RangedAttackMob> extends Goal {
+public class EARangedBowAttackGoal<T extends Monster & RangedAttackMob> extends Goal {
 	private final T entity;
 	private final double moveSpeedAmp;
 	private int attackCooldown;
@@ -27,7 +27,7 @@ public class AIRangedBowAttackGoal<T extends Monster & RangedAttackMob> extends 
 	private boolean strafingBackwards;
 	private int strafingTime = -1;
 
-	public AIRangedBowAttackGoal(T mob, double moveSpeedAmpIn, int attackCooldownIn, float maxAttackDistanceIn, boolean canStrafe) {
+	public EARangedBowAttackGoal(T mob, double moveSpeedAmpIn, int attackCooldownIn, float maxAttackDistanceIn, boolean canStrafe) {
 		this.entity = mob;
 		this.moveSpeedAmp = moveSpeedAmpIn;
 		this.attackCooldown = attackCooldownIn;
@@ -160,7 +160,7 @@ public class AIRangedBowAttackGoal<T extends Monster & RangedAttackMob> extends 
 	}
 
 	private boolean canStrafe() {
-		return this.canStrafe && this.entity.goalSelector.getRunningGoals().noneMatch(p -> p.getGoal() instanceof AIAvoidEntityGoal);
+		return this.canStrafe && this.entity.goalSelector.getRunningGoals().noneMatch(p -> p.getGoal() instanceof EAAvoidEntityGoal);
 	}
 
 	private void attackEntityWithRangedAttack(T entity, LivingEntity target, float distanceFactor) {

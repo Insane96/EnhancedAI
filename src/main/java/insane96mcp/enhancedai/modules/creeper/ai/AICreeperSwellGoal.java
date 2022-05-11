@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.modules.creeper.ai;
 
-import insane96mcp.enhancedai.modules.base.ai.AIAvoidExplosionGoal;
+import insane96mcp.enhancedai.modules.base.ai.AvoidExplosionGoal;
 import insane96mcp.enhancedai.modules.creeper.utils.CreeperUtils;
 import insane96mcp.enhancedai.setup.Strings;
 import net.minecraft.world.entity.LivingEntity;
@@ -83,8 +83,8 @@ public class AICreeperSwellGoal extends Goal {
 				if (creatureEntity == this.swellingCreeper)
 					continue;
 				creatureEntity.goalSelector.availableGoals.forEach(prioritizedGoal -> {
-					if (prioritizedGoal.getGoal() instanceof AIAvoidExplosionGoal aiAvoidExplosionGoal) {
-						aiAvoidExplosionGoal.run(this.swellingCreeper, CreeperUtils.getExplosionSize(this.swellingCreeper));
+					if (prioritizedGoal.getGoal() instanceof AvoidExplosionGoal avoidExplosionGoal) {
+						avoidExplosionGoal.run(this.swellingCreeper, CreeperUtils.getExplosionSize(this.swellingCreeper));
 					}
 				});
 			}

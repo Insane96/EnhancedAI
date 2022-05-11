@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.modules.base.feature;
 
-import insane96mcp.enhancedai.modules.base.ai.AINearestAttackableTargetGoal;
+import insane96mcp.enhancedai.modules.base.ai.EANearestAttackableTargetGoal;
 import insane96mcp.enhancedai.setup.Config;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
@@ -102,10 +102,8 @@ public class Targeting extends Feature {
 
 		ArrayList<Goal> goalsToRemove = new ArrayList<>();
 		for (WrappedGoal prioritizedGoal : mobEntity.targetSelector.availableGoals) {
-			if (!(prioritizedGoal.getGoal() instanceof NearestAttackableTargetGoal))
+			if (!(prioritizedGoal.getGoal() instanceof NearestAttackableTargetGoal<?> goal))
 				continue;
-
-			NearestAttackableTargetGoal<?> goal = (NearestAttackableTargetGoal<?>) prioritizedGoal.getGoal();
 
 			if (goal.targetType != Player.class)
 				continue;
@@ -121,24 +119,24 @@ public class Targeting extends Feature {
 
 		goalsToRemove.forEach(mobEntity.goalSelector::removeGoal);
 
-		AINearestAttackableTargetGoal<Player> targetGoal;
+		EANearestAttackableTargetGoal<Player> targetGoal;
 
 		if (mobEntity instanceof Spider)
-			targetGoal = new AINearestAttackableTargetGoal.TargetGoal<>((Spider) mobEntity, Player.class, true, false, predicate);
+			targetGoal = new EANearestAttackableTargetGoal.TargetGoal<>((Spider) mobEntity, Player.class, true, false, predicate);
 		else
-			targetGoal = new AINearestAttackableTargetGoal<>(mobEntity, Player.class, true, false, predicate);
+			targetGoal = new EANearestAttackableTargetGoal<>(mobEntity, Player.class, true, false, predicate);
 		if (mobEntity.level.random.nextDouble() < this.xray)
 			targetGoal.setXray(true);
 
 		targetGoal.setInstaTarget(this.instaTarget);
 		mobEntity.targetSelector.addGoal(2, targetGoal);
 
-		AINearestAttackableTargetGoal<Endermite> targetGoalTest;
+		EANearestAttackableTargetGoal<Endermite> targetGoalTest;
 
 		if (mobEntity instanceof Spider)
-			targetGoalTest = new AINearestAttackableTargetGoal.TargetGoal<>((Spider) mobEntity, Endermite.class, true, false, predicate);
+			targetGoalTest = new EANearestAttackableTargetGoal.TargetGoal<>((Spider) mobEntity, Endermite.class, true, false, predicate);
 		else
-			targetGoalTest = new AINearestAttackableTargetGoal<>(mobEntity, Endermite.class, true, false, predicate);
+			targetGoalTest = new EANearestAttackableTargetGoal<>(mobEntity, Endermite.class, true, false, predicate);
 		if (mobEntity.level.random.nextDouble() < this.xray)
 			targetGoalTest.setXray(true);
 

@@ -12,7 +12,7 @@ import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 
-public class AIZombieFisher extends Goal {
+public class FishingTargetGoal extends Goal {
 
 	//Runs every other tick
 	private final Zombie fisher;
@@ -22,7 +22,7 @@ public class AIZombieFisher extends Goal {
 
 	FishingHook fishingHook;
 
-	public AIZombieFisher(Zombie fisher){
+	public FishingTargetGoal(Zombie fisher){
 		this.fisher = fisher;
 	}
 

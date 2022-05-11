@@ -8,14 +8,14 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.player.Player;
 
-public class AISpiderWebThrow extends Goal {
+public class WebThrowGoal extends Goal {
 
 	private final Spider spider;
 	private Player targetPlayer;
 
 	private int cooldown = Modules.spider.throwingWeb.throwingCooldown * 2;
 
-	public AISpiderWebThrow(Spider spider){
+	public WebThrowGoal(Spider spider){
 		this.spider = spider;
 	}
 

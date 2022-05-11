@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.modules.spider.feature;
 
-import insane96mcp.enhancedai.modules.spider.ai.AISpiderWebThrow;
+import insane96mcp.enhancedai.modules.spider.ai.WebThrowGoal;
 import insane96mcp.enhancedai.setup.Config;
 import insane96mcp.enhancedai.setup.Strings;
 import insane96mcp.insanelib.base.Feature;
@@ -146,7 +146,7 @@ public class ThrowingWeb extends Feature {
 			spider.getPersistentData().putBoolean(Strings.Tags.PROCESSED, true);
 		}
 		if (webThrower)
-			spider.goalSelector.addGoal(2, new AISpiderWebThrow(spider));
+			spider.goalSelector.addGoal(2, new WebThrowGoal(spider));
 	}
 
 	public void applySlowness(LivingEntity entity) {

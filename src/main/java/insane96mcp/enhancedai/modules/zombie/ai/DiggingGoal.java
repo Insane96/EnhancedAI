@@ -26,7 +26,7 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
-public class AIZombieDigger extends Goal {
+public class DiggingGoal extends Goal {
 
 	private final Zombie digger;
 	private LivingEntity target;
@@ -41,7 +41,7 @@ public class AIZombieDigger extends Goal {
 
 	private int ticksWithNoPath = 0;
 
-	public AIZombieDigger(Zombie digger, boolean toolOnly, boolean properToolOnly){
+	public DiggingGoal(Zombie digger, boolean toolOnly, boolean properToolOnly){
 		this.digger = digger;
 		this.reachDistance = 4;
 		this.toolOnly = toolOnly;

@@ -12,7 +12,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.EnumSet;
 import java.util.function.Predicate;
 
-public class AIAvoidEntityGoal<T extends LivingEntity> extends Goal {
+public class EAAvoidEntityGoal<T extends LivingEntity> extends Goal {
 	protected final PathfinderMob entity;
 	private final double farSpeed;
 	private final double nearSpeed;
@@ -26,11 +26,11 @@ public class AIAvoidEntityGoal<T extends LivingEntity> extends Goal {
 	protected final Predicate<LivingEntity> predicateOnAvoidEntity;
 	private final TargetingConditions builtTargetSelector;
 
-	public AIAvoidEntityGoal(PathfinderMob entityIn, Class<T> classToAvoidIn, float avoidDistance, float avoidDistanceNear, double nearSpeed, double farSpeed) {
+	public EAAvoidEntityGoal(PathfinderMob entityIn, Class<T> classToAvoidIn, float avoidDistance, float avoidDistanceNear, double nearSpeed, double farSpeed) {
 		this(entityIn, classToAvoidIn, (livingEntity) -> true, avoidDistance, avoidDistanceNear, nearSpeed, farSpeed, EntitySelector.NO_CREATIVE_OR_SPECTATOR::test);
 	}
 
-	public AIAvoidEntityGoal(PathfinderMob entityIn, Class<T> avoidClass, Predicate<LivingEntity> targetPredicate, float avoidDistance, float avoidDistanceNear, double nearSpeedIn, double farSpeedIn, Predicate<LivingEntity> p_i48859_9_) {
+	public EAAvoidEntityGoal(PathfinderMob entityIn, Class<T> avoidClass, Predicate<LivingEntity> targetPredicate, float avoidDistance, float avoidDistanceNear, double nearSpeedIn, double farSpeedIn, Predicate<LivingEntity> p_i48859_9_) {
 		this.entity = entityIn;
 		this.classToAvoid = avoidClass;
 		this.avoidTargetSelector = targetPredicate;
@@ -42,7 +42,7 @@ public class AIAvoidEntityGoal<T extends LivingEntity> extends Goal {
 		this.builtTargetSelector = TargetingConditions.forCombat().range(avoidDistance).selector(p_i48859_9_.and(targetPredicate));
 	}
 
-	public AIAvoidEntityGoal(PathfinderMob entityIn, Class<T> avoidClass, float avoidDistance, float avoidDistanceNear, double nearSpeedIn, double farSpeedIn, Predicate<LivingEntity> targetPredicate) {
+	public EAAvoidEntityGoal(PathfinderMob entityIn, Class<T> avoidClass, float avoidDistance, float avoidDistanceNear, double nearSpeedIn, double farSpeedIn, Predicate<LivingEntity> targetPredicate) {
 		this(entityIn, avoidClass, (p_203782_0_) -> true, avoidDistance, avoidDistanceNear, nearSpeedIn, farSpeedIn, targetPredicate);
 	}
 

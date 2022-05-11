@@ -13,7 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 
-public class AIZombiePearler extends Goal {
+public class PearlUseGoal extends Goal {
 
 	//Runs every other tick
 	private final Zombie pearler;
@@ -22,7 +22,7 @@ public class AIZombiePearler extends Goal {
 
 	ThrownEnderpearl enderPearlEntity;
 
-	public AIZombiePearler(Zombie pearler){
+	public PearlUseGoal(Zombie pearler){
 		this.pearler = pearler;
 	}
 

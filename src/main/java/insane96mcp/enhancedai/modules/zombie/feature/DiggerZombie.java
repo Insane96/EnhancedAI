@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.modules.zombie.feature;
 
-import insane96mcp.enhancedai.modules.zombie.ai.AIZombieDigger;
+import insane96mcp.enhancedai.modules.zombie.ai.DiggingGoal;
 import insane96mcp.enhancedai.setup.Config;
 import insane96mcp.enhancedai.setup.Strings;
 import insane96mcp.insanelib.base.Feature;
@@ -112,7 +112,7 @@ public class DiggerZombie extends Feature {
 		}
 
 		if (miner)
-			zombie.goalSelector.addGoal(1, new AIZombieDigger(zombie, this.diggerToolOnly, this.diggerProperToolOnly));
+			zombie.goalSelector.addGoal(1, new DiggingGoal(zombie, this.diggerToolOnly, this.diggerProperToolOnly));
 
 		zombie.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(zombie, Endermite.class, true));
 	}

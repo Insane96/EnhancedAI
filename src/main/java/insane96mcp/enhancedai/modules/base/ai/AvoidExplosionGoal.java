@@ -9,7 +9,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 
-public class AIAvoidExplosionGoal extends Goal {
+public class AvoidExplosionGoal extends Goal {
 	protected final PathfinderMob entity;
 	private final double farSpeed;
 	private final double nearSpeed;
@@ -20,7 +20,7 @@ public class AIAvoidExplosionGoal extends Goal {
 	private boolean run = false;
 	//private boolean alwaysRun = false;
 
-	public AIAvoidExplosionGoal(PathfinderMob entityIn, double nearSpeedIn, double farSpeedIn) {
+	public AvoidExplosionGoal(PathfinderMob entityIn, double nearSpeedIn, double farSpeedIn) {
 		this.entity = entityIn;
 		this.farSpeed = farSpeedIn;
 		this.nearSpeed = nearSpeedIn;

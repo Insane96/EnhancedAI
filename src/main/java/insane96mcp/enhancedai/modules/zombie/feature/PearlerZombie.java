@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.modules.zombie.feature;
 
-import insane96mcp.enhancedai.modules.zombie.ai.AIZombiePearler;
+import insane96mcp.enhancedai.modules.zombie.ai.PearlUseGoal;
 import insane96mcp.enhancedai.setup.Config;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
@@ -77,6 +77,6 @@ public class PearlerZombie extends Feature {
 		if (event.getWorld().random.nextDouble() < this.equipEnderPearlChance)
 			zombie.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.ENDER_PEARL, this.enderPearlAmount));
 
-		zombie.goalSelector.addGoal(2, new AIZombiePearler(zombie));
+		zombie.goalSelector.addGoal(2, new PearlUseGoal(zombie));
 	}
 }

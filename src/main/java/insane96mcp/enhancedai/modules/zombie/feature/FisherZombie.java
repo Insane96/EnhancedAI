@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.modules.zombie.feature;
 
-import insane96mcp.enhancedai.modules.zombie.ai.AIZombieFisher;
+import insane96mcp.enhancedai.modules.zombie.ai.FishingTargetGoal;
 import insane96mcp.enhancedai.setup.Config;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
@@ -71,6 +71,6 @@ public class FisherZombie extends Feature {
 		if (event.getWorld().random.nextDouble() < this.equipFishingRodChance)
 			zombie.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.FISHING_ROD));
 
-		zombie.goalSelector.addGoal(2, new AIZombieFisher(zombie));
+		zombie.goalSelector.addGoal(2, new FishingTargetGoal(zombie));
 	}
 }

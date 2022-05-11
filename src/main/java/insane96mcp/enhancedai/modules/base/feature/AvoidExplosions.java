@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.modules.base.feature;
 
-import insane96mcp.enhancedai.modules.base.ai.AIAvoidExplosionGoal;
+import insane96mcp.enhancedai.modules.base.ai.AvoidExplosionGoal;
 import insane96mcp.enhancedai.setup.Config;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
@@ -37,7 +37,7 @@ public class AvoidExplosions extends Feature {
 		if (!(event.getEntity() instanceof PathfinderMob creatureEntity))
 			return;
 
-		creatureEntity.goalSelector.addGoal(1, new AIAvoidExplosionGoal(creatureEntity, 1.6d, 1.3d));
+		creatureEntity.goalSelector.addGoal(1, new AvoidExplosionGoal(creatureEntity, 1.6d, 1.3d));
 	}
 
 	private void alertTNT(EntityJoinWorldEvent event) {
@@ -47,8 +47,8 @@ public class AvoidExplosions extends Feature {
 		List<PathfinderMob> creaturesNearby = tnt.level.getEntitiesOfClass(PathfinderMob.class, tnt.getBoundingBox().inflate(8d));
 		for (PathfinderMob creatureEntity : creaturesNearby) {
 			creatureEntity.goalSelector.availableGoals.forEach(prioritizedGoal -> {
-				if (prioritizedGoal.getGoal() instanceof AIAvoidExplosionGoal aiAvoidExplosionGoal) {
-					aiAvoidExplosionGoal.run(tnt, 8d);
+				if (prioritizedGoal.getGoal() instanceof AvoidExplosionGoal avoidExplosionGoal) {
+					avoidExplosionGoal.run(tnt, 8d);
 				}
 			});
 		}

@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.function.Predicate;
 
-public class AINearestAttackableTargetGoal<T extends LivingEntity> extends TargetGoal {
+public class EANearestAttackableTargetGoal<T extends LivingEntity> extends TargetGoal {
 	protected final Class<T> targetClass;
 	protected int targetChance;
 	protected LivingEntity nearestTarget;
@@ -23,15 +23,15 @@ public class AINearestAttackableTargetGoal<T extends LivingEntity> extends Targe
 
 	private boolean xray;
 
-	public AINearestAttackableTargetGoal(Mob goalOwnerIn, Class<T> targetClassIn, boolean checkSight) {
+	public EANearestAttackableTargetGoal(Mob goalOwnerIn, Class<T> targetClassIn, boolean checkSight) {
 		this(goalOwnerIn, targetClassIn, checkSight, false);
 	}
 
-	public AINearestAttackableTargetGoal(Mob goalOwnerIn, Class<T> targetClassIn, boolean checkSight, boolean nearbyOnlyIn) {
+	public EANearestAttackableTargetGoal(Mob goalOwnerIn, Class<T> targetClassIn, boolean checkSight, boolean nearbyOnlyIn) {
 		this(goalOwnerIn, targetClassIn, checkSight, nearbyOnlyIn, null);
 	}
 
-	public AINearestAttackableTargetGoal(Mob goalOwnerIn, Class<T> targetClassIn, boolean checkSight, boolean nearbyOnlyIn, @Nullable Predicate<LivingEntity> targetPredicate) {
+	public EANearestAttackableTargetGoal(Mob goalOwnerIn, Class<T> targetClassIn, boolean checkSight, boolean nearbyOnlyIn, @Nullable Predicate<LivingEntity> targetPredicate) {
 		super(goalOwnerIn, checkSight, nearbyOnlyIn);
 		this.targetClass = targetClassIn;
 		this.targetChance = 10;
@@ -84,7 +84,7 @@ public class AINearestAttackableTargetGoal<T extends LivingEntity> extends Targe
 		this.targetEntitySelector.ignoreLineOfSight();
 	}
 
-	public static class TargetGoal<T extends LivingEntity> extends AINearestAttackableTargetGoal<T> {
+	public static class TargetGoal<T extends LivingEntity> extends EANearestAttackableTargetGoal<T> {
 		public TargetGoal(Spider goalOwnerIn, Class<T> targetClassIn, boolean checkSight, boolean nearbyOnlyIn, @Nullable Predicate<LivingEntity> targetPredicate) {
 			super(goalOwnerIn, targetClassIn, checkSight, nearbyOnlyIn, targetPredicate);
 		}
