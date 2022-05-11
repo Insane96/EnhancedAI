@@ -27,6 +27,7 @@ public class SkeletonAI extends Feature {
 	private final ForgeConfigSpec.ConfigValue<Integer> maxShootingRangeConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> strafeChanceConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> arrowInaccuracyConfig;
+	private final ForgeConfigSpec.ConfigValue<Double> spammerChanceConfig;
 	private final BlacklistConfig entityBlacklistConfig;
 	//Flee from target
 	private final ForgeConfigSpec.ConfigValue<Double> avoidPlayerChanceConfig;
@@ -42,6 +43,7 @@ public class SkeletonAI extends Feature {
 	public int maxShootingRange = 48;
 	public double strafeChance = 0.333d;
 	public double arrowInaccuracy = 2;
+	public double spammerChance = 0.1d;
 	public ArrayList<IdTagMatcher> entityBlacklist;
 	public boolean entityBlacklistAsWhitelist;
 	//Flee from target
@@ -67,6 +69,9 @@ public class SkeletonAI extends Feature {
 		arrowInaccuracyConfig = Config.builder
 				.comment("How much inaccuracy does the arrow fired by skeletons have. Vanilla skeletons have 10/6/2 inaccuracy in easy/normal/hard difficulty.")
 				.defineInRange("Arrow Inaccuracy", this.arrowInaccuracy, 0d, 30d);
+		spammerChanceConfig = Config.builder
+				.comment("Chance for a Skeleton to spawn as a spammer, which spams arrows instead of fully charging the bow")
+				.defineInRange("Spammer chance", this.spammerChance, 0d, 1d);
 		entityBlacklistConfig = new BlacklistConfig(Config.builder, "Entity Blacklist", "Entities that shouldn't get the enhanced Shoot AI", defaultBlacklist, false);
 
 		Config.builder.push("Flee from Target");
@@ -98,6 +103,7 @@ public class SkeletonAI extends Feature {
 		this.maxShootingRange = this.maxShootingRangeConfig.get();
 		this.strafeChance = this.strafeChanceConfig.get();
 		this.arrowInaccuracy = this.arrowInaccuracyConfig.get();
+		this.spammerChance = this.spammerChanceConfig.get();
 		this.entityBlacklist = (ArrayList<IdTagMatcher>) IdTagMatcher.parseStringList(this.entityBlacklistConfig.listConfig.get());
 		this.entityBlacklistAsWhitelist = this.entityBlacklistConfig.listAsWhitelistConfig.get();
 		//Flee from target
@@ -155,7 +161,15 @@ public class SkeletonAI extends Feature {
 
 		avoidEntityGoals.forEach(skeleton.goalSelector::removeGoal);
 		if (hasAIArrowAttack) {
-			EARangedBowAttackGoal<AbstractSkeleton> EARangedBowAttackGoal = new EARangedBowAttackGoal<>(skeleton, 1.0d, 20, RandomHelper.getInt(skeleton.level.random, this.minShootingRange, this.maxShootingRange), strafe);
+			int attackCooldown = 20;
+			int bowChargeTicks = 20;
+			double inaccuracy = this.arrowInaccuracy;
+			if (skeleton.level.random.nextDouble() < this.spammerChance) {
+				attackCooldown = 5;
+				bowChargeTicks = 5;
+				inaccuracy *= 2d;
+			}
+			EARangedBowAttackGoal<AbstractSkeleton> EARangedBowAttackGoal = new EARangedBowAttackGoal<>(skeleton, 1.0d, RandomHelper.getInt(skeleton.level.random, this.minShootingRange, this.maxShootingRange), strafe).setAttackCooldown(attackCooldown).setBowChargeTicks(bowChargeTicks).setInaccuracy((float) inaccuracy);
 			skeleton.goalSelector.addGoal(2, EARangedBowAttackGoal);
 
 			if (avoidTarget) {

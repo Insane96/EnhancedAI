@@ -1,6 +1,5 @@
 package insane96mcp.enhancedai.modules.skeleton.ai;
 
-import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.modules.base.ai.EAAvoidEntityGoal;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
@@ -19,6 +18,8 @@ public class EARangedBowAttackGoal<T extends Monster & RangedAttackMob> extends 
 	private final T entity;
 	private final double moveSpeedAmp;
 	private int attackCooldown;
+	private int bowChargeTicks;
+	private float inaccuracy;
 	private final float maxAttackDistance;
 	private int attackTime = -1;
 	private int seeTime;
@@ -27,17 +28,27 @@ public class EARangedBowAttackGoal<T extends Monster & RangedAttackMob> extends 
 	private boolean strafingBackwards;
 	private int strafingTime = -1;
 
-	public EARangedBowAttackGoal(T mob, double moveSpeedAmpIn, int attackCooldownIn, float maxAttackDistanceIn, boolean canStrafe) {
+	public EARangedBowAttackGoal(T mob, double moveSpeedAmpIn, float maxAttackDistanceIn, boolean canStrafe) {
 		this.entity = mob;
 		this.moveSpeedAmp = moveSpeedAmpIn;
-		this.attackCooldown = attackCooldownIn;
 		this.maxAttackDistance = maxAttackDistanceIn * maxAttackDistanceIn;
 		this.canStrafe = canStrafe;
 		this.setFlags(EnumSet.of(Goal.Flag.LOOK));
 	}
 
-	public void setAttackCooldown(int attackCooldownIn) {
+	public EARangedBowAttackGoal<T> setAttackCooldown(int attackCooldownIn) {
 		this.attackCooldown = attackCooldownIn;
+		return this;
+	}
+
+	public EARangedBowAttackGoal<T> setBowChargeTicks(int bowChargeTicks) {
+		this.bowChargeTicks = bowChargeTicks;
+		return this;
+	}
+
+	public EARangedBowAttackGoal<T> setInaccuracy(float inaccuracy) {
+		this.inaccuracy = inaccuracy;
+		return this;
 	}
 
 	/**
@@ -146,9 +157,9 @@ public class EARangedBowAttackGoal<T extends Monster & RangedAttackMob> extends 
 					this.entity.stopUsingItem();
 				}
 				else if (canSeeTarget) {
-					if (i >= 20) {
+					if (i >= this.bowChargeTicks) {
 						this.entity.stopUsingItem();
-						attackEntityWithRangedAttack(this.entity, livingentity, 20);
+						attackEntityWithRangedAttack(this.entity, livingentity, this.bowChargeTicks);
 						this.attackTime = this.attackCooldown;
 					}
 				}
@@ -167,9 +178,10 @@ public class EARangedBowAttackGoal<T extends Monster & RangedAttackMob> extends 
 		ItemStack itemstack = entity.getProjectile(entity.getItemInHand(ProjectileUtil.getWeaponHoldingHand(entity, item -> item == Items.BOW)));
 		double distance = entity.distanceTo(target);
 		double distanceY = target.getY() - entity.getY();
-		float f = distanceFactor / 20.0F;
+		float f = 1; //distanceFactor / 20.0F;
 		f = (f * f + f * 2.0F) / 3.0F;
 		AbstractArrow abstractarrowentity = ProjectileUtil.getMobArrow(entity, itemstack, f);
+		abstractarrowentity.setBaseDamage(abstractarrowentity.getBaseDamage() * (distanceFactor / 20f));
 		if (entity.getMainHandItem().getItem() instanceof net.minecraft.world.item.BowItem)
 			abstractarrowentity = ((net.minecraft.world.item.BowItem)entity.getMainHandItem().getItem()).customArrow(abstractarrowentity);
 		double d0 = target.getX() - entity.getX();
@@ -178,7 +190,7 @@ public class EARangedBowAttackGoal<T extends Monster & RangedAttackMob> extends 
 		double yPos = target.getY(0d);
 		yPos += target.getEyeHeight() * 0.5 + (distanceY / distanceXZ);
 		double d1 = yPos - abstractarrowentity.getY();
-		abstractarrowentity.shoot(d0, d1 + distanceXZ * 0.18d, d2, f * 1.1f + ((float)distance / 32f) + (float)Math.max(distanceY / 48d, 0f), (float) Modules.skeleton.skeletonAI.arrowInaccuracy);
+		abstractarrowentity.shoot(d0, d1 + distanceXZ * 0.18d, d2, f * 1.1f + ((float)distance / 32f) + (float)Math.max(distanceY / 48d, 0f), this.inaccuracy);
 		entity.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (entity.getRandom().nextFloat() * 0.4F + 0.8F));
 		entity.level.addFreshEntity(abstractarrowentity);
 	}

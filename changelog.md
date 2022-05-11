@@ -4,11 +4,13 @@
 * Added Animal Module
   * Added Animal Attacking Feature. Make animals fight back and no longer flee when attacked
 * Added Swim Speed Multiplier to Targeting
-* Reduced XRay Chance
 * Skeleton
+  * Added 10% chance for a skeleton to be a spammer. Shots an arrow every 0.5 seconds dealing 1/4 damage and begin twice as inaccurate
   * Flee Distance changed (12 -> 16 blocks; 7 -> 8 blocks faster flee) and now configurable
-* Zombie Pearlers no longer need to be on ground to pearl
-* Improved Digger Zombies, they now keep mining multiple blocks before stopping, and they should get stuck less
+* Zombie
+  * Zombie Pearlers no longer need to be on ground to pearl
+  * Improved Digger Zombies, they now keep mining multiple blocks before stopping, and they should get stuck less
+* Reduced XRay Chance
 
 ## 1.2.4
 * Port to 1.18.2, requires InsaneLib 1.4.6
