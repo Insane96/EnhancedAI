@@ -1,6 +1,9 @@
 # Changelog
 
 ## Upcoming
+* Added Animal Module
+  * Added Animal Attacking Feature. Make animals fight back and no longer flee when attacked
+* Added Swim Speed Multiplier to Targeting
 * Reduced XRay Chance
 * Skeleton
   * Flee Distance changed (12 -> 16 blocks; 7 -> 8 blocks faster flee) and now configurable
