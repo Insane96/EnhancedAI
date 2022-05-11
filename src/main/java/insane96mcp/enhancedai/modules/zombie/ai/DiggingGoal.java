@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,14 +40,15 @@ public class DiggingGoal extends Goal {
 	private final boolean toolOnly;
 	private final boolean properToolOnly;
 
-	private int ticksWithNoPath = 0;
+	private Vec3 lastPosition = null;
+	private int lastPositionTickstamp = 0;
 
 	public DiggingGoal(Zombie digger, boolean toolOnly, boolean properToolOnly){
 		this.digger = digger;
 		this.reachDistance = 4;
 		this.toolOnly = toolOnly;
 		this.properToolOnly = properToolOnly;
-		this.setFlags(EnumSet.of(Flag.LOOK, Flag.MOVE));
+		this.setFlags(EnumSet.of(Flag.LOOK));
 	}
 
 	public boolean canUse() {
@@ -56,13 +58,8 @@ public class DiggingGoal extends Goal {
 		if (digger.getTarget() == null)
 			return false;
 
-		if (this.digger.getNavigation().isDone() || this.digger.getNavigation().isStuck())
-			this.ticksWithNoPath++;
-		else if (this.ticksWithNoPath > 0)
-			this.ticksWithNoPath--;
-
-		return ticksWithNoPath >= 30
-				&& this.digger.distanceToSqr(digger.getTarget()) > 1.5d;
+		return this.isStuck()
+				&& this.digger.distanceToSqr(digger.getTarget()) > 2d;
 	}
 
 	public boolean canContinueToUse() {
@@ -94,7 +91,7 @@ public class DiggingGoal extends Goal {
 		this.breakingTick = 0;
 		this.blockState = null;
 		this.prevBreakProgress = 0;
-		this.ticksWithNoPath = 0;
+		this.lastPosition = null;
 	}
 
 	public void tick() {
@@ -117,11 +114,13 @@ public class DiggingGoal extends Goal {
 		}
 		if (this.breakingTick >= this.tickToBreak) {
 			//TODO this drops blocks even if the zombie has no mining item (e.g. stone with bare hands drops cobblestone)
-			this.digger.level.destroyBlock(targetBlocks.get(0), true, this.digger);
+			this.digger.level.destroyBlock(targetBlocks.get(0), false, this.digger);
 			this.digger.level.destroyBlockProgress(this.digger.getId(), targetBlocks.get(0), -1);
 			this.targetBlocks.remove(0);
 			if (!this.targetBlocks.isEmpty())
 				initBlockBreak();
+			else if (this.digger.distanceToSqr(digger.getTarget()) > 2d && !this.digger.getSensing().hasLineOfSight(this.target))
+				start();
 		}
 	}
 
@@ -175,9 +174,9 @@ public class DiggingGoal extends Goal {
 			digSpeed /= 5.0F;
 		}
 
-		if (!this.digger.isOnGround()) {
-			digSpeed /= 5.0F;
-		}
+		//if (!this.digger.isOnGround()) {
+		//	digSpeed /= 5.0F;
+		//}
 
 		return digSpeed;
 	}
@@ -195,8 +194,16 @@ public class DiggingGoal extends Goal {
 
 	private void fillTargetBlocks() {
 		int mobHeight = Mth.ceil(this.digger.getBbHeight());
+		/*float angle = (float) Math.toDegrees(Math.atan2(this.target.getEyeY() - this.digger.getEyeY(), this.target.getZ() - this.digger.getZ()));
+
+		if(angle < 0){
+			angle += 360;
+		}
+		LogHelper.info("%s", angle);*/
 		for (int i = 0; i < mobHeight; i++) {
-			BlockHitResult rayTraceResult = this.digger.level.clip(new ClipContext(this.digger.position().add(0, i, 0), this.target.getEyePosition(1f).add(0, i, 0), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.digger));
+			BlockHitResult rayTraceResult;
+			//if (this.digger.distanceToSqr(this.target) < 36d || Math.abs(Math.sin(Math.toRadians(angle))) < Math.sin(Math.toRadians(angle)))
+				rayTraceResult = this.digger.level.clip(new ClipContext(this.digger.position().add(0, i + 0.5d, 0), this.target.getEyePosition(1f).add(0, i, 0), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.digger));
 			if (rayTraceResult.getType() == HitResult.Type.MISS)
 				continue;
 			if (this.targetBlocks.contains(rayTraceResult.getBlockPos()))
@@ -237,5 +244,13 @@ public class DiggingGoal extends Goal {
 
 	public boolean requiresUpdateEveryTick() {
 		return true;
+	}
+
+	public boolean isStuck() {
+		if (this.lastPosition == null || this.digger.distanceToSqr(this.lastPosition) > 2.25d) {
+			this.lastPosition = this.digger.position();
+			this.lastPositionTickstamp = this.digger.tickCount;
+		}
+		return this.digger.getNavigation().isDone() || this.digger.tickCount - this.lastPositionTickstamp >= 60;
 	}
 }
