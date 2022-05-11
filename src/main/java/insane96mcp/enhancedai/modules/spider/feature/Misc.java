@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 @Label(name = "Miscellaneous", description = "Various small changes to Spiders.")
-public class MiscFeature extends Feature {
+public class Misc extends Feature {
 
 	private final ForgeConfigSpec.ConfigValue<Double> fallDamageReductionConfig;
 
@@ -27,7 +27,7 @@ public class MiscFeature extends Feature {
 	public ArrayList<IdTagMatcher> entityBlacklist;
 	public boolean entityBlacklistAsWhitelist;
 
-	public MiscFeature(Module module) {
+	public Misc(Module module) {
 		super(Config.builder, module);
 		Config.builder.comment(this.getDescription()).push(this.getName());
 		fallDamageReductionConfig = Config.builder

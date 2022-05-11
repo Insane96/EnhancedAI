@@ -37,9 +37,6 @@ public class AIZombiePearler extends Goal {
 		if (--this.cooldown > 0)
 			return false;
 
-		if (!this.pearler.isOnGround())
-			return false;
-
 		return this.pearler.getMainHandItem().getItem() == Items.ENDER_PEARL || this.pearler.getOffhandItem().getItem() == Items.ENDER_PEARL;
 	}
 
@@ -50,7 +47,7 @@ public class AIZombiePearler extends Goal {
 	public void start() {
 		this.targetPlayer = (Player) this.pearler.getTarget();
 		EquipmentSlot slot = this.pearler.getMainHandItem().getItem() == Items.ENDER_PEARL ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
-		this.pearler.level.playSound(null, this.pearler.getX(), this.pearler.getY(), this.pearler.getZ(), SoundEvents.ENDER_PEARL_THROW, SoundSource.NEUTRAL, 1F, 0.4F / (this.pearler.level.random.nextFloat() * 0.4F + 0.8F));
+		this.pearler.level.playSound(null, this.pearler.getX(), this.pearler.getY(), this.pearler.getZ(), SoundEvents.ENDER_PEARL_THROW, SoundSource.HOSTILE, 1F, 0.4F / (this.pearler.level.random.nextFloat() * 0.4F + 0.8F));
 		ItemStack stack = this.pearler.getItemBySlot(slot);
 		this.enderPearlEntity = new ThrownEnderpearl(this.pearler.level, this.pearler);
 		enderPearlEntity.setPos(this.pearler.getEyePosition(1f).x, this.pearler.getEyePosition(1f).y, this.pearler.getEyePosition(1f).z);

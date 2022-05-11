@@ -4,6 +4,7 @@
 * Reduced XRay Chance
 * Skeleton
   * Flee Distance changed (12 -> 16 blocks; 7 -> 8 blocks faster flee) and now configurable
+* Zombie Pearlers no longer need to be on ground to pearl
 
 ## 1.2.4
 * Port to 1.18.2, requires InsaneLib 1.4.6

@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Label(name = "Skeleton Shoot", description = "Skeletons are more precise when shooting and strafing is removed, can hit a target from up to 64 blocks and try to stay away from the target.")
-public class SkeletonAIFeature extends Feature {
+public class SkeletonAI extends Feature {
 
 	private final ForgeConfigSpec.ConfigValue<Integer> minShootingRangeConfig;
 	private final ForgeConfigSpec.ConfigValue<Integer> maxShootingRangeConfig;
@@ -52,7 +52,7 @@ public class SkeletonAIFeature extends Feature {
 	public double fleeSpeedNear = 1.6d;
 	public double fleeSpeedFar = 1.3d;
 
-	public SkeletonAIFeature(Module module) {
+	public SkeletonAI(Module module) {
 		super(Config.builder, module);
 		super.pushConfig(Config.builder);
 		minShootingRangeConfig = Config.builder

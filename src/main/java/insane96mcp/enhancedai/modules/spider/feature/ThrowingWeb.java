@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 @Label(name = "Throwing Web", description = "Makes spiders throw a web at a player, slowing them.")
-public class ThrowingWebFeature extends Feature {
+public class ThrowingWeb extends Feature {
 
 	private final ForgeConfigSpec.ConfigValue<Double> webThrowChanceConfig;
 	private final ForgeConfigSpec.ConfigValue<Integer> destroyWebAfterConfig;
@@ -51,7 +51,7 @@ public class ThrowingWebFeature extends Feature {
 	public ArrayList<IdTagMatcher> entityBlacklist;
 	public boolean entityBlacklistAsWhitelist;
 
-	public ThrowingWebFeature(Module module) {
+	public ThrowingWeb(Module module) {
 		super(Config.builder, module);
 		Config.builder.comment(this.getDescription()).push(this.getName());
 		webThrowChanceConfig = Config.builder

@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 @Label(name = "Targeting", description = "Change how mobs target players")
-public class TargetingFeature extends Feature {
+public class Targeting extends Feature {
 
 	private final ForgeConfigSpec.ConfigValue<Integer> followRangeConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> xrayConfig;
@@ -42,7 +42,7 @@ public class TargetingFeature extends Feature {
 	public ArrayList<IdTagMatcher> entityBlacklist;
 	public boolean entityBlacklistAsWhitelist = true;
 
-	public TargetingFeature(Module module) {
+	public Targeting(Module module) {
 		super(Config.builder, module);
 		Config.builder.comment(this.getDescription()).push(this.getName());
 		followRangeConfig = Config.builder

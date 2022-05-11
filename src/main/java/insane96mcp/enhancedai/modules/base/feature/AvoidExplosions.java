@@ -13,9 +13,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.List;
 
 @Label(name = "Avoid Explosions", description = "Mobs will run away from exploding creepers / TNT")
-public class AvoidExplosionsFeature extends Feature {
+public class AvoidExplosions extends Feature {
 
-	public AvoidExplosionsFeature(Module module) {
+	public AvoidExplosions(Module module) {
 		super(Config.builder, module);
 	}
 

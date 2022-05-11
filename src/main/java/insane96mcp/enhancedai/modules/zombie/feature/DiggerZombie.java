@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 @Label(name = "Digger Zombie", description = "Zombies can mine blocks to reach the target")
-public class DiggerZombieFeature extends Feature {
+public class DiggerZombie extends Feature {
 	private final ForgeConfigSpec.ConfigValue<Double> diggerChanceConfig;
 	private final ForgeConfigSpec.ConfigValue<Boolean> diggerToolOnlyConfig;
 	private final ForgeConfigSpec.ConfigValue<Boolean> diggerProperToolOnlyConfig;
@@ -38,7 +38,7 @@ public class DiggerZombieFeature extends Feature {
 	public ArrayList<IdTagMatcher> entityBlacklist;
 	public boolean entityBlacklistAsWhitelist;
 
-	public DiggerZombieFeature(Module module) {
+	public DiggerZombie(Module module) {
 		super(Config.builder, module);
 		Config.builder.comment(this.getDescription()).push(this.getName());
 		diggerChanceConfig = Config.builder

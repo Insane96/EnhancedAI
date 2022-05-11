@@ -11,7 +11,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 @Label(name = "Base")
-public class BaseFeature extends Feature {
+public class Base extends Feature {
 
 	private final ForgeConfigSpec.ConfigValue<Integer> monstersDespawningDistanceConfig;
 	private final ForgeConfigSpec.ConfigValue<Integer> minMonstersDespawningDistanceConfig;
@@ -19,7 +19,7 @@ public class BaseFeature extends Feature {
 	public int monstersDespawningDistance = 80;
 	public int minMonstersDespawningDistance = 48;
 
-	public BaseFeature(Module module) {
+	public Base(Module module) {
 		super(Config.builder, module, true, false);
 		super.pushConfig(Config.builder);
 		monstersDespawningDistanceConfig = Config.builder

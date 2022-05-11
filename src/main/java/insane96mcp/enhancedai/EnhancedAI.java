@@ -1,5 +1,6 @@
 package insane96mcp.enhancedai;
 
+import insane96mcp.enhancedai.modules.animal.feature.AnimalAttacking;
 import insane96mcp.enhancedai.setup.Config;
 import insane96mcp.enhancedai.setup.EAAttributes;
 import insane96mcp.enhancedai.setup.EAEntities;
@@ -23,5 +24,7 @@ public class EnhancedAI
         EASounds.SOUND_EVENTS.register(FMLJavaModLoadingContext.get().getModEventBus());
 		EAAttributes.ATTRIBUTES.register(FMLJavaModLoadingContext.get().getModEventBus());
 		EAEntities.ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
+
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(AnimalAttacking::attribute);
     }
 }
