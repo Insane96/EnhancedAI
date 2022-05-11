@@ -11,6 +11,7 @@
   * Zombie Pearlers no longer need to be on ground to pearl
   * Improved Digger Zombies, they now keep mining multiple blocks before stopping, and they should get stuck less
 * Reduced XRay Chance
+* Increased mobs despawning distance
 
 ## 1.2.4
 * Port to 1.18.2, requires InsaneLib 1.4.6

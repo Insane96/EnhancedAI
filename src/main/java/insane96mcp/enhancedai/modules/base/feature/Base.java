@@ -16,7 +16,7 @@ public class Base extends Feature {
 	private final ForgeConfigSpec.ConfigValue<Integer> monstersDespawningDistanceConfig;
 	private final ForgeConfigSpec.ConfigValue<Integer> minMonstersDespawningDistanceConfig;
 
-	public int monstersDespawningDistance = 80;
+	public int monstersDespawningDistance = 96;
 	public int minMonstersDespawningDistance = 48;
 
 	public Base(Module module) {
