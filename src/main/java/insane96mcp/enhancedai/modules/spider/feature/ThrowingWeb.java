@@ -1,5 +1,6 @@
 package insane96mcp.enhancedai.modules.spider.feature;
 
+import insane96mcp.enhancedai.config.DoubleMinMax;
 import insane96mcp.enhancedai.modules.spider.ai.WebThrowGoal;
 import insane96mcp.enhancedai.setup.Config;
 import insane96mcp.enhancedai.setup.Strings;
@@ -8,6 +9,7 @@ import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.config.BlacklistConfig;
 import insane96mcp.insanelib.util.IdTagMatcher;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -26,8 +28,7 @@ public class ThrowingWeb extends Feature {
 	private final ForgeConfigSpec.ConfigValue<Integer> destroyWebAfterConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> thrownWebDamageConfig;
 	private final ForgeConfigSpec.ConfigValue<Integer> throwingCooldownConfig;
-	private final ForgeConfigSpec.ConfigValue<Double> minDistanceConfig;
-	private final ForgeConfigSpec.ConfigValue<Double> maxDistanceConfig;
+	private final DoubleMinMax.Config distanceConfig;
 	//Slowness
 	private final ForgeConfigSpec.ConfigValue<Integer> slownessTimeConfig;
 	private final ForgeConfigSpec.ConfigValue<Integer> slownessAmplifierConfig;
@@ -39,9 +40,9 @@ public class ThrowingWeb extends Feature {
 	public double webThrowChance = 0.1d;
 	public int destroyWebAfter = 100;
 	public double thrownWebDamage = 5d;
+	//TODO Move to IntMinMax 40, 60
 	public int throwingCooldown = 50;
-	public double minDistance = 2.5d;
-	public double maxDistance = 64d;
+	public DoubleMinMax distance = new DoubleMinMax(2.5d, 64d);
 	//Slowness
 	public int slownessTime = 120;
 	public int slownessAmplifier = 2;
@@ -66,12 +67,9 @@ public class ThrowingWeb extends Feature {
 		throwingCooldownConfig = Config.builder
 				.comment("Every how many ticks do spiders throw the projectile")
 				.defineInRange("Projectile cooldown", this.throwingCooldown, 1, 1200);
-		minDistanceConfig = Config.builder
-				.comment("Minimum distance required for the spider to throw webs. Setting this to 0 will make the spider throw webs even when attacking the player.")
-				.defineInRange("Min Distance", this.minDistance, 0d, 64d);
-		maxDistanceConfig = Config.builder
-				.comment("Maximum distance at which the spider will throw webs.")
-				.defineInRange("Max Distance", this.maxDistance, 0d, 64d);
+		this.distanceConfig = new DoubleMinMax.Config(Config.builder, "Distance Required", "Distance Required for the spider to throw webs. Setting 'Minimum' to 0 will make the spider throw webs even when attacking the player.")
+				.setMinMax(0d, 64d, this.distance)
+				.build();
 
 		Config.builder.push("Slowness");
 		slownessTimeConfig = Config.builder
@@ -99,8 +97,7 @@ public class ThrowingWeb extends Feature {
 		this.destroyWebAfter = this.destroyWebAfterConfig.get();
 		this.thrownWebDamage = this.thrownWebDamageConfig.get();
 		this.throwingCooldown = this.throwingCooldownConfig.get();
-		this.minDistance = this.minDistanceConfig.get();
-		this.maxDistance = this.maxDistanceConfig.get();
+		this.distance = this.distanceConfig.get();
 		//Slowness
 		this.slownessTime = this.slownessTimeConfig.get();
 		this.slownessAmplifier = this.slownessAmplifierConfig.get();
@@ -134,17 +131,18 @@ public class ThrowingWeb extends Feature {
 		if (isInBlacklist || (!isInWhitelist && this.entityBlacklistAsWhitelist))
 			return;
 
-		boolean processed = spider.getPersistentData().getBoolean(Strings.Tags.PROCESSED);
+		CompoundTag persistentData = spider.getPersistentData();
 
-		boolean webThrower = spider.level.random.nextDouble() < this.webThrowChance;
+		boolean webThrower;
 
-		if (processed) {
-			webThrower = spider.getPersistentData().getBoolean(Strings.Tags.Spider.WEB_THROWER);
+		if (!persistentData.contains(Strings.Tags.Spider.WEB_THROWER)) {
+			webThrower = spider.level.random.nextDouble() < this.webThrowChance;
+			persistentData.putBoolean(Strings.Tags.Spider.WEB_THROWER, webThrower);
 		}
 		else {
-			spider.getPersistentData().putBoolean(Strings.Tags.Spider.WEB_THROWER, webThrower);
-			spider.getPersistentData().putBoolean(Strings.Tags.PROCESSED, true);
+			webThrower = persistentData.getBoolean(Strings.Tags.Spider.WEB_THROWER);
 		}
+
 		if (webThrower)
 			spider.goalSelector.addGoal(2, new WebThrowGoal(spider));
 	}

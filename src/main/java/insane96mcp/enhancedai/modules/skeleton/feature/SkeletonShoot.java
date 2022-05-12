@@ -1,5 +1,6 @@
 package insane96mcp.enhancedai.modules.skeleton.feature;
 
+import insane96mcp.enhancedai.config.IntMinMax;
 import insane96mcp.enhancedai.modules.base.ai.EAAvoidEntityGoal;
 import insane96mcp.enhancedai.modules.skeleton.ai.EARangedBowAttackGoal;
 import insane96mcp.enhancedai.setup.Config;
@@ -9,7 +10,6 @@ import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.config.BlacklistConfig;
 import insane96mcp.insanelib.util.IdTagMatcher;
-import insane96mcp.insanelib.util.RandomHelper;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
@@ -21,10 +21,9 @@ import java.util.Arrays;
 import java.util.List;
 
 @Label(name = "Skeleton Shoot", description = "Skeletons are more precise when shooting and strafing is removed, can hit a target from up to 64 blocks and try to stay away from the target.")
-public class SkeletonAI extends Feature {
+public class SkeletonShoot extends Feature {
 
-	private final ForgeConfigSpec.ConfigValue<Integer> minShootingRangeConfig;
-	private final ForgeConfigSpec.ConfigValue<Integer> maxShootingRangeConfig;
+	private final IntMinMax.Config shootingRangeConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> strafeChanceConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> arrowInaccuracyConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> spammerChanceConfig;
@@ -39,8 +38,7 @@ public class SkeletonAI extends Feature {
 
 	private final List<String> defaultBlacklist = Arrays.asList("quark:forgotten");
 
-	public int minShootingRange = 24;
-	public int maxShootingRange = 48;
+	public IntMinMax shootingRange = new IntMinMax(24, 32);
 	public double strafeChance = 0.333d;
 	public double arrowInaccuracy = 2;
 	public double spammerChance = 0.1d;
@@ -54,15 +52,11 @@ public class SkeletonAI extends Feature {
 	public double fleeSpeedNear = 1.6d;
 	public double fleeSpeedFar = 1.3d;
 
-	public SkeletonAI(Module module) {
+	public SkeletonShoot(Module module) {
 		super(Config.builder, module);
 		super.pushConfig(Config.builder);
-		minShootingRangeConfig = Config.builder
-				.comment("The min range from where a skeleton will shoot a player")
-				.defineInRange("Min Shooting Range", this.minShootingRange, 1, 64);
-		maxShootingRangeConfig = Config.builder
-				.comment("The max range from where a skeleton will shoot a player")
-				.defineInRange("Max Shooting Range", this.maxShootingRange, 1, 64);
+		this.shootingRangeConfig = new IntMinMax.Config(Config.builder, "Shooting Range", "The range from where a skeleton will shoot a player")
+				.setMinMax(1, 64, this.shootingRange);
 		strafeChanceConfig = Config.builder
 				.comment("Chance for a Skeleton to spawn with the ability to strafe (like vanilla)")
 				.defineInRange("Strafe chance", this.strafeChance, 0d, 1d);
@@ -99,8 +93,7 @@ public class SkeletonAI extends Feature {
 	@Override
 	public void loadConfig() {
 		super.loadConfig();
-		this.minShootingRange = this.minShootingRangeConfig.get();
-		this.maxShootingRange = this.maxShootingRangeConfig.get();
+		this.shootingRange = this.shootingRangeConfig.get();
 		this.strafeChance = this.strafeChanceConfig.get();
 		this.arrowInaccuracy = this.arrowInaccuracyConfig.get();
 		this.spammerChance = this.spammerChanceConfig.get();
@@ -169,7 +162,7 @@ public class SkeletonAI extends Feature {
 				bowChargeTicks = 5;
 				inaccuracy *= 2d;
 			}
-			EARangedBowAttackGoal<AbstractSkeleton> EARangedBowAttackGoal = new EARangedBowAttackGoal<>(skeleton, 1.0d, RandomHelper.getInt(skeleton.level.random, this.minShootingRange, this.maxShootingRange), strafe).setAttackCooldown(attackCooldown).setBowChargeTicks(bowChargeTicks).setInaccuracy((float) inaccuracy);
+			EARangedBowAttackGoal<AbstractSkeleton> EARangedBowAttackGoal = new EARangedBowAttackGoal<>(skeleton, 1.0d, this.shootingRange.getRandBetween(skeleton.getRandom()), strafe).setAttackCooldown(attackCooldown).setBowChargeTicks(bowChargeTicks).setInaccuracy((float) inaccuracy);
 			skeleton.goalSelector.addGoal(2, EARangedBowAttackGoal);
 
 			if (avoidTarget) {

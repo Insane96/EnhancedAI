@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.modules.skeleton;
 
-import insane96mcp.enhancedai.modules.skeleton.feature.SkeletonAI;
+import insane96mcp.enhancedai.modules.skeleton.feature.SkeletonShoot;
 import insane96mcp.enhancedai.setup.Config;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
@@ -8,18 +8,18 @@ import insane96mcp.insanelib.base.Module;
 @Label(name = "Skeleton")
 public class SkeletonModule extends Module {
 
-	public SkeletonAI skeletonAI;
+	public SkeletonShoot skeletonShoot;
 
 	public SkeletonModule() {
 		super(Config.builder);
 		this.pushConfig(Config.builder);
-		skeletonAI = new SkeletonAI(this);
+		skeletonShoot = new SkeletonShoot(this);
 		Config.builder.pop();
 	}
 
 	@Override
 	public void loadConfig() {
 		super.loadConfig();
-		skeletonAI.loadConfig();
+		skeletonShoot.loadConfig();
 	}
 }

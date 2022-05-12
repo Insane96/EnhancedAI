@@ -4,6 +4,8 @@
 * Added Animal Module
   * Added Animal Attacking Feature. Make animals fight back and no longer flee when attacked
 * Added Swim Speed Multiplier to Targeting
+* Added Blaze Module
+  * Added Blaze Attack Feature. Blazes can fire multiple fireballs per shot, more fireballs, with less cooldown and with better aim
 * Skeleton
   * Added 10% chance for a skeleton to be a spammer. Shots an arrow every 0.5 seconds dealing 1/4 damage and begin twice as inaccurate
   * Flee Distance changed (12 -> 16 blocks; 7 -> 8 blocks faster flee) and now configurable
@@ -12,6 +14,7 @@
   * Improved Digger Zombies, they now keep mining multiple blocks before stopping, and they should get stuck less
 * Reduced XRay Chance
 * Increased mobs despawning distance
+* Fixed spiders throwing webs 4x slower
 
 ## 1.2.4
 * Port to 1.18.2, requires InsaneLib 1.4.6

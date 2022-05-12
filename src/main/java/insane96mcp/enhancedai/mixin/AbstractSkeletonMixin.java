@@ -11,6 +11,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class AbstractSkeletonMixin {
 	@Inject(at = @At("TAIL"), method = "reassessWeaponGoal()V")
 	public void reassessWeaponGoal(CallbackInfo callbackInfo) {
-		Modules.skeleton.skeletonAI.reassessWeaponGoal((AbstractSkeleton) (Object) this);
+		Modules.skeleton.skeletonShoot.reassessWeaponGoal((AbstractSkeleton) (Object) this);
 	}
 }

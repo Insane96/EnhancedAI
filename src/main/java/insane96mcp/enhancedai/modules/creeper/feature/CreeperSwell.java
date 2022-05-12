@@ -96,10 +96,8 @@ public class CreeperSwell extends Feature {
 		if (!this.isEnabled())
 			return;
 
-		if (!(event.getEntity() instanceof Creeper))
+		if (!(event.getEntity() instanceof Creeper creeper))
 			return;
-
-		Creeper creeper = (Creeper) event.getEntity();
 
 		//Remove Creeper Swell Goal
 		ArrayList<Goal> goalsToRemove = new ArrayList<>();

@@ -28,5 +28,13 @@ public class Strings {
 		public static class Spider {
 			public static final String WEB_THROWER = EnhancedAI.RESOURCE_PREFIX + "web_thrower";
 		}
+
+		public static class Animal {
+			public static final String WEB_THROWER = EnhancedAI.RESOURCE_PREFIX + "web_thrower";
+		}
+
+		public static class Blaze {
+			public static final String ATTACK = EnhancedAI.RESOURCE_PREFIX + "attack";
+		}
 	}
 }

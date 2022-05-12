@@ -13,7 +13,7 @@ public class WebThrowGoal extends Goal {
 	private final Spider spider;
 	private Player targetPlayer;
 
-	private int cooldown = Modules.spider.throwingWeb.throwingCooldown * 2;
+	private int cooldown = adjustedTickDelay(Modules.spider.throwingWeb.throwingCooldown);
 
 	public WebThrowGoal(Spider spider){
 		this.spider = spider;
@@ -26,7 +26,7 @@ public class WebThrowGoal extends Goal {
 
 		double distance = this.spider.distanceToSqr(target);
 
-		if (distance < Modules.spider.throwingWeb.minDistance * Modules.spider.throwingWeb.minDistance || distance > Modules.spider.throwingWeb.maxDistance * Modules.spider.throwingWeb.maxDistance)
+		if (distance < Modules.spider.throwingWeb.distance.min * Modules.spider.throwingWeb.distance.min || distance > Modules.spider.throwingWeb.distance.max * Modules.spider.throwingWeb.distance.max)
 			return false;
 
 		return --this.cooldown <= 0;
@@ -56,7 +56,7 @@ public class WebThrowGoal extends Goal {
 		thrownWeb.setDamage((float) Modules.spider.throwingWeb.thrownWebDamage);
 		thrownWeb.level.addFreshEntity(thrownWeb);
 		this.spider.playSound(SoundEvents.SPIDER_HURT, 1.0F, 2.0F / (this.spider.getRandom().nextFloat() * 0.4F + 0.8F));
-		this.cooldown = Modules.spider.throwingWeb.throwingCooldown * 2;
+		this.cooldown = adjustedTickDelay(Modules.spider.throwingWeb.throwingCooldown);
 	}
 
 	public void stop() {
