@@ -6,6 +6,7 @@
 * Added Swim Speed Multiplier to Targeting
 * Added Blaze Module
   * Added Blaze Attack Feature. Blazes can fire multiple fireballs per shot, more fireballs, with less cooldown and with better aim
+* Added Anti-Cheese Feature, monsters can no longer be boated or minecarted
 * Skeleton
   * Added 10% chance for a skeleton to be a spammer. Shots an arrow every 0.5 seconds dealing 1/4 damage and begin twice as inaccurate
   * Flee Distance changed (12 -> 16 blocks; 7 -> 8 blocks faster flee) and now configurable

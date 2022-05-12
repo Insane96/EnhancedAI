@@ -49,7 +49,7 @@ public class Targeting extends Feature {
 
 	public Targeting(Module module) {
 		super(Config.builder, module);
-		Config.builder.comment(this.getDescription()).push(this.getName());
+		this.pushConfig(Config.builder);
 		followRangeConfig = Config.builder
 				.comment("How far away can the mobs see the player. This overrides the vanilla value (16 for most mobs). Setting to 0 will leave the follow range as vanilla. I recommend using mods like Mobs Properties Randomness to have more control over the attribute.")
 				.defineInRange("Follow Range Override", this.followRange, 0, 128);
