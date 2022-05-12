@@ -56,7 +56,8 @@ public class SkeletonShoot extends Feature {
 		super(Config.builder, module);
 		super.pushConfig(Config.builder);
 		this.shootingRangeConfig = new IntMinMax.Config(Config.builder, "Shooting Range", "The range from where a skeleton will shoot a player")
-				.setMinMax(1, 64, this.shootingRange);
+				.setMinMax(1, 64, this.shootingRange)
+				.build();
 		strafeChanceConfig = Config.builder
 				.comment("Chance for a Skeleton to spawn with the ability to strafe (like vanilla)")
 				.defineInRange("Strafe chance", this.strafeChance, 0d, 1d);

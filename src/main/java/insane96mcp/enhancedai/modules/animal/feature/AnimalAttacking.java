@@ -38,7 +38,7 @@ public class AnimalAttacking extends Feature {
                 .define("Animals Fight back", this.animalsFightBack);
         noMoreFleeConfig = Config.builder
                 .comment("If true, when attacked, animals will no longer flee.")
-                .define("Animals Fight back", this.noMoreFlee);
+                .define("Animals No Longer Flee", this.noMoreFlee);
         Config.builder.pop();
     }
 
