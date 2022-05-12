@@ -247,6 +247,9 @@ public class DiggingGoal extends Goal {
 	}
 
 	public boolean isStuck() {
+		if (this.digger.getTarget() == null)
+			return false;
+
 		if (this.lastPosition == null || this.digger.distanceToSqr(this.lastPosition) > 2.25d) {
 			this.lastPosition = this.digger.position();
 			this.lastPositionTickstamp = this.digger.tickCount;
