@@ -19,6 +19,7 @@ public class EABlazeAttackGoal extends Goal {
     private int rechargeTime = 100;
     private int chargeTime = 60;
     private int fireballsPerShot = 1;
+    private int inaccuracy = -1;
 
     public EABlazeAttackGoal(Blaze blaze) {
         this.blaze = blaze;
@@ -47,6 +48,11 @@ public class EABlazeAttackGoal extends Goal {
 
     public EABlazeAttackGoal setFireballsPerShot(int fireballsPerShot) {
         this.fireballsPerShot = fireballsPerShot;
+        return this;
+    }
+
+    public EABlazeAttackGoal setInaccuracy(int inaccuracy) {
+        this.inaccuracy = inaccuracy;
         return this;
     }
 
@@ -97,7 +103,7 @@ public class EABlazeAttackGoal extends Goal {
         }
         else if (distanceSqrToTarget < this.getFollowDistance() * this.getFollowDistance() && hasLineOfSight) {
             double xDir = livingentity.getX() - this.blaze.getX();
-            double yDir = livingentity.getY(0d) - this.blaze.getY(0.5D);
+            double yDir = livingentity.getY(0.3d) - this.blaze.getY(0.5d);
             double zDir = livingentity.getZ() - this.blaze.getZ();
             if (this.attackTime <= 0) {
                 ++this.attackStep;
@@ -115,13 +121,17 @@ public class EABlazeAttackGoal extends Goal {
                 }
 
                 if (this.attackStep > 1) {
-                    double d4 = Math.sqrt(Math.sqrt(distanceSqrToTarget)) * 0.5D;
+                    double inaccuracy;
+                    if (this.inaccuracy == -1)
+                        inaccuracy = Math.sqrt(Math.sqrt(distanceSqrToTarget)) * 0.5D;
+                    else
+                        inaccuracy = 0.3d * this.inaccuracy;
                     if (!this.blaze.isSilent()) {
                         this.blaze.level.levelEvent(null, 1018, this.blaze.blockPosition(), 0);
                     }
 
                     for (int i = 0; i < this.fireballsPerShot; i++) {
-                        SmallFireball smallfireball = new SmallFireball(this.blaze.level, this.blaze, xDir + this.blaze.getRandom().nextGaussian() * d4, yDir, zDir + this.blaze.getRandom().nextGaussian() * d4);
+                        SmallFireball smallfireball = new SmallFireball(this.blaze.level, this.blaze, xDir + this.blaze.getRandom().nextGaussian() * inaccuracy, yDir, zDir + this.blaze.getRandom().nextGaussian() * inaccuracy);
                         smallfireball.setPos(smallfireball.getX(), this.blaze.getY(0.5D) + 0.5D, smallfireball.getZ());
                         this.blaze.level.addFreshEntity(smallfireball);
                     }

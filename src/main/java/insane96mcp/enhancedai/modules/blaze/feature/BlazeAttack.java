@@ -24,14 +24,16 @@ public class BlazeAttack extends Feature {
     private final IntMinMax.Config rechargeTimeConfig;
     private final IntMinMax.Config chargeTimeConfig;
     private final IntMinMax.Config fireballsPerShotConfig;
+    private final IntMinMax.Config inaccuracyConfig;
 
     private final BlacklistConfig entityBlacklistConfig;
 
-    public IntMinMax timeBetweenFireballs = new IntMinMax(2, 6);
+    public IntMinMax timeBetweenFireballs = new IntMinMax(3, 6);
     public IntMinMax fireballsShot = new IntMinMax(3, 8);
     public IntMinMax rechargeTime = new IntMinMax(60, 100);
     public IntMinMax chargeTime = new IntMinMax(30, 60);
-    public IntMinMax fireballsPerShot = new IntMinMax(1, 3);
+    public IntMinMax fireballsPerShot = new IntMinMax(1, 2);
+    public IntMinMax inaccuracy = new IntMinMax(2, 14);
 
     public ArrayList<IdTagMatcher> entityBlacklist;
     public boolean entityBlacklistAsWhitelist;
@@ -54,6 +56,9 @@ public class BlazeAttack extends Feature {
         this.fireballsPerShotConfig = new IntMinMax.Config(Config.builder, "Fireballs Per Shot", "How many fireballs are shot per shot. Vanilla is 1")
                 .setMinMax(1, 8, this.fireballsPerShot)
                 .build();
+        this.inaccuracyConfig = new IntMinMax.Config(Config.builder, "Inaccuracy", "The higher the more spread up shots will be. Setting both to -1 will use the vanilla behaviour")
+                .setMinMax(-1, 32, this.inaccuracy)
+                .build();
 
         entityBlacklistConfig = new BlacklistConfig(Config.builder, "Entity Blacklist", "Entities that shouldn't get the new Blaze Attack AI", Collections.emptyList(), false);
         Config.builder.pop();
@@ -67,6 +72,7 @@ public class BlazeAttack extends Feature {
         this.rechargeTime = this.rechargeTimeConfig.get();
         this.chargeTime = this.chargeTimeConfig.get();
         this.fireballsPerShot = this.fireballsPerShotConfig.get();
+        this.inaccuracy = this.inaccuracyConfig.get();
 
         this.entityBlacklist = (ArrayList<IdTagMatcher>) IdTagMatcher.parseStringList(this.entityBlacklistConfig.listConfig.get());
         this.entityBlacklistAsWhitelist = this.entityBlacklistConfig.listAsWhitelistConfig.get();
@@ -108,6 +114,7 @@ public class BlazeAttack extends Feature {
                 .setFireballShot(this.fireballsShot.getRandBetween(blaze.getRandom()))
                 .setRechargeTime(this.rechargeTime.getRandBetween(blaze.getRandom()))
                 .setChargeTime(this.chargeTime.getRandBetween(blaze.getRandom()))
-                .setFireballsPerShot(this.fireballsPerShot.getRandBetween(blaze.getRandom())));
+                .setFireballsPerShot(this.fireballsPerShot.getRandBetween(blaze.getRandom()))
+                .setInaccuracy(this.inaccuracy.getRandBetween(blaze.getRandom())));
     }
 }
