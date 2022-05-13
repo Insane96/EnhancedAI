@@ -2,6 +2,8 @@
 
 ## Upcoming
 * Animals movement speed when attacking is now configurable
+* Fixed skeletons using the correct arrow (e.g. strays no longer shot slowness arrows)
+* Fixed potential crash with Diggin zombies
 
 ## Beta 1.3.0
 * Added Animal Module

@@ -95,12 +95,12 @@ public class EARangedBowAttackGoal<T extends Monster & RangedAttackMob> extends 
 	 * Keep ticking a continuous task that has already been started
 	 */
 	public void tick() {
-		LivingEntity livingentity = this.entity.getTarget();
-		if (livingentity == null)
+		LivingEntity target = this.entity.getTarget();
+		if (target == null)
 			return;
 
-		double distanceFromTarget = this.entity.distanceToSqr(livingentity.getX(), livingentity.getY(), livingentity.getZ());
-		boolean canSeeTarget = this.entity.getSensing().hasLineOfSight(livingentity);
+		double distanceFromTarget = this.entity.distanceToSqr(target.getX(), target.getY(), target.getZ());
+		boolean canSeeTarget = this.entity.getSensing().hasLineOfSight(target);
 		boolean flag1 = this.seeTime > 0;
 		if (canSeeTarget != flag1) {
 			this.seeTime = 0;
@@ -113,7 +113,7 @@ public class EARangedBowAttackGoal<T extends Monster & RangedAttackMob> extends 
 			--this.seeTime;
 		}
 		if (distanceFromTarget > (double)this.maxAttackDistance)
-			this.entity.getNavigation().moveTo(livingentity, this.moveSpeedAmp);
+			this.entity.getNavigation().moveTo(target, this.moveSpeedAmp);
 		else {
 
 			if (distanceFromTarget >= 49d && distanceFromTarget <= (double)this.maxAttackDistance && this.seeTime >= 20 && this.canStrafe()) {
@@ -139,8 +139,8 @@ public class EARangedBowAttackGoal<T extends Monster & RangedAttackMob> extends 
 			int i = this.entity.getTicksUsingItem();
 			if (i > 12) {
 				this.entity.getNavigation().stop();
-				this.entity.lookAt(livingentity, 30.0F, 30.0F);
-				this.entity.getLookControl().setLookAt(livingentity, 30.0F, 30.0F);
+				this.entity.lookAt(target, 30.0F, 30.0F);
+				this.entity.getLookControl().setLookAt(target, 30.0F, 30.0F);
 			}
 			else if (this.strafingTime > -1 && this.canStrafe()) {
 				if (distanceFromTarget > (double)(this.maxAttackDistance * 0.9F)) {
@@ -152,7 +152,7 @@ public class EARangedBowAttackGoal<T extends Monster & RangedAttackMob> extends 
 
 				this.entity.getMoveControl().strafe(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F);
 			}
-			this.entity.getLookControl().setLookAt(livingentity, 30.0F, 30.0F);
+			this.entity.getLookControl().setLookAt(target, 30.0F, 30.0F);
 
 			if (this.entity.isUsingItem()) {
 				if (!canSeeTarget && this.seeTime < -60) {
@@ -161,7 +161,7 @@ public class EARangedBowAttackGoal<T extends Monster & RangedAttackMob> extends 
 				else if (canSeeTarget) {
 					if (i >= this.bowChargeTicks) {
 						this.entity.stopUsingItem();
-						attackEntityWithRangedAttack(this.entity, livingentity, i);
+						attackEntityWithRangedAttack(this.entity, target, i);
 						this.attackTime = this.attackCooldown;
 					}
 				}
@@ -190,13 +190,15 @@ public class EARangedBowAttackGoal<T extends Monster & RangedAttackMob> extends 
 		//abstractarrowentity.setBaseDamage(abstractarrowentity.getBaseDamage() * (distanceFactor / 20f));
 		if (entity.getMainHandItem().getItem() instanceof net.minecraft.world.item.BowItem)
 			abstractarrowentity = ((net.minecraft.world.item.BowItem)entity.getMainHandItem().getItem()).customArrow(abstractarrowentity);
-		double d0 = target.getX() - entity.getX();
-		double d2 = target.getZ() - entity.getZ();
-		double distanceXZ = Math.sqrt(d0 * d0 + d2 * d2);
+		double dirX = target.getX() - entity.getX();
+		double dirZ = target.getZ() - entity.getZ();
+		double distanceXZ = Math.sqrt(dirX * dirX + dirZ * dirZ);
+		//dirX += (target.getDeltaMovement().x * (distanceXZ * 0.1d));
+		//dirZ += (target.getDeltaMovement().z * (distanceXZ * 0.1d));
 		double yPos = target.getY(0d);
 		yPos += target.getEyeHeight() * 0.5 + (distanceY / distanceXZ);
-		double d1 = yPos - abstractarrowentity.getY();
-		abstractarrowentity.shoot(d0, d1 + distanceXZ * 0.18d, d2, f * 1.1f + ((float)distance / 32f) + (float)Math.max(distanceY / 48d, 0f), this.inaccuracy);
+		double dirY = yPos - abstractarrowentity.getY();
+		abstractarrowentity.shoot(dirX, dirY + distanceXZ * 0.18d, dirZ, f * 1.1f + ((float)distance / 32f) + (float)Math.max(distanceY / 48d, 0f), this.inaccuracy);
 		entity.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (entity.getRandom().nextFloat() * 0.4F + 0.8F));
 		entity.level.addFreshEntity(abstractarrowentity);
 	}

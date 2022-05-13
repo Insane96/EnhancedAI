@@ -119,7 +119,7 @@ public class DiggingGoal extends Goal {
 			this.targetBlocks.remove(0);
 			if (!this.targetBlocks.isEmpty())
 				initBlockBreak();
-			else if (this.digger.distanceToSqr(digger.getTarget()) > 2d && !this.digger.getSensing().hasLineOfSight(this.target))
+			else if (this.digger.distanceToSqr(this.target) > 2d && !this.digger.getSensing().hasLineOfSight(this.target))
 				start();
 		}
 	}
