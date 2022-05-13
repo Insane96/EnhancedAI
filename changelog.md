@@ -2,6 +2,7 @@
 
 ## Upcoming
 * Animals movement speed when attacking is now configurable
+* Digger Zombies now get equipped with a Wooden Pickaxe
 * Fixed skeletons using the correct arrow (e.g. strays no longer shot slowness arrows)
 * Fixed potential crash with Diggin zombies
 
