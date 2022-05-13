@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## Beta 1.3.0
 * Added Animal Module
   * Added Animal Attacking Feature. Make animals fight back and no longer flee when attacked
 * Added Swim Speed Multiplier to Targeting
