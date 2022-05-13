@@ -25,20 +25,25 @@ public class AnimalAttacking extends Feature {
 
     private final ForgeConfigSpec.ConfigValue<Boolean> animalsFightBackConfig;
     private final ForgeConfigSpec.ConfigValue<Boolean> noMoreFleeConfig;
+    private final ForgeConfigSpec.ConfigValue<Double> speedMultiplierConfig;
 
     public boolean animalsFightBack = true;
     public boolean noMoreFlee = true;
-    private static final double ATTACK_DAMAGE = 3d;
+    public double speedMultiplier = 1.35d;
+    private static final double BASE_ATTACK_DAMAGE = 3d;
 
     public AnimalAttacking(Module module) {
         super(Config.builder, module, true, false);
         super.pushConfig(Config.builder);
         animalsFightBackConfig = Config.builder
-                .comment("If true, when attacked, animals will call other animals for help and attack back. Animals have a slightly bigger range to attack. Attack damage can't be changed via config due to limitation so use mods like Mobs Properties Randomness to increase the damage. Base damage is " + String.format("%.1f", ATTACK_DAMAGE))
+                .comment("If true, when attacked, animals will call other animals for help and attack back. Animals have a slightly bigger range to attack. Attack damage can't be changed via config due to limitation so use mods like Mobs Properties Randomness to increase the damage. Base damage is " + String.format("%.1f", BASE_ATTACK_DAMAGE))
                 .define("Animals Fight back", this.animalsFightBack);
         noMoreFleeConfig = Config.builder
                 .comment("If true, when attacked, animals will no longer flee.")
                 .define("Animals No Longer Flee", this.noMoreFlee);
+        speedMultiplierConfig = Config.builder
+                .comment("Movement speed multiplier when attacking.")
+                .defineInRange("Movement Speed Multiplier", this.speedMultiplier, 0d, 4d);
         Config.builder.pop();
     }
 
@@ -47,6 +52,7 @@ public class AnimalAttacking extends Feature {
         super.loadConfig();
         this.animalsFightBack = this.animalsFightBackConfig.get();
         this.noMoreFlee = this.noMoreFleeConfig.get();
+        this.speedMultiplier = this.speedMultiplierConfig.get();
     }
 
     public static void attribute(EntityAttributeModificationEvent event) {
@@ -54,7 +60,7 @@ public class AnimalAttacking extends Feature {
             if (event.has(entityType, Attributes.ATTACK_DAMAGE))
                 continue;
 
-            event.add(entityType, Attributes.ATTACK_DAMAGE, ATTACK_DAMAGE);
+            event.add(entityType, Attributes.ATTACK_DAMAGE, BASE_ATTACK_DAMAGE);
         }
     }
 
@@ -68,7 +74,7 @@ public class AnimalAttacking extends Feature {
 
         if (this.animalsFightBack) {
             animal.targetSelector.addGoal(1, (new HurtByTargetGoal(animal)).setAlertOthers());
-            animal.goalSelector.addGoal(1, new MeleeAttackGoal(animal, 1.3d, false));
+            animal.goalSelector.addGoal(1, new MeleeAttackGoal(animal, this.speedMultiplier, false));
         }
 
         if (this.noMoreFlee) {
