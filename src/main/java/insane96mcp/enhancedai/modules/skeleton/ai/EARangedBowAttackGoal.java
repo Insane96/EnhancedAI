@@ -1,9 +1,11 @@
 package insane96mcp.enhancedai.modules.skeleton.ai;
 
 import insane96mcp.enhancedai.modules.base.ai.EAAvoidEntityGoal;
+import insane96mcp.enhancedai.setup.Reflection;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -159,7 +161,7 @@ public class EARangedBowAttackGoal<T extends Monster & RangedAttackMob> extends 
 				else if (canSeeTarget) {
 					if (i >= this.bowChargeTicks) {
 						this.entity.stopUsingItem();
-						attackEntityWithRangedAttack(this.entity, livingentity, this.bowChargeTicks);
+						attackEntityWithRangedAttack(this.entity, livingentity, i);
 						this.attackTime = this.attackCooldown;
 					}
 				}
@@ -174,14 +176,18 @@ public class EARangedBowAttackGoal<T extends Monster & RangedAttackMob> extends 
 		return this.canStrafe && this.entity.goalSelector.getRunningGoals().noneMatch(p -> p.getGoal() instanceof EAAvoidEntityGoal);
 	}
 
-	private void attackEntityWithRangedAttack(T entity, LivingEntity target, float distanceFactor) {
+	private void attackEntityWithRangedAttack(T entity, LivingEntity target, int chargeTicks) {
 		ItemStack itemstack = entity.getProjectile(entity.getItemInHand(ProjectileUtil.getWeaponHoldingHand(entity, item -> item == Items.BOW)));
 		double distance = entity.distanceTo(target);
 		double distanceY = target.getY() - entity.getY();
 		float f = 1; //distanceFactor / 20.0F;
 		f = (f * f + f * 2.0F) / 3.0F;
-		AbstractArrow abstractarrowentity = ProjectileUtil.getMobArrow(entity, itemstack, f);
-		abstractarrowentity.setBaseDamage(abstractarrowentity.getBaseDamage() * (distanceFactor / 20f));
+		AbstractArrow abstractarrowentity;
+		if (entity instanceof AbstractSkeleton skeleton)
+			abstractarrowentity = Reflection.AbstractSkeleton_getArrow(skeleton, itemstack, BowItem.getPowerForTime(chargeTicks));
+		else
+			abstractarrowentity = ProjectileUtil.getMobArrow(entity, itemstack, f);
+		//abstractarrowentity.setBaseDamage(abstractarrowentity.getBaseDamage() * (distanceFactor / 20f));
 		if (entity.getMainHandItem().getItem() instanceof net.minecraft.world.item.BowItem)
 			abstractarrowentity = ((net.minecraft.world.item.BowItem)entity.getMainHandItem().getItem()).customArrow(abstractarrowentity);
 		double d0 = target.getX() - entity.getX();
