@@ -2,6 +2,9 @@
 
 ## Upcoming
 * Added max Y coordinate at which zombies can mine, sea level by default
+* Skeletons now shot slower when not in hard difficulty
+* Reduced Follow range override (~~64~~ -> 48)
+* Reduced Skeleton Spammer chance (~~10%~~ -> 7%)
 * Set drop chance of mining zombies wooden pickaxe to 0
 * Fixed Mining Zombies having pickaxe in wrong hand
 * Fixed another potential crash with mining zombies

@@ -10,6 +10,7 @@ import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.config.BlacklistConfig;
 import insane96mcp.insanelib.util.IdTagMatcher;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
@@ -41,7 +42,7 @@ public class SkeletonShoot extends Feature {
 	public IntMinMax shootingRange = new IntMinMax(24, 32);
 	public double strafeChance = 0.333d;
 	public double arrowInaccuracy = 2;
-	public double spammerChance = 0.1d;
+	public double spammerChance = 0.07d;
 	public ArrayList<IdTagMatcher> entityBlacklist;
 	public boolean entityBlacklistAsWhitelist;
 	//Flee from target
@@ -163,6 +164,9 @@ public class SkeletonShoot extends Feature {
 				bowChargeTicks = 5;
 				inaccuracy *= 2d;
 			}
+			if (!skeleton.level.getDifficulty().equals(Difficulty.HARD))
+				attackCooldown *= 2;
+
 			EARangedBowAttackGoal<AbstractSkeleton> EARangedBowAttackGoal = new EARangedBowAttackGoal<>(skeleton, 1.0d, this.shootingRange.getRandBetween(skeleton.getRandom()), strafe).setAttackCooldown(attackCooldown).setBowChargeTicks(bowChargeTicks).setInaccuracy((float) inaccuracy);
 			skeleton.goalSelector.addGoal(2, EARangedBowAttackGoal);
 

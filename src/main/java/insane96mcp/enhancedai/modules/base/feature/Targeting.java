@@ -40,7 +40,7 @@ public class Targeting extends Feature {
 
 	private final List<String> entityBlacklistDefault = Arrays.asList("minecraft:enderman");
 
-	public int followRange = 64;
+	public int followRange = 48;
 	public double swimSpeedMultiplier = 2.5d;
 	public double xray = 0.15d;
 	public boolean instaTarget = true;
