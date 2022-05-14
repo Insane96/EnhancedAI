@@ -19,7 +19,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 
-@Label(name = "Digger Zombie", description = "Zombies can mine blocks to reach the target")
+@Label(name = "Digger Zombie", description = "Zombies can mine blocks to reach the target. Uses offhand item to mine")
 public class DiggerZombie extends Feature {
 	private final ForgeConfigSpec.ConfigValue<Double> diggerChanceConfig;
 	private final ForgeConfigSpec.ConfigValue<Boolean> diggerToolOnlyConfig;
@@ -120,8 +120,8 @@ public class DiggerZombie extends Feature {
 
 		if (miner) {
 			zombie.goalSelector.addGoal(1, new DiggingGoal(zombie, this.diggerToolOnly, this.diggerProperToolOnly));
-			zombie.equipItemIfPossible(new ItemStack(Items.WOODEN_PICKAXE));
-			zombie.setDropChance(EquipmentSlot.MAINHAND, -0.04f);
+			zombie.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.WOODEN_PICKAXE));
+			zombie.setDropChance(EquipmentSlot.OFFHAND, -1f);
 		}
 	}
 }

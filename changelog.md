@@ -2,6 +2,7 @@
 
 ## Upcoming
 * Set drop chance of mining zombies wooden pickaxe to 0
+* Fixed Mining Zombies having pickaxe in wrong hand
 * Fixed another potential crash with mining zombies
 
 ## 1.3.1
