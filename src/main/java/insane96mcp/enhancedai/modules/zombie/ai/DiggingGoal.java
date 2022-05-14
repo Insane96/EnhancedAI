@@ -55,7 +55,7 @@ public class DiggingGoal extends Goal {
 		if (this.toolOnly && !(this.digger.getOffhandItem().getItem() instanceof DiggerItem))
 			return false;
 
-		if (digger.getTarget() == null)
+		if (this.digger.getTarget() == null)
 			return false;
 
 		return this.isStuck()
@@ -76,6 +76,8 @@ public class DiggingGoal extends Goal {
 
 	public void start() {
 		this.target = this.digger.getTarget();
+		if (this.target == null)
+			return;
 		fillTargetBlocks();
 		if (!this.targetBlocks.isEmpty())
 			initBlockBreak();
@@ -201,9 +203,7 @@ public class DiggingGoal extends Goal {
 		}
 		LogHelper.info("%s", angle);*/
 		for (int i = 0; i < mobHeight; i++) {
-			BlockHitResult rayTraceResult;
-			//if (this.digger.distanceToSqr(this.target) < 36d || Math.abs(Math.sin(Math.toRadians(angle))) < Math.sin(Math.toRadians(angle)))
-				rayTraceResult = this.digger.level.clip(new ClipContext(this.digger.position().add(0, i + 0.5d, 0), this.target.getEyePosition(1f).add(0, i, 0), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.digger));
+			BlockHitResult rayTraceResult = this.digger.level.clip(new ClipContext(this.digger.position().add(0, i + 0.5d, 0), this.target.getEyePosition(1f).add(0, i, 0), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.digger));
 			if (rayTraceResult.getType() == HitResult.Type.MISS)
 				continue;
 			if (this.targetBlocks.contains(rayTraceResult.getBlockPos()))

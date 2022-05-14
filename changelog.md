@@ -1,5 +1,9 @@
 # Changelog
 
+## Upcoming
+* Set drop chance of mining zombies wooden pickaxe to 0
+* Fixed another potential crash with mining zombies
+
 ## 1.3.1
 * Animals movement speed when attacking is now configurable
 * Digger Zombies now get equipped with a Wooden Pickaxe

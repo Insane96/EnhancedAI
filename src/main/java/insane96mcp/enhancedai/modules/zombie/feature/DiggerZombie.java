@@ -8,6 +8,7 @@ import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.config.BlacklistConfig;
 import insane96mcp.insanelib.util.IdTagMatcher;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -120,6 +121,7 @@ public class DiggerZombie extends Feature {
 		if (miner) {
 			zombie.goalSelector.addGoal(1, new DiggingGoal(zombie, this.diggerToolOnly, this.diggerProperToolOnly));
 			zombie.equipItemIfPossible(new ItemStack(Items.WOODEN_PICKAXE));
+			zombie.setDropChance(EquipmentSlot.MAINHAND, -0.04f);
 		}
 	}
 }
