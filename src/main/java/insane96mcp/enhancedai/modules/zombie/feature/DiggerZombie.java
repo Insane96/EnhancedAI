@@ -25,6 +25,7 @@ public class DiggerZombie extends Feature {
 	private final ForgeConfigSpec.ConfigValue<Boolean> diggerToolOnlyConfig;
 	private final ForgeConfigSpec.ConfigValue<Boolean> diggerProperToolOnlyConfig;
 	private final ForgeConfigSpec.ConfigValue<Boolean> equipWoodenPickConfig;
+	private final ForgeConfigSpec.ConfigValue<Integer> maxYDigConfig;
 	private final ForgeConfigSpec.ConfigValue<Boolean> blacklistTileEntitiesConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> miningSpeedMultiplierConfig;
 	private final BlacklistConfig blockBlacklistConfig;
@@ -34,6 +35,7 @@ public class DiggerZombie extends Feature {
 	public boolean diggerToolOnly = false;
 	public boolean diggerProperToolOnly = false;
 	public boolean equipWoodenPick = true;
+	public int maxYDig = 64;
 	public boolean blacklistTileEntities = false;
 	public double miningSpeedMultiplier = 1d;
 	public ArrayList<IdTagMatcher> blockBlacklist;
@@ -47,7 +49,6 @@ public class DiggerZombie extends Feature {
 		diggerChanceConfig = Config.builder
 				.comment("Chance for a Zombie to spawn with the digger ability")
 				.defineInRange("Digger Chance", this.diggerChance, 0d, 1d);
-		//TODO Main and off-hand
 		diggerToolOnlyConfig = Config.builder
 				.comment("Zombies with Digger AI will mine only if they have a tool in the off-hand")
 				.define("Digger Tool Only", this.diggerToolOnly);
@@ -57,6 +58,9 @@ public class DiggerZombie extends Feature {
 		equipWoodenPickConfig = Config.builder
 				.comment("Zombies with Digger AI will spawn with a Wooden Pickaxe.")
 				.define("Equip Wooden Pick", this.equipWoodenPick);
+		maxYDigConfig = Config.builder
+				.comment("The maximum Y coordinate at which Zombies can mine.")
+				.defineInRange("Max Y Dig", this.maxYDig, -128, 512);
 		miningSpeedMultiplierConfig = Config.builder
 				.comment("Multiplier for digger zombies mining speed. E.g. with this set to 2, zombies will take twice the time to mine a block.")
 				.defineInRange("Digger Speed Multiplier", this.miningSpeedMultiplier, 0d, 128d);
@@ -75,6 +79,7 @@ public class DiggerZombie extends Feature {
 		this.diggerToolOnly = this.diggerToolOnlyConfig.get();
 		this.diggerProperToolOnly = this.diggerProperToolOnlyConfig.get();
 		this.equipWoodenPick = this.equipWoodenPickConfig.get();
+		this.maxYDig = this.maxYDigConfig.get();
 		this.miningSpeedMultiplier = this.miningSpeedMultiplierConfig.get();
 		this.blacklistTileEntities = this.blacklistTileEntitiesConfig.get();
 		this.blockBlacklist = (ArrayList<IdTagMatcher>) IdTagMatcher.parseStringList(this.blockBlacklistConfig.listConfig.get());

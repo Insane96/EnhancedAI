@@ -208,6 +208,9 @@ public class DiggingGoal extends Goal {
 				continue;
 			if (this.targetBlocks.contains(rayTraceResult.getBlockPos()))
 				continue;
+			if (rayTraceResult.getBlockPos().getY() > Modules.zombie.diggerZombie.maxYDig)
+				continue;
+
 			double distance = this.digger.distanceToSqr(rayTraceResult.getLocation());
 			if (distance > this.reachDistance * this.reachDistance)
 				continue;

@@ -1,6 +1,7 @@
 # Changelog
 
 ## Upcoming
+* Added max Y coordinate at which zombies can mine, sea level by default
 * Set drop chance of mining zombies wooden pickaxe to 0
 * Fixed Mining Zombies having pickaxe in wrong hand
 * Fixed another potential crash with mining zombies
