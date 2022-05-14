@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 1.3.1
 * Animals movement speed when attacking is now configurable
 * Digger Zombies now get equipped with a Wooden Pickaxe
 * Fixed skeletons using the correct arrow (e.g. strays no longer shot slowness arrows)
