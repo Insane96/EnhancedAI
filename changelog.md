@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 1.3.2
 * Added max Y coordinate at which zombies can mine, sea level by default
 * Skeletons now shot slower when not in hard difficulty
 * Reduced Follow range override (~~64~~ -> 48)
