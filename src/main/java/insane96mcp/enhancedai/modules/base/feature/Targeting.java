@@ -42,7 +42,7 @@ public class Targeting extends Feature {
 
 	public int followRange = 48;
 	public double swimSpeedMultiplier = 2.5d;
-	public double xray = 0.15d;
+	public double xray = 0.20d;
 	public boolean instaTarget = true;
 	public ArrayList<IdTagMatcher> entityBlacklist;
 	public boolean entityBlacklistAsWhitelist = true;

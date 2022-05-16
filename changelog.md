@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Increased XRay Chance (~~15%~~ -> 20%)
+
 ## 1.3.2
 * Added max Y coordinate at which zombies can mine, sea level by default
 * Skeletons now shot slower when not in hard difficulty
