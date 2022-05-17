@@ -3,6 +3,7 @@
 ## Upcoming
 * Increased XRay Chance (~~15%~~ -> 20%)
 * Increased animal attack damage (3 -> 4) and increased knockback
+* Fixed disabling Miner Zombies Wooden pick not disabling it
 
 ## 1.3.2
 * Added max Y coordinate at which zombies can mine, sea level by default

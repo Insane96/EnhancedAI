@@ -125,8 +125,11 @@ public class DiggerZombie extends Feature {
 
 		if (miner) {
 			zombie.goalSelector.addGoal(1, new DiggingGoal(zombie, this.diggerToolOnly, this.diggerProperToolOnly));
-			zombie.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.WOODEN_PICKAXE));
-			zombie.setDropChance(EquipmentSlot.OFFHAND, -1f);
+			if (this.equipWoodenPick)
+			{
+				zombie.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.WOODEN_PICKAXE));
+				zombie.setDropChance(EquipmentSlot.OFFHAND, -1f);
+			}
 		}
 	}
 }
