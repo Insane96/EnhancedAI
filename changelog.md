@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 1.3.3
 * Increased XRay Chance (~~15%~~ -> 20%)
 * Increased animal attack damage (3 -> 4) and increased knockback
 * Fixed disabling Miner Zombies Wooden pick not disabling it
