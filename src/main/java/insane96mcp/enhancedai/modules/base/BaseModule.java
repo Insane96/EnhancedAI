@@ -1,10 +1,7 @@
 package insane96mcp.enhancedai.modules.base;
 
 
-import insane96mcp.enhancedai.modules.base.feature.AntiCheese;
-import insane96mcp.enhancedai.modules.base.feature.AvoidExplosions;
-import insane96mcp.enhancedai.modules.base.feature.Base;
-import insane96mcp.enhancedai.modules.base.feature.Targeting;
+import insane96mcp.enhancedai.modules.base.feature.*;
 import insane96mcp.enhancedai.setup.Config;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
@@ -16,6 +13,7 @@ public class BaseModule extends Module {
 	public Targeting targeting;
 	public AvoidExplosions avoidExplosions;
 	public AntiCheese antiCheese;
+	public Movement movement;
 
 	public BaseModule() {
 		super(Config.builder);
@@ -24,6 +22,7 @@ public class BaseModule extends Module {
 		targeting = new Targeting(this);
 		avoidExplosions = new AvoidExplosions(this);
 		antiCheese = new AntiCheese(this);
+		movement = new Movement(this);
 		Config.builder.pop();
 	}
 
@@ -34,5 +33,6 @@ public class BaseModule extends Module {
 		targeting.loadConfig();
 		avoidExplosions.loadConfig();
 		antiCheese.loadConfig();
+		movement.loadConfig();
 	}
 }

@@ -34,7 +34,7 @@ public class AntiCheese extends Feature {
     }
 
     @SubscribeEvent
-    public void onMobSpawn(EntityMountEvent event) {
+    public void onMobMount(EntityMountEvent event) {
         if (!this.isEnabled())
             return;
 

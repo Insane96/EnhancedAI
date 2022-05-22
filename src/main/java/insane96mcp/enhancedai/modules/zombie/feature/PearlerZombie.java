@@ -56,6 +56,9 @@ public class PearlerZombie extends Feature {
 		if (!this.isEnabled())
 			return;
 
+		if (event.getWorld().isClientSide)
+			return;
+
 		if (!(event.getEntity() instanceof Zombie zombie))
 			return;
 
