@@ -1,6 +1,8 @@
 # Changelog
 
 ## Upcoming
+* Added Movement features
+  * Mobs will now try to target climbable blocks and use them to reach the target
 * Increased digger chance (~~5%~~ -> 8%)
 * Fixed zombies spawning with Ender Pearls and wooden pickaxes client-side
 
