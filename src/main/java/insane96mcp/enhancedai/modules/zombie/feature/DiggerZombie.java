@@ -31,7 +31,7 @@ public class DiggerZombie extends Feature {
 	private final BlacklistConfig blockBlacklistConfig;
 	private final BlacklistConfig entityBlacklistConfig;
 
-	public double diggerChance = 0.05;
+	public double diggerChance = 0.08;
 	public boolean diggerToolOnly = false;
 	public boolean diggerProperToolOnly = false;
 	public boolean equipWoodenPick = true;

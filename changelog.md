@@ -1,7 +1,8 @@
 # Changelog
 
 ## Upcoming
-* Fixed zombies spawning with Ender Pearls client-side
+* Increased digger chance (~~5%~~ -> 8%)
+* Fixed zombies spawning with Ender Pearls and wooden pickaxes client-side
 
 ## 1.3.3
 * Increased XRay Chance (~~15%~~ -> 20%)
