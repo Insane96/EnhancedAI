@@ -84,8 +84,8 @@ public class EANearestAttackableTargetGoal<T extends LivingEntity> extends Targe
 		this.targetEntitySelector.ignoreLineOfSight();
 	}
 
-	public static class TargetGoal<T extends LivingEntity> extends EANearestAttackableTargetGoal<T> {
-		public TargetGoal(Spider goalOwnerIn, Class<T> targetClassIn, boolean checkSight, boolean nearbyOnlyIn, @Nullable Predicate<LivingEntity> targetPredicate) {
+	public static class SpiderTargetGoal<T extends LivingEntity> extends EANearestAttackableTargetGoal<T> {
+		public SpiderTargetGoal(Spider goalOwnerIn, Class<T> targetClassIn, boolean checkSight, boolean nearbyOnlyIn, @Nullable Predicate<LivingEntity> targetPredicate) {
 			super(goalOwnerIn, targetClassIn, checkSight, nearbyOnlyIn, targetPredicate);
 		}
 

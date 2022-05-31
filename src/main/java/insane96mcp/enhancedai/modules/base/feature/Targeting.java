@@ -137,7 +137,7 @@ public class Targeting extends Feature {
 		EANearestAttackableTargetGoal<Player> targetGoal;
 
 		if (mobEntity instanceof Spider)
-			targetGoal = new EANearestAttackableTargetGoal.TargetGoal<>((Spider) mobEntity, Player.class, true, false, predicate);
+			targetGoal = new EANearestAttackableTargetGoal.SpiderTargetGoal<>((Spider) mobEntity, Player.class, true, false, predicate);
 		else
 			targetGoal = new EANearestAttackableTargetGoal<>(mobEntity, Player.class, true, false, predicate);
 		if (mobEntity.level.random.nextDouble() < this.xray)
@@ -149,7 +149,7 @@ public class Targeting extends Feature {
 		EANearestAttackableTargetGoal<Endermite> targetGoalTest;
 
 		if (mobEntity instanceof Spider)
-			targetGoalTest = new EANearestAttackableTargetGoal.TargetGoal<>((Spider) mobEntity, Endermite.class, true, false, predicate);
+			targetGoalTest = new EANearestAttackableTargetGoal.SpiderTargetGoal<>((Spider) mobEntity, Endermite.class, true, false, predicate);
 		else
 			targetGoalTest = new EANearestAttackableTargetGoal<>(mobEntity, Endermite.class, true, false, predicate);
 		if (mobEntity.level.random.nextDouble() < this.xray)
