@@ -1,6 +1,10 @@
 # Changelog
 
 ## Upcoming
+* Added Witch Module
+  * Added Witch Potion Throwing Feature. Witches throw potions farther, faster and more potion types. Also, no longer chase player if they can't see him. 15% chance for potions to be lingering instead of splash.
+  * Added Witch Flee Target Feature. Witches run away from players when near them. Have 50% chance to be able to throw potions while fleeing
+  * Witches no longer stop when drinking potions, instead they now move slower
 * Added Movement features
   * Mobs will now try to target climbable blocks and use them to reach the target
 * Increased digger chance (~~5%~~ -> 7%)
@@ -86,7 +90,7 @@
 
 ## Alpha 1.2.0
 * Added Spider Web Throw. Spiders with this ability will throw Cobwebs at the target, stackingly slowing him down or, if missed, places a cobweb at the block hit
-* Added Zombie Pearlers. Zombies with and Ender Pearl in the hand or off hand will throw it to get closer to the player
+* Added Zombie Pearlers. Zombies with and Ender Pearl in the hand or off-hand will throw it to get closer to the player
 * Launching creepers now cancel the explosion if they didn't reach the target. If that's the case, the launching ability will go on a 6 seconds cooldown
 * Launching creepers will no longer launch if they're less than 12 blocks away from the target
 * Skeletons now have 50% chance to not be able to shoot the player when avoiding them

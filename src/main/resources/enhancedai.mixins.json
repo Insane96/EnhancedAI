@@ -1,12 +1,13 @@
 {
-	"required": true,
-	"package": "insane96mcp.enhancedai.mixin",
-	"compatibilityLevel": "JAVA_8",
-	"refmap": "enhancedai.refmap.json",
-	"mixins": [
-		"AbstractSkeletonMixin",
+    "required": true,
+    "package": "insane96mcp.enhancedai.mixin",
+    "compatibilityLevel": "JAVA_8",
+    "refmap": "enhancedai.refmap.json",
+    "mixins": [
+        "AbstractSkeletonMixin",
         "CreeperMixin",
-		"MobCategoryMixin"
-	],
-	"minVersion": "0.8"
+        "MobCategoryMixin",
+        "WitchMixin"
+    ],
+    "minVersion": "0.8"
 }

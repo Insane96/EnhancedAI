@@ -51,7 +51,7 @@ public class EAAvoidEntityGoal<T extends LivingEntity> extends Goal {
 	 * method as well.
 	 */
 	public boolean canUse() {
-		this.avoidTarget = this.entity.level.getNearestEntity(this.classToAvoid, this.builtTargetSelector, this.entity, this.entity.getX(), this.entity.getY(), this.entity.getZ(), this.entity.getBoundingBox().inflate(this.avoidDistance, 3.0D, this.avoidDistance));
+		this.avoidTarget = this.entity.level.getNearestEntity(this.classToAvoid, this.builtTargetSelector, this.entity, this.entity.getX(), this.entity.getY(), this.entity.getZ(), this.entity.getBoundingBox().inflate(this.avoidDistance, this.avoidDistance, this.avoidDistance));
 		if (this.avoidTarget == null) {
 			return false;
 		} else {
@@ -92,7 +92,7 @@ public class EAAvoidEntityGoal<T extends LivingEntity> extends Goal {
 	 * Keep ticking a continuous task that has already been started
 	 */
 	public void tick() {
-		if (this.entity.distanceToSqr(this.avoidTarget) < 49.0D) {
+		if (this.entity.distanceToSqr(this.avoidTarget) < this.avoidDistanceNear) {
 			this.entity.getNavigation().setSpeedModifier(this.nearSpeed);
 		} else {
 			this.entity.getNavigation().setSpeedModifier(this.farSpeed);
