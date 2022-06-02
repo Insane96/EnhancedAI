@@ -31,6 +31,7 @@ public class WitchThrowPotionGoal extends Goal {
     private LivingEntity target;
 
     private int attackTime = -1;
+    private boolean randomPotion = false;
 
     public WitchThrowPotionGoal(Witch witch, int attackIntervalMin, int attackIntervalMax, float attackRadius) {
         this.witch = witch;
@@ -81,8 +82,8 @@ public class WitchThrowPotionGoal extends Goal {
                 return;
             }
 
-            this.throwPotionAtTarget();
             this.attackTime = Mth.floor(Mth.nextInt(witch.getRandom(), this.attackIntervalMin, this.attackIntervalMax));
+            this.throwPotionAtTarget();
         }
     }
 
@@ -92,13 +93,20 @@ public class WitchThrowPotionGoal extends Goal {
 
         Collection<MobEffectInstance> mobEffectInstances = new ArrayList<>();
         List<MobEffectInstance> listToLoop = this.target instanceof Raider ? Modules.witch.witchPotionThrowing.goodPotionsList : Modules.witch.witchPotionThrowing.badPotionsList;
-        for (MobEffectInstance mobEffectInstance : listToLoop) {
-            if (this.target.hasEffect(mobEffectInstance.getEffect()))
-                continue;
-
-            mobEffectInstances.add(new MobEffectInstance(mobEffectInstance));
-            break;
+        if (this.randomPotion) {
+            mobEffectInstances.add(listToLoop.get(witch.getRandom().nextInt(listToLoop.size())));
         }
+        else {
+            for (MobEffectInstance mobEffectInstance : listToLoop) {
+                if (this.target.hasEffect(mobEffectInstance.getEffect()))
+                    continue;
+
+                mobEffectInstances.add(new MobEffectInstance(mobEffectInstance));
+                break;
+            }
+        }
+
+        this.randomPotion = false;
 
         ThrownPotion thrownpotion = new ThrownPotion(witch.level, this.witch);
         Item potionType = witch.level.random.nextDouble() < Modules.witch.witchPotionThrowing.lingeringChance ? Items.LINGERING_POTION : Items.SPLASH_POTION;
@@ -118,6 +126,11 @@ public class WitchThrowPotionGoal extends Goal {
         }
 
         witch.level.addFreshEntity(thrownpotion);
+
+        if (witch.level.random.nextDouble() < Modules.witch.witchPotionThrowing.anotherThrowChance) {
+            this.attackTime = 8;
+            this.randomPotion = true;
+        }
     }
 
     /**

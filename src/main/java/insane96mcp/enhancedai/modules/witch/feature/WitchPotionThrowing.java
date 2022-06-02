@@ -34,16 +34,18 @@ public class WitchPotionThrowing extends Feature {
     private final ForgeConfigSpec.ConfigValue<List<? extends String>> badPotionsListConfig;
     private final ForgeConfigSpec.ConfigValue<List<? extends String>> goodPotionsListConfig;
     private final ForgeConfigSpec.ConfigValue<Double> lingeringChanceConfig;
+    private final ForgeConfigSpec.ConfigValue<Double> anotherThrowChanceConfig;
     private final IntMinMax.Config throwSpeedConfig;
     private final IntMinMax.Config throwRangeConfig;
     private final BlacklistConfig entityBlacklistConfig;
 
-    public static final List<String> badPotionsListDefault = Arrays.asList("minecraft:weakness,0,1800", "minecraft:slowness,0,1800", "minecraft:hunger,0,600", "minecraft:mining_fatigue,0,600", "minecraft:poison,0,900", "minecraft:blindness,0,120", "minecraft:instant_damage,0,1");
+    public static final List<String> badPotionsListDefault = Arrays.asList("minecraft:weakness,0,1800", "minecraft:slowness,1,1200", "minecraft:hunger,0,600", "minecraft:mining_fatigue,0,600", "minecraft:poison,0,900", "minecraft:blindness,0,120", "minecraft:instant_damage,0,1");
     public static final List<String> goodPotionsListDefault = Arrays.asList("minecraft:regeneration,0,900", "minecraft:speed,0,1800", "minecraft:strength,0,1800", "minecraft:instant_health,0,1");
 
     public ArrayList<MobEffectInstance> badPotionsList;
     public ArrayList<MobEffectInstance> goodPotionsList;
     public double lingeringChance = 0.15d;
+    public double anotherThrowChance = 0.25d;
     public IntMinMax throwSpeed = new IntMinMax(45, 60);
     public IntMinMax throwRange = new IntMinMax(16, 32);
     public ArrayList<IdTagMatcher> entityBlacklist;
@@ -60,7 +62,10 @@ public class WitchPotionThrowing extends Feature {
                 .defineList("Good Potions List", goodPotionsListDefault, o -> o instanceof String);
         this.lingeringChanceConfig = Config.builder
                 .comment("Chance for the potions thrown by the Witch to be lingering.")
-                .defineInRange("Lingering Chance", this.lingeringChance, 0f, 1f);
+                .defineInRange("Lingering Chance", this.lingeringChance, 0d, 1d);
+        this.anotherThrowChanceConfig = Config.builder
+                .comment("Chance for the Witch to throw another random potion right after she threw one.")
+                .defineInRange("Another Throw Chance", this.anotherThrowChance, 0d, 1d);
         this.throwSpeedConfig = new IntMinMax.Config(Config.builder, "Throw Speed", "Speed at which Witches throw potions")
                 .setMinMax(10, Integer.MAX_VALUE, this.throwSpeed)
                 .build();
@@ -77,6 +82,7 @@ public class WitchPotionThrowing extends Feature {
         this.badPotionsList = parseMobEffectsList(this.badPotionsListConfig.get());
         this.goodPotionsList = parseMobEffectsList(this.goodPotionsListConfig.get());
         this.lingeringChance = this.lingeringChanceConfig.get();
+        this.anotherThrowChance = this.anotherThrowChanceConfig.get();
         this.throwSpeed = this.throwSpeedConfig.get();
         this.throwRange = this.throwRangeConfig.get();
         this.entityBlacklist = (ArrayList<IdTagMatcher>) IdTagMatcher.parseStringList(this.entityBlacklistConfig.listConfig.get());
