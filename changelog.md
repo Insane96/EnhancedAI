@@ -5,6 +5,7 @@
   * Mobs will now try to target climbable blocks and use them to reach the target
 * Increased digger chance (~~5%~~ -> 8%)
 * Halved animal knockback
+* Fixed a potential crash when mods don't register the knockback attribute for animals
 * Fixed zombies spawning with Ender Pearls and wooden pickaxes client-side
 
 ## 1.3.3

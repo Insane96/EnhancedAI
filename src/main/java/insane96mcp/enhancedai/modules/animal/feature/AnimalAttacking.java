@@ -6,6 +6,7 @@ import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -76,7 +77,9 @@ public class AnimalAttacking extends Feature {
         if (this.animalsFightBack) {
             animal.targetSelector.addGoal(1, (new HurtByTargetGoal(animal)).setAlertOthers());
             animal.goalSelector.addGoal(1, new MeleeAttackGoal(animal, this.speedMultiplier, false));
-            animal.getAttribute(Attributes.ATTACK_KNOCKBACK).addPermanentModifier(new AttributeModifier("Animal knockback", 5d, AttributeModifier.Operation.ADDITION));
+            AttributeInstance kbAttribute = animal.getAttribute(Attributes.ATTACK_KNOCKBACK);
+            if (kbAttribute != null)
+                kbAttribute.addPermanentModifier(new AttributeModifier("Animal knockback", 5d, AttributeModifier.Operation.ADDITION));
         }
 
         if (this.noMoreFlee) {
