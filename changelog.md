@@ -1,8 +1,8 @@
 # Changelog
 
-## Upcoming
+## 1.4.0
 * Added Witch Module
-  * Added Witch Potion Throwing Feature. Witches throw potions farther, faster and more potion types. Also, no longer chase player if they can't see him. 15% chance for potions to be lingering instead of splash.
+  * Added Witch Potion Throwing Feature. Witches throw potions farther, faster and more potion types. Also, no longer chase player if they can't see him. 15% chance for potions to be lingering instead of splash. 25% chance to throw a potion back to back.
   * Added Witch Flee Target Feature. Witches run away from players when near them. Have 50% chance to be able to throw potions while fleeing
   * Witches no longer stop when drinking potions, instead they now move slower
 * Added Movement features
