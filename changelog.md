@@ -4,6 +4,7 @@
 * Added Movement features
   * Mobs will now try to target climbable blocks and use them to reach the target
 * Increased digger chance (~~5%~~ -> 8%)
+* Halved animal knockback
 * Fixed zombies spawning with Ender Pearls and wooden pickaxes client-side
 
 ## 1.3.3

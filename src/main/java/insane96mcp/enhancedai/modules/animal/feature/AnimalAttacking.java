@@ -76,7 +76,7 @@ public class AnimalAttacking extends Feature {
         if (this.animalsFightBack) {
             animal.targetSelector.addGoal(1, (new HurtByTargetGoal(animal)).setAlertOthers());
             animal.goalSelector.addGoal(1, new MeleeAttackGoal(animal, this.speedMultiplier, false));
-            animal.getAttribute(Attributes.ATTACK_KNOCKBACK).addPermanentModifier(new AttributeModifier("Animal knockback", 10d, AttributeModifier.Operation.ADDITION));
+            animal.getAttribute(Attributes.ATTACK_KNOCKBACK).addPermanentModifier(new AttributeModifier("Animal knockback", 5d, AttributeModifier.Operation.ADDITION));
         }
 
         if (this.noMoreFlee) {
