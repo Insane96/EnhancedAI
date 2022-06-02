@@ -128,7 +128,7 @@ public class WitchThrowPotionGoal extends Goal {
         witch.level.addFreshEntity(thrownpotion);
 
         if (witch.level.random.nextDouble() < Modules.witch.witchPotionThrowing.anotherThrowChance) {
-            this.attackTime = 8;
+            this.attackTime = 7;
             this.randomPotion = true;
         }
     }

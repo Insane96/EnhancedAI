@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Slowed down witches throw speed and reduced back-to-back attack chance
+
 ## 1.4.0
 * Added Witch Module
   * Added Witch Potion Throwing Feature. Witches throw potions farther, faster and more potion types. Also, no longer chase player if they can't see him. 15% chance for potions to be lingering instead of splash. 25% chance to throw a potion back to back.

@@ -45,8 +45,8 @@ public class WitchPotionThrowing extends Feature {
     public ArrayList<MobEffectInstance> badPotionsList;
     public ArrayList<MobEffectInstance> goodPotionsList;
     public double lingeringChance = 0.15d;
-    public double anotherThrowChance = 0.25d;
-    public IntMinMax throwSpeed = new IntMinMax(45, 60);
+    public double anotherThrowChance = 0.20d;
+    public IntMinMax throwSpeed = new IntMinMax(50, 70);
     public IntMinMax throwRange = new IntMinMax(16, 32);
     public ArrayList<IdTagMatcher> entityBlacklist;
     public boolean entityBlacklistAsWhitelist;
