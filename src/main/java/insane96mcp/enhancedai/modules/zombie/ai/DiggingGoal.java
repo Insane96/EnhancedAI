@@ -18,6 +18,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -62,16 +63,21 @@ public class DiggingGoal extends Goal {
 				&& this.digger.distanceToSqr(digger.getTarget()) > 2d;
 	}
 
+	private Path path;
+
 	public boolean canContinueToUse() {
 		if (this.properToolOnly && this.blockState != null && !this.canHarvestBlock())
 			return false;
+
+		this.path = this.digger.getNavigation().createPath(this.target, 1);
 
 		return !this.targetBlocks.isEmpty()
 				&& this.target != null
 				&& this.target.isAlive()
 				&& this.targetBlocks.get(0).distSqr(this.digger.blockPosition()) < this.reachDistance * this.reachDistance
 				&& this.digger.getNavigation().isDone()
-				&& !this.digger.level.getBlockState(this.targetBlocks.get(0)).isAir();
+				&& !this.digger.level.getBlockState(this.targetBlocks.get(0)).isAir()
+				&& this.path != null && this.path.getDistToTarget() > 1d;
 	}
 
 	public void start() {
