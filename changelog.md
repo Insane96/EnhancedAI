@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 1.4.1
 * Witch
   * Added Thirsty Witches feature. Witches drink more potions and milk if they have a negative effect.
   * Potion Throwing
