@@ -33,6 +33,7 @@ public class DiggingGoal extends Goal {
 	private final Zombie digger;
 	private LivingEntity target;
 	private final double reachDistance;
+	private final double maxDistanceFromTarget;
 	private final List<BlockPos> targetBlocks = new ArrayList<>();
 	private int tickToBreak = 0;
 	private int breakingTick = 0;
@@ -44,9 +45,10 @@ public class DiggingGoal extends Goal {
 	private Vec3 lastPosition = null;
 	private int lastPositionTickstamp = 0;
 
-	public DiggingGoal(Zombie digger, boolean toolOnly, boolean properToolOnly){
+	public DiggingGoal(Zombie digger, double maxDistanceFromTarget, boolean toolOnly, boolean properToolOnly){
 		this.digger = digger;
 		this.reachDistance = 4;
+		this.maxDistanceFromTarget = maxDistanceFromTarget == 0 ? 64 * 64 : maxDistanceFromTarget * maxDistanceFromTarget;
 		this.toolOnly = toolOnly;
 		this.properToolOnly = properToolOnly;
 		this.setFlags(EnumSet.of(Flag.LOOK));
@@ -60,7 +62,8 @@ public class DiggingGoal extends Goal {
 			return false;
 
 		return this.isStuck()
-				&& this.digger.distanceToSqr(digger.getTarget()) > 2d;
+				&& this.digger.distanceToSqr(digger.getTarget()) > 2d
+				&& this.digger.distanceToSqr(digger.getTarget()) < maxDistanceFromTarget;
 	}
 
 	private Path path;

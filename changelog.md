@@ -4,6 +4,7 @@
 * Slowed down witches throw speed and reduced back-to-back attack chance
 * Added Entity Blacklist to Avoid Explosion Feature
 * Miner Zombies no longer keep mining if they can reach the target
+* Added a max distance from target to mine config option. Disabled by default
 
 ## 1.4.0
 * Added Witch Module

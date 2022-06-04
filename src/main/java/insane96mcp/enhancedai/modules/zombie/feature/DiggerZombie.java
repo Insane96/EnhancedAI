@@ -26,6 +26,7 @@ public class DiggerZombie extends Feature {
 	private final ForgeConfigSpec.ConfigValue<Boolean> diggerProperToolOnlyConfig;
 	private final ForgeConfigSpec.ConfigValue<Boolean> equipWoodenPickConfig;
 	private final ForgeConfigSpec.ConfigValue<Integer> maxYDigConfig;
+	private final ForgeConfigSpec.ConfigValue<Integer> maxDistanceConfig;
 	private final ForgeConfigSpec.ConfigValue<Boolean> blacklistTileEntitiesConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> miningSpeedMultiplierConfig;
 	private final BlacklistConfig blockBlacklistConfig;
@@ -36,6 +37,7 @@ public class DiggerZombie extends Feature {
 	public boolean diggerProperToolOnly = false;
 	public boolean equipWoodenPick = true;
 	public int maxYDig = 64;
+	public int maxDistance = 0;
 	public boolean blacklistTileEntities = false;
 	public double miningSpeedMultiplier = 1d;
 	public ArrayList<IdTagMatcher> blockBlacklist;
@@ -61,6 +63,9 @@ public class DiggerZombie extends Feature {
 		maxYDigConfig = Config.builder
 				.comment("The maximum Y coordinate at which Zombies can mine.")
 				.defineInRange("Max Y Dig", this.maxYDig, -128, 512);
+		maxDistanceConfig = Config.builder
+				.comment("The maximum distance from the target at which the zombie can mine. Set to 0 to always mine.")
+				.defineInRange("Max Distance", this.maxYDig, 0, 128);
 		miningSpeedMultiplierConfig = Config.builder
 				.comment("Multiplier for digger zombies mining speed. E.g. with this set to 2, zombies will take twice the time to mine a block.")
 				.defineInRange("Digger Speed Multiplier", this.miningSpeedMultiplier, 0d, 128d);
@@ -80,6 +85,7 @@ public class DiggerZombie extends Feature {
 		this.diggerProperToolOnly = this.diggerProperToolOnlyConfig.get();
 		this.equipWoodenPick = this.equipWoodenPickConfig.get();
 		this.maxYDig = this.maxYDigConfig.get();
+		this.maxDistance = this.maxDistanceConfig.get();
 		this.miningSpeedMultiplier = this.miningSpeedMultiplierConfig.get();
 		this.blacklistTileEntities = this.blacklistTileEntitiesConfig.get();
 		this.blockBlacklist = (ArrayList<IdTagMatcher>) IdTagMatcher.parseStringList(this.blockBlacklistConfig.listConfig.get());
@@ -127,7 +133,7 @@ public class DiggerZombie extends Feature {
 		}
 
 		if (miner) {
-			zombie.goalSelector.addGoal(1, new DiggingGoal(zombie, this.diggerToolOnly, this.diggerProperToolOnly));
+			zombie.goalSelector.addGoal(1, new DiggingGoal(zombie, this.maxDistance, this.diggerToolOnly, this.diggerProperToolOnly));
 			if (this.equipWoodenPick)
 			{
 				zombie.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.WOODEN_PICKAXE));
