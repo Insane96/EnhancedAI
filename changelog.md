@@ -2,6 +2,7 @@
 
 ## Upcoming
 * Slowed down witches throw speed and reduced back-to-back attack chance
+* Added Entity Blacklist to Avoid Explosion Feature
 
 ## 1.4.0
 * Added Witch Module

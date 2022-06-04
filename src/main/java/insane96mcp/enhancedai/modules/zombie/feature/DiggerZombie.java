@@ -45,7 +45,7 @@ public class DiggerZombie extends Feature {
 
 	public DiggerZombie(Module module) {
 		super(Config.builder, module);
-		Config.builder.comment(this.getDescription()).push(this.getName());
+		this.pushConfig(Config.builder);
 		diggerChanceConfig = Config.builder
 				.comment("Chance for a Zombie to spawn with the digger ability")
 				.defineInRange("Digger Chance", this.diggerChance, 0d, 1d);
