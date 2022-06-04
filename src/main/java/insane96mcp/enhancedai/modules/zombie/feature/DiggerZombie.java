@@ -65,7 +65,7 @@ public class DiggerZombie extends Feature {
 				.defineInRange("Max Y Dig", this.maxYDig, -128, 512);
 		maxDistanceConfig = Config.builder
 				.comment("The maximum distance from the target at which the zombie can mine. Set to 0 to always mine.")
-				.defineInRange("Max Distance", this.maxYDig, 0, 128);
+				.defineInRange("Max Distance", this.maxDistance, 0, 128);
 		miningSpeedMultiplierConfig = Config.builder
 				.comment("Multiplier for digger zombies mining speed. E.g. with this set to 2, zombies will take twice the time to mine a block.")
 				.defineInRange("Digger Speed Multiplier", this.miningSpeedMultiplier, 0d, 128d);

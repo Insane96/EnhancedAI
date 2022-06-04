@@ -1,8 +1,7 @@
 package insane96mcp.enhancedai.modules.witch.ai;
 
 import insane96mcp.enhancedai.modules.Modules;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import insane96mcp.enhancedai.utils.MCUtils;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -14,7 +13,6 @@ import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.PotionUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,6 +37,7 @@ public class WitchThrowPotionGoal extends Goal {
         this.attackIntervalMax = attackIntervalMax;
         this.attackRadius = attackRadius;
         this.attackRadiusSqr = attackRadius * attackRadius;
+        this.attackTime = Mth.floor(Mth.nextInt(witch.getRandom(), this.attackIntervalMin, this.attackIntervalMax));
         this.setFlags(EnumSet.of(Goal.Flag.LOOK));
     }
 
@@ -54,9 +53,13 @@ public class WitchThrowPotionGoal extends Goal {
     }
 
     @Override
+    public void start() {
+        super.start();
+    }
+
+    @Override
     public void stop() {
         this.target = null;
-        this.attackTime = -1;
     }
 
     @Override
@@ -69,18 +72,19 @@ public class WitchThrowPotionGoal extends Goal {
         double distanceToTarget = this.witch.distanceToSqr(this.target.getX(), this.target.getY(), this.target.getZ());
         boolean canSee = this.witch.getSensing().hasLineOfSight(this.target);
 
-        if (distanceToTarget > (double) this.attackRadiusSqr) {
+        if (distanceToTarget > (double) this.attackRadiusSqr && !canSee) {
             this.witch.getNavigation().moveTo(this.target, 1d);
             return;
-        } else {
-            this.witch.getNavigation().stop();
-        }
+        } /*else {
+            this.witch.getNavigation().setSpeedModifier();
+        }*/
 
         this.witch.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
         if (--this.attackTime <= 0) {
             if (!canSee) {
                 return;
             }
+            this.witch.getNavigation().stop();
 
             this.attackTime = Mth.floor(Mth.nextInt(witch.getRandom(), this.attackIntervalMin, this.attackIntervalMax));
             this.throwPotionAtTarget();
@@ -110,7 +114,7 @@ public class WitchThrowPotionGoal extends Goal {
 
         ThrownPotion thrownpotion = new ThrownPotion(witch.level, this.witch);
         Item potionType = witch.level.random.nextDouble() < Modules.witch.witchPotionThrowing.lingeringChance ? Items.LINGERING_POTION : Items.SPLASH_POTION;
-        thrownpotion.setItem(setCustomEffects(new ItemStack(potionType), mobEffectInstances));
+        thrownpotion.setItem(MCUtils.setCustomEffects(new ItemStack(potionType), mobEffectInstances));
         thrownpotion.setXRot(thrownpotion.getXRot() - -20.0F);
         double distance = this.witch.distanceTo(target);
         double dirX = this.target.getX() - this.witch.getX();
@@ -131,23 +135,5 @@ public class WitchThrowPotionGoal extends Goal {
             this.attackTime = 7;
             this.randomPotion = true;
         }
-    }
-
-    /**
-     * Copy-paste of PotionUtils.setCustomEffects but setting the potion color too
-     */
-    private static ItemStack setCustomEffects(ItemStack itemStack, Collection<MobEffectInstance> mobEffectInstances) {
-        if (!mobEffectInstances.isEmpty()) {
-            CompoundTag compoundtag = itemStack.getOrCreateTag();
-            ListTag listtag = compoundtag.getList("CustomPotionEffects", 9);
-
-            for (MobEffectInstance mobeffectinstance : mobEffectInstances) {
-                listtag.add(mobeffectinstance.save(new CompoundTag()));
-            }
-            compoundtag.putInt(PotionUtils.TAG_CUSTOM_POTION_COLOR, PotionUtils.getColor(mobEffectInstances));
-
-            compoundtag.put("CustomPotionEffects", listtag);
-        }
-        return itemStack;
     }
 }

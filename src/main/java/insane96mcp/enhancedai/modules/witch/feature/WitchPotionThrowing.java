@@ -3,15 +3,13 @@ package insane96mcp.enhancedai.modules.witch.feature;
 import insane96mcp.enhancedai.config.IntMinMax;
 import insane96mcp.enhancedai.modules.witch.ai.WitchThrowPotionGoal;
 import insane96mcp.enhancedai.setup.Config;
-import insane96mcp.enhancedai.utils.LogHelper;
+import insane96mcp.enhancedai.utils.Utils;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.config.BlacklistConfig;
 import insane96mcp.insanelib.util.IdTagMatcher;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
@@ -20,8 +18,6 @@ import net.minecraft.world.entity.monster.Witch;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,6 +33,7 @@ public class WitchPotionThrowing extends Feature {
     private final ForgeConfigSpec.ConfigValue<Double> anotherThrowChanceConfig;
     private final IntMinMax.Config throwSpeedConfig;
     private final IntMinMax.Config throwRangeConfig;
+    private final ForgeConfigSpec.ConfigValue<Boolean> useSlowFallingConfig;
     private final BlacklistConfig entityBlacklistConfig;
 
     public static final List<String> badPotionsListDefault = Arrays.asList("minecraft:weakness,0,1800", "minecraft:slowness,1,1200", "minecraft:hunger,0,600", "minecraft:mining_fatigue,0,600", "minecraft:poison,0,900", "minecraft:blindness,0,120", "minecraft:instant_damage,0,1");
@@ -48,6 +45,7 @@ public class WitchPotionThrowing extends Feature {
     public double anotherThrowChance = 0.20d;
     public IntMinMax throwSpeed = new IntMinMax(50, 70);
     public IntMinMax throwRange = new IntMinMax(16, 32);
+    public boolean useSlowFalling = true;
     public ArrayList<IdTagMatcher> entityBlacklist;
     public boolean entityBlacklistAsWhitelist;
 
@@ -72,6 +70,9 @@ public class WitchPotionThrowing extends Feature {
         this.throwRangeConfig = new IntMinMax.Config(Config.builder, "Throw Range", "Range at which Witches throw potions")
                 .setMinMax(8, 64, this.throwRange)
                 .build();
+        this.useSlowFallingConfig = Config.builder
+                .comment("If true, witches will throw a potion of slow falling at their feet when they're falling for more than 8 blocks.")
+                .define("Use Slow Falling", this.useSlowFalling);
         entityBlacklistConfig = new BlacklistConfig(Config.builder, "Entity Blacklist", "Entities that shouldn't get the new Witch ranged attack AI", Collections.emptyList(), false);
         Config.builder.pop();
     }
@@ -79,53 +80,15 @@ public class WitchPotionThrowing extends Feature {
     @Override
     public void loadConfig() {
         super.loadConfig();
-        this.badPotionsList = parseMobEffectsList(this.badPotionsListConfig.get());
-        this.goodPotionsList = parseMobEffectsList(this.goodPotionsListConfig.get());
+        this.badPotionsList = Utils.parseMobEffectsList(this.badPotionsListConfig.get());
+        this.goodPotionsList = Utils.parseMobEffectsList(this.goodPotionsListConfig.get());
         this.lingeringChance = this.lingeringChanceConfig.get();
         this.anotherThrowChance = this.anotherThrowChanceConfig.get();
         this.throwSpeed = this.throwSpeedConfig.get();
         this.throwRange = this.throwRangeConfig.get();
+        this.useSlowFalling = this.useSlowFallingConfig.get();
         this.entityBlacklist = (ArrayList<IdTagMatcher>) IdTagMatcher.parseStringList(this.entityBlacklistConfig.listConfig.get());
         this.entityBlacklistAsWhitelist = this.entityBlacklistConfig.listAsWhitelistConfig.get();
-    }
-
-    private static ArrayList<MobEffectInstance> parseMobEffectsList(List<? extends String> list) {
-        ArrayList<MobEffectInstance> mobEffectInstances = new ArrayList<>();
-        for (String s : list) {
-            String[] split = s.split(",");
-            if (split.length != 3) {
-                LogHelper.warn("Invalid line \"%s\" for Mob Effect", s);
-                continue;
-            }
-
-            ResourceLocation effectRL = ResourceLocation.tryParse(split[0]);
-            if (effectRL == null) {
-                LogHelper.warn("%s potion effect for Mob Effect is not valid", split[0]);
-                continue;
-            }
-            if (!ForgeRegistries.MOB_EFFECTS.containsKey(effectRL)) {
-                LogHelper.warn("%s potion effect for Mob Effect seems to not exist", split[0]);
-                continue;
-            }
-            MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(effectRL);
-
-            //Amplifier
-            if (!NumberUtils.isParsable(split[1])) {
-                LogHelper.warn(String.format("Invalid amplifier \"%s\" for Mob Effect", s));
-                continue;
-            }
-            int amplifier = Integer.parseInt(split[1]);
-
-            //Duration
-            if (!NumberUtils.isParsable(split[2])) {
-                LogHelper.warn(String.format("Invalid duration \"%s\" for Mob Effect", s));
-                continue;
-            }
-            int duration = Integer.parseInt(split[2]);
-
-            mobEffectInstances.add(new MobEffectInstance(effect, duration, amplifier));
-        }
-        return mobEffectInstances;
     }
 
     @SubscribeEvent
@@ -163,5 +126,9 @@ public class WitchPotionThrowing extends Feature {
         int attackSpeed = Mth.nextInt(witch.getRandom(), this.throwSpeed.min, this.throwSpeed.max);
         int attackRange = Mth.nextInt(witch.getRandom(), this.throwRange.min, this.throwRange.max);
         witch.goalSelector.addGoal(2, new WitchThrowPotionGoal(witch, attackSpeed, attackSpeed, attackRange));
+    }
+
+    public boolean shouldUseSlowFalling() {
+        return this.isEnabled() && this.useSlowFalling;
     }
 }

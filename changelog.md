@@ -1,7 +1,11 @@
 # Changelog
 
 ## Upcoming
-* Slowed down witches throw speed and reduced back-to-back attack chance
+* Witch
+  * Added Thirsty Witches feature. Witches drink more potions and milk if they have a negative effect.
+  * Potion Throwing
+    * Witches are now able to use a slow falling potion on themselves if falling for more than 8 blocks
+    * Slowed down witches throw speed and reduced back-to-back attack chance
 * Added Entity Blacklist to Avoid Explosion Feature
 * Miner Zombies no longer keep mining if they can reach the target
 * Added a max distance from target to mine config option. Disabled by default

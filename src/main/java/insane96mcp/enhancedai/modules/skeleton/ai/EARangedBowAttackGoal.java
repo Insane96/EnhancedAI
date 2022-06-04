@@ -117,7 +117,6 @@ public class EARangedBowAttackGoal<T extends Monster & RangedAttackMob> extends 
 		else {
 
 			if (distanceFromTarget >= 49d && distanceFromTarget <= (double)this.maxAttackDistance && this.seeTime >= 20 && this.canStrafe()) {
-				//this.entity.getNavigator().clearPath();
 				++this.strafingTime;
 			}
 			else {
