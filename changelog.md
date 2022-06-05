@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.4.2
+* Enemy animals (such as Hoglins) no longer gain the Animal attacking AI
+
 ## 1.4.1
 * Witch
   * Added Thirsty Witches feature. Witches drink more potions and milk if they have a negative effect.

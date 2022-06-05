@@ -15,6 +15,7 @@ import net.minecraft.world.entity.ai.goal.PanicGoal;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.monster.Enemy;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -71,6 +72,9 @@ public class AnimalAttacking extends Feature {
         if (!this.isEnabled())
             return;
 
+        if (event.getEntity() instanceof Enemy)
+            return;
+
         if (!(event.getEntity() instanceof Animal animal))
             return;
 
@@ -79,7 +83,7 @@ public class AnimalAttacking extends Feature {
             animal.goalSelector.addGoal(1, new MeleeAttackGoal(animal, this.speedMultiplier, false));
             AttributeInstance kbAttribute = animal.getAttribute(Attributes.ATTACK_KNOCKBACK);
             if (kbAttribute != null)
-                kbAttribute.addPermanentModifier(new AttributeModifier("Animal knockback", 5d, AttributeModifier.Operation.ADDITION));
+                kbAttribute.addPermanentModifier(new AttributeModifier("Animal knockback", 2.5d, AttributeModifier.Operation.ADDITION));
         }
 
         if (this.noMoreFlee) {
