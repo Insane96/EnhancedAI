@@ -1,5 +1,6 @@
 package insane96mcp.enhancedai.modules.witch;
 
+import insane96mcp.enhancedai.modules.witch.feature.DarkArtWitch;
 import insane96mcp.enhancedai.modules.witch.feature.ThirstyWitches;
 import insane96mcp.enhancedai.modules.witch.feature.WitchFleeTarget;
 import insane96mcp.enhancedai.modules.witch.feature.WitchPotionThrowing;
@@ -13,6 +14,7 @@ public class WitchModule extends Module {
 	public WitchPotionThrowing witchPotionThrowing;
 	public WitchFleeTarget witchFleeTarget;
 	public ThirstyWitches thirstyWitches;
+	public DarkArtWitch darkArtWitch;
 
 	public WitchModule() {
 		super(Config.builder);
@@ -20,6 +22,7 @@ public class WitchModule extends Module {
 		witchPotionThrowing = new WitchPotionThrowing(this);
 		witchFleeTarget = new WitchFleeTarget(this);
 		thirstyWitches = new ThirstyWitches(this);
+		darkArtWitch = new DarkArtWitch(this);
 		Config.builder.pop();
 	}
 
@@ -29,5 +32,6 @@ public class WitchModule extends Module {
 		witchPotionThrowing.loadConfig();
 		witchFleeTarget.loadConfig();
 		thirstyWitches.loadConfig();
+		darkArtWitch.loadConfig();
 	}
 }

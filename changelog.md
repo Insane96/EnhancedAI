@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.4.2
+## Upcoming
 * Enemy animals (such as Hoglins) no longer gain the Animal attacking AI
 
 ## 1.4.1

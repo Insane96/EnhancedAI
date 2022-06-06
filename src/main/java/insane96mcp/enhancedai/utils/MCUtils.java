@@ -1,13 +1,16 @@
 package insane96mcp.enhancedai.utils;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.level.Level;
 
 import java.util.Collection;
 
@@ -38,5 +41,30 @@ public class MCUtils {
                 return true;
         }
         return false;
+    }
+
+    /**
+     * Returns level.getMinBuildHeight() - 1 when no spawn spots are found, otherwise the Y coord
+     */
+    public static int getYSpawn(EntityType<?> entityType, BlockPos pos, Level level, int minRelativeY) {
+        int height = (int) Math.ceil(entityType.getHeight());
+        int fittingYPos = level.getMinBuildHeight() - 1;
+        for (int y = pos.getY(); y > pos.getY() - minRelativeY; y--) {
+            boolean viable = true;
+            BlockPos p = new BlockPos(pos.getX(), y, pos.getZ());
+            for (int i = 0; i < height; i++) {
+                if (level.getBlockState(p.above(i)).getMaterial().blocksMotion()) {
+                    viable = false;
+                    break;
+                }
+            }
+            if (!viable)
+                continue;
+            fittingYPos = y;
+            if (!level.getBlockState(p.below()).getMaterial().blocksMotion())
+                continue;
+            return y;
+        }
+        return fittingYPos;
     }
 }

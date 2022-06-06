@@ -75,9 +75,7 @@ public class WitchThrowPotionGoal extends Goal {
         if (distanceToTarget > (double) this.attackRadiusSqr && !canSee) {
             this.witch.getNavigation().moveTo(this.target, 1d);
             return;
-        } /*else {
-            this.witch.getNavigation().setSpeedModifier();
-        }*/
+        }
 
         this.witch.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
         if (--this.attackTime <= 0) {
