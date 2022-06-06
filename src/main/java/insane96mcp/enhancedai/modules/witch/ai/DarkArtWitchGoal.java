@@ -2,6 +2,7 @@ package insane96mcp.enhancedai.modules.witch.ai;
 
 import insane96mcp.enhancedai.utils.MCUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -139,7 +140,7 @@ public class DarkArtWitchGoal extends Goal {
             @Override
             public void tick(DarkArtWitchGoal goal) {
                 if (goal.phaseTick <= IMPRISON_VILLAGER_TICK) {
-                    //TODO PlaySound
+                    goal.villager.playSound(SoundEvents.ANVIL_PLACE, 1f, 0.5f);
                 }
                 else {
                     goal.phase = LEVITATE;
