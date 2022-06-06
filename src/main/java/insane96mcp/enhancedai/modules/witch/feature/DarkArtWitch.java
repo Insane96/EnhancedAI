@@ -15,13 +15,13 @@ public class DarkArtWitch extends Feature {
 
     private final ForgeConfigSpec.DoubleValue darkArtChanceConfig;
 
-    public double darkArtChance = 0.02d;
+    public double darkArtChance = 0.1d;
 
     public DarkArtWitch(Module module) {
         super(Config.builder, module);
         super.pushConfig(Config.builder);
         this.darkArtChanceConfig = Config.builder
-                .comment("Chance for a witch to get the Dark Art AI (as soon as they gain a target will summon a Villager and cast a lightning bolt on them")
+                .comment("Chance for a witch to get the Dark Art AI (as soon as they have a target and are less than 10 blocks away from the target will summon a Villager and cast a lightning bolt on them")
                 .defineInRange("Dark Art Chance", this.darkArtChance, 0d, 1d);
         Config.builder.pop();
     }

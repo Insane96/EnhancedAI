@@ -25,8 +25,8 @@ public class WitchFleeTarget extends Feature {
     public double attackWhenAvoidingChance = 0.5d;
     public double fleeDistance = 16;
     public double fleeDistanceNear = 8;
-    public double fleeSpeedNear = 1.5d;
-    public double fleeSpeedFar = 1.25d;
+    public double fleeSpeedNear = 1.25d;
+    public double fleeSpeedFar = 1.1d;
 
     public WitchFleeTarget(Module module) {
         super(Config.builder, module);

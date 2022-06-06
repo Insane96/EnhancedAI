@@ -1,6 +1,7 @@
 package insane96mcp.enhancedai.mixin;
 
 import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.setup.Strings;
 import insane96mcp.enhancedai.utils.MCUtils;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
@@ -67,7 +68,9 @@ public abstract class WitchMixin extends Raider {
 		else
 			return;
 
-		if (this.level.isClientSide || !this.isAlive()) {
+		if (this.level.isClientSide
+				|| !this.isAlive()
+				|| this.getPersistentData().getBoolean(Strings.Tags.Witch.PERFORMING_DARK_ARTS)) {
 			super.aiStep();
 			return;
 		}
@@ -146,7 +149,7 @@ public abstract class WitchMixin extends Raider {
 		}
 
 		if (Modules.witch.witchPotionThrowing.shouldUseSlowFalling() && this.fallDistance > 8 && !this.hasEffect(MobEffects.SLOW_FALLING)) {
-			ItemStack stack = PotionUtils.setPotion(new ItemStack(Items.SPLASH_POTION), Potions.SLOW_FALLING);
+			ItemStack stack = MCUtils.setCustomEffects(new ItemStack(Items.SPLASH_POTION), List.of(new MobEffectInstance(MobEffects.SLOW_FALLING, 300, 0)));
 			this.getLookControl().setLookAt(this.getX(), this.getY(), this.getZ());
 			if (!this.isSilent()) {
 				this.playSound(SoundEvents.WITCH_THROW, 1.0F, 0.8F + this.getRandom().nextFloat() * 0.4F);

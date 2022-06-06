@@ -1,7 +1,10 @@
 package insane96mcp.enhancedai.modules.witch.ai;
 
+import insane96mcp.enhancedai.setup.Strings;
 import insane96mcp.enhancedai.utils.MCUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -35,7 +38,7 @@ public class DarkArtWitchGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        return this.witch.getTarget() != null;
+        return this.witch.getTarget() != null && this.witch.getTarget().distanceToSqr(this.witch) < 100d && this.phase == Phase.EQUIP_EGG;
     }
 
     @Override
@@ -46,89 +49,79 @@ public class DarkArtWitchGoal extends Goal {
     @Override
     public void start() {
         this.target = this.witch.getTarget();
+        this.witch.getPersistentData().putBoolean(Strings.Tags.Witch.PERFORMING_DARK_ARTS, true);
+        this.witch.setInvulnerable(true);
+        this.witch.setGlowingTag(true);
     }
 
     @Override
     public void stop() {
         super.stop();
+        this.witch.getPersistentData().putBoolean(Strings.Tags.Witch.PERFORMING_DARK_ARTS, false);
+        this.witch.setInvulnerable(false);
+        this.witch.setGlowingTag(false);
     }
 
     @Override
     public void tick() {
+        //this.witch.setDeltaMovement(0d, 0d, 0d);
+        this.witch.getNavigation().stop();
         this.phase.tick( this);
         this.phaseTick++;
     }
 
     private enum Phase {
-
         EQUIP_EGG {
             @Override
             public void tick(DarkArtWitchGoal goal) {
-                if (goal.phaseTick <= EQUIP_EGG_TICK) {
+                if (goal.phaseTick == 0) {
+                    goal.witch.addEffect(new MobEffectInstance(MobEffects.LEVITATION, LEVITATE_TICK * 2, 0));
+                }
+                if (goal.phaseTick < EQUIP_EGG_TICK) {
                     goal.witch.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.VILLAGER_SPAWN_EGG));
-                }
-                else {
-                    goal.phase = LOOK_AT_TARGET;
-                }
-            }
-        },
-        LOOK_AT_TARGET {
-            @Override
-            public void tick(DarkArtWitchGoal goal) {
-                if (goal.phaseTick <= LOOK_AT_TARGET_TICK) {
                     goal.witch.getLookControl().setLookAt(goal.target);
                 }
                 else {
-                    goal.phase = FIND_SUMMON_SPOT;
-                }
-            }
-        },
-        FIND_SUMMON_SPOT {
-            @Override
-            public void tick(DarkArtWitchGoal goal) {
-                if (goal.phaseTick <= FIND_SUMMON_SPOT_TICK) {
-                    //Tries to spawn the Villager up to 10 times
-                    int x = 0, y = 0, z = 0;
-                    for (int t = 0; t < 10; t++) {
-                        float angle = goal.witch.getRandom().nextFloat() * (float) Math.PI * 2f;
-                        x = (int) Math.floor(Math.cos(angle) * 3.33f);
-                        z = (int) Math.floor(Math.sin(angle) * 3.33f);
-                        y = (int) (goal.witch.getY() + 3);
-
-                        y = MCUtils.getYSpawn(EntityType.VILLAGER, new BlockPos(x, y, z), goal.witch.level, 4);
-                        if (y != goal.witch.level.getMinBuildHeight() - 1)
-                            break;
-                    }
-                    if (y < goal.witch.level.getMinBuildHeight())
-                        goal.phase = END;
-                    else {
-                        goal.summonSpot = new Vec3(x + 0.5, y, z + 0.5);
-                        goal.phase = SUMMON_VILLAGER;
-                        goal.witch.getLookControl().setLookAt(goal.summonSpot);
-                    }
+                    goal.phase = SUMMON_VILLAGER;
                 }
             }
         },
         SUMMON_VILLAGER {
             @Override
             public void tick(DarkArtWitchGoal goal) {
-                if (goal.phaseTick <= SUMMON_VILLAGER_TICK) {
-                    goal.witch.getLookControl().setLookAt(goal.summonSpot);
-                    goal.villager = new Villager(EntityType.VILLAGER, goal.witch.level);
-                    goal.villager.setNoAi(true);
-                    goal.villager.setPos(goal.summonSpot);
-                    goal.villager.getLookControl().setLookAt(goal.witch);
-                    goal.witch.level.addFreshEntity(goal.villager);
+                //Tries to spawn the Villager up to 10 times
+                int x = 0, y = 0, z = 0;
+                for (int t = 0; t < 10; t++) {
+                    float angle = goal.witch.getRandom().nextFloat() * (float) Math.PI * 2f;
+                    x = (int) (Math.floor(Math.cos(angle) * 3.33f) + goal.witch.getX());
+                    z = (int) (Math.floor(Math.sin(angle) * 3.33f) + goal.witch.getZ());
+                    y = (int) (goal.witch.getY() + 3);
+
+                    y = MCUtils.getYSpawn(EntityType.VILLAGER, new BlockPos(x, y, z), goal.witch.level, 4);
+                    if (y != goal.witch.level.getMinBuildHeight() - 1)
+                        break;
                 }
+                if (y < goal.witch.level.getMinBuildHeight())
+                    goal.phase = END;
                 else {
+                    goal.summonSpot = new Vec3(x + 0.5, y, z + 0.5);
                     goal.phase = LOOK_AT_VILLAGER;
+                    goal.witch.getLookControl().setLookAt(goal.summonSpot);
                 }
+                goal.witch.getLookControl().setLookAt(goal.summonSpot);
+                goal.villager = new Villager(EntityType.VILLAGER, goal.witch.level);
+                goal.villager.setPos(goal.summonSpot);
+                goal.villager.getLookControl().setLookAt(goal.witch);
+                goal.villager.setInvulnerable(true);
+                goal.villager.setNoAi(true);
+                goal.witch.level.addFreshEntity(goal.villager);
+                goal.phase = LOOK_AT_VILLAGER;
             }
         },
         LOOK_AT_VILLAGER {
             @Override
             public void tick(DarkArtWitchGoal goal) {
-                if (goal.phaseTick <= LOOK_AT_VILLAGER_TICK) {
+                if (goal.phaseTick < LOOK_AT_VILLAGER_TICK) {
                     goal.witch.getLookControl().setLookAt(goal.villager);
                 }
                 else {
@@ -139,10 +132,9 @@ public class DarkArtWitchGoal extends Goal {
         IMPRISON_VILLAGER {
             @Override
             public void tick(DarkArtWitchGoal goal) {
-                if (goal.phaseTick <= IMPRISON_VILLAGER_TICK) {
-                    goal.villager.playSound(SoundEvents.ANVIL_PLACE, 1f, 0.5f);
-                }
-                else {
+                if (goal.phaseTick == IMPRISON_VILLAGER_TICK) {
+                    goal.villager.playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 2f, 0.5f);
+                    goal.witch.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
                     goal.phase = LEVITATE;
                 }
             }
@@ -150,8 +142,10 @@ public class DarkArtWitchGoal extends Goal {
         LEVITATE {
             @Override
             public void tick(DarkArtWitchGoal goal) {
-                if (goal.phaseTick <= LEVITATE_TICK) {
-                    goal.witch.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 20, 4));
+                if (goal.phaseTick < LEVITATE_TICK) {
+                    goal.witch.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 2, 1));
+                    goal.witch.level.addParticle(ParticleTypes.ANGRY_VILLAGER, true, goal.witch.getX(), goal.witch.getY(), goal.witch.getZ(), 0.1, 0.1, 0.1);
+                    goal.witch.getLookControl().setLookAt(goal.villager);
                 }
                 else {
                     goal.phase = LIGHTNING_STRIKE;
@@ -161,12 +155,14 @@ public class DarkArtWitchGoal extends Goal {
         LIGHTNING_STRIKE {
             @Override
             public void tick(DarkArtWitchGoal goal) {
-                if (goal.phaseTick <= LIGHTNING_STRIKE_TICK) {
+                if (goal.phaseTick == LIGHTNING_STRIKE_TICK) {
                     LightningBolt lightningBolt = new LightningBolt(EntityType.LIGHTNING_BOLT, goal.witch.level);
                     lightningBolt.setPos(goal.villager.getPosition(1f));
+                    lightningBolt.setVisualOnly(true);
+                    lightningBolt.setDamage(0f);
                     goal.witch.level.addFreshEntity(lightningBolt);
-                }
-                else {
+                    goal.villager.setNoAi(false);
+                    goal.villager.thunderHit((ServerLevel) goal.villager.level, lightningBolt);
                     goal.phase = END;
                 }
             }
@@ -176,13 +172,10 @@ public class DarkArtWitchGoal extends Goal {
             public void tick(DarkArtWitchGoal goal) {}
         };
 
-        private static final int EQUIP_EGG_TICK = 0;
-        private static final int LOOK_AT_TARGET_TICK = 29;
-        private static final int FIND_SUMMON_SPOT_TICK = 30;
-        private static final int SUMMON_VILLAGER_TICK = 31;
-        private static final int LOOK_AT_VILLAGER_TICK = SUMMON_VILLAGER_TICK + 20;
+        private static final int EQUIP_EGG_TICK = 26;
+        private static final int LOOK_AT_VILLAGER_TICK = EQUIP_EGG_TICK + 20;
         private static final int IMPRISON_VILLAGER_TICK = LOOK_AT_VILLAGER_TICK + 1;
-        private static final int LEVITATE_TICK = IMPRISON_VILLAGER_TICK + 30;
+        private static final int LEVITATE_TICK = IMPRISON_VILLAGER_TICK + 15;
         private static final int LIGHTNING_STRIKE_TICK = LEVITATE_TICK + 1;
 
         public abstract void tick(DarkArtWitchGoal goal);

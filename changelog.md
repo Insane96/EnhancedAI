@@ -1,6 +1,10 @@
 # Changelog
 
 ## Upcoming
+* Witches
+  * Added Dark Art Witches Feature. When approaching a Dark Art Witch, she'll use a Villager spawn egg and call a lightning bolt on it. 
+  * Reduced flee speed
+  * Reduced Slow Falling duration when witches used it
 * Enemy animals (such as Hoglins) no longer gain the Animal attacking AI
 
 ## 1.4.1

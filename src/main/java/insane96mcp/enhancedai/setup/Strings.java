@@ -36,5 +36,9 @@ public class Strings {
 		public static class Blaze {
 			public static final String ATTACK = EnhancedAI.RESOURCE_PREFIX + "attack";
 		}
+
+		public static class Witch {
+			public static final String PERFORMING_DARK_ARTS = EnhancedAI.RESOURCE_PREFIX + "performing_dark_arts";
+		}
 	}
 }
