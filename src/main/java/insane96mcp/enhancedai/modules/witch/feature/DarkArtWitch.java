@@ -15,7 +15,7 @@ public class DarkArtWitch extends Feature {
 
     private final ForgeConfigSpec.DoubleValue darkArtChanceConfig;
 
-    public double darkArtChance = 0.1d;
+    public double darkArtChance = 0.20d;
 
     public DarkArtWitch(Module module) {
         super(Config.builder, module);

@@ -29,6 +29,7 @@ public class ThirstyWitches extends Feature {
     public double healingChance = 0.05d;
     public double waterBreathingChance = 1d;
     public double fireResistanceChance = 1d;
+    //Move to throwing
     public double invisibilityChance = 0.1d;
     public double milkChance = 0.1d;
 
@@ -48,7 +49,7 @@ public class ThirstyWitches extends Feature {
                 .comment("Chance for a witch to drink a fire resistance potion when on fire. Vanilla is 15%.")
                 .defineInRange("Fire Resistance", this.fireResistanceChance, 0d, 1d);
         this.invisibilityChanceConfig = Config.builder
-                .comment("Chance for a witch to drink an Invisibility potion when health < 50%.")
+                .comment("Chance for a witch to drink an Invisibility potion when health < 40%.")
                 .defineInRange("Invisibility", this.invisibilityChance, 0d, 1d);
         this.milkChanceConfig = Config.builder
                 .comment("Chance for a witch to drink milk when they have a negative effect.")

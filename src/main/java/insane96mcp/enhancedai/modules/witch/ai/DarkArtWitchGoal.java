@@ -74,7 +74,7 @@ public class DarkArtWitchGoal extends Goal {
         EQUIP_EGG {
             @Override
             public void tick(DarkArtWitchGoal goal) {
-                if (goal.phaseTick == 0) {
+                if (goal.phaseTick == 10) {
                     goal.witch.addEffect(new MobEffectInstance(MobEffects.LEVITATION, LEVITATE_TICK * 2, 0));
                 }
                 if (goal.phaseTick < EQUIP_EGG_TICK) {

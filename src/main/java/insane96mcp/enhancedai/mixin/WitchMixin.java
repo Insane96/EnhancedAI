@@ -16,6 +16,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableWitchTargetGoa
 import net.minecraft.world.entity.ai.goal.target.NearestHealableRaiderTargetGoal;
 import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -118,9 +119,6 @@ public abstract class WitchMixin extends Raider {
 				else if (this.random.nextFloat() < Modules.witch.thirstyWitches.fireResistanceChance && (this.isOnFire() || this.getLastDamageSource() != null && this.getLastDamageSource().isFire()) && !this.hasEffect(MobEffects.FIRE_RESISTANCE)) {
 					mobEffectInstances.addAll(Potions.FIRE_RESISTANCE.getEffects());
 				}
-				else if (this.random.nextFloat() < Modules.witch.thirstyWitches.invisibilityChance && this.getHealth() < this.getMaxHealth() * 0.50d && !this.hasEffect(MobEffects.INVISIBILITY)) {
-					mobEffectInstances.add(new MobEffectInstance(MobEffects.INVISIBILITY, 120, 0));
-				}
 				else if (this.random.nextFloat() < Modules.witch.thirstyWitches.healingChance && this.getHealth() < this.getMaxHealth() - 4) {
 					mobEffectInstances.addAll(Potions.STRONG_HEALING.getEffects());
 				}
@@ -154,11 +152,18 @@ public abstract class WitchMixin extends Raider {
 			if (!this.isSilent()) {
 				this.playSound(SoundEvents.WITCH_THROW, 1.0F, 0.8F + this.getRandom().nextFloat() * 0.4F);
 			}
-			this.level.levelEvent(2007, this.blockPosition(), PotionUtils.getColor(stack));
+			this.level.levelEvent(2002, this.blockPosition(), PotionUtils.getColor(stack));
 			List<MobEffectInstance> mobEffects = PotionUtils.getMobEffects(stack);
 			for (MobEffectInstance mobEffect : mobEffects) {
 				this.addEffect(new MobEffectInstance(mobEffect));
 			}
+		}
+
+		if (this.random.nextFloat() < Modules.witch.thirstyWitches.invisibilityChance && this.getHealth() < this.getMaxHealth() * 0.4d && !this.hasEffect(MobEffects.INVISIBILITY)) {
+			ThrownPotion thrownPotion = new ThrownPotion(this.level, this);
+			thrownPotion.setItem(MCUtils.setCustomEffects(new ItemStack(Items.SPLASH_POTION), List.of(new MobEffectInstance(MobEffects.INVISIBILITY, 200))));
+			thrownPotion.shoot(0, -1d, 0, 0.1f, 2f);
+			this.level.addFreshEntity(thrownPotion);
 		}
 
 		if (this.random.nextFloat() < 7.5E-4F) {
