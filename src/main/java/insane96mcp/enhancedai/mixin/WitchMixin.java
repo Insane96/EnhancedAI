@@ -164,7 +164,7 @@ public abstract class WitchMixin extends Raider {
 			}
 		}
 
-		if (this.getHealth() < this.getMaxHealth() * Modules.witch.witchPotionThrowing.healthThresholdInvisiblity && !this.hasEffect(MobEffects.INVISIBILITY) && --this.invisibilityCooldown <= 0) {
+		if (!this.hasEffect(MobEffects.INVISIBILITY) && --this.invisibilityCooldown <= 0 && this.getHealth() < this.getMaxHealth() * Modules.witch.witchPotionThrowing.healthThresholdInvisiblity) {
 			ThrownPotion thrownPotion = new ThrownPotion(this.level, this);
 			thrownPotion.setItem(MCUtils.setCustomEffects(new ItemStack(Items.SPLASH_POTION), List.of(new MobEffectInstance(MobEffects.INVISIBILITY, 200))));
 			thrownPotion.shoot(0, -1d, 0, 0.1f, 2f);
