@@ -14,6 +14,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableWitchTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestHealableRaiderTargetGoal;
+import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrownPotion;
@@ -23,6 +24,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -169,6 +171,16 @@ public abstract class WitchMixin extends Raider {
 			thrownPotion.setItem(MCUtils.setCustomEffects(new ItemStack(Items.SPLASH_POTION), List.of(new MobEffectInstance(MobEffects.INVISIBILITY, 200))));
 			thrownPotion.shoot(0, -1d, 0, 0.1f, 2f);
 			this.level.addFreshEntity(thrownPotion);
+
+			//Try 5 times to find a random spot
+			for (int i = 0; i < 5; i++) {
+				Vec3 randomPos = DefaultRandomPos.getPos(this, 16, 9);
+				if (randomPos != null) {
+					this.getNavigation().moveTo(randomPos.x, randomPos.y, randomPos.z, 1.1f);
+					break;
+				}
+			}
+
 			this.invisibilityCooldown = 20;
 		}
 
