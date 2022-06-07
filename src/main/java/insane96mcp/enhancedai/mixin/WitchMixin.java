@@ -49,6 +49,8 @@ public abstract class WitchMixin extends Raider {
 	@Shadow
 	private int usingTime;
 
+	private int invisibilityCooldown = 20;
+
 	protected WitchMixin(EntityType<? extends Raider> p_37839_, Level p_37840_) {
 		super(p_37839_, p_37840_);
 	}
@@ -119,8 +121,11 @@ public abstract class WitchMixin extends Raider {
 				else if (this.random.nextFloat() < Modules.witch.thirstyWitches.fireResistanceChance && (this.isOnFire() || this.getLastDamageSource() != null && this.getLastDamageSource().isFire()) && !this.hasEffect(MobEffects.FIRE_RESISTANCE)) {
 					mobEffectInstances.addAll(Potions.FIRE_RESISTANCE.getEffects());
 				}
-				else if (this.random.nextFloat() < Modules.witch.thirstyWitches.healingChance && this.getHealth() < this.getMaxHealth() - 4) {
-					mobEffectInstances.addAll(Potions.STRONG_HEALING.getEffects());
+				else if (this.random.nextFloat() < Modules.witch.thirstyWitches.healingChance && this.getHealth() < this.getMaxHealth() - 3) {
+					if (this.getHealth() < this.getMaxHealth() * Modules.witch.thirstyWitches.strongHealingThreshold)
+						mobEffectInstances.addAll(Potions.STRONG_HEALING.getEffects());
+					else
+						mobEffectInstances.addAll(Potions.HEALING.getEffects());
 				}
 			}
 
@@ -159,11 +164,12 @@ public abstract class WitchMixin extends Raider {
 			}
 		}
 
-		if (this.random.nextFloat() < Modules.witch.thirstyWitches.invisibilityChance && this.getHealth() < this.getMaxHealth() * 0.4d && !this.hasEffect(MobEffects.INVISIBILITY)) {
+		if (this.getHealth() < this.getMaxHealth() * Modules.witch.witchPotionThrowing.healthThresholdInvisiblity && !this.hasEffect(MobEffects.INVISIBILITY) && --this.invisibilityCooldown <= 0) {
 			ThrownPotion thrownPotion = new ThrownPotion(this.level, this);
 			thrownPotion.setItem(MCUtils.setCustomEffects(new ItemStack(Items.SPLASH_POTION), List.of(new MobEffectInstance(MobEffects.INVISIBILITY, 200))));
 			thrownPotion.shoot(0, -1d, 0, 0.1f, 2f);
 			this.level.addFreshEntity(thrownPotion);
+			this.invisibilityCooldown = 20;
 		}
 
 		if (this.random.nextFloat() < 7.5E-4F) {

@@ -18,19 +18,18 @@ public class ThirstyWitches extends Feature {
 
     private final ForgeConfigSpec.ConfigValue<List<? extends String>> drinkPotionConfig;
     private final ForgeConfigSpec.DoubleValue healingChanceConfig;
+    private final ForgeConfigSpec.DoubleValue strongHealingThresholdConfig;
     private final ForgeConfigSpec.DoubleValue waterBreathingChanceConfig;
     private final ForgeConfigSpec.DoubleValue fireResistanceChanceConfig;
-    private final ForgeConfigSpec.DoubleValue invisibilityChanceConfig;
     private final ForgeConfigSpec.DoubleValue milkChanceConfig;
 
     public static final List<String> drinkPotionDefault = Arrays.asList("minecraft:speed,1,3600", "minecraft:resistance,0,3600", "minecraft:absorption,0,1800", "minecraft:regeneration,0,900");
 
     public ArrayList<MobEffectInstance> drinkPotion;
     public double healingChance = 0.05d;
+    public double strongHealingThreshold = 0.4d;
     public double waterBreathingChance = 1d;
     public double fireResistanceChance = 1d;
-    //Move to throwing
-    public double invisibilityChance = 0.1d;
     public double milkChance = 0.1d;
 
     public ThirstyWitches(Module module) {
@@ -40,17 +39,17 @@ public class ThirstyWitches extends Feature {
                 .comment("A list of potions that the witch will drink as soon as the player is targeted. Note that witches can still drink other potions in different situations, refer to other config options. Format is effect_id,amplifier,duration. The potions are applied in order and witches will not throw the same potion if the target has already the effect.")
                 .defineList("Potions on Target List", drinkPotionDefault, o -> o instanceof String);
         this.healingChanceConfig = Config.builder
-                .comment("Chance for a witch to drink a strong healing potion when not full health. Defaults to Vanilla")
+                .comment("Chance for a witch to drink a healing potion when not full health. Defaults to Vanilla")
                 .defineInRange("Healing Chance", this.healingChance, 0d, 1d);
+        this.strongHealingThresholdConfig = Config.builder
+                .comment("Below this percentage health, witches will drink strong healing potions instead of normal ones.")
+                .defineInRange("Strong healing Threshold", this.strongHealingThreshold, 0d, 1d);
         this.waterBreathingChanceConfig = Config.builder
                 .comment("Chance for a witch to drink a water breathing potion when in water and air meter is at half. Vanilla is 15% and doesn't check the air meter.")
                 .defineInRange("Water Breathing Chance", this.waterBreathingChance, 0d, 1d);
         this.fireResistanceChanceConfig = Config.builder
                 .comment("Chance for a witch to drink a fire resistance potion when on fire. Vanilla is 15%.")
                 .defineInRange("Fire Resistance", this.fireResistanceChance, 0d, 1d);
-        this.invisibilityChanceConfig = Config.builder
-                .comment("Chance for a witch to drink an Invisibility potion when health < 40%.")
-                .defineInRange("Invisibility", this.invisibilityChance, 0d, 1d);
         this.milkChanceConfig = Config.builder
                 .comment("Chance for a witch to drink milk when they have a negative effect.")
                 .defineInRange("Drink Milk Chance", this.milkChance, 0d, 1d);
@@ -64,7 +63,6 @@ public class ThirstyWitches extends Feature {
         this.healingChance = this.healingChanceConfig.get();
         this.waterBreathingChance = this.waterBreathingChanceConfig.get();
         this.fireResistanceChance = this.fireResistanceChanceConfig.get();
-        this.invisibilityChance = this.invisibilityChanceConfig.get();
         this.milkChance = this.milkChanceConfig.get();
     }
 

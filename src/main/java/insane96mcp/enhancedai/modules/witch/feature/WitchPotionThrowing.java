@@ -34,6 +34,7 @@ public class WitchPotionThrowing extends Feature {
     private final IntMinMax.Config throwSpeedConfig;
     private final IntMinMax.Config throwRangeConfig;
     private final ForgeConfigSpec.ConfigValue<Boolean> useSlowFallingConfig;
+    private final ForgeConfigSpec.ConfigValue<Double> healthThresholdInvisiblityConfig;
     private final BlacklistConfig entityBlacklistConfig;
 
     public static final List<String> badPotionsListDefault = Arrays.asList("minecraft:weakness,0,1800", "minecraft:slowness,1,1200", "minecraft:hunger,0,600", "minecraft:mining_fatigue,0,600", "minecraft:poison,0,900", "minecraft:blindness,0,120", "minecraft:instant_damage,0,1");
@@ -46,6 +47,7 @@ public class WitchPotionThrowing extends Feature {
     public IntMinMax throwSpeed = new IntMinMax(50, 70);
     public IntMinMax throwRange = new IntMinMax(16, 32);
     public boolean useSlowFalling = true;
+    public double healthThresholdInvisiblity = 0.50d;
     public ArrayList<IdTagMatcher> entityBlacklist;
     public boolean entityBlacklistAsWhitelist;
 
@@ -73,6 +75,9 @@ public class WitchPotionThrowing extends Feature {
         this.useSlowFallingConfig = Config.builder
                 .comment("If true, witches will throw a potion of slow falling at their feet when they're falling for more than 8 blocks.")
                 .define("Use Slow Falling", this.useSlowFalling);
+        this.healthThresholdInvisiblityConfig = Config.builder
+                .comment("When below this health percentage Witches will throw Invisibility potions at their feet.")
+                .defineInRange("Health Threshold Invisibility", this.healthThresholdInvisiblity, 0d, 1d);
         entityBlacklistConfig = new BlacklistConfig(Config.builder, "Entity Blacklist", "Entities that shouldn't get the new Witch ranged attack AI", Collections.emptyList(), false);
         Config.builder.pop();
     }
@@ -87,6 +92,7 @@ public class WitchPotionThrowing extends Feature {
         this.throwSpeed = this.throwSpeedConfig.get();
         this.throwRange = this.throwRangeConfig.get();
         this.useSlowFalling = this.useSlowFallingConfig.get();
+        this.healthThresholdInvisiblity = this.healthThresholdInvisiblityConfig.get();
         this.entityBlacklist = (ArrayList<IdTagMatcher>) IdTagMatcher.parseStringList(this.entityBlacklistConfig.listConfig.get());
         this.entityBlacklistAsWhitelist = this.entityBlacklistConfig.listAsWhitelistConfig.get();
     }

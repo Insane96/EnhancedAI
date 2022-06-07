@@ -74,8 +74,8 @@ public class DarkArtWitchGoal extends Goal {
         EQUIP_EGG {
             @Override
             public void tick(DarkArtWitchGoal goal) {
-                if (goal.phaseTick == 10) {
-                    goal.witch.addEffect(new MobEffectInstance(MobEffects.LEVITATION, LEVITATE_TICK * 2, 0));
+                if (goal.phaseTick == 15) {
+                    goal.witch.addEffect(new MobEffectInstance(MobEffects.LEVITATION, (LEVITATE_TICK - 15) * 2, 0));
                 }
                 if (goal.phaseTick < EQUIP_EGG_TICK) {
                     goal.witch.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.VILLAGER_SPAWN_EGG));
