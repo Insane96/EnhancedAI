@@ -52,6 +52,7 @@ public class DarkArtWitchGoal extends Goal {
         this.witch.getPersistentData().putBoolean(Strings.Tags.Witch.PERFORMING_DARK_ARTS, true);
         this.witch.setInvulnerable(true);
         this.witch.setGlowingTag(true);
+        this.witch.getNavigation().stop();
     }
 
     @Override
@@ -65,7 +66,6 @@ public class DarkArtWitchGoal extends Goal {
     @Override
     public void tick() {
         //this.witch.setDeltaMovement(0d, 0d, 0d);
-        this.witch.getNavigation().stop();
         this.phase.tick( this);
         this.phaseTick++;
     }
@@ -79,7 +79,7 @@ public class DarkArtWitchGoal extends Goal {
                 }
                 if (goal.phaseTick < EQUIP_EGG_TICK) {
                     goal.witch.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.VILLAGER_SPAWN_EGG));
-                    goal.witch.getLookControl().setLookAt(goal.target);
+                    goal.witch.getLookControl().setLookAt(goal.target, 180, 180);
                 }
                 else {
                     goal.phase = SUMMON_VILLAGER;
@@ -106,9 +106,8 @@ public class DarkArtWitchGoal extends Goal {
                 else {
                     goal.summonSpot = new Vec3(x + 0.5, y, z + 0.5);
                     goal.phase = LOOK_AT_VILLAGER;
-                    goal.witch.getLookControl().setLookAt(goal.summonSpot);
                 }
-                goal.witch.getLookControl().setLookAt(goal.summonSpot);
+                goal.witch.getLookControl().setLookAt(goal.summonSpot.x, goal.summonSpot.y, goal.summonSpot.z, 180, 180);
                 goal.villager = new Villager(EntityType.VILLAGER, goal.witch.level);
                 goal.villager.setPos(goal.summonSpot);
                 goal.villager.getLookControl().setLookAt(goal.witch);
@@ -122,7 +121,7 @@ public class DarkArtWitchGoal extends Goal {
             @Override
             public void tick(DarkArtWitchGoal goal) {
                 if (goal.phaseTick < LOOK_AT_VILLAGER_TICK) {
-                    goal.witch.getLookControl().setLookAt(goal.villager);
+                    goal.witch.getLookControl().setLookAt(goal.villager, 180, 180);
                 }
                 else {
                     goal.phase = IMPRISON_VILLAGER;
@@ -145,7 +144,7 @@ public class DarkArtWitchGoal extends Goal {
                 if (goal.phaseTick < LEVITATE_TICK) {
                     goal.witch.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 2, 1));
                     goal.witch.level.addParticle(ParticleTypes.ANGRY_VILLAGER, true, goal.witch.getX(), goal.witch.getY(), goal.witch.getZ(), 0.1, 0.1, 0.1);
-                    goal.witch.getLookControl().setLookAt(goal.villager);
+                    goal.witch.getLookControl().setLookAt(goal.villager, 180, 180);
                 }
                 else {
                     goal.phase = LIGHTNING_STRIKE;
