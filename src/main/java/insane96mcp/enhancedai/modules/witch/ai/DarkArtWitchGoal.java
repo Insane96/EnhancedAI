@@ -52,7 +52,7 @@ public class DarkArtWitchGoal extends Goal {
         this.witch.getPersistentData().putBoolean(Strings.Tags.Witch.PERFORMING_DARK_ARTS, true);
         this.witch.setInvulnerable(true);
         this.witch.setGlowingTag(true);
-        this.witch.getNavigation().stop();
+        this.witch.setDeltaMovement(0d, this.witch.getDeltaMovement().y, 0d);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class DarkArtWitchGoal extends Goal {
 
     @Override
     public void tick() {
-        //this.witch.setDeltaMovement(0d, 0d, 0d);
+        this.witch.getNavigation().stop();
         this.phase.tick( this);
         this.phaseTick++;
     }
