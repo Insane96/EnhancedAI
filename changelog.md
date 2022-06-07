@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Invisible witches now try to run in a random direction.
+
 ## 1.4.2
 * Witches
   * Added Dark Art Witches Feature. When approaching a Dark Art Witch, she'll use a Villager spawn egg and call a lightning bolt on it.

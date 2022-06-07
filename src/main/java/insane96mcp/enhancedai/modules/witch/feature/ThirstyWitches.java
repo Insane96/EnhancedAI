@@ -61,6 +61,7 @@ public class ThirstyWitches extends Feature {
         super.loadConfig();
         this.drinkPotion = Utils.parseMobEffectsList(this.drinkPotionConfig.get());
         this.healingChance = this.healingChanceConfig.get();
+        this.strongHealingThreshold = this.strongHealingThresholdConfig.get();
         this.waterBreathingChance = this.waterBreathingChanceConfig.get();
         this.fireResistanceChance = this.fireResistanceChanceConfig.get();
         this.milkChance = this.milkChanceConfig.get();
