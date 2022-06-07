@@ -37,7 +37,7 @@ public class WitchThrowPotionGoal extends Goal {
         this.attackIntervalMax = attackIntervalMax;
         this.attackRadius = attackRadius;
         this.attackRadiusSqr = attackRadius * attackRadius;
-        this.attackTime = Mth.floor(Mth.nextInt(witch.getRandom(), this.attackIntervalMin, this.attackIntervalMax));
+        this.attackTime = Mth.floor(Mth.nextInt(witch.getRandom(), this.attackIntervalMin, this.attackIntervalMax)) / 2;
         this.setFlags(EnumSet.of(Goal.Flag.LOOK));
     }
 

@@ -128,7 +128,7 @@ public abstract class WitchMixin extends Raider {
 			if (!mobEffectInstances.isEmpty()) {
 				item = MCUtils.setCustomEffects(new ItemStack(Items.POTION), mobEffectInstances);
 			}
-			else if (MCUtils.hasNegativeEffect(this) && Modules.witch.thirstyWitches.shouldDrinkMilk(this.random)) {
+			else if (MCUtils.hasLongNegativeEffect(this) && Modules.witch.thirstyWitches.shouldDrinkMilk(this.random)) {
 				item = new ItemStack(Items.MILK_BUCKET);
 			}
 

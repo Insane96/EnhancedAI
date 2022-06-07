@@ -44,6 +44,19 @@ public class MCUtils {
     }
 
     /**
+     * Same as hasNegativeEffect but also checks if the duration of the effect is higher than 7.5 seconds
+     * @param entity
+     * @return
+     */
+    public static boolean hasLongNegativeEffect(LivingEntity entity) {
+        for (MobEffectInstance mobEffectInstance : entity.getActiveEffects()) {
+            if (entity.hasEffect(mobEffectInstance.getEffect()) && mobEffectInstance.getEffect().getCategory().equals(MobEffectCategory.HARMFUL) && mobEffectInstance.getDuration() > 150)
+                return true;
+        }
+        return false;
+    }
+
+    /**
      * Returns level.getMinBuildHeight() - 1 when no spawn spots are found, otherwise the Y coord
      */
     public static int getYSpawn(EntityType<?> entityType, BlockPos pos, Level level, int minRelativeY) {
