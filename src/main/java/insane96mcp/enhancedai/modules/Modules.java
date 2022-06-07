@@ -4,6 +4,7 @@ import insane96mcp.enhancedai.modules.animal.AnimalModule;
 import insane96mcp.enhancedai.modules.base.BaseModule;
 import insane96mcp.enhancedai.modules.blaze.BlazeModule;
 import insane96mcp.enhancedai.modules.creeper.CreeperModule;
+import insane96mcp.enhancedai.modules.enderman.EndermanModule;
 import insane96mcp.enhancedai.modules.skeleton.SkeletonModule;
 import insane96mcp.enhancedai.modules.spider.SpiderModule;
 import insane96mcp.enhancedai.modules.witch.WitchModule;
@@ -19,6 +20,7 @@ public class Modules {
 	public static AnimalModule animal;
 	public static BlazeModule blaze;
 	public static WitchModule witch;
+	public static EndermanModule enderman;
 
 	public static void init() {
 		base = new BaseModule();
@@ -29,6 +31,7 @@ public class Modules {
 		animal = new AnimalModule();
 		blaze = new BlazeModule();
 		witch = new WitchModule();
+		enderman = new EndermanModule();
 	}
 
 	public static void loadConfig() {
@@ -40,5 +43,6 @@ public class Modules {
 		animal.loadConfig();
 		blaze.loadConfig();
 		witch.loadConfig();
+		enderman.loadConfig();
 	}
 }
