@@ -10,7 +10,7 @@
   * Witches no longer drink strong healing potions by default. They'll only drink it if are below certain health
   * Reduced flee speed
   * Reduced Slow Falling duration when witches use it
-* Enemy animals (such as Hoglins) no longer gain the Animal attacking AI
+* Enemy animals (such as Hoglins) no longer gain the Animal attacking AI and bonus knockback
 
 ## 1.4.1
 * Witch
@@ -51,8 +51,8 @@
 ## 1.3.1
 * Animals movement speed when attacking is now configurable
 * Digger Zombies now get equipped with a Wooden Pickaxe
-* Fixed skeletons using the correct arrow (e.g. strays no longer shot slowness arrows)
-* Fixed potential crash with Diggin zombies
+* Fixed skeletons not using the correct arrow (e.g. strays no longer shot slowness arrows)
+* Fixed potential crash with Digging zombies
 
 ## Beta 1.3.0
 * Added Animal Module
