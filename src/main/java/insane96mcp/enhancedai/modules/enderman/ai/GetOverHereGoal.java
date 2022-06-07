@@ -2,8 +2,8 @@ package insane96mcp.enhancedai.modules.enderman.ai;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.EnderMan;
@@ -24,28 +24,31 @@ public class GetOverHereGoal extends Goal {
         if (this.enderMan.getTarget() == null)
             return false;
 
-        if (this.enderMan.getTarget().distanceTo(this.enderMan) > 8d) {
+        if (this.enderMan.getTarget().distanceToSqr(this.enderMan) > 8d) {
             this.awayFromTargetTick++;
         }
         else {
             this.awayFromTargetTick = 0;
         }
 
-        return this.awayFromTargetTick > reducedTickDelay(100);
+        return this.awayFromTargetTick > reducedTickDelay(50);
     }
 
     @SuppressWarnings("ConstantConditions")
     @Override
     public void start() {
         this.target = this.enderMan.getTarget();
-        this.target.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 20));
         if (this.target instanceof ServerPlayer player) {
             if (player.isSleeping()) {
                 player.stopSleepInBed(true, true);
             }
 
-            player.connection.teleport(this.enderMan.getX(), this.enderMan.getY(), this.enderMan.getZ(), player.getXRot(), player.getYRot());
-            player.playSound(SoundEvents.CHORUS_FRUIT_TELEPORT, 1f, 0.5f);
+            double x = this.enderMan.getX() + Mth.nextInt(this.enderMan.getRandom(), -3, 3);
+            double z = this.enderMan.getZ() + Mth.nextInt(this.enderMan.getRandom(), -3, 3);
+            double y = this.enderMan.getY();
+
+            player.connection.teleport(x, y, z, player.getYRot(), player.getXRot());
+            this.enderMan.level.playSound(null, x, y, z, SoundEvents.CHORUS_FRUIT_TELEPORT, SoundSource.HOSTILE, 1f, 0.5f);
         }
         else {
             this.target.setPos(this.enderMan.getX(), this.enderMan.getY(), this.enderMan.getZ());

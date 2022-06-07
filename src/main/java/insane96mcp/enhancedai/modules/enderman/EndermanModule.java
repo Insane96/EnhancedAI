@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.modules.enderman;
 
-import insane96mcp.enhancedai.modules.witch.feature.WitchPotionThrowing;
+import insane96mcp.enhancedai.modules.enderman.feature.GetOverHere;
 import insane96mcp.enhancedai.setup.Config;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
@@ -8,18 +8,18 @@ import insane96mcp.insanelib.base.Module;
 @Label(name = "Enderman")
 public class EndermanModule extends Module {
 
-	public WitchPotionThrowing witchPotionThrowing;
+	public GetOverHere getOverHere;
 
 	public EndermanModule() {
 		super(Config.builder);
 		this.pushConfig(Config.builder);
-		witchPotionThrowing = new WitchPotionThrowing(this);
+		getOverHere = new GetOverHere(this);
 		Config.builder.pop();
 	}
 
 	@Override
 	public void loadConfig() {
 		super.loadConfig();
-		witchPotionThrowing.loadConfig();
+		getOverHere.loadConfig();
 	}
 }

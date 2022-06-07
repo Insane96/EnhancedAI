@@ -45,8 +45,8 @@ public class GetOverHere extends Feature {
 
         boolean getOverHere = enderMan.level.random.nextDouble() < this.getOverHereChance;
 
-        if (!getOverHere)
-            return;
+        //if (!getOverHere)
+            //return;
 
 
         GetOverHereGoal getOverHereGoal = new GetOverHereGoal(enderMan);
