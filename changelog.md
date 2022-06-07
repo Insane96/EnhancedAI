@@ -1,6 +1,7 @@
 # Changelog
 
 ## Upcoming
+* Split skeleton shoot and skeleton flee in two separate features
 * Invisible witches now try to run in a random direction.
 
 ## 1.4.2
