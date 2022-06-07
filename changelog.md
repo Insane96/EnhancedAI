@@ -1,12 +1,12 @@
 # Changelog
 
-## Upcoming
+## 1.4.2
 * Witches
-  * Added Dark Art Witches Feature. When approaching a Dark Art Witch, she'll use a Villager spawn egg and call a lightning bolt on it. 
-  * Reduced flee speed
-  * Witches no longer drink strong healing potions by default. They'll only drink it if are below certain health
+  * Added Dark Art Witches Feature. When approaching a Dark Art Witch, she'll use a Villager spawn egg and call a lightning bolt on it.
   * Invisibility potions are now a Throwing feature
-  * Reduced Slow Falling duration when witches used it
+  * Witches no longer drink strong healing potions by default. They'll only drink it if are below certain health
+  * Reduced flee speed
+  * Reduced Slow Falling duration when witches use it
 * Enemy animals (such as Hoglins) no longer gain the Animal attacking AI
 
 ## 1.4.1
