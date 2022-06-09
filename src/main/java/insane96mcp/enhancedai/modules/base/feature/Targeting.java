@@ -131,7 +131,8 @@ public class Targeting extends Feature {
 		if (mobEntity.level.random.nextDouble() < this.xray)
 			targetGoal.setIgnoreLineOfSight();
 
-		targetGoal.setInstaTarget(this.instaTarget);
+		if (this.instaTarget)
+			targetGoal.setInstaTarget();
 		mobEntity.targetSelector.addGoal(2, targetGoal);
 
 		ILNearestAttackableTargetGoal<Endermite> targetGoalTest;
@@ -143,7 +144,6 @@ public class Targeting extends Feature {
 		if (mobEntity.level.random.nextDouble() < this.xray)
 			targetGoalTest.setIgnoreLineOfSight();
 
-		targetGoalTest.setInstaTarget(this.instaTarget);
-		mobEntity.targetSelector.addGoal(2, targetGoalTest);
+		mobEntity.targetSelector.addGoal(2, targetGoalTest.setInstaTarget());
 	}
 }

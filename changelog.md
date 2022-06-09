@@ -6,6 +6,7 @@
 * Thrown webs cooldown is now between 40 and 60 ticks
 * Added entity Blacklist to Animals Attacking Feature
 * Invisible witches now try to run in a random direction.
+* Fixed disabling InstaTarget having no effect
 * Config is now alphabetically ordered (with Base Module on top) (need to regen config for this to take effect)
 
 ## 1.4.2
