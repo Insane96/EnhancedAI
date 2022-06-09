@@ -1,7 +1,7 @@
 package insane96mcp.enhancedai.modules.witch.ai;
 
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.enhancedai.utils.MCUtils;
+import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;

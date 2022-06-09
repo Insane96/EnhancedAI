@@ -1,13 +1,12 @@
 package insane96mcp.enhancedai.modules.blaze.feature;
 
-import insane96mcp.enhancedai.config.IntMinMax;
 import insane96mcp.enhancedai.modules.blaze.ai.EABlazeAttackGoal;
 import insane96mcp.enhancedai.setup.Config;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
-import insane96mcp.insanelib.config.BlacklistConfig;
-import insane96mcp.insanelib.util.IdTagMatcher;
+import insane96mcp.insanelib.config.Blacklist;
+import insane96mcp.insanelib.config.MinMax;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Blaze;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -19,48 +18,50 @@ import java.util.Collections;
 @Label(name = "Blaze Attack", description = "Make blazes fire faster/more fireballs")
 public class BlazeAttack extends Feature {
 
-    private final IntMinMax.Config timeBetweenFireballsConfig;
-    private final IntMinMax.Config fireballsShotConfig;
-    private final IntMinMax.Config rechargeTimeConfig;
-    private final IntMinMax.Config chargeTimeConfig;
-    private final IntMinMax.Config fireballsPerShotConfig;
-    private final IntMinMax.Config inaccuracyConfig;
+    private final MinMax.Config timeBetweenFireballsConfig;
+    private final MinMax.Config fireballsShotConfig;
+    private final MinMax.Config rechargeTimeConfig;
+    private final MinMax.Config chargeTimeConfig;
+    private final MinMax.Config fireballsPerShotConfig;
+    private final MinMax.Config inaccuracyConfig;
 
-    private final BlacklistConfig entityBlacklistConfig;
+    private final Blacklist.Config entityBlacklistConfig;
 
-    public IntMinMax timeBetweenFireballs = new IntMinMax(3, 6);
-    public IntMinMax fireballsShot = new IntMinMax(3, 8);
-    public IntMinMax rechargeTime = new IntMinMax(60, 100);
-    public IntMinMax chargeTime = new IntMinMax(30, 60);
-    public IntMinMax fireballsPerShot = new IntMinMax(1, 2);
-    public IntMinMax inaccuracy = new IntMinMax(2, 14);
+    public MinMax timeBetweenFireballs = new MinMax(3, 6);
+    public MinMax fireballsShot = new MinMax(3, 8);
+    public MinMax rechargeTime = new MinMax(60, 100);
+    public MinMax chargeTime = new MinMax(30, 60);
+    public MinMax fireballsPerShot = new MinMax(1, 2);
+    public MinMax inaccuracy = new MinMax(2, 14);
 
-    public ArrayList<IdTagMatcher> entityBlacklist;
-    public boolean entityBlacklistAsWhitelist;
+    public Blacklist entityBlacklist;
 
     public BlazeAttack(Module module) {
         super(Config.builder, module);
         super.pushConfig(Config.builder);
-        this.timeBetweenFireballsConfig = new IntMinMax.Config(Config.builder, "Time Between Fireballs", "How many ticks pass between shooting fireballs. Vanilla is 6")
+        this.timeBetweenFireballsConfig = new MinMax.Config(Config.builder, "Time Between Fireballs", "How many ticks pass between shooting fireballs. Vanilla is 6")
                 .setMinMax(1, 300, this.timeBetweenFireballs)
                 .build();
-        this.fireballsShotConfig = new IntMinMax.Config(Config.builder, "Fireballs shot", "How many fireballs blazes shoot. Vanilla is 3")
+        this.fireballsShotConfig = new MinMax.Config(Config.builder, "Fireballs shot", "How many fireballs blazes shoot. Vanilla is 3")
                 .setMinMax(1, 64, this.fireballsShot)
                 .build();
-        this.rechargeTimeConfig = new IntMinMax.Config(Config.builder, "Recharge time", "Time (in ticks) taken by the blaze to recharge (before setting himself on fire). Vanilla is 100")
+        this.rechargeTimeConfig = new MinMax.Config(Config.builder, "Recharge time", "Time (in ticks) taken by the blaze to recharge (before setting himself on fire). Vanilla is 100")
                 .setMinMax(1, 600, this.rechargeTime)
                 .build();
-        this.chargeTimeConfig = new IntMinMax.Config(Config.builder, "Charge time", "Time (in ticks) taken by the blaze to charge (while on fire before shooting fireballs). Vanilla is 60")
+        this.chargeTimeConfig = new MinMax.Config(Config.builder, "Charge time", "Time (in ticks) taken by the blaze to charge (while on fire before shooting fireballs). Vanilla is 60")
                 .setMinMax(1, 600, this.chargeTime)
                 .build();
-        this.fireballsPerShotConfig = new IntMinMax.Config(Config.builder, "Fireballs Per Shot", "How many fireballs are shot per shot. Vanilla is 1")
+        this.fireballsPerShotConfig = new MinMax.Config(Config.builder, "Fireballs Per Shot", "How many fireballs are shot per shot. Vanilla is 1")
                 .setMinMax(1, 8, this.fireballsPerShot)
                 .build();
-        this.inaccuracyConfig = new IntMinMax.Config(Config.builder, "Inaccuracy", "The higher the more spread up shots will be. Setting both to -1 will use the vanilla behaviour")
+        this.inaccuracyConfig = new MinMax.Config(Config.builder, "Inaccuracy", "The higher the more spread up shots will be. Setting both to -1 will use the vanilla behaviour")
                 .setMinMax(-1, 32, this.inaccuracy)
                 .build();
 
-        entityBlacklistConfig = new BlacklistConfig(Config.builder, "Entity Blacklist", "Entities that shouldn't get the new Blaze Attack AI", Collections.emptyList(), false);
+        entityBlacklistConfig = new Blacklist.Config(Config.builder, "Entity Blacklist", "Entities that shouldn't get the new Blaze Attack AI")
+                .setDefaultList(Collections.emptyList())
+                .setIsDefaultWhitelist(false)
+                .build();
         Config.builder.pop();
     }
 
@@ -74,8 +75,7 @@ public class BlazeAttack extends Feature {
         this.fireballsPerShot = this.fireballsPerShotConfig.get();
         this.inaccuracy = this.inaccuracyConfig.get();
 
-        this.entityBlacklist = (ArrayList<IdTagMatcher>) IdTagMatcher.parseStringList(this.entityBlacklistConfig.listConfig.get());
-        this.entityBlacklistAsWhitelist = this.entityBlacklistConfig.listAsWhitelistConfig.get();
+        this.entityBlacklist = this.entityBlacklistConfig.get();
     }
 
     @SubscribeEvent
@@ -86,19 +86,7 @@ public class BlazeAttack extends Feature {
         if (!(event.getEntity() instanceof Blaze blaze))
             return;
 
-        //Check for black/whitelist
-        boolean isInWhitelist = false;
-        boolean isInBlacklist = false;
-        for (IdTagMatcher blacklistEntry : this.entityBlacklist) {
-            if (blacklistEntry.matchesEntity(blaze)) {
-                if (!this.entityBlacklistAsWhitelist)
-                    isInBlacklist = true;
-                else
-                    isInWhitelist = true;
-                break;
-            }
-        }
-        if (isInBlacklist || (!isInWhitelist && this.entityBlacklistAsWhitelist))
+        if (this.entityBlacklist.isBlackWhiteListed(blaze.getType()))
             return;
 
         ArrayList<Goal> goalsToRemove = new ArrayList<>();
@@ -110,11 +98,11 @@ public class BlazeAttack extends Feature {
         goalsToRemove.forEach(blaze.goalSelector::removeGoal);
 
         blaze.goalSelector.addGoal(4, new EABlazeAttackGoal(blaze)
-                .setTimeBetweenFireballs(this.timeBetweenFireballs.getRandBetween(blaze.getRandom()))
-                .setFireballShot(this.fireballsShot.getRandBetween(blaze.getRandom()))
-                .setRechargeTime(this.rechargeTime.getRandBetween(blaze.getRandom()))
-                .setChargeTime(this.chargeTime.getRandBetween(blaze.getRandom()))
-                .setFireballsPerShot(this.fireballsPerShot.getRandBetween(blaze.getRandom()))
-                .setInaccuracy(this.inaccuracy.getRandBetween(blaze.getRandom())));
+                .setTimeBetweenFireballs(this.timeBetweenFireballs.getIntRandBetween(blaze.getRandom()))
+                .setFireballShot(this.fireballsShot.getIntRandBetween(blaze.getRandom()))
+                .setRechargeTime(this.rechargeTime.getIntRandBetween(blaze.getRandom()))
+                .setChargeTime(this.chargeTime.getIntRandBetween(blaze.getRandom()))
+                .setFireballsPerShot(this.fireballsPerShot.getIntRandBetween(blaze.getRandom()))
+                .setInaccuracy(this.inaccuracy.getIntRandBetween(blaze.getRandom())));
     }
 }

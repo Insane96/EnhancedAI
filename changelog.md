@@ -1,6 +1,7 @@
 # Changelog
 
 ## Upcoming
+* Requires InsaneLib 1.5.0
 * Split skeleton shoot and skeleton flee in two separate features
 * Invisible witches now try to run in a random direction.
 

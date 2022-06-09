@@ -1,7 +1,7 @@
 package insane96mcp.enhancedai.modules.witch.ai;
 
 import insane96mcp.enhancedai.setup.Strings;
-import insane96mcp.enhancedai.utils.MCUtils;
+import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -97,7 +97,7 @@ public class DarkArtWitchGoal extends Goal {
                     z = (int) (Math.floor(Math.sin(angle) * 3.33f) + goal.witch.getZ());
                     y = (int) (goal.witch.getY() + 3);
 
-                    y = MCUtils.getYSpawn(EntityType.VILLAGER, new BlockPos(x, y, z), goal.witch.level, 4);
+                    y = MCUtils.getFittingY(EntityType.VILLAGER, new BlockPos(x, y, z), goal.witch.level, 4);
                     if (y != goal.witch.level.getMinBuildHeight() - 1)
                         break;
                 }

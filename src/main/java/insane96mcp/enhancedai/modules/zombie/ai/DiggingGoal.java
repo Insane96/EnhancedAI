@@ -1,7 +1,6 @@
 package insane96mcp.enhancedai.modules.zombie.ai;
 
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.insanelib.util.IdTagMatcher;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
@@ -229,24 +228,7 @@ public class DiggingGoal extends Goal {
 			if (state.hasBlockEntity())
 				continue;
 
-			//Check for black/whitelist
-			boolean isInWhitelist = false;
-			boolean isInBlacklist = false;
-			for (IdTagMatcher blacklistEntry : Modules.zombie.diggerZombie.blockBlacklist) {
-				if (!Modules.zombie.diggerZombie.blockBlacklistAsWhitelist) {
-					if (blacklistEntry.matchesBlock(state.getBlock())) {
-						isInBlacklist = true;
-						break;
-					}
-				}
-				else {
-					if (blacklistEntry.matchesBlock(state.getBlock())) {
-						isInWhitelist = true;
-						break;
-					}
-				}
-			}
-			if (isInBlacklist || (!isInWhitelist && Modules.zombie.diggerZombie.blockBlacklistAsWhitelist))
+			if (Modules.zombie.diggerZombie.blockBlacklist.isBlackWhiteListed(state.getBlock()))
 				continue;
 
 			this.targetBlocks.add(rayTraceResult.getBlockPos());

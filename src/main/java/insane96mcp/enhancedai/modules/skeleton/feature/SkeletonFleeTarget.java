@@ -6,8 +6,7 @@ import insane96mcp.enhancedai.setup.Strings;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
-import insane96mcp.insanelib.config.BlacklistConfig;
-import insane96mcp.insanelib.util.IdTagMatcher;
+import insane96mcp.insanelib.config.Blacklist;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
@@ -15,7 +14,6 @@ import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.ForgeConfigSpec;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,7 +26,7 @@ public class SkeletonFleeTarget extends Feature {
     private final ForgeConfigSpec.ConfigValue<Double> fleeDistanceNearConfig;
     private final ForgeConfigSpec.ConfigValue<Double> fleeSpeedNearConfig;
     private final ForgeConfigSpec.ConfigValue<Double> fleeSpeedFarConfig;
-    private final BlacklistConfig entityBlacklistConfig;
+    private final Blacklist.Config entityBlacklistConfig;
 
     private final List<String> defaultBlacklist = Arrays.asList("quark:forgotten");
 
@@ -38,8 +36,7 @@ public class SkeletonFleeTarget extends Feature {
     public double fleeDistanceNear = 8;
     public double fleeSpeedNear = 1.6d;
     public double fleeSpeedFar = 1.3d;
-    public ArrayList<IdTagMatcher> entityBlacklist;
-    public boolean entityBlacklistAsWhitelist;
+    public Blacklist entityBlacklist;
 
     public SkeletonFleeTarget(Module module) {
         super(Config.builder, module);
@@ -62,7 +59,10 @@ public class SkeletonFleeTarget extends Feature {
         fleeSpeedNearConfig = Config.builder
                 .comment("Speed multiplier when the skeleton avoids the player and it's within 'Flee Distance Near' blocks from him.")
                 .defineInRange("Flee speed Multiplier Near", this.fleeSpeedNear, 0d, 4d);
-        entityBlacklistConfig = new BlacklistConfig(Config.builder, "Entity Blacklist", "Entities that shouldn't get the enhanced Shoot AI", defaultBlacklist, false);
+        entityBlacklistConfig = new Blacklist.Config(Config.builder, "Entity Blacklist", "Entities that shouldn't get the enhanced Shoot AI")
+                .setDefaultList(defaultBlacklist)
+                .setIsDefaultWhitelist(false)
+                .build();
         Config.builder.pop();
     }
 
@@ -75,27 +75,14 @@ public class SkeletonFleeTarget extends Feature {
         this.fleeDistanceNear = this.fleeDistanceNearConfig.get();
         this.fleeSpeedNear = this.fleeSpeedNearConfig.get();
         this.fleeSpeedFar = this.fleeSpeedFarConfig.get();
-        this.entityBlacklist = (ArrayList<IdTagMatcher>) IdTagMatcher.parseStringList(this.entityBlacklistConfig.listConfig.get());
-        this.entityBlacklistAsWhitelist = this.entityBlacklistConfig.listAsWhitelistConfig.get();
+        this.entityBlacklist = this.entityBlacklistConfig.get();
     }
 
     public void onReassessWeaponGoal(AbstractSkeleton skeleton) {
         if (!this.isEnabled())
             return;
 
-        //Check for black/whitelist
-        boolean isInWhitelist = false;
-        boolean isInBlacklist = false;
-        for (IdTagMatcher blacklistEntry : this.entityBlacklist) {
-            if (blacklistEntry.matchesEntity(skeleton)) {
-                if (!this.entityBlacklistAsWhitelist)
-                    isInBlacklist = true;
-                else
-                    isInWhitelist = true;
-                break;
-            }
-        }
-        if (isInBlacklist || (!isInWhitelist && this.entityBlacklistAsWhitelist))
+        if (this.entityBlacklist.isBlackWhiteListed(skeleton.getType()))
             return;
 
         boolean avoidTarget = skeleton.level.random.nextDouble() < this.avoidPlayerChance;

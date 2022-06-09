@@ -1,15 +1,13 @@
 package insane96mcp.enhancedai.modules.witch.feature;
 
-import insane96mcp.enhancedai.config.IntMinMax;
 import insane96mcp.enhancedai.modules.witch.ai.WitchThrowPotionGoal;
 import insane96mcp.enhancedai.setup.Config;
-import insane96mcp.enhancedai.utils.Utils;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
-import insane96mcp.insanelib.config.BlacklistConfig;
-import insane96mcp.insanelib.util.IdTagMatcher;
-import net.minecraft.util.Mth;
+import insane96mcp.insanelib.config.Blacklist;
+import insane96mcp.insanelib.config.MinMax;
+import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
@@ -31,11 +29,11 @@ public class WitchPotionThrowing extends Feature {
     private final ForgeConfigSpec.ConfigValue<List<? extends String>> goodPotionsListConfig;
     private final ForgeConfigSpec.ConfigValue<Double> lingeringChanceConfig;
     private final ForgeConfigSpec.ConfigValue<Double> anotherThrowChanceConfig;
-    private final IntMinMax.Config throwSpeedConfig;
-    private final IntMinMax.Config throwRangeConfig;
+    private final MinMax.Config throwSpeedConfig;
+    private final MinMax.Config throwRangeConfig;
     private final ForgeConfigSpec.ConfigValue<Boolean> useSlowFallingConfig;
     private final ForgeConfigSpec.ConfigValue<Double> healthThresholdInvisiblityConfig;
-    private final BlacklistConfig entityBlacklistConfig;
+    private final Blacklist.Config entityBlacklistConfig;
 
     public static final List<String> badPotionsListDefault = Arrays.asList("minecraft:weakness,0,1800", "minecraft:slowness,1,1200", "minecraft:hunger,0,600", "minecraft:mining_fatigue,0,600", "minecraft:poison,0,900", "minecraft:blindness,0,120", "minecraft:instant_damage,0,1");
     public static final List<String> goodPotionsListDefault = Arrays.asList("minecraft:regeneration,0,900", "minecraft:speed,0,1800", "minecraft:strength,0,1800", "minecraft:instant_health,0,1");
@@ -44,12 +42,11 @@ public class WitchPotionThrowing extends Feature {
     public ArrayList<MobEffectInstance> goodPotionsList;
     public double lingeringChance = 0.15d;
     public double anotherThrowChance = 0.20d;
-    public IntMinMax throwSpeed = new IntMinMax(50, 70);
-    public IntMinMax throwRange = new IntMinMax(16, 32);
+    public MinMax throwSpeed = new MinMax(50, 70);
+    public MinMax throwRange = new MinMax(16, 32);
     public boolean useSlowFalling = true;
     public double healthThresholdInvisiblity = 0.50d;
-    public ArrayList<IdTagMatcher> entityBlacklist;
-    public boolean entityBlacklistAsWhitelist;
+    public Blacklist entityBlacklist;
 
     public WitchPotionThrowing(Module module) {
         super(Config.builder, module);
@@ -66,10 +63,10 @@ public class WitchPotionThrowing extends Feature {
         this.anotherThrowChanceConfig = Config.builder
                 .comment("Chance for the Witch to throw another random potion right after she threw one.")
                 .defineInRange("Another Throw Chance", this.anotherThrowChance, 0d, 1d);
-        this.throwSpeedConfig = new IntMinMax.Config(Config.builder, "Throw Speed", "Speed at which Witches throw potions")
+        this.throwSpeedConfig = new MinMax.Config(Config.builder, "Throw Speed", "Speed at which Witches throw potions")
                 .setMinMax(10, Integer.MAX_VALUE, this.throwSpeed)
                 .build();
-        this.throwRangeConfig = new IntMinMax.Config(Config.builder, "Throw Range", "Range at which Witches throw potions")
+        this.throwRangeConfig = new MinMax.Config(Config.builder, "Throw Range", "Range at which Witches throw potions")
                 .setMinMax(8, 64, this.throwRange)
                 .build();
         this.useSlowFallingConfig = Config.builder
@@ -78,23 +75,25 @@ public class WitchPotionThrowing extends Feature {
         this.healthThresholdInvisiblityConfig = Config.builder
                 .comment("When below this health percentage Witches will throw Invisibility potions at their feet.")
                 .defineInRange("Health Threshold Invisibility", this.healthThresholdInvisiblity, 0d, 1d);
-        entityBlacklistConfig = new BlacklistConfig(Config.builder, "Entity Blacklist", "Entities that shouldn't get the new Witch ranged attack AI", Collections.emptyList(), false);
+        entityBlacklistConfig = new Blacklist.Config(Config.builder, "Entity Blacklist", "Entities that shouldn't get the new Witch ranged attack AI")
+                .setDefaultList(Collections.emptyList())
+                .setIsDefaultWhitelist(false)
+                .build();
         Config.builder.pop();
     }
 
     @Override
     public void loadConfig() {
         super.loadConfig();
-        this.badPotionsList = Utils.parseMobEffectsList(this.badPotionsListConfig.get());
-        this.goodPotionsList = Utils.parseMobEffectsList(this.goodPotionsListConfig.get());
+        this.badPotionsList = MCUtils.parseMobEffectsList(this.badPotionsListConfig.get());
+        this.goodPotionsList = MCUtils.parseMobEffectsList(this.goodPotionsListConfig.get());
         this.lingeringChance = this.lingeringChanceConfig.get();
         this.anotherThrowChance = this.anotherThrowChanceConfig.get();
         this.throwSpeed = this.throwSpeedConfig.get();
         this.throwRange = this.throwRangeConfig.get();
         this.useSlowFalling = this.useSlowFallingConfig.get();
         this.healthThresholdInvisiblity = this.healthThresholdInvisiblityConfig.get();
-        this.entityBlacklist = (ArrayList<IdTagMatcher>) IdTagMatcher.parseStringList(this.entityBlacklistConfig.listConfig.get());
-        this.entityBlacklistAsWhitelist = this.entityBlacklistConfig.listAsWhitelistConfig.get();
+        this.entityBlacklist = this.entityBlacklistConfig.get();
     }
 
     @SubscribeEvent
@@ -108,19 +107,7 @@ public class WitchPotionThrowing extends Feature {
         if (!(event.getEntity() instanceof Witch witch))
             return;
 
-        //Check for black/whitelist
-        boolean isInWhitelist = false;
-        boolean isInBlacklist = false;
-        for (IdTagMatcher blacklistEntry : this.entityBlacklist) {
-            if (blacklistEntry.matchesEntity(witch)) {
-                if (!this.entityBlacklistAsWhitelist)
-                    isInBlacklist = true;
-                else
-                    isInWhitelist = true;
-                break;
-            }
-        }
-        if (isInBlacklist || (!isInWhitelist && this.entityBlacklistAsWhitelist))
+        if (this.entityBlacklist.isBlackWhiteListed(witch.getType()))
             return;
 
         List<Goal> rangedAttackGoals = witch.goalSelector.availableGoals.stream()
@@ -129,8 +116,8 @@ public class WitchPotionThrowing extends Feature {
                 .toList();
         rangedAttackGoals.forEach(witch.goalSelector::removeGoal);
 
-        int attackSpeed = Mth.nextInt(witch.getRandom(), this.throwSpeed.min, this.throwSpeed.max);
-        int attackRange = Mth.nextInt(witch.getRandom(), this.throwRange.min, this.throwRange.max);
+        int attackSpeed = this.throwSpeed.getIntRandBetween(witch.getRandom());
+        int attackRange = this.throwRange.getIntRandBetween(witch.getRandom());
         witch.goalSelector.addGoal(2, new WitchThrowPotionGoal(witch, attackSpeed, attackSpeed, attackRange));
     }
 

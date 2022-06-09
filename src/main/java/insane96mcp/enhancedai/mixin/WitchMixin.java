@@ -2,7 +2,7 @@ package insane96mcp.enhancedai.mixin;
 
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.setup.Strings;
-import insane96mcp.enhancedai.utils.MCUtils;
+import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.effect.MobEffectInstance;

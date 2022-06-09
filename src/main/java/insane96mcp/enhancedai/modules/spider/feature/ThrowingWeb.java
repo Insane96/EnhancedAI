@@ -1,14 +1,13 @@
 package insane96mcp.enhancedai.modules.spider.feature;
 
-import insane96mcp.enhancedai.config.DoubleMinMax;
 import insane96mcp.enhancedai.modules.spider.ai.WebThrowGoal;
 import insane96mcp.enhancedai.setup.Config;
 import insane96mcp.enhancedai.setup.Strings;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
-import insane96mcp.insanelib.config.BlacklistConfig;
-import insane96mcp.insanelib.util.IdTagMatcher;
+import insane96mcp.insanelib.config.Blacklist;
+import insane96mcp.insanelib.config.MinMax;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -18,7 +17,6 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import java.util.ArrayList;
 import java.util.Collections;
 
 @Label(name = "Throwing Web", description = "Makes spiders throw a web at a player, slowing them.")
@@ -28,29 +26,28 @@ public class ThrowingWeb extends Feature {
 	private final ForgeConfigSpec.ConfigValue<Integer> destroyWebAfterConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> thrownWebDamageConfig;
 	private final ForgeConfigSpec.ConfigValue<Integer> throwingCooldownConfig;
-	private final DoubleMinMax.Config distanceConfig;
+	private final MinMax.Config distanceConfig;
 	//Slowness
 	private final ForgeConfigSpec.ConfigValue<Integer> slownessTimeConfig;
 	private final ForgeConfigSpec.ConfigValue<Integer> slownessAmplifierConfig;
 	private final ForgeConfigSpec.ConfigValue<Boolean> stackSlownessConfig;
 	private final ForgeConfigSpec.ConfigValue<Integer> maxSlownessConfig;
 
-	private final BlacklistConfig entityBlacklistConfig;
+	private final Blacklist.Config entityBlacklistConfig;
 
 	public double webThrowChance = 0.1d;
 	public int destroyWebAfter = 100;
 	public double thrownWebDamage = 5d;
 	//TODO Move to IntMinMax 40, 60
 	public int throwingCooldown = 50;
-	public DoubleMinMax distance = new DoubleMinMax(2.5d, 64d);
+	public MinMax distance = new MinMax(2.5d, 64d);
 	//Slowness
 	public int slownessTime = 120;
 	public int slownessAmplifier = 2;
 	public boolean stackSlowness = true;
 	public int maxSlowness = 6;
 
-	public ArrayList<IdTagMatcher> entityBlacklist;
-	public boolean entityBlacklistAsWhitelist;
+	public Blacklist entityBlacklist;
 
 	public ThrowingWeb(Module module) {
 		super(Config.builder, module);
@@ -67,7 +64,7 @@ public class ThrowingWeb extends Feature {
 		throwingCooldownConfig = Config.builder
 				.comment("Every how many ticks do spiders throw the projectile")
 				.defineInRange("Projectile cooldown", this.throwingCooldown, 1, 1200);
-		this.distanceConfig = new DoubleMinMax.Config(Config.builder, "Distance Required", "Distance Required for the spider to throw webs. Setting 'Minimum' to 0 will make the spider throw webs even when attacking the player.")
+		this.distanceConfig = new MinMax.Config(Config.builder, "Distance Required", "Distance Required for the spider to throw webs. Setting 'Minimum' to 0 will make the spider throw webs even when attacking the player.")
 				.setMinMax(0d, 64d, this.distance)
 				.build();
 
@@ -86,7 +83,10 @@ public class ThrowingWeb extends Feature {
 				.defineInRange("Max Slowness Amplifier", this.maxSlowness, 0, 128);
 		Config.builder.pop();
 
-		entityBlacklistConfig = new BlacklistConfig(Config.builder, "Entity Blacklist", "Entities that shouldn't get the Throwing Web AI", Collections.emptyList(), false);
+		entityBlacklistConfig = new Blacklist.Config(Config.builder, "Entity Blacklist", "Entities that shouldn't get the Throwing Web AI")
+				.setDefaultList(Collections.emptyList())
+				.setIsDefaultWhitelist(false)
+				.build();
 		Config.builder.pop();
 	}
 
@@ -104,8 +104,7 @@ public class ThrowingWeb extends Feature {
 		this.stackSlowness = this.stackSlownessConfig.get();
 		this.maxSlowness = this.maxSlownessConfig.get();
 
-		this.entityBlacklist = (ArrayList<IdTagMatcher>) IdTagMatcher.parseStringList(this.entityBlacklistConfig.listConfig.get());
-		this.entityBlacklistAsWhitelist = this.entityBlacklistConfig.listAsWhitelistConfig.get();
+		this.entityBlacklist = this.entityBlacklistConfig.get();
 	}
 
 	@SubscribeEvent
@@ -116,19 +115,7 @@ public class ThrowingWeb extends Feature {
 		if (!(event.getEntity() instanceof Spider spider))
 			return;
 
-		//Check for black/whitelist
-		boolean isInWhitelist = false;
-		boolean isInBlacklist = false;
-		for (IdTagMatcher blacklistEntry : this.entityBlacklist) {
-			if (blacklistEntry.matchesEntity(spider)) {
-				if (!this.entityBlacklistAsWhitelist)
-					isInBlacklist = true;
-				else
-					isInWhitelist = true;
-				break;
-			}
-		}
-		if (isInBlacklist || (!isInWhitelist && this.entityBlacklistAsWhitelist))
+		if (this.entityBlacklist.isBlackWhiteListed(spider.getType()))
 			return;
 
 		CompoundTag persistentData = spider.getPersistentData();

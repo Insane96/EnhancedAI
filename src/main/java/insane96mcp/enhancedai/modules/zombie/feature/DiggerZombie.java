@@ -6,8 +6,7 @@ import insane96mcp.enhancedai.setup.Strings;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
-import insane96mcp.insanelib.config.BlacklistConfig;
-import insane96mcp.insanelib.util.IdTagMatcher;
+import insane96mcp.insanelib.config.Blacklist;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.ItemStack;
@@ -16,7 +15,6 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import java.util.ArrayList;
 import java.util.Collections;
 
 @Label(name = "Digger Zombie", description = "Zombies can mine blocks to reach the target. Uses offhand item to mine")
@@ -29,8 +27,8 @@ public class DiggerZombie extends Feature {
 	private final ForgeConfigSpec.ConfigValue<Integer> maxDistanceConfig;
 	private final ForgeConfigSpec.ConfigValue<Boolean> blacklistTileEntitiesConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> miningSpeedMultiplierConfig;
-	private final BlacklistConfig blockBlacklistConfig;
-	private final BlacklistConfig entityBlacklistConfig;
+	private final Blacklist.Config blockBlacklistConfig;
+	private final Blacklist.Config entityBlacklistConfig;
 
 	public double diggerChance = 0.07d;
 	public boolean diggerToolOnly = false;
@@ -40,10 +38,8 @@ public class DiggerZombie extends Feature {
 	public int maxDistance = 0;
 	public boolean blacklistTileEntities = false;
 	public double miningSpeedMultiplier = 1d;
-	public ArrayList<IdTagMatcher> blockBlacklist;
-	public boolean blockBlacklistAsWhitelist;
-	public ArrayList<IdTagMatcher> entityBlacklist;
-	public boolean entityBlacklistAsWhitelist;
+	public Blacklist blockBlacklist;
+	public Blacklist entityBlacklist;
 
 	public DiggerZombie(Module module) {
 		super(Config.builder, module);
@@ -72,8 +68,14 @@ public class DiggerZombie extends Feature {
 		blacklistTileEntitiesConfig = Config.builder
 				.comment("Zombies with Digger AI will not be able to break tile entities")
 				.define("Blacklist Tile Entities", this.blacklistTileEntities);
-		blockBlacklistConfig = new BlacklistConfig(Config.builder, "Block Blacklist", "Blocks in here will not be minable by zombies (or will be the only minable in case it's whitelist)", Collections.emptyList(), false);
-		entityBlacklistConfig = new BlacklistConfig(Config.builder, "Entity Blacklist", "Entities that shouldn't get the Digger AI", Collections.emptyList(), false);
+		blockBlacklistConfig = new Blacklist.Config(Config.builder, "Block Blacklist", "Blocks in here will not be minable by zombies (or will be the only minable in case it's whitelist)")
+				.setDefaultList(Collections.emptyList())
+				.setIsDefaultWhitelist(false)
+				.build();
+		entityBlacklistConfig = new Blacklist.Config(Config.builder, "Entity Blacklist", "Entities that shouldn't get the Digger AI")
+				.setDefaultList(Collections.emptyList())
+				.setIsDefaultWhitelist(false)
+				.build();
 		Config.builder.pop();
 	}
 
@@ -88,10 +90,8 @@ public class DiggerZombie extends Feature {
 		this.maxDistance = this.maxDistanceConfig.get();
 		this.miningSpeedMultiplier = this.miningSpeedMultiplierConfig.get();
 		this.blacklistTileEntities = this.blacklistTileEntitiesConfig.get();
-		this.blockBlacklist = (ArrayList<IdTagMatcher>) IdTagMatcher.parseStringList(this.blockBlacklistConfig.listConfig.get());
-		this.blockBlacklistAsWhitelist = this.blockBlacklistConfig.listAsWhitelistConfig.get();
-		this.entityBlacklist = (ArrayList<IdTagMatcher>) IdTagMatcher.parseStringList(this.entityBlacklistConfig.listConfig.get());
-		this.entityBlacklistAsWhitelist = this.entityBlacklistConfig.listAsWhitelistConfig.get();
+		this.blockBlacklist = this.blockBlacklistConfig.get();
+		this.entityBlacklist = this.entityBlacklistConfig.get();
 	}
 
 	@SubscribeEvent
@@ -105,19 +105,7 @@ public class DiggerZombie extends Feature {
 		if (!(event.getEntity() instanceof Zombie zombie))
 			return;
 
-		//Check for black/whitelist
-		boolean isInWhitelist = false;
-		boolean isInBlacklist = false;
-		for (IdTagMatcher blacklistEntry : this.entityBlacklist) {
-			if (blacklistEntry.matchesEntity(zombie)) {
-				if (!this.entityBlacklistAsWhitelist)
-					isInBlacklist = true;
-				else
-					isInWhitelist = true;
-				break;
-			}
-		}
-		if (isInBlacklist || (!isInWhitelist && this.entityBlacklistAsWhitelist))
+		if (this.entityBlacklist.isBlackWhiteListed(zombie.getType()))
 			return;
 
 		boolean processed = zombie.getPersistentData().getBoolean(Strings.Tags.PROCESSED);

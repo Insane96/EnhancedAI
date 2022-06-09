@@ -5,8 +5,7 @@ import insane96mcp.enhancedai.setup.Config;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
-import insane96mcp.insanelib.config.BlacklistConfig;
-import insane96mcp.insanelib.util.IdTagMatcher;
+import insane96mcp.insanelib.config.Blacklist;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -36,7 +35,7 @@ public class Targeting extends Feature {
 	private final ForgeConfigSpec.ConfigValue<Double> swimSpeedMultiplierConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> xrayConfig;
 	private final ForgeConfigSpec.ConfigValue<Boolean> instaTargetConfig;
-	private final BlacklistConfig entityBlacklistConfig;
+	private final Blacklist.Config entityBlacklistConfig;
 
 	private final List<String> entityBlacklistDefault = Arrays.asList("minecraft:enderman");
 
@@ -44,8 +43,7 @@ public class Targeting extends Feature {
 	public double swimSpeedMultiplier = 2.5d;
 	public double xray = 0.20d;
 	public boolean instaTarget = true;
-	public ArrayList<IdTagMatcher> entityBlacklist;
-	public boolean entityBlacklistAsWhitelist = true;
+	public Blacklist entityBlacklist;
 
 	public Targeting(Module module) {
 		super(Config.builder, module);
@@ -62,7 +60,10 @@ public class Targeting extends Feature {
 		instaTargetConfig = Config.builder
 				.comment("Mobs will no longer take random time to target a player.")
 				.define("Instant Target", instaTarget);
-		entityBlacklistConfig = new BlacklistConfig(Config.builder, "Entity Blacklist", "Entities in here will not have the TargetAI changed", entityBlacklistDefault, false);
+		entityBlacklistConfig = new Blacklist.Config(Config.builder, "Entity Blacklist", "Entities in here will not have the TargetAI changed")
+				.setDefaultList(entityBlacklistDefault)
+				.setIsDefaultWhitelist(false)
+				.build();
 		Config.builder.pop();
 	}
 
@@ -73,8 +74,7 @@ public class Targeting extends Feature {
 		this.swimSpeedMultiplier = this.swimSpeedMultiplierConfig.get();
 		this.xray = this.xrayConfig.get();
 		this.instaTarget = this.instaTargetConfig.get();
-		this.entityBlacklist = (ArrayList<IdTagMatcher>) IdTagMatcher.parseStringList(this.entityBlacklistConfig.listConfig.get());
-		this.entityBlacklistAsWhitelist = this.entityBlacklistConfig.listAsWhitelistConfig.get();
+		this.entityBlacklist = this.entityBlacklistConfig.get();
 	}
 
 	final UUID UUID_SWIM_SPEED_MULTIPLIER = UUID.fromString("6d2cb27e-e5e3-41b9-8108-f74131a90cce");
@@ -87,20 +87,7 @@ public class Targeting extends Feature {
 		if (!(event.getEntity() instanceof Mob mobEntity))
 			return;
 
-		//Check for black/whitelist
-		boolean isInWhitelist = false;
-		boolean isInBlacklist = false;
-		for (IdTagMatcher blacklistEntry : this.entityBlacklist) {
-			if (!this.entityBlacklistAsWhitelist && blacklistEntry.matchesEntity(mobEntity)) {
-				isInBlacklist = true;
-				break;
-			}
-			else if (blacklistEntry.matchesEntity(mobEntity)) {
-				isInWhitelist = true;
-				break;
-			}
-		}
-		if (isInBlacklist || (!isInWhitelist && this.entityBlacklistAsWhitelist))
+		if (this.entityBlacklist.isBlackWhiteListed(mobEntity.getType()))
 			return;
 
 		if (this.followRange != 0) {

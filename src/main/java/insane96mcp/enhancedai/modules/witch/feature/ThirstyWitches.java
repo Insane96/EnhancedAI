@@ -1,7 +1,6 @@
 package insane96mcp.enhancedai.modules.witch.feature;
 
 import insane96mcp.enhancedai.setup.Config;
-import insane96mcp.enhancedai.utils.Utils;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
