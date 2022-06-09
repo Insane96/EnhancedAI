@@ -4,7 +4,9 @@
 * Requires InsaneLib 1.5.0
 * Split skeleton shoot and skeleton flee in two separate features
 * Thrown webs cooldown is now between 40 and 60 ticks
+* Added entity Blacklist to Animals Attacking Feature
 * Invisible witches now try to run in a random direction.
+* Config is now alphabetically ordered (with Base Module on top) (need to regen config for this to take effect)
 
 ## 1.4.2
 * Witches

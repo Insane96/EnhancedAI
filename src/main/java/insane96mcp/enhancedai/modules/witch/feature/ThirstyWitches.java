@@ -4,6 +4,7 @@ import insane96mcp.enhancedai.setup.Config;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
+import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraftforge.common.ForgeConfigSpec;
 
@@ -58,7 +59,7 @@ public class ThirstyWitches extends Feature {
     @Override
     public void loadConfig() {
         super.loadConfig();
-        this.drinkPotion = Utils.parseMobEffectsList(this.drinkPotionConfig.get());
+        this.drinkPotion = MCUtils.parseMobEffectsList(this.drinkPotionConfig.get());
         this.healingChance = this.healingChanceConfig.get();
         this.strongHealingThreshold = this.strongHealingThresholdConfig.get();
         this.waterBreathingChance = this.waterBreathingChanceConfig.get();

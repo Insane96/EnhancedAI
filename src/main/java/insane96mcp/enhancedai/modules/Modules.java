@@ -4,7 +4,6 @@ import insane96mcp.enhancedai.modules.animal.AnimalModule;
 import insane96mcp.enhancedai.modules.base.BaseModule;
 import insane96mcp.enhancedai.modules.blaze.BlazeModule;
 import insane96mcp.enhancedai.modules.creeper.CreeperModule;
-import insane96mcp.enhancedai.modules.enderman.EndermanModule;
 import insane96mcp.enhancedai.modules.skeleton.SkeletonModule;
 import insane96mcp.enhancedai.modules.spider.SpiderModule;
 import insane96mcp.enhancedai.modules.witch.WitchModule;
@@ -13,36 +12,36 @@ import insane96mcp.enhancedai.modules.zombie.ZombieModule;
 public class Modules {
 
 	public static BaseModule base;
-	public static CreeperModule creeper;
-	public static SkeletonModule skeleton;
-	public static ZombieModule zombie;
-	public static SpiderModule spider;
 	public static AnimalModule animal;
 	public static BlazeModule blaze;
+	public static CreeperModule creeper;
+	//public static EndermanModule enderman;
+	public static SkeletonModule skeleton;
+	public static SpiderModule spider;
 	public static WitchModule witch;
-	public static EndermanModule enderman;
+	public static ZombieModule zombie;
 
 	public static void init() {
 		base = new BaseModule();
-		creeper = new CreeperModule();
-		skeleton = new SkeletonModule();
-		zombie = new ZombieModule();
-		spider = new SpiderModule();
 		animal = new AnimalModule();
 		blaze = new BlazeModule();
+		creeper = new CreeperModule();
+		//enderman = new EndermanModule();
+		skeleton = new SkeletonModule();
+		spider = new SpiderModule();
 		witch = new WitchModule();
-		enderman = new EndermanModule();
+		zombie = new ZombieModule();
 	}
 
 	public static void loadConfig() {
 		base.loadConfig();
-		creeper.loadConfig();
-		skeleton.loadConfig();
-		zombie.loadConfig();
-		spider.loadConfig();
 		animal.loadConfig();
 		blaze.loadConfig();
+		creeper.loadConfig();
+		//enderman.loadConfig();
+		skeleton.loadConfig();
+		spider.loadConfig();
 		witch.loadConfig();
-		enderman.loadConfig();
+		zombie.loadConfig();
 	}
 }

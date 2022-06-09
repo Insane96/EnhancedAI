@@ -4,6 +4,7 @@ import insane96mcp.enhancedai.setup.Config;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
+import insane96mcp.insanelib.config.Blacklist;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -22,6 +23,7 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 @Label(name = "Animal Attacking", description = "Make animals fight back and no longer flee when attacked")
 public class AnimalAttacking extends Feature {
@@ -29,10 +31,13 @@ public class AnimalAttacking extends Feature {
     private final ForgeConfigSpec.ConfigValue<Boolean> animalsFightBackConfig;
     private final ForgeConfigSpec.ConfigValue<Boolean> noMoreFleeConfig;
     private final ForgeConfigSpec.ConfigValue<Double> speedMultiplierConfig;
+    private final Blacklist.Config entityBlacklistConfig;
 
     public boolean animalsFightBack = true;
     public boolean noMoreFlee = true;
     public double speedMultiplier = 1.35d;
+    public Blacklist entityBlacklist;
+
     private static final double BASE_ATTACK_DAMAGE = 4d;
 
     public AnimalAttacking(Module module) {
@@ -47,6 +52,10 @@ public class AnimalAttacking extends Feature {
         speedMultiplierConfig = Config.builder
                 .comment("Movement speed multiplier when attacking.")
                 .defineInRange("Movement Speed Multiplier", this.speedMultiplier, 0d, 4d);
+        entityBlacklistConfig = new Blacklist.Config(Config.builder, "Entity Blacklist", "Entities that shouldn't be affected by this feature")
+                .setDefaultList(Collections.emptyList())
+                .setIsDefaultWhitelist(false)
+                .build();
         Config.builder.pop();
     }
 
@@ -56,6 +65,7 @@ public class AnimalAttacking extends Feature {
         this.animalsFightBack = this.animalsFightBackConfig.get();
         this.noMoreFlee = this.noMoreFleeConfig.get();
         this.speedMultiplier = this.speedMultiplierConfig.get();
+        this.entityBlacklist = this.entityBlacklistConfig.get();
     }
 
     public static void attribute(EntityAttributeModificationEvent event) {
@@ -78,12 +88,15 @@ public class AnimalAttacking extends Feature {
         if (!(event.getEntity() instanceof Animal animal))
             return;
 
+        if (this.entityBlacklist.isBlackWhiteListed(animal.getType()))
+            return;
+
         if (this.animalsFightBack) {
             animal.targetSelector.addGoal(1, (new HurtByTargetGoal(animal)).setAlertOthers());
             animal.goalSelector.addGoal(1, new MeleeAttackGoal(animal, this.speedMultiplier, false));
             AttributeInstance kbAttribute = animal.getAttribute(Attributes.ATTACK_KNOCKBACK);
             if (kbAttribute != null)
-                kbAttribute.addPermanentModifier(new AttributeModifier("Animal knockback", 2.5d, AttributeModifier.Operation.ADDITION));
+                kbAttribute.addPermanentModifier(new AttributeModifier("Animal knockback", 3.5d, AttributeModifier.Operation.ADDITION));
         }
 
         if (this.noMoreFlee) {
