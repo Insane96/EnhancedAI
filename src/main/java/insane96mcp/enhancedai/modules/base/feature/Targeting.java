@@ -1,7 +1,8 @@
 package insane96mcp.enhancedai.modules.base.feature;
 
-import insane96mcp.enhancedai.modules.base.ai.EANearestAttackableTargetGoal;
+import insane96mcp.enhancedai.modules.base.ai.EASpiderTargetGoal;
 import insane96mcp.enhancedai.setup.Config;
+import insane96mcp.insanelib.ai.ILNearestAttackableTargetGoal;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
@@ -121,26 +122,26 @@ public class Targeting extends Feature {
 
 		goalsToRemove.forEach(mobEntity.goalSelector::removeGoal);
 
-		EANearestAttackableTargetGoal<Player> targetGoal;
+		ILNearestAttackableTargetGoal<Player> targetGoal;
 
 		if (mobEntity instanceof Spider)
-			targetGoal = new EANearestAttackableTargetGoal.SpiderTargetGoal<>((Spider) mobEntity, Player.class, true, false, predicate);
+			targetGoal = new EASpiderTargetGoal<>((Spider) mobEntity, Player.class, true, false, predicate);
 		else
-			targetGoal = new EANearestAttackableTargetGoal<>(mobEntity, Player.class, true, false, predicate);
+			targetGoal = new ILNearestAttackableTargetGoal<>(mobEntity, Player.class, true, false, predicate);
 		if (mobEntity.level.random.nextDouble() < this.xray)
-			targetGoal.setXray(true);
+			targetGoal.setIgnoreLineOfSight();
 
 		targetGoal.setInstaTarget(this.instaTarget);
 		mobEntity.targetSelector.addGoal(2, targetGoal);
 
-		EANearestAttackableTargetGoal<Endermite> targetGoalTest;
+		ILNearestAttackableTargetGoal<Endermite> targetGoalTest;
 
 		if (mobEntity instanceof Spider)
-			targetGoalTest = new EANearestAttackableTargetGoal.SpiderTargetGoal<>((Spider) mobEntity, Endermite.class, true, false, predicate);
+			targetGoalTest = new EASpiderTargetGoal<>((Spider) mobEntity, Endermite.class, true, false, predicate);
 		else
-			targetGoalTest = new EANearestAttackableTargetGoal<>(mobEntity, Endermite.class, true, false, predicate);
+			targetGoalTest = new ILNearestAttackableTargetGoal<>(mobEntity, Endermite.class, true, false, predicate);
 		if (mobEntity.level.random.nextDouble() < this.xray)
-			targetGoalTest.setXray(true);
+			targetGoalTest.setIgnoreLineOfSight();
 
 		targetGoalTest.setInstaTarget(this.instaTarget);
 		mobEntity.targetSelector.addGoal(2, targetGoalTest);
