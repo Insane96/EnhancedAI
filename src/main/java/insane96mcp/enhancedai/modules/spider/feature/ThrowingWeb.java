@@ -25,7 +25,7 @@ public class ThrowingWeb extends Feature {
 	private final ForgeConfigSpec.ConfigValue<Double> webThrowChanceConfig;
 	private final ForgeConfigSpec.ConfigValue<Integer> destroyWebAfterConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> thrownWebDamageConfig;
-	private final ForgeConfigSpec.ConfigValue<Integer> throwingCooldownConfig;
+	private final MinMax.Config throwingCooldownConfig;
 	private final MinMax.Config distanceConfig;
 	//Slowness
 	private final ForgeConfigSpec.ConfigValue<Integer> slownessTimeConfig;
@@ -38,8 +38,7 @@ public class ThrowingWeb extends Feature {
 	public double webThrowChance = 0.1d;
 	public int destroyWebAfter = 100;
 	public double thrownWebDamage = 5d;
-	//TODO Move to IntMinMax 40, 60
-	public int throwingCooldown = 50;
+	public MinMax throwingCooldown = new MinMax(40, 60);
 	public MinMax distance = new MinMax(2.5d, 64d);
 	//Slowness
 	public int slownessTime = 120;
@@ -61,9 +60,9 @@ public class ThrowingWeb extends Feature {
 		thrownWebDamageConfig = Config.builder
 				.comment("Damage when the projectiles hits a mob. The damage is set for normal difficulty. Hard difficulty gets +50% damage and Easy gets (-50% + 1) damage.")
 				.defineInRange("Web Damage", this.thrownWebDamage, 0d, 128d);
-		throwingCooldownConfig = Config.builder
-				.comment("Every how many ticks do spiders throw the projectile")
-				.defineInRange("Projectile cooldown", this.throwingCooldown, 1, 1200);
+		this.throwingCooldownConfig = new MinMax.Config(Config.builder, "Projectile cooldown", "Every how many ticks do spiders throw the projectile")
+				.setMinMax(1, 1200, this.throwingCooldown)
+				.build();
 		this.distanceConfig = new MinMax.Config(Config.builder, "Distance Required", "Distance Required for the spider to throw webs. Setting 'Minimum' to 0 will make the spider throw webs even when attacking the player.")
 				.setMinMax(0d, 64d, this.distance)
 				.build();

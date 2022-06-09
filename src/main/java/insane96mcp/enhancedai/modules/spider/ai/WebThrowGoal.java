@@ -13,7 +13,7 @@ public class WebThrowGoal extends Goal {
 	private final Spider spider;
 	private Player targetPlayer;
 
-	private int cooldown = adjustedTickDelay(Modules.spider.throwingWeb.throwingCooldown);
+	private int cooldown = adjustedTickDelay((int) Modules.spider.throwingWeb.throwingCooldown.min);
 
 	public WebThrowGoal(Spider spider){
 		this.spider = spider;
@@ -56,7 +56,7 @@ public class WebThrowGoal extends Goal {
 		thrownWeb.setDamage((float) Modules.spider.throwingWeb.thrownWebDamage);
 		thrownWeb.level.addFreshEntity(thrownWeb);
 		this.spider.playSound(SoundEvents.SPIDER_HURT, 1.0F, 2.0F / (this.spider.getRandom().nextFloat() * 0.4F + 0.8F));
-		this.cooldown = adjustedTickDelay(Modules.spider.throwingWeb.throwingCooldown);
+		this.cooldown = adjustedTickDelay(Modules.spider.throwingWeb.throwingCooldown.getIntRandBetween(spider.getRandom()));
 	}
 
 	public void stop() {

@@ -3,6 +3,7 @@
 ## Upcoming
 * Requires InsaneLib 1.5.0
 * Split skeleton shoot and skeleton flee in two separate features
+* Thrown webs cooldown is now between 40 and 60 ticks
 * Invisible witches now try to run in a random direction.
 
 ## 1.4.2
