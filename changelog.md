@@ -1,5 +1,9 @@
 # Changelog
 
+## Beta 1.4.4
+* Fixed possible crash with Digger AI
+* Fixed digger not dropping blocks broken
+
 ## Beta 1.4.3
 * Requires InsaneLib 1.5.0
 * Split skeleton shoot and skeleton flee in two separate features

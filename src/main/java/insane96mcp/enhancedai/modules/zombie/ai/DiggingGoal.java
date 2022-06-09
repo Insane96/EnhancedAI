@@ -65,21 +65,20 @@ public class DiggingGoal extends Goal {
 				&& this.digger.distanceToSqr(digger.getTarget()) < maxDistanceFromTarget;
 	}
 
-	private Path path;
-
 	public boolean canContinueToUse() {
 		if (this.properToolOnly && this.blockState != null && !this.canHarvestBlock())
 			return false;
 
-		this.path = this.digger.getNavigation().createPath(this.target, 1);
+		if (this.target == null || !this.target.isAlive())
+			return false;
+
+		Path path = this.digger.getNavigation().createPath(this.target, 1);
 
 		return !this.targetBlocks.isEmpty()
-				&& this.target != null
-				&& this.target.isAlive()
 				&& this.targetBlocks.get(0).distSqr(this.digger.blockPosition()) < this.reachDistance * this.reachDistance
 				&& this.digger.getNavigation().isDone()
 				&& !this.digger.level.getBlockState(this.targetBlocks.get(0)).isAir()
-				&& this.path != null && this.path.getDistToTarget() > 1d;
+				&& path != null && path.getDistToTarget() > 1d;
 	}
 
 	public void start() {
@@ -124,7 +123,7 @@ public class DiggingGoal extends Goal {
 		}
 		if (this.breakingTick >= this.tickToBreak) {
 			//TODO this drops blocks even if the zombie has no mining item (e.g. stone with bare hands drops cobblestone)
-			this.digger.level.destroyBlock(targetBlocks.get(0), false, this.digger);
+			this.digger.level.destroyBlock(targetBlocks.get(0), true, this.digger);
 			this.digger.level.destroyBlockProgress(this.digger.getId(), targetBlocks.get(0), -1);
 			this.targetBlocks.remove(0);
 			if (!this.targetBlocks.isEmpty())
