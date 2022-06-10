@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Creepers should now stop exploding if the target dies
+
 ## Beta 1.4.4
 * Fixed possible crash with Digger AI
 * Fixed digger not dropping blocks broken

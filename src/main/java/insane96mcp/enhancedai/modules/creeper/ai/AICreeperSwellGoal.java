@@ -26,47 +26,34 @@ public class AICreeperSwellGoal extends Goal {
 		this.swellingCreeper = entitycreeperIn;
 	}
 
-	/**
-	 * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
-	 * method as well.
-	 */
 	public boolean canUse() {
-		LivingEntity target = this.swellingCreeper.getTarget();
-		if (target == null)
+		this.creeperAttackTarget = this.swellingCreeper.getTarget();
+		if (creeperAttackTarget == null)
 			return false;
 
-		boolean canBreach = breaching && canBreach(this.swellingCreeper, target);
-		boolean ignoresWalls = ignoreWalls && this.swellingCreeper.distanceToSqr(target) < (CreeperUtils.getExplosionSizeSq(this.swellingCreeper) * 1d * 1d);
+		boolean canBreach = breaching && canBreach(this.swellingCreeper, this.creeperAttackTarget);
+		boolean ignoresWalls = ignoreWalls && this.swellingCreeper.distanceToSqr(this.creeperAttackTarget) < (CreeperUtils.getExplosionSizeSq(this.swellingCreeper) * 1d * 1d);
 
 		if (canBreach)
 			isBreaching = true;
 
 		return (this.swellingCreeper.getSwellDir() > 0) ||
 				ignoresWalls ||
-				(this.swellingCreeper.getSensing().hasLineOfSight(target) && this.swellingCreeper.distanceToSqr(target) < CreeperUtils.getExplosionSizeSq(this.swellingCreeper) * 1.5d * 1.5d) ||
-				canBreach;
+				canBreach ||
+				(this.swellingCreeper.getSensing().hasLineOfSight(this.creeperAttackTarget) && this.swellingCreeper.distanceToSqr(this.creeperAttackTarget) < CreeperUtils.getExplosionSizeSq(this.swellingCreeper) * 1.5d * 1.5d);
 	}
 
-	/**
-	 * Execute a one shot task or start executing a continuous task
-	 */
 	public void start() {
 		if (!walkingFuse)
 			this.swellingCreeper.getNavigation().stop();
-		this.creeperAttackTarget = this.swellingCreeper.getTarget();
 	}
 
-	/**
-	 * Reset the task's internal state. Called when this task is interrupted by another one
-	 */
 	public void stop() {
 		this.creeperAttackTarget = null;
 		this.isBreaching = false;
+		this.swellingCreeper.setSwellDir(-1);
 	}
 
-	/**
-	 * Keep ticking a continuous task that has already been started
-	 */
 	public void tick() {
 		if (this.creeperAttackTarget == null || !this.creeperAttackTarget.isAlive())
 			this.swellingCreeper.setSwellDir(-1);
