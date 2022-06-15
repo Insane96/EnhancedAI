@@ -114,7 +114,7 @@ public class ThrowingWeb extends Feature {
 		if (!(event.getEntity() instanceof Spider spider))
 			return;
 
-		if (this.entityBlacklist.isBlackWhiteListed(spider.getType()))
+		if (this.entityBlacklist.isEntityBlackOrNotWhitelist(spider))
 			return;
 
 		CompoundTag persistentData = spider.getPersistentData();

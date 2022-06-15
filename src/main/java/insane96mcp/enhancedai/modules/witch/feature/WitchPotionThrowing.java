@@ -107,7 +107,7 @@ public class WitchPotionThrowing extends Feature {
         if (!(event.getEntity() instanceof Witch witch))
             return;
 
-        if (this.entityBlacklist.isBlackWhiteListed(witch.getType()))
+        if (this.entityBlacklist.isEntityBlackOrNotWhitelist(witch))
             return;
 
         List<Goal> rangedAttackGoals = witch.goalSelector.availableGoals.stream()

@@ -1,6 +1,7 @@
 # Changelog
 
-## Upcoming
+## 1.4.5
+* Requires InsaneLib 1.5.1
 * Creepers should now stop exploding if the target dies
 
 ## Beta 1.4.4

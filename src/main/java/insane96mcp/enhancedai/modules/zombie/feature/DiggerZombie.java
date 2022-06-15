@@ -105,7 +105,7 @@ public class DiggerZombie extends Feature {
 		if (!(event.getEntity() instanceof Zombie zombie))
 			return;
 
-		if (this.entityBlacklist.isBlackWhiteListed(zombie.getType()))
+		if (this.entityBlacklist.isEntityBlackOrNotWhitelist(zombie))
 			return;
 
 		boolean processed = zombie.getPersistentData().getBoolean(Strings.Tags.PROCESSED);

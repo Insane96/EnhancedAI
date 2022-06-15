@@ -88,7 +88,7 @@ public class AnimalAttacking extends Feature {
         if (!(event.getEntity() instanceof Animal animal))
             return;
 
-        if (this.entityBlacklist.isBlackWhiteListed(animal.getType()))
+        if (this.entityBlacklist.isEntityBlackOrNotWhitelist(animal))
             return;
 
         if (this.animalsFightBack) {

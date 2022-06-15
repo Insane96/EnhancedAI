@@ -61,7 +61,7 @@ public class PearlerZombie extends Feature {
 		if (!(event.getEntity() instanceof Zombie zombie))
 			return;
 
-		if (this.entityBlacklist.isBlackWhiteListed(zombie.getType()))
+		if (this.entityBlacklist.isEntityBlackOrNotWhitelist(zombie))
 			return;
 
 		if (event.getWorld().random.nextDouble() < this.equipEnderPearlChance)
