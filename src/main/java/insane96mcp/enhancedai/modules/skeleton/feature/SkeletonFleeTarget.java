@@ -82,7 +82,7 @@ public class SkeletonFleeTarget extends Feature {
         if (!this.isEnabled())
             return;
 
-        if (this.entityBlacklist.isBlackWhiteListed(skeleton.getType()))
+        if (this.entityBlacklist.isEntityBlackOrNotWhitelist(skeleton))
             return;
 
         boolean avoidTarget = skeleton.level.random.nextDouble() < this.avoidPlayerChance;

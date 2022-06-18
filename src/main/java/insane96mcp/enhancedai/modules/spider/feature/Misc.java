@@ -59,7 +59,7 @@ public class Misc extends Feature {
 		if (!(event.getEntity() instanceof Spider spider))
 			return;
 
-		if (this.entityBlacklist.isBlackWhiteListed(spider.getType()))
+		if (this.entityBlacklist.isEntityBlackOrNotWhitelist(spider))
 			return;
 
 		event.setAmount((float) (event.getAmount() * (1d - this.fallDamageReduction)));

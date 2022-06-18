@@ -227,7 +227,7 @@ public class DiggingGoal extends Goal {
 			if (state.hasBlockEntity())
 				continue;
 
-			if (Modules.zombie.diggerZombie.blockBlacklist.isBlackWhiteListed(state.getBlock()))
+			if (Modules.zombie.diggerZombie.blockBlacklist.isBlockBlackOrNotWhiteListed(state.getBlock()))
 				continue;
 
 			this.targetBlocks.add(rayTraceResult.getBlockPos());

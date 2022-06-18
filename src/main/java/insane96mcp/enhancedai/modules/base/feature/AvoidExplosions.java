@@ -50,7 +50,7 @@ public class AvoidExplosions extends Feature {
 		if (!(event.getEntity() instanceof PathfinderMob creatureEntity))
 			return;
 
-		if (this.entityBlacklist.isBlackWhiteListed(creatureEntity.getType()))
+		if (this.entityBlacklist.isEntityBlackOrNotWhitelist(creatureEntity))
 			return;
 
 		creatureEntity.goalSelector.addGoal(1, new AvoidExplosionGoal(creatureEntity, 1.6d, 1.3d));

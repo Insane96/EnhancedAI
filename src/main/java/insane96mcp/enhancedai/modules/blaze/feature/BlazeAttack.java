@@ -86,7 +86,7 @@ public class BlazeAttack extends Feature {
         if (!(event.getEntity() instanceof Blaze blaze))
             return;
 
-        if (this.entityBlacklist.isBlackWhiteListed(blaze.getType()))
+        if (this.entityBlacklist.isEntityBlackOrNotWhitelist(blaze))
             return;
 
         ArrayList<Goal> goalsToRemove = new ArrayList<>();

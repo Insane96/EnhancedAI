@@ -71,7 +71,7 @@ public class SkeletonShoot extends Feature {
 		if (!this.isEnabled())
 			return;
 
-		if (this.entityBlacklist.isBlackWhiteListed(skeleton.getType()))
+		if (this.entityBlacklist.isEntityBlackOrNotWhitelist(skeleton))
 			return;
 
 		boolean strafe = skeleton.level.random.nextDouble() < this.strafeChance;

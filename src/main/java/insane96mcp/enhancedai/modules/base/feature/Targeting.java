@@ -88,7 +88,7 @@ public class Targeting extends Feature {
 		if (!(event.getEntity() instanceof Mob mobEntity))
 			return;
 
-		if (this.entityBlacklist.isBlackWhiteListed(mobEntity.getType()))
+		if (this.entityBlacklist.isEntityBlackOrNotWhitelist(mobEntity))
 			return;
 
 		if (this.followRange != 0) {
