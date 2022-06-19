@@ -2,6 +2,7 @@
 
 ## Upcoming
 * Increased Dark Art Witch chance
+* Fixed Diggers begin able to insta-break indestructible blocks
 
 ## 1.4.5
 * Requires InsaneLib 1.5.1

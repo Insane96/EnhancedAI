@@ -139,6 +139,50 @@ public class DiggingGoal extends Goal {
 		this.breakingTick = 0;
 	}
 
+	private void fillTargetBlocks() {
+		int mobHeight = Mth.ceil(this.digger.getBbHeight());
+		for (int i = 0; i < mobHeight; i++) {
+			BlockHitResult rayTraceResult = this.digger.level.clip(new ClipContext(this.digger.position().add(0, i + 0.5d, 0), this.target.getEyePosition(1f).add(0, i, 0), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.digger));
+			if (rayTraceResult.getType() == HitResult.Type.MISS)
+				continue;
+			if (this.targetBlocks.contains(rayTraceResult.getBlockPos()))
+				continue;
+			if (rayTraceResult.getBlockPos().getY() > Modules.zombie.diggerZombie.maxYDig)
+				continue;
+
+			double distance = this.digger.distanceToSqr(rayTraceResult.getLocation());
+			if (distance > this.reachDistance * this.reachDistance)
+				continue;
+
+			BlockState state = this.digger.level.getBlockState(rayTraceResult.getBlockPos());
+
+			if (state.hasBlockEntity() || state.getDestroySpeed(this.digger.level, rayTraceResult.getBlockPos()) == -1)
+				continue;
+
+			if (Modules.zombie.diggerZombie.blockBlacklist.isBlockBlackOrNotWhiteListed(state.getBlock()))
+				continue;
+
+			this.targetBlocks.add(rayTraceResult.getBlockPos());
+		}
+		Collections.reverse(this.targetBlocks);
+	}
+
+	public boolean requiresUpdateEveryTick() {
+		return true;
+	}
+
+	public boolean isStuck() {
+		if (this.digger.getTarget() == null)
+			return false;
+
+		if (this.lastPosition == null || this.digger.distanceToSqr(this.lastPosition) > 2.25d) {
+			this.lastPosition = this.digger.position();
+			this.lastPositionTickstamp = this.digger.tickCount;
+		}
+		return this.digger.getNavigation().isDone() || this.digger.tickCount - this.lastPositionTickstamp >= 60;
+	}
+
+	// Copy-paste of vanilla code
 	private int computeTickToBreak() {
 		int canHarvestBlock = this.canHarvestBlock() ? 30 : 100;
 		double diggingSpeed = this.getDigSpeed() / this.blockState.getDestroySpeed(this.digger.level, this.targetBlocks.get(0)) / canHarvestBlock;
@@ -199,54 +243,5 @@ public class DiggingGoal extends Goal {
 			return false;
 
 		return stack.isCorrectToolForDrops(this.blockState);
-	}
-
-	private void fillTargetBlocks() {
-		int mobHeight = Mth.ceil(this.digger.getBbHeight());
-		/*float angle = (float) Math.toDegrees(Math.atan2(this.target.getEyeY() - this.digger.getEyeY(), this.target.getZ() - this.digger.getZ()));
-
-		if(angle < 0){
-			angle += 360;
-		}
-		LogHelper.info("%s", angle);*/
-		for (int i = 0; i < mobHeight; i++) {
-			BlockHitResult rayTraceResult = this.digger.level.clip(new ClipContext(this.digger.position().add(0, i + 0.5d, 0), this.target.getEyePosition(1f).add(0, i, 0), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.digger));
-			if (rayTraceResult.getType() == HitResult.Type.MISS)
-				continue;
-			if (this.targetBlocks.contains(rayTraceResult.getBlockPos()))
-				continue;
-			if (rayTraceResult.getBlockPos().getY() > Modules.zombie.diggerZombie.maxYDig)
-				continue;
-
-			double distance = this.digger.distanceToSqr(rayTraceResult.getLocation());
-			if (distance > this.reachDistance * this.reachDistance)
-				continue;
-
-			BlockState state = this.digger.level.getBlockState(rayTraceResult.getBlockPos());
-
-			if (state.hasBlockEntity())
-				continue;
-
-			if (Modules.zombie.diggerZombie.blockBlacklist.isBlockBlackOrNotWhiteListed(state.getBlock()))
-				continue;
-
-			this.targetBlocks.add(rayTraceResult.getBlockPos());
-		}
-		Collections.reverse(this.targetBlocks);
-	}
-
-	public boolean requiresUpdateEveryTick() {
-		return true;
-	}
-
-	public boolean isStuck() {
-		if (this.digger.getTarget() == null)
-			return false;
-
-		if (this.lastPosition == null || this.digger.distanceToSqr(this.lastPosition) > 2.25d) {
-			this.lastPosition = this.digger.position();
-			this.lastPositionTickstamp = this.digger.tickCount;
-		}
-		return this.digger.getNavigation().isDone() || this.digger.tickCount - this.lastPositionTickstamp >= 60;
 	}
 }
