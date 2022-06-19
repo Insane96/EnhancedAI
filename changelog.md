@@ -2,6 +2,7 @@
 
 ## Upcoming
 * Increased Dark Art Witch chance
+* Dark art witches no longer start the ritual if the target can't see them
 * Fixed Diggers begin able to insta-break indestructible blocks
 
 ## 1.4.5

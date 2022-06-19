@@ -38,7 +38,7 @@ public class DarkArtWitchGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        return this.witch.getTarget() != null && this.witch.getTarget().distanceToSqr(this.witch) < 100d && this.phase == Phase.EQUIP_EGG;
+        return this.witch.getTarget() != null && this.witch.getTarget().distanceToSqr(this.witch) < 100d && this.witch.getSensing().hasLineOfSight(this.witch.getTarget()) && this.phase == Phase.EQUIP_EGG;
     }
 
     @Override
