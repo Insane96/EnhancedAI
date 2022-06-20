@@ -12,7 +12,7 @@ public class CreeperUtils {
 		return explosionSize;
 	}
 
-	public static float getExplosionSizeSq(Creeper creeper) {
+	public static float getExplosionSizeSqr(Creeper creeper) {
 		float explosionSize = getExplosionSize(creeper);
 		return explosionSize * explosionSize;
 	}

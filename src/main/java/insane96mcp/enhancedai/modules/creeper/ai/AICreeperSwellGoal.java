@@ -32,7 +32,7 @@ public class AICreeperSwellGoal extends Goal {
 			return false;
 
 		boolean canBreach = breaching && canBreach(this.swellingCreeper, this.creeperAttackTarget);
-		boolean ignoresWalls = ignoreWalls && this.swellingCreeper.distanceToSqr(this.creeperAttackTarget) < (CreeperUtils.getExplosionSizeSq(this.swellingCreeper) * 1d * 1d);
+		boolean ignoresWalls = ignoreWalls && this.swellingCreeper.distanceToSqr(this.creeperAttackTarget) < (CreeperUtils.getExplosionSizeSqr(this.swellingCreeper) * 1d * 1d);
 
 		if (canBreach)
 			isBreaching = true;
@@ -40,7 +40,7 @@ public class AICreeperSwellGoal extends Goal {
 		return (this.swellingCreeper.getSwellDir() > 0) ||
 				ignoresWalls ||
 				canBreach ||
-				(this.swellingCreeper.getSensing().hasLineOfSight(this.creeperAttackTarget) && this.swellingCreeper.distanceToSqr(this.creeperAttackTarget) < CreeperUtils.getExplosionSizeSq(this.swellingCreeper) * 1.5d * 1.5d);
+				(this.swellingCreeper.getSensing().hasLineOfSight(this.creeperAttackTarget) && this.swellingCreeper.distanceToSqr(this.creeperAttackTarget) < CreeperUtils.getExplosionSizeSqr(this.swellingCreeper) * 1.5d * 1.5d);
 	}
 
 	public void start() {
@@ -59,7 +59,7 @@ public class AICreeperSwellGoal extends Goal {
 			this.swellingCreeper.setSwellDir(-1);
 		if (this.isBreaching && this.swellingCreeper.distanceToSqr(this.creeperAttackTarget) >= 14 * 14)
 			this.swellingCreeper.setSwellDir(-1);
-		else if (this.swellingCreeper.distanceToSqr(this.creeperAttackTarget) > (CreeperUtils.getExplosionSizeSq(this.swellingCreeper) * 2d * 2d) && !isBreaching)
+		else if (this.swellingCreeper.distanceToSqr(this.creeperAttackTarget) > (CreeperUtils.getExplosionSizeSqr(this.swellingCreeper) * 2d * 2d) && !isBreaching)
 			this.swellingCreeper.setSwellDir(-1);
 		else if (!this.swellingCreeper.getSensing().hasLineOfSight(this.creeperAttackTarget) && !ignoreWalls && !isBreaching)
 			this.swellingCreeper.setSwellDir(-1);
@@ -105,7 +105,7 @@ public class AICreeperSwellGoal extends Goal {
 		return (creeper.getNavigation().isDone() || creeper.getNavigation().isStuck())
 				&& !creeper.getSensing().hasLineOfSight(target)
 				&& !creeper.isInWater()
-				&& xzDistance < (CreeperUtils.getExplosionSizeSq(creeper) * 5d * 5d)
+				&& xzDistance < (CreeperUtils.getExplosionSizeSqr(creeper) * 5d * 5d)
 				&& yDistance > -CreeperUtils.getExplosionSize(creeper) - 2;
 	}
 
