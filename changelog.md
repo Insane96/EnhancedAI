@@ -1,5 +1,9 @@
 # Changelog
 
+## Upcoming
+* Creepers now start exploding when nearer to the target (explosion radius ~~x1.5~~ -> 1.35 blocks)
+* Cleaned up Creeper Module and AI, should perform slightly better
+
 ## 1.4.6
 * Increased Dark Art Witch chance
 * Dark art witches no longer start the ritual if the target can't see them

@@ -13,8 +13,7 @@ public class CreeperUtils {
 	}
 
 	public static float getExplosionSizeSqr(Creeper creeper) {
-		float explosionSize = getExplosionSize(creeper);
-		return explosionSize * explosionSize;
+		return (float) Math.pow(getExplosionSize(creeper), 2);
 	}
 
 	public static short getFuse(Creeper creeper) {

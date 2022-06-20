@@ -48,7 +48,7 @@ public class AICreeperSwellGoal extends Goal {
 		return (this.swellingCreeper.getSwellDir() > 0) ||
 				ignoresWalls ||
 				canBreach ||
-				(this.swellingCreeper.getSensing().hasLineOfSight(this.creeperAttackTarget) && this.swellingCreeper.distanceToSqr(this.creeperAttackTarget) < explosionSizeSqr * 1.5d * 1.5d);
+				(this.swellingCreeper.getSensing().hasLineOfSight(this.creeperAttackTarget) && this.swellingCreeper.distanceToSqr(this.creeperAttackTarget) < explosionSizeSqr * 1.35d * 1.35d);
 	}
 
 	public void start() {
@@ -86,21 +86,24 @@ public class AICreeperSwellGoal extends Goal {
 		}
 	}
 
-	public void setIgnoreWalls(boolean ignoreWalls) {
+	public AICreeperSwellGoal setIgnoreWalls(boolean ignoreWalls) {
 		this.ignoreWalls = ignoreWalls;
+		return this;
 	}
 
-	public void setWalkingFuse(boolean walkingFuse) {
+	public AICreeperSwellGoal setWalkingFuse(boolean walkingFuse) {
 		if (walkingFuse)
 			this.setFlags(EnumSet.noneOf(Goal.Flag.class));
 		else
 			this.setFlags(EnumSet.of(Flag.MOVE));
 
 		this.walkingFuse = walkingFuse;
+		return this;
 	}
 
-	public void setBreaching(boolean breaching) {
+	public AICreeperSwellGoal setBreaching(boolean breaching) {
 		this.breaching = breaching;
+		return this;
 	}
 
 	public static boolean canBreach(Creeper creeper, LivingEntity target) {
