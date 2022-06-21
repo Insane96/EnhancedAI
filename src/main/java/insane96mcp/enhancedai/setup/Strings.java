@@ -29,12 +29,13 @@ public class Strings {
 			public static final String WEB_THROWER = EnhancedAI.RESOURCE_PREFIX + "web_thrower";
 		}
 
-		public static class Animal {
-			public static final String WEB_THROWER = EnhancedAI.RESOURCE_PREFIX + "web_thrower";
-		}
-
 		public static class Blaze {
 			public static final String ATTACK = EnhancedAI.RESOURCE_PREFIX + "attack";
+		}
+
+		public static class Ghast {
+			public static final String ATTACK_COOLDOWN = EnhancedAI.RESOURCE_PREFIX + "attack_cooldown";
+			public static final String FIREBALLS_SHOT = EnhancedAI.RESOURCE_PREFIX + "fireballs_shot";
 		}
 
 		public static class Witch {
