@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class DebugRendererMixin {
 	@Inject(at = @At(value = "TAIL"), method = "render")
 	private static void render(PoseStack poseStack, MultiBufferSource.BufferSource bufferSource, double d1, double d2, double d3, CallbackInfo callbackInfo) {
-		Minecraft.getInstance().debugRenderer.pathfindingRenderer.render(poseStack, bufferSource, d1, d2, d3);
+		if (Minecraft.getInstance().options.renderDebug)
+			Minecraft.getInstance().debugRenderer.pathfindingRenderer.render(poseStack, bufferSource, d1, d2, d3);
 	}
 }
