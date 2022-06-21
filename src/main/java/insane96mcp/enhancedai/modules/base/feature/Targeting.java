@@ -93,7 +93,7 @@ public class Targeting extends Feature {
 		if (this.entityBlacklist.isEntityBlackOrNotWhitelist(mobEntity))
 			return;
 
-		if (this.followRange != 0) {
+		if (this.followRange != 0 && mobEntity.getAttribute(Attributes.FOLLOW_RANGE) != null && mobEntity.getAttribute(Attributes.FOLLOW_RANGE).getBaseValue() < this.followRange) {
 			MCUtils.setAttributeValue(mobEntity, Attributes.FOLLOW_RANGE, this.followRange);
 		}
 
