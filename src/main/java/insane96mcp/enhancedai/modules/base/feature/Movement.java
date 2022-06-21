@@ -17,8 +17,8 @@ public class Movement extends Feature {
     private final ForgeConfigSpec.ConfigValue<Boolean> allowClimbingConfig;
     private final ForgeConfigSpec.ConfigValue<Boolean> targetLaddersConfig;
 
-    public boolean allowClimbing = true;
-    public boolean targetLadders = true;
+    public boolean allowClimbing = false;
+    public boolean targetLadders = false;
 
     public Movement(Module module) {
         super(Config.builder, module);
