@@ -10,5 +10,8 @@
         "MobCategoryMixin",
         "WitchMixin"
     ],
-    "minVersion": "0.8"
+    "minVersion": "0.8",
+    "client": [
+        "DebugRendererMixin"
+    ]
 }
