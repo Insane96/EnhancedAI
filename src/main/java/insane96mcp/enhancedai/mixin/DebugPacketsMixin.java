@@ -1,8 +1,6 @@
 package insane96mcp.enhancedai.mixin;
 
-import io.netty.buffer.Unpooled;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
 import net.minecraft.network.protocol.game.DebugPackets;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -22,12 +20,12 @@ public class DebugPacketsMixin {
 
 	@Inject(at = @At(value = "HEAD"), method = "sendPathFindingPacket")
 	private static void sendPathFindingPacket(Level level, Mob mob, @Nullable Path path, float maxDistanceToWaypoint, CallbackInfo callbackInfo) {
-		if (!(level instanceof ServerLevel) || path == null) return;
+		/*if (!(level instanceof ServerLevel) || path == null) return;
 
 		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 		buf.writeInt(mob.getId()).writeFloat(maxDistanceToWaypoint);
 		path.writeToStream(buf);
-		sendPacketToAllPlayers((ServerLevel) level, buf, ClientboundCustomPayloadPacket.DEBUG_PATHFINDING_PACKET);
+		sendPacketToAllPlayers((ServerLevel) level, buf, ClientboundCustomPayloadPacket.DEBUG_PATHFINDING_PACKET);*/
 	}
 
 	@Shadow
