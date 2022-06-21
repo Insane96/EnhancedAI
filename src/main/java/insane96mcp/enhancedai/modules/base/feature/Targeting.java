@@ -37,6 +37,7 @@ public class Targeting extends Feature {
 	private final ForgeConfigSpec.ConfigValue<Double> swimSpeedMultiplierConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> xrayConfig;
 	private final ForgeConfigSpec.ConfigValue<Boolean> instaTargetConfig;
+	private final ForgeConfigSpec.BooleanValue increasedPathfindingConfig;
 	private final Blacklist.Config entityBlacklistConfig;
 
 	private final List<String> entityBlacklistDefault = Arrays.asList("minecraft:enderman");
@@ -45,6 +46,7 @@ public class Targeting extends Feature {
 	public double swimSpeedMultiplier = 2.5d;
 	public double xray = 0.20d;
 	public boolean instaTarget = true;
+	public boolean increasedPathfinding = true;
 	public Blacklist entityBlacklist;
 
 	public Targeting(Module module) {
@@ -62,6 +64,9 @@ public class Targeting extends Feature {
 		instaTargetConfig = Config.builder
 				.comment("Mobs will no longer take random time to target a player.")
 				.define("Instant Target", instaTarget);
+		increasedPathfindingConfig = Config.builder
+				.comment("Mobs will be able to find better paths to the target. Note that this might hit performance a bit.")
+				.define("Increased Path Finding", this.increasedPathfinding);
 		entityBlacklistConfig = new Blacklist.Config(Config.builder, "Entity Blacklist", "Entities in here will not have the TargetAI changed")
 				.setDefaultList(entityBlacklistDefault)
 				.setIsDefaultWhitelist(false)
@@ -76,6 +81,7 @@ public class Targeting extends Feature {
 		this.swimSpeedMultiplier = this.swimSpeedMultiplierConfig.get();
 		this.xray = this.xrayConfig.get();
 		this.instaTarget = this.instaTargetConfig.get();
+		this.increasedPathfinding = this.increasedPathfindingConfig.get();
 		this.entityBlacklist = this.entityBlacklistConfig.get();
 	}
 
@@ -136,6 +142,8 @@ public class Targeting extends Feature {
 		if (this.instaTarget)
 			targetGoal.setInstaTarget();
 		mobEntity.targetSelector.addGoal(2, targetGoal);
+		if (this.increasedPathfinding)
+			mobEntity.getNavigation().setMaxVisitedNodesMultiplier(5f);
 
 		ILNearestAttackableTargetGoal<Endermite> targetGoalTest;
 
