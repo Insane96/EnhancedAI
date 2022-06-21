@@ -36,8 +36,8 @@ public class CreeperSwell extends Feature {
 	public double cenaChance = 0.02d;
 	public double walkingFuseChance = 0.1d;
 	public double ignoreWalls = 0.1d;
-	public double breach = 0.075;
-	public double launch = 0.05;
+	public double breach = 0.075d;
+	public double launch = 0.05d;
 	public boolean tntLike = false;
 
 	public CreeperSwell(Module module) {
@@ -82,10 +82,8 @@ public class CreeperSwell extends Feature {
 
 		Explosion e = event.getExplosion();
 
-		if (!(e.getExploder() instanceof Creeper))
+		if (!(e.getExploder() instanceof Creeper creeper))
 			return;
-
-		Creeper creeper = (Creeper) e.getExploder();
 
 		if (creeper.getPersistentData().getBoolean(Strings.Tags.Creeper.CENA))
 			creeper.playSound(EASounds.CREEPER_CENA_EXPLODE.get(), 4.0f, 1.0f);
@@ -108,43 +106,42 @@ public class CreeperSwell extends Feature {
 
 		goalsToRemove.forEach(creeper.goalSelector::removeGoal);
 
-		boolean processed = creeper.getPersistentData().getBoolean(Strings.Tags.PROCESSED);
-
-		//Set creeper cena
-		if (creeper.level.random.nextDouble() < this.cenaChance && !processed) {
-			creeper.setCustomName(new TextComponent("Creeper Cena"));
-			CompoundTag compoundNBT = new CompoundTag();
-			compoundNBT.putShort("Fuse", (short)34);
-			compoundNBT.putByte("ExplosionRadius", (byte)6);
-			compoundNBT.putBoolean("powered", creeper.isPowered());
-			creeper.readAdditionalSaveData(compoundNBT);
-			creeper.getPersistentData().putBoolean(ILStrings.Tags.EXPLOSION_CAUSES_FIRE, true);
-			creeper.getPersistentData().putBoolean(Strings.Tags.Creeper.CENA, true);
-		}
+		CompoundTag persistentData = creeper.getPersistentData();
 
 		boolean walkingFuse = creeper.level.random.nextDouble() < this.walkingFuseChance;
 		boolean ignoreWalls = creeper.level.random.nextDouble() < this.ignoreWalls;
 		boolean breach = creeper.level.random.nextDouble() < this.breach;
 		boolean launch = creeper.level.random.nextDouble() < this.launch;
 
-		if (processed) {
-			walkingFuse = creeper.getPersistentData().getBoolean(Strings.Tags.Creeper.WALKING_FUSE);
-			ignoreWalls = creeper.getPersistentData().getBoolean(Strings.Tags.Creeper.IGNORE_WALLS);
-			breach = creeper.getPersistentData().getBoolean(Strings.Tags.Creeper.BREACH);
-			launch = creeper.getPersistentData().getBoolean(Strings.Tags.Creeper.LAUNCH);
+		if (persistentData.contains(Strings.Tags.Creeper.WALKING_FUSE)) {
+			walkingFuse = persistentData.getBoolean(Strings.Tags.Creeper.WALKING_FUSE);
+			ignoreWalls = persistentData.getBoolean(Strings.Tags.Creeper.IGNORE_WALLS);
+			breach = persistentData.getBoolean(Strings.Tags.Creeper.BREACH);
+			launch = persistentData.getBoolean(Strings.Tags.Creeper.LAUNCH);
 		}
 		else {
-			creeper.getPersistentData().putBoolean(Strings.Tags.Creeper.WALKING_FUSE, walkingFuse);
-			creeper.getPersistentData().putBoolean(Strings.Tags.Creeper.IGNORE_WALLS, ignoreWalls);
-			creeper.getPersistentData().putBoolean(Strings.Tags.Creeper.BREACH, breach);
-			creeper.getPersistentData().putBoolean(Strings.Tags.Creeper.LAUNCH, launch);
-			creeper.getPersistentData().putBoolean(Strings.Tags.PROCESSED, true);
+			persistentData.putBoolean(Strings.Tags.Creeper.WALKING_FUSE, walkingFuse);
+			persistentData.putBoolean(Strings.Tags.Creeper.IGNORE_WALLS, ignoreWalls);
+			persistentData.putBoolean(Strings.Tags.Creeper.BREACH, breach);
+			persistentData.putBoolean(Strings.Tags.Creeper.LAUNCH, launch);
+
+			//Set creeper cena
+			if (creeper.level.random.nextDouble() < this.cenaChance) {
+				creeper.setCustomName(new TextComponent("Creeper Cena"));
+				CompoundTag compoundNBT = new CompoundTag();
+				compoundNBT.putShort("Fuse", (short)34);
+				compoundNBT.putByte("ExplosionRadius", (byte)6);
+				compoundNBT.putBoolean("powered", creeper.isPowered());
+				creeper.readAdditionalSaveData(compoundNBT);
+				persistentData.putBoolean(ILStrings.Tags.EXPLOSION_CAUSES_FIRE, true);
+				persistentData.putBoolean(Strings.Tags.Creeper.CENA, true);
+			}
 		}
 
-		AICreeperSwellGoal swellGoal = new AICreeperSwellGoal(creeper);
-		swellGoal.setWalkingFuse(walkingFuse);
-		swellGoal.setIgnoreWalls(ignoreWalls);
-		swellGoal.setBreaching(breach);
+		AICreeperSwellGoal swellGoal = new AICreeperSwellGoal(creeper)
+				.setWalkingFuse(walkingFuse)
+				.setIgnoreWalls(ignoreWalls)
+				.setBreaching(breach);
 		creeper.goalSelector.addGoal(2, swellGoal);
 
 		if (launch)
@@ -153,16 +150,11 @@ public class CreeperSwell extends Feature {
 
 	@SubscribeEvent
 	public void livingDamageEvent(LivingDamageEvent event) {
-		if (!this.tntLike)
+		if (!this.isEnabled()
+				|| !event.getSource().isExplosion()
+				|| !(event.getEntityLiving() instanceof Creeper creeper))
 			return;
 
-		if (!event.getSource().isExplosion())
-			return;
-
-		if (!(event.getEntityLiving() instanceof Creeper))
-			return;
-
-		Creeper creeper = (Creeper) event.getEntityLiving();
 		creeper.ignite();
 	}
 }

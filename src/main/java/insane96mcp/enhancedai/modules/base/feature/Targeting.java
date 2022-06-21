@@ -21,6 +21,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
@@ -53,7 +54,7 @@ public class Targeting extends Feature {
 				.comment("How far away can the mobs see the player. This overrides the vanilla value (16 for most mobs). Setting to 0 will leave the follow range as vanilla. I recommend using mods like Mobs Properties Randomness to have more control over the attribute.")
 				.defineInRange("Follow Range Override", this.followRange, 0, 128);
 		swimSpeedMultiplierConfig = Config.builder
-				.comment("How faster mobs can swim. I recommend using mods like Mobs Properties Randomness to have more control over the attribute.")
+				.comment("How faster mobs can swim. Setting to 0 will leave the swim speed as vanilla. I recommend using mods like Mobs Properties Randomness to have more control over the attribute.")
 				.defineInRange("Swim Speed Multiplier", this.swimSpeedMultiplier, 0d, 4d);
 		xrayConfig = Config.builder
 				.comment("Chance for a mob to be able to see players through blocks.")
@@ -80,7 +81,8 @@ public class Targeting extends Feature {
 
 	final UUID UUID_SWIM_SPEED_MULTIPLIER = UUID.fromString("6d2cb27e-e5e3-41b9-8108-f74131a90cce");
 
-	@SubscribeEvent
+	//High priority as should run before specific mobs
+	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void onMobSpawn(EntityJoinWorldEvent event) {
 		if (!this.isEnabled())
 			return;
