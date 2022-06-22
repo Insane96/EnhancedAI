@@ -13,7 +13,10 @@ public class GhastShootFireballGoal extends Goal {
     public int chargeTime;
 
     private int attackCooldown;
-    private int fireballShot;
+    private int fireballsToShot;
+
+    private int cooldownBetweenFireballs = 4;
+    private int fireballsShot = 0;
 
     public GhastShootFireballGoal(Ghast p_32776_) {
         this.ghast = p_32776_;
@@ -48,28 +51,36 @@ public class GhastShootFireballGoal extends Goal {
                 level.levelEvent(null, 1015, this.ghast.blockPosition(), 0);
             }
 
-            if (this.chargeTime == 10) {
-                Vec3 vec3 = this.ghast.getViewVector(1f);
-                double dirX = target.getX() - (this.ghast.getX() + vec3.x * 4d);
-                double dirY = target.getY(0.5d) - (0.5d + this.ghast.getY(0.5d));
-                double dirZ = target.getZ() - (this.ghast.getZ() + vec3.z * 4d);
-                if (!this.ghast.isSilent()) {
-                    level.levelEvent(null, 1016, this.ghast.blockPosition(), 0);
-                }
+            if (this.chargeTime >= 10) {
+                if (--this.cooldownBetweenFireballs == 0) {
+                    Vec3 vec3 = this.ghast.getViewVector(1f);
+                    double dirX = target.getX() - (this.ghast.getX() + vec3.x * 4d);
+                    double dirY = target.getY(0.7d) - (this.ghast.getY(0.5d));
+                    double dirZ = target.getZ() - (this.ghast.getZ() + vec3.z * 4d);
+                    if (!this.ghast.isSilent()) {
+                        level.levelEvent(null, 1016, this.ghast.blockPosition(), 0);
+                    }
 
-                double randomVariation = 0.1d * (this.fireballShot - 1);
-                for (int i = 0; i < this.fireballShot; i++) {
+                    double randomVariation = 0.5d * (this.fireballsToShot - 1);
                     LargeFireball largefireball = new LargeFireball(level, this.ghast, dirX + Mth.nextDouble(ghast.getRandom(), -randomVariation, randomVariation), dirY, dirZ + Mth.nextDouble(ghast.getRandom(), -randomVariation, randomVariation), this.ghast.getExplosionPower());
-                    largefireball.setPos(this.ghast.getX() + vec3.x * 4d, this.ghast.getY(0.5d) + 0.5d, largefireball.getZ() + vec3.z * 4d);
+                    largefireball.setPos(this.ghast.getX() + vec3.x * 3d, this.ghast.getY(0.5d) - 0.3d, largefireball.getZ() + vec3.z * 3d);
+                    largefireball.xPower *= 1.5f;
+                    largefireball.yPower *= 1.5f;
+                    largefireball.zPower *= 1.5f;
                     level.addFreshEntity(largefireball);
+                    this.fireballsShot++;
+                    this.cooldownBetweenFireballs = 4;
                 }
-                this.chargeTime = -this.attackCooldown;
+                if (this.fireballsShot == this.fireballsToShot) {
+                    this.chargeTime = -this.attackCooldown;
+                    this.fireballsShot = 0;
+                }
             }
         } else if (this.chargeTime > 0) {
             --this.chargeTime;
         }
 
-        this.ghast.setCharging(this.chargeTime > 10);
+        this.ghast.setCharging(this.chargeTime > 0);
     }
 
     public GhastShootFireballGoal setAttackCooldown(int attackCooldown) {
@@ -77,8 +88,8 @@ public class GhastShootFireballGoal extends Goal {
         return this;
     }
 
-    public GhastShootFireballGoal setFireballShot(int fireballShot) {
-        this.fireballShot = fireballShot;
+    public GhastShootFireballGoal setFireballsToShot(int fireballsToShot) {
+        this.fireballsToShot = fireballsToShot;
         return this;
     }
 }

@@ -91,6 +91,6 @@ public class GhastShoot extends Feature {
 
         ghast.goalSelector.addGoal(4, new GhastShootFireballGoal(ghast)
                 .setAttackCooldown(attackCooldown)
-                .setFireballShot(fireballsShot));
+                .setFireballsToShot(fireballsShot));
     }
 }
