@@ -6,12 +6,8 @@
     "mixins": [
         "AbstractSkeletonMixin",
         "CreeperMixin",
-        "DebugPacketsMixin",
         "MobCategoryMixin",
         "WitchMixin"
     ],
-    "minVersion": "0.8",
-    "client": [
-        "DebugRendererMixin"
-    ]
+    "minVersion": "0.8"
 }
