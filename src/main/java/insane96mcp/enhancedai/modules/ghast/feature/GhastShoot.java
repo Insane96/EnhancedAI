@@ -11,6 +11,7 @@ import insane96mcp.insanelib.config.MinMax;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Ghast;
+import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -22,11 +23,13 @@ public class GhastShoot extends Feature {
 
     private final MinMax.Config attackCooldownConfig;
     private final MinMax.Config fireballsShotConfig;
+    private final ForgeConfigSpec.DoubleValue shootWhenNotSeenConfig;
 
     private final Blacklist.Config entityBlacklistConfig;
 
     public MinMax attackCooldown = new MinMax(40, 50);
     public MinMax fireballsShot = new MinMax(1, 3);
+    public double shootWhenNotSeen = 0.3d;
 
     public Blacklist entityBlacklist;
 
@@ -40,6 +43,10 @@ public class GhastShoot extends Feature {
                 .setMinMax(1, 16, this.fireballsShot)
                 .build();
 
+        this.shootWhenNotSeenConfig = Config.builder
+                .comment("Chance for a Ghast to try and shoot the target even if can't see it.")
+                .defineInRange("Shoot when not seen", this.shootWhenNotSeen, 0d, 1d);
+
         entityBlacklistConfig = new Blacklist.Config(Config.builder, "Entity Blacklist", "Entities that shouldn't get the new Ghast Fireballing AI")
                 .setDefaultList(Collections.emptyList())
                 .setIsDefaultWhitelist(false)
@@ -52,6 +59,7 @@ public class GhastShoot extends Feature {
         super.loadConfig();
         this.attackCooldown = this.attackCooldownConfig.get();
         this.fireballsShot = this.fireballsShotConfig.get();
+        this.shootWhenNotSeen = this.shootWhenNotSeenConfig.get();
 
         this.entityBlacklist = this.entityBlacklistConfig.get();
     }
@@ -71,14 +79,17 @@ public class GhastShoot extends Feature {
 
         int attackCooldown = this.attackCooldown.getIntRandBetween(ghast.getRandom());
         int fireballsShot = this.fireballsShot.getIntRandBetween(ghast.getRandom());
+        boolean shootWhenNotSeen = ghast.getRandom().nextDouble() < this.shootWhenNotSeen;
 
         if (persistentData.contains(Strings.Tags.Ghast.ATTACK_COOLDOWN)) {
             attackCooldown = persistentData.getInt(Strings.Tags.Ghast.ATTACK_COOLDOWN);
             fireballsShot = persistentData.getInt(Strings.Tags.Ghast.FIREBALLS_SHOT);
+            shootWhenNotSeen = persistentData.getBoolean(Strings.Tags.Ghast.SHOOT_WHEN_NOT_SEEN);
         }
         else {
             persistentData.putInt(Strings.Tags.Ghast.ATTACK_COOLDOWN, attackCooldown);
             persistentData.putInt(Strings.Tags.Ghast.FIREBALLS_SHOT, fireballsShot);
+            persistentData.putBoolean(Strings.Tags.Ghast.SHOOT_WHEN_NOT_SEEN, shootWhenNotSeen);
         }
 
         ArrayList<Goal> goalsToRemove = new ArrayList<>();
@@ -91,6 +102,7 @@ public class GhastShoot extends Feature {
 
         ghast.goalSelector.addGoal(4, new GhastShootFireballGoal(ghast)
                 .setAttackCooldown(attackCooldown)
-                .setFireballsToShot(fireballsShot));
+                .setFireballsToShot(fireballsShot)
+                .setIgnoreLineOfSight(shootWhenNotSeen));
     }
 }

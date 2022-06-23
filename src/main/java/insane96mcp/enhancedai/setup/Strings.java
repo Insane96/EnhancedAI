@@ -36,7 +36,8 @@ public class Strings {
 		public static class Ghast {
 			public static final String ATTACK_COOLDOWN = EnhancedAI.RESOURCE_PREFIX + "attack_cooldown";
 			public static final String FIREBALLS_SHOT = EnhancedAI.RESOURCE_PREFIX + "fireballs_shot";
-		}
+			public static final String SHOOT_WHEN_NOT_SEEN = EnhancedAI.RESOURCE_PREFIX + "shoot_when_not_seen";
+        }
 
 		public static class Witch {
 			public static final String PERFORMING_DARK_ARTS = EnhancedAI.RESOURCE_PREFIX + "performing_dark_arts";

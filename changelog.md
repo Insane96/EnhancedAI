@@ -6,6 +6,7 @@
 * Entities with higher follow range than the override are no longer overridden (e.g. Ghasts)
 * Creepers now start exploding when nearer to the target (explosion radius ~~x1.5~~ -> 1.35 blocks)
 * Cleaned up Creeper Module and AI, should perform slightly better
+* Hiding no longer let mobs lose the target
 * Fixed a bug where the vanilla targeting AI was not removed causing mobs to be confused at times
 
 ## 1.4.6
