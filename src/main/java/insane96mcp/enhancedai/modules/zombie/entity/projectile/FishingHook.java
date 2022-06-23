@@ -1,6 +1,5 @@
 package insane96mcp.enhancedai.modules.zombie.entity.projectile;
 
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -10,37 +9,25 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.storage.loot.BuiltInLootTables;
-import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 
 public class FishingHook extends Projectile {
@@ -146,7 +133,7 @@ public class FishingHook extends Projectile {
 
             if (flag) {
                 this.setDeltaMovement(this.getDeltaMovement().multiply(0.3D, 0.2D, 0.3D));
-                this.currentState = FishHookState.BOBBING;
+                //this.currentState = FishHookState.BOBBING;
                 return;
             }
 
@@ -164,34 +151,6 @@ public class FishingHook extends Projectile {
                 }
 
                 return;
-            }
-
-            if (this.currentState == FishHookState.BOBBING) {
-                Vec3 vec3 = this.getDeltaMovement();
-                double d0 = this.getY() + vec3.y - (double)blockpos.getY() - (double)f;
-                if (Math.abs(d0) < 0.01D) {
-                    d0 += Math.signum(d0) * 0.1D;
-                }
-
-                this.setDeltaMovement(vec3.x * 0.9D, vec3.y - d0 * (double)this.random.nextFloat() * 0.2D, vec3.z * 0.9D);
-                if (this.nibble <= 0 && this.timeUntilHooked <= 0) {
-                    this.openWater = true;
-                } else {
-                    this.openWater = this.openWater && this.outOfWaterTime < 10 && this.calculateOpenWater(blockpos);
-                }
-
-                if (flag) {
-                    this.outOfWaterTime = Math.max(0, this.outOfWaterTime - 1);
-                    if (this.biting) {
-                        this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.1D * (double)this.syncronizedRandom.nextFloat() * (double)this.syncronizedRandom.nextFloat(), 0.0D));
-                    }
-
-                    if (!this.level.isClientSide) {
-                        this.catchingFish(blockpos);
-                    }
-                } else {
-                    this.outOfWaterTime = Math.min(10, this.outOfWaterTime + 1);
-                }
             }
         }
 
@@ -254,7 +213,6 @@ public class FishingHook extends Projectile {
             if (this.nibble <= 0) {
                 this.timeUntilLured = 0;
                 this.timeUntilHooked = 0;
-                this.getEntityData().set(DATA_BITING, false);
             }
         } else if (this.timeUntilHooked > 0) {
             this.timeUntilHooked -= i;
@@ -283,7 +241,6 @@ public class FishingHook extends Projectile {
                 serverlevel.sendParticles(ParticleTypes.BUBBLE, this.getX(), d3, this.getZ(), (int)(1.0F + this.getBbWidth() * 20.0F), (double)this.getBbWidth(), 0.0D, (double)this.getBbWidth(), (double)0.2F);
                 serverlevel.sendParticles(ParticleTypes.FISHING, this.getX(), d3, this.getZ(), (int)(1.0F + this.getBbWidth() * 20.0F), (double)this.getBbWidth(), 0.0D, (double)this.getBbWidth(), (double)0.2F);
                 this.nibble = Mth.nextInt(this.random, 20, 40);
-                this.getEntityData().set(DATA_BITING, true);
             }
         } else if (this.timeUntilLured > 0) {
             this.timeUntilLured -= i;
@@ -331,57 +288,6 @@ public class FishingHook extends Projectile {
     }
 
     public void readAdditionalSaveData(CompoundTag p_37151_) {
-    }
-
-    public int retrieve(ItemStack p_37157_) {
-        Player player = this.getPlayerOwner();
-        if (!this.level.isClientSide && player != null && !this.shouldStopFishing(player)) {
-            int i = 0;
-            net.minecraftforge.event.entity.player.ItemFishedEvent event = null;
-            if (this.hookedIn != null) {
-                this.pullEntity(this.hookedIn);
-                CriteriaTriggers.FISHING_ROD_HOOKED.trigger((ServerPlayer)player, p_37157_, this, Collections.emptyList());
-                this.level.broadcastEntityEvent(this, (byte)31);
-                i = this.hookedIn instanceof ItemEntity ? 3 : 5;
-            } else if (this.nibble > 0) {
-                LootContext.Builder lootcontext$builder = (new LootContext.Builder((ServerLevel)this.level)).withParameter(LootContextParams.ORIGIN, this.position()).withParameter(LootContextParams.TOOL, p_37157_).withParameter(LootContextParams.THIS_ENTITY, this).withRandom(this.random).withLuck((float)this.luck + player.getLuck());
-                lootcontext$builder.withParameter(LootContextParams.KILLER_ENTITY, this.getOwner()).withParameter(LootContextParams.THIS_ENTITY, this);
-                LootTable loottable = this.level.getServer().getLootTables().get(BuiltInLootTables.FISHING);
-                List<ItemStack> list = loottable.getRandomItems(lootcontext$builder.create(LootContextParamSets.FISHING));
-                event = new net.minecraftforge.event.entity.player.ItemFishedEvent(list, this.onGround ? 2 : 1, this);
-                net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event);
-                if (event.isCanceled()) {
-                    this.discard();
-                    return event.getRodDamage();
-                }
-                CriteriaTriggers.FISHING_ROD_HOOKED.trigger((ServerPlayer)player, p_37157_, this, list);
-
-                for(ItemStack itemstack : list) {
-                    ItemEntity itementity = new ItemEntity(this.level, this.getX(), this.getY(), this.getZ(), itemstack);
-                    double d0 = player.getX() - this.getX();
-                    double d1 = player.getY() - this.getY();
-                    double d2 = player.getZ() - this.getZ();
-                    double d3 = 0.1D;
-                    itementity.setDeltaMovement(d0 * 0.1D, d1 * 0.1D + Math.sqrt(Math.sqrt(d0 * d0 + d1 * d1 + d2 * d2)) * 0.08D, d2 * 0.1D);
-                    this.level.addFreshEntity(itementity);
-                    player.level.addFreshEntity(new ExperienceOrb(player.level, player.getX(), player.getY() + 0.5D, player.getZ() + 0.5D, this.random.nextInt(6) + 1));
-                    if (itemstack.is(ItemTags.FISHES)) {
-                        player.awardStat(Stats.FISH_CAUGHT, 1);
-                    }
-                }
-
-                i = 1;
-            }
-
-            if (this.onGround) {
-                i = 2;
-            }
-
-            this.discard();
-            return event == null ? i : event.getRodDamage();
-        } else {
-            return 0;
-        }
     }
 
     public void handleEntityEvent(byte p_37123_) {
