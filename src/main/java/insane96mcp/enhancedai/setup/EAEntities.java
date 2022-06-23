@@ -17,4 +17,11 @@ public class EAEntities {
 			.setUpdateInterval(10)
 			.setShouldReceiveVelocityUpdates(true)
 			.build("thrown_web"));
+
+	public static final RegistryObject<EntityType<ThrownWebEntity>> FISHING_HOOK = ENTITIES.register("fishing_hook", () -> EntityType.Builder.<ThrownWebEntity>of(ThrownWebEntity::new, MobCategory.MISC)
+			.sized(0.25f, 0.25f)
+			.setTrackingRange(4)
+			.setUpdateInterval(10)
+			.setShouldReceiveVelocityUpdates(true)
+			.build("thrown_web"));
 }
