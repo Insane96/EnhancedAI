@@ -7,6 +7,7 @@ import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.config.Blacklist;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.ItemStack;
@@ -108,16 +109,15 @@ public class DiggerZombie extends Feature {
 		if (this.entityBlacklist.isEntityBlackOrNotWhitelist(zombie))
 			return;
 
-		boolean processed = zombie.getPersistentData().getBoolean(Strings.Tags.PROCESSED);
-
 		boolean miner = zombie.level.random.nextDouble() < this.diggerChance;
 
-		if (processed) {
-			miner = zombie.getPersistentData().getBoolean(Strings.Tags.Zombie.MINER);
+		CompoundTag persistentData = zombie.getPersistentData();
+
+		if (persistentData.contains(Strings.Tags.Zombie.MINER)) {
+			miner = persistentData.getBoolean(Strings.Tags.Zombie.MINER);
 		}
 		else {
-			zombie.getPersistentData().putBoolean(Strings.Tags.Zombie.MINER, miner);
-			zombie.getPersistentData().putBoolean(Strings.Tags.PROCESSED, true);
+			persistentData.putBoolean(Strings.Tags.Zombie.MINER, miner);
 		}
 
 		if (miner) {

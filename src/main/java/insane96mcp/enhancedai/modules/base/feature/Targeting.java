@@ -25,7 +25,6 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -38,15 +37,17 @@ public class Targeting extends Feature {
 	private final ForgeConfigSpec.ConfigValue<Double> xrayConfig;
 	private final ForgeConfigSpec.ConfigValue<Boolean> instaTargetConfig;
 	private final ForgeConfigSpec.BooleanValue betterPathfindingConfig;
+
 	private final Blacklist.Config entityBlacklistConfig;
 
-	private final List<String> entityBlacklistDefault = Arrays.asList("minecraft:enderman");
+	private final List<String> entityBlacklistDefault = List.of("minecraft:enderman");
 
 	public int followRange = 48;
 	public double swimSpeedMultiplier = 2.5d;
 	public double xray = 0.20d;
 	public boolean instaTarget = true;
 	public boolean betterPathfinding = true;
+
 	public Blacklist entityBlacklist;
 
 	public Targeting(Module module) {
@@ -67,6 +68,7 @@ public class Targeting extends Feature {
 		betterPathfindingConfig = Config.builder
 				.comment("Mobs will be able to find better paths to the target. Note that this might hit performance a bit.")
 				.define("Better Path Finding", this.betterPathfinding);
+
 		entityBlacklistConfig = new Blacklist.Config(Config.builder, "Entity Blacklist", "Entities in here will not have the TargetAI changed")
 				.setDefaultList(entityBlacklistDefault)
 				.setIsDefaultWhitelist(false)
@@ -82,6 +84,7 @@ public class Targeting extends Feature {
 		this.xray = this.xrayConfig.get();
 		this.instaTarget = this.instaTargetConfig.get();
 		this.betterPathfinding = this.betterPathfindingConfig.get();
+
 		this.entityBlacklist = this.entityBlacklistConfig.get();
 	}
 
@@ -99,6 +102,7 @@ public class Targeting extends Feature {
 		if (this.entityBlacklist.isEntityBlackOrNotWhitelist(mobEntity))
 			return;
 
+		//noinspection ConstantConditions
 		if (this.followRange != 0 && mobEntity.getAttribute(Attributes.FOLLOW_RANGE) != null && mobEntity.getAttribute(Attributes.FOLLOW_RANGE).getBaseValue() < this.followRange) {
 			MCUtils.setAttributeValue(mobEntity, Attributes.FOLLOW_RANGE, this.followRange);
 		}

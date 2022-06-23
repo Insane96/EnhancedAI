@@ -1,5 +1,6 @@
 package insane96mcp.enhancedai.modules.zombie.ai;
 
+import insane96mcp.enhancedai.modules.Modules;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -60,7 +61,7 @@ public class PearlUseGoal extends Goal {
 		double d3 = Math.sqrt(d0 * d0 + d2 * d2);
 		double pitch = Mth.wrapDegrees((float)(-(Mth.atan2(d1, d3) * (double)(180F / (float)Math.PI))));
 		double yaw = Mth.wrapDegrees((float)(Mth.atan2(d2, d0) * (double)(180F / (float)Math.PI)) - 90.0F);
-		enderPearlEntity.shootFromRotation(this.pearler, (float) (pitch - 3f - d1), (float) (yaw), 0.0F, 1.5F, 4);
+		enderPearlEntity.shootFromRotation(this.pearler, (float) (pitch - 3f - d1), (float) (yaw), 0.0F, 1.5F, Modules.zombie.pearlerZombie.inaccuracy);
 		this.pearler.level.addFreshEntity(enderPearlEntity);
 		stack.shrink(1);
 		this.cooldown = 40;

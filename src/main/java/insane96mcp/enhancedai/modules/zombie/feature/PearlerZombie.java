@@ -20,10 +20,14 @@ import java.util.Collections;
 public class PearlerZombie extends Feature {
 	private final ForgeConfigSpec.ConfigValue<Double> equipEnderPearlChanceConfig;
 	private final ForgeConfigSpec.ConfigValue<Integer> enderPearlAmountConfig;
+	private final ForgeConfigSpec.IntValue inaccuracyConfig;
+
 	private final Blacklist.Config entityBlacklistConfig;
 
 	public double equipEnderPearlChance = 0.04;
 	public int enderPearlAmount = 2;
+	public int inaccuracy = 4;
+
 	public Blacklist entityBlacklist;
 
 	public PearlerZombie(Module module) {
@@ -35,6 +39,10 @@ public class PearlerZombie extends Feature {
 		enderPearlAmountConfig = Config.builder
 				.comment("How many ender pearls will Zombies spawn with.")
 				.defineInRange("Ender Pearl Amount", this.enderPearlAmount, 1, 16);
+		inaccuracyConfig = Config.builder
+				.comment("Inaccuracy when throwing the ender pearl.")
+				.defineInRange("Inaccuracy", this.inaccuracy, 1, 128);
+
 		entityBlacklistConfig = new Blacklist.Config(Config.builder, "Entity Blacklist", "Entities that shouldn't get the Pearler AI")
 				.setDefaultList(Collections.emptyList())
 				.setIsDefaultWhitelist(false)
@@ -47,6 +55,8 @@ public class PearlerZombie extends Feature {
 		super.loadConfig();
 		this.equipEnderPearlChance = this.equipEnderPearlChanceConfig.get();
 		this.enderPearlAmount = this.enderPearlAmountConfig.get();
+		this.inaccuracy = this.inaccuracyConfig.get();
+
 		this.entityBlacklist = this.entityBlacklistConfig.get();
 	}
 

@@ -4,7 +4,7 @@ import insane96mcp.enhancedai.EnhancedAI;
 
 public class Strings {
 	public static class Tags {
-		public static final String PROCESSED = EnhancedAI.RESOURCE_PREFIX + "processed";
+		//public static final String PROCESSED = EnhancedAI.RESOURCE_PREFIX + "processed";
 
 		public static class Creeper {
 			public static final String LAUNCH = EnhancedAI.RESOURCE_PREFIX + "launch";
