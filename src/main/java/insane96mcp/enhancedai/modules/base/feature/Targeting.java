@@ -128,14 +128,14 @@ public class Targeting extends Feature {
 		if (!hasTargetGoal)
 			return;
 
-		goalsToRemove.forEach(mobEntity.goalSelector::removeGoal);
+		goalsToRemove.forEach(mobEntity.targetSelector::removeGoal);
 
 		ILNearestAttackableTargetGoal<Player> targetGoal;
 
 		if (mobEntity instanceof Spider)
 			targetGoal = new EASpiderTargetGoal<>((Spider) mobEntity, Player.class, true, false, predicate);
 		else
-			targetGoal = new ILNearestAttackableTargetGoal<>(mobEntity, Player.class, true, false, predicate);
+			targetGoal = new ILNearestAttackableTargetGoal<>(mobEntity, Player.class, false, false, predicate);
 		if (mobEntity.level.random.nextDouble() < this.xray)
 			targetGoal.setIgnoreLineOfSight();
 
@@ -150,7 +150,7 @@ public class Targeting extends Feature {
 		if (mobEntity instanceof Spider)
 			targetGoalTest = new EASpiderTargetGoal<>((Spider) mobEntity, Endermite.class, true, false, predicate);
 		else
-			targetGoalTest = new ILNearestAttackableTargetGoal<>(mobEntity, Endermite.class, true, false, predicate);
+			targetGoalTest = new ILNearestAttackableTargetGoal<>(mobEntity, Endermite.class, false, false, predicate);
 		if (mobEntity.level.random.nextDouble() < this.xray)
 			targetGoalTest.setIgnoreLineOfSight();
 
