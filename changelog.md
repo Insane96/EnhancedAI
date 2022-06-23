@@ -1,8 +1,12 @@
 # Changelog
 
 ## Upcoming
+* Ghast
+  * Ghasts can now shoot up to 3 fireballs.
+  * Ghasts can now shoot slightly faster or slightly slower.
+  * Ghasts can keep shooting even if can no longer see the target, will also shoot 4x faster when can't see the target
 * Added an option to make mobs find a better path to the target
-* Pearler Zombies inaccuracy can now be configured
+* Pearler Zombies' inaccuracy can now be configured
 * Allow Climbing and Target Ladders are now disabled by default
 * Entities with higher follow range than the override are no longer overridden (e.g. Ghasts)
 * Creepers now start exploding when nearer to the target (explosion radius ~~x1.5~~ -> 1.35 blocks)

@@ -42,9 +42,8 @@ public class GhastShoot extends Feature {
         this.fireballsShotConfig = new MinMax.Config(Config.builder, "Fireballs shot", "How many fireballs ghast shoot like a shotgun. Vanilla is 1")
                 .setMinMax(1, 16, this.fireballsShot)
                 .build();
-
         this.shootWhenNotSeenConfig = Config.builder
-                .comment("Chance for a Ghast to try and shoot the target even if can't see it.")
+                .comment("Chance for a Ghast to try and shoot the target even if can't see it. If enabled and the Ghast can't see the target, he will shoot 4 times as fast to breach.")
                 .defineInRange("Shoot when not seen", this.shootWhenNotSeen, 0d, 1d);
 
         entityBlacklistConfig = new Blacklist.Config(Config.builder, "Entity Blacklist", "Entities that shouldn't get the new Ghast Fireballing AI")

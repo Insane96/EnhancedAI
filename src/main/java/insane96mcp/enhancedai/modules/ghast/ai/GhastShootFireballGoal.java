@@ -74,6 +74,8 @@ public class GhastShootFireballGoal extends Goal {
                 }
                 if (this.fireballsShot == this.fireballsToShot) {
                     this.chargeTime = -this.attackCooldown;
+                    if (this.ignoreLineOfSight)
+                        this.chargeTime /= 4;
                     this.fireballsShot = 0;
                 }
             }
