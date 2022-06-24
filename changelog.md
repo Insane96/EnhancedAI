@@ -1,6 +1,7 @@
 # Changelog
 
 ## Upcoming
+* TODO Change drowned AI to use swim speed instead of mov speed
 * Ghast
   * Ghasts can now shoot up to 3 fireballs.
   * Ghasts can now shoot slightly faster or slightly slower.
