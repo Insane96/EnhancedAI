@@ -82,6 +82,12 @@ public class FishingHook extends Projectile {
 
     public void tick() {
         super.tick();
+        if (this.getOwner() == null || !this.getOwner().isAlive()) {
+            this.discard();
+        }
+        if (this.distanceToSqr(this.getOwner()) > 1024d) {
+            this.discard();
+        }
         if (this.onGround) {
             ++this.life;
             if (this.life >= 1200) {

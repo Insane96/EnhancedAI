@@ -21,7 +21,7 @@ public class FisherZombie extends Feature {
 	private final ForgeConfigSpec.ConfigValue<Double> equipFishingRodChanceConfig;
 	private final Blacklist.Config entityBlacklistConfig;
 
-	public double equipFishingRodChance = 0.08;
+	public double equipFishingRodChance = 0.07;
 	public Blacklist entityBlacklist;
 
 	public FisherZombie(Module module) {

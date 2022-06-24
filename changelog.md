@@ -5,6 +5,8 @@
   * Ghasts can now shoot up to 3 fireballs.
   * Ghasts can now shoot slightly faster or slightly slower.
   * Ghasts can keep shooting even if can no longer see the target, will also shoot 4x faster when can't see the target to breach
+* Added Fishing Zombies
+  * Zombies have 7% chance to spawn with a fishing rod and will be able to reel in players
 * Added Drowned Swimming feature. Makes drowned swim speed based off `forge:swim_speed` attribute instead of `minecraft:generic.movement_speed`
 * Added an option to make mobs find a better path to the target
 * Moved Swim speed multiplier to Movement feature

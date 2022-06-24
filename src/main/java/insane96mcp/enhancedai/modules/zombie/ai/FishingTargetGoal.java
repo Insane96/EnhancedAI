@@ -18,6 +18,7 @@ public class FishingTargetGoal extends Goal {
 	private int cooldown = 20;
 
 	private int reel;
+	private int fishingHookLifetime = 0;
 
 	FishingHook fishingHook;
 
@@ -62,10 +63,11 @@ public class FishingTargetGoal extends Goal {
 		this.fishingHook.shoot(dirX, dirY + distanceXZ * 0.17d, dirZ, 1.1f + ((float)distance / 32f) + (float)Math.max(distanceY / 48d, 0f), 1);
 		this.fisher.level.addFreshEntity(fishingHook);
 		this.reel = reducedTickDelay(40);
+		this.fishingHookLifetime = reducedTickDelay(40);
 	}
 
 	public void tick() {
-		if (this.fishingHook.isOnGround() || this.fishingHook.getHookedIn() != null) {
+		if (this.fishingHook.isOnGround() || this.fishingHook.getHookedIn() != null || --this.fishingHookLifetime <= 0) {
 			if (--this.reel <= 0) {
 				this.fishingHook.level.playSound((Player)null, this.fisher.getX(), this.fisher.getY(), this.fisher.getZ(), SoundEvents.FISHING_BOBBER_RETRIEVE, SoundSource.HOSTILE, 1.0F, 0.4F / (this.fisher.getRandom().nextFloat() * 0.4F + 0.8F));
 				this.fishingHook.retrieve();
