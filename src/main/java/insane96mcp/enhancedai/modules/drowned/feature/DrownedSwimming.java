@@ -25,7 +25,7 @@ public class DrownedSwimming extends Feature {
 	private final ForgeConfigSpec.DoubleValue swimSpeedMultiplierConfig;
 	private final Blacklist.Config entityBlacklistConfig;
 
-	public double swimSpeedMultiplier = 0.25d;
+	public double swimSpeedMultiplier = 0.3d;
 	public Blacklist entityBlacklist;
 
 	public DrownedSwimming(Module module) {

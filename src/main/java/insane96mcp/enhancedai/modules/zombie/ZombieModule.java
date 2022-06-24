@@ -1,6 +1,7 @@
 package insane96mcp.enhancedai.modules.zombie;
 
 import insane96mcp.enhancedai.modules.zombie.feature.DiggerZombie;
+import insane96mcp.enhancedai.modules.zombie.feature.FisherZombie;
 import insane96mcp.enhancedai.modules.zombie.feature.PearlerZombie;
 import insane96mcp.enhancedai.setup.Config;
 import insane96mcp.insanelib.base.Label;
@@ -11,14 +12,14 @@ public class ZombieModule extends Module {
 
 	public DiggerZombie diggerZombie;
 	public PearlerZombie pearlerZombie;
-	//public FisherZombie fisherZombie;
+	public FisherZombie fisherZombie;
 
 	public ZombieModule() {
 		super(Config.builder);
 		this.pushConfig(Config.builder);
 		this.diggerZombie = new DiggerZombie(this);
 		this.pearlerZombie = new PearlerZombie(this);
-		//this.fisherZombie = new FisherZombie(this);
+		this.fisherZombie = new FisherZombie(this);
 		Config.builder.pop();
 	}
 
@@ -27,6 +28,6 @@ public class ZombieModule extends Module {
 		super.loadConfig();
 		this.diggerZombie.loadConfig();
 		this.pearlerZombie.loadConfig();
-		//this.fisherZombie.loadConfig();
+		this.fisherZombie.loadConfig();
 	}
 }

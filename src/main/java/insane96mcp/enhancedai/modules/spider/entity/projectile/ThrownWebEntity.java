@@ -21,8 +21,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ThrownWebEntity extends ThrowableItemProjectile {
 
@@ -34,11 +32,6 @@ public class ThrownWebEntity extends ThrowableItemProjectile {
 
 	public ThrownWebEntity(Level worldIn, LivingEntity throwerIn) {
 		super(EAEntities.THROWN_WEB.get(), throwerIn, worldIn);
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	public ThrownWebEntity(Level worldIn, double x, double y, double z) {
-		super(EntityType.ENDER_PEARL, x, y, z, worldIn);
 	}
 
 	@Override

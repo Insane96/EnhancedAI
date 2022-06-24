@@ -24,7 +24,7 @@ public class PearlerZombie extends Feature {
 
 	private final Blacklist.Config entityBlacklistConfig;
 
-	public double equipEnderPearlChance = 0.04;
+	public double equipEnderPearlChance = 0.05;
 	public int enderPearlAmount = 2;
 	public int inaccuracy = 4;
 
