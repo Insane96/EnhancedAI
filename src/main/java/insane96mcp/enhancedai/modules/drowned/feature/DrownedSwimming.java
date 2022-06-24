@@ -5,25 +5,36 @@ import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.config.Blacklist;
+import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.monster.Drowned;
+import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.Collections;
+import java.util.UUID;
 
 @Label(name = "Drowned Swimming", description = "Makes drowned swim speed based off swim speed attribute instead of movement speed.")
 public class DrownedSwimming extends Feature {
+
+	private final ForgeConfigSpec.DoubleValue swimSpeedMultiplierConfig;
 	private final Blacklist.Config entityBlacklistConfig;
 
+	public double swimSpeedMultiplier = 0.25d;
 	public Blacklist entityBlacklist;
 
 	public DrownedSwimming(Module module) {
 		super(Config.builder, module);
 		this.pushConfig(Config.builder);
+		swimSpeedMultiplierConfig = Config.builder
+				.comment("Multiplier for the swim speed of Drowneds. Note that the swim speed is also affected by the Movement Feature. Set to 0 to disable the multiplier.")
+				.defineInRange("Swim Speed Multiplier", this.swimSpeedMultiplier, 0d, 4d);
+
 		entityBlacklistConfig = new Blacklist.Config(Config.builder, "Entity Blacklist", "Entities that shouldn't get the Swim Control from drowneds")
 				.setDefaultList(Collections.emptyList())
 				.setIsDefaultWhitelist(false)
@@ -34,24 +45,25 @@ public class DrownedSwimming extends Feature {
 	@Override
 	public void loadConfig() {
 		super.loadConfig();
+		this.swimSpeedMultiplier = this.swimSpeedMultiplierConfig.get();
 		this.entityBlacklist = this.entityBlacklistConfig.get();
 	}
 
+	final UUID UUID_SWIM_SPEED_MULTIPLIER = UUID.fromString("ba2adf05-2438-4d1f-8165-89173f0a1eae");
+
 	@SubscribeEvent
 	public void onSpawn(EntityJoinWorldEvent event) {
-		if (!this.isEnabled())
+		if (!this.isEnabled()
+				|| !(event.getEntity() instanceof Drowned drowned)
+				|| this.entityBlacklist.isEntityBlackOrNotWhitelist(drowned))
 			return;
-
-		if (!(event.getEntity() instanceof Drowned drowned))
-			return;
-
-		if (this.entityBlacklist.isEntityBlackOrNotWhitelist(drowned))
-			return;
-
 
 		drowned.moveControl = new EADrownedMoveControl(drowned);
-	}
 
+		if (this.swimSpeedMultiplier > 0d) {
+			MCUtils.applyModifier(drowned, ForgeMod.SWIM_SPEED.get(), UUID_SWIM_SPEED_MULTIPLIER, "Enhanced AI Drowneds Swim Speed Multiplier", this.swimSpeedMultiplier - 1, AttributeModifier.Operation.MULTIPLY_TOTAL);
+		}
+	}
 
 	static class EADrownedMoveControl extends MoveControl {
 		private final Drowned drowned;
