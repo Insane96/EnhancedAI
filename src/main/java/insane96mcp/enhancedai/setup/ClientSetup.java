@@ -1,6 +1,7 @@
 package insane96mcp.enhancedai.setup;
 
 import insane96mcp.enhancedai.EnhancedAI;
+import insane96mcp.enhancedai.modules.zombie.client.renderer.entity.FishingHookRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -12,5 +13,6 @@ public class ClientSetup {
 	@SubscribeEvent
 	public static void init(final EntityRenderersEvent.RegisterRenderers event) {
 		event.registerEntityRenderer(EAEntities.THROWN_WEB.get(), ThrownItemRenderer::new);
+		event.registerEntityRenderer(EAEntities.FISHING_HOOK.get(), FishingHookRenderer::new);
 	}
 }
