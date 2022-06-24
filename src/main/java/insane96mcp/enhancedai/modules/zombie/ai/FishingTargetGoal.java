@@ -8,6 +8,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.phys.Vec3;
 
 public class FishingTargetGoal extends Goal {
 
@@ -15,6 +16,7 @@ public class FishingTargetGoal extends Goal {
 	private final Zombie fisher;
 	private Player targetPlayer;
 	private int cooldown = 20;
+
 	private int reel;
 
 	FishingHook fishingHook;
@@ -47,31 +49,33 @@ public class FishingTargetGoal extends Goal {
 		this.targetPlayer = (Player) this.fisher.getTarget();
 		this.fisher.level.playSound(null, this.fisher.getX(), this.fisher.getY(), this.fisher.getZ(), SoundEvents.FISHING_BOBBER_THROW, SoundSource.HOSTILE, 1F, 0.4F / (this.fisher.level.random.nextFloat() * 0.4F + 0.8F));
 		this.fishingHook = new FishingHook(this.fisher, this.fisher.level);
-		/*this.fishingHook.setOwner(this.targetPlayer);
-		fishingHook.setPos(this.fisher.getEyePosition(1f).x, this.fisher.getEyePosition(1f).y, this.fisher.getEyePosition(1f).z);
+		this.fishingHook.setPos(this.fisher.getEyePosition(1f).x, this.fisher.getEyePosition(1f).y, this.fisher.getEyePosition(1f).z);
 		Vec3 vector3d = this.fisher.getEyePosition(1f);
-		double d0 = this.targetPlayer.getX() - vector3d.x;
-		double d1 = this.targetPlayer.getEyePosition(1f).y - vector3d.y;
-		double d2 = this.targetPlayer.getZ() - vector3d.z;
-		double d3 = Math.sqrt(d0 * d0 + d2 * d2);
-		double pitch = Mth.wrapDegrees((float)(-(Mth.atan2(d1, d3) * (double)(180F / (float)Math.PI))));
-		double yaw = Mth.wrapDegrees((float)(Mth.atan2(d2, d0) * (double)(180F / (float)Math.PI)) - 90.0F);
-		fishingHook.shootFromRotation(this.fisher, (float) (pitch - 3f - d1), (float) (yaw), 0.0F, 1.5F, 1);*/
+		double distance = this.fisher.distanceTo(this.targetPlayer);
+		double distanceY = this.targetPlayer.getY() - this.fisher.getY();
+		double dirX = this.targetPlayer.getX() - this.fisher.getX();
+		double dirZ = this.targetPlayer.getZ() - this.fisher.getZ();
+		double distanceXZ = Math.sqrt(dirX * dirX + dirZ * dirZ);
+		double yPos = this.targetPlayer.getY(0d);
+		yPos += this.targetPlayer.getEyeHeight() * 0.5 + (distanceY / distanceXZ);
+		double dirY = yPos - this.fishingHook.getY();
+		this.fishingHook.shoot(dirX, dirY + distanceXZ * 0.17d, dirZ, 1.1f + ((float)distance / 32f) + (float)Math.max(distanceY / 48d, 0f), 1);
 		this.fisher.level.addFreshEntity(fishingHook);
-		this.reel = 100;
+		this.reel = reducedTickDelay(40);
 	}
 
 	public void tick() {
-		if (--this.reel > 0)
-			return;
-
-		fishingHook.retrieve();
+		if (this.fishingHook.isOnGround() || this.fishingHook.getHookedIn() != null) {
+			if (--this.reel <= 0) {
+				this.fishingHook.level.playSound((Player)null, this.fisher.getX(), this.fisher.getY(), this.fisher.getZ(), SoundEvents.FISHING_BOBBER_RETRIEVE, SoundSource.HOSTILE, 1.0F, 0.4F / (this.fisher.getRandom().nextFloat() * 0.4F + 0.8F));
+				this.fishingHook.retrieve();
+			}
+		}
 	}
 
 	public void stop() {
 		this.targetPlayer = null;
 		this.fishingHook = null;
-		this.fisher.getNavigation().stop();
-		this.cooldown = 30;
+		this.cooldown = reducedTickDelay(40);
 	}
 }

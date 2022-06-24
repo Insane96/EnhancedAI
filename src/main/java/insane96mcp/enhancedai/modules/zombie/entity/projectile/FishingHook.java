@@ -8,7 +8,6 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MoverType;
@@ -24,10 +23,8 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 public class FishingHook extends Projectile {
-    private final Random syncronizedRandom = new Random();
     private static final EntityDataAccessor<Integer> DATA_HOOKED_ENTITY = SynchedEntityData.defineId(FishingHook.class, EntityDataSerializers.INT);
     private int life;
     @Nullable
@@ -42,7 +39,7 @@ public class FishingHook extends Projectile {
     public FishingHook(Entity p_37106_, Level p_37107_) {
         this(EAEntities.FISHING_HOOK.get(), p_37107_);
         this.setOwner(p_37106_);
-        float xRot = p_37106_.getXRot();
+        /*float xRot = p_37106_.getXRot();
         float yRot = p_37106_.getYRot();
         float cosY = Mth.cos(-yRot * ((float)Math.PI / 180F) - (float)Math.PI);
         float sinY = Mth.sin(-yRot * ((float)Math.PI / 180F) - (float)Math.PI);
@@ -59,7 +56,7 @@ public class FishingHook extends Projectile {
         this.setYRot((float)(Mth.atan2(vec3.x, vec3.z) * (double)(180F / (float)Math.PI)));
         this.setXRot((float)(Mth.atan2(vec3.y, vec3.horizontalDistance()) * (double)(180F / (float)Math.PI)));
         this.yRotO = this.getYRot();
-        this.xRotO = this.getXRot();
+        this.xRotO = this.getXRot();*/
     }
 
     protected void defineSynchedData() {
@@ -84,7 +81,6 @@ public class FishingHook extends Projectile {
     }
 
     public void tick() {
-        this.syncronizedRandom.setSeed(this.getUUID().getLeastSignificantBits() ^ this.level.getGameTime());
         super.tick();
         if (this.onGround) {
             ++this.life;
@@ -146,7 +142,7 @@ public class FishingHook extends Projectile {
         }
 
         //Vanilla is 0.92, so this slows down slower
-        this.setDeltaMovement(this.getDeltaMovement().scale(0.95D));
+        this.setDeltaMovement(this.getDeltaMovement().scale(0.96D));
         this.reapplyPosition();
     }
 
@@ -205,7 +201,7 @@ public class FishingHook extends Projectile {
     protected void pullEntity(Entity entity) {
         Entity owner = this.getOwner();
         if (owner != null) {
-            Vec3 vec3 = (new Vec3(owner.getX() - this.getX(), owner.getY() - this.getY(), owner.getZ() - this.getZ())).scale(0.1D);
+            Vec3 vec3 = (new Vec3(owner.getX() - this.getX(), owner.getY() - this.getY(), owner.getZ() - this.getZ())).scale(0.35D);
             entity.setDeltaMovement(entity.getDeltaMovement().add(vec3));
         }
     }
