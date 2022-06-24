@@ -10,7 +10,6 @@ import insane96mcp.insanelib.config.Blacklist;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
@@ -19,21 +18,18 @@ import net.minecraft.world.entity.monster.Endermite;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.function.Predicate;
 
 @Label(name = "Targeting", description = "Change how mobs target players")
 public class Targeting extends Feature {
 
 	private final ForgeConfigSpec.ConfigValue<Integer> followRangeConfig;
-	private final ForgeConfigSpec.ConfigValue<Double> swimSpeedMultiplierConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> xrayConfig;
 	private final ForgeConfigSpec.ConfigValue<Boolean> instaTargetConfig;
 	private final ForgeConfigSpec.BooleanValue betterPathfindingConfig;
@@ -43,7 +39,6 @@ public class Targeting extends Feature {
 	private final List<String> entityBlacklistDefault = List.of("minecraft:enderman");
 
 	public int followRange = 48;
-	public double swimSpeedMultiplier = 2.5d;
 	public double xray = 0.20d;
 	public boolean instaTarget = true;
 	public boolean betterPathfinding = true;
@@ -56,9 +51,6 @@ public class Targeting extends Feature {
 		followRangeConfig = Config.builder
 				.comment("How far away can the mobs see the player. This overrides the vanilla value (16 for most mobs). Setting to 0 will leave the follow range as vanilla. I recommend using mods like Mobs Properties Randomness to have more control over the attribute.")
 				.defineInRange("Follow Range Override", this.followRange, 0, 128);
-		swimSpeedMultiplierConfig = Config.builder
-				.comment("How faster mobs can swim. Setting to 0 will leave the swim speed as vanilla. I recommend using mods like Mobs Properties Randomness to have more control over the attribute.")
-				.defineInRange("Swim Speed Multiplier", this.swimSpeedMultiplier, 0d, 4d);
 		xrayConfig = Config.builder
 				.comment("Chance for a mob to be able to see players through blocks.")
 				.defineInRange("XRay Chance", xray, 0d, 1d);
@@ -80,15 +72,12 @@ public class Targeting extends Feature {
 	public void loadConfig() {
 		super.loadConfig();
 		this.followRange = this.followRangeConfig.get();
-		this.swimSpeedMultiplier = this.swimSpeedMultiplierConfig.get();
 		this.xray = this.xrayConfig.get();
 		this.instaTarget = this.instaTargetConfig.get();
 		this.betterPathfinding = this.betterPathfindingConfig.get();
 
 		this.entityBlacklist = this.entityBlacklistConfig.get();
 	}
-
-	final UUID UUID_SWIM_SPEED_MULTIPLIER = UUID.fromString("6d2cb27e-e5e3-41b9-8108-f74131a90cce");
 
 	//High priority as should run before specific mobs
 	@SubscribeEvent(priority = EventPriority.HIGH)
@@ -105,10 +94,6 @@ public class Targeting extends Feature {
 		//noinspection ConstantConditions
 		if (this.followRange != 0 && mobEntity.getAttribute(Attributes.FOLLOW_RANGE) != null && mobEntity.getAttribute(Attributes.FOLLOW_RANGE).getBaseValue() < this.followRange) {
 			MCUtils.setAttributeValue(mobEntity, Attributes.FOLLOW_RANGE, this.followRange);
-		}
-
-		if (this.swimSpeedMultiplier != 0d) {
-			MCUtils.applyModifier(mobEntity, ForgeMod.SWIM_SPEED.get(), UUID_SWIM_SPEED_MULTIPLIER, "Enhanced AI Swim Speed Multiplier", this.swimSpeedMultiplier, AttributeModifier.Operation.MULTIPLY_BASE, false);
 		}
 
 		boolean hasTargetGoal = false;

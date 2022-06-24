@@ -1,16 +1,17 @@
 # Changelog
 
 ## Upcoming
-* TODO Change drowned AI to use swim speed instead of mov speed
-* Ghast
+* Added Ghast Shoot feature 
   * Ghasts can now shoot up to 3 fireballs.
   * Ghasts can now shoot slightly faster or slightly slower.
-  * Ghasts can keep shooting even if can no longer see the target, will also shoot 4x faster when can't see the target
+  * Ghasts can keep shooting even if can no longer see the target, will also shoot 4x faster when can't see the target to breach
+* Added Drowned Swimming feature. Makes drowned swim speed based off `forge:swim_speed` attribute instead of `minecraft:generic.movement_speed`
 * Added an option to make mobs find a better path to the target
+* Moved Swim speed multiplier to Movement feature
 * Pearler Zombies' inaccuracy can now be configured
 * Allow Climbing and Target Ladders are now disabled by default
 * Entities with higher follow range than the override are no longer overridden (e.g. Ghasts)
-* Creepers now start exploding when nearer to the target (explosion radius ~~x1.5~~ -> 1.35 blocks)
+* Creepers now start exploding when nearer to the target (explosion radius ~~x1.5~~ -> x1.35 blocks)
 * Cleaned up Creeper Module and AI, should perform slightly better
 * Hiding no longer let mobs lose the target
 * Fixed a bug where the vanilla targeting AI was not removed causing mobs to be confused at times
