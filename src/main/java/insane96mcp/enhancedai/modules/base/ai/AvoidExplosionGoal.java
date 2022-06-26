@@ -27,7 +27,6 @@ public class AvoidExplosionGoal extends Goal {
 		this.setFlags(EnumSet.of(Goal.Flag.MOVE));
 	}
 
-	//TODO Make them run again if too near the explosion
 	public boolean canUse() {
 		if (this.run && this.avoidTarget.distanceToSqr(entity) < (explosionRadius * explosionRadius * 2d * 2d) && (this.path == null || this.path.isDone())) {
 			Vec3 vector3d;

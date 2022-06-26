@@ -53,7 +53,6 @@ public class GhastShootFireballGoal extends Goal {
             }
 
             if (this.chargeTime >= 10) {
-                //TODO try to stop moving when shooting
                 if (--this.cooldownBetweenFireballs == 0) {
                     Vec3 vec3 = this.ghast.getViewVector(1f);
                     double dirX = target.getX() - (this.ghast.getX() + vec3.x * 4d);
@@ -72,7 +71,7 @@ public class GhastShootFireballGoal extends Goal {
                 }
                 if (this.fireballsShot == this.fireballsToShot) {
                     this.chargeTime = -this.attackCooldown;
-                    if (this.ignoreLineOfSight)
+                    if (this.ignoreLineOfSight && !this.ghast.hasLineOfSight(target))
                         this.chargeTime /= 4;
                     this.fireballsShot = 0;
                 }
