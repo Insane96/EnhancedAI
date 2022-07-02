@@ -46,13 +46,10 @@ public class FisherZombie extends Feature {
 
 	@SubscribeEvent
 	public void onSpawn(EntityJoinWorldEvent event) {
-		if (!this.isEnabled())
-			return;
-
-		if (!(event.getEntity() instanceof Zombie zombie))
-			return;
-
-		if (this.entityBlacklist.isEntityBlackOrNotWhitelist(zombie))
+		if (!this.isEnabled()
+				|| event.getWorld().isClientSide
+				|| !(event.getEntity() instanceof Zombie zombie)
+				|| this.entityBlacklist.isEntityBlackOrNotWhitelist(zombie))
 			return;
 
 		if (event.getWorld().random.nextDouble() < this.equipFishingRodChance)

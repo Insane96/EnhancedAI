@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Fixed Zombies spawning with Fishing rod client side.
+
 ## Beta 1.5.0
 * Added Ghast Shoot feature 
   * Ghasts can now shoot up to 3 fireballs.
