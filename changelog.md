@@ -2,6 +2,7 @@
 
 ## Upcoming
 * Fixed Zombies spawning with Fishing rod client side.
+* Fixed Fisher zombies fishing even if they couldn't see the target
 
 ## Beta 1.5.0
 * Added Ghast Shoot feature 

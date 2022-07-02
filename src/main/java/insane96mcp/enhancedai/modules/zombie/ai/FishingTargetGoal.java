@@ -33,7 +33,8 @@ public class FishingTargetGoal extends Goal {
 
 		//24d & 4d
 		if (this.fisher.distanceToSqr(target) > 576d
-				|| this.fisher.distanceToSqr(target) < 16d)
+				|| this.fisher.distanceToSqr(target) < 16d
+				|| this.fisher.getSensing().hasLineOfSight(target))
 			return false;
 
 		if (--this.cooldown > 0)
