@@ -37,7 +37,7 @@ public class Attacking extends Feature {
 			if (event.has(entityType, ForgeMod.ATTACK_RANGE.get()))
 				continue;
 
-			event.add(entityType, ForgeMod.ATTACK_RANGE.get(), entityType.getWidth());
+			event.add(entityType, ForgeMod.ATTACK_RANGE.get(), entityType.getWidth() * 2d);
 		}
 	}
 }

@@ -1,7 +1,7 @@
 # Changelog
 
 ## Upcoming
-* Added Melee Attacks Attribute Based. Mobs attack distance based off `forge:attack_range` attribute.
+* Added Melee Attacks Attribute Based. Mobs attack distance based off `forge:attack_range` attribute. Defaults to vanilla attack range.
 * Fixed Zombies spawning with Fishing rod client side.
 * Fixed Fisher zombies fishing even if they couldn't see the target
 
