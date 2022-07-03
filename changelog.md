@@ -2,6 +2,7 @@
 
 ## Upcoming
 * Added Melee Attacks Attribute Based. Mobs attack distance based off `forge:attack_range` attribute. Defaults to vanilla attack range.
+* Fixed witches having wrong config for potion effects, causing duration and amplifier being swapped. You need to regen the config or fix the potion effects by swapping the last two numbers.
 * Fixed Zombies spawning with Fishing rod client side.
 * Fixed Fisher zombies fishing even if they couldn't see the target
 
@@ -63,8 +64,9 @@
     * Witches are now able to use a slow falling potion on themselves if falling for more than 8 blocks
     * Slowed down witches throw speed and reduced back-to-back attack chance
 * Added Entity Blacklist to Avoid Explosion Feature
-* Miner Zombies no longer keep mining if they can reach the target
-* Added a max distance from target to mine config option. Disabled by default
+* Miner Zombies 
+  * No longer keep mining if they can reach the target
+  * Added a max distance from target to mine config option. Disabled by default
 
 ## 1.4.0
 * Added Witch Module

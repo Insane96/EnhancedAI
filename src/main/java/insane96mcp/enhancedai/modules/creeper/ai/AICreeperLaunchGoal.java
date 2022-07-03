@@ -94,10 +94,11 @@ public class AICreeperLaunchGoal extends Goal {
 		if (--ticksBeforeLaunching != 0)
 			return;
 
-		if (!this.launchingCreeper.level.isClientSide)
-			for(ServerPlayer player : ((ServerLevel) this.launchingCreeper.level).players()) {
+		if (!this.launchingCreeper.level.isClientSide) {
+			for (ServerPlayer player : ((ServerLevel) this.launchingCreeper.level).players()) {
 				((ServerLevel) this.launchingCreeper.level).sendParticles(player, ParticleTypes.CLOUD, true, this.launchingCreeper.getX(), this.launchingCreeper.getY(), this.launchingCreeper.getZ(), 100, 0.5d, 0.5d, 0.5d, 0.2d);
 			}
+		}
 
 		this.launchingCreeper.playSound(SoundEvents.FIREWORK_ROCKET_LAUNCH, 6.0f, 0.5f);
 		double distanceY = this.creeperAttackTarget.getY() - this.launchingCreeper.getY();

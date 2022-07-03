@@ -23,7 +23,7 @@ public class ThirstyWitches extends Feature {
     private final ForgeConfigSpec.DoubleValue fireResistanceChanceConfig;
     private final ForgeConfigSpec.DoubleValue milkChanceConfig;
 
-    public static final List<String> drinkPotionDefault = Arrays.asList("minecraft:speed,1,3600", "minecraft:resistance,0,3600", "minecraft:absorption,0,1800", "minecraft:regeneration,0,900");
+    public static final List<String> drinkPotionDefault = Arrays.asList("minecraft:speed,3600,1", "minecraft:resistance,3600,0", "minecraft:absorption,1800,0", "minecraft:regeneration,900,0");
 
     public ArrayList<MobEffectInstance> drinkPotion;
     public double healingChance = 0.05d;
@@ -36,7 +36,7 @@ public class ThirstyWitches extends Feature {
         super(Config.builder, module);
         super.pushConfig(Config.builder);
         this.drinkPotionConfig = Config.builder
-                .comment("A list of potions that the witch will drink as soon as the player is targeted. Note that witches can still drink other potions in different situations, refer to other config options. Format is effect_id,amplifier,duration. The potions are applied in order and witches will not throw the same potion if the target has already the effect.")
+                .comment("A list of potions that the witch will drink as soon as the player is targeted. Note that witches can still drink other potions in different situations, refer to other config options. Format is effect_id,duration,amplifier. The potions are applied in order and witches will not throw the same potion if the target has already the effect.")
                 .defineList("Potions on Target List", drinkPotionDefault, o -> o instanceof String);
         this.healingChanceConfig = Config.builder
                 .comment("Chance for a witch to drink a healing potion when not full health. Defaults to Vanilla")

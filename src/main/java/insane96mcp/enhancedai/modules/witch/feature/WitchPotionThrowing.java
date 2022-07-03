@@ -35,8 +35,8 @@ public class WitchPotionThrowing extends Feature {
     private final ForgeConfigSpec.ConfigValue<Double> healthThresholdInvisiblityConfig;
     private final Blacklist.Config entityBlacklistConfig;
 
-    public static final List<String> badPotionsListDefault = Arrays.asList("minecraft:weakness,0,1800", "minecraft:slowness,1,1200", "minecraft:hunger,0,600", "minecraft:mining_fatigue,0,600", "minecraft:poison,0,900", "minecraft:blindness,0,120", "minecraft:instant_damage,0,1");
-    public static final List<String> goodPotionsListDefault = Arrays.asList("minecraft:regeneration,0,900", "minecraft:speed,0,1800", "minecraft:strength,0,1800", "minecraft:instant_health,0,1");
+    public static final List<String> badPotionsListDefault = Arrays.asList("minecraft:weakness,1800,0", "minecraft:slowness,1200,1", "minecraft:hunger,600,0", "minecraft:mining_fatigue,600,0", "minecraft:poison,900,0", "minecraft:blindness,120,0", "minecraft:instant_damage,1,0");
+    public static final List<String> goodPotionsListDefault = Arrays.asList("minecraft:regeneration,900,0", "minecraft:speed,1800,0", "minecraft:strength,1800,0", "minecraft:instant_health,1,0");
 
     public ArrayList<MobEffectInstance> badPotionsList;
     public ArrayList<MobEffectInstance> goodPotionsList;
@@ -52,10 +52,10 @@ public class WitchPotionThrowing extends Feature {
         super(Config.builder, module);
         this.pushConfig(Config.builder);
         this.badPotionsListConfig = Config.builder
-                .comment("A list of potions that the witch can throw at enemies. Format is effect_id,amplifier,duration. The potions are applied in order and witches will not throw the same potion if the target has already the effect.")
+                .comment("A list of potions that the witch can throw at enemies. Format is effect_id,duration,amplifier. The potions are applied in order and witches will not throw the same potion if the target has already the effect.")
                 .defineList("Bad Potions List", badPotionsListDefault, o -> o instanceof String);
         this.goodPotionsListConfig = Config.builder
-                .comment("A list of potions that the witch can throw at allies (in raids). Format is effect_id,amplifier,duration. The potions are applied in order and witches will not throw the same potion if the target has already the effect.")
+                .comment("A list of potions that the witch can throw at allies (in raids). Format is effect_id,duration,amplifier. The potions are applied in order and witches will not throw the same potion if the target has already the effect.")
                 .defineList("Good Potions List", goodPotionsListDefault, o -> o instanceof String);
         this.lingeringChanceConfig = Config.builder
                 .comment("Chance for the potions thrown by the Witch to be lingering.")
