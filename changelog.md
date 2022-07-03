@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Fixed Fisher zombies fishing only if they couldn't see the target
+
 ## 1.5.1
 * Added Melee Attacks Attribute Based. Makes mob attack distance based off `forge:attack_range` attribute. Defaults to vanilla attack range, can be changed by modifiying the `forge:attack_range` attribute.
 * Fixed witches having wrong config for potion effects, causing duration and amplifier being swapped. You need to regen the config or fix the potion effects by swapping the last two numbers.
