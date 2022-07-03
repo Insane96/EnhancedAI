@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(MobCategory.class)
 public class MobCategoryMixin {
 	@Inject(at = @At(value = "RETURN"), method = "getNoDespawnDistance()I", cancellable = true)
-	public void tickOnPlaySound(CallbackInfoReturnable<Integer> callbackInfo) {
+	public void getNoDespawnDistance(CallbackInfoReturnable<Integer> callbackInfo) {
 		callbackInfo.setReturnValue(Modules.base.base.minMonstersDespawningDistance);
 	}
 }

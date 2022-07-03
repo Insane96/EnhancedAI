@@ -14,6 +14,7 @@ public class BaseModule extends Module {
 	public AvoidExplosions avoidExplosions;
 	public AntiCheese antiCheese;
 	public Movement movement;
+	public Attacking attacking;
 	//public Shielding shielding;
 
 	public BaseModule() {
@@ -24,6 +25,7 @@ public class BaseModule extends Module {
 		avoidExplosions = new AvoidExplosions(this);
 		antiCheese = new AntiCheese(this);
 		movement = new Movement(this);
+		attacking = new Attacking(this);
 		//shielding = new Shielding(this);
 		Config.builder.pop();
 	}
@@ -36,6 +38,7 @@ public class BaseModule extends Module {
 		avoidExplosions.loadConfig();
 		antiCheese.loadConfig();
 		movement.loadConfig();
+		attacking.loadConfig();
 		//shielding.loadConfig();
 	}
 }

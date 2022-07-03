@@ -1,6 +1,7 @@
 package insane96mcp.enhancedai;
 
 import insane96mcp.enhancedai.modules.animal.feature.AnimalAttacking;
+import insane96mcp.enhancedai.modules.base.feature.Attacking;
 import insane96mcp.enhancedai.setup.*;
 import net.minecraft.server.commands.DebugPathCommand;
 import net.minecraftforge.common.MinecraftForge;
@@ -31,6 +32,7 @@ public class EnhancedAI
         Reflection.init();
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(AnimalAttacking::attribute);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(Attacking::attackRangeAttribute);
     }
 
     @SubscribeEvent
