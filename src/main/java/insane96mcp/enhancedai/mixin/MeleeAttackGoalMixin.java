@@ -21,7 +21,7 @@ public class MeleeAttackGoalMixin {
 
 	@Inject(at = @At(value = "RETURN"), method = "getAttackReachSqr", cancellable = true)
 	public void getAttackReachSqr(LivingEntity livingEntity, CallbackInfoReturnable<Double> callbackInfo) {
-		if (!Modules.base.attacking.isEnabled() || !Modules.base.attacking.meleeAttacksAttributeBased)
+		if (!Modules.base.attacking.shouldChangeAttackRange())
 			return;
 		double attackRange = this.mob.getAttributeValue(ForgeMod.ATTACK_RANGE.get());
 		callbackInfo.setReturnValue(attackRange * attackRange + livingEntity.getBbWidth());

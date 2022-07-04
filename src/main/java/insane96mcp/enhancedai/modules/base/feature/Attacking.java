@@ -15,14 +15,14 @@ public class Attacking extends Feature {
 
 	private final ForgeConfigSpec.BooleanValue meleeAttacksAttributeBasedConfig;
 
-	public boolean meleeAttacksAttributeBased = true;
+	public boolean meleeAttacksAttributeBased = false;
 
 	public Attacking(Module module) {
-		super(Config.builder, module, true, false);
+		super(Config.builder, module, true);
 		super.pushConfig(Config.builder);
 		meleeAttacksAttributeBasedConfig = Config.builder
-				.comment("If true melee monsters (zombies, etc) will attack based off the forge:attack_range attribute. Increasing it will make mobs attack for farther away.")
-				.define("Melee ATtacks Attribute Based", this.meleeAttacksAttributeBased);
+				.comment("If true melee monsters (zombies, etc) will attack based off the forge:attack_range attribute. Increasing it will make mobs attack for farther away. Be aware that the attack doesn't check if there are block between the target and the mob so might result in mobs attacking through walls with high values")
+				.define("Melee Attacks Attribute Based", this.meleeAttacksAttributeBased);
 		Config.builder.pop();
 	}
 
@@ -39,5 +39,9 @@ public class Attacking extends Feature {
 
 			event.add(entityType, ForgeMod.ATTACK_RANGE.get(), entityType.getWidth() * 2d);
 		}
+	}
+
+	public boolean shouldChangeAttackRange() {
+		return this.isEnabled() && this.meleeAttacksAttributeBased;
 	}
 }
