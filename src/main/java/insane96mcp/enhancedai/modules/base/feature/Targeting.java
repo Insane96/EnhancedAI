@@ -1,13 +1,19 @@
 package insane96mcp.enhancedai.modules.base.feature;
 
+import insane96mcp.enhancedai.modules.base.ai.EANearestAttackableTarget;
 import insane96mcp.enhancedai.modules.base.ai.EASpiderTargetGoal;
 import insane96mcp.enhancedai.setup.Config;
+import insane96mcp.enhancedai.setup.EAAttributes;
+import insane96mcp.enhancedai.setup.Strings;
 import insane96mcp.insanelib.ai.ILNearestAttackableTargetGoal;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.config.Blacklist;
+import insane96mcp.insanelib.config.MinMax;
 import insane96mcp.insanelib.util.MCUtils;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -18,6 +24,7 @@ import net.minecraft.world.entity.monster.Endermite;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -29,8 +36,8 @@ import java.util.function.Predicate;
 @Label(name = "Targeting", description = "Change how mobs target players")
 public class Targeting extends Feature {
 
-	private final ForgeConfigSpec.ConfigValue<Integer> followRangeConfig;
-	private final ForgeConfigSpec.ConfigValue<Double> xrayConfig;
+	private final MinMax.Config followRangeOverrideConfig;
+	private final MinMax.Config xRayRangeOverrideConfig;
 	private final ForgeConfigSpec.ConfigValue<Boolean> instaTargetConfig;
 	private final ForgeConfigSpec.BooleanValue betterPathfindingConfig;
 
@@ -38,8 +45,8 @@ public class Targeting extends Feature {
 
 	private final List<String> entityBlacklistDefault = List.of("minecraft:enderman");
 
-	public int followRange = 48;
-	public double xray = 0.20d;
+	public MinMax followRangeOverride = new MinMax(32, 64);
+	public MinMax xrayRangeOverride = new MinMax(16, 32);
 	public boolean instaTarget = true;
 	public boolean betterPathfinding = true;
 
@@ -48,12 +55,12 @@ public class Targeting extends Feature {
 	public Targeting(Module module) {
 		super(Config.builder, module);
 		this.pushConfig(Config.builder);
-		followRangeConfig = Config.builder
-				.comment("How far away can the mobs see the player. This overrides the vanilla value (16 for most mobs). Setting to 0 will leave the follow range as vanilla. I recommend using mods like Mobs Properties Randomness to have more control over the attribute.")
-				.defineInRange("Follow Range Override", this.followRange, 0, 128);
-		xrayConfig = Config.builder
-				.comment("Chance for a mob to be able to see players through blocks.")
-				.defineInRange("XRay Chance", xray, 0d, 1d);
+		followRangeOverrideConfig = new MinMax.Config(Config.builder, "Follow Range Override", "How far away can the mobs see the player. This overrides the vanilla value (16 for most mobs). Setting 'Max' to 0 will leave the follow range as vanilla. I recommend using mods like Mobs Properties Randomness to have more control over the attribute.")
+				.setMinMax(0, 128,  this.followRangeOverride)
+				.build();
+		xRayRangeOverrideConfig = new MinMax.Config(Config.builder, "XRay Range Override", "How far away can the mobs see the player even through walls. Setting 'Max' to 0 will make mobs not able to see through walls. I recommend using mods like Mobs Properties Randomness to have more control over the attribute; the attribute name is 'enhancedai:generic.xray_follow_range'.")
+				.setMinMax(0, 128,  this.xrayRangeOverride)
+				.build();
 		instaTargetConfig = Config.builder
 				.comment("Mobs will no longer take random time to target a player.")
 				.define("Instant Target", instaTarget);
@@ -71,12 +78,21 @@ public class Targeting extends Feature {
 	@Override
 	public void loadConfig() {
 		super.loadConfig();
-		this.followRange = this.followRangeConfig.get();
-		this.xray = this.xrayConfig.get();
+		this.followRangeOverride = this.followRangeOverrideConfig.get();
+		this.xrayRangeOverride = this.xRayRangeOverrideConfig.get();
 		this.instaTarget = this.instaTargetConfig.get();
 		this.betterPathfinding = this.betterPathfindingConfig.get();
 
 		this.entityBlacklist = this.entityBlacklistConfig.get();
+	}
+
+	public static void xrayRangeAttribute(EntityAttributeModificationEvent event) {
+		for (EntityType<? extends LivingEntity> entityType : event.getTypes()) {
+			if (event.has(entityType, EAAttributes.XRAY_FOLLOW_RANGE.get()))
+				continue;
+
+			event.add(entityType, EAAttributes.XRAY_FOLLOW_RANGE.get());
+		}
 	}
 
 	//High priority as should run before specific mobs
@@ -91,9 +107,18 @@ public class Targeting extends Feature {
 		if (this.entityBlacklist.isEntityBlackOrNotWhitelist(mobEntity))
 			return;
 
-		//noinspection ConstantConditions
-		if (this.followRange != 0 && mobEntity.getAttribute(Attributes.FOLLOW_RANGE) != null && mobEntity.getAttribute(Attributes.FOLLOW_RANGE).getBaseValue() < this.followRange) {
-			MCUtils.setAttributeValue(mobEntity, Attributes.FOLLOW_RANGE, this.followRange);
+		CompoundTag persistentData = mobEntity.getPersistentData();
+		if (!persistentData.getBoolean(Strings.Tags.FOLLOW_RANGES_PROCESSED)) {
+			//noinspection ConstantConditions
+			if (this.followRangeOverride.max != 0 && mobEntity.getAttribute(Attributes.FOLLOW_RANGE) != null && mobEntity.getAttribute(Attributes.FOLLOW_RANGE).getBaseValue() < this.followRangeOverride.max) {
+				MCUtils.setAttributeValue(mobEntity, Attributes.FOLLOW_RANGE, this.followRangeOverride.getIntRandBetween(mobEntity.getRandom()));
+			}
+
+			//noinspection ConstantConditions
+			if (this.xrayRangeOverride.max != 0 && mobEntity.getAttribute(EAAttributes.XRAY_FOLLOW_RANGE.get()) != null && mobEntity.getAttribute(EAAttributes.XRAY_FOLLOW_RANGE.get()).getBaseValue() < this.xrayRangeOverride.min) {
+				MCUtils.setAttributeValue(mobEntity, EAAttributes.XRAY_FOLLOW_RANGE.get(), this.xrayRangeOverride.getIntRandBetween(mobEntity.getRandom()));
+			}
+			persistentData.putBoolean(Strings.Tags.FOLLOW_RANGES_PROCESSED, true);
 		}
 
 		boolean hasTargetGoal = false;
@@ -119,14 +144,14 @@ public class Targeting extends Feature {
 
 		goalsToRemove.forEach(mobEntity.targetSelector::removeGoal);
 
-		ILNearestAttackableTargetGoal<Player> targetGoal;
+		EANearestAttackableTarget<Player> targetGoal;
 
 		if (mobEntity instanceof Spider)
 			targetGoal = new EASpiderTargetGoal<>((Spider) mobEntity, Player.class, true, false, predicate);
 		else
-			targetGoal = new ILNearestAttackableTargetGoal<>(mobEntity, Player.class, false, false, predicate);
-		if (mobEntity.level.random.nextDouble() < this.xray)
-			targetGoal.setIgnoreLineOfSight();
+			targetGoal = new EANearestAttackableTarget<>(mobEntity, Player.class, false, false, predicate);
+		//if (mobEntity.level.random.nextDouble() < this.xray)
+			//targetGoal.setIgnoreLineOfSight();
 
 		if (this.instaTarget)
 			targetGoal.setInstaTarget();
@@ -139,9 +164,9 @@ public class Targeting extends Feature {
 		if (mobEntity instanceof Spider)
 			targetGoalTest = new EASpiderTargetGoal<>((Spider) mobEntity, Endermite.class, true, false, predicate);
 		else
-			targetGoalTest = new ILNearestAttackableTargetGoal<>(mobEntity, Endermite.class, false, false, predicate);
-		if (mobEntity.level.random.nextDouble() < this.xray)
-			targetGoalTest.setIgnoreLineOfSight();
+			targetGoalTest = new EANearestAttackableTarget<>(mobEntity, Endermite.class, false, false, predicate);
+		//if (mobEntity.level.random.nextDouble() < this.xray)
+			//targetGoalTest.setIgnoreLineOfSight();
 
 		mobEntity.targetSelector.addGoal(2, targetGoalTest.setInstaTarget());
 	}

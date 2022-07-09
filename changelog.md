@@ -1,6 +1,7 @@
 # Changelog
 
 ## Upcoming
+* XRay follow range is now a separate attribute
 * Fixed Fisher zombies fishing only if they couldn't see the target
 * Melee Attacks Attribute Based is now disabled by default
 

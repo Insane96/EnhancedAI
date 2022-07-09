@@ -2,6 +2,7 @@ package insane96mcp.enhancedai;
 
 import insane96mcp.enhancedai.modules.animal.feature.AnimalAttacking;
 import insane96mcp.enhancedai.modules.base.feature.Attacking;
+import insane96mcp.enhancedai.modules.base.feature.Targeting;
 import insane96mcp.enhancedai.setup.*;
 import net.minecraft.server.commands.DebugPathCommand;
 import net.minecraftforge.common.MinecraftForge;
@@ -33,6 +34,7 @@ public class EnhancedAI
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(AnimalAttacking::attribute);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(Attacking::attackRangeAttribute);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(Targeting::xrayRangeAttribute);
     }
 
     @SubscribeEvent
