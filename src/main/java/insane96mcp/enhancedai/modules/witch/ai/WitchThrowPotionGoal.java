@@ -6,10 +6,10 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.projectile.ThrownPotion;
-import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -94,7 +94,7 @@ public class WitchThrowPotionGoal extends Goal {
             return;
 
         Collection<MobEffectInstance> mobEffectInstances = new ArrayList<>();
-        List<MobEffectInstance> listToLoop = this.target instanceof Raider ? Modules.witch.witchPotionThrowing.goodPotionsList : Modules.witch.witchPotionThrowing.badPotionsList;
+        List<MobEffectInstance> listToLoop = this.target instanceof Mob ? Modules.witch.witchPotionThrowing.goodPotionsList : Modules.witch.witchPotionThrowing.badPotionsList;
         if (this.randomPotion) {
             mobEffectInstances.add(listToLoop.get(witch.getRandom().nextInt(listToLoop.size())));
         }

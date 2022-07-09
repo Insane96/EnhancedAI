@@ -68,7 +68,7 @@ public abstract class WitchMixin extends Raider {
 
 	@Inject(at = @At("HEAD"), method = "aiStep", cancellable = true)
 	private void aiStep(CallbackInfo ci) {
-		if (Modules.witch.thirstyWitches.isEnabled())
+		if (Modules.witch.isEnabled())
 			ci.cancel();
 		else
 			return;
@@ -106,7 +106,7 @@ public abstract class WitchMixin extends Raider {
 			}
 		}
 		else {
-			if (this.getTarget() != null && this.distanceToSqr(this.getTarget()) > 64d) {
+			if (this.getTarget() != null && this.getTarget() instanceof Player && this.distanceToSqr(this.getTarget()) > 64d) {
 				List<MobEffectInstance> listToLoop = Modules.witch.thirstyWitches.drinkPotion;
 				for (MobEffectInstance mobEffectInstance : listToLoop) {
 					if (this.hasEffect(mobEffectInstance.getEffect()))

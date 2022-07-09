@@ -119,6 +119,7 @@ public class WitchPotionThrowing extends Feature {
         int attackSpeed = this.throwSpeed.getIntRandBetween(witch.getRandom());
         int attackRange = this.throwRange.getIntRandBetween(witch.getRandom());
         witch.goalSelector.addGoal(2, new WitchThrowPotionGoal(witch, attackSpeed, attackSpeed, attackRange));
+        //witch.targetSelector.addGoal(2, new WitchBuffAllyGoal<>(witch, Mob.class, true, (livingEntity -> livingEntity != null && !witch.hasActiveRaid() && livingEntity.getType() != EntityType.WITCH)));
     }
 
     public boolean shouldUseSlowFalling() {
