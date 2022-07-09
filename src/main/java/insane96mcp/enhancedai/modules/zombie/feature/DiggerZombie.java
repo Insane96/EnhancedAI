@@ -52,7 +52,7 @@ public class DiggerZombie extends Feature {
 				.comment("Zombies with Digger AI will mine only if they have a tool in the off-hand")
 				.define("Digger Tool Only", this.diggerToolOnly);
 		diggerProperToolOnlyConfig = Config.builder
-				.comment("Zombies with Digger AI will mine only if their off-hand tool can mine targeted blocks (e.g. zombies with shovels will not mine stone). Blocks that require no tool (e.g. planks) will be minable.")
+				.comment("Zombies with Digger AI will mine only if their off-hand tool can mine targeted blocks (e.g. zombies with shovels will not mine stone). Blocks that require no tool (e.g. planks) will be minable regardless of proper tool or not.")
 				.define("Digger Proper Tool Only", this.diggerProperToolOnly);
 		equipWoodenPickConfig = Config.builder
 				.comment("Zombies with Digger AI will spawn with a Wooden Pickaxe.")
