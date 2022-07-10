@@ -3,6 +3,7 @@
 ## Upcoming
 * XRay follow range is now a separate attribute
 * Fixed Fisher zombies fishing only if they couldn't see the target
+* Fixed crash when the owner of fishing hook died / transformed
 * Melee Attacks Attribute Based is now disabled by default
 
 ## 1.5.1
