@@ -1,7 +1,7 @@
 # Changelog
 
 ## Upcoming
-* XRay follow range is now a separate attribute
+* XRay follow range is now a separate attribute and can be overridden separately from 
 * Fixed Fisher zombies fishing only if they couldn't see the target
 * Fixed crash when the owner of fishing hook died / transformed
 * Melee Attacks Attribute Based is now disabled by default

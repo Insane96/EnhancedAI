@@ -91,7 +91,7 @@ public class Targeting extends Feature {
 			if (event.has(entityType, EAAttributes.XRAY_FOLLOW_RANGE.get()))
 				continue;
 
-			event.add(entityType, EAAttributes.XRAY_FOLLOW_RANGE.get());
+			event.add(entityType, EAAttributes.XRAY_FOLLOW_RANGE.get(), 0d);
 		}
 	}
 
@@ -110,12 +110,12 @@ public class Targeting extends Feature {
 		CompoundTag persistentData = mobEntity.getPersistentData();
 		if (!persistentData.getBoolean(Strings.Tags.FOLLOW_RANGES_PROCESSED)) {
 			//noinspection ConstantConditions
-			if (this.followRangeOverride.max != 0 && mobEntity.getAttribute(Attributes.FOLLOW_RANGE) != null && mobEntity.getAttribute(Attributes.FOLLOW_RANGE).getBaseValue() < this.followRangeOverride.max) {
+			if (this.followRangeOverride.min != 0 && mobEntity.getAttribute(Attributes.FOLLOW_RANGE) != null && mobEntity.getAttribute(Attributes.FOLLOW_RANGE).getBaseValue() < this.followRangeOverride.min) {
 				MCUtils.setAttributeValue(mobEntity, Attributes.FOLLOW_RANGE, this.followRangeOverride.getIntRandBetween(mobEntity.getRandom()));
 			}
 
 			//noinspection ConstantConditions
-			if (this.xrayRangeOverride.max != 0 && mobEntity.getAttribute(EAAttributes.XRAY_FOLLOW_RANGE.get()) != null && mobEntity.getAttribute(EAAttributes.XRAY_FOLLOW_RANGE.get()).getBaseValue() < this.xrayRangeOverride.min) {
+			if (this.xrayRangeOverride.min != 0 && mobEntity.getAttribute(EAAttributes.XRAY_FOLLOW_RANGE.get()) != null && mobEntity.getAttribute(EAAttributes.XRAY_FOLLOW_RANGE.get()).getBaseValue() < this.xrayRangeOverride.min) {
 				MCUtils.setAttributeValue(mobEntity, EAAttributes.XRAY_FOLLOW_RANGE.get(), this.xrayRangeOverride.getIntRandBetween(mobEntity.getRandom()));
 			}
 			persistentData.putBoolean(Strings.Tags.FOLLOW_RANGES_PROCESSED, true);
