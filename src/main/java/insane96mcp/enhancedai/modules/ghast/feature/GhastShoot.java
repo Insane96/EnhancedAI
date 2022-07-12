@@ -2,6 +2,7 @@ package insane96mcp.enhancedai.modules.ghast.feature;
 
 import insane96mcp.enhancedai.modules.ghast.ai.GhastShootFireballGoal;
 import insane96mcp.enhancedai.setup.Config;
+import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.enhancedai.setup.Strings;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
@@ -76,20 +77,9 @@ public class GhastShoot extends Feature {
 
         CompoundTag persistentData = ghast.getPersistentData();
 
-        int attackCooldown = this.attackCooldown.getIntRandBetween(ghast.getRandom());
-        int fireballsShot = this.fireballsShot.getIntRandBetween(ghast.getRandom());
-        boolean shootWhenNotSeen = ghast.getRandom().nextDouble() < this.shootWhenNotSeen;
-
-        if (persistentData.contains(Strings.Tags.Ghast.ATTACK_COOLDOWN)) {
-            attackCooldown = persistentData.getInt(Strings.Tags.Ghast.ATTACK_COOLDOWN);
-            fireballsShot = persistentData.getInt(Strings.Tags.Ghast.FIREBALLS_SHOT);
-            shootWhenNotSeen = persistentData.getBoolean(Strings.Tags.Ghast.SHOOT_WHEN_NOT_SEEN);
-        }
-        else {
-            persistentData.putInt(Strings.Tags.Ghast.ATTACK_COOLDOWN, attackCooldown);
-            persistentData.putInt(Strings.Tags.Ghast.FIREBALLS_SHOT, fireballsShot);
-            persistentData.putBoolean(Strings.Tags.Ghast.SHOOT_WHEN_NOT_SEEN, shootWhenNotSeen);
-        }
+        int attackCooldown = NBTUtils.getIntOrDefault(persistentData, Strings.Tags.Ghast.ATTACK_COOLDOWN, this.attackCooldown.getIntRandBetween(ghast.getRandom()));
+        int fireballsShot = NBTUtils.getIntOrDefault(persistentData, Strings.Tags.Ghast.FIREBALLS_SHOT, this.fireballsShot.getIntRandBetween(ghast.getRandom()));
+        boolean shootWhenNotSeen = NBTUtils.getBooleanOrDefault(persistentData, Strings.Tags.Ghast.SHOOT_WHEN_NOT_SEEN, ghast.getRandom().nextDouble() < this.shootWhenNotSeen);
 
         ArrayList<Goal> goalsToRemove = new ArrayList<>();
         ghast.goalSelector.availableGoals.forEach(prioritizedGoal -> {

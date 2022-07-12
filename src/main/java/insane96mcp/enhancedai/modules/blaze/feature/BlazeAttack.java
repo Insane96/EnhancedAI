@@ -2,11 +2,14 @@ package insane96mcp.enhancedai.modules.blaze.feature;
 
 import insane96mcp.enhancedai.modules.blaze.ai.EABlazeAttackGoal;
 import insane96mcp.enhancedai.setup.Config;
+import insane96mcp.enhancedai.setup.NBTUtils;
+import insane96mcp.enhancedai.setup.Strings;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.config.Blacklist;
 import insane96mcp.insanelib.config.MinMax;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Blaze;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -89,6 +92,15 @@ public class BlazeAttack extends Feature {
         if (this.entityBlacklist.isEntityBlackOrNotWhitelist(blaze))
             return;
 
+        CompoundTag persistentData = blaze.getPersistentData();
+
+        int timeBetweenFireballs = NBTUtils.getIntOrDefault(persistentData, Strings.Tags.Blaze.TIME_BETWEEN_FIREBALLS, this.timeBetweenFireballs.getIntRandBetween(blaze.getRandom()));
+        int fireballsShot = NBTUtils.getIntOrDefault(persistentData, Strings.Tags.Blaze.FIREBALLS_SHOT, this.fireballsShot.getIntRandBetween(blaze.getRandom()));
+        int rechargeTime = NBTUtils.getIntOrDefault(persistentData, Strings.Tags.Blaze.RECHARGE_TIME, this.rechargeTime.getIntRandBetween(blaze.getRandom()));
+        int chargeTime = NBTUtils.getIntOrDefault(persistentData, Strings.Tags.Blaze.CHARGE_TIME, this.chargeTime.getIntRandBetween(blaze.getRandom()));
+        int fireballsPerShot = NBTUtils.getIntOrDefault(persistentData, Strings.Tags.Blaze.FIREBALLS_PER_SHOT, this.fireballsPerShot.getIntRandBetween(blaze.getRandom()));
+        int inaccuracy = NBTUtils.getIntOrDefault(persistentData, Strings.Tags.Blaze.INACCURACY, this.inaccuracy.getIntRandBetween(blaze.getRandom()));
+
         ArrayList<Goal> goalsToRemove = new ArrayList<>();
         blaze.goalSelector.availableGoals.forEach(prioritizedGoal -> {
             if (prioritizedGoal.getGoal() instanceof Blaze.BlazeAttackGoal)
@@ -98,11 +110,11 @@ public class BlazeAttack extends Feature {
         goalsToRemove.forEach(blaze.goalSelector::removeGoal);
 
         blaze.goalSelector.addGoal(4, new EABlazeAttackGoal(blaze)
-                .setTimeBetweenFireballs(this.timeBetweenFireballs.getIntRandBetween(blaze.getRandom()))
-                .setFireballShot(this.fireballsShot.getIntRandBetween(blaze.getRandom()))
-                .setRechargeTime(this.rechargeTime.getIntRandBetween(blaze.getRandom()))
-                .setChargeTime(this.chargeTime.getIntRandBetween(blaze.getRandom()))
-                .setFireballsPerShot(this.fireballsPerShot.getIntRandBetween(blaze.getRandom()))
-                .setInaccuracy(this.inaccuracy.getIntRandBetween(blaze.getRandom())));
+                .setTimeBetweenFireballs(timeBetweenFireballs)
+                .setFireballShot(fireballsShot)
+                .setRechargeTime(rechargeTime)
+                .setChargeTime(chargeTime)
+                .setFireballsPerShot(fireballsPerShot)
+                .setInaccuracy(inaccuracy));
     }
 }

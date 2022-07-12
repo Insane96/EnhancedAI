@@ -25,6 +25,9 @@ public class AICreeperSwellGoal extends Goal {
 	private float explosionSize;
 	private float explosionSizeSqr;
 
+	@SuppressWarnings("FieldCanBeLocal")
+	private final double IGNITE_DISTANCE_MULTIPLIER_SQR = 1.35d * 1.35d;
+
 	public AICreeperSwellGoal(Creeper creeper) {
 		this.swellingCreeper = creeper;
 	}
@@ -48,7 +51,7 @@ public class AICreeperSwellGoal extends Goal {
 		return (this.swellingCreeper.getSwellDir() > 0) ||
 				ignoresWalls ||
 				canBreach ||
-				(this.swellingCreeper.getSensing().hasLineOfSight(this.creeperAttackTarget) && this.swellingCreeper.distanceToSqr(this.creeperAttackTarget) < explosionSizeSqr * 1.35d * 1.35d);
+				(this.swellingCreeper.getSensing().hasLineOfSight(this.creeperAttackTarget) && this.swellingCreeper.distanceToSqr(this.creeperAttackTarget) < explosionSizeSqr * IGNITE_DISTANCE_MULTIPLIER_SQR);
 	}
 
 	public void start() {

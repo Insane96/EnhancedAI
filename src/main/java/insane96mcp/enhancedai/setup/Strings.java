@@ -6,6 +6,19 @@ public class Strings {
 	public static class Tags {
 		public static final String FOLLOW_RANGES_PROCESSED = EnhancedAI.RESOURCE_PREFIX + "follow_ranges_processed";
 
+		public static class Animal {
+			public static final String SPEED_MULTIPLIER_WHEN_AGGROED = EnhancedAI.RESOURCE_PREFIX + "speed_multiplier_when_aggroed";
+		}
+
+		public static class Blaze {
+			public static final String TIME_BETWEEN_FIREBALLS = EnhancedAI.RESOURCE_PREFIX + "time_between_fireballs";
+			public static final String FIREBALLS_SHOT = EnhancedAI.RESOURCE_PREFIX + "fireballs_shot";
+			public static final String RECHARGE_TIME = EnhancedAI.RESOURCE_PREFIX + "recharge_time";
+			public static final String CHARGE_TIME = EnhancedAI.RESOURCE_PREFIX + "charge_time";
+			public static final String FIREBALLS_PER_SHOT = EnhancedAI.RESOURCE_PREFIX + "fireballs_per_shot";
+			public static final String INACCURACY = EnhancedAI.RESOURCE_PREFIX + "inaccuracy";
+		}
+
 		public static class Creeper {
 			public static final String LAUNCH = EnhancedAI.RESOURCE_PREFIX + "launch";
 			public static final String BREACH = EnhancedAI.RESOURCE_PREFIX + "breach";
@@ -22,15 +35,10 @@ public class Strings {
 
 		public static class Zombie {
 			public static final String MINER = EnhancedAI.RESOURCE_PREFIX + "miner";
-			//public static final String PEARLER = EnhancedAI.RESOURCE_PREFIX + "pearler";
 		}
 
 		public static class Spider {
 			public static final String WEB_THROWER = EnhancedAI.RESOURCE_PREFIX + "web_thrower";
-		}
-
-		public static class Blaze {
-			public static final String ATTACK = EnhancedAI.RESOURCE_PREFIX + "attack";
 		}
 
 		public static class Ghast {

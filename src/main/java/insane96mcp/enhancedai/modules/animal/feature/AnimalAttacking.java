@@ -1,10 +1,13 @@
 package insane96mcp.enhancedai.modules.animal.feature;
 
 import insane96mcp.enhancedai.setup.Config;
+import insane96mcp.enhancedai.setup.NBTUtils;
+import insane96mcp.enhancedai.setup.Strings;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.config.Blacklist;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -91,9 +94,13 @@ public class AnimalAttacking extends Feature {
         if (this.entityBlacklist.isEntityBlackOrNotWhitelist(animal))
             return;
 
+        CompoundTag persistentData = animal.getPersistentData();
+
+        double movementSpeedMultiplier = NBTUtils.getDoubleOrDefault(persistentData, Strings.Tags.Animal.SPEED_MULTIPLIER_WHEN_AGGROED, this.speedMultiplier);
+
         if (this.animalsFightBack) {
             animal.targetSelector.addGoal(1, (new HurtByTargetGoal(animal)).setAlertOthers());
-            animal.goalSelector.addGoal(1, new MeleeAttackGoal(animal, this.speedMultiplier, false));
+            animal.goalSelector.addGoal(1, new MeleeAttackGoal(animal, movementSpeedMultiplier, false));
             AttributeInstance kbAttribute = animal.getAttribute(Attributes.ATTACK_KNOCKBACK);
             if (kbAttribute != null)
                 kbAttribute.addPermanentModifier(new AttributeModifier("Animal knockback", 3.5d, AttributeModifier.Operation.ADDITION));
