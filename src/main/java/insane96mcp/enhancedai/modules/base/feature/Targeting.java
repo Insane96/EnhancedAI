@@ -4,7 +4,7 @@ import insane96mcp.enhancedai.modules.base.ai.EANearestAttackableTarget;
 import insane96mcp.enhancedai.modules.base.ai.EASpiderTargetGoal;
 import insane96mcp.enhancedai.setup.Config;
 import insane96mcp.enhancedai.setup.EAAttributes;
-import insane96mcp.enhancedai.setup.Strings;
+import insane96mcp.enhancedai.setup.EAStrings;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
@@ -106,7 +106,7 @@ public class Targeting extends Feature {
 			return;
 
 		CompoundTag persistentData = mobEntity.getPersistentData();
-		if (!persistentData.getBoolean(Strings.Tags.FOLLOW_RANGES_PROCESSED)) {
+		if (!persistentData.getBoolean(EAStrings.Tags.FOLLOW_RANGES_PROCESSED)) {
 			//noinspection ConstantConditions
 			if (this.followRangeOverride.min != 0d && mobEntity.getAttribute(Attributes.FOLLOW_RANGE) != null && mobEntity.getAttribute(Attributes.FOLLOW_RANGE).getBaseValue() < this.followRangeOverride.min) {
 				MCUtils.setAttributeValue(mobEntity, Attributes.FOLLOW_RANGE, this.followRangeOverride.getIntRandBetween(mobEntity.getRandom()));
@@ -116,7 +116,7 @@ public class Targeting extends Feature {
 			if (this.xrayRangeOverride.min != 0d && mobEntity.getAttribute(EAAttributes.XRAY_FOLLOW_RANGE.get()) != null && mobEntity.getAttribute(EAAttributes.XRAY_FOLLOW_RANGE.get()).getBaseValue() < this.xrayRangeOverride.min) {
 				MCUtils.setAttributeValue(mobEntity, EAAttributes.XRAY_FOLLOW_RANGE.get(), this.xrayRangeOverride.getIntRandBetween(mobEntity.getRandom()));
 			}
-			persistentData.putBoolean(Strings.Tags.FOLLOW_RANGES_PROCESSED, true);
+			persistentData.putBoolean(EAStrings.Tags.FOLLOW_RANGES_PROCESSED, true);
 		}
 
 		boolean hasTargetGoal = false;

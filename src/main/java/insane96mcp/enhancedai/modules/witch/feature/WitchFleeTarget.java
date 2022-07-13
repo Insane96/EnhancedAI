@@ -2,8 +2,8 @@ package insane96mcp.enhancedai.modules.witch.feature;
 
 import insane96mcp.enhancedai.modules.base.ai.EAAvoidEntityGoal;
 import insane96mcp.enhancedai.setup.Config;
+import insane96mcp.enhancedai.setup.EAStrings;
 import insane96mcp.enhancedai.setup.NBTUtils;
-import insane96mcp.enhancedai.setup.Strings;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
@@ -79,12 +79,12 @@ public class WitchFleeTarget extends Feature {
 
         CompoundTag persistentData = witch.getPersistentData();
 
-        boolean avoidTarget = NBTUtils.getBooleanOrPutDefault(persistentData, Strings.Tags.Flee.AVOID_TARGET, witch.level.random.nextDouble() < this.avoidPlayerChance);
-        boolean attackWhenAvoiding = NBTUtils.getBooleanOrPutDefault(persistentData, Strings.Tags.Flee.ATTACK_WHEN_AVOIDING, witch.level.random.nextDouble() < this.attackWhenAvoidingChance);
-        double fleeDistanceFar = NBTUtils.getDoubleOrPutDefault(persistentData, Strings.Tags.Flee.FLEE_DISTANCE_FAR, this.fleeDistanceFar);
-        double fleeDistanceNear = NBTUtils.getDoubleOrPutDefault(persistentData, Strings.Tags.Flee.FLEE_DISTANCE_NEAR, this.fleeDistanceNear);
-        double fleeSpeedFar = NBTUtils.getDoubleOrPutDefault(persistentData, Strings.Tags.Flee.FLEE_SPEED_FAR, this.fleeSpeedFar);
-        double fleeSpeedNear = NBTUtils.getDoubleOrPutDefault(persistentData, Strings.Tags.Flee.FLEE_SPEED_NEAR, this.fleeSpeedNear);
+        boolean avoidTarget = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Flee.AVOID_TARGET, witch.level.random.nextDouble() < this.avoidPlayerChance);
+        boolean attackWhenAvoiding = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Flee.ATTACK_WHEN_AVOIDING, witch.level.random.nextDouble() < this.attackWhenAvoidingChance);
+        double fleeDistanceFar = NBTUtils.getDoubleOrPutDefault(persistentData, EAStrings.Tags.Flee.FLEE_DISTANCE_FAR, this.fleeDistanceFar);
+        double fleeDistanceNear = NBTUtils.getDoubleOrPutDefault(persistentData, EAStrings.Tags.Flee.FLEE_DISTANCE_NEAR, this.fleeDistanceNear);
+        double fleeSpeedFar = NBTUtils.getDoubleOrPutDefault(persistentData, EAStrings.Tags.Flee.FLEE_SPEED_FAR, this.fleeSpeedFar);
+        double fleeSpeedNear = NBTUtils.getDoubleOrPutDefault(persistentData, EAStrings.Tags.Flee.FLEE_SPEED_NEAR, this.fleeSpeedNear);
 
         if (!avoidTarget)
             return;

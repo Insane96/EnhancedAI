@@ -2,8 +2,8 @@ package insane96mcp.enhancedai.modules.ghast.feature;
 
 import insane96mcp.enhancedai.modules.ghast.ai.GhastShootFireballGoal;
 import insane96mcp.enhancedai.setup.Config;
+import insane96mcp.enhancedai.setup.EAStrings;
 import insane96mcp.enhancedai.setup.NBTUtils;
-import insane96mcp.enhancedai.setup.Strings;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
@@ -77,9 +77,9 @@ public class GhastShoot extends Feature {
 
         CompoundTag persistentData = ghast.getPersistentData();
 
-        int attackCooldown = NBTUtils.getIntOrPutDefault(persistentData, Strings.Tags.Ghast.ATTACK_COOLDOWN, this.attackCooldown.getIntRandBetween(ghast.getRandom()));
-        int fireballsShot = NBTUtils.getIntOrPutDefault(persistentData, Strings.Tags.Ghast.FIREBALLS_SHOT, this.fireballsShot.getIntRandBetween(ghast.getRandom()));
-        boolean shootWhenNotSeen = NBTUtils.getBooleanOrPutDefault(persistentData, Strings.Tags.Ghast.SHOOT_WHEN_NOT_SEEN, ghast.getRandom().nextDouble() < this.shootWhenNotSeen);
+        int attackCooldown = NBTUtils.getIntOrPutDefault(persistentData, EAStrings.Tags.Ghast.ATTACK_COOLDOWN, this.attackCooldown.getIntRandBetween(ghast.getRandom()));
+        int fireballsShot = NBTUtils.getIntOrPutDefault(persistentData, EAStrings.Tags.Ghast.FIREBALLS_SHOT, this.fireballsShot.getIntRandBetween(ghast.getRandom()));
+        boolean shootWhenNotSeen = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Ghast.SHOOT_WHEN_NOT_SEEN, ghast.getRandom().nextDouble() < this.shootWhenNotSeen);
 
         ArrayList<Goal> goalsToRemove = new ArrayList<>();
         ghast.goalSelector.availableGoals.forEach(prioritizedGoal -> {

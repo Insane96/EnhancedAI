@@ -2,8 +2,8 @@ package insane96mcp.enhancedai.modules.spider.feature;
 
 import insane96mcp.enhancedai.modules.spider.ai.WebThrowGoal;
 import insane96mcp.enhancedai.setup.Config;
+import insane96mcp.enhancedai.setup.EAStrings;
 import insane96mcp.enhancedai.setup.NBTUtils;
-import insane96mcp.enhancedai.setup.Strings;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
@@ -120,7 +120,7 @@ public class ThrowingWeb extends Feature {
 
 		CompoundTag persistentData = spider.getPersistentData();
 
-		boolean webThrower = NBTUtils.getBooleanOrPutDefault(persistentData, Strings.Tags.Spider.WEB_THROWER, spider.level.random.nextDouble() < this.webThrowChance);
+		boolean webThrower = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Spider.WEB_THROWER, spider.level.random.nextDouble() < this.webThrowChance);
 
 		if (webThrower)
 			spider.goalSelector.addGoal(2, new WebThrowGoal(spider));

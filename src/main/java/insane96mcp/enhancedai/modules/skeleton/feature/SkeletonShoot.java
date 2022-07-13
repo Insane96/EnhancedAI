@@ -3,8 +3,8 @@ package insane96mcp.enhancedai.modules.skeleton.feature;
 import insane96mcp.enhancedai.modules.base.ai.EAAvoidEntityGoal;
 import insane96mcp.enhancedai.modules.skeleton.ai.EARangedBowAttackGoal;
 import insane96mcp.enhancedai.setup.Config;
+import insane96mcp.enhancedai.setup.EAStrings;
 import insane96mcp.enhancedai.setup.NBTUtils;
-import insane96mcp.enhancedai.setup.Strings;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
@@ -77,8 +77,8 @@ public class SkeletonShoot extends Feature {
 
 		CompoundTag persistentData = skeleton.getPersistentData();
 
-		boolean strafe = NBTUtils.getBooleanOrPutDefault(persistentData, Strings.Tags.Skeleton.STRAFE, skeleton.level.random.nextDouble() < this.strafeChance);
-		int shootingRange = NBTUtils.getIntOrPutDefault(persistentData, Strings.Tags.Skeleton.SHOOTING_RANGE, this.shootingRange.getIntRandBetween(skeleton.getRandom()));
+		boolean strafe = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Skeleton.STRAFE, skeleton.level.random.nextDouble() < this.strafeChance);
+		int shootingRange = NBTUtils.getIntOrPutDefault(persistentData, EAStrings.Tags.Skeleton.SHOOTING_RANGE, this.shootingRange.getIntRandBetween(skeleton.getRandom()));
 
 		boolean hasAIArrowAttack = false;
 		for (WrappedGoal prioritizedGoal : skeleton.goalSelector.availableGoals) {

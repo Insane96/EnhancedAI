@@ -2,7 +2,7 @@ package insane96mcp.enhancedai.modules.creeper.ai;
 
 import insane96mcp.enhancedai.modules.base.ai.AvoidExplosionGoal;
 import insane96mcp.enhancedai.modules.creeper.utils.CreeperUtils;
-import insane96mcp.enhancedai.setup.Strings;
+import insane96mcp.enhancedai.setup.EAStrings;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -110,7 +110,7 @@ public class AICreeperSwellGoal extends Goal {
 	}
 
 	public static boolean canBreach(Creeper creeper, LivingEntity target) {
-		if (!creeper.getPersistentData().contains(Strings.Tags.Creeper.BREACH))
+		if (!creeper.getPersistentData().contains(EAStrings.Tags.Creeper.BREACH))
 			return false;
 		double yDistance = creeper.getY() - target.getY();
 		double x = target.getX() - creeper.getX();

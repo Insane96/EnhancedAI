@@ -4,8 +4,8 @@ import insane96mcp.enhancedai.modules.creeper.ai.AICreeperLaunchGoal;
 import insane96mcp.enhancedai.modules.creeper.ai.AICreeperSwellGoal;
 import insane96mcp.enhancedai.setup.Config;
 import insane96mcp.enhancedai.setup.EASounds;
+import insane96mcp.enhancedai.setup.EAStrings;
 import insane96mcp.enhancedai.setup.NBTUtils;
-import insane96mcp.enhancedai.setup.Strings;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
@@ -86,7 +86,7 @@ public class CreeperSwell extends Feature {
 		if (!(e.getExploder() instanceof Creeper creeper))
 			return;
 
-		if (creeper.getPersistentData().getBoolean(Strings.Tags.Creeper.CENA))
+		if (creeper.getPersistentData().getBoolean(EAStrings.Tags.Creeper.CENA))
 			creeper.playSound(EASounds.CREEPER_CENA_EXPLODE.get(), 4.0f, 1.0f);
 	}
 
@@ -109,11 +109,11 @@ public class CreeperSwell extends Feature {
 
 		CompoundTag persistentData = creeper.getPersistentData();
 
-		boolean walkingFuse = NBTUtils.getBooleanOrPutDefault(persistentData, Strings.Tags.Creeper.WALKING_FUSE, creeper.level.random.nextDouble() < this.walkingFuseChance);
-		boolean ignoreWalls = NBTUtils.getBooleanOrPutDefault(persistentData, Strings.Tags.Creeper.IGNORE_WALLS, creeper.level.random.nextDouble() < this.ignoreWalls);
-		boolean breach = NBTUtils.getBooleanOrPutDefault(persistentData, Strings.Tags.Creeper.BREACH, creeper.level.random.nextDouble() < this.breach);
-		boolean launch = NBTUtils.getBooleanOrPutDefault(persistentData, Strings.Tags.Creeper.LAUNCH, creeper.level.random.nextDouble() < this.launch);
-		boolean cena = NBTUtils.getBooleanOrPutDefault(persistentData, Strings.Tags.Creeper.CENA, creeper.level.random.nextDouble() < this.cenaChance);
+		boolean walkingFuse = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Creeper.WALKING_FUSE, creeper.level.random.nextDouble() < this.walkingFuseChance);
+		boolean ignoreWalls = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Creeper.IGNORE_WALLS, creeper.level.random.nextDouble() < this.ignoreWalls);
+		boolean breach = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Creeper.BREACH, creeper.level.random.nextDouble() < this.breach);
+		boolean launch = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Creeper.LAUNCH, creeper.level.random.nextDouble() < this.launch);
+		boolean cena = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Creeper.CENA, creeper.level.random.nextDouble() < this.cenaChance);
 
 		if (cena) {
 			creeper.setCustomName(new TextComponent("Creeper Cena"));

@@ -1,7 +1,7 @@
 package insane96mcp.enhancedai.mixin;
 
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.enhancedai.setup.Strings;
+import insane96mcp.enhancedai.setup.EAStrings;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
@@ -75,7 +75,7 @@ public abstract class WitchMixin extends Raider {
 
 		if (this.level.isClientSide
 				|| !this.isAlive()
-				|| this.getPersistentData().getBoolean(Strings.Tags.Witch.PERFORMING_DARK_ARTS)) {
+				|| this.getPersistentData().getBoolean(EAStrings.Tags.Witch.PERFORMING_DARK_ARTS)) {
 			super.aiStep();
 			return;
 		}

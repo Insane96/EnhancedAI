@@ -2,8 +2,8 @@ package insane96mcp.enhancedai.modules.zombie.feature;
 
 import insane96mcp.enhancedai.modules.zombie.ai.DiggingGoal;
 import insane96mcp.enhancedai.setup.Config;
+import insane96mcp.enhancedai.setup.EAStrings;
 import insane96mcp.enhancedai.setup.NBTUtils;
-import insane96mcp.enhancedai.setup.Strings;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
@@ -106,9 +106,9 @@ public class DiggerZombie extends Feature {
 
 		CompoundTag persistentData = zombie.getPersistentData();
 
-		boolean miner = NBTUtils.getBooleanOrPutDefault(persistentData, Strings.Tags.Zombie.MINER, zombie.level.random.nextDouble() < this.diggerChance);
-		boolean diggerToolOnly = NBTUtils.getBooleanOrPutDefault(persistentData, Strings.Tags.Zombie.TOOL_ONLY, this.diggerToolOnly);
-		boolean diggerProperToolOnly = NBTUtils.getBooleanOrPutDefault(persistentData, Strings.Tags.Zombie.PROPER_TOOL_ONLY, this.diggerProperToolOnly);
+		boolean miner = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Zombie.MINER, zombie.level.random.nextDouble() < this.diggerChance);
+		boolean diggerToolOnly = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Zombie.TOOL_ONLY, this.diggerToolOnly);
+		boolean diggerProperToolOnly = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Zombie.PROPER_TOOL_ONLY, this.diggerProperToolOnly);
 
 		if (miner) {
 			zombie.goalSelector.addGoal(1, new DiggingGoal(zombie, this.maxDistance, diggerToolOnly, diggerProperToolOnly));

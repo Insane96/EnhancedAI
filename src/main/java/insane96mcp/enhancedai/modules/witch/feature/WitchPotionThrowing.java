@@ -2,8 +2,8 @@ package insane96mcp.enhancedai.modules.witch.feature;
 
 import insane96mcp.enhancedai.modules.witch.ai.WitchThrowPotionGoal;
 import insane96mcp.enhancedai.setup.Config;
+import insane96mcp.enhancedai.setup.EAStrings;
 import insane96mcp.enhancedai.setup.NBTUtils;
-import insane96mcp.enhancedai.setup.Strings;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
@@ -108,10 +108,10 @@ public class WitchPotionThrowing extends Feature {
             return;
 
         CompoundTag persistentData = witch.getPersistentData();
-        int attackSpeed = NBTUtils.getIntOrPutDefault(persistentData, Strings.Tags.Witch.ATTACK_SPEED, this.throwSpeed.getIntRandBetween(witch.getRandom()));
-        int attackRange = NBTUtils.getIntOrPutDefault(persistentData, Strings.Tags.Witch.ATTACK_RANGE, this.throwRange.getIntRandBetween(witch.getRandom()));
-        double lingeringChance = NBTUtils.getDoubleOrPutDefault(persistentData, Strings.Tags.Witch.LINGERING_CHANCE, this.lingeringChance);
-        double anotherThrowChance = NBTUtils.getDoubleOrPutDefault(persistentData, Strings.Tags.Witch.ANOTHER_THROW_CHANCE, this.anotherThrowChance);
+        int attackSpeed = NBTUtils.getIntOrPutDefault(persistentData, EAStrings.Tags.Witch.ATTACK_SPEED, this.throwSpeed.getIntRandBetween(witch.getRandom()));
+        int attackRange = NBTUtils.getIntOrPutDefault(persistentData, EAStrings.Tags.Witch.ATTACK_RANGE, this.throwRange.getIntRandBetween(witch.getRandom()));
+        double lingeringChance = NBTUtils.getDoubleOrPutDefault(persistentData, EAStrings.Tags.Witch.LINGERING_CHANCE, this.lingeringChance);
+        double anotherThrowChance = NBTUtils.getDoubleOrPutDefault(persistentData, EAStrings.Tags.Witch.ANOTHER_THROW_CHANCE, this.anotherThrowChance);
 
         List<Goal> rangedAttackGoals = witch.goalSelector.availableGoals.stream()
                 .map(WrappedGoal::getGoal)

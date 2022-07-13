@@ -2,7 +2,7 @@ package insane96mcp.enhancedai.setup;
 
 import insane96mcp.enhancedai.EnhancedAI;
 
-public class Strings {
+public class EAStrings {
 	public static class Tags {
 		public static final String FOLLOW_RANGES_PROCESSED = EnhancedAI.RESOURCE_PREFIX + "follow_ranges_processed";
 

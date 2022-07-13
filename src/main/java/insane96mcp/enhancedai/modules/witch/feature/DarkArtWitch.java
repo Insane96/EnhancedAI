@@ -2,8 +2,8 @@ package insane96mcp.enhancedai.modules.witch.feature;
 
 import insane96mcp.enhancedai.modules.witch.ai.DarkArtWitchGoal;
 import insane96mcp.enhancedai.setup.Config;
+import insane96mcp.enhancedai.setup.EAStrings;
 import insane96mcp.enhancedai.setup.NBTUtils;
-import insane96mcp.enhancedai.setup.Strings;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
@@ -47,7 +47,7 @@ public class DarkArtWitch extends Feature {
             return;
 
         CompoundTag persistentData = witch.getPersistentData();
-        boolean darkArt = NBTUtils.getBooleanOrPutDefault(persistentData, Strings.Tags.Witch.DARK_ARTS, witch.level.random.nextDouble() < this.darkArtChance);
+        boolean darkArt = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Witch.DARK_ARTS, witch.level.random.nextDouble() < this.darkArtChance);
 
         if (!darkArt)
             return;

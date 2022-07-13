@@ -1,7 +1,7 @@
 package insane96mcp.enhancedai.modules.creeper.ai;
 
 import insane96mcp.enhancedai.modules.creeper.utils.CreeperUtils;
-import insane96mcp.enhancedai.setup.Strings;
+import insane96mcp.enhancedai.setup.EAStrings;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -50,7 +50,7 @@ public class AICreeperLaunchGoal extends Goal {
 		if (--cooldown > 0)
 			return false;
 
-		if (!this.launchingCreeper.getSensing().hasLineOfSight(target) && !this.launchingCreeper.getPersistentData().contains(Strings.Tags.Creeper.BREACH))
+		if (!this.launchingCreeper.getSensing().hasLineOfSight(target) && !this.launchingCreeper.getPersistentData().contains(EAStrings.Tags.Creeper.BREACH))
 			return false;
 
 		if (this.launchingCreeper.level.getBlockState(this.launchingCreeper.blockPosition().above(3)).getMaterial().blocksMotion())

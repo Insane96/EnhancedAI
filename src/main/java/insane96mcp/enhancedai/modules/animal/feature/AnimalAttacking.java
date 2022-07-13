@@ -1,8 +1,8 @@
 package insane96mcp.enhancedai.modules.animal.feature;
 
 import insane96mcp.enhancedai.setup.Config;
+import insane96mcp.enhancedai.setup.EAStrings;
 import insane96mcp.enhancedai.setup.NBTUtils;
-import insane96mcp.enhancedai.setup.Strings;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
@@ -96,7 +96,7 @@ public class AnimalAttacking extends Feature {
 
         CompoundTag persistentData = animal.getPersistentData();
 
-        double movementSpeedMultiplier = NBTUtils.getDoubleOrPutDefault(persistentData, Strings.Tags.Animal.SPEED_MULTIPLIER_WHEN_AGGROED, this.speedMultiplier);
+        double movementSpeedMultiplier = NBTUtils.getDoubleOrPutDefault(persistentData, EAStrings.Tags.Animal.SPEED_MULTIPLIER_WHEN_AGGROED, this.speedMultiplier);
 
         if (this.animalsFightBack) {
             animal.targetSelector.addGoal(1, (new HurtByTargetGoal(animal)).setAlertOthers());
