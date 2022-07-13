@@ -2,6 +2,7 @@
 
 ## Upcoming
 * XRay follow range is now a separate attribute and can be overridden separately from 
+* Most mobs data (e.g. if a zombie is a miner or the inaccuracy of a skeleton) are now loaded from NBT `ForgeData` (if not present will use default values). You can find all the Tags here: https://github.com/Insane96/EnhancedAI/wiki/Entity-Tags
 * Fixed Fisher zombies fishing only if they couldn't see the target
 * Fixed crash when the owner of fishing hook died / transformed
 * Melee Attacks Attribute Based is now disabled by default

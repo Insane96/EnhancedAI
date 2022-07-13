@@ -26,7 +26,7 @@ public class EANearestAttackableTarget<T extends LivingEntity> extends ILNearest
     @Override
     protected void findTarget() {
         if (this.targetClass != Player.class && this.targetClass != ServerPlayer.class) {
-            //Try to find the nearest player without xray, then try with xray if the attribute is not 0
+            //Try to find the nearest target without xray, then try with xray if the attribute is not 0
             this.nearestTarget = this.mob.level.getNearestEntity(this.targetClass, this.targetEntitySelector, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ(), this.getTargetSearchArea(this.getFollowDistance()));
             if (this.nearestTarget == null && this.getFollowXRayDistance() > 0d) {
                 this.nearestTarget = this.mob.level.getNearestEntity(this.targetClass, this.targetEntitySelectorXRay, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ(), this.getTargetSearchArea(this.getFollowXRayDistance()));
