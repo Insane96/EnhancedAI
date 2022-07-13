@@ -16,6 +16,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.Collections;
@@ -107,7 +108,8 @@ public class ThrowingWeb extends Feature {
 		this.entityBlacklist = this.entityBlacklistConfig.get();
 	}
 
-	@SubscribeEvent
+	//Lowest priority so other mods can set persistent data
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onSpawn(EntityJoinWorldEvent event) {
 		if (!this.isEnabled())
 			return;

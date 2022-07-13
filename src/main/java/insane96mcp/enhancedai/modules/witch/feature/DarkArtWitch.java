@@ -11,6 +11,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.monster.Witch;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 @Label(name = "Dark Arts Witches", description = "Witches summon Villagers and cast a lightning bolt upon them.")
@@ -35,7 +36,8 @@ public class DarkArtWitch extends Feature {
         this.darkArtChance = this.darkArtChanceConfig.get();
     }
 
-    @SubscribeEvent
+    //Lowest priority so other mods can set persistent data
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onSpawn(EntityJoinWorldEvent event) {
         if (!this.isEnabled())
             return;

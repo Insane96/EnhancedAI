@@ -13,6 +13,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Blaze;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
@@ -81,7 +82,8 @@ public class BlazeAttack extends Feature {
         this.entityBlacklist = this.entityBlacklistConfig.get();
     }
 
-    @SubscribeEvent
+    //Lowest priority so other mods can set persistent data
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onSpawn(EntityJoinWorldEvent event) {
         if (!this.isEnabled())
             return;

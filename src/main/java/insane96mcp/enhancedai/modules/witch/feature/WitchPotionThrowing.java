@@ -18,6 +18,7 @@ import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.monster.Witch;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
@@ -99,7 +100,8 @@ public class WitchPotionThrowing extends Feature {
         this.entityBlacklist = this.entityBlacklistConfig.get();
     }
 
-    @SubscribeEvent
+    //Lowest priority so other mods can set persistent data
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onSpawn(EntityJoinWorldEvent event) {
         if (!this.isEnabled()
                 || event.getWorld().isClientSide

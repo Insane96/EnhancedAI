@@ -20,6 +20,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
@@ -90,7 +91,8 @@ public class CreeperSwell extends Feature {
 			creeper.playSound(EASounds.CREEPER_CENA_EXPLODE.get(), 4.0f, 1.0f);
 	}
 
-	@SubscribeEvent
+	//Lowest priority so other mods can set persistent data
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void eventEntityJoinWorld(EntityJoinWorldEvent event) {
 		if (!this.isEnabled())
 			return;

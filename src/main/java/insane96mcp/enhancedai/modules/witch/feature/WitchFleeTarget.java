@@ -12,6 +12,7 @@ import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 @Label(name = "Witch Flee Target", description = "Witches flee from the target.")
@@ -66,7 +67,8 @@ public class WitchFleeTarget extends Feature {
         this.fleeSpeedFar = this.fleeSpeedFarConfig.get();
     }
 
-    @SubscribeEvent
+    //Lowest priority so other mods can set persistent data
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onSpawn(EntityJoinWorldEvent event) {
         if (!this.isEnabled())
             return;
