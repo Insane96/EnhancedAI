@@ -84,16 +84,10 @@ public class AnimalAttacking extends Feature {
     //Lowest priority so other mods can set persistent data
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onSpawn(EntityJoinWorldEvent event) {
-        if (!this.isEnabled())
-            return;
-
-        if (event.getEntity() instanceof Enemy)
-            return;
-
-        if (!(event.getEntity() instanceof Animal animal))
-            return;
-
-        if (this.entityBlacklist.isEntityBlackOrNotWhitelist(animal))
+        if (!this.isEnabled()
+                || event.getEntity() instanceof Enemy
+                || !(event.getEntity() instanceof Animal animal)
+                || this.entityBlacklist.isEntityBlackOrNotWhitelist(animal))
             return;
 
         CompoundTag persistentData = animal.getPersistentData();
