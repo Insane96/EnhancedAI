@@ -96,7 +96,7 @@ public class AnimalAttacking extends Feature {
 
         CompoundTag persistentData = animal.getPersistentData();
 
-        double movementSpeedMultiplier = NBTUtils.getDoubleOrDefault(persistentData, Strings.Tags.Animal.SPEED_MULTIPLIER_WHEN_AGGROED, this.speedMultiplier);
+        double movementSpeedMultiplier = NBTUtils.getDoubleOrPutDefault(persistentData, Strings.Tags.Animal.SPEED_MULTIPLIER_WHEN_AGGROED, this.speedMultiplier);
 
         if (this.animalsFightBack) {
             animal.targetSelector.addGoal(1, (new HurtByTargetGoal(animal)).setAlertOthers());

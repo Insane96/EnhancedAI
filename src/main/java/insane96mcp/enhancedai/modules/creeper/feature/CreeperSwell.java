@@ -109,11 +109,11 @@ public class CreeperSwell extends Feature {
 
 		CompoundTag persistentData = creeper.getPersistentData();
 
-		boolean walkingFuse = NBTUtils.getBooleanOrDefault(persistentData, Strings.Tags.Creeper.WALKING_FUSE, creeper.level.random.nextDouble() < this.walkingFuseChance);
-		boolean ignoreWalls = NBTUtils.getBooleanOrDefault(persistentData, Strings.Tags.Creeper.IGNORE_WALLS, creeper.level.random.nextDouble() < this.ignoreWalls);
-		boolean breach = NBTUtils.getBooleanOrDefault(persistentData, Strings.Tags.Creeper.BREACH, creeper.level.random.nextDouble() < this.breach);
-		boolean launch = NBTUtils.getBooleanOrDefault(persistentData, Strings.Tags.Creeper.LAUNCH, creeper.level.random.nextDouble() < this.launch);
-		boolean cena = NBTUtils.getBooleanOrDefault(persistentData, Strings.Tags.Creeper.CENA, creeper.level.random.nextDouble() < this.cenaChance);
+		boolean walkingFuse = NBTUtils.getBooleanOrPutDefault(persistentData, Strings.Tags.Creeper.WALKING_FUSE, creeper.level.random.nextDouble() < this.walkingFuseChance);
+		boolean ignoreWalls = NBTUtils.getBooleanOrPutDefault(persistentData, Strings.Tags.Creeper.IGNORE_WALLS, creeper.level.random.nextDouble() < this.ignoreWalls);
+		boolean breach = NBTUtils.getBooleanOrPutDefault(persistentData, Strings.Tags.Creeper.BREACH, creeper.level.random.nextDouble() < this.breach);
+		boolean launch = NBTUtils.getBooleanOrPutDefault(persistentData, Strings.Tags.Creeper.LAUNCH, creeper.level.random.nextDouble() < this.launch);
+		boolean cena = NBTUtils.getBooleanOrPutDefault(persistentData, Strings.Tags.Creeper.CENA, creeper.level.random.nextDouble() < this.cenaChance);
 
 		if (cena) {
 			creeper.setCustomName(new TextComponent("Creeper Cena"));

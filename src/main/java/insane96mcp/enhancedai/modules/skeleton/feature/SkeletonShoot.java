@@ -3,6 +3,7 @@ package insane96mcp.enhancedai.modules.skeleton.feature;
 import insane96mcp.enhancedai.modules.base.ai.EAAvoidEntityGoal;
 import insane96mcp.enhancedai.modules.skeleton.ai.EARangedBowAttackGoal;
 import insane96mcp.enhancedai.setup.Config;
+import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.enhancedai.setup.Strings;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
@@ -74,16 +75,10 @@ public class SkeletonShoot extends Feature {
 		if (this.entityBlacklist.isEntityBlackOrNotWhitelist(skeleton))
 			return;
 
-		boolean strafe = skeleton.level.random.nextDouble() < this.strafeChance;
-
 		CompoundTag persistentData = skeleton.getPersistentData();
 
-		if (persistentData.contains(Strings.Tags.Skeleton.STRAFE)) {
-			strafe = persistentData.getBoolean(Strings.Tags.Skeleton.STRAFE);
-		}
-		else {
-			persistentData.putBoolean(Strings.Tags.Skeleton.STRAFE, strafe);
-		}
+		boolean strafe = NBTUtils.getBooleanOrPutDefault(persistentData, Strings.Tags.Skeleton.STRAFE, skeleton.level.random.nextDouble() < this.strafeChance);
+		int shootingRange = NBTUtils.getIntOrPutDefault(persistentData, Strings.Tags.Skeleton.SHOOTING_RANGE, this.shootingRange.getIntRandBetween(skeleton.getRandom()));
 
 		boolean hasAIArrowAttack = false;
 		for (WrappedGoal prioritizedGoal : skeleton.goalSelector.availableGoals) {
@@ -108,7 +103,7 @@ public class SkeletonShoot extends Feature {
 			if (!skeleton.level.getDifficulty().equals(Difficulty.HARD))
 				attackCooldown *= 2;
 
-			EARangedBowAttackGoal<AbstractSkeleton> EARangedBowAttackGoal = new EARangedBowAttackGoal<>(skeleton, 1.0d, this.shootingRange.getIntRandBetween(skeleton.getRandom()), strafe)
+			EARangedBowAttackGoal<AbstractSkeleton> EARangedBowAttackGoal = new EARangedBowAttackGoal<>(skeleton, 1.0d, shootingRange, strafe)
 					.setAttackCooldown(attackCooldown)
 					.setBowChargeTicks(bowChargeTicks)
 					.setInaccuracy((float) inaccuracy);

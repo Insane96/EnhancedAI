@@ -25,19 +25,23 @@ public class WitchThrowPotionGoal extends Goal {
     private final int attackIntervalMax;
     private final float attackRadius;
     private final float attackRadiusSqr;
+    private final double lingeringChance;
+    private final double anotherThrowChance;
 
     private LivingEntity target;
 
     private int attackTime = -1;
     private boolean randomPotion = false;
 
-    public WitchThrowPotionGoal(Witch witch, int attackIntervalMin, int attackIntervalMax, float attackRadius) {
+    public WitchThrowPotionGoal(Witch witch, int attackIntervalMin, int attackIntervalMax, float attackRadius, double lingeringChance, double anotherThrowChance) {
         this.witch = witch;
         this.attackIntervalMin = attackIntervalMin;
         this.attackIntervalMax = attackIntervalMax;
         this.attackRadius = attackRadius;
         this.attackRadiusSqr = attackRadius * attackRadius;
         this.attackTime = Mth.floor(Mth.nextInt(witch.getRandom(), this.attackIntervalMin, this.attackIntervalMax)) / 2;
+        this.lingeringChance = lingeringChance;
+        this.anotherThrowChance = anotherThrowChance;
         this.setFlags(EnumSet.of(Goal.Flag.LOOK));
     }
 
@@ -111,7 +115,7 @@ public class WitchThrowPotionGoal extends Goal {
         this.randomPotion = false;
 
         ThrownPotion thrownpotion = new ThrownPotion(witch.level, this.witch);
-        Item potionType = witch.level.random.nextDouble() < Modules.witch.witchPotionThrowing.lingeringChance ? Items.LINGERING_POTION : Items.SPLASH_POTION;
+        Item potionType = witch.level.random.nextDouble() < this.lingeringChance ? Items.LINGERING_POTION : Items.SPLASH_POTION;
         thrownpotion.setItem(MCUtils.setCustomEffects(new ItemStack(potionType), mobEffectInstances));
         thrownpotion.setXRot(thrownpotion.getXRot() - -20.0F);
         double distance = this.witch.distanceTo(target);
@@ -129,7 +133,7 @@ public class WitchThrowPotionGoal extends Goal {
 
         witch.level.addFreshEntity(thrownpotion);
 
-        if (witch.level.random.nextDouble() < Modules.witch.witchPotionThrowing.anotherThrowChance) {
+        if (witch.level.random.nextDouble() < this.anotherThrowChance) {
             this.attackTime = 7;
             this.randomPotion = true;
         }

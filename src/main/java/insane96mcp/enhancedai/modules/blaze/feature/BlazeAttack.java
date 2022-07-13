@@ -94,12 +94,12 @@ public class BlazeAttack extends Feature {
 
         CompoundTag persistentData = blaze.getPersistentData();
 
-        int timeBetweenFireballs = NBTUtils.getIntOrDefault(persistentData, Strings.Tags.Blaze.TIME_BETWEEN_FIREBALLS, this.timeBetweenFireballs.getIntRandBetween(blaze.getRandom()));
-        int fireballsShot = NBTUtils.getIntOrDefault(persistentData, Strings.Tags.Blaze.FIREBALLS_SHOT, this.fireballsShot.getIntRandBetween(blaze.getRandom()));
-        int rechargeTime = NBTUtils.getIntOrDefault(persistentData, Strings.Tags.Blaze.RECHARGE_TIME, this.rechargeTime.getIntRandBetween(blaze.getRandom()));
-        int chargeTime = NBTUtils.getIntOrDefault(persistentData, Strings.Tags.Blaze.CHARGE_TIME, this.chargeTime.getIntRandBetween(blaze.getRandom()));
-        int fireballsPerShot = NBTUtils.getIntOrDefault(persistentData, Strings.Tags.Blaze.FIREBALLS_PER_SHOT, this.fireballsPerShot.getIntRandBetween(blaze.getRandom()));
-        int inaccuracy = NBTUtils.getIntOrDefault(persistentData, Strings.Tags.Blaze.INACCURACY, this.inaccuracy.getIntRandBetween(blaze.getRandom()));
+        int timeBetweenFireballs = NBTUtils.getIntOrPutDefault(persistentData, Strings.Tags.Blaze.TIME_BETWEEN_FIREBALLS, this.timeBetweenFireballs.getIntRandBetween(blaze.getRandom()));
+        int fireballsShot = NBTUtils.getIntOrPutDefault(persistentData, Strings.Tags.Blaze.FIREBALLS_SHOT, this.fireballsShot.getIntRandBetween(blaze.getRandom()));
+        int rechargeTime = NBTUtils.getIntOrPutDefault(persistentData, Strings.Tags.Blaze.RECHARGE_TIME, this.rechargeTime.getIntRandBetween(blaze.getRandom()));
+        int chargeTime = NBTUtils.getIntOrPutDefault(persistentData, Strings.Tags.Blaze.CHARGE_TIME, this.chargeTime.getIntRandBetween(blaze.getRandom()));
+        int fireballsPerShot = NBTUtils.getIntOrPutDefault(persistentData, Strings.Tags.Blaze.FIREBALLS_PER_SHOT, this.fireballsPerShot.getIntRandBetween(blaze.getRandom()));
+        int inaccuracy = NBTUtils.getIntOrPutDefault(persistentData, Strings.Tags.Blaze.INACCURACY, this.inaccuracy.getIntRandBetween(blaze.getRandom()));
 
         ArrayList<Goal> goalsToRemove = new ArrayList<>();
         blaze.goalSelector.availableGoals.forEach(prioritizedGoal -> {

@@ -2,12 +2,15 @@ package insane96mcp.enhancedai.modules.witch.feature;
 
 import insane96mcp.enhancedai.modules.witch.ai.WitchThrowPotionGoal;
 import insane96mcp.enhancedai.setup.Config;
+import insane96mcp.enhancedai.setup.NBTUtils;
+import insane96mcp.enhancedai.setup.Strings;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.config.Blacklist;
 import insane96mcp.insanelib.config.MinMax;
 import insane96mcp.insanelib.util.MCUtils;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
@@ -98,17 +101,17 @@ public class WitchPotionThrowing extends Feature {
 
     @SubscribeEvent
     public void onSpawn(EntityJoinWorldEvent event) {
-        if (!this.isEnabled())
+        if (!this.isEnabled()
+                || event.getWorld().isClientSide
+                || !(event.getEntity() instanceof Witch witch)
+                || this.entityBlacklist.isEntityBlackOrNotWhitelist(witch))
             return;
 
-        if (event.getWorld().isClientSide)
-            return;
-
-        if (!(event.getEntity() instanceof Witch witch))
-            return;
-
-        if (this.entityBlacklist.isEntityBlackOrNotWhitelist(witch))
-            return;
+        CompoundTag persistentData = witch.getPersistentData();
+        int attackSpeed = NBTUtils.getIntOrPutDefault(persistentData, Strings.Tags.Witch.ATTACK_SPEED, this.throwSpeed.getIntRandBetween(witch.getRandom()));
+        int attackRange = NBTUtils.getIntOrPutDefault(persistentData, Strings.Tags.Witch.ATTACK_RANGE, this.throwRange.getIntRandBetween(witch.getRandom()));
+        double lingeringChance = NBTUtils.getDoubleOrPutDefault(persistentData, Strings.Tags.Witch.LINGERING_CHANCE, this.lingeringChance);
+        double anotherThrowChance = NBTUtils.getDoubleOrPutDefault(persistentData, Strings.Tags.Witch.ANOTHER_THROW_CHANCE, this.anotherThrowChance);
 
         List<Goal> rangedAttackGoals = witch.goalSelector.availableGoals.stream()
                 .map(WrappedGoal::getGoal)
@@ -116,9 +119,7 @@ public class WitchPotionThrowing extends Feature {
                 .toList();
         rangedAttackGoals.forEach(witch.goalSelector::removeGoal);
 
-        int attackSpeed = this.throwSpeed.getIntRandBetween(witch.getRandom());
-        int attackRange = this.throwRange.getIntRandBetween(witch.getRandom());
-        witch.goalSelector.addGoal(2, new WitchThrowPotionGoal(witch, attackSpeed, attackSpeed, attackRange));
+        witch.goalSelector.addGoal(2, new WitchThrowPotionGoal(witch, attackSpeed, attackSpeed, attackRange, lingeringChance, anotherThrowChance));
         //witch.targetSelector.addGoal(2, new WitchBuffAllyGoal<>(witch, Mob.class, true, (livingEntity -> livingEntity != null && !witch.hasActiveRaid() && livingEntity.getType() != EntityType.WITCH)));
     }
 

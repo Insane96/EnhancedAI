@@ -40,7 +40,7 @@ public class GhastShoot extends Feature {
         this.attackCooldownConfig = new MinMax.Config(Config.builder, "Attack Cooldown", "How many ticks pass between shooting fireballs. Vanilla is 40")
                 .setMinMax(1, 300, this.attackCooldown)
                 .build();
-        this.fireballsShotConfig = new MinMax.Config(Config.builder, "Fireballs shot", "How many fireballs ghast shoot like a shotgun. Vanilla is 1")
+        this.fireballsShotConfig = new MinMax.Config(Config.builder, "Fireballs shot", "How many fireballs ghast shoot in rapid succession. Vanilla is 1")
                 .setMinMax(1, 16, this.fireballsShot)
                 .build();
         this.shootWhenNotSeenConfig = Config.builder
@@ -77,9 +77,9 @@ public class GhastShoot extends Feature {
 
         CompoundTag persistentData = ghast.getPersistentData();
 
-        int attackCooldown = NBTUtils.getIntOrDefault(persistentData, Strings.Tags.Ghast.ATTACK_COOLDOWN, this.attackCooldown.getIntRandBetween(ghast.getRandom()));
-        int fireballsShot = NBTUtils.getIntOrDefault(persistentData, Strings.Tags.Ghast.FIREBALLS_SHOT, this.fireballsShot.getIntRandBetween(ghast.getRandom()));
-        boolean shootWhenNotSeen = NBTUtils.getBooleanOrDefault(persistentData, Strings.Tags.Ghast.SHOOT_WHEN_NOT_SEEN, ghast.getRandom().nextDouble() < this.shootWhenNotSeen);
+        int attackCooldown = NBTUtils.getIntOrPutDefault(persistentData, Strings.Tags.Ghast.ATTACK_COOLDOWN, this.attackCooldown.getIntRandBetween(ghast.getRandom()));
+        int fireballsShot = NBTUtils.getIntOrPutDefault(persistentData, Strings.Tags.Ghast.FIREBALLS_SHOT, this.fireballsShot.getIntRandBetween(ghast.getRandom()));
+        boolean shootWhenNotSeen = NBTUtils.getBooleanOrPutDefault(persistentData, Strings.Tags.Ghast.SHOOT_WHEN_NOT_SEEN, ghast.getRandom().nextDouble() < this.shootWhenNotSeen);
 
         ArrayList<Goal> goalsToRemove = new ArrayList<>();
         ghast.goalSelector.availableGoals.forEach(prioritizedGoal -> {

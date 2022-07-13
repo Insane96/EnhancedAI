@@ -2,6 +2,7 @@ package insane96mcp.enhancedai.modules.skeleton.feature;
 
 import insane96mcp.enhancedai.modules.base.ai.EAAvoidEntityGoal;
 import insane96mcp.enhancedai.setup.Config;
+import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.enhancedai.setup.Strings;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
@@ -14,7 +15,6 @@ import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.ForgeConfigSpec;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Label(name = "Skeleton Flee", description = "Skeletons try to stay away from the target.")
@@ -22,17 +22,17 @@ public class SkeletonFleeTarget extends Feature {
 
     private final ForgeConfigSpec.ConfigValue<Double> avoidPlayerChanceConfig;
     private final ForgeConfigSpec.ConfigValue<Double> attackWhenAvoidingChanceConfig;
-    private final ForgeConfigSpec.ConfigValue<Double> fleeDistanceConfig;
+    private final ForgeConfigSpec.ConfigValue<Double> fleeDistanceFarConfig;
     private final ForgeConfigSpec.ConfigValue<Double> fleeDistanceNearConfig;
     private final ForgeConfigSpec.ConfigValue<Double> fleeSpeedNearConfig;
     private final ForgeConfigSpec.ConfigValue<Double> fleeSpeedFarConfig;
     private final Blacklist.Config entityBlacklistConfig;
 
-    private final List<String> defaultBlacklist = Arrays.asList("quark:forgotten");
+    private final List<String> defaultBlacklist = List.of("quark:forgotten");
 
     public double avoidPlayerChance = 0.5d;
     public double attackWhenAvoidingChance = 0.5d;
-    public double fleeDistance = 16;
+    public double fleeDistanceFar = 16;
     public double fleeDistanceNear = 8;
     public double fleeSpeedNear = 1.6d;
     public double fleeSpeedFar = 1.3d;
@@ -47,14 +47,14 @@ public class SkeletonFleeTarget extends Feature {
         attackWhenAvoidingChanceConfig = Config.builder
                 .comment("Chance for a Skeleton to be able to shoot while running from a player")
                 .defineInRange("Attack When Avoiding Chance", this.attackWhenAvoidingChance, 0d, 1d);
-        fleeDistanceConfig = Config.builder
+        fleeDistanceFarConfig = Config.builder
                 .comment("Distance from a player that will make the skeleton run away.")
-                .defineInRange("Flee Distance", this.fleeDistance, 0d, 32d);
+                .defineInRange("Flee Distance", this.fleeDistanceFar, 0d, 32d);
         fleeDistanceNearConfig = Config.builder
                 .comment("Distance from a player that counts as near and will make the skeleton run away faster.")
                 .defineInRange("Flee Distance Near", this.fleeDistanceNear, 0d, 32d);
         fleeSpeedFarConfig = Config.builder
-                .comment("Speed multiplier when the skeleton avoids the player and it's farther than 'Flee Distance Near' blocks from him.")
+                .comment("Speed multiplier when the skeleton avoids the player and it's farther than 'Flee Distance Far' blocks from him.")
                 .defineInRange("Flee speed Multiplier Far", this.fleeSpeedFar, 0d, 4d);
         fleeSpeedNearConfig = Config.builder
                 .comment("Speed multiplier when the skeleton avoids the player and it's within 'Flee Distance Near' blocks from him.")
@@ -71,7 +71,7 @@ public class SkeletonFleeTarget extends Feature {
         super.loadConfig();
         this.avoidPlayerChance = this.avoidPlayerChanceConfig.get();
         this.attackWhenAvoidingChance = this.attackWhenAvoidingChanceConfig.get();
-        this.fleeDistance = this.fleeDistanceConfig.get();
+        this.fleeDistanceFar = this.fleeDistanceFarConfig.get();
         this.fleeDistanceNear = this.fleeDistanceNearConfig.get();
         this.fleeSpeedNear = this.fleeSpeedNearConfig.get();
         this.fleeSpeedFar = this.fleeSpeedFarConfig.get();
@@ -85,19 +85,14 @@ public class SkeletonFleeTarget extends Feature {
         if (this.entityBlacklist.isEntityBlackOrNotWhitelist(skeleton))
             return;
 
-        boolean avoidTarget = skeleton.level.random.nextDouble() < this.avoidPlayerChance;
-        boolean attackWhenAvoiding = skeleton.level.random.nextDouble() < this.attackWhenAvoidingChance;
-
         CompoundTag persistentData = skeleton.getPersistentData();
 
-        if (persistentData.contains(Strings.Tags.Skeleton.AVOID_TARGET)) {
-            avoidTarget = persistentData.getBoolean(Strings.Tags.Skeleton.AVOID_TARGET);
-            attackWhenAvoiding = persistentData.getBoolean(Strings.Tags.Skeleton.ATTACK_WHEN_AVOIDING);
-        }
-        else {
-            persistentData.putBoolean(Strings.Tags.Skeleton.AVOID_TARGET, avoidTarget);
-            persistentData.putBoolean(Strings.Tags.Skeleton.ATTACK_WHEN_AVOIDING, attackWhenAvoiding);
-        }
+        boolean avoidTarget = NBTUtils.getBooleanOrPutDefault(persistentData, Strings.Tags.Flee.AVOID_TARGET, skeleton.level.random.nextDouble() < this.avoidPlayerChance);
+        boolean attackWhenAvoiding = NBTUtils.getBooleanOrPutDefault(persistentData, Strings.Tags.Flee.ATTACK_WHEN_AVOIDING, skeleton.level.random.nextDouble() < this.attackWhenAvoidingChance);
+        double fleeDistanceFar = NBTUtils.getDoubleOrPutDefault(persistentData, Strings.Tags.Flee.FLEE_DISTANCE_FAR, this.fleeDistanceFar);
+        double fleeDistanceNear = NBTUtils.getDoubleOrPutDefault(persistentData, Strings.Tags.Flee.FLEE_DISTANCE_NEAR, this.fleeDistanceNear);
+        double fleeSpeedFar = NBTUtils.getDoubleOrPutDefault(persistentData, Strings.Tags.Flee.FLEE_SPEED_FAR, this.fleeSpeedFar);
+        double fleeSpeedNear = NBTUtils.getDoubleOrPutDefault(persistentData, Strings.Tags.Flee.FLEE_SPEED_NEAR, this.fleeSpeedNear);
 
         if (!avoidTarget)
             return;
@@ -114,7 +109,7 @@ public class SkeletonFleeTarget extends Feature {
 
         avoidEntityGoals.forEach(skeleton.goalSelector::removeGoal);
         if (hasAIArrowAttack) {
-            EAAvoidEntityGoal<Player> avoidEntityGoal = new EAAvoidEntityGoal<>(skeleton, Player.class, (float) this.fleeDistance, (float) this.fleeDistanceNear, this.fleeSpeedNear, this.fleeSpeedFar);
+            EAAvoidEntityGoal<Player> avoidEntityGoal = new EAAvoidEntityGoal<>(skeleton, Player.class, (float) fleeDistanceFar, (float) fleeDistanceNear, fleeSpeedNear, fleeSpeedFar);
             avoidEntityGoal.setAttackWhenRunning(attackWhenAvoiding);
             skeleton.goalSelector.addGoal(1, avoidEntityGoal);
         }

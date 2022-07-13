@@ -2,6 +2,7 @@ package insane96mcp.enhancedai.modules.zombie.feature;
 
 import insane96mcp.enhancedai.modules.zombie.ai.DiggingGoal;
 import insane96mcp.enhancedai.setup.Config;
+import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.enhancedai.setup.Strings;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
@@ -49,7 +50,7 @@ public class DiggerZombie extends Feature {
 				.comment("Chance for a Zombie to spawn with the digger ability")
 				.defineInRange("Digger Chance", this.diggerChance, 0d, 1d);
 		diggerToolOnlyConfig = Config.builder
-				.comment("Zombies with Digger AI will mine only if they have a tool in the off-hand")
+				.comment("Zombies with Digger AI will mine only if they have any tool in the off-hand")
 				.define("Digger Tool Only", this.diggerToolOnly);
 		diggerProperToolOnlyConfig = Config.builder
 				.comment("Zombies with Digger AI will mine only if their off-hand tool can mine targeted blocks (e.g. zombies with shovels will not mine stone). Blocks that require no tool (e.g. planks) will be minable regardless of proper tool or not.")
@@ -97,31 +98,20 @@ public class DiggerZombie extends Feature {
 
 	@SubscribeEvent
 	public void onSpawn(EntityJoinWorldEvent event) {
-		if (!this.isEnabled())
+		if (!this.isEnabled()
+		 		|| event.getWorld().isClientSide
+				|| !(event.getEntity() instanceof Zombie zombie)
+		 		|| this.entityBlacklist.isEntityBlackOrNotWhitelist(zombie))
 			return;
-
-		if (event.getWorld().isClientSide)
-			return;
-
-		if (!(event.getEntity() instanceof Zombie zombie))
-			return;
-
-		if (this.entityBlacklist.isEntityBlackOrNotWhitelist(zombie))
-			return;
-
-		boolean miner = zombie.level.random.nextDouble() < this.diggerChance;
 
 		CompoundTag persistentData = zombie.getPersistentData();
 
-		if (persistentData.contains(Strings.Tags.Zombie.MINER)) {
-			miner = persistentData.getBoolean(Strings.Tags.Zombie.MINER);
-		}
-		else {
-			persistentData.putBoolean(Strings.Tags.Zombie.MINER, miner);
-		}
+		boolean miner = NBTUtils.getBooleanOrPutDefault(persistentData, Strings.Tags.Zombie.MINER, zombie.level.random.nextDouble() < this.diggerChance);
+		boolean diggerToolOnly = NBTUtils.getBooleanOrPutDefault(persistentData, Strings.Tags.Zombie.TOOL_ONLY, this.diggerToolOnly);
+		boolean diggerProperToolOnly = NBTUtils.getBooleanOrPutDefault(persistentData, Strings.Tags.Zombie.PROPER_TOOL_ONLY, this.diggerProperToolOnly);
 
 		if (miner) {
-			zombie.goalSelector.addGoal(1, new DiggingGoal(zombie, this.maxDistance, this.diggerToolOnly, this.diggerProperToolOnly));
+			zombie.goalSelector.addGoal(1, new DiggingGoal(zombie, this.maxDistance, diggerToolOnly, diggerProperToolOnly));
 			if (this.equipWoodenPick)
 			{
 				zombie.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.WOODEN_PICKAXE));

@@ -2,9 +2,12 @@ package insane96mcp.enhancedai.modules.witch.feature;
 
 import insane96mcp.enhancedai.modules.witch.ai.DarkArtWitchGoal;
 import insane96mcp.enhancedai.setup.Config;
+import insane96mcp.enhancedai.setup.NBTUtils;
+import insane96mcp.enhancedai.setup.Strings;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.monster.Witch;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -43,7 +46,8 @@ public class DarkArtWitch extends Feature {
         if (!(event.getEntity() instanceof Witch witch))
             return;
 
-        boolean darkArt = witch.level.random.nextDouble() < this.darkArtChance;
+        CompoundTag persistentData = witch.getPersistentData();
+        boolean darkArt = NBTUtils.getBooleanOrPutDefault(persistentData, Strings.Tags.Witch.DARK_ARTS, witch.level.random.nextDouble() < this.darkArtChance);
 
         if (!darkArt)
             return;
