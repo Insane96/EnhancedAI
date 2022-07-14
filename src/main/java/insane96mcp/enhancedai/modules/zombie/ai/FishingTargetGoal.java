@@ -8,7 +8,6 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.phys.Vec3;
 
 public class FishingTargetGoal extends Goal {
 
@@ -51,8 +50,7 @@ public class FishingTargetGoal extends Goal {
 		this.targetPlayer = (Player) this.fisher.getTarget();
 		this.fisher.level.playSound(null, this.fisher.getX(), this.fisher.getY(), this.fisher.getZ(), SoundEvents.FISHING_BOBBER_THROW, SoundSource.HOSTILE, 1F, 0.4F / (this.fisher.level.random.nextFloat() * 0.4F + 0.8F));
 		this.fishingHook = new FishingHook(this.fisher, this.fisher.level);
-		this.fishingHook.setPos(this.fisher.getEyePosition(1f).x, this.fisher.getEyePosition(1f).y, this.fisher.getEyePosition(1f).z);
-		Vec3 vector3d = this.fisher.getEyePosition(1f);
+		this.fishingHook.setPos(this.fisher.getEyePosition(1f).x, this.fisher.getEyePosition(1f).y + 0.1d, this.fisher.getEyePosition(1f).z);
 		double distance = this.fisher.distanceTo(this.targetPlayer);
 		double distanceY = this.targetPlayer.getY() - this.fisher.getY();
 		double dirX = this.targetPlayer.getX() - this.fisher.getX();

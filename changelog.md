@@ -1,8 +1,8 @@
 # Changelog
 
-## Upcoming
+## Beta 1.6.0
 * XRay follow range is now a separate attribute and can be overridden separately from 
-* Most mobs data (e.g. if a zombie is a miner or the inaccuracy of a skeleton) are now loaded from NBT `ForgeData` (if not present will use default values from config).  
+* Most mobs data (e.g. if a zombie is a miner or the inaccuracy of a skeleton) are now loaded from NBT in `ForgeData` (if not present will use default values from config).  
   You can find all the Tags here: https://github.com/Insane96/EnhancedAI/wiki/Entity-Tags
 * Fixed Fisher zombies fishing only if they couldn't see the target
 * Melee Attacks Attribute Based is now disabled by default
