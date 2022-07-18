@@ -2,6 +2,7 @@
 
 ## Upcoming
 * Creeper cena explosion no longer generates fire by default
+* Digger Zombies will now less likely stop mining
 
 ## Beta 1.6.0
 * XRay follow range is now a separate attribute and can be overridden separately from 

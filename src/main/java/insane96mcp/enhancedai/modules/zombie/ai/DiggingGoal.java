@@ -72,13 +72,14 @@ public class DiggingGoal extends Goal {
 		if (this.target == null || !this.target.isAlive())
 			return false;
 
+		//TODO move to initBlockBeak
 		Path path = this.digger.getNavigation().createPath(this.target, 1);
 
 		return !this.targetBlocks.isEmpty()
 				&& this.targetBlocks.get(0).distSqr(this.digger.blockPosition()) < this.reachDistance * this.reachDistance
 				&& this.digger.getNavigation().isDone()
 				&& !this.digger.level.getBlockState(this.targetBlocks.get(0)).isAir()
-				&& path != null && path.getDistToTarget() > 1d;
+				&& path != null && path.getDistToTarget() > 4d;
 	}
 
 	public void start() {
@@ -171,6 +172,9 @@ public class DiggingGoal extends Goal {
 		return true;
 	}
 
+	/**
+	 *
+	 */
 	public boolean isStuck() {
 		if (this.digger.getTarget() == null)
 			return false;
