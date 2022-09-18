@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 1.6.1
 * Creeper cena explosion no longer generates fire by default
 * Digger Zombies will now less likely stop mining
 * Avoid explosion run speed can now be configured. Also reduced the running speed
