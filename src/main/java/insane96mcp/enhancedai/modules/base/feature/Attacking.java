@@ -19,7 +19,7 @@ public class Attacking extends Feature {
 
 	public Attacking(Module module) {
 		super(Config.builder, module, true);
-		super.pushConfig(Config.builder);
+		this.pushConfig(Config.builder);
 		meleeAttacksAttributeBasedConfig = Config.builder
 				.comment("If true melee monsters (zombies, etc) will attack based off the forge:attack_range attribute. Increasing it will make mobs attack for farther away. Be aware that the attack doesn't check if there are block between the target and the mob so might result in mobs attacking through walls with high values")
 				.define("Melee Attacks Attribute Based", this.meleeAttacksAttributeBased);
