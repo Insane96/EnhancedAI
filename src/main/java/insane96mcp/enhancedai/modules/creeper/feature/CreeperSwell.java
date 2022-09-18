@@ -29,6 +29,7 @@ import java.util.ArrayList;
 public class CreeperSwell extends Feature {
 
 	private final ForgeConfigSpec.ConfigValue<Double> cenaChanceConfig;
+	private final ForgeConfigSpec.ConfigValue<Boolean> cenaFireConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> walkingFuseConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> ignoreWallsConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> breachConfig;
@@ -36,6 +37,7 @@ public class CreeperSwell extends Feature {
 	private final ForgeConfigSpec.ConfigValue<Boolean> tntLikeConfig;
 
 	public double cenaChance = 0.02d;
+	public boolean cenaFire = false;
 	public double walkingFuseChance = 0.1d;
 	public double ignoreWalls = 0.1d;
 	public double breach = 0.075d;
@@ -44,10 +46,13 @@ public class CreeperSwell extends Feature {
 
 	public CreeperSwell(Module module) {
 		super(Config.builder, module);
-		Config.builder.comment(this.getDescription()).push(this.getName());
+		this.pushConfig(Config.builder);
 		cenaChanceConfig = Config.builder
 				.comment("AND HIS NAME IS ...")
 				.defineInRange("Cena Chance", cenaChance, 0d, 1d);
+		cenaFireConfig = Config.builder
+				.comment("If true, Creeper Cena explosion will generate fire")
+				.define("Cena generates fire", this.cenaFire);
 		walkingFuseConfig = Config.builder
 				.comment("Percentage chance for a Creeper to not stand still while exploding.")
 				.defineInRange("Walking Fuse Chance", walkingFuseChance, 0d, 1d);
@@ -70,11 +75,12 @@ public class CreeperSwell extends Feature {
 	public void loadConfig() {
 		super.loadConfig();
 		cenaChance = cenaChanceConfig.get();
-		walkingFuseChance = walkingFuseConfig.get();
-		ignoreWalls = ignoreWallsConfig.get();
-		breach = breachConfig.get();
-		launch = this.launchConfig.get();
-		tntLike = tntLikeConfig.get();
+		this.cenaFire = this.cenaFireConfig.get();
+		this.walkingFuseChance = walkingFuseConfig.get();
+		this.ignoreWalls = ignoreWallsConfig.get();
+		this.breach = breachConfig.get();
+		this.launch = this.launchConfig.get();
+		this.tntLike = tntLikeConfig.get();
 	}
 
 	@SubscribeEvent
@@ -124,7 +130,8 @@ public class CreeperSwell extends Feature {
 			compoundNBT.putShort("Fuse", (short)34);
 			compoundNBT.putByte("ExplosionRadius", (byte)6);
 			creeper.readAdditionalSaveData(compoundNBT);
-			persistentData.putBoolean(ILStrings.Tags.EXPLOSION_CAUSES_FIRE, true);
+			if (this.cenaFire)
+				persistentData.putBoolean(ILStrings.Tags.EXPLOSION_CAUSES_FIRE, true);
 		}
 
 		AICreeperSwellGoal swellGoal = new AICreeperSwellGoal(creeper)
