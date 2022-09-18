@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Fixed Witches throwing good potions at any non-player entity
+
 ## Beta 1.6.0
 * XRay follow range is now a separate attribute and can be overridden separately from 
 * Most mobs data (e.g. if a zombie is a miner or the inaccuracy of a skeleton) are now loaded from NBT in `ForgeData` (if not present will use default values from config).  
