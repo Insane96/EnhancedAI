@@ -15,6 +15,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
@@ -38,7 +39,11 @@ public class DarkArtWitchGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        return this.witch.getTarget() != null && this.witch.getTarget().distanceToSqr(this.witch) < 100d && this.witch.getSensing().hasLineOfSight(this.witch.getTarget()) && this.phase == Phase.EQUIP_EGG;
+        return this.witch.getTarget() != null
+                && !(this.witch.getTarget() instanceof Raider)
+                && this.witch.getTarget().distanceToSqr(this.witch) < 100d
+                && this.witch.getSensing().hasLineOfSight(this.witch.getTarget())
+                && this.phase == Phase.EQUIP_EGG;
     }
 
     @Override
@@ -50,16 +55,15 @@ public class DarkArtWitchGoal extends Goal {
     public void start() {
         this.target = this.witch.getTarget();
         this.witch.getPersistentData().putBoolean(EAStrings.Tags.Witch.PERFORMING_DARK_ARTS, true);
-        this.witch.setInvulnerable(true);
+        this.witch.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 100, 3));
         this.witch.setGlowingTag(true);
         this.witch.setDeltaMovement(0d, this.witch.getDeltaMovement().y, 0d);
     }
 
     @Override
     public void stop() {
-        super.stop();
         this.witch.getPersistentData().putBoolean(EAStrings.Tags.Witch.PERFORMING_DARK_ARTS, false);
-        this.witch.setInvulnerable(false);
+        this.witch.removeEffect(MobEffects.DAMAGE_RESISTANCE);
         this.witch.setGlowingTag(false);
     }
 
@@ -70,13 +74,24 @@ public class DarkArtWitchGoal extends Goal {
         this.phaseTick++;
     }
 
+    public boolean isRunning() {
+        return this.phaseTick > 0;
+    }
+
+    public void forceStop() {
+        if (this.villager != null) {
+            this.villager.kill();
+        }
+    }
+
     private enum Phase {
         EQUIP_EGG {
             @Override
             public void tick(DarkArtWitchGoal goal) {
-                if (goal.phaseTick == 15) {
-                    goal.witch.addEffect(new MobEffectInstance(MobEffects.LEVITATION, (LEVITATE_TICK - 15) * 2, 0));
+                if (goal.phaseTick == 20) {
+                    goal.witch.addEffect(new MobEffectInstance(MobEffects.LEVITATION, (LEVITATE_TICK - 20) * 2, 0));
                 }
+
                 if (goal.phaseTick < EQUIP_EGG_TICK) {
                     goal.witch.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.VILLAGER_SPAWN_EGG));
                     goal.witch.getLookControl().setLookAt(goal.target, 180, 180);

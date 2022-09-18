@@ -11,6 +11,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.monster.Witch;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -39,13 +40,9 @@ public class DarkArtWitch extends Feature {
     //Lowest priority so other mods can set persistent data
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onSpawn(EntityJoinWorldEvent event) {
-        if (!this.isEnabled())
-            return;
-
-        if (event.getWorld().isClientSide)
-            return;
-
-        if (!(event.getEntity() instanceof Witch witch))
+        if (!this.isEnabled()
+                || event.getWorld().isClientSide
+                || !(event.getEntity() instanceof Witch witch))
             return;
 
         CompoundTag persistentData = witch.getPersistentData();
@@ -56,5 +53,22 @@ public class DarkArtWitch extends Feature {
 
         DarkArtWitchGoal darkArtWitchGoal = new DarkArtWitchGoal(witch);
         witch.goalSelector.addGoal(1, darkArtWitchGoal);
+    }
+
+    @SubscribeEvent
+    public void onDeath(LivingDeathEvent event) {
+        if (!this.isEnabled()
+                || event.getEntity().level.isClientSide
+                || !(event.getEntity() instanceof Witch witch))
+            return;
+
+
+        witch.goalSelector.availableGoals.forEach(prioritizedGoal -> {
+            if (prioritizedGoal.getGoal() instanceof DarkArtWitchGoal goal) {
+                if (goal.isRunning()) {
+                    goal.forceStop();
+                }
+            }
+        });
     }
 }
