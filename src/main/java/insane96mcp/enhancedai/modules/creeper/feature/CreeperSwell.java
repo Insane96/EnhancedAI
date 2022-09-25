@@ -28,31 +28,29 @@ import java.util.ArrayList;
 @Label(name = "Creeper Swell", description = "Various changes to Creepers exploding. Ignoring Walls, Walking Fuse and smarter exploding based off explosion size")
 public class CreeperSwell extends Feature {
 
-	private final ForgeConfigSpec.ConfigValue<Double> cenaChanceConfig;
-	private final ForgeConfigSpec.ConfigValue<Boolean> cenaFireConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> walkingFuseConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> ignoreWallsConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> breachConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> launchConfig;
 	private final ForgeConfigSpec.ConfigValue<Boolean> tntLikeConfig;
+	//Cena
+	private final ForgeConfigSpec.DoubleValue cenaChanceConfig;
+	private final ForgeConfigSpec.BooleanValue cenaFireConfig;
+	private final ForgeConfigSpec.DoubleValue cenaExplosionPowerConfig;
 
-	public double cenaChance = 0.02d;
-	public boolean cenaFire = false;
 	public double walkingFuseChance = 0.1d;
 	public double ignoreWalls = 0.1d;
 	public double breach = 0.075d;
 	public double launch = 0.05d;
 	public boolean tntLike = false;
+	//Cena
+	public double cenaChance = 0.02d;
+	public boolean cenaFire = false;
+	public double cenaExplosionPower = 6;
 
 	public CreeperSwell(Module module) {
 		super(Config.builder, module);
 		this.pushConfig(Config.builder);
-		cenaChanceConfig = Config.builder
-				.comment("AND HIS NAME IS ...")
-				.defineInRange("Cena Chance", cenaChance, 0d, 1d);
-		cenaFireConfig = Config.builder
-				.comment("If true, Creeper Cena explosion will generate fire")
-				.define("Cena generates fire", this.cenaFire);
 		walkingFuseConfig = Config.builder
 				.comment("Percentage chance for a Creeper to not stand still while exploding.")
 				.defineInRange("Walking Fuse Chance", walkingFuseChance, 0d, 1d);
@@ -68,19 +66,32 @@ public class CreeperSwell extends Feature {
 		tntLikeConfig = Config.builder
 				.comment("If true creepers will ignite if damaged by an explosion.")
 				.define("TNT Like", tntLike);
+		Config.builder.push("Creeper Cena");
+		cenaChanceConfig = Config.builder
+				.comment("AND HIS NAME IS ...")
+				.defineInRange("Cena Chance", cenaChance, 0d, 1d);
+		cenaFireConfig = Config.builder
+				.comment("If true, Creeper Cena explosion will generate fire")
+				.define("Cena generates fire", this.cenaFire);
+		cenaExplosionPowerConfig = Config.builder
+				.comment("Explosion power of Creeper Cena")
+				.defineInRange("Cena explosion power", this.cenaExplosionPower, 0d, 12d);
+		Config.builder.pop();
 		Config.builder.pop();
 	}
 
 	@Override
 	public void loadConfig() {
 		super.loadConfig();
-		cenaChance = cenaChanceConfig.get();
-		this.cenaFire = this.cenaFireConfig.get();
 		this.walkingFuseChance = walkingFuseConfig.get();
 		this.ignoreWalls = ignoreWallsConfig.get();
 		this.breach = breachConfig.get();
 		this.launch = this.launchConfig.get();
 		this.tntLike = tntLikeConfig.get();
+		//Cena
+		this.cenaChance = this.cenaChanceConfig.get();
+		this.cenaFire = this.cenaFireConfig.get();
+		this.cenaExplosionPower = this.cenaExplosionPowerConfig.get();
 	}
 
 	@SubscribeEvent
@@ -128,7 +139,7 @@ public class CreeperSwell extends Feature {
 			CompoundTag compoundNBT = new CompoundTag();
 			creeper.addAdditionalSaveData(compoundNBT);
 			compoundNBT.putShort("Fuse", (short)34);
-			compoundNBT.putByte("ExplosionRadius", (byte)6);
+			compoundNBT.putByte("ExplosionRadius", (byte)this.cenaExplosionPower);
 			creeper.readAdditionalSaveData(compoundNBT);
 			if (this.cenaFire)
 				persistentData.putBoolean(ILStrings.Tags.EXPLOSION_CAUSES_FIRE, true);
@@ -148,7 +159,8 @@ public class CreeperSwell extends Feature {
 	public void livingDamageEvent(LivingDamageEvent event) {
 		if (!this.isEnabled()
 				|| !event.getSource().isExplosion()
-				|| !(event.getEntityLiving() instanceof Creeper creeper))
+				|| !(event.getEntityLiving() instanceof Creeper creeper)
+				|| !this.tntLike)
 			return;
 
 		creeper.ignite();

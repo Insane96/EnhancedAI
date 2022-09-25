@@ -1,5 +1,9 @@
 # Changelog
 
+## Upcoming
+* Creeper cena explosion size can now be configured
+* Fixed Tnt like creepers not obeying the config option
+
 ## 1.6.1
 * Creeper cena explosion no longer generates fire by default
 * Digger Zombies will now less likely stop mining
