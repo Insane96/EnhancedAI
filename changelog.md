@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 1.6.2
 * Creeper cena explosion size can now be configured
 * Fixed Tnt like creepers not obeying the config option
 
