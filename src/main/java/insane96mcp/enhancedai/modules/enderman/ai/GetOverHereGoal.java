@@ -10,21 +10,21 @@ import net.minecraft.world.entity.monster.EnderMan;
 
 public class GetOverHereGoal extends Goal {
 
-    private final EnderMan enderMan;
+    private final EnderMan enderman;
     private LivingEntity target;
 
     private int awayFromTargetTick = 0;
 
-    public GetOverHereGoal(EnderMan enderMan) {
-        this.enderMan = enderMan;
+    public GetOverHereGoal(EnderMan enderman) {
+        this.enderman = enderman;
     }
 
     @Override
     public boolean canUse() {
-        if (this.enderMan.getTarget() == null)
+        if (this.enderman.getTarget() == null)
             return false;
 
-        if (this.enderMan.getTarget().distanceToSqr(this.enderMan) > 8d) {
+        if (this.enderman.getTarget().distanceToSqr(this.enderman) > 8d) {
             this.awayFromTargetTick++;
         }
         else {
@@ -37,21 +37,21 @@ public class GetOverHereGoal extends Goal {
     @SuppressWarnings("ConstantConditions")
     @Override
     public void start() {
-        this.target = this.enderMan.getTarget();
+        this.target = this.enderman.getTarget();
         if (this.target instanceof ServerPlayer player) {
             if (player.isSleeping()) {
                 player.stopSleepInBed(true, true);
             }
 
-            double x = this.enderMan.getX() + Mth.nextInt(this.enderMan.getRandom(), -3, 3);
-            double z = this.enderMan.getZ() + Mth.nextInt(this.enderMan.getRandom(), -3, 3);
-            double y = this.enderMan.getY();
+            double x = this.enderman.getX() + Mth.nextInt(this.enderman.getRandom(), -3, 3);
+            double z = this.enderman.getZ() + Mth.nextInt(this.enderman.getRandom(), -3, 3);
+            double y = this.enderman.getY();
 
             player.connection.teleport(x, y, z, player.getYRot(), player.getXRot());
-            this.enderMan.level.playSound(null, x, y, z, SoundEvents.CHORUS_FRUIT_TELEPORT, SoundSource.HOSTILE, 1f, 0.5f);
+            this.enderman.level.playSound(null, x, y, z, SoundEvents.CHORUS_FRUIT_TELEPORT, SoundSource.HOSTILE, 1f, 0.5f);
         }
         else {
-            this.target.setPos(this.enderMan.getX(), this.enderMan.getY(), this.enderMan.getZ());
+            this.target.setPos(this.enderman.getX(), this.enderman.getY(), this.enderman.getZ());
             this.target.playSound(SoundEvents.CHORUS_FRUIT_TELEPORT, 1f, 0.5f);
         }
         this.awayFromTargetTick = 0;

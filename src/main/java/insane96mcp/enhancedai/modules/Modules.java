@@ -5,6 +5,7 @@ import insane96mcp.enhancedai.modules.base.BaseModule;
 import insane96mcp.enhancedai.modules.blaze.BlazeModule;
 import insane96mcp.enhancedai.modules.creeper.CreeperModule;
 import insane96mcp.enhancedai.modules.drowned.DrownedModule;
+import insane96mcp.enhancedai.modules.enderman.EndermanModule;
 import insane96mcp.enhancedai.modules.ghast.GhastModule;
 import insane96mcp.enhancedai.modules.skeleton.SkeletonModule;
 import insane96mcp.enhancedai.modules.spider.SpiderModule;
@@ -19,7 +20,7 @@ public class Modules {
 	public static CreeperModule creeper;
 	public static DrownedModule drowned;
 	public static GhastModule ghast;
-	//public static EndermanModule enderman;
+	public static EndermanModule enderman;
 	public static SkeletonModule skeleton;
 	public static SpiderModule spider;
 	public static WitchModule witch;
@@ -32,7 +33,7 @@ public class Modules {
 		creeper = new CreeperModule();
 		drowned = new DrownedModule();
 		ghast = new GhastModule();
-		//enderman = new EndermanModule();
+		enderman = new EndermanModule();
 		skeleton = new SkeletonModule();
 		spider = new SpiderModule();
 		witch = new WitchModule();
@@ -46,7 +47,7 @@ public class Modules {
 		creeper.loadConfig();
 		drowned.loadConfig();
 		ghast.loadConfig();
-		//enderman.loadConfig();
+		enderman.loadConfig();
 		skeleton.loadConfig();
 		spider.loadConfig();
 		witch.loadConfig();

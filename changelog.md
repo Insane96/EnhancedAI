@@ -1,7 +1,8 @@
 # Changelog
 
 ## Upcoming
-* Fixed zombies stopping mining if the player was less than 4 blocks from them
+* Fixed zombies stopping mining if the player was less than 4 blocks from them\
+* Added experimental Get Over Here ability to Enderman. Disabled by default as I'm not happy how it is.
 
 ## 1.6.2
 * Creeper cena explosion size can now be configured

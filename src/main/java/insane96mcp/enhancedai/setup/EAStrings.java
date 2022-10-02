@@ -6,7 +6,7 @@ public class EAStrings {
 	public static class Tags {
 		public static final String FOLLOW_RANGES_PROCESSED = EnhancedAI.RESOURCE_PREFIX + "follow_ranges_processed";
 
-		public static class Flee {
+        public static class Flee {
 			public static final String AVOID_TARGET = EnhancedAI.RESOURCE_PREFIX + "avoid_target";
 			public static final String ATTACK_WHEN_AVOIDING = EnhancedAI.RESOURCE_PREFIX + "attack_when_avoiding";
 			public static final String FLEE_DISTANCE_FAR = EnhancedAI.RESOURCE_PREFIX + "flee_distance_far";
@@ -34,6 +34,10 @@ public class EAStrings {
 			public static final String CENA = EnhancedAI.RESOURCE_PREFIX + "cena";
 			public static final String WALKING_FUSE = EnhancedAI.RESOURCE_PREFIX + "walking_fuse";
 			public static final String IGNORE_WALLS = EnhancedAI.RESOURCE_PREFIX + "ignore_walls";
+		}
+
+		public static class Enderman {
+			public static final String GET_OVER_HERE = EnhancedAI.RESOURCE_PREFIX + "get_over_here";
 		}
 
 		public static class Skeleton {
