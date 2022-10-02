@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Fixed zombies stopping mining if the player was less than 4 blocks from them
+
 ## 1.6.2
 * Creeper cena explosion size can now be configured
 * Fixed Tnt like creepers not obeying the config option

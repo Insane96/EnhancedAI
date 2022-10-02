@@ -79,7 +79,7 @@ public class DiggingGoal extends Goal {
 				&& this.targetBlocks.get(0).distSqr(this.digger.blockPosition()) < this.reachDistance * this.reachDistance
 				&& this.digger.getNavigation().isDone()
 				&& !this.digger.level.getBlockState(this.targetBlocks.get(0)).isAir()
-				&& path != null && path.getDistToTarget() > 4d;
+				&& path != null && path.getDistToTarget() > 1.5d;
 	}
 
 	public void start() {
