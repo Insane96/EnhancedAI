@@ -9,17 +9,20 @@ import insane96mcp.insanelib.base.Module;
 public class EndermanModule extends Module {
 
 	public GetOverHere getOverHere;
+	//public ItemDisruption itemDisruption;
 
 	public EndermanModule() {
 		super(Config.builder);
 		this.pushConfig(Config.builder);
-		getOverHere = new GetOverHere(this);
+		this.getOverHere = new GetOverHere(this);
+		//this.itemDisruption = new ItemDisruption(this);
 		Config.builder.pop();
 	}
 
 	@Override
 	public void loadConfig() {
 		super.loadConfig();
-		getOverHere.loadConfig();
+		this.getOverHere.loadConfig();
+		//this.itemDisruption.loadConfig();
 	}
 }
