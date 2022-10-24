@@ -173,7 +173,7 @@ public class DiggingGoal extends Goal {
 	}
 
 	/**
-	 *
+	 * Returns true if the zombie has been stuck in the same spot (radius 1.5 blocks) for more than 3 seconds
 	 */
 	public boolean isStuck() {
 		if (this.digger.getTarget() == null)
@@ -209,6 +209,7 @@ public class DiggingGoal extends Goal {
 
 		if (this.digger.hasEffect(MobEffects.DIG_SLOWDOWN)) {
 			float miningFatigueAmplifier;
+			//noinspection ConstantConditions
 			switch (this.digger.getEffect(MobEffects.DIG_SLOWDOWN).getAmplifier()) {
 				case 0:
 					miningFatigueAmplifier = 0.3F;
