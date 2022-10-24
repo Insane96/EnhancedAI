@@ -231,10 +231,6 @@ public class DiggingGoal extends Goal {
 			digSpeed /= 5.0F;
 		}
 
-		//if (!this.digger.isOnGround()) {
-		//	digSpeed /= 5.0F;
-		//}
-
 		return digSpeed;
 	}
 

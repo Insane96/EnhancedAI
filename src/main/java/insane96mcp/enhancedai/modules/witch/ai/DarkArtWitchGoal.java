@@ -23,7 +23,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.EnumSet;
 
 public class DarkArtWitchGoal extends Goal {
-    protected Witch witch;
+    protected final Witch witch;
     protected LivingEntity target;
     protected Phase phase;
     protected int phaseTick = 0;

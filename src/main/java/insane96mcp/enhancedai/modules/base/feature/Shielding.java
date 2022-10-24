@@ -36,11 +36,8 @@ public class Shielding extends Feature {
 
     @SubscribeEvent
     public void onMobSpawn(EntityJoinWorldEvent event) {
-        if (!this.isEnabled())
-            return;
-
-        if (!(event.getEntity() instanceof Mob mob))
-            return;
+        if (!this.isEnabled()
+                || !(event.getEntity() instanceof Mob mob)) return;
 
         mob.goalSelector.addGoal(3, new ShieldingGoal(mob, 1d));
     }

@@ -21,6 +21,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -39,24 +40,6 @@ public class FishingHook extends Projectile {
     public FishingHook(Entity p_37106_, Level p_37107_) {
         this(EAEntities.FISHING_HOOK.get(), p_37107_);
         this.setOwner(p_37106_);
-        /*float xRot = p_37106_.getXRot();
-        float yRot = p_37106_.getYRot();
-        float cosY = Mth.cos(-yRot * ((float)Math.PI / 180F) - (float)Math.PI);
-        float sinY = Mth.sin(-yRot * ((float)Math.PI / 180F) - (float)Math.PI);
-        float cosX = -Mth.cos(-xRot * ((float)Math.PI / 180F));
-        float sinX = Mth.sin(-xRot * ((float)Math.PI / 180F));
-        double d0 = p_37106_.getX() - (double)sinY * 0.3D;
-        double d1 = p_37106_.getEyeY();
-        double d2 = p_37106_.getZ() - (double)cosY * 0.3D;
-        this.moveTo(d0, d1, d2, yRot, xRot);
-        Vec3 vec3 = new Vec3((-sinY), Mth.clamp(-(sinX / cosX), -5.0F, 5.0F), (-cosY));
-        double d3 = vec3.length();
-        vec3 = vec3.multiply(0.6D / d3 + 0.5D + this.random.nextGaussian() * 0.0045D, 0.6D / d3 + 0.5D + this.random.nextGaussian() * 0.0045D, 0.6D / d3 + 0.5D + this.random.nextGaussian() * 0.0045D);
-        this.setDeltaMovement(vec3);
-        this.setYRot((float)(Mth.atan2(vec3.x, vec3.z) * (double)(180F / (float)Math.PI)));
-        this.setXRot((float)(Mth.atan2(vec3.y, vec3.horizontalDistance()) * (double)(180F / (float)Math.PI)));
-        this.yRotO = this.getYRot();
-        this.xRotO = this.getXRot();*/
     }
 
     protected void defineSynchedData() {
@@ -239,13 +222,13 @@ public class FishingHook extends Projectile {
         return false;
     }
 
-    public void recreateFromPacket(ClientboundAddEntityPacket p_150150_) {
+    public void recreateFromPacket(@NotNull ClientboundAddEntityPacket p_150150_) {
         super.recreateFromPacket(p_150150_);
     }
 
-    static enum FishHookState {
+    enum FishHookState {
         FLYING,
         HOOKED_IN_ENTITY,
-        ON_GROUND;
+        ON_GROUND
     }
 }

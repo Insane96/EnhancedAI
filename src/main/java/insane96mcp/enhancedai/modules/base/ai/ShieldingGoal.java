@@ -7,11 +7,11 @@ import net.minecraft.world.item.UseAnim;
 
 public class ShieldingGoal extends Goal {
 	private final Mob mob;
-	private final double moveSpeedAmp;
+	private final double movementSpeedOnBlocking;
 
-	public ShieldingGoal(Mob mob, double moveSpeedAmpIn) {
+	public ShieldingGoal(Mob mob, double movementSpeedOnBlocking) {
 		this.mob = mob;
-		this.moveSpeedAmp = moveSpeedAmpIn;
+		this.movementSpeedOnBlocking = movementSpeedOnBlocking;
 		//this.setFlags(EnumSet.of(Flag.LOOK));
 	}
 
@@ -25,7 +25,10 @@ public class ShieldingGoal extends Goal {
 
 	public void start() {
 		super.start();
+		if (this.mob.getTarget() == null)
+			return;
 		this.mob.startUsingItem(this.mob.getMainHandItem().getItem().getUseAnimation(this.mob.getMainHandItem()).equals(UseAnim.BLOCK) ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND);
+		this.mob.getNavigation().setSpeedModifier(movementSpeedOnBlocking);
 		this.mob.getLookControl().setLookAt(this.mob.getTarget());
 	}
 

@@ -58,11 +58,11 @@ public abstract class WitchMixin extends Raider {
 	}
 
 	@ModifyArg(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/attributes/AttributeInstance;addTransientModifier(Lnet/minecraft/world/entity/ai/attributes/AttributeModifier;)V"))
-	public AttributeModifier onAddSpeedPenality(AttributeModifier attributeModifier) {
+	public AttributeModifier onAddSpeedPenalty(AttributeModifier attributeModifier) {
 		return SPEED_MODIFIER_DRINKING;
 	}
 	@ModifyArg(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/attributes/AttributeInstance;removeModifier(Lnet/minecraft/world/entity/ai/attributes/AttributeModifier;)V"))
-	public AttributeModifier onRemoveSpeedPenality(AttributeModifier attributeModifier) {
+	public AttributeModifier onRemoveSpeedPenalty(AttributeModifier attributeModifier) {
 		return SPEED_MODIFIER_DRINKING;
 	}
 

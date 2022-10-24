@@ -42,10 +42,6 @@ public class EAAvoidEntityGoal<T extends LivingEntity> extends Goal {
 		this.builtTargetSelector = TargetingConditions.forCombat().range(avoidDistance).selector(p_i48859_9_.and(targetPredicate));
 	}
 
-	public EAAvoidEntityGoal(PathfinderMob entityIn, Class<T> avoidClass, float avoidDistance, float avoidDistanceNear, double nearSpeedIn, double farSpeedIn, Predicate<LivingEntity> targetPredicate) {
-		this(entityIn, avoidClass, (p_203782_0_) -> true, avoidDistance, avoidDistanceNear, nearSpeedIn, farSpeedIn, targetPredicate);
-	}
-
 	/**
 	 * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
 	 * method as well.

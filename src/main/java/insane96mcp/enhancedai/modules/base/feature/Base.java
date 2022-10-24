@@ -39,21 +39,8 @@ public class Base extends Feature {
 		MobCategory.MONSTER.despawnDistance = this.monstersDespawningDistance;
 	}
 
-	//@SubscribeEvent
-	//public void onMobSpawn(EntityAttributeCreationEvent event) {
-		//AttributeModifierMap.MutableAttribute attribute = AttributeModifierMap.createMutableAttribute().createMutableAttribute(XRAY_FOLLOW_RANGE);
-		//event.put(, attribute);
-	//}
-
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void onMobSpawn(EntityJoinWorldEvent event) {
-		/*if (!(event.getEntity() instanceof MonsterEntity))
-			return;
 
-		MonsterEntity entity = (MonsterEntity) event.getEntity();
-
-		ModifiableAttributeInstance attributeInstance = entity.getAttributeManager().createInstanceIfAbsent(ModAttributes.XRAY_FOLLOW_RANGE.get());
-		LogHelper.info("attribute instance " + attributeInstance);
-		LogHelper.info("" + entity.getAttribute(ModAttributes.XRAY_FOLLOW_RANGE.get()));*/
 	}
 }
