@@ -19,7 +19,7 @@ public class PearlUseGoal extends Goal {
 	//Runs every other tick
 	private final Zombie pearler;
 	private Player targetPlayer;
-	private int cooldown = 20;
+	private int cooldown = reducedTickDelay(50);
 
 	ThrownEnderpearl enderPearlEntity;
 
@@ -64,7 +64,7 @@ public class PearlUseGoal extends Goal {
 		enderPearlEntity.shootFromRotation(this.pearler, (float) (pitch - 3f - d1), (float) (yaw), 0.0F, 1.5F, Modules.zombie.pearlerZombie.inaccuracy);
 		this.pearler.level.addFreshEntity(enderPearlEntity);
 		stack.shrink(1);
-		this.cooldown = 40;
+		this.cooldown = reducedTickDelay(100);
 	}
 
 	public void stop() {

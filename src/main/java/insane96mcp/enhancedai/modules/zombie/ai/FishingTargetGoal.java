@@ -14,7 +14,7 @@ public class FishingTargetGoal extends Goal {
 	//Runs every other tick
 	private final Zombie fisher;
 	private Player targetPlayer;
-	private int cooldown = 20;
+	private int cooldown = reducedTickDelay(50);
 
 	private int reel;
 	private int fishingHookLifetime = 0;
@@ -66,9 +66,10 @@ public class FishingTargetGoal extends Goal {
 	}
 
 	public void tick() {
+		//TODO Make zombies stop when shooting hook
 		if (this.fishingHook.isOnGround() || this.fishingHook.getHookedIn() != null || --this.fishingHookLifetime <= 0) {
 			if (--this.reel <= 0) {
-				this.fishingHook.level.playSound((Player)null, this.fisher.getX(), this.fisher.getY(), this.fisher.getZ(), SoundEvents.FISHING_BOBBER_RETRIEVE, SoundSource.HOSTILE, 1.0F, 0.4F / (this.fisher.getRandom().nextFloat() * 0.4F + 0.8F));
+				this.fishingHook.level.playSound(null, this.fisher.getX(), this.fisher.getY(), this.fisher.getZ(), SoundEvents.FISHING_BOBBER_RETRIEVE, SoundSource.HOSTILE, 1.0F, 0.4F / (this.fisher.getRandom().nextFloat() * 0.4F + 0.8F));
 				this.fishingHook.retrieve();
 			}
 		}
