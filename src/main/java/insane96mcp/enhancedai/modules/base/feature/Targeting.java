@@ -1,15 +1,18 @@
 package insane96mcp.enhancedai.modules.base.feature;
 
+import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.modules.base.ai.EANearestAttackableTarget;
 import insane96mcp.enhancedai.modules.base.ai.EASpiderTargetGoal;
-import insane96mcp.enhancedai.setup.Config;
 import insane96mcp.enhancedai.setup.EAAttributes;
 import insane96mcp.enhancedai.setup.EAStrings;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
-import insane96mcp.insanelib.config.Blacklist;
-import insane96mcp.insanelib.config.MinMax;
+import insane96mcp.insanelib.base.config.Blacklist;
+import insane96mcp.insanelib.base.config.Config;
+import insane96mcp.insanelib.base.config.LoadFeature;
+import insane96mcp.insanelib.base.config.MinMax;
+import insane96mcp.insanelib.util.IdTagMatcher;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EntityType;
@@ -21,9 +24,8 @@ import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -32,56 +34,30 @@ import java.util.List;
 import java.util.function.Predicate;
 
 @Label(name = "Targeting", description = "Change how mobs target players")
+@LoadFeature(module = Modules.Ids.BASE)
 public class Targeting extends Feature {
 
-	private final MinMax.Config followRangeOverrideConfig;
-	private final MinMax.Config xRayRangeOverrideConfig;
-	private final ForgeConfigSpec.ConfigValue<Boolean> instaTargetConfig;
-	private final ForgeConfigSpec.BooleanValue betterPathfindingConfig;
+	@Config(min = 0d, max = 128d)
+	@Label(name = "Follow Range Override", description = "How far away can the mobs see the player. This overrides the vanilla value (16 for most mobs). Setting 'Max' to 0 will leave the follow range as vanilla. I recommend using mods like Mobs Properties Randomness to have more control over the attribute.")
+	public static MinMax followRangeOverride = new MinMax(32, 64);
+	@Config(min = 0d, max = 128d)
+	@Label(name = "XRay Range Override", description = "How far away can the mobs see the player even through walls. Setting 'Max' to 0 will make mobs not able to see through walls. I recommend using mods like Mobs Properties Randomness to have more control over the attribute; the attribute name is 'enhancedai:generic.xray_follow_range'.")
+	public static MinMax xrayRangeOverride = new MinMax(16, 32);
+	@Config
+	@Label(name = "Instant Target", description = "Mobs will no longer take random time to target a player.")
+	public static Boolean instaTarget = true;
+	@Config
+	@Label(name = "Better Path Finding", description = "Mobs will be able to find better paths to the target. Note that this might hit performance a bit.")
+	public static Boolean betterPathfinding = true;
+	@Config
+	@Label(name = "Entity Blacklist", description = "Entities in here will not be affected by this feature.")
 
-	private final Blacklist.Config entityBlacklistConfig;
+	public static Blacklist entityBlacklist = new Blacklist(List.of(
+			new IdTagMatcher(IdTagMatcher.Type.ID, "minecraft:enderman")
+	), false);
 
-	private final List<String> entityBlacklistDefault = List.of("minecraft:enderman");
-
-	public MinMax followRangeOverride = new MinMax(32, 64);
-	public MinMax xrayRangeOverride = new MinMax(16, 32);
-	public boolean instaTarget = true;
-	public boolean betterPathfinding = true;
-
-	public Blacklist entityBlacklist;
-
-	public Targeting(Module module) {
-		super(Config.builder, module);
-		this.pushConfig(Config.builder);
-		followRangeOverrideConfig = new MinMax.Config(Config.builder, "Follow Range Override", "How far away can the mobs see the player. This overrides the vanilla value (16 for most mobs). Setting 'Max' to 0 will leave the follow range as vanilla. I recommend using mods like Mobs Properties Randomness to have more control over the attribute.")
-				.setMinMax(0, 128,  this.followRangeOverride)
-				.build();
-		xRayRangeOverrideConfig = new MinMax.Config(Config.builder, "XRay Range Override", "How far away can the mobs see the player even through walls. Setting 'Max' to 0 will make mobs not able to see through walls. I recommend using mods like Mobs Properties Randomness to have more control over the attribute; the attribute name is 'enhancedai:generic.xray_follow_range'.")
-				.setMinMax(0, 128,  this.xrayRangeOverride)
-				.build();
-		instaTargetConfig = Config.builder
-				.comment("Mobs will no longer take random time to target a player.")
-				.define("Instant Target", instaTarget);
-		betterPathfindingConfig = Config.builder
-				.comment("Mobs will be able to find better paths to the target. Note that this might hit performance a bit.")
-				.define("Better Path Finding", this.betterPathfinding);
-
-		entityBlacklistConfig = new Blacklist.Config(Config.builder, "Entity Blacklist", "Entities in here will not have the TargetAI changed")
-				.setDefaultList(entityBlacklistDefault)
-				.setIsDefaultWhitelist(false)
-				.build();
-		Config.builder.pop();
-	}
-
-	@Override
-	public void loadConfig() {
-		super.loadConfig();
-		this.followRangeOverride = this.followRangeOverrideConfig.get();
-		this.xrayRangeOverride = this.xRayRangeOverrideConfig.get();
-		this.instaTarget = this.instaTargetConfig.get();
-		this.betterPathfinding = this.betterPathfindingConfig.get();
-
-		this.entityBlacklist = this.entityBlacklistConfig.get();
+	public Targeting(Module module, boolean enabledByDefault, boolean canBeDisabled) {
+		super(module, enabledByDefault, canBeDisabled);
 	}
 
 	public static void xrayRangeAttribute(EntityAttributeModificationEvent event) {
@@ -95,26 +71,22 @@ public class Targeting extends Feature {
 
 	//High priority as should run before specific mobs
 	@SubscribeEvent(priority = EventPriority.HIGH)
-	public void onMobSpawn(EntityJoinWorldEvent event) {
-		if (!this.isEnabled())
-			return;
-
-		if (!(event.getEntity() instanceof Mob mobEntity))
-			return;
-
-		if (this.entityBlacklist.isEntityBlackOrNotWhitelist(mobEntity))
+	public void onMobSpawn(EntityJoinLevelEvent event) {
+		if (!this.isEnabled()
+				|| !(event.getEntity() instanceof Mob mobEntity)
+				|| entityBlacklist.isEntityBlackOrNotWhitelist(mobEntity))
 			return;
 
 		CompoundTag persistentData = mobEntity.getPersistentData();
 		if (!persistentData.getBoolean(EAStrings.Tags.FOLLOW_RANGES_PROCESSED)) {
 			//noinspection ConstantConditions
-			if (this.followRangeOverride.min != 0d && mobEntity.getAttribute(Attributes.FOLLOW_RANGE) != null && mobEntity.getAttribute(Attributes.FOLLOW_RANGE).getBaseValue() < this.followRangeOverride.min) {
-				MCUtils.setAttributeValue(mobEntity, Attributes.FOLLOW_RANGE, this.followRangeOverride.getIntRandBetween(mobEntity.getRandom()));
+			if (followRangeOverride.min != 0d && mobEntity.getAttribute(Attributes.FOLLOW_RANGE) != null && mobEntity.getAttribute(Attributes.FOLLOW_RANGE).getBaseValue() < followRangeOverride.min) {
+				MCUtils.setAttributeValue(mobEntity, Attributes.FOLLOW_RANGE, followRangeOverride.getIntRandBetween(mobEntity.getRandom()));
 			}
 
 			//noinspection ConstantConditions
-			if (this.xrayRangeOverride.min != 0d && mobEntity.getAttribute(EAAttributes.XRAY_FOLLOW_RANGE.get()) != null && mobEntity.getAttribute(EAAttributes.XRAY_FOLLOW_RANGE.get()).getBaseValue() < this.xrayRangeOverride.min) {
-				MCUtils.setAttributeValue(mobEntity, EAAttributes.XRAY_FOLLOW_RANGE.get(), this.xrayRangeOverride.getIntRandBetween(mobEntity.getRandom()));
+			if (xrayRangeOverride.min != 0d && mobEntity.getAttribute(EAAttributes.XRAY_FOLLOW_RANGE.get()) != null && mobEntity.getAttribute(EAAttributes.XRAY_FOLLOW_RANGE.get()).getBaseValue() < xrayRangeOverride.min) {
+				MCUtils.setAttributeValue(mobEntity, EAAttributes.XRAY_FOLLOW_RANGE.get(), xrayRangeOverride.getIntRandBetween(mobEntity.getRandom()));
 			}
 			persistentData.putBoolean(EAStrings.Tags.FOLLOW_RANGES_PROCESSED, true);
 		}
@@ -149,10 +121,10 @@ public class Targeting extends Feature {
 		else
 			targetGoal = new EANearestAttackableTarget<>(mobEntity, Player.class, false, false, predicate);
 
-		if (this.instaTarget)
+		if (instaTarget)
 			targetGoal.setInstaTarget();
 		mobEntity.targetSelector.addGoal(2, targetGoal);
-		if (this.betterPathfinding)
+		if (betterPathfinding)
 			mobEntity.getNavigation().setMaxVisitedNodesMultiplier(4f);
 
 		/*ILNearestAttackableTargetGoal<Endermite> targetGoalTest;

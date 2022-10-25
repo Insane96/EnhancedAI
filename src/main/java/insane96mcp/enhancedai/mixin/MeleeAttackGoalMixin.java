@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.mixin;
 
-import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.modules.base.feature.Attacking;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
@@ -21,7 +21,7 @@ public class MeleeAttackGoalMixin {
 
 	@Inject(at = @At(value = "RETURN"), method = "getAttackReachSqr", cancellable = true)
 	public void getAttackReachSqr(LivingEntity livingEntity, CallbackInfoReturnable<Double> callbackInfo) {
-		if (!Modules.base.attacking.shouldChangeAttackRange())
+		if (!Attacking.shouldChangeAttackRange())
 			return;
 		double attackRange = this.mob.getAttributeValue(ForgeMod.ATTACK_RANGE.get());
 		callbackInfo.setReturnValue(attackRange * attackRange + livingEntity.getBbWidth());

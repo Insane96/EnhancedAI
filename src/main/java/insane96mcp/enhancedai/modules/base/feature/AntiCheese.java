@@ -1,36 +1,27 @@
 package insane96mcp.enhancedai.modules.base.feature;
 
-import insane96mcp.enhancedai.setup.Config;
+import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
+import insane96mcp.insanelib.base.config.Config;
+import insane96mcp.insanelib.base.config.LoadFeature;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.entity.vehicle.Minecart;
-import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 @Label(name = "Anti-Cheese", description = "Prevent players from abusing some game mechanics to stop mobs")
+@LoadFeature(module = Modules.Ids.BASE)
 public class AntiCheese extends Feature {
 
-    private final ForgeConfigSpec.ConfigValue<Boolean> preventBoatingConfig;
+    @Config
+    @Label(name = "Prevent Boating & Minecarting", description = "If true, 'Enemies' will no longer be able to be Boated and Minecarted.")
+    public static Boolean preventBoating = true;
 
-    public boolean preventBoating = true;
-
-    public AntiCheese(Module module) {
-        super(Config.builder, module);
-        this.pushConfig(Config.builder);
-        this.preventBoatingConfig = Config.builder
-                .comment("If true, 'Enemies' will no longer be able to be Boated and Minecarted.")
-                .define("Prevent Boating & Minecarting", this.preventBoating);
-        Config.builder.pop();
-    }
-
-    @Override
-    public void loadConfig() {
-        super.loadConfig();
-        this.preventBoating = this.preventBoatingConfig.get();
+    public AntiCheese(Module module, boolean enabledByDefault, boolean canBeDisabled) {
+        super(module, enabledByDefault, canBeDisabled);
     }
 
     @SubscribeEvent

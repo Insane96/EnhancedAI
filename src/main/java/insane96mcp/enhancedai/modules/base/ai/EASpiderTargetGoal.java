@@ -17,7 +17,7 @@ public class EASpiderTargetGoal<T extends LivingEntity> extends EANearestAttacka
      * method as well.
      */
     public boolean canUse() {
-        float f = this.mob.getBrightness();
+        float f = this.mob.getLightLevelDependentMagicValue();
         return !(f >= 0.5F) && super.canUse();
     }
 }

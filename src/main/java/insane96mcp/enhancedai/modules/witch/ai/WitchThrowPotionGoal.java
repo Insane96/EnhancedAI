@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.modules.witch.ai;
 
-import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.modules.witch.feature.WitchPotionThrowing;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -23,21 +23,21 @@ public class WitchThrowPotionGoal extends Goal {
     private final Witch witch;
     private final int attackIntervalMin;
     private final int attackIntervalMax;
-    private final float attackRadius;
+    //private final float attackRadius;
     private final float attackRadiusSqr;
     private final double lingeringChance;
     private final double anotherThrowChance;
 
     private LivingEntity target;
 
-    private int attackTime = -1;
+    private int attackTime;
     private boolean randomPotion = false;
 
     public WitchThrowPotionGoal(Witch witch, int attackIntervalMin, int attackIntervalMax, float attackRadius, double lingeringChance, double anotherThrowChance) {
         this.witch = witch;
         this.attackIntervalMin = attackIntervalMin;
         this.attackIntervalMax = attackIntervalMax;
-        this.attackRadius = attackRadius;
+        //this.attackRadius = attackRadius;
         this.attackRadiusSqr = attackRadius * attackRadius;
         this.attackTime = Mth.floor(Mth.nextInt(witch.getRandom(), this.attackIntervalMin, this.attackIntervalMax)) / 2;
         this.lingeringChance = lingeringChance;
@@ -98,7 +98,7 @@ public class WitchThrowPotionGoal extends Goal {
             return;
 
         Collection<MobEffectInstance> mobEffectInstances = new ArrayList<>();
-        List<MobEffectInstance> listToLoop = this.target instanceof Raider ? Modules.witch.witchPotionThrowing.goodPotionsList : Modules.witch.witchPotionThrowing.badPotionsList;
+        List<MobEffectInstance> listToLoop = this.target instanceof Raider ? WitchPotionThrowing.goodPotionsList : WitchPotionThrowing.badPotionsList;
         if (this.randomPotion) {
             mobEffectInstances.add(listToLoop.get(witch.getRandom().nextInt(listToLoop.size())));
         }
@@ -117,7 +117,7 @@ public class WitchThrowPotionGoal extends Goal {
         ThrownPotion thrownpotion = new ThrownPotion(witch.level, this.witch);
         Item potionType = witch.level.random.nextDouble() < this.lingeringChance ? Items.LINGERING_POTION : Items.SPLASH_POTION;
         thrownpotion.setItem(MCUtils.setCustomEffects(new ItemStack(potionType), mobEffectInstances));
-        thrownpotion.setXRot(thrownpotion.getXRot() - -20.0F);
+        thrownpotion.setXRot(thrownpotion.getXRot() + 20.0F);
         double distance = this.witch.distanceTo(target);
         double dirX = this.target.getX() - this.witch.getX();
         double distanceY = this.target.getY() - this.witch.getY();

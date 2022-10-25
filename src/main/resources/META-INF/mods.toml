@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[40,)"
+loaderVersion="[42,)"
 license="All rights reserved"
 issueTrackerURL="https://github.com/Insane96/EnhancedAI/issues"
 [[mods]]
@@ -18,18 +18,18 @@ Also His name is John Cena.
 [[dependencies.enhancedai]]
     modId="forge"
     mandatory=true
-    versionRange="[40,)"
+    versionRange="[42,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.enhancedai]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.18.2,1.19)"
+    versionRange="[1.19.1,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.enhancedai]]
     modId = "insanelib"
     mandatory = true
-    versionRange = "[1.5.1,)"
+    versionRange = "[1.7.0,)"
     ordering = "NONE"
     side = "BOTH"

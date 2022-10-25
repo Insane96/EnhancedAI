@@ -1,60 +1,51 @@
 package insane96mcp.enhancedai.modules;
 
-import insane96mcp.enhancedai.modules.animal.AnimalModule;
-import insane96mcp.enhancedai.modules.base.BaseModule;
-import insane96mcp.enhancedai.modules.blaze.BlazeModule;
-import insane96mcp.enhancedai.modules.creeper.CreeperModule;
-import insane96mcp.enhancedai.modules.drowned.DrownedModule;
-import insane96mcp.enhancedai.modules.enderman.EndermanModule;
-import insane96mcp.enhancedai.modules.ghast.GhastModule;
-import insane96mcp.enhancedai.modules.skeleton.SkeletonModule;
-import insane96mcp.enhancedai.modules.spider.SpiderModule;
-import insane96mcp.enhancedai.modules.villager.VillagerModule;
-import insane96mcp.enhancedai.modules.witch.WitchModule;
-import insane96mcp.enhancedai.modules.zombie.ZombieModule;
+import insane96mcp.enhancedai.EnhancedAI;
+import insane96mcp.enhancedai.setup.Config;
+import insane96mcp.insanelib.base.Module;
 
 public class Modules {
 
-	public static BaseModule base;
-	public static AnimalModule animal;
-	public static BlazeModule blaze;
-	public static CreeperModule creeper;
-	public static DrownedModule drowned;
-	public static GhastModule ghast;
-	public static EndermanModule enderman;
-	public static SkeletonModule skeleton;
-	public static SpiderModule spider;
-	public static VillagerModule villager;
-	public static WitchModule witch;
-	public static ZombieModule zombie;
+	public static Module base;
+	public static Module animal;
+	public static Module blaze;
+	public static Module creeper;
+	public static Module drowned;
+	public static Module ghast;
+	public static Module enderman;
+	public static Module skeleton;
+	public static Module spider;
+	public static Module villager;
+	public static Module witch;
+	public static Module zombie;
 
 	public static void init() {
-		base = new BaseModule();
-		animal = new AnimalModule();
-		blaze = new BlazeModule();
-		creeper = new CreeperModule();
-		drowned = new DrownedModule();
-		ghast = new GhastModule();
-		enderman = new EndermanModule();
-		skeleton = new SkeletonModule();
-		spider = new SpiderModule();
-		villager = new VillagerModule();
-		witch = new WitchModule();
-		zombie = new ZombieModule();
+		base = Module.Builder.create(Config.builder, Ids.BASE, "Base").build();
+		animal = Module.Builder.create(Config.builder, Ids.ANIMAL, "Animals").build();
+		blaze = Module.Builder.create(Config.builder, Ids.BLAZE, "Blazes").build();
+		creeper = Module.Builder.create(Config.builder, Ids.CREEPER, "Creepers").build();
+		drowned = Module.Builder.create(Config.builder, Ids.DROWNED, "Drowneds").build();
+		ghast = Module.Builder.create(Config.builder, Ids.GHAST, "Ghasts").build();
+		enderman = Module.Builder.create(Config.builder, Ids.ENDERMAN, "Endermen").build();
+		skeleton = Module.Builder.create(Config.builder, Ids.SKELETON, "Skeletons").build();
+		spider = Module.Builder.create(Config.builder, Ids.SPIDER, "Spiders").build();
+		villager = Module.Builder.create(Config.builder, Ids.VILLAGER, "Villagers").build();
+		witch = Module.Builder.create(Config.builder, Ids.WITCH, "Witches").build();
+		zombie = Module.Builder.create(Config.builder, Ids.ZOMBIE, "Zombies").build();
 	}
 
-	public static void loadConfig() {
-		base.loadConfig();
-		animal.loadConfig();
-		blaze.loadConfig();
-		creeper.loadConfig();
-		drowned.loadConfig();
-		ghast.loadConfig();
-		enderman.loadConfig();
-		skeleton.loadConfig();
-		spider.loadConfig();
-		villager.loadConfig();
-		witch.loadConfig();
-		zombie.loadConfig();
+	public static class Ids {
+		public static final String BASE = EnhancedAI.RESOURCE_PREFIX + "base";
+		public static final String ANIMAL = EnhancedAI.RESOURCE_PREFIX + "animal";
+		public static final String BLAZE = EnhancedAI.RESOURCE_PREFIX + "blaze";
+		public static final String CREEPER = EnhancedAI.RESOURCE_PREFIX + "creeper";
+		public static final String DROWNED = EnhancedAI.RESOURCE_PREFIX + "drowned";
+		public static final String GHAST = EnhancedAI.RESOURCE_PREFIX + "ghast";
+		public static final String ENDERMAN = EnhancedAI.RESOURCE_PREFIX + "enderman";
+		public static final String SKELETON = EnhancedAI.RESOURCE_PREFIX + "skeleton";
+		public static final String SPIDER = EnhancedAI.RESOURCE_PREFIX + "spider";
+		public static final String VILLAGER = EnhancedAI.RESOURCE_PREFIX + "villager";
+		public static final String WITCH = EnhancedAI.RESOURCE_PREFIX + "witch";
+		public static final String ZOMBIE = EnhancedAI.RESOURCE_PREFIX + "zombie";
 	}
 }

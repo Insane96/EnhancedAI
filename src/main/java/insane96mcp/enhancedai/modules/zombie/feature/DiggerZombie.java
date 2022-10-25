@@ -1,120 +1,82 @@
 package insane96mcp.enhancedai.modules.zombie.feature;
 
+import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.modules.zombie.ai.DiggingGoal;
-import insane96mcp.enhancedai.setup.Config;
 import insane96mcp.enhancedai.setup.EAStrings;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
-import insane96mcp.insanelib.config.Blacklist;
+import insane96mcp.insanelib.base.config.Blacklist;
+import insane96mcp.insanelib.base.config.Config;
+import insane96mcp.insanelib.base.config.LoadFeature;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.Collections;
 
 @Label(name = "Digger Zombie", description = "Zombies can mine blocks to reach the target. Uses offhand item to mine")
+@LoadFeature(module = Modules.Ids.ZOMBIE)
 public class DiggerZombie extends Feature {
-	private final ForgeConfigSpec.ConfigValue<Double> diggerChanceConfig;
-	private final ForgeConfigSpec.ConfigValue<Boolean> diggerToolOnlyConfig;
-	private final ForgeConfigSpec.ConfigValue<Boolean> diggerProperToolOnlyConfig;
-	private final ForgeConfigSpec.ConfigValue<Boolean> equipWoodenPickConfig;
-	private final ForgeConfigSpec.ConfigValue<Integer> maxYDigConfig;
-	private final ForgeConfigSpec.ConfigValue<Integer> maxDistanceConfig;
-	private final ForgeConfigSpec.ConfigValue<Boolean> blacklistTileEntitiesConfig;
-	private final ForgeConfigSpec.ConfigValue<Double> miningSpeedMultiplierConfig;
-	private final Blacklist.Config blockBlacklistConfig;
-	private final Blacklist.Config entityBlacklistConfig;
+	@Config(min = 0d, max = 1d)
+	@Label(name = "Digger Chance", description = "Chance for a Zombie to spawn with the digger ability")
+	public static Double diggerChance = 0.07d;
+	@Config
+	@Label(name = "Digger Tool Only", description = "Zombies with Digger AI will mine only if they have any tool in the off-hand")
+	public static Boolean diggerToolOnly = false;
+	@Config
+	@Label(name = "Digger Proper Tool Only", description = "Zombies with Digger AI will mine only if their off-hand tool can mine targeted blocks (e.g. zombies with shovels will not mine stone). Blocks that require no tool (e.g. planks) will be minable regardless of proper tool or not.")
+	public static Boolean diggerProperToolOnly = false;
+	@Config
+	@Label(name = "Equip Wooden Pick", description = "Zombies with Digger AI will spawn with a Wooden Pickaxe.")
+	public static Boolean equipWoodenPick = true;
+	@Config(min = 128, max = 320)
+	@Label(name = "Max Y Dig", description = "The maximum Y coordinate at which Zombies can mine.")
+	public static Integer maxYDig = 64;
+	@Config(min = 0, max = 128)
+	@Label(name = "Max Distance", description = "The maximum distance from the target at which the zombie can mine. Set to 0 to always mine.")
+	public static Integer maxDistance = 0;
+	@Config
+	@Label(name = "Blacklist Tile Entities", description = "Zombies with Digger AI will not be able to break tile entities")
+	public static Boolean blacklistTileEntities = false;
+	@Config(min = 0d, max = 128d)
+	@Label(name = "Digger Speed Multiplier", description = "Multiplier for digger zombies mining speed. E.g. with this set to 2, zombies will take twice the time to mine a block.")
+	public static Double miningSpeedMultiplier = 1d;
+	@Config
+	@Label(name = "Block Blacklist", description = "Blocks in here will not be minable by zombies (or will be the only minable in case it's whitelist)")
+	public static Blacklist blockBlacklist = new Blacklist(Collections.emptyList(), false);
+	@Config
+	@Label(name = "Entity Blacklist", description = "Entities in this list will not be affected by this feature")
+	public static Blacklist entityBlacklist = new Blacklist(Collections.emptyList(), false);
 
-	public double diggerChance = 0.07d;
-	public boolean diggerToolOnly = false;
-	public boolean diggerProperToolOnly = false;
-	public boolean equipWoodenPick = true;
-	public int maxYDig = 64;
-	public int maxDistance = 0;
-	public boolean blacklistTileEntities = false;
-	public double miningSpeedMultiplier = 1d;
-	public Blacklist blockBlacklist;
-	public Blacklist entityBlacklist;
-
-	public DiggerZombie(Module module) {
-		super(Config.builder, module);
-		this.pushConfig(Config.builder);
-		diggerChanceConfig = Config.builder
-				.comment("Chance for a Zombie to spawn with the digger ability")
-				.defineInRange("Digger Chance", this.diggerChance, 0d, 1d);
-		diggerToolOnlyConfig = Config.builder
-				.comment("Zombies with Digger AI will mine only if they have any tool in the off-hand")
-				.define("Digger Tool Only", this.diggerToolOnly);
-		diggerProperToolOnlyConfig = Config.builder
-				.comment("Zombies with Digger AI will mine only if their off-hand tool can mine targeted blocks (e.g. zombies with shovels will not mine stone). Blocks that require no tool (e.g. planks) will be minable regardless of proper tool or not.")
-				.define("Digger Proper Tool Only", this.diggerProperToolOnly);
-		equipWoodenPickConfig = Config.builder
-				.comment("Zombies with Digger AI will spawn with a Wooden Pickaxe.")
-				.define("Equip Wooden Pick", this.equipWoodenPick);
-		maxYDigConfig = Config.builder
-				.comment("The maximum Y coordinate at which Zombies can mine.")
-				.defineInRange("Max Y Dig", this.maxYDig, -128, 512);
-		maxDistanceConfig = Config.builder
-				.comment("The maximum distance from the target at which the zombie can mine. Set to 0 to always mine.")
-				.defineInRange("Max Distance", this.maxDistance, 0, 128);
-		miningSpeedMultiplierConfig = Config.builder
-				.comment("Multiplier for digger zombies mining speed. E.g. with this set to 2, zombies will take twice the time to mine a block.")
-				.defineInRange("Digger Speed Multiplier", this.miningSpeedMultiplier, 0d, 128d);
-		blacklistTileEntitiesConfig = Config.builder
-				.comment("Zombies with Digger AI will not be able to break tile entities")
-				.define("Blacklist Tile Entities", this.blacklistTileEntities);
-		blockBlacklistConfig = new Blacklist.Config(Config.builder, "Block Blacklist", "Blocks in here will not be minable by zombies (or will be the only minable in case it's whitelist)")
-				.setDefaultList(Collections.emptyList())
-				.setIsDefaultWhitelist(false)
-				.build();
-		entityBlacklistConfig = new Blacklist.Config(Config.builder, "Entity Blacklist", "Entities that shouldn't get the Digger AI")
-				.setDefaultList(Collections.emptyList())
-				.setIsDefaultWhitelist(false)
-				.build();
-		Config.builder.pop();
-	}
-
-	@Override
-	public void loadConfig() {
-		super.loadConfig();
-		this.diggerChance = this.diggerChanceConfig.get();
-		this.diggerToolOnly = this.diggerToolOnlyConfig.get();
-		this.diggerProperToolOnly = this.diggerProperToolOnlyConfig.get();
-		this.equipWoodenPick = this.equipWoodenPickConfig.get();
-		this.maxYDig = this.maxYDigConfig.get();
-		this.maxDistance = this.maxDistanceConfig.get();
-		this.miningSpeedMultiplier = this.miningSpeedMultiplierConfig.get();
-		this.blacklistTileEntities = this.blacklistTileEntitiesConfig.get();
-		this.blockBlacklist = this.blockBlacklistConfig.get();
-		this.entityBlacklist = this.entityBlacklistConfig.get();
+	public DiggerZombie(Module module, boolean enabledByDefault, boolean canBeDisabled) {
+		super(module, enabledByDefault, canBeDisabled);
 	}
 
 	//Lowest priority so other mods can set persistent data
 	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public void onSpawn(EntityJoinWorldEvent event) {
+	public void onSpawn(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
-		 		|| event.getWorld().isClientSide
+		 		|| event.getLevel().isClientSide
 				|| !(event.getEntity() instanceof Zombie zombie)
-		 		|| this.entityBlacklist.isEntityBlackOrNotWhitelist(zombie))
+		 		|| entityBlacklist.isEntityBlackOrNotWhitelist(zombie))
 			return;
 
 		CompoundTag persistentData = zombie.getPersistentData();
 
-		boolean miner = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Zombie.MINER, zombie.level.random.nextDouble() < this.diggerChance);
-		boolean diggerToolOnly = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Zombie.TOOL_ONLY, this.diggerToolOnly);
-		boolean diggerProperToolOnly = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Zombie.PROPER_TOOL_ONLY, this.diggerProperToolOnly);
+		boolean miner = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Zombie.MINER, zombie.level.random.nextDouble() < diggerChance);
+		boolean diggerToolOnly1 = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Zombie.TOOL_ONLY, diggerToolOnly);
+		boolean diggerProperToolOnly1 = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Zombie.PROPER_TOOL_ONLY, diggerProperToolOnly);
 
 		if (miner) {
-			zombie.goalSelector.addGoal(1, new DiggingGoal(zombie, this.maxDistance, diggerToolOnly, diggerProperToolOnly));
-			if (this.equipWoodenPick)
+			zombie.goalSelector.addGoal(1, new DiggingGoal(zombie, maxDistance, diggerToolOnly1, diggerProperToolOnly1));
+			if (equipWoodenPick)
 			{
 				zombie.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.WOODEN_PICKAXE));
 				zombie.setDropChance(EquipmentSlot.OFFHAND, -1f);

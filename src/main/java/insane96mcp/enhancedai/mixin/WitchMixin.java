@@ -1,6 +1,8 @@
 package insane96mcp.enhancedai.mixin;
 
 import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.modules.witch.feature.ThirstyWitches;
+import insane96mcp.enhancedai.modules.witch.feature.WitchPotionThrowing;
 import insane96mcp.enhancedai.setup.EAStrings;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.sounds.SoundEvents;
@@ -107,7 +109,7 @@ public abstract class WitchMixin extends Raider {
 		}
 		else {
 			if (this.getTarget() != null && this.getTarget() instanceof Player && this.distanceToSqr(this.getTarget()) > 64d) {
-				List<MobEffectInstance> listToLoop = Modules.witch.thirstyWitches.drinkPotion;
+				List<MobEffectInstance> listToLoop = ThirstyWitches.drinkPotion;
 				for (MobEffectInstance mobEffectInstance : listToLoop) {
 					if (this.hasEffect(mobEffectInstance.getEffect()))
 						continue;
@@ -117,14 +119,14 @@ public abstract class WitchMixin extends Raider {
 				}
 			}
 			else {
-				if (this.random.nextFloat() < Modules.witch.thirstyWitches.waterBreathingChance && this.isEyeInFluid(FluidTags.WATER) && !this.hasEffect(MobEffects.WATER_BREATHING) && this.getAirSupply() < this.getMaxAirSupply() / 2) {
+				if (this.random.nextFloat() < ThirstyWitches.waterBreathingChance && this.isEyeInFluid(FluidTags.WATER) && !this.hasEffect(MobEffects.WATER_BREATHING) && this.getAirSupply() < this.getMaxAirSupply() / 2) {
 					mobEffectInstances.addAll(Potions.WATER_BREATHING.getEffects());
 				}
-				else if (this.random.nextFloat() < Modules.witch.thirstyWitches.fireResistanceChance && (this.isOnFire() || this.getLastDamageSource() != null && this.getLastDamageSource().isFire()) && !this.hasEffect(MobEffects.FIRE_RESISTANCE)) {
+				else if (this.random.nextFloat() < ThirstyWitches.fireResistanceChance && (this.isOnFire() || this.getLastDamageSource() != null && this.getLastDamageSource().isFire()) && !this.hasEffect(MobEffects.FIRE_RESISTANCE)) {
 					mobEffectInstances.addAll(Potions.FIRE_RESISTANCE.getEffects());
 				}
-				else if (this.random.nextFloat() < Modules.witch.thirstyWitches.healingChance && this.getHealth() < this.getMaxHealth() - 3) {
-					if (this.getHealth() < this.getMaxHealth() * Modules.witch.thirstyWitches.strongHealingThreshold)
+				else if (this.random.nextFloat() < ThirstyWitches.healingChance && this.getHealth() < this.getMaxHealth() - 3) {
+					if (this.getHealth() < this.getMaxHealth() * ThirstyWitches.strongHealingThreshold)
 						mobEffectInstances.addAll(Potions.STRONG_HEALING.getEffects());
 					else
 						mobEffectInstances.addAll(Potions.HEALING.getEffects());
@@ -135,7 +137,7 @@ public abstract class WitchMixin extends Raider {
 			if (!mobEffectInstances.isEmpty()) {
 				item = MCUtils.setCustomEffects(new ItemStack(Items.POTION), mobEffectInstances);
 			}
-			else if (MCUtils.hasLongNegativeEffect(this) && Modules.witch.thirstyWitches.shouldDrinkMilk(this.random)) {
+			else if (MCUtils.hasLongNegativeEffect(this) && ThirstyWitches.shouldDrinkMilk(this.random)) {
 				item = new ItemStack(Items.MILK_BUCKET);
 			}
 
@@ -153,7 +155,7 @@ public abstract class WitchMixin extends Raider {
 			}
 		}
 
-		if (Modules.witch.witchPotionThrowing.shouldUseSlowFalling() && this.fallDistance > 8 && !this.hasEffect(MobEffects.SLOW_FALLING)) {
+		if (WitchPotionThrowing.shouldUseSlowFalling() && this.fallDistance > 8 && !this.hasEffect(MobEffects.SLOW_FALLING)) {
 			ItemStack stack = MCUtils.setCustomEffects(new ItemStack(Items.SPLASH_POTION), List.of(new MobEffectInstance(MobEffects.SLOW_FALLING, 300, 0)));
 			this.getLookControl().setLookAt(this.getX(), this.getY(), this.getZ());
 			if (!this.isSilent()) {
@@ -166,7 +168,7 @@ public abstract class WitchMixin extends Raider {
 			}
 		}
 
-		if (!this.hasEffect(MobEffects.INVISIBILITY) && --this.invisibilityCooldown <= 0 && this.getHealth() < this.getMaxHealth() * Modules.witch.witchPotionThrowing.healthThresholdInvisiblity) {
+		if (!this.hasEffect(MobEffects.INVISIBILITY) && --this.invisibilityCooldown <= 0 && this.getHealth() < this.getMaxHealth() * WitchPotionThrowing.healthThresholdInvisibility) {
 			ThrownPotion thrownPotion = new ThrownPotion(this.level, this);
 			thrownPotion.setItem(MCUtils.setCustomEffects(new ItemStack(Items.SPLASH_POTION), List.of(new MobEffectInstance(MobEffects.INVISIBILITY, 200))));
 			thrownPotion.shoot(0, -1d, 0, 0.1f, 2f);

@@ -1,43 +1,28 @@
 package insane96mcp.enhancedai.modules.base.feature;
 
+import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.modules.base.ai.ShieldingGoal;
-import insane96mcp.enhancedai.setup.Config;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
+import insane96mcp.insanelib.base.config.LoadFeature;
 import net.minecraft.world.entity.Mob;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 @Label(name = "Shielding", description = "Makes mobs be able to use shields.")
+@LoadFeature(module = Modules.Ids.BASE, enabledByDefault = false)
 public class Shielding extends Feature {
 
-    //private final ForgeConfigSpec.ConfigValue<Boolean> allowClimbingConfig;
-
-    //public boolean allowClimbing = true;
-
-    public Shielding(Module module) {
-        super(Config.builder, module);
-        /*this.pushConfig(Config.builder);
-        this.allowClimbingConfig = Config.builder
-                .comment("If true, mobs will be able to climb (up and down)")
-                .define("Allow Climbing", this.allowClimbing);
-        this.targetLaddersConfig = Config.builder
-                .comment("If true, mobs try to find climbable blocks to reach the target")
-                .define("Target Ladders", this.targetLadders);
-        Config.builder.pop();*/
-    }
-
-    @Override
-    public void loadConfig() {
-        super.loadConfig();
-        //this.allowClimbing = this.allowClimbingConfig.get();
+    public Shielding(Module module, boolean enabledByDefault, boolean canBeDisabled) {
+        super(module, enabledByDefault, canBeDisabled);
     }
 
     @SubscribeEvent
-    public void onMobSpawn(EntityJoinWorldEvent event) {
+    public void onMobSpawn(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
-                || !(event.getEntity() instanceof Mob mob)) return;
+                || !(event.getEntity() instanceof Mob mob))
+            return;
 
         mob.goalSelector.addGoal(3, new ShieldingGoal(mob, 1d));
     }

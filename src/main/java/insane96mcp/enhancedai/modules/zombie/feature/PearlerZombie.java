@@ -1,81 +1,55 @@
 package insane96mcp.enhancedai.modules.zombie.feature;
 
+import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.modules.zombie.ai.PearlUseGoal;
-import insane96mcp.enhancedai.setup.Config;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
-import insane96mcp.insanelib.config.Blacklist;
+import insane96mcp.insanelib.base.config.Blacklist;
+import insane96mcp.insanelib.base.config.Config;
+import insane96mcp.insanelib.base.config.LoadFeature;
+import insane96mcp.insanelib.util.IdTagMatcher;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import java.util.Collections;
+import java.util.List;
 
 @Label(name = "Pearler Zombie", description = "Let zombies use ender pearls. Either put ender pearls in main or off hand and when far enough from the player they will throw it.")
+@LoadFeature(module = Modules.Ids.ZOMBIE)
 public class PearlerZombie extends Feature {
-	private final ForgeConfigSpec.ConfigValue<Double> equipEnderPearlChanceConfig;
-	private final ForgeConfigSpec.ConfigValue<Integer> enderPearlAmountConfig;
-	private final ForgeConfigSpec.IntValue inaccuracyConfig;
+	@Config(min = 0d, max = 1d)
+	@Label(name = "Equip Ender Pearl Chance", description = "Chance for a Zombie to spawn with an ender pearl in the offhand. I highly recommend using something like Mobs Properties Randomness to have more control over mobs equipment.")
+	public static Double equipEnderPearlChance = 0.05;
+	@Config(min = 0, max = 16)
+	@Label(name = "Ender Pearl Amount", description = "How many ender pearls will Zombies spawn with.")
+	public static Integer enderPearlAmount = 2;
+	@Config(min = 1, max = 128)
+	@Label(name = "Inaccuracy", description = "Inaccuracy when throwing the ender pearl.")
+	public static Integer inaccuracy = 4;
+	@Config(min = 1, max = 128)
+	@Label(name = "Entity Blacklist", description = "Entities that will not be affected by this module.")
+	public static Blacklist entityBlacklist = new Blacklist(List.of(
+			new IdTagMatcher(IdTagMatcher.Type.ID, "quark:forgotten")
+	), false);
 
-	private final Blacklist.Config entityBlacklistConfig;
-
-	public double equipEnderPearlChance = 0.05;
-	public int enderPearlAmount = 2;
-	public int inaccuracy = 4;
-
-	public Blacklist entityBlacklist;
-
-	public PearlerZombie(Module module) {
-		super(Config.builder, module);
-		Config.builder.comment(this.getDescription()).push(this.getName());
-		equipEnderPearlChanceConfig = Config.builder
-				.comment("Chance for a Zombie to spawn with an ender pearl in the off hand. I highly recommend using something like Mobs Properties Randomness to have more control over mobs equipment.")
-				.defineInRange("Equip Ender Pearl Chance", this.equipEnderPearlChance, 0d, 1d);
-		enderPearlAmountConfig = Config.builder
-				.comment("How many ender pearls will Zombies spawn with.")
-				.defineInRange("Ender Pearl Amount", this.enderPearlAmount, 1, 16);
-		inaccuracyConfig = Config.builder
-				.comment("Inaccuracy when throwing the ender pearl.")
-				.defineInRange("Inaccuracy", this.inaccuracy, 1, 128);
-
-		entityBlacklistConfig = new Blacklist.Config(Config.builder, "Entity Blacklist", "Entities that shouldn't get the Pearler AI")
-				.setDefaultList(Collections.emptyList())
-				.setIsDefaultWhitelist(false)
-				.build();
-		Config.builder.pop();
-	}
-
-	@Override
-	public void loadConfig() {
-		super.loadConfig();
-		this.equipEnderPearlChance = this.equipEnderPearlChanceConfig.get();
-		this.enderPearlAmount = this.enderPearlAmountConfig.get();
-		this.inaccuracy = this.inaccuracyConfig.get();
-
-		this.entityBlacklist = this.entityBlacklistConfig.get();
+	public PearlerZombie(Module module, boolean enabledByDefault, boolean canBeDisabled) {
+		super(module, enabledByDefault, canBeDisabled);
 	}
 
 	@SubscribeEvent
-	public void onSpawn(EntityJoinWorldEvent event) {
-		if (!this.isEnabled())
+	public void onSpawn(EntityJoinLevelEvent event) {
+		if (!this.isEnabled()
+				|| event.getLevel().isClientSide
+				|| !(event.getEntity() instanceof Zombie zombie)
+				|| entityBlacklist.isEntityBlackOrNotWhitelist(zombie))
 			return;
 
-		if (event.getWorld().isClientSide)
-			return;
-
-		if (!(event.getEntity() instanceof Zombie zombie))
-			return;
-
-		if (this.entityBlacklist.isEntityBlackOrNotWhitelist(zombie))
-			return;
-
-		if (event.getWorld().random.nextDouble() < this.equipEnderPearlChance)
-			zombie.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.ENDER_PEARL, this.enderPearlAmount));
+		if (event.getLevel().random.nextDouble() < equipEnderPearlChance)
+			zombie.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.ENDER_PEARL, enderPearlAmount));
 
 		zombie.goalSelector.addGoal(2, new PearlUseGoal(zombie));
 	}

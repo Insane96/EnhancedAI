@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.modules.spider.entity.projectile;
 
-import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.modules.spider.feature.ThrowingWeb;
 import insane96mcp.enhancedai.setup.EAEntities;
 import insane96mcp.insanelib.util.scheduled.ScheduledTasks;
 import net.minecraft.core.BlockPos;
@@ -21,6 +21,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import org.jetbrains.annotations.NotNull;
 
 public class ThrownWebEntity extends ThrowableItemProjectile {
 
@@ -35,7 +36,7 @@ public class ThrownWebEntity extends ThrowableItemProjectile {
 	}
 
 	@Override
-	protected Item getDefaultItem() {
+	protected @NotNull Item getDefaultItem() {
 		return Items.COBWEB;
 	}
 
@@ -43,7 +44,7 @@ public class ThrownWebEntity extends ThrowableItemProjectile {
 		this.damage = damage;
 	}
 
-	protected void onHitEntity(EntityHitResult result) {
+	protected void onHitEntity(@NotNull EntityHitResult result) {
 		super.onHitEntity(result);
 		if (!result.getEntity().hurt(DamageSource.thrown(this, this.getOwner()).setScalesWithDifficulty(), this.damage))
 			return;
@@ -54,7 +55,7 @@ public class ThrownWebEntity extends ThrowableItemProjectile {
 		if (!(result.getEntity() instanceof LivingEntity entity) || this.level.isClientSide)
 			return;
 
-		Modules.spider.throwingWeb.applySlowness(entity);
+		ThrowingWeb.applySlowness(entity);
 	}
 
 	protected void onHitBlock(BlockHitResult result) {
@@ -63,7 +64,7 @@ public class ThrownWebEntity extends ThrowableItemProjectile {
 		BlockPos spawnCobwebAt = result.getBlockPos().offset(result.getDirection().getNormal());
 		if (FallingBlock.isFree(this.level.getBlockState(spawnCobwebAt)) /*&& this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)*/) {
 			this.level.setBlock(spawnCobwebAt, Blocks.COBWEB.defaultBlockState(), 3);
-			ScheduledTasks.schedule(new TemporaryCobwebTask(Modules.spider.throwingWeb.destroyWebAfter, this.level, spawnCobwebAt));
+			ScheduledTasks.schedule(new TemporaryCobwebTask(ThrowingWeb.destroyWebAfter, this.level, spawnCobwebAt));
 			for(int i = 0; i < 32; ++i) {
 				this.level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.COBWEB.defaultBlockState()), spawnCobwebAt.getX() + this.random.nextDouble(), spawnCobwebAt.getY() + this.random.nextDouble(), spawnCobwebAt.getZ() + this.random.nextDouble(), 0d, 0D, 0d);
 			}
@@ -71,7 +72,7 @@ public class ThrownWebEntity extends ThrowableItemProjectile {
 		}
 	}
 
-	protected void onHit(HitResult result) {
+	protected void onHit(@NotNull HitResult result) {
 		super.onHit(result);
 		this.discard();
 	}

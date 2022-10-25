@@ -1,47 +1,37 @@
 package insane96mcp.enhancedai.modules.witch.feature;
 
+import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.modules.witch.ai.DarkArtWitchGoal;
-import insane96mcp.enhancedai.setup.Config;
 import insane96mcp.enhancedai.setup.EAStrings;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
+import insane96mcp.insanelib.base.config.Config;
+import insane96mcp.insanelib.base.config.LoadFeature;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.monster.Witch;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@Label(name = "Dark Arts Witches", description = "Witches summon Villagers and cast a lightning bolt upon them.")
+@Label(name = "Dark Arts Witches", description = "Witches summon Villagers and cast a lightning upon them.")
+@LoadFeature(module = Modules.Ids.WITCH)
 public class DarkArtWitch extends Feature {
+    @Config(min = 0d, max = 1d)
+    @Label(name = "Dark Art Chance", description = "Chance for a witch to get the Dark Art AI (as soon as they have a target and are less than 10 blocks away from the target will summon a Villager and cast a lightning bolt on them")
+    public static Double darkArtChance = 0.333d;
 
-    private final ForgeConfigSpec.DoubleValue darkArtChanceConfig;
-
-    public double darkArtChance = 0.333d;
-
-    public DarkArtWitch(Module module) {
-        super(Config.builder, module);
-        super.pushConfig(Config.builder);
-        this.darkArtChanceConfig = Config.builder
-                .comment("Chance for a witch to get the Dark Art AI (as soon as they have a target and are less than 10 blocks away from the target will summon a Villager and cast a lightning bolt on them")
-                .defineInRange("Dark Art Chance", this.darkArtChance, 0d, 1d);
-        Config.builder.pop();
-    }
-
-    @Override
-    public void loadConfig() {
-        super.loadConfig();
-        this.darkArtChance = this.darkArtChanceConfig.get();
+    public DarkArtWitch(Module module, boolean enabledByDefault, boolean canBeDisabled) {
+        super(module, enabledByDefault, canBeDisabled);
     }
 
     //Lowest priority so other mods can set persistent data
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void onSpawn(EntityJoinWorldEvent event) {
+    public void onSpawn(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
-                || event.getWorld().isClientSide
+                || event.getLevel().isClientSide
                 || !(event.getEntity() instanceof Witch witch))
             return;
 

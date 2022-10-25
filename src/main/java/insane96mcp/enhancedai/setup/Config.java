@@ -2,10 +2,9 @@ package insane96mcp.enhancedai.setup;
 
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.insanelib.base.Module;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
 import org.apache.commons.lang3.tuple.Pair;
 
 @Mod.EventBusSubscriber(modid = EnhancedAI.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -25,11 +24,7 @@ public class Config {
 	public static class CommonConfig {
 		public CommonConfig(final ForgeConfigSpec.Builder builder) {
 			Modules.init();
+			Module.loadFeatures(EnhancedAI.MOD_ID, this.getClass().getClassLoader());
 		}
-	}
-
-	@SubscribeEvent
-	public static void onModConfigEvent(final ModConfigEvent event) {
-		Modules.loadConfig();
 	}
 }

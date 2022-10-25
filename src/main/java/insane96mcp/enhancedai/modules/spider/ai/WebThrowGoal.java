@@ -1,7 +1,7 @@
 package insane96mcp.enhancedai.modules.spider.ai;
 
-import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.modules.spider.entity.projectile.ThrownWebEntity;
+import insane96mcp.enhancedai.modules.spider.feature.ThrowingWeb;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -13,7 +13,7 @@ public class WebThrowGoal extends Goal {
 	private final Spider spider;
 	private Player targetPlayer;
 
-	private int cooldown = adjustedTickDelay((int) Modules.spider.throwingWeb.throwingCooldown.min);
+	private int cooldown = adjustedTickDelay((int) ThrowingWeb.throwingCooldown.min);
 
 	public WebThrowGoal(Spider spider){
 		this.spider = spider;
@@ -26,7 +26,7 @@ public class WebThrowGoal extends Goal {
 
 		double distance = this.spider.distanceToSqr(target);
 
-		if (distance < Modules.spider.throwingWeb.distance.min * Modules.spider.throwingWeb.distance.min || distance > Modules.spider.throwingWeb.distance.max * Modules.spider.throwingWeb.distance.max)
+		if (distance < ThrowingWeb.distance.min * ThrowingWeb.distance.min || distance > ThrowingWeb.distance.max * ThrowingWeb.distance.max)
 			return false;
 
 		return --this.cooldown <= 0;
@@ -53,10 +53,10 @@ public class WebThrowGoal extends Goal {
 		yPos += this.targetPlayer.getEyeHeight() * 0.5 + (distanceY / distanceXZ);
 		double d1 = yPos - thrownWeb.getY();
 		thrownWeb.shoot(d0, d1 + distanceXZ * 0.18d, d2, f * 1.1f + ((float)distance / 32f) + (float)Math.max(distanceY / 48d, 0f), 0);
-		thrownWeb.setDamage((float) Modules.spider.throwingWeb.thrownWebDamage);
+		thrownWeb.setDamage(ThrowingWeb.thrownWebDamage.floatValue());
 		thrownWeb.level.addFreshEntity(thrownWeb);
 		this.spider.playSound(SoundEvents.SPIDER_HURT, 1.0F, 2.0F / (this.spider.getRandom().nextFloat() * 0.4F + 0.8F));
-		this.cooldown = adjustedTickDelay(Modules.spider.throwingWeb.throwingCooldown.getIntRandBetween(spider.getRandom()));
+		this.cooldown = adjustedTickDelay(ThrowingWeb.throwingCooldown.getIntRandBetween(spider.getRandom()));
 	}
 
 	public void stop() {

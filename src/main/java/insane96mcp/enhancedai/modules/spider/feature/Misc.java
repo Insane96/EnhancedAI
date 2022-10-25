@@ -1,67 +1,43 @@
 package insane96mcp.enhancedai.modules.spider.feature;
 
-import insane96mcp.enhancedai.setup.Config;
+import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
-import insane96mcp.insanelib.config.Blacklist;
+import insane96mcp.insanelib.base.config.Blacklist;
+import insane96mcp.insanelib.base.config.Config;
+import insane96mcp.insanelib.base.config.LoadFeature;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.monster.Spider;
-import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.Collections;
 
 @Label(name = "Miscellaneous", description = "Various small changes to Spiders.")
+@LoadFeature(module = Modules.Ids.SPIDER)
 public class Misc extends Feature {
+	@Config(min = 0d, max = 1d)
+	@Label(name = "Fall Damage Reduction", description = "Percentage reduction of the fall damage taken by spiders.")
+	public static Double fallDamageReduction = 0.9d;
 
-	private final ForgeConfigSpec.ConfigValue<Double> fallDamageReductionConfig;
+	@Config
+	@Label(name = "Entity Blacklist", description = "Entities that shouldn't be affected by this feature")
+	public static Blacklist entityBlacklist = new Blacklist(Collections.emptyList(), false);
 
-	private final Blacklist.Config entityBlacklistConfig;
-
-	public double fallDamageReduction = 0.9d;
-
-	public Blacklist entityBlacklist;
-
-	public Misc(Module module) {
-		super(Config.builder, module);
-		Config.builder.comment(this.getDescription()).push(this.getName());
-		fallDamageReductionConfig = Config.builder
-				.comment("Percentage reduction of the fall damage taken by spiders.")
-				.defineInRange("Fall Damage Reduction", this.fallDamageReduction, 0d, 1d);
-		entityBlacklistConfig = new Blacklist.Config(Config.builder, "Entity Blacklist", "Entities that shouldn't be affected by this feature")
-				.setDefaultList(Collections.emptyList())
-				.setIsDefaultWhitelist(false)
-				.build();
-		Config.builder.pop();
-	}
-
-	@Override
-	public void loadConfig() {
-		super.loadConfig();
-		this.fallDamageReduction = this.fallDamageReductionConfig.get();
-
-		this.entityBlacklist = this.entityBlacklistConfig.get();
+	public Misc(Module module, boolean enabledByDefault, boolean canBeDisabled) {
+		super(module, enabledByDefault, canBeDisabled);
 	}
 
 	@SubscribeEvent
 	public void onSpawn(LivingDamageEvent event) {
-		if (!this.isEnabled())
+		if (!this.isEnabled()
+				|| fallDamageReduction == 0d
+				|| !event.getSource().equals(DamageSource.FALL)
+				|| !(event.getEntity() instanceof Spider spider)
+				|| entityBlacklist.isEntityBlackOrNotWhitelist(spider))
 			return;
 
-		if (this.fallDamageReduction == 0d)
-			return;
-
-		if (!event.getSource().equals(DamageSource.FALL))
-			return;
-
-		if (!(event.getEntity() instanceof Spider spider))
-			return;
-
-		if (this.entityBlacklist.isEntityBlackOrNotWhitelist(spider))
-			return;
-
-		event.setAmount((float) (event.getAmount() * (1d - this.fallDamageReduction)));
+		event.setAmount((float) (event.getAmount() * (1d - fallDamageReduction)));
 	}
 }

@@ -1,9 +1,8 @@
 package insane96mcp.enhancedai.modules.zombie.ai;
 
-import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.modules.zombie.feature.DiggerZombie;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectUtil;
@@ -21,6 +20,7 @@ import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.ForgeMod;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -148,7 +148,7 @@ public class DiggingGoal extends Goal {
 				continue;
 			if (this.targetBlocks.contains(rayTraceResult.getBlockPos()))
 				continue;
-			if (rayTraceResult.getBlockPos().getY() > Modules.zombie.diggerZombie.maxYDig)
+			if (rayTraceResult.getBlockPos().getY() > DiggerZombie.maxYDig)
 				continue;
 
 			double distance = this.digger.distanceToSqr(rayTraceResult.getLocation());
@@ -160,7 +160,7 @@ public class DiggingGoal extends Goal {
 			if (state.hasBlockEntity() || state.getDestroySpeed(this.digger.level, rayTraceResult.getBlockPos()) == -1)
 				continue;
 
-			if (Modules.zombie.diggerZombie.blockBlacklist.isBlockBlackOrNotWhiteListed(state.getBlock()))
+			if (DiggerZombie.blockBlacklist.isBlockBlackOrNotWhiteListed(state.getBlock()))
 				continue;
 
 			this.targetBlocks.add(rayTraceResult.getBlockPos());
@@ -190,7 +190,7 @@ public class DiggingGoal extends Goal {
 	private int computeTickToBreak() {
 		int canHarvestBlock = this.canHarvestBlock() ? 30 : 100;
 		double diggingSpeed = this.getDigSpeed() / this.blockState.getDestroySpeed(this.digger.level, this.targetBlocks.get(0)) / canHarvestBlock;
-		return Mth.ceil((1f / diggingSpeed) * Modules.zombie.diggerZombie.miningSpeedMultiplier);
+		return Mth.ceil((1f / diggingSpeed) * DiggerZombie.miningSpeedMultiplier);
 	}
 
 	private float getDigSpeed() {
@@ -208,27 +208,18 @@ public class DiggingGoal extends Goal {
 		}
 
 		if (this.digger.hasEffect(MobEffects.DIG_SLOWDOWN)) {
-			float miningFatigueAmplifier;
 			//noinspection ConstantConditions
-			switch (this.digger.getEffect(MobEffects.DIG_SLOWDOWN).getAmplifier()) {
-				case 0:
-					miningFatigueAmplifier = 0.3F;
-					break;
-				case 1:
-					miningFatigueAmplifier = 0.09F;
-					break;
-				case 2:
-					miningFatigueAmplifier = 0.0027F;
-					break;
-				case 3:
-				default:
-					miningFatigueAmplifier = 8.1E-4F;
-			}
+			float miningFatigueAmplifier = switch (this.digger.getEffect(MobEffects.DIG_SLOWDOWN).getAmplifier()) {
+				case 0 -> 0.3F;
+				case 1 -> 0.09F;
+				case 2 -> 0.0027F;
+				default -> 8.1E-4F;
+			};
 
 			digSpeed *= miningFatigueAmplifier;
 		}
 
-		if (this.digger.isEyeInFluid(FluidTags.WATER) && !EnchantmentHelper.hasAquaAffinity(this.digger)) {
+		if (this.digger.isEyeInFluidType(ForgeMod.WATER_TYPE.get()) && !EnchantmentHelper.hasAquaAffinity(this.digger)) {
 			digSpeed /= 5.0F;
 		}
 
