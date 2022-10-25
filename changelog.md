@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 1.6.3
 * Added Villager Module
   * Villager Attacking. Makes villagers fight back
 * Added experimental Get Over Here ability to Enderman. Disabled by default as I'm not happy how it is.
@@ -22,7 +22,7 @@
 * Fixed Witches throwing good potions at any non-player entity
 
 ## Beta 1.6.0
-* XRay follow range is now a separate attribute and can be overridden separately from 
+* XRay follow range is now a separate attribute and can be overridden separately from vanilla follow range
 * Most mobs data (e.g. if a zombie is a miner or the inaccuracy of a skeleton) are now loaded from NBT in `ForgeData` (if not present will use default values from config).  
   You can find all the Tags here: https://github.com/Insane96/EnhancedAI/wiki/Entity-Tags
 * Fixed Fisher zombies fishing only if they couldn't see the target
