@@ -1,8 +1,10 @@
 # Changelog
 
 ## Upcoming
-* Fixed zombies stopping mining if the player was less than 4 blocks from them
+* Added Villager Module
+  * Villager Attacking. Makes villagers fight back
 * Added experimental Get Over Here ability to Enderman. Disabled by default as I'm not happy how it is.
+* Fixed zombies stopping mining if the player was less than 4 blocks from them
 * Slightly increased Pearl Zombies Cooldown (~~4~~ -> 5 seconds)
 * Fisher zombies now retrieve hooks faster (~~2~~ -> 1.5 seconds)
 

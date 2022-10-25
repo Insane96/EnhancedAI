@@ -15,7 +15,7 @@ public class EAStrings {
 			public static final String FLEE_SPEED_NEAR = EnhancedAI.RESOURCE_PREFIX + "flee_speed_near";
 		}
 
-		public static class Animal {
+		public static class Passive {
 			public static final String SPEED_MULTIPLIER_WHEN_AGGROED = EnhancedAI.RESOURCE_PREFIX + "speed_multiplier_when_aggroed";
 		}
 
