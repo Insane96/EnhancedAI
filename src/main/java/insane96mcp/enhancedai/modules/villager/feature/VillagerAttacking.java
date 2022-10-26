@@ -52,6 +52,7 @@ public class VillagerAttacking extends Feature {
         if (villagersFightBack) {
             villager.targetSelector.addGoal(1, (new HurtByTargetGoal(villager)).setAlertOthers());
             villager.goalSelector.addGoal(1, new MeleeAttackGoal(villager, movementSpeedMultiplier, false));
+            //villager.getBrain().removeAllBehaviors();
         }
     }
 }

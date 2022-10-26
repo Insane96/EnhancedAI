@@ -36,7 +36,7 @@ public class DiggerZombie extends Feature {
 	@Config
 	@Label(name = "Equip Wooden Pick", description = "Zombies with Digger AI will spawn with a Wooden Pickaxe.")
 	public static Boolean equipWoodenPick = true;
-	@Config(min = 128, max = 320)
+	@Config(min = -64, max = 320)
 	@Label(name = "Max Y Dig", description = "The maximum Y coordinate at which Zombies can mine.")
 	public static Integer maxYDig = 64;
 	@Config(min = 0, max = 128)
