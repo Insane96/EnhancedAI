@@ -3,6 +3,7 @@ package insane96mcp.enhancedai.modules;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.setup.Config;
 import insane96mcp.insanelib.base.Module;
+import net.minecraftforge.fml.config.ModConfig;
 
 public class Modules {
 
@@ -20,18 +21,18 @@ public class Modules {
 	public static Module zombie;
 
 	public static void init() {
-		base = Module.Builder.create(Config.builder, Ids.BASE, "Base").build();
-		animal = Module.Builder.create(Config.builder, Ids.ANIMAL, "Animals").build();
-		blaze = Module.Builder.create(Config.builder, Ids.BLAZE, "Blazes").build();
-		creeper = Module.Builder.create(Config.builder, Ids.CREEPER, "Creepers").build();
-		drowned = Module.Builder.create(Config.builder, Ids.DROWNED, "Drowneds").build();
-		ghast = Module.Builder.create(Config.builder, Ids.GHAST, "Ghasts").build();
-		enderman = Module.Builder.create(Config.builder, Ids.ENDERMAN, "Endermen").build();
-		skeleton = Module.Builder.create(Config.builder, Ids.SKELETON, "Skeletons").build();
-		spider = Module.Builder.create(Config.builder, Ids.SPIDER, "Spiders").build();
-		villager = Module.Builder.create(Config.builder, Ids.VILLAGER, "Villagers").build();
-		witch = Module.Builder.create(Config.builder, Ids.WITCH, "Witches").build();
-		zombie = Module.Builder.create(Config.builder, Ids.ZOMBIE, "Zombies").build();
+		base = Module.Builder.create(Ids.BASE, "Base", ModConfig.Type.COMMON, Config.builder).build();
+		animal = Module.Builder.create(Ids.ANIMAL, "Animals", ModConfig.Type.COMMON, Config.builder).build();
+		blaze = Module.Builder.create(Ids.BLAZE, "Blazes", ModConfig.Type.COMMON, Config.builder).build();
+		creeper = Module.Builder.create(Ids.CREEPER, "Creepers", ModConfig.Type.COMMON, Config.builder).build();
+		drowned = Module.Builder.create(Ids.DROWNED, "Drowneds", ModConfig.Type.COMMON, Config.builder).build();
+		ghast = Module.Builder.create(Ids.GHAST, "Ghasts", ModConfig.Type.COMMON, Config.builder).build();
+		enderman = Module.Builder.create(Ids.ENDERMAN, "Endermen", ModConfig.Type.COMMON, Config.builder).build();
+		skeleton = Module.Builder.create(Ids.SKELETON, "Skeletons", ModConfig.Type.COMMON, Config.builder).build();
+		spider = Module.Builder.create(Ids.SPIDER, "Spiders", ModConfig.Type.COMMON, Config.builder).build();
+		villager = Module.Builder.create(Ids.VILLAGER, "Villagers", ModConfig.Type.COMMON, Config.builder).build();
+		witch = Module.Builder.create(Ids.WITCH, "Witches", ModConfig.Type.COMMON, Config.builder).build();
+		zombie = Module.Builder.create(Ids.ZOMBIE, "Zombies", ModConfig.Type.COMMON, Config.builder).build();
 	}
 
 	public static class Ids {
