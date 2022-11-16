@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Added Prevent Infighting 
+
 ## Beta 1.7.1
 * Requires InsaneLib 1.7.1
 

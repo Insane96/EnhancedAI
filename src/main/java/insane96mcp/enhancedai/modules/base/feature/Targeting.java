@@ -18,10 +18,13 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
@@ -30,6 +33,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -50,8 +54,10 @@ public class Targeting extends Feature {
 	@Label(name = "Better Path Finding", description = "Mobs will be able to find better paths to the target. Note that this might hit performance a bit.")
 	public static Boolean betterPathfinding = true;
 	@Config
+	@Label(name = "Prevent Infighting", description = "Mobs will no longer attack each other.")
+	public static Boolean preventInfighting = true;
+	@Config
 	@Label(name = "Entity Blacklist", description = "Entities in here will not be affected by this feature.")
-
 	public static Blacklist entityBlacklist = new Blacklist(List.of(
 			new IdTagMatcher(IdTagMatcher.Type.ID, "minecraft:enderman")
 	), false);
@@ -77,20 +83,37 @@ public class Targeting extends Feature {
 				|| entityBlacklist.isEntityBlackOrNotWhitelist(mobEntity))
 			return;
 
-		CompoundTag persistentData = mobEntity.getPersistentData();
-		if (!persistentData.getBoolean(EAStrings.Tags.FOLLOW_RANGES_PROCESSED)) {
-			//noinspection ConstantConditions
-			if (followRangeOverride.min != 0d && mobEntity.getAttribute(Attributes.FOLLOW_RANGE) != null && mobEntity.getAttribute(Attributes.FOLLOW_RANGE).getBaseValue() < followRangeOverride.min) {
-				MCUtils.setAttributeValue(mobEntity, Attributes.FOLLOW_RANGE, followRangeOverride.getIntRandBetween(mobEntity.getRandom()));
-			}
+		processFollowRanges(mobEntity);
+		processTargetGoal(mobEntity);
+		processHurtByGoal(mobEntity);
+	}
 
-			//noinspection ConstantConditions
-			if (xrayRangeOverride.min != 0d && mobEntity.getAttribute(EAAttributes.XRAY_FOLLOW_RANGE.get()) != null && mobEntity.getAttribute(EAAttributes.XRAY_FOLLOW_RANGE.get()).getBaseValue() < xrayRangeOverride.min) {
-				MCUtils.setAttributeValue(mobEntity, EAAttributes.XRAY_FOLLOW_RANGE.get(), xrayRangeOverride.getIntRandBetween(mobEntity.getRandom()));
-			}
-			persistentData.putBoolean(EAStrings.Tags.FOLLOW_RANGES_PROCESSED, true);
+	private void processHurtByGoal(Mob mobEntity) {
+		if (!preventInfighting
+				|| !(mobEntity instanceof PathfinderMob mob))
+			return;
+
+		HurtByTargetGoal toRemove = null;
+		for (WrappedGoal prioritizedGoal : mob.targetSelector.availableGoals) {
+			if (!(prioritizedGoal.getGoal() instanceof HurtByTargetGoal goal))
+				continue;
+			toRemove = goal;
+
+			List<Class<?>> toIgnoreDamage = Arrays.asList(goal.toIgnoreDamage);
+			toIgnoreDamage.add(Enemy.class);
+			HurtByTargetGoal newGoal = new HurtByTargetGoal(mob, toIgnoreDamage.toArray(Class[]::new));
+			if (goal.toIgnoreAlert != null)
+				newGoal = newGoal.setAlertOthers(goal.toIgnoreAlert);
+			mob.targetSelector.addGoal(prioritizedGoal.getPriority(), newGoal);
+
+			break;
 		}
 
+		if (toRemove != null)
+			mobEntity.targetSelector.removeGoal(toRemove);
+	}
+
+	private void processTargetGoal(Mob mobEntity) {
 		boolean hasTargetGoal = false;
 
 		Predicate<LivingEntity> predicate = null;
@@ -135,5 +158,21 @@ public class Targeting extends Feature {
 			targetGoalTest = new EANearestAttackableTarget<>(mobEntity, Endermite.class, false, false, predicate);
 
 		mobEntity.targetSelector.addGoal(2, targetGoalTest.setInstaTarget());*/
+	}
+
+	private void processFollowRanges(Mob mobEntity) {
+		CompoundTag persistentData = mobEntity.getPersistentData();
+		if (!persistentData.getBoolean(EAStrings.Tags.FOLLOW_RANGES_PROCESSED)) {
+			//noinspection ConstantConditions
+			if (followRangeOverride.min != 0d && mobEntity.getAttribute(Attributes.FOLLOW_RANGE) != null && mobEntity.getAttribute(Attributes.FOLLOW_RANGE).getBaseValue() < followRangeOverride.min) {
+				MCUtils.setAttributeValue(mobEntity, Attributes.FOLLOW_RANGE, followRangeOverride.getIntRandBetween(mobEntity.getRandom()));
+			}
+
+			//noinspection ConstantConditions
+			if (xrayRangeOverride.min != 0d && mobEntity.getAttribute(EAAttributes.XRAY_FOLLOW_RANGE.get()) != null && mobEntity.getAttribute(EAAttributes.XRAY_FOLLOW_RANGE.get()).getBaseValue() < xrayRangeOverride.min) {
+				MCUtils.setAttributeValue(mobEntity, EAAttributes.XRAY_FOLLOW_RANGE.get(), xrayRangeOverride.getIntRandBetween(mobEntity.getRandom()));
+			}
+			persistentData.putBoolean(EAStrings.Tags.FOLLOW_RANGES_PROCESSED, true);
+		}
 	}
 }
