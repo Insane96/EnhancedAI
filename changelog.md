@@ -2,6 +2,9 @@
 
 ## Upcoming
 * Added Prevent Infighting. Mobs no longer attack eachother
+* Villagers Attacking
+  * No longer attack enemies (can be configured)
+  * No longer attack players with high enough reputation (defaults to Iron Golem)
 * Animal knockback can now be configured
 
 ## Beta 1.7.1
