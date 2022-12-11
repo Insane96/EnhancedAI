@@ -60,4 +60,17 @@ public class VillagerAttacking extends Feature {
             //villager.getBrain().removeAllBehaviors();
         }
     }
+
+    /*@SubscribeEvent(priority = EventPriority.LOWEST)
+    public void onHit(LivingAttackEvent event) {
+        if (!this.isEnabled()
+                || !(event.getSource().getEntity() instanceof Player)
+                || !(event.getEntity() instanceof Villager villager)
+                || entityBlacklist.isEntityBlackOrNotWhitelist(villager))
+            return;
+
+        villager.getBrain().eraseMemory(MemoryModuleType.HURT_BY);
+        villager.getBrain().eraseMemory(MemoryModuleType.HURT_BY_ENTITY);
+        villager.getBrain().updateActivityFromSchedule(villager.level.getDayTime(), villager.level.getGameTime());
+    }*/
 }
