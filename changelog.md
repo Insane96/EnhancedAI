@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 1.8.0
 * Added Prevent Infighting. Mobs no longer attack eachother
 * Villagers Attacking
   * No longer attack enemies (can be configured)
