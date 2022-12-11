@@ -20,7 +20,7 @@ public class EAVillagerHurtByTargetGoal extends HurtByTargetGoal {
     public boolean canUse() {
         LivingEntity hurtVillager = this.mob.getLastHurtByMob();
         if (hurtVillager instanceof Player player) {
-            return villager.getPlayerReputation(player) < VillagerAttacking.minReputationFightBack && super.canUse();
+            return villager.getPlayerReputation(player) <= VillagerAttacking.minReputationFightBack && super.canUse();
         }
         else if (hurtVillager instanceof Enemy) {
             return VillagerAttacking.villagersFightBackEnemies && super.canUse();
