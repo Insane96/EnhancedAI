@@ -55,7 +55,8 @@ public class ThrownWebEntity extends ThrowableItemProjectile {
 		if (!(result.getEntity() instanceof LivingEntity entity) || this.level.isClientSide)
 			return;
 
-		ThrowingWeb.applySlowness(entity);
+		ThrowingWeb.applyEffects((LivingEntity) this.getOwner(), entity);
+		ThrowingWeb.applyWeb(entity);
 	}
 
 	protected void onHitBlock(BlockHitResult result) {

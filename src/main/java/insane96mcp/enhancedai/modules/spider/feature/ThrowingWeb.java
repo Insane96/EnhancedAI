@@ -2,6 +2,7 @@ package insane96mcp.enhancedai.modules.spider.feature;
 
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.modules.spider.ai.WebThrowGoal;
+import insane96mcp.enhancedai.modules.spider.entity.projectile.TemporaryCobwebTask;
 import insane96mcp.enhancedai.setup.EAStrings;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
@@ -11,11 +12,21 @@ import insane96mcp.insanelib.base.config.Blacklist;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.LoadFeature;
 import insane96mcp.insanelib.base.config.MinMax;
+import insane96mcp.insanelib.util.scheduled.ScheduledTasks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.CaveSpider;
 import net.minecraft.world.entity.monster.Spider;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FallingBlock;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -40,6 +51,15 @@ public class ThrowingWeb extends Feature {
 	@Config(min = 0d, max = 64d)
 	@Label(name = "Distance Required", description = "Distance Required for the spider to throw webs. Setting 'Minimum' to 0 will make the spider throw webs even when attacking the player.")
 	public static MinMax distance = new MinMax(2.5d, 64d);
+	@Config
+	@Label(name = "Always web", description = "If true entities will get webbed when hit.")
+	public static Boolean alwaysWeb = false;
+	@Config
+	@Label(name = "Cave spiders poisonous webs", description = "If true cave spiders' thrown web will poison entities hit like when they hit the entity melee.")
+	public static Boolean caveSpidersPoisonousWebs = true;
+	@Config
+	@Label(name = "Apply Slowness", description = "If true entities will get slowness when hit.")
+	public static Boolean applySlowness = true;
 	//Slowness
 	@Config(min = 0d, max = 6000)
 	@Label(name = "Slowness.Duration", description = "How many ticks of slowness are applied to the target hit by the web?")
@@ -52,7 +72,7 @@ public class ThrowingWeb extends Feature {
 	public static Boolean stackSlowness = true;
 	@Config(min = 0d, max = 128)
 	@Label(name = "Slowness.Max Amplifier", description = "How many max levels of slowness can be applied to the target?")
-	public static Integer maxSlowness = 6;
+	public static Integer maxSlowness = 4;
 	@Config
 	@Label(name = "Entity Blacklist", description = "Entities that will not be affected by this feature")
 	public static Blacklist entityBlacklist = new Blacklist(Collections.emptyList(), false);
@@ -77,12 +97,49 @@ public class ThrowingWeb extends Feature {
 			spider.goalSelector.addGoal(2, new WebThrowGoal(spider));
 	}
 
+	public static void applyEffects(LivingEntity spider, LivingEntity entity) {
+		applySlowness(entity);
+		applyPoison(spider, entity);
+	}
+
 	public static void applySlowness(LivingEntity entity) {
+		if (!applySlowness)
+			return;
 		MobEffectInstance slowness = entity.getEffect(MobEffects.MOVEMENT_SLOWDOWN);
 
 		if (slowness == null)
 			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, slownessDuration, slownessAmplifier - 1, true, true, true));
 		else if (stackSlowness)
 			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, slownessDuration, Math.min(slowness.getAmplifier() + slownessAmplifier, maxSlowness - 1), true, true, true));
+	}
+
+	public static void applyPoison(LivingEntity spider, LivingEntity entity) {
+		if (!caveSpidersPoisonousWebs
+				|| !(spider instanceof CaveSpider caveSpider))
+			return;
+		int i = 0;
+		if (caveSpider.level.getDifficulty() == Difficulty.NORMAL) {
+			i = 7;
+		} else if (caveSpider.level.getDifficulty() == Difficulty.HARD) {
+			i = 15;
+		}
+
+		if (i > 0) {
+			entity.addEffect(new MobEffectInstance(MobEffects.POISON, i * 20, 0), caveSpider);
+		}
+	}
+
+	public static void applyWeb(LivingEntity entity) {
+		if (!alwaysWeb)
+			return;
+		BlockPos spawnCobwebAt = entity.blockPosition();
+		if (FallingBlock.isFree(entity.level.getBlockState(spawnCobwebAt))) {
+			entity.level.setBlock(spawnCobwebAt, Blocks.COBWEB.defaultBlockState(), 3);
+			ScheduledTasks.schedule(new TemporaryCobwebTask(ThrowingWeb.destroyWebAfter, entity.level, spawnCobwebAt));
+			for(int i = 0; i < 32; ++i) {
+				entity.level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.COBWEB.defaultBlockState()), spawnCobwebAt.getX() + entity.getRandom().nextDouble(), spawnCobwebAt.getY() + entity.getRandom().nextDouble(), spawnCobwebAt.getZ() + entity.getRandom().nextDouble(), 0d, 0D, 0d);
+			}
+			entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.SLIME_SQUISH, SoundSource.HOSTILE, 1.0f, 0.5f);
+		}
 	}
 }
