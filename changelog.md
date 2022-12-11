@@ -10,6 +10,8 @@
   * Added config option to place a cobweb on the entity hit by the thrown web
   * Added config option to disable slowness effect correctly
   * Reduced max slowness level (~~VI (6)~~ -> IV (4))
+* Witch Potion Throwing
+  * Halved Weakness potion duration (~~1:30~~ -> 0:45)
 * Animal knockback can now be configured
 * Drowned now go in Swimming pose when swimming, quite ugly as they don't support the swimming animation fully
 
