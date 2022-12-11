@@ -99,7 +99,7 @@ public class Targeting extends Feature {
 				continue;
 			toRemove = goal;
 
-			List<Class<?>> toIgnoreDamage = Arrays.asList(goal.toIgnoreDamage);
+			List<Class<?>> toIgnoreDamage = new ArrayList<>(Arrays.asList(goal.toIgnoreDamage));
 			toIgnoreDamage.add(Enemy.class);
 			HurtByTargetGoal newGoal = new HurtByTargetGoal(mob, toIgnoreDamage.toArray(Class[]::new));
 			if (goal.toIgnoreAlert != null)
