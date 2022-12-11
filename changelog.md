@@ -14,6 +14,7 @@
   * Halved Weakness potion duration (~~1:30~~ -> 0:45)
 * Animal knockback can now be configured
 * Drowned now go in Swimming pose when swimming, quite ugly as they don't support the swimming animation fully
+* Added italian (by me) and portuguese translations (thanks to https://github.com/FITFC)
 
 ## Beta 1.7.1
 * Requires InsaneLib 1.7.1
