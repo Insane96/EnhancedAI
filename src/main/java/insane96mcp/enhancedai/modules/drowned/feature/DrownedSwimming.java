@@ -10,6 +10,7 @@ import insane96mcp.insanelib.base.config.LoadFeature;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.monster.Drowned;
@@ -51,6 +52,7 @@ public class DrownedSwimming extends Feature {
 		}
 	}
 
+	//Same as MoveControl but uses forge:swim_speed instead of minecraft:generic.movement_speed
 	static class EADrownedMoveControl extends MoveControl {
 		private final Drowned drowned;
 
@@ -83,11 +85,13 @@ public class DrownedSwimming extends Feature {
 				float f2 = Mth.lerp(0.125F, this.drowned.getSpeed(), f1);
 				this.drowned.setSpeed(f2);
 				this.drowned.setDeltaMovement(this.drowned.getDeltaMovement().add((double)f2 * d0 * 0.005D, (double)f2 * d1 * 0.1D, (double)f2 * d2 * 0.005D));
+				this.drowned.setPose(Pose.SWIMMING);
 			}
 			else {
 				if (!this.drowned.isOnGround()) {
 					this.drowned.setDeltaMovement(this.drowned.getDeltaMovement().add(0.0D, -0.008D, 0.0D));
 				}
+				this.drowned.setPose(Pose.STANDING);
 
 				super.tick();
 			}
