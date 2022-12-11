@@ -43,6 +43,9 @@ public class AnimalAttacking extends Feature {
     @Config(min = 0d, max = 4d)
     @Label(name = "Movement Speed Multiplier", description = "Movement speed multiplier when aggroed.")
     public static Double speedMultiplier = 1.35d;
+    @Config(min = 0d, max = 128d)
+    @Label(name = "Knockback", description = "Animals' knockback attribute will be set to this value.")
+    public static Double knockback = 3.5d;
     @Config
     @Label(name = "Entity Blacklist", description = "Entities that shouldn't be affected by this feature")
     public static Blacklist entityBlacklist = new Blacklist(List.of(), false);
@@ -78,9 +81,11 @@ public class AnimalAttacking extends Feature {
         if (animalsFightBack) {
             animal.targetSelector.addGoal(1, (new HurtByTargetGoal(animal)).setAlertOthers());
             animal.goalSelector.addGoal(1, new MeleeAttackGoal(animal, movementSpeedMultiplier, false));
-            AttributeInstance kbAttribute = animal.getAttribute(Attributes.ATTACK_KNOCKBACK);
-            if (kbAttribute != null)
-                kbAttribute.addPermanentModifier(new AttributeModifier("Animal knockback", 3.5d, AttributeModifier.Operation.ADDITION));
+            if (knockback > 0d) {
+                AttributeInstance kbAttribute = animal.getAttribute(Attributes.ATTACK_KNOCKBACK);
+                if (kbAttribute != null)
+                    kbAttribute.addPermanentModifier(new AttributeModifier("Animal knockback", knockback, AttributeModifier.Operation.ADDITION));
+            }
         }
 
         if (noMoreFlee) {

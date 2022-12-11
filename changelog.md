@@ -1,7 +1,8 @@
 # Changelog
 
 ## Upcoming
-* Added Prevent Infighting 
+* Added Prevent Infighting. Mobs no longer attack eachother
+* Animal knockback can now be configured
 
 ## Beta 1.7.1
 * Requires InsaneLib 1.7.1
