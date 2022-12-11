@@ -7,6 +7,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Creeper;
@@ -36,6 +37,7 @@ public class AICreeperLaunchGoal extends Goal {
 	}
 
 	public boolean canUse() {
+		// Cache fuse
 		if (fuse == 0) {
 			fuse = CreeperUtils.getFuse(this.launchingCreeper);
 			explosionSize = CreeperUtils.getExplosionSize(this.launchingCreeper);
@@ -72,7 +74,12 @@ public class AICreeperLaunchGoal extends Goal {
 		this.creeperAttackTarget = this.launchingCreeper.getTarget();
 		this.launchingCreeper.ignite();
 		double distance = this.launchingCreeper.distanceTo(this.creeperAttackTarget);
-		this.ticksBeforeLaunching = (int) Math.max((50 - distance) * 0.33d, 1);
+		float inaccuracy = 0.15f;
+		if (this.launchingCreeper.level.getDifficulty() == Difficulty.EASY)
+			inaccuracy = 0.1f;
+		if (this.launchingCreeper.level.getDifficulty() == Difficulty.HARD)
+			inaccuracy = 0.05f;
+		this.ticksBeforeLaunching = (int) Math.max((50 - distance) * Mth.randomBetween(this.launchingCreeper.getRandom(), 0.25f + inaccuracy, 0.25f + inaccuracy), 1);
 	}
 
 	public boolean canContinueToUse() {
@@ -102,12 +109,19 @@ public class AICreeperLaunchGoal extends Goal {
 
 		this.launchingCreeper.playSound(SoundEvents.FIREWORK_ROCKET_LAUNCH, 6.0f, 0.5f);
 		double distanceY = this.creeperAttackTarget.getY() - this.launchingCreeper.getY();
-		double d0 = this.creeperAttackTarget.getX() - this.launchingCreeper.getX();
-		double d2 = this.creeperAttackTarget.getZ() - this.launchingCreeper.getZ();
-		double distanceXZ = Math.sqrt(d0 * d0 + d2 * d2);
+		double distanceX = this.creeperAttackTarget.getX() - this.launchingCreeper.getX();
+		double distanceZ = this.creeperAttackTarget.getZ() - this.launchingCreeper.getZ();
+		double distanceXZ = Math.sqrt(distanceX * distanceX + distanceZ * distanceZ);
 
+		float inaccuracy = 0.35f;
+		if (this.launchingCreeper.level.getDifficulty() == Difficulty.EASY)
+			inaccuracy = 0.5f;
+		if (this.launchingCreeper.level.getDifficulty() == Difficulty.HARD)
+			inaccuracy = 0.2f;
+		distanceX *= Mth.randomBetween(this.launchingCreeper.getRandom(), 1f - inaccuracy, 1f + inaccuracy);
+		distanceZ *= Mth.randomBetween(this.launchingCreeper.getRandom(), 1f - inaccuracy, 1f + inaccuracy);
 		//TODO better Y speed, right now when creeper Y distance is below 7 you always get 7 which isn't good when the creeper's Y distance is 0, and when the Y Distance is higher than about 25 the creeper will go to space
-		Vec3 motion = new Vec3(d0 * 0.15d, Mth.clamp(distanceY, 7d, 40d) / 10d + distanceXZ / 72d, d2 * 0.15d);
+		Vec3 motion = new Vec3(distanceX * 0.15d, Mth.clamp(distanceY, 7d, 40d) / 10d + distanceXZ / 72d, distanceZ * 0.15d);
 		this.launchingCreeper.setDeltaMovement(motion);
 		this.hasLaunched = true;
 	}

@@ -12,14 +12,18 @@ import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.LoadFeature;
 import insane96mcp.insanelib.setup.ILStrings;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.SwellGoal;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.level.Explosion;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.level.ExplosionEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -127,5 +131,22 @@ public class CreeperSwell extends Feature {
 			return;
 
 		creeper.ignite();
+	}
+
+	@SubscribeEvent
+	public void onLaunchCreeperUpdate(LivingEvent.LivingTickEvent event) {
+		if (!this.isEnabled()
+				|| event.getEntity().tickCount % 20 != 0
+				|| !(event.getEntity() instanceof Creeper creeper)
+				|| creeper.level.isClientSide)
+			return;
+
+		ServerLevel serverLevel = (ServerLevel) creeper.level;
+		if (creeper.getPersistentData().getBoolean(EAStrings.Tags.Creeper.LAUNCH)) {
+			for(int j = 0; j < serverLevel.players().size(); ++j) {
+				ServerPlayer serverplayer = serverLevel.players().get(j);
+				serverLevel.sendParticles(serverplayer, ParticleTypes.CLOUD, true, creeper.getX(), creeper.getY(), creeper.getZ(), 10, 0.1, 0.1, 0.1, 0.1);
+			}
+		}
 	}
 }
