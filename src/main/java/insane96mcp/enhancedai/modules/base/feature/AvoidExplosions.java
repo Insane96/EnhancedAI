@@ -22,8 +22,8 @@ public class AvoidExplosions extends Feature {
 	private final ForgeConfigSpec.DoubleValue runSpeedFarConfig;
 	private final Blacklist.Config entityBlacklistConfig;
 
-	public double runSpeedNear = 1.5d;
-	public double runSpeedFar = 1.25d;
+	public double runSpeedNear = 1.4d;
+	public double runSpeedFar = 1.2d;
 	public Blacklist entityBlacklist;
 
 	public AvoidExplosions(Module module) {

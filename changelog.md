@@ -1,5 +1,9 @@
 # Changelog
 
+## Upcoming
+* Decreased running speed from explosions
+* 
+
 ## 1.6.3
 * Added Villager Module
   * Villager Attacking. Makes villagers fight back
