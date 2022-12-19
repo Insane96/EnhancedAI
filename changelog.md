@@ -5,6 +5,7 @@
 * Increased Blaze Time Between Fireballs (~~3\~6~~ -> 4~10 ticks)
 * Witch Potion Throwing
   * Halved Weakness potion duration (~~1:30~~ -> 0:45) 
+* Fixed Creeper Cena exploding 0.1 seconds too early
 
 ## 1.6.3
 * Added Villager Module

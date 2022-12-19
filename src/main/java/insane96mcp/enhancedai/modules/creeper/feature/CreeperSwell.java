@@ -138,7 +138,7 @@ public class CreeperSwell extends Feature {
 			creeper.setCustomName(new TextComponent("Creeper Cena"));
 			CompoundTag compoundNBT = new CompoundTag();
 			creeper.addAdditionalSaveData(compoundNBT);
-			compoundNBT.putShort("Fuse", (short)34);
+			compoundNBT.putShort("Fuse", (short)36);
 			compoundNBT.putByte("ExplosionRadius", (byte)this.cenaExplosionPower);
 			creeper.readAdditionalSaveData(compoundNBT);
 			if (this.cenaFire)
