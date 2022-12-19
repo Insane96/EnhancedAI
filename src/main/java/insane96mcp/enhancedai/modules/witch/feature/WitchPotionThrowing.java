@@ -39,7 +39,7 @@ public class WitchPotionThrowing extends Feature {
     private final ForgeConfigSpec.ConfigValue<Double> healthThresholdInvisiblityConfig;
     private final Blacklist.Config entityBlacklistConfig;
 
-    public static final List<String> badPotionsListDefault = Arrays.asList("minecraft:weakness,1800,0", "minecraft:slowness,1200,1", "minecraft:hunger,600,0", "minecraft:mining_fatigue,600,0", "minecraft:poison,900,0", "minecraft:blindness,120,0", "minecraft:instant_damage,1,0");
+    public static final List<String> badPotionsListDefault = Arrays.asList("minecraft:weakness,900,0", "minecraft:slowness,1200,1", "minecraft:hunger,600,0", "minecraft:mining_fatigue,600,0", "minecraft:poison,900,0", "minecraft:blindness,120,0", "minecraft:instant_damage,1,0");
     public static final List<String> goodPotionsListDefault = Arrays.asList("minecraft:regeneration,900,0", "minecraft:speed,1800,0", "minecraft:strength,1800,0", "minecraft:instant_health,1,0");
 
     public ArrayList<MobEffectInstance> badPotionsList;
