@@ -31,7 +31,7 @@ public class BlazeAttack extends Feature {
 
     private final Blacklist.Config entityBlacklistConfig;
 
-    public MinMax timeBetweenFireballs = new MinMax(3, 6);
+    public MinMax timeBetweenFireballs = new MinMax(4, 10);
     public MinMax fireballsShot = new MinMax(3, 8);
     public MinMax rechargeTime = new MinMax(60, 100);
     public MinMax chargeTime = new MinMax(30, 60);

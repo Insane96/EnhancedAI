@@ -2,6 +2,7 @@
 
 ## Upcoming
 * Decreased running speed from explosions
+* Increased Blaze Time Between Fireballs (~~3\~6~~ -> 4~10 ticks)
 * 
 
 ## 1.6.3
