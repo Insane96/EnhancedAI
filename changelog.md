@@ -25,7 +25,7 @@
 * Avoid explosion run speed can now be configured. Also reduced the running speed
 * Dark art witches no longer trigger if the target is a raider
 * Dark Art Witches are no longer immune when performing the ritual, instead, they have a strong resistance (80% damage reduction)
-* Dark Art Withches' spawned villagers are now killed if the Witch dies
+* Dark Art Witches' spawned villagers are now killed if the Witch dies
 * Fixed Witches throwing good potions at any non-player entity
 
 ## Beta 1.6.0
