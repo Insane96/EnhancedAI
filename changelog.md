@@ -1,5 +1,9 @@
 # Changelog
 
+## Upcoming
+* Updated to 1.19.3
+* Creeper Cena chance increased (~~2%~~ -> 3%) but reduced explosion power (~~6~~ -> 5)
+
 ## 1.8.0
 * Added Prevent Infighting. Mobs no longer attack eachother
 * Villagers Attacking

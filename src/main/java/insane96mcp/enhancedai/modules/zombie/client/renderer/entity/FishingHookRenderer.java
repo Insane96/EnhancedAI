@@ -2,9 +2,7 @@ package insane96mcp.enhancedai.modules.zombie.client.renderer.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import insane96mcp.enhancedai.modules.zombie.entity.projectile.FishingHook;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -20,6 +18,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
 
 @OnlyIn(Dist.CLIENT)
 public class FishingHookRenderer extends EntityRenderer<FishingHook> {
@@ -38,7 +38,7 @@ public class FishingHookRenderer extends EntityRenderer<FishingHook> {
             poseStack.pushPose();
             poseStack.scale(0.5F, 0.5F, 0.5F);
             poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
-            poseStack.mulPose(Vector3f.YP.rotationDegrees(180.0F));
+            poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
             PoseStack.Pose posestack$pose = poseStack.last();
             Matrix4f matrix4f = posestack$pose.pose();
             Matrix3f matrix3f = posestack$pose.normal();
