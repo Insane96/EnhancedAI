@@ -12,6 +12,7 @@ import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.LoadFeature;
 import insane96mcp.insanelib.setup.ILStrings;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -21,6 +22,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.SwellGoal;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.level.Explosion;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
@@ -134,18 +136,39 @@ public class CreeperSwell extends Feature {
 	}
 
 	@SubscribeEvent
-	public void onLaunchCreeperUpdate(LivingEvent.LivingTickEvent event) {
+	public void onCreeperTick(LivingEvent.LivingTickEvent event) {
 		if (!this.isEnabled()
-				|| event.getEntity().tickCount % 20 != 0
 				|| !(event.getEntity() instanceof Creeper creeper)
 				|| creeper.level.isClientSide)
 			return;
 
+		onLaunchCreeperTick(creeper);
+		onCenaCreeperTick(creeper);
+	}
+
+	public void onLaunchCreeperTick(Creeper creeper) {
+		if (creeper.tickCount % 20 != 0)
+			return;
 		ServerLevel serverLevel = (ServerLevel) creeper.level;
 		if (creeper.getPersistentData().getBoolean(EAStrings.Tags.Creeper.LAUNCH)) {
 			for(int j = 0; j < serverLevel.players().size(); ++j) {
 				ServerPlayer serverplayer = serverLevel.players().get(j);
-				serverLevel.sendParticles(serverplayer, ParticleTypes.CLOUD, true, creeper.getX(), creeper.getY(), creeper.getZ(), 10, 0.1, 0.1, 0.1, 0.1);
+				serverLevel.sendParticles(serverplayer, ParticleTypes.CLOUD, true, creeper.getX(), creeper.getY() + 0.5d, creeper.getZ(), 10, 0.1, 0.1, 0.1, 0.1);
+			}
+		}
+	}
+
+	public void onCenaCreeperTick(Creeper creeper) {
+		if (creeper.tickCount % 40 != 0)
+			return;
+		ServerLevel serverLevel = (ServerLevel) creeper.level;
+		if (creeper.getPersistentData().getBoolean(EAStrings.Tags.Creeper.CENA)) {
+			for(int j = 0; j < serverLevel.players().size(); ++j) {
+				ServerPlayer serverplayer = serverLevel.players().get(j);
+				BlockPos blockpos = serverplayer.blockPosition();
+				if (!blockpos.closerToCenterThan(new Vec3(creeper.getX(), creeper.getY() + 0.5d, creeper.getZ()), 16))
+					continue;
+				serverLevel.sendParticles(serverplayer, ParticleTypes.ANGRY_VILLAGER, false, creeper.getX(), creeper.getY() + 1.1d, creeper.getZ(), 1, 0.15, 0.15, 0.15, 0);
 			}
 		}
 	}

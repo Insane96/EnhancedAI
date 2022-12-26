@@ -2,7 +2,9 @@
 
 ## Upcoming
 * Updated to 1.19.3
-* Creeper Cena chance increased (~~2%~~ -> 3%) but reduced explosion power (~~6~~ -> 5)
+* Creeper Cena 
+  * Creeper Cena now emits particles when players are close enough
+  * Chance increased (~~2%~~ -> 3%) but reduced explosion power (~~6~~ -> 5)
 * Fixed level's `RandomSource` causing crashes
 
 ## 1.8.0
