@@ -70,7 +70,7 @@ public class DiggerZombie extends Feature {
 
 		CompoundTag persistentData = zombie.getPersistentData();
 
-		boolean miner = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Zombie.MINER, zombie.level.random.nextDouble() < diggerChance);
+		boolean miner = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Zombie.MINER, zombie.getRandom().nextDouble() < diggerChance);
 		boolean diggerToolOnly1 = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Zombie.TOOL_ONLY, diggerToolOnly);
 		boolean diggerProperToolOnly1 = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Zombie.PROPER_TOOL_ONLY, diggerProperToolOnly);
 

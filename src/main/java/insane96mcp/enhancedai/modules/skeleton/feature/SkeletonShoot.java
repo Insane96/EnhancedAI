@@ -54,7 +54,7 @@ public class SkeletonShoot extends Feature {
 
 		CompoundTag persistentData = skeleton.getPersistentData();
 
-		boolean strafe = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Skeleton.STRAFE, skeleton.level.random.nextDouble() < strafeChance);
+		boolean strafe = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Skeleton.STRAFE, skeleton.getRandom().nextDouble() < strafeChance);
 		int shootingRange1 = NBTUtils.getIntOrPutDefault(persistentData, EAStrings.Tags.Skeleton.SHOOTING_RANGE, shootingRange.getIntRandBetween(skeleton.getRandom()));
 
 		boolean hasAIArrowAttack = false;
@@ -72,7 +72,7 @@ public class SkeletonShoot extends Feature {
 			int attackCooldown = 20;
 			int bowChargeTicks = 20;
 			double inaccuracy = arrowInaccuracy;
-			if (skeleton.level.random.nextDouble() < spammerChance) {
+			if (skeleton.getRandom().nextDouble() < spammerChance) {
 				attackCooldown = 5;
 				bowChargeTicks = 5;
 				inaccuracy *= 2d;

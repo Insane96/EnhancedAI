@@ -115,7 +115,7 @@ public class WitchThrowPotionGoal extends Goal {
         this.randomPotion = false;
 
         ThrownPotion thrownpotion = new ThrownPotion(witch.level, this.witch);
-        Item potionType = witch.level.random.nextDouble() < this.lingeringChance ? Items.LINGERING_POTION : Items.SPLASH_POTION;
+        Item potionType = witch.getRandom().nextDouble() < this.lingeringChance ? Items.LINGERING_POTION : Items.SPLASH_POTION;
         thrownpotion.setItem(MCUtils.setCustomEffects(new ItemStack(potionType), mobEffectInstances));
         thrownpotion.setXRot(thrownpotion.getXRot() + 20.0F);
         double distance = this.witch.distanceTo(target);
@@ -133,7 +133,7 @@ public class WitchThrowPotionGoal extends Goal {
 
         witch.level.addFreshEntity(thrownpotion);
 
-        if (witch.level.random.nextDouble() < this.anotherThrowChance) {
+        if (witch.getRandom().nextDouble() < this.anotherThrowChance) {
             this.attackTime = 7;
             this.randomPotion = true;
         }

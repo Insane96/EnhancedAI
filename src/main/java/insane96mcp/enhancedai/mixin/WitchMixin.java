@@ -89,7 +89,7 @@ public abstract class WitchMixin extends Raider {
 
 		if (this.isDrinkingPotion()) {
 			if (this.usingTime % 8 == 0)
-				this.playSound(SoundEvents.GENERIC_DRINK, 1.0f, this.level.random.nextFloat() * 0.1F + 0.9F);
+				this.playSound(SoundEvents.GENERIC_DRINK, 1.0f, this.random.nextFloat() * 0.1F + 0.9F);
 			if (this.usingTime-- <= 0) {
 				this.setUsingItem(false);
 				ItemStack itemstack = this.getMainHandItem();

@@ -40,7 +40,7 @@ public class FisherZombie extends Feature {
 				|| entityBlacklist.isEntityBlackOrNotWhitelist(zombie))
 			return;
 
-		if (event.getLevel().random.nextDouble() < equipFishingRodChance)
+		if (zombie.getRandom().nextDouble() < equipFishingRodChance)
 			zombie.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.FISHING_ROD));
 
 		zombie.goalSelector.addGoal(2, new FishingTargetGoal(zombie));
