@@ -172,4 +172,21 @@ public class CreeperSwell extends Feature {
 			}
 		}
 	}
+
+	/*public static boolean onCreeperScale(Creeper creeper, PoseStack poseStack, float partialTicks) {
+		if (!Feature.isEnabled(CreeperSwell.class))
+			return false;
+
+		float swelling = creeper.getSwelling(partialTicks);
+		float explosionPower = CreeperUtils.getExplosionSize(creeper);
+		float f1 = 1.0F + Mth.sin(swelling * 100.0F) * swelling * 0.01F;
+		swelling = Mth.clamp(swelling, 0.0F, 1.0F);
+		swelling *= swelling;
+		swelling *= swelling;
+		swelling *= 5;
+		float f2 = (1.0F + swelling * 0.4F) / f1;
+		float f3 = (1.0F + swelling * 0.2F) / f1;
+		poseStack.scale(f2, f3, f2);
+		return true;
+	}*/
 }
