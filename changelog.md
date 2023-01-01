@@ -6,6 +6,7 @@
   * Creeper Cena now emits particles when players are close enough
   * Chance increased (~~2%~~ -> 3%) but reduced explosion power (~~6~~ -> 5)
 * Fixed level's `RandomSource` causing crashes
+* Fixed Zombies Fishing Rods and Ender Pearls replacing what they had in the off-hand
 
 ## 1.8.0
 * Added Prevent Infighting. Mobs no longer attack eachother

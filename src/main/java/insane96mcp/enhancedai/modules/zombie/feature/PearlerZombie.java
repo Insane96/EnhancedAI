@@ -48,7 +48,7 @@ public class PearlerZombie extends Feature {
 				|| entityBlacklist.isEntityBlackOrNotWhitelist(zombie))
 			return;
 
-		if (zombie.getRandom().nextDouble() < equipEnderPearlChance)
+		if (zombie.getOffhandItem().isEmpty() && zombie.getRandom().nextDouble() < equipEnderPearlChance)
 			zombie.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.ENDER_PEARL, enderPearlAmount));
 
 		zombie.goalSelector.addGoal(2, new PearlUseGoal(zombie));
