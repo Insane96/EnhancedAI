@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Fixed Crash when a Dark Art Witch started summoning a Villager while out of the world
+
 ## 1.6.4
 * Decreased running speed from explosions
 * Increased Blaze Time Between Fireballs (~~3\~6~~ -> 4~10 ticks)

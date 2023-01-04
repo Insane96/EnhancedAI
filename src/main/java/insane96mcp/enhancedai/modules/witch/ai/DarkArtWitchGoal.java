@@ -116,8 +116,10 @@ public class DarkArtWitchGoal extends Goal {
                     if (y != goal.witch.level.getMinBuildHeight() - 1)
                         break;
                 }
-                if (y < goal.witch.level.getMinBuildHeight())
+                if (y < goal.witch.level.getMinBuildHeight()) {
                     goal.phase = END;
+                    return;
+                }
                 else {
                     goal.summonSpot = new Vec3(x + 0.5, y, z + 0.5);
                     goal.phase = LOOK_AT_VILLAGER;
