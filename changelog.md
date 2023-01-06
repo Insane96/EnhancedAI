@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 1.8.1
 * Updated to 1.19.3
 * Creeper
   * Creeper Cena now emits particles when players are close enough
