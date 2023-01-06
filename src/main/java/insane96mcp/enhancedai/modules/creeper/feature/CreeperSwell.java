@@ -45,6 +45,9 @@ public class CreeperSwell extends Feature {
 	@Config(min = 0d, max = 1d)
 	@Label(name = "Launch Chance", description = "Launching creepers will try ignite and throw themselves at the player.")
 	public static Double launchChance = 0.05d;
+	@Config
+	@Label(name = "Launch Particles", description = "If true, Launching Creepers emit particles")
+	public static Boolean launchParticles = true;
 	@Config(min = 0d, max = 1d)
 	@Label(name = "Breach Chance", description = "Breaching creepers will try to open an hole in the wall to let mobs in.")
 	public static Double breachChance = 0.075d;
@@ -55,6 +58,9 @@ public class CreeperSwell extends Feature {
 	@Config(min = 0d, max = 1d)
 	@Label(name = "Cena.Chance", description = "AND HIS NAME IS ...")
 	public static Double cenaChance = 0.03d;
+	@Config
+	@Label(name = "Cena.Particles", description = "If true, Creeper Cena emits particles")
+	public static Boolean cenaParticles = true;
 	@Config
 	@Label(name = "Cena.Generates fire", description = "If true, Creeper Cena explosion will generate fire")
 	public static Boolean cenaFire = false;
@@ -147,7 +153,8 @@ public class CreeperSwell extends Feature {
 	}
 
 	public void onLaunchCreeperTick(Creeper creeper) {
-		if (creeper.tickCount % 20 != 0)
+		if (creeper.tickCount % 20 != 0
+				|| !launchParticles)
 			return;
 		ServerLevel serverLevel = (ServerLevel) creeper.level;
 		if (creeper.getPersistentData().getBoolean(EAStrings.Tags.Creeper.LAUNCH)) {
@@ -159,7 +166,8 @@ public class CreeperSwell extends Feature {
 	}
 
 	public void onCenaCreeperTick(Creeper creeper) {
-		if (creeper.tickCount % 40 != 0)
+		if (creeper.tickCount % 40 != 5
+				|| !cenaParticles)
 			return;
 		ServerLevel serverLevel = (ServerLevel) creeper.level;
 		if (creeper.getPersistentData().getBoolean(EAStrings.Tags.Creeper.CENA)) {

@@ -2,11 +2,15 @@
 
 ## Upcoming
 * Updated to 1.19.3
-* Creeper Cena 
+* Creeper
   * Creeper Cena now emits particles when players are close enough
   * Chance increased (~~2%~~ -> 3%) but reduced explosion power (~~6~~ -> 5)
+  * Cena and Launching Creepers particles can be disabled
 * Fixed level's `RandomSource` causing crashes
 * Fixed Zombies Fishing Rods and Ender Pearls replacing what they had in the off-hand
+* Dark Ark Witches
+  * Witches summoned by Dark Art Witches can no longer be Dark Art Witches 
+  * Fixed Dark art Witches failing to spawn a villager, causing a crash
 
 ## 1.8.0
 * Added Prevent Infighting. Mobs no longer attack eachother
