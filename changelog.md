@@ -1,7 +1,8 @@
 # Changelog
 
-## Upcoming
-* Fixed Crash when a Dark Art Witch started summoning a Villager while out of the world
+## 1.6.5
+* Witches summoned by Dark Art Witches can no longer be Dark Art Witches
+* Fixed Dark art Witches failing to spawn a villager, causing a crash
 
 ## 1.6.4
 * Decreased running speed from explosions
