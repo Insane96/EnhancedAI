@@ -56,8 +56,8 @@ public class SkeletonFleeTarget extends Feature {
 
         CompoundTag persistentData = skeleton.getPersistentData();
 
-        boolean avoidTarget = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Flee.AVOID_TARGET, skeleton.level.random.nextDouble() < avoidPlayerChance);
-        boolean attackWhenAvoiding = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Flee.ATTACK_WHEN_AVOIDING, skeleton.level.random.nextDouble() < attackWhenAvoidingChance);
+        boolean avoidTarget = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Flee.AVOID_TARGET, skeleton.getRandom().nextDouble() < avoidPlayerChance);
+        boolean attackWhenAvoiding = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Flee.ATTACK_WHEN_AVOIDING, skeleton.getRandom().nextDouble() < attackWhenAvoidingChance);
         double fleeDistanceFar1 = NBTUtils.getDoubleOrPutDefault(persistentData, EAStrings.Tags.Flee.FLEE_DISTANCE_FAR, fleeDistanceFar);
         double fleeDistanceNear1 = NBTUtils.getDoubleOrPutDefault(persistentData, EAStrings.Tags.Flee.FLEE_DISTANCE_NEAR, fleeDistanceNear);
         double fleeSpeedFar1 = NBTUtils.getDoubleOrPutDefault(persistentData, EAStrings.Tags.Flee.FLEE_SPEED_FAR, fleeSpeedFar);

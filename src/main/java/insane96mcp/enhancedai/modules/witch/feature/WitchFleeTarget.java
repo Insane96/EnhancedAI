@@ -52,8 +52,8 @@ public class WitchFleeTarget extends Feature {
 
         CompoundTag persistentData = witch.getPersistentData();
 
-        boolean avoidTarget = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Flee.AVOID_TARGET, witch.level.random.nextDouble() < avoidPlayerChance);
-        boolean attackWhenAvoiding = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Flee.ATTACK_WHEN_AVOIDING, witch.level.random.nextDouble() < attackWhenAvoidingChance);
+        boolean avoidTarget = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Flee.AVOID_TARGET, witch.getRandom().nextDouble() < avoidPlayerChance);
+        boolean attackWhenAvoiding = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Flee.ATTACK_WHEN_AVOIDING, witch.getRandom().nextDouble() < attackWhenAvoidingChance);
         double fleeDistanceFar1 = NBTUtils.getDoubleOrPutDefault(persistentData, EAStrings.Tags.Flee.FLEE_DISTANCE_FAR, fleeDistanceFar);
         double fleeDistanceNear1 = NBTUtils.getDoubleOrPutDefault(persistentData, EAStrings.Tags.Flee.FLEE_DISTANCE_NEAR, fleeDistanceNear);
         double fleeSpeedFar1 = NBTUtils.getDoubleOrPutDefault(persistentData, EAStrings.Tags.Flee.FLEE_SPEED_FAR, fleeSpeedFar);

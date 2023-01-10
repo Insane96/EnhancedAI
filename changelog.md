@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.8.1
+* Fixed level's `RandomSource` causing crashes
+* Witches summoned by Dark Art Witches can no longer be Dark Art Witches
+* Fixed Dark art Witches failing to spawn a villager, causing a crash
+
 ## 1.8.0
 * Added Prevent Infighting. Mobs no longer attack eachother
 * Villagers Attacking

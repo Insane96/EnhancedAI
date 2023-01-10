@@ -95,11 +95,11 @@ public class CreeperSwell extends Feature {
 
 		CompoundTag persistentData = creeper.getPersistentData();
 
-		boolean walkingFuse = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Creeper.WALKING_FUSE, creeper.level.random.nextDouble() < walkingFuseChance);
-		boolean ignoreWalls = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Creeper.IGNORE_WALLS, creeper.level.random.nextDouble() < ignoreWallsChance);
-		boolean breach = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Creeper.BREACH, creeper.level.random.nextDouble() < breachChance);
-		boolean launch = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Creeper.LAUNCH, creeper.level.random.nextDouble() < launchChance);
-		boolean cena = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Creeper.CENA, creeper.level.random.nextDouble() < cenaChance);
+		boolean walkingFuse = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Creeper.WALKING_FUSE, creeper.getRandom().nextDouble() < walkingFuseChance);
+		boolean ignoreWalls = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Creeper.IGNORE_WALLS, creeper.getRandom().nextDouble() < ignoreWallsChance);
+		boolean breach = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Creeper.BREACH, creeper.getRandom().nextDouble() < breachChance);
+		boolean launch = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Creeper.LAUNCH, creeper.getRandom().nextDouble() < launchChance);
+		boolean cena = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Creeper.CENA, creeper.getRandom().nextDouble() < cenaChance);
 
 		if (cena) {
 			creeper.setCustomName(Component.literal("Creeper Cena"));
