@@ -12,6 +12,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.npc.Villager;
@@ -112,12 +113,14 @@ public class DarkArtWitchGoal extends Goal {
                     z = (int) (Math.floor(Math.sin(angle) * 3.33f) + goal.witch.getZ());
                     y = (int) (goal.witch.getY() + 3);
 
-                    y = MCUtils.getFittingY(EntityType.VILLAGER, new BlockPos(x, y, z), goal.witch.level, 4);
+                    y = MCUtils.getFittingY(EntityType.VILLAGER, new BlockPos(x, y, z), goal.witch.level, 6);
                     if (y != goal.witch.level.getMinBuildHeight() - 1)
                         break;
                 }
-                if (y < goal.witch.level.getMinBuildHeight())
+                if (y < goal.witch.level.getMinBuildHeight()) {
                     goal.phase = END;
+                    return;
+                }
                 else {
                     goal.summonSpot = new Vec3(x + 0.5, y, z + 0.5);
                     goal.phase = LOOK_AT_VILLAGER;
@@ -175,8 +178,7 @@ public class DarkArtWitchGoal extends Goal {
                     lightningBolt.setVisualOnly(true);
                     lightningBolt.setDamage(0f);
                     goal.witch.level.addFreshEntity(lightningBolt);
-                    goal.villager.setNoAi(false);
-                    goal.villager.thunderHit((ServerLevel) goal.villager.level, lightningBolt);
+                    goal.summonWitch();
                     goal.phase = END;
                 }
             }
@@ -193,5 +195,16 @@ public class DarkArtWitchGoal extends Goal {
         private static final int LIGHTNING_STRIKE_TICK = LEVITATE_TICK + 1;
 
         public abstract void tick(DarkArtWitchGoal goal);
+    }
+
+    private void summonWitch() {
+        ServerLevel serverLevel = (ServerLevel) this.witch.level;
+        Witch witch = EntityType.WITCH.create(serverLevel);
+        witch.moveTo(this.witch.getX(), this.witch.getY(), this.witch.getZ(), this.witch.getYRot(), this.witch.getXRot());
+        witch.finalizeSpawn(serverLevel, this.witch.level.getCurrentDifficultyAt(witch.blockPosition()), MobSpawnType.CONVERSION, null, null);
+        witch.getPersistentData().putBoolean(EAStrings.Tags.Witch.DARK_ARTS, false);
+        //witch.setPersistenceRequired();
+        serverLevel.addFreshEntityWithPassengers(witch);
+        this.villager.discard();
     }
 }
