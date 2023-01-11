@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.9.0
+* The update in the number is just to keep 1.19.2 and 1.19.3 separated
+* Requires InsaneLib 1.7.4
+* Creeper Cena inflating animation now matches with the Fuse time
+
 ## 1.8.1
 * Updated to 1.19.3
 * Creeper

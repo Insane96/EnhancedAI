@@ -11,6 +11,7 @@ import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.LoadFeature;
+import insane96mcp.insanelib.network.MessageCreeperDataSync;
 import insane96mcp.insanelib.setup.ILStrings;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -90,6 +91,7 @@ public class CreeperSwell extends Feature {
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void eventEntityJoinWorld(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
+				|| event.getLevel().isClientSide
 				|| !(event.getEntity() instanceof Creeper creeper)) return;
 
 		//Remove Creeper Swell Goal
@@ -116,6 +118,7 @@ public class CreeperSwell extends Feature {
 			compoundNBT.putShort("Fuse", (short)36);
 			compoundNBT.putByte("ExplosionRadius", cenaExplosionPower.byteValue());
 			creeper.readAdditionalSaveData(compoundNBT);
+			MessageCreeperDataSync.syncCreeperToPlayers(creeper);
 			if (cenaFire)
 				persistentData.putBoolean(ILStrings.Tags.EXPLOSION_CAUSES_FIRE, true);
 		}
