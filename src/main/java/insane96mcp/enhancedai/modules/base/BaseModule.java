@@ -15,6 +15,7 @@ public class BaseModule extends Module {
 	public AntiCheese antiCheese;
 	public Movement movement;
 	public Attacking attacking;
+	public TinkersConstruct tinkersConstruct;
 	//public Shielding shielding;
 
 	public BaseModule() {
@@ -26,6 +27,7 @@ public class BaseModule extends Module {
 		antiCheese = new AntiCheese(this);
 		movement = new Movement(this);
 		attacking = new Attacking(this);
+		tinkersConstruct = new TinkersConstruct(this);
 		//shielding = new Shielding(this);
 		Config.builder.pop();
 	}
@@ -39,6 +41,7 @@ public class BaseModule extends Module {
 		antiCheese.loadConfig();
 		movement.loadConfig();
 		attacking.loadConfig();
+		tinkersConstruct.loadConfig();
 		//shielding.loadConfig();
 	}
 }

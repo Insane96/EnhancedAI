@@ -3,6 +3,12 @@ buildscript {
         maven { url = 'https://files.minecraftforge.net/maven' }
         maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
         maven { url = 'https://maven.parchmentmc.org' }
+        maven {
+            url "https://cursemaven.com"
+            content {
+                includeGroup "curse.maven"
+            }
+        }
         jcenter()
         mavenCentral()
     }
@@ -85,6 +91,10 @@ repositories {
         dirs "libs"
     }
     maven { url "https://www.cursemaven.com" }
+    maven { // SlimeKnights and JEI
+        name 'DVS1 Maven FS'
+        url 'https://dvs1.progwml6.com/files/maven'
+    }
 }
 
 mixin {
@@ -98,6 +108,9 @@ dependencies {
     implementation fg.deobf("blank:InsaneLib:${lib_version}-mc${mc_version}")
     
     annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
+
+    implementation fg.deobf("slimeknights.mantle:Mantle:${mc_version}-${mantle_version}")
+    implementation fg.deobf("slimeknights.tconstruct:TConstruct:${mc_version}-${tic_version}")
 
     //implementation fg.deobf("curse.maven:savage-and-ravage-381736:3226442")
     //implementation fg.deobf("curse.maven:abnormals_core-382216:3457851")
