@@ -7,25 +7,25 @@ assignees: ''
 
 ---
 
-**Describe the bug**
+**Describe the bug**  
 A clear and concise description of what the bug is.
 
-**Versions:**
+**Versions (don't use "latest"):**  
  - Minecraft: 
  - Forge: 
  - Enhanced AI: 
  - InsaneLib: 
 
-**Steps to reproduce**
-1. 
-2. 
-3. 
+**Steps to reproduce**  
+1.   
+2.   
+3.   
 
-**Screenshots**
+**Screenshots**  
 If applicable, add screenshots to help explain your problem.
 
-**Logs**
-Use a paste site (pastebin, gist) to send the game logs (both logs and crash if applicable)
+**Logs**  
+Use a paste site (**pastebin, gist**) to send the game logs (both logs and crash if applicable)
 
-**Can the issue be reproduced with a mininal set of mods? (E.g. EnhancedAI + InsaneLib + Tinkers' Construct)**
+**Can the issue be reproduced with EnhancedAI only?**  
 Yes/No
