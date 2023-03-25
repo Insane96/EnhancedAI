@@ -52,7 +52,8 @@ public class Animals extends Feature {
     @Label(name = "Entity Blacklist", description = "Entities that shouldn't be affected by this feature")
     public static Blacklist entityBlacklist = new Blacklist(List.of(
             new IdTagMatcher(IdTagMatcher.Type.ID, "minecraft:llama"),
-            new IdTagMatcher(IdTagMatcher.Type.ID, "minecraft:trader_llama")
+            new IdTagMatcher(IdTagMatcher.Type.ID, "minecraft:trader_llama"),
+            new IdTagMatcher(IdTagMatcher.Type.ID, "minecraft:bee")
     ), false);
 
     private static final double BASE_ATTACK_DAMAGE = 4d;

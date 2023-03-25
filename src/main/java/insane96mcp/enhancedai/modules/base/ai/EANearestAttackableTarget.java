@@ -7,9 +7,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.function.Predicate;
 
 /**
  * Extension of ILNearestAttackableTargetGoal making use of XRay attribute
@@ -18,9 +15,10 @@ public class EANearestAttackableTarget<T extends LivingEntity> extends ILNearest
 
     public TargetingConditions targetEntitySelectorXRay;
 
-    public EANearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, boolean mustSee, boolean mustReach, @Nullable Predicate<LivingEntity> targetPredicate) {
-        super(goalOwnerIn, targetClassIn, mustSee, mustReach, targetPredicate);
-        this.targetEntitySelectorXRay = TargetingConditions.forCombat().ignoreLineOfSight().range(this.getFollowXRayDistance()).selector(targetPredicate);
+    public EANearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, boolean mustSee, boolean mustReach, TargetingConditions targetingConditions) {
+        super(goalOwnerIn, targetClassIn, mustSee, mustReach, null);
+        this.targetEntitySelector = targetingConditions;
+        this.targetEntitySelectorXRay = targetingConditions.copy().ignoreLineOfSight().range(this.getFollowXRayDistance());
     }
 
     @Override
