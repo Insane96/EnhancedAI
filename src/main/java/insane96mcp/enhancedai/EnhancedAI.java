@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai;
 
-import insane96mcp.enhancedai.modules.animal.feature.AnimalAttacking;
+import insane96mcp.enhancedai.modules.animal.feature.Animals;
 import insane96mcp.enhancedai.modules.base.feature.Attacking;
 import insane96mcp.enhancedai.modules.base.feature.Targeting;
 import insane96mcp.enhancedai.setup.*;
@@ -32,7 +32,7 @@ public class EnhancedAI
 
         Reflection.init();
 
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(AnimalAttacking::attribute);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(Animals::attribute);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(Attacking::attackRangeAttribute);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(Targeting::xrayRangeAttribute);
     }
