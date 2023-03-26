@@ -44,7 +44,7 @@ public class ThrowingWeb extends Feature {
 	public static Integer destroyWebAfter = 100;
 	@Config(min = 0, max = 128d)
 	@Label(name = "Web Damage", description = "Damage when the projectiles hits a mob. The damage is set for normal difficulty. Hard difficulty gets +50% damage and Easy gets (-50% + 1) damage.")
-	public static Double thrownWebDamage = 5d;
+	public static Double thrownWebDamage = 3d;
 	@Config(min = 1, max = 1200)
 	@Label(name = "Cooldown", description = "Every how many ticks do spiders throw the projectile")
 	public static MinMax throwingCooldown = new MinMax(40, 60);
@@ -107,10 +107,10 @@ public class ThrowingWeb extends Feature {
 			return;
 		MobEffectInstance slowness = entity.getEffect(MobEffects.MOVEMENT_SLOWDOWN);
 
-		if (slowness == null)
-			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, slownessDuration, slownessAmplifier - 1, true, true, true));
-		else if (stackSlowness)
+		if (stackSlowness && slowness != null)
 			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, slownessDuration, Math.min(slowness.getAmplifier() + slownessAmplifier, maxSlowness - 1), true, true, true));
+		else
+			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, slownessDuration, slownessAmplifier - 1, true, true, true));
 	}
 
 	public static void applyPoison(LivingEntity spider, LivingEntity entity) {

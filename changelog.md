@@ -3,6 +3,9 @@
 ## 1.9.1
 * Only 20% of animals are now able to fight back, the others will just scatter
 * Skeleton inaccuracy is now loaded from tag "enhancedai:inaccuracy"
+* Spiders Web Throwers
+  * Reduced thrown web damage to 3 from 5
+  * Fixed stackSlowness = false not working correctly
 
 ## 1.9.0
 * The update in the number is just to keep 1.19.2 and 1.19.3 separated
