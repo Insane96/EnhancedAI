@@ -58,7 +58,7 @@ public class CreeperSwell extends Feature {
 	//Cena
 	@Config(min = 0d, max = 1d)
 	@Label(name = "Cena.Chance", description = "AND HIS NAME IS ...")
-	public static Double cenaChance = 0.03d;
+	public static Double cenaChance = 0.02d;
 	@Config
 	@Label(name = "Cena.Particles", description = "If true, Creeper Cena emits particles")
 	public static Boolean cenaParticles = true;
@@ -67,7 +67,7 @@ public class CreeperSwell extends Feature {
 	public static Boolean cenaFire = false;
 	@Config(min = 0d, max = 12d)
 	@Label(name = "Cena.Explosion power", description = "Explosion power of Creeper Cena")
-	public static Double cenaExplosionPower = 5d;
+	public static Double cenaExplosionPower = 4d;
 
 	public CreeperSwell(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super(module, enabledByDefault, canBeDisabled);
