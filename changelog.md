@@ -6,6 +6,7 @@
 * Spiders Web Throwers
   * Reduced thrown web damage to 3 from 5
   * Fixed stackSlowness = false not working correctly
+* Fixed XRay mobs targeting players from far far away
 
 ## 1.9.0
 * The update in the number is just to keep 1.19.2 and 1.19.3 separated
