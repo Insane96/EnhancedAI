@@ -2,6 +2,7 @@
 
 ## 1.9.1
 * Only 20% of animals are now able to fight back, the others will just scatter
+* Skeleton inaccuracy is now loaded from tag "enhancedai:inaccuracy"
 
 ## 1.9.0
 * The update in the number is just to keep 1.19.2 and 1.19.3 separated
