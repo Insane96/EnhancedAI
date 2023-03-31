@@ -53,7 +53,10 @@ public class Animals extends Feature {
     public static Blacklist entityBlacklist = new Blacklist(List.of(
             new IdTagMatcher(IdTagMatcher.Type.ID, "minecraft:llama"),
             new IdTagMatcher(IdTagMatcher.Type.ID, "minecraft:trader_llama"),
-            new IdTagMatcher(IdTagMatcher.Type.ID, "minecraft:bee")
+            new IdTagMatcher(IdTagMatcher.Type.ID, "minecraft:bee"),
+            new IdTagMatcher(IdTagMatcher.Type.ID, "minecraft:wolf"),
+            new IdTagMatcher(IdTagMatcher.Type.ID, "minecraft:bear"),
+            new IdTagMatcher(IdTagMatcher.Type.ID, "minecraft:panda")
     ), false);
 
     private static final double BASE_ATTACK_DAMAGE = 4d;
