@@ -59,7 +59,7 @@ public class Animals extends Feature {
             new IdTagMatcher(IdTagMatcher.Type.ID, "minecraft:panda")
     ), false);
 
-    private static final double BASE_ATTACK_DAMAGE = 4d;
+    private static final double BASE_ATTACK_DAMAGE = 3d;
 
     public Animals(Module module, boolean enabledByDefault, boolean canBeDisabled) {
         super(module, enabledByDefault, canBeDisabled);
