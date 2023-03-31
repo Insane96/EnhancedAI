@@ -43,7 +43,7 @@ public class Targeting extends Feature {
 
 	@Config(min = 0d, max = 128d)
 	@Label(name = "Follow Range Override", description = "How far away can the mobs see the player. This overrides the vanilla value (16 for most mobs). Setting 'Max' to 0 will leave the follow range as vanilla. I recommend using mods like Mobs Properties Randomness to have more control over the attribute.")
-	public static MinMax followRangeOverride = new MinMax(32, 64);
+	public static MinMax followRangeOverride = new MinMax(24, 48);
 	@Config(min = 0d, max = 128d)
 	@Label(name = "XRay Range Override", description = "How far away can the mobs see the player even through walls. Setting 'Max' to 0 will make mobs not able to see through walls. I recommend using mods like Mobs Properties Randomness to have more control over the attribute; the attribute name is 'enhancedai:generic.xray_follow_range'.")
 	public static MinMax xrayRangeOverride = new MinMax(16, 32);

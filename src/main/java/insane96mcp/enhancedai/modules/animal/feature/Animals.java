@@ -40,6 +40,9 @@ public class Animals extends Feature {
     @Label(name = "Group Flee", description = "If true, when an animal is attacked, all the animals around will flee.")
     public static Boolean groupFlee = true;
     @Config
+    @Label(name = "Flee Range", description = "If Group Flee is enabled, this is the range where the animals will flee.")
+    public static Integer groupFleeRange = 16;
+    @Config
     @Label(name = "Fight back chance", description = "Animals have this percentage chance to be able to fight back instead of fleeing. Animals have a slightly bigger range to attack. Attack damage can't be changed via config due to limitation so use mods like Mobs Properties Randomness to change the damage. Base damage is 4")
     public static Double animalsFightBackChance = 0.2d;
     @Config(min = 0d, max = 4d)
@@ -108,7 +111,7 @@ public class Animals extends Feature {
                 || !(event.getSource().getEntity() instanceof LivingEntity attacker))
             return;
 
-        animal.level.getNearbyEntities(Animal.class, TargetingConditions.forNonCombat().ignoreLineOfSight(), animal, animal.getBoundingBox().inflate(12d))
+        animal.level.getNearbyEntities(Animal.class, TargetingConditions.forNonCombat().ignoreLineOfSight(), animal, animal.getBoundingBox().inflate(groupFleeRange))
                 .forEach(nearbyAnimal -> nearbyAnimal.setLastHurtByMob(attacker));
     }
 }
