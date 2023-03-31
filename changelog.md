@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.9.2
+* Walking fuse creepers now slowdown when exploding
+
 ## 1.9.1
 * Only 20% of animals are now able to fight back, the others will just scatter
 * Skeleton inaccuracy is now loaded from tag "enhancedai:inaccuracy"

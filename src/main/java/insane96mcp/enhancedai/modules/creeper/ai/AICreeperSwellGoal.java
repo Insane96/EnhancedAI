@@ -1,17 +1,25 @@
 package insane96mcp.enhancedai.modules.creeper.ai;
 
 import insane96mcp.enhancedai.modules.base.ai.AvoidExplosionGoal;
+import insane96mcp.enhancedai.modules.creeper.feature.CreeperSwell;
 import insane96mcp.enhancedai.modules.creeper.utils.CreeperUtils;
 import insane96mcp.enhancedai.setup.EAStrings;
+import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Creeper;
 
 import java.util.EnumSet;
 import java.util.List;
+import java.util.UUID;
 
 public class AICreeperSwellGoal extends Goal {
+
+	private static final UUID WALKING_FUSE_SPEED_MODIFIER = UUID.fromString("ab376fec-5a15-4d3e-8fa2-0be4b6bc1849");
 
 	protected final Creeper swellingCreeper;
 	private LivingEntity creeperAttackTarget;
@@ -57,12 +65,17 @@ public class AICreeperSwellGoal extends Goal {
 	public void start() {
 		if (!walkingFuse)
 			this.swellingCreeper.getNavigation().stop();
+		else
+			MCUtils.applyModifier(this.swellingCreeper, Attributes.MOVEMENT_SPEED, WALKING_FUSE_SPEED_MODIFIER, "Walking fuse speed modifier", CreeperSwell.walkingFuseSpeedModifier, AttributeModifier.Operation.MULTIPLY_BASE, false);
 	}
 
 	public void stop() {
 		this.creeperAttackTarget = null;
 		this.isBreaching = false;
 		this.swellingCreeper.setSwellDir(-1);
+		AttributeInstance movementSpeed = this.swellingCreeper.getAttribute(Attributes.MOVEMENT_SPEED);
+		if (movementSpeed != null)
+			movementSpeed.removeModifier(WALKING_FUSE_SPEED_MODIFIER);
 	}
 
 	public void tick() {
