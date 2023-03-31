@@ -5,6 +5,7 @@
 * Reduced animals base attack damage (4 -> 3)
 * Animals now scare only animals of the same species
 * Reduced follow range override (32~64 -> 24~48)
+* Reduced xray distance (16~32 -> 12~24)
 
 ## 1.9.1
 * Only 20% of animals are now able to fight back, the others will just scatter
