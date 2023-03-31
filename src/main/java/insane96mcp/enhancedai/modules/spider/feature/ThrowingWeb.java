@@ -50,7 +50,7 @@ public class ThrowingWeb extends Feature {
 	public static MinMax throwingCooldown = new MinMax(40, 60);
 	@Config(min = 0d, max = 64d)
 	@Label(name = "Distance Required", description = "Distance Required for the spider to throw webs. Setting 'Minimum' to 0 will make the spider throw webs even when attacking the player.")
-	public static MinMax distance = new MinMax(2.5d, 64d);
+	public static MinMax distance = new MinMax(2.5d, 32d);
 	@Config
 	@Label(name = "Always web", description = "If true entities will get webbed when hit.")
 	public static Boolean alwaysWeb = false;
@@ -66,13 +66,13 @@ public class ThrowingWeb extends Feature {
 	public static Integer slownessDuration = 120;
 	@Config(min = 0d, max = 128)
 	@Label(name = "Slowness.Amplifier", description = "How many levels of slowness are applied to the target hit by the web?")
-	public static Integer slownessAmplifier = 2;
+	public static Integer slownessAmplifier = 1;
 	@Config
 	@Label(name = "Slowness.Stacking Amplifier", description = "Should multiple hits on a target with slowness increase the level of Slowness? (This works with any type of slowness)")
 	public static Boolean stackSlowness = true;
 	@Config(min = 0d, max = 128)
 	@Label(name = "Slowness.Max Amplifier", description = "How many max levels of slowness can be applied to the target?")
-	public static Integer maxSlowness = 4;
+	public static Integer maxSlowness = 2;
 	@Config
 	@Label(name = "Entity Blacklist", description = "Entities that will not be affected by this feature")
 	public static Blacklist entityBlacklist = new Blacklist(Collections.emptyList(), false);
