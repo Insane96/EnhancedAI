@@ -112,6 +112,6 @@ public class Animals extends Feature {
             return;
 
         animal.level.getNearbyEntities(Animal.class, TargetingConditions.forNonCombat().ignoreLineOfSight(), animal, animal.getBoundingBox().inflate(groupFleeRange))
-                .forEach(nearbyAnimal -> nearbyAnimal.setLastHurtByMob(attacker));
+                .stream().filter(otherAnimal -> otherAnimal.getType().equals(animal.getType())).forEach(nearbyAnimal -> nearbyAnimal.setLastHurtByMob(attacker));
     }
 }

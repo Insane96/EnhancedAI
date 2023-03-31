@@ -3,6 +3,7 @@
 ## 1.9.2
 * Walking fuse creepers now slowdown when exploding
 * Reduced animals base attack damage (4 -> 3)
+* Animals now scare only animals of the same species
 * Reduced follow range override (32~64 -> 24~48)
 
 ## 1.9.1
