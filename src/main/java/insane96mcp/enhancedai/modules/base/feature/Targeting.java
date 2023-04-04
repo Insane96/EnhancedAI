@@ -24,6 +24,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.player.Player;
@@ -35,7 +36,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Predicate;
 
 @Label(name = "Targeting", description = "Change how mobs target players")
 @LoadFeature(module = Modules.Ids.BASE)
@@ -43,10 +43,10 @@ public class Targeting extends Feature {
 
 	@Config(min = 0d, max = 128d)
 	@Label(name = "Follow Range Override", description = "How far away can the mobs see the player. This overrides the vanilla value (16 for most mobs). Setting 'Max' to 0 will leave the follow range as vanilla. I recommend using mods like Mobs Properties Randomness to have more control over the attribute.")
-	public static MinMax followRangeOverride = new MinMax(32, 64);
+	public static MinMax followRangeOverride = new MinMax(24, 48);
 	@Config(min = 0d, max = 128d)
 	@Label(name = "XRay Range Override", description = "How far away can the mobs see the player even through walls. Setting 'Max' to 0 will make mobs not able to see through walls. I recommend using mods like Mobs Properties Randomness to have more control over the attribute; the attribute name is 'enhancedai:generic.xray_follow_range'.")
-	public static MinMax xrayRangeOverride = new MinMax(16, 32);
+	public static MinMax xrayRangeOverride = new MinMax(12, 24);
 	@Config
 	@Label(name = "Instant Target", description = "Mobs will no longer take random time to target a player.")
 	public static Boolean instaTarget = true;
@@ -79,6 +79,7 @@ public class Targeting extends Feature {
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void onMobSpawn(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
+				|| event.getLevel().isClientSide
 				|| !(event.getEntity() instanceof Mob mobEntity)
 				|| entityBlacklist.isEntityBlackOrNotWhitelist(mobEntity))
 			return;
@@ -116,7 +117,7 @@ public class Targeting extends Feature {
 	private void processTargetGoal(Mob mobEntity) {
 		boolean hasTargetGoal = false;
 
-		Predicate<LivingEntity> predicate = null;
+		TargetingConditions targetingConditions = null;
 
 		ArrayList<Goal> goalsToRemove = new ArrayList<>();
 		for (WrappedGoal prioritizedGoal : mobEntity.targetSelector.availableGoals) {
@@ -126,7 +127,7 @@ public class Targeting extends Feature {
 			if (goal.targetType != Player.class)
 				continue;
 
-			predicate = goal.targetConditions.selector;
+			targetingConditions = goal.targetConditions;
 
 			goalsToRemove.add(prioritizedGoal.getGoal());
 			hasTargetGoal = true;
@@ -140,9 +141,9 @@ public class Targeting extends Feature {
 		EANearestAttackableTarget<Player> targetGoal;
 
 		if (mobEntity instanceof Spider)
-			targetGoal = new EASpiderTargetGoal<>((Spider) mobEntity, Player.class, true, false, predicate);
+			targetGoal = new EASpiderTargetGoal<>((Spider) mobEntity, Player.class, true, false, targetingConditions);
 		else
-			targetGoal = new EANearestAttackableTarget<>(mobEntity, Player.class, false, false, predicate);
+			targetGoal = new EANearestAttackableTarget<>(mobEntity, Player.class, false, false, targetingConditions);
 
 		if (instaTarget)
 			targetGoal.setInstaTarget();

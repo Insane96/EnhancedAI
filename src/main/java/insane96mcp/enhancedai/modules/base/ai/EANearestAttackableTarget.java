@@ -7,9 +7,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.function.Predicate;
 
 /**
  * Extension of ILNearestAttackableTargetGoal making use of XRay attribute
@@ -18,9 +15,10 @@ public class EANearestAttackableTarget<T extends LivingEntity> extends ILNearest
 
     public TargetingConditions targetEntitySelectorXRay;
 
-    public EANearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, boolean mustSee, boolean mustReach, @Nullable Predicate<LivingEntity> targetPredicate) {
-        super(goalOwnerIn, targetClassIn, mustSee, mustReach, targetPredicate);
-        this.targetEntitySelectorXRay = TargetingConditions.forCombat().ignoreLineOfSight().range(this.getFollowXRayDistance()).selector(targetPredicate);
+    public EANearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, boolean mustSee, boolean mustReach, TargetingConditions targetingConditions) {
+        super(goalOwnerIn, targetClassIn, mustSee, mustReach, null);
+        this.targetEntitySelector = targetingConditions;
+        this.targetEntitySelectorXRay = targetingConditions.copy().ignoreLineOfSight();
     }
 
     @Override
@@ -29,14 +27,14 @@ public class EANearestAttackableTarget<T extends LivingEntity> extends ILNearest
             //Try to find the nearest target without xray, then try with xray if the attribute is not 0
             this.nearestTarget = this.mob.level.getNearestEntity(this.targetClass, this.targetEntitySelector, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ(), this.getTargetSearchArea(this.getFollowDistance()));
             if (this.nearestTarget == null && this.getFollowXRayDistance() > 0d) {
-                this.nearestTarget = this.mob.level.getNearestEntity(this.targetClass, this.targetEntitySelectorXRay, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ(), this.getTargetSearchArea(this.getFollowXRayDistance()));
+                this.nearestTarget = this.mob.level.getNearestEntity(this.targetClass, this.targetEntitySelectorXRay.range(this.getFollowXRayDistance()), this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ(), this.getTargetSearchArea(this.getFollowXRayDistance()));
             }
         }
         else {
             //Try to find the nearest player without xray, then try with xray if the attribute is not 0
             this.nearestTarget = this.mob.level.getNearestPlayer(this.targetEntitySelector, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ());
             if (this.nearestTarget == null && this.getFollowXRayDistance() > 0d) {
-                this.nearestTarget = this.mob.level.getNearestPlayer(this.targetEntitySelectorXRay, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ());
+                this.nearestTarget = this.mob.level.getNearestPlayer(this.targetEntitySelectorXRay.range(this.getFollowXRayDistance()), this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ());
             }
         }
     }

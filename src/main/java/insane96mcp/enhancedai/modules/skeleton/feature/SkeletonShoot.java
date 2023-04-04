@@ -1,9 +1,9 @@
 package insane96mcp.enhancedai.modules.skeleton.feature;
 
+import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.modules.base.ai.EAAvoidEntityGoal;
 import insane96mcp.enhancedai.modules.skeleton.ai.EARangedBowAttackGoal;
-import insane96mcp.enhancedai.setup.EAStrings;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
@@ -24,6 +24,10 @@ import java.util.List;
 @Label(name = "Skeleton Shoot", description = "Skeletons are more precise when shooting and strafing is removed, can hit a target from up to 64 blocks and try to stay away from the target.")
 @LoadFeature(module = Modules.Ids.SKELETON)
 public class SkeletonShoot extends Feature {
+
+	public static final String STRAFE = EnhancedAI.RESOURCE_PREFIX + "strafe";
+	public static final String SHOOTING_RANGE = EnhancedAI.RESOURCE_PREFIX + "shooting_range";
+	public static final String INACCURACY = EnhancedAI.RESOURCE_PREFIX + "inaccuracy";
 
 	@Config(min = 1, max = 64)
 	@Label(name = "Shooting Range", description = "The range from where a skeleton will shoot a player")
@@ -54,8 +58,9 @@ public class SkeletonShoot extends Feature {
 
 		CompoundTag persistentData = skeleton.getPersistentData();
 
-		boolean strafe = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Skeleton.STRAFE, skeleton.getRandom().nextDouble() < strafeChance);
-		int shootingRange1 = NBTUtils.getIntOrPutDefault(persistentData, EAStrings.Tags.Skeleton.SHOOTING_RANGE, shootingRange.getIntRandBetween(skeleton.getRandom()));
+		boolean strafe = NBTUtils.getBooleanOrPutDefault(persistentData, STRAFE, skeleton.getRandom().nextDouble() < strafeChance);
+		int shootingRange1 = NBTUtils.getIntOrPutDefault(persistentData, SHOOTING_RANGE, shootingRange.getIntRandBetween(skeleton.getRandom()));
+		double inaccuracy = NBTUtils.getDoubleOrPutDefault(persistentData, INACCURACY, arrowInaccuracy);
 
 		boolean hasAIArrowAttack = false;
 		for (WrappedGoal prioritizedGoal : skeleton.goalSelector.availableGoals) {
@@ -71,7 +76,6 @@ public class SkeletonShoot extends Feature {
 		if (hasAIArrowAttack) {
 			int attackCooldown = 20;
 			int bowChargeTicks = 20;
-			double inaccuracy = arrowInaccuracy;
 			if (skeleton.getRandom().nextDouble() < spammerChance) {
 				attackCooldown = 5;
 				bowChargeTicks = 5;

@@ -44,13 +44,13 @@ public class ThrowingWeb extends Feature {
 	public static Integer destroyWebAfter = 100;
 	@Config(min = 0, max = 128d)
 	@Label(name = "Web Damage", description = "Damage when the projectiles hits a mob. The damage is set for normal difficulty. Hard difficulty gets +50% damage and Easy gets (-50% + 1) damage.")
-	public static Double thrownWebDamage = 5d;
+	public static Double thrownWebDamage = 3d;
 	@Config(min = 1, max = 1200)
 	@Label(name = "Cooldown", description = "Every how many ticks do spiders throw the projectile")
 	public static MinMax throwingCooldown = new MinMax(40, 60);
 	@Config(min = 0d, max = 64d)
 	@Label(name = "Distance Required", description = "Distance Required for the spider to throw webs. Setting 'Minimum' to 0 will make the spider throw webs even when attacking the player.")
-	public static MinMax distance = new MinMax(2.5d, 64d);
+	public static MinMax distance = new MinMax(2.5d, 32d);
 	@Config
 	@Label(name = "Always web", description = "If true entities will get webbed when hit.")
 	public static Boolean alwaysWeb = false;
@@ -66,13 +66,13 @@ public class ThrowingWeb extends Feature {
 	public static Integer slownessDuration = 120;
 	@Config(min = 0d, max = 128)
 	@Label(name = "Slowness.Amplifier", description = "How many levels of slowness are applied to the target hit by the web?")
-	public static Integer slownessAmplifier = 2;
+	public static Integer slownessAmplifier = 1;
 	@Config
 	@Label(name = "Slowness.Stacking Amplifier", description = "Should multiple hits on a target with slowness increase the level of Slowness? (This works with any type of slowness)")
 	public static Boolean stackSlowness = true;
 	@Config(min = 0d, max = 128)
 	@Label(name = "Slowness.Max Amplifier", description = "How many max levels of slowness can be applied to the target?")
-	public static Integer maxSlowness = 4;
+	public static Integer maxSlowness = 2;
 	@Config
 	@Label(name = "Entity Blacklist", description = "Entities that will not be affected by this feature")
 	public static Blacklist entityBlacklist = new Blacklist(Collections.emptyList(), false);
@@ -107,10 +107,10 @@ public class ThrowingWeb extends Feature {
 			return;
 		MobEffectInstance slowness = entity.getEffect(MobEffects.MOVEMENT_SLOWDOWN);
 
-		if (slowness == null)
-			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, slownessDuration, slownessAmplifier - 1, true, true, true));
-		else if (stackSlowness)
+		if (stackSlowness && slowness != null)
 			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, slownessDuration, Math.min(slowness.getAmplifier() + slownessAmplifier, maxSlowness - 1), true, true, true));
+		else
+			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, slownessDuration, slownessAmplifier - 1, true, true, true));
 	}
 
 	public static void applyPoison(LivingEntity spider, LivingEntity entity) {

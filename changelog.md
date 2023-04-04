@@ -3,6 +3,22 @@
 ## 1.10.0
 * Updated to 1.19.4
 
+## 1.9.2
+* Walking fuse creepers now slowdown when exploding
+* Reduced animals base attack damage (4 -> 3)
+* Animals now scare only animals of the same species
+* Reduced follow range override (32~64 -> 24~48)
+* Reduced xray distance (16~32 -> 12~24)
+* Reduced Throwing Web Spiders range and slowness applied
+
+## 1.9.1
+* Only 20% of animals are now able to fight back, the others will just scatter
+* Skeleton inaccuracy is now loaded from tag "enhancedai:inaccuracy"
+* Spiders Web Throwers
+  * Reduced thrown web damage to 3 from 5
+  * Fixed stackSlowness = false not working correctly
+* Fixed XRay mobs targeting players from far far away
+
 ## 1.9.0
 * The update in the number is just to keep 1.19.2 and 1.19.3 separated
 * Requires InsaneLib 1.7.4

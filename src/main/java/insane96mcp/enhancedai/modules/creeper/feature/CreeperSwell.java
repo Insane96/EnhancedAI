@@ -41,6 +41,9 @@ public class CreeperSwell extends Feature {
 	@Config(min = 0d, max = 1d)
 	@Label(name = "Walking Fuse Chance", description = "Percentage chance for a Creeper to keep walking while exploding.")
 	public static Double walkingFuseChance = 0.1d;
+	@Config
+	@Label(name = "Walking Fuse Speed Modifier", description = "Speed modifier when a walking fuse creeper is swelling.")
+	public static Double walkingFuseSpeedModifier = -0.5d;
 	@Config(min = 0d, max = 1d)
 	@Label(name = "Ignore Walls Chance", description = "Percentage chance for a Creeper to ignore walls while targeting a player. This means that a creeper will be able to explode if it's in the correct range from a player even if there's a wall between.")
 	public static Double ignoreWallsChance = 0.1d;
@@ -59,7 +62,7 @@ public class CreeperSwell extends Feature {
 	//Cena
 	@Config(min = 0d, max = 1d)
 	@Label(name = "Cena.Chance", description = "AND HIS NAME IS ...")
-	public static Double cenaChance = 0.03d;
+	public static Double cenaChance = 0.02d;
 	@Config
 	@Label(name = "Cena.Particles", description = "If true, Creeper Cena emits particles")
 	public static Boolean cenaParticles = true;
@@ -68,7 +71,7 @@ public class CreeperSwell extends Feature {
 	public static Boolean cenaFire = false;
 	@Config(min = 0d, max = 12d)
 	@Label(name = "Cena.Explosion power", description = "Explosion power of Creeper Cena")
-	public static Double cenaExplosionPower = 5d;
+	public static Double cenaExplosionPower = 4d;
 
 	public CreeperSwell(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super(module, enabledByDefault, canBeDisabled);
