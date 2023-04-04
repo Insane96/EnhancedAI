@@ -7,7 +7,7 @@ import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Blacklist;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.LoadFeature;
-import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -33,7 +33,7 @@ public class Misc extends Feature {
 	public void onSpawn(LivingDamageEvent event) {
 		if (!this.isEnabled()
 				|| fallDamageReduction == 0d
-				|| !event.getSource().equals(DamageSource.FALL)
+				|| !event.getSource().is(DamageTypeTags.IS_FALL)
 				|| !(event.getEntity() instanceof Spider spider)
 				|| entityBlacklist.isEntityBlackOrNotWhitelist(spider))
 			return;

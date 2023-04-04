@@ -25,10 +25,10 @@ public class Attacking extends Feature {
 
 	public static void attackRangeAttribute(EntityAttributeModificationEvent event) {
 		for (EntityType<? extends LivingEntity> entityType : event.getTypes()) {
-			if (event.has(entityType, ForgeMod.ATTACK_RANGE.get()))
+			if (event.has(entityType, ForgeMod.ENTITY_REACH.get()))
 				continue;
 
-			event.add(entityType, ForgeMod.ATTACK_RANGE.get(), entityType.getWidth() * 2d);
+			event.add(entityType, ForgeMod.ENTITY_REACH.get(), entityType.getWidth() * 2d);
 		}
 	}
 

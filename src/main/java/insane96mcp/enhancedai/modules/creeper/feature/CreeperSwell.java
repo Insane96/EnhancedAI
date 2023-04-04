@@ -19,6 +19,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.SwellGoal;
 import net.minecraft.world.entity.monster.Creeper;
@@ -137,7 +138,7 @@ public class CreeperSwell extends Feature {
 	public void livingDamageEvent(LivingDamageEvent event) {
 		if (!this.isEnabled()
 				|| !tntLike
-				|| !event.getSource().isExplosion()
+				|| !event.getSource().is(DamageTypeTags.IS_EXPLOSION)
 				|| !(event.getEntity() instanceof Creeper creeper))
 			return;
 
