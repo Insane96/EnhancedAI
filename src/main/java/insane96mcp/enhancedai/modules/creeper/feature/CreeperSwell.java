@@ -53,6 +53,10 @@ public class CreeperSwell extends Feature {
 	@Config
 	@Label(name = "Launch Particles", description = "If true, Launching Creepers emit particles")
 	public static Boolean launchParticles = true;
+
+	@Config
+	@Label(name = "Launch inaccuracy", description = "The inaccuracy of the launching creeper in Normal difficulty, easy is increased, hard is decreased.")
+	public static Double launchInaccuracy = 0.5d;
 	@Config(min = 0d, max = 1d)
 	@Label(name = "Breach Chance", description = "Breaching creepers will try to open an hole in the wall to let mobs in.")
 	public static Double breachChance = 0.075d;
