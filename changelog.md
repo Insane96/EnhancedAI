@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Launching creepers inaccuracy can now be configured
+
 ## 1.10.0
 * Updated to 1.19.4
 
