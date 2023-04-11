@@ -74,15 +74,15 @@ public class SkeletonShoot extends Feature {
 
 		avoidEntityGoals.forEach(skeleton.goalSelector::removeGoal);
 		if (hasAIArrowAttack) {
-			int attackCooldown = 20;
+			int attackCooldown = 40;
 			int bowChargeTicks = 20;
 			if (skeleton.getRandom().nextDouble() < spammerChance) {
-				attackCooldown = 5;
+				attackCooldown = 20;
 				bowChargeTicks = 5;
-				inaccuracy *= 2d;
+				inaccuracy *= 2.5d;
 			}
-			if (!skeleton.level.getDifficulty().equals(Difficulty.HARD))
-				attackCooldown *= 2;
+			if (skeleton.level.getDifficulty().equals(Difficulty.HARD))
+				attackCooldown /= 2;
 
 			EARangedBowAttackGoal<AbstractSkeleton> EARangedBowAttackGoal = new EARangedBowAttackGoal<>(skeleton, 1.0d, shootingRange1, strafe)
 					.setAttackCooldown(attackCooldown)
