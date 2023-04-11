@@ -2,6 +2,7 @@
 
 ## Upcoming
 * Launching creepers inaccuracy can now be configured
+* Skeleton Spammers now spam less, deal less damage and can be spawned with "enhancedai:spammer" tag
 
 ## 1.10.0
 * Updated to 1.19.4
