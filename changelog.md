@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Fixed digger zombies overriding off hand items
+
 ## 1.10.1
 * Launching creepers inaccuracy can now be configured
 * Skeleton Spammers now spam less, deal less damage and can be spawned with "enhancedai:spammer" tag
