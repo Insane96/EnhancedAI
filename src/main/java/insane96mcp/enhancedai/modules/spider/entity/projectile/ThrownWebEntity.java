@@ -8,7 +8,6 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
@@ -46,7 +45,7 @@ public class ThrownWebEntity extends ThrowableItemProjectile {
 
 	protected void onHitEntity(@NotNull EntityHitResult result) {
 		super.onHitEntity(result);
-		if (!result.getEntity().hurt(DamageSource.thrown(this, this.getOwner()).setScalesWithDifficulty(), this.damage))
+		if (!result.getEntity().hurt(this.damageSources().thrown(this, this.getOwner()), this.damage))
 			return;
 		for(int i = 0; i < 32; ++i) {
 			this.level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.COBWEB.defaultBlockState()), result.getEntity().position().x + this.random.nextDouble() - 0.5d, result.getEntity().position().y + this.random.nextDouble() - 0.5d, result.getEntity().position().z + this.random.nextDouble() - 0.5d, 0d, 0D, 0d);

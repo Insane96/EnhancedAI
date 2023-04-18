@@ -6,6 +6,7 @@ import insane96mcp.enhancedai.modules.witch.feature.WitchPotionThrowing;
 import insane96mcp.enhancedai.setup.EAStrings;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -122,7 +123,7 @@ public abstract class WitchMixin extends Raider {
 				if (this.random.nextFloat() < ThirstyWitches.waterBreathingChance && this.isEyeInFluid(FluidTags.WATER) && !this.hasEffect(MobEffects.WATER_BREATHING) && this.getAirSupply() < this.getMaxAirSupply() / 2) {
 					mobEffectInstances.addAll(Potions.WATER_BREATHING.getEffects());
 				}
-				else if (this.random.nextFloat() < ThirstyWitches.fireResistanceChance && (this.isOnFire() || this.getLastDamageSource() != null && this.getLastDamageSource().isFire()) && !this.hasEffect(MobEffects.FIRE_RESISTANCE)) {
+				else if (this.random.nextFloat() < ThirstyWitches.fireResistanceChance && (this.isOnFire() || this.getLastDamageSource() != null && this.getLastDamageSource().is(DamageTypeTags.IS_FIRE)) && !this.hasEffect(MobEffects.FIRE_RESISTANCE)) {
 					mobEffectInstances.addAll(Potions.FIRE_RESISTANCE.getEffects());
 				}
 				else if (this.random.nextFloat() < ThirstyWitches.healingChance && this.getHealth() < this.getMaxHealth() - 3) {

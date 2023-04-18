@@ -28,6 +28,7 @@ public class SkeletonShoot extends Feature {
 	public static final String STRAFE = EnhancedAI.RESOURCE_PREFIX + "strafe";
 	public static final String SHOOTING_RANGE = EnhancedAI.RESOURCE_PREFIX + "shooting_range";
 	public static final String INACCURACY = EnhancedAI.RESOURCE_PREFIX + "inaccuracy";
+	private static final String SPAMMER = EnhancedAI.RESOURCE_PREFIX + "spammer";
 
 	@Config(min = 1, max = 64)
 	@Label(name = "Shooting Range", description = "The range from where a skeleton will shoot a player")
@@ -61,6 +62,7 @@ public class SkeletonShoot extends Feature {
 		boolean strafe = NBTUtils.getBooleanOrPutDefault(persistentData, STRAFE, skeleton.getRandom().nextDouble() < strafeChance);
 		int shootingRange1 = NBTUtils.getIntOrPutDefault(persistentData, SHOOTING_RANGE, shootingRange.getIntRandBetween(skeleton.getRandom()));
 		double inaccuracy = NBTUtils.getDoubleOrPutDefault(persistentData, INACCURACY, arrowInaccuracy);
+		boolean spammer = NBTUtils.getBooleanOrPutDefault(persistentData, SPAMMER, skeleton.getRandom().nextDouble() < spammerChance);
 
 		boolean hasAIArrowAttack = false;
 		for (WrappedGoal prioritizedGoal : skeleton.goalSelector.availableGoals) {
@@ -74,15 +76,15 @@ public class SkeletonShoot extends Feature {
 
 		avoidEntityGoals.forEach(skeleton.goalSelector::removeGoal);
 		if (hasAIArrowAttack) {
-			int attackCooldown = 20;
+			int attackCooldown = 40;
 			int bowChargeTicks = 20;
-			if (skeleton.getRandom().nextDouble() < spammerChance) {
-				attackCooldown = 5;
-				bowChargeTicks = 5;
-				inaccuracy *= 2d;
+			if (spammer) {
+				attackCooldown = 16;
+				bowChargeTicks = 3;
+				inaccuracy *= 2.5d;
 			}
-			if (!skeleton.level.getDifficulty().equals(Difficulty.HARD))
-				attackCooldown *= 2;
+			if (skeleton.level.getDifficulty().equals(Difficulty.HARD))
+				attackCooldown /= 2;
 
 			EARangedBowAttackGoal<AbstractSkeleton> EARangedBowAttackGoal = new EARangedBowAttackGoal<>(skeleton, 1.0d, shootingRange1, strafe)
 					.setAttackCooldown(attackCooldown)

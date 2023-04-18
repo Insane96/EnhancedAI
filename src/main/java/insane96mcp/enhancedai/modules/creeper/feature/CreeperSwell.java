@@ -19,6 +19,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.SwellGoal;
 import net.minecraft.world.entity.monster.Creeper;
@@ -52,6 +53,10 @@ public class CreeperSwell extends Feature {
 	@Config
 	@Label(name = "Launch Particles", description = "If true, Launching Creepers emit particles")
 	public static Boolean launchParticles = true;
+
+	@Config
+	@Label(name = "Launch inaccuracy", description = "The inaccuracy of the launching creeper in Normal difficulty, easy is increased, hard is decreased.")
+	public static Double launchInaccuracy = 0.5d;
 	@Config(min = 0d, max = 1d)
 	@Label(name = "Breach Chance", description = "Breaching creepers will try to open an hole in the wall to let mobs in.")
 	public static Double breachChance = 0.075d;
@@ -140,7 +145,7 @@ public class CreeperSwell extends Feature {
 	public void livingDamageEvent(LivingDamageEvent event) {
 		if (!this.isEnabled()
 				|| !tntLike
-				|| !event.getSource().isExplosion()
+				|| !event.getSource().is(DamageTypeTags.IS_EXPLOSION)
 				|| !(event.getEntity() instanceof Creeper creeper))
 			return;
 

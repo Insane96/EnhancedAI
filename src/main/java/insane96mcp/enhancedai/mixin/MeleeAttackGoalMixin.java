@@ -23,7 +23,7 @@ public class MeleeAttackGoalMixin {
 	public void getAttackReachSqr(LivingEntity livingEntity, CallbackInfoReturnable<Double> callbackInfo) {
 		if (!Attacking.shouldChangeAttackRange())
 			return;
-		double attackRange = this.mob.getAttributeValue(ForgeMod.ATTACK_RANGE.get());
+		double attackRange = this.mob.getAttributeValue(ForgeMod.ENTITY_REACH.get());
 		callbackInfo.setReturnValue(attackRange * attackRange + livingEntity.getBbWidth());
 	}
 }

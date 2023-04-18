@@ -1,5 +1,6 @@
 package insane96mcp.enhancedai.modules.creeper.ai;
 
+import insane96mcp.enhancedai.modules.creeper.feature.CreeperSwell;
 import insane96mcp.enhancedai.modules.creeper.utils.CreeperUtils;
 import insane96mcp.enhancedai.setup.EAStrings;
 import net.minecraft.core.particles.ParticleTypes;
@@ -113,11 +114,11 @@ public class AICreeperLaunchGoal extends Goal {
 		double distanceZ = this.creeperAttackTarget.getZ() - this.launchingCreeper.getZ();
 		double distanceXZ = Math.sqrt(distanceX * distanceX + distanceZ * distanceZ);
 
-		float inaccuracy = 0.35f;
+		float inaccuracy = CreeperSwell.launchInaccuracy.floatValue();
 		if (this.launchingCreeper.level.getDifficulty() == Difficulty.EASY)
-			inaccuracy = 0.5f;
-		if (this.launchingCreeper.level.getDifficulty() == Difficulty.HARD)
-			inaccuracy = 0.2f;
+			inaccuracy *= 1.5f;
+		else if (this.launchingCreeper.level.getDifficulty() == Difficulty.HARD)
+			inaccuracy *= 0.5f;
 		distanceX *= Mth.randomBetween(this.launchingCreeper.getRandom(), 1f - inaccuracy, 1f + inaccuracy);
 		distanceZ *= Mth.randomBetween(this.launchingCreeper.getRandom(), 1f - inaccuracy, 1f + inaccuracy);
 		//TODO better Y speed, right now when creeper Y distance is below 7 you always get 7 which isn't good when the creeper's Y distance is 0, and when the Y Distance is higher than about 25 the creeper will go to space
