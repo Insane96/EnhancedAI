@@ -44,6 +44,8 @@ public class DiggingGoal extends Goal {
 	private Vec3 lastPosition = null;
 	private int lastPositionTickstamp = 0;
 
+	private Path path = null;
+
 	public DiggingGoal(Zombie digger, double maxDistanceFromTarget, boolean toolOnly, boolean properToolOnly){
 		this.digger = digger;
 		this.reachDistance = 4;
@@ -72,14 +74,11 @@ public class DiggingGoal extends Goal {
 		if (this.target == null || !this.target.isAlive())
 			return false;
 
-		//TODO move to initBlockBeak
-		Path path = this.digger.getNavigation().createPath(this.target, 1);
-
 		return !this.targetBlocks.isEmpty()
 				&& this.targetBlocks.get(0).distSqr(this.digger.blockPosition()) < this.reachDistance * this.reachDistance
 				&& this.digger.getNavigation().isDone()
 				&& !this.digger.level.getBlockState(this.targetBlocks.get(0)).isAir()
-				&& path != null && path.getDistToTarget() > 1.5d;
+				&& this.path != null && this.path.getDistToTarget() > 1.5d;
 	}
 
 	public void start() {
@@ -102,6 +101,7 @@ public class DiggingGoal extends Goal {
 		this.blockState = null;
 		this.prevBreakProgress = 0;
 		this.lastPosition = null;
+		this.path = null;
 	}
 
 	public void tick() {
@@ -112,8 +112,8 @@ public class DiggingGoal extends Goal {
 		this.breakingTick++;
 		this.digger.getLookControl().setLookAt(this.targetBlocks.get(0).getX() + 0.5d, this.targetBlocks.get(0).getY() + 0.5d, this.targetBlocks.get(0).getZ() + 0.5d);
 		if (this.prevBreakProgress != (int) ((this.breakingTick / (float) this.tickToBreak) * 10)) {
-			this.digger.level.destroyBlockProgress(this.digger.getId(), targetBlocks.get(0), this.prevBreakProgress);
 			this.prevBreakProgress = (int) ((this.breakingTick / (float) this.tickToBreak) * 10);
+			this.digger.level.destroyBlockProgress(this.digger.getId(), targetBlocks.get(0), this.prevBreakProgress);
 		}
 		if (this.breakingTick % 6 == 0) {
 			this.digger.swing(InteractionHand.MAIN_HAND);
@@ -123,8 +123,7 @@ public class DiggingGoal extends Goal {
 			this.digger.level.playSound(null, this.targetBlocks.get(0), soundType.getHitSound(), SoundSource.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F);
 		}
 		if (this.breakingTick >= this.tickToBreak) {
-			//TODO this drops blocks even if the zombie has no mining item (e.g. stone with bare hands drops cobblestone)
-			this.digger.level.destroyBlock(targetBlocks.get(0), true, this.digger);
+			this.digger.level.destroyBlock(targetBlocks.get(0), false, this.digger);
 			this.digger.level.destroyBlockProgress(this.digger.getId(), targetBlocks.get(0), -1);
 			this.targetBlocks.remove(0);
 			if (!this.targetBlocks.isEmpty())
@@ -138,6 +137,7 @@ public class DiggingGoal extends Goal {
 		this.blockState = this.digger.level.getBlockState(this.targetBlocks.get(0));
 		this.tickToBreak = computeTickToBreak();
 		this.breakingTick = 0;
+		this.path = this.digger.getNavigation().createPath(this.target, 1);
 	}
 
 	private void fillTargetBlocks() {
