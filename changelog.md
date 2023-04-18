@@ -2,6 +2,7 @@
 
 ## Upcoming
 * Fixed digger zombies overriding off hand items
+* Fixed zombies stopping mining mid block 
 
 ## 1.10.1
 * Launching creepers inaccuracy can now be configured
