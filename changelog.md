@@ -3,8 +3,10 @@
 ## 1.10.2
 * 40% of animals now flee from players
 * Animals no longer flee if they can attack back
+* Digger zombies no longer drop items from blocks mined
 * Fixed digger zombies overriding off hand items
 * Fixed zombies stopping mining mid block 
+* Fixed digger zombies ignoring the 'Blacklist Tile Entities' config option
 
 ## 1.10.1
 * Launching creepers inaccuracy can now be configured

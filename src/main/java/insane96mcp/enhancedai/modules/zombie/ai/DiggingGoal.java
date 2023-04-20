@@ -163,6 +163,9 @@ public class DiggingGoal extends Goal {
 			if (DiggerZombie.blockBlacklist.isBlockBlackOrNotWhiteListed(state.getBlock()))
 				continue;
 
+			if (state.hasBlockEntity() && DiggerZombie.blacklistTileEntities)
+				continue;
+
 			this.targetBlocks.add(rayTraceResult.getBlockPos());
 		}
 		Collections.reverse(this.targetBlocks);

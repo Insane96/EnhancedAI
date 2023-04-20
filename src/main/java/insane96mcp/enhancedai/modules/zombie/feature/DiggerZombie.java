@@ -38,7 +38,7 @@ public class DiggerZombie extends Feature {
 	public static Boolean equipWoodenPick = true;
 	@Config(min = -64, max = 320)
 	@Label(name = "Max Y Dig", description = "The maximum Y coordinate at which Zombies can mine.")
-	public static Integer maxYDig = 64;
+	public static Integer maxYDig = 320;
 	@Config(min = 0, max = 128)
 	@Label(name = "Max Distance", description = "The maximum distance from the target at which the zombie can mine. Set to 0 to always mine.")
 	public static Integer maxDistance = 0;
