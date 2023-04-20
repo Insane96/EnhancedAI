@@ -1,6 +1,7 @@
 # Changelog
 
 ## Upcoming
+* Animals no longer flee if they can attack back
 * Fixed digger zombies overriding off hand items
 * Fixed zombies stopping mining mid block 
 

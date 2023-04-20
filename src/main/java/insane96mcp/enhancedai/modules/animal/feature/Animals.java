@@ -18,6 +18,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.PanicGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.Animal;
@@ -44,7 +45,10 @@ public class Animals extends Feature {
     public static Integer groupFleeRange = 16;
     @Config
     @Label(name = "Fight back chance", description = "Animals have this percentage chance to be able to fight back instead of fleeing. Animals have a slightly bigger range to attack. Attack damage can't be changed via config due to limitation so use mods like Mobs Properties Randomness to change the damage. Base damage is 4")
-    public static Double animalsFightBackChance = 0.2d;
+    public static Double fightBackChance = 0.2d;
+    @Config
+    @Label(name = "Players Scared chance", description = "Animals have this percentage chance to be scared by players and run away")
+    public static Double playersScaredChance = 0.2d;
     @Config(min = 0d, max = 4d)
     @Label(name = "Movement Speed Multiplier", description = "Movement speed multiplier when aggroed.")
     public static Double speedMultiplier = 1.35d;
@@ -89,11 +93,12 @@ public class Animals extends Feature {
         CompoundTag persistentData = animal.getPersistentData();
 
         double movementSpeedMultiplier = NBTUtils.getDoubleOrPutDefault(persistentData, EAStrings.Tags.Passive.SPEED_MULTIPLIER_WHEN_AGGROED, speedMultiplier);
-        boolean canAttackBack = NBTUtils.getBooleanOrPutDefault(persistentData, CAN_ATTACK_BACK, animal.getRandom().nextDouble() < animalsFightBackChance);
+        boolean canAttackBack = NBTUtils.getBooleanOrPutDefault(persistentData, CAN_ATTACK_BACK, animal.getRandom().nextDouble() < fightBackChance);
 
         if (canAttackBack && !animal.isBaby()) {
             animal.targetSelector.addGoal(1, (new HurtByTargetGoal(animal)).setAlertOthers());
             animal.goalSelector.addGoal(1, new MeleeAttackGoal(animal, movementSpeedMultiplier, true));
+            animal.goalSelector.availableGoals.removeIf(wrappedGoal -> wrappedGoal.getGoal() instanceof PanicGoal);
             if (knockback > 0d) {
                 AttributeInstance kbAttribute = animal.getAttribute(Attributes.ATTACK_KNOCKBACK);
                 if (kbAttribute != null)
