@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 1.10.2
 * 40% of animals now flee from players
 * Animals no longer flee if they can attack back
 * Fixed digger zombies overriding off hand items
