@@ -51,7 +51,7 @@ public class Animals extends Feature {
     public static Double fightBackChance = 0.2d;
     @Config
     @Label(name = "Players Scared chance", description = "Animals have this percentage chance to be scared by players and run away. Fight back chance has priority over this.")
-    public static Double playersScaredChance = 0.2d;
+    public static Double playersScaredChance = 0.4d;
     @Config(min = 0d, max = 4d)
     @Label(name = "Movement Speed Multiplier", description = "Movement speed multiplier when aggroed.")
     public static Double speedMultiplier = 1.35d;
