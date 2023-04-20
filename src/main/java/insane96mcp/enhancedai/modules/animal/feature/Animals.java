@@ -2,6 +2,7 @@ package insane96mcp.enhancedai.modules.animal.feature;
 
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.modules.base.ai.EAAvoidEntityGoal;
 import insane96mcp.enhancedai.setup.EAStrings;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
@@ -23,6 +24,7 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
@@ -36,6 +38,7 @@ import java.util.List;
 public class Animals extends Feature {
 
     public static final String CAN_ATTACK_BACK = EnhancedAI.RESOURCE_PREFIX + "can_attack_back";
+    public static final String PLAYER_SCARED = EnhancedAI.RESOURCE_PREFIX + "player_scared";
 
     @Config
     @Label(name = "Group Flee", description = "If true, when an animal is attacked, all the animals around will flee.")
@@ -47,7 +50,7 @@ public class Animals extends Feature {
     @Label(name = "Fight back chance", description = "Animals have this percentage chance to be able to fight back instead of fleeing. Animals have a slightly bigger range to attack. Attack damage can't be changed via config due to limitation so use mods like Mobs Properties Randomness to change the damage. Base damage is 4")
     public static Double fightBackChance = 0.2d;
     @Config
-    @Label(name = "Players Scared chance", description = "Animals have this percentage chance to be scared by players and run away")
+    @Label(name = "Players Scared chance", description = "Animals have this percentage chance to be scared by players and run away. Fight back chance has priority over this.")
     public static Double playersScaredChance = 0.2d;
     @Config(min = 0d, max = 4d)
     @Label(name = "Movement Speed Multiplier", description = "Movement speed multiplier when aggroed.")
@@ -94,6 +97,7 @@ public class Animals extends Feature {
 
         double movementSpeedMultiplier = NBTUtils.getDoubleOrPutDefault(persistentData, EAStrings.Tags.Passive.SPEED_MULTIPLIER_WHEN_AGGROED, speedMultiplier);
         boolean canAttackBack = NBTUtils.getBooleanOrPutDefault(persistentData, CAN_ATTACK_BACK, animal.getRandom().nextDouble() < fightBackChance);
+        boolean playerScared = NBTUtils.getBooleanOrPutDefault(persistentData, PLAYER_SCARED, animal.getRandom().nextDouble() < playersScaredChance);
 
         if (canAttackBack && !animal.isBaby()) {
             animal.targetSelector.addGoal(1, (new HurtByTargetGoal(animal)).setAlertOthers());
@@ -104,6 +108,10 @@ public class Animals extends Feature {
                 if (kbAttribute != null)
                     kbAttribute.addPermanentModifier(new AttributeModifier("Animal knockback", knockback, AttributeModifier.Operation.ADDITION));
             }
+        }
+        else if (playerScared) {
+            EAAvoidEntityGoal<Player> avoidEntityGoal = new EAAvoidEntityGoal<>(animal, Player.class, (float) 16, (float) 8, 1.25, 1.1);
+            animal.goalSelector.addGoal(1, avoidEntityGoal);
         }
     }
 
