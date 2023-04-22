@@ -49,10 +49,10 @@ public class WitchPotionThrowing extends Feature {
     public static Double anotherThrowChance = 0.20d;
     @Config(min = 1)
     @Label(name = "Throw Speed", description = "Speed at which Witches throw potions (in ticks).")
-    public static MinMax throwSpeed = new MinMax(50, 70);
+    public static MinMax throwSpeed = new MinMax(60, 80);
     @Config(min = 8, max = 64)
     @Label(name = "Throw Range", description = "Range at which Witches throw potions.")
-    public static MinMax throwRange = new MinMax(16, 32);
+    public static MinMax throwRange = new MinMax(16, 24);
     @Config
     @Label(name = "Use Slow Falling", description = "If true, witches will throw a potion of slow falling at their feet when they're falling for more than 8 blocks.")
     public static Boolean useSlowFalling = true;
