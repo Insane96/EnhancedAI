@@ -87,8 +87,8 @@ public class SkeletonShoot extends Feature {
 		avoidEntityGoals.forEach(skeleton.goalSelector::removeGoal);
 		if (hasAIArrowAttack) {
 			if (spammer) {
-				shootingCooldown1 = 20;
-				bowChargeTicks1 = 2;
+				shootingCooldown1 = 30;
+				bowChargeTicks1 = 1;
 				inaccuracy *= 2.5d;
 			}
 			if (skeleton.level.getDifficulty().equals(Difficulty.HARD))
