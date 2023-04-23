@@ -30,9 +30,9 @@ public class FishingTargetGoal extends Goal {
 		if (!(target instanceof Player))
 			return false;
 
-		//24d & 2.5d
+		//24d & ~2.25d
 		if (this.fisher.distanceToSqr(target) > 576d
-				|| this.fisher.distanceToSqr(target) < 6.25d
+				|| this.fisher.distanceToSqr(target) < 5d
 				|| !this.fisher.getSensing().hasLineOfSight(target))
 			return false;
 

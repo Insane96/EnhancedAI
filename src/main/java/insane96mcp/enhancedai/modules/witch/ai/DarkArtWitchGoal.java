@@ -56,7 +56,7 @@ public class DarkArtWitchGoal extends Goal {
     public void start() {
         this.target = this.witch.getTarget();
         this.witch.getPersistentData().putBoolean(EAStrings.Tags.Witch.PERFORMING_DARK_ARTS, true);
-        this.witch.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 100, 3));
+        this.witch.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 100, 2));
         this.witch.setGlowingTag(true);
         this.witch.setDeltaMovement(0d, this.witch.getDeltaMovement().y, 0d);
     }

@@ -49,7 +49,7 @@ public class WitchPotionThrowing extends Feature {
     public static Double anotherThrowChance = 0.20d;
     @Config(min = 1)
     @Label(name = "Throw Speed", description = "Speed at which Witches throw potions (in ticks).")
-    public static MinMax throwSpeed = new MinMax(60, 80);
+    public static MinMax throwSpeed = new MinMax(70, 90);
     @Config(min = 8, max = 64)
     @Label(name = "Throw Range", description = "Range at which Witches throw potions.")
     public static MinMax throwRange = new MinMax(16, 24);

@@ -1,5 +1,10 @@
 # Changelog
 
+## Upcoming
+* Reduced witches Resistance when performing dark arts
+* Fisher zombies now fish closer to targets
+* Witches now throw Slowness I potions instead of II
+
 ## 1.10.2
 * 40% of animals now flee from players
 * Animals no longer flee if they can attack back
