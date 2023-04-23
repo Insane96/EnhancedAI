@@ -1,5 +1,6 @@
 package insane96mcp.enhancedai.modules.witch.feature;
 
+import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.modules.witch.ai.WitchThrowPotionGoal;
 import insane96mcp.enhancedai.setup.EAStrings;
@@ -33,6 +34,8 @@ import java.util.List;
 @LoadFeature(module = Modules.Ids.WITCH)
 public class WitchPotionThrowing extends Feature {
 
+    public static final String APPRENTICE = EnhancedAI.RESOURCE_PREFIX + "apprentice";
+
     private static ForgeConfigSpec.ConfigValue<List<? extends String>> badPotionsListConfig;
     private static ForgeConfigSpec.ConfigValue<List<? extends String>> goodPotionsListConfig;
     public static final List<String> badPotionsListDefault = Arrays.asList("minecraft:weakness,900,0", "minecraft:slowness,1200,0", "minecraft:hunger,600,0", "minecraft:mining_fatigue,600,0", "minecraft:poison,900,0", "minecraft:blindness,120,0", "minecraft:instant_damage,1,0");
@@ -53,6 +56,9 @@ public class WitchPotionThrowing extends Feature {
     @Config(min = 8, max = 64)
     @Label(name = "Throw Range", description = "Range at which Witches throw potions.")
     public static MinMax throwRange = new MinMax(16, 24);
+    @Config(min = 0d, max = 1d)
+    @Label(name = "Apprentice Witch Chance", description = "Chance for a Witch to be an apprentice. Apprentice Witches throw random potions instead of in order, and have a chance to throw a wrong potion.")
+    public static Double apprenticeWitchChance = 0.75d;
     @Config
     @Label(name = "Use Slow Falling", description = "If true, witches will throw a potion of slow falling at their feet when they're falling for more than 8 blocks.")
     public static Boolean useSlowFalling = true;
@@ -71,10 +77,10 @@ public class WitchPotionThrowing extends Feature {
     public void loadConfigOptions() {
         super.loadConfigOptions();
         badPotionsListConfig = this.getBuilder()
-                .comment("A list of potions that the witch can throw at enemies. Format is effect_id,duration,amplifier. The potions are applied in order and witches will not throw the same potion if the target has already the effect.")
+                .comment("A list of potions that the witch can throw at enemies. Format is effect_id,duration,amplifier. The potions are thrown in order and witches will not throw the same potion if the target has already the effect.")
                 .defineList("Bad Potions List", badPotionsListDefault, o -> o instanceof String);
         goodPotionsListConfig = this.getBuilder()
-                .comment("A list of potions that the witch can throw at allies (in raids). Format is effect_id,duration,amplifier. The potions are applied in order and witches will not throw the same potion if the target has already the effect.")
+                .comment("A list of potions that the witch can throw at allies (in raids). Format is effect_id,duration,amplifier. The potions are thrown in order and witches will not throw the same potion if the target has already the effect.")
                 .defineList("Good Potions List", goodPotionsListDefault, o -> o instanceof String);
     }
 
@@ -99,6 +105,7 @@ public class WitchPotionThrowing extends Feature {
         int attackRange = NBTUtils.getIntOrPutDefault(persistentData, EAStrings.Tags.Witch.ATTACK_RANGE, throwRange.getIntRandBetween(witch.getRandom()));
         double lingeringChance1 = NBTUtils.getDoubleOrPutDefault(persistentData, EAStrings.Tags.Witch.LINGERING_CHANCE, lingeringChance);
         double anotherThrowChance1 = NBTUtils.getDoubleOrPutDefault(persistentData, EAStrings.Tags.Witch.ANOTHER_THROW_CHANCE, anotherThrowChance);
+        boolean apprentice = NBTUtils.getBooleanOrPutDefault(persistentData, APPRENTICE, witch.getRandom().nextDouble() < apprenticeWitchChance);
 
         List<Goal> rangedAttackGoals = witch.goalSelector.availableGoals.stream()
                 .map(WrappedGoal::getGoal)
@@ -106,7 +113,7 @@ public class WitchPotionThrowing extends Feature {
                 .toList();
         rangedAttackGoals.forEach(witch.goalSelector::removeGoal);
 
-        witch.goalSelector.addGoal(2, new WitchThrowPotionGoal(witch, attackSpeed, attackSpeed, attackRange, lingeringChance1, anotherThrowChance1));
+        witch.goalSelector.addGoal(2, new WitchThrowPotionGoal(witch, attackSpeed, attackSpeed, attackRange, lingeringChance1, anotherThrowChance1, apprentice));
         //witch.targetSelector.addGoal(2, new WitchBuffAllyGoal<>(witch, Mob.class, true, (livingEntity -> livingEntity != null && !witch.hasActiveRaid() && livingEntity.getType() != EntityType.WITCH)));
     }
 

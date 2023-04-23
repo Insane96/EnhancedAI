@@ -5,6 +5,9 @@
 * Reduced witches Resistance when performing dark arts
 * Fisher zombies now fish closer to targets
 * Witches now throw Slowness I potions instead of II
+* Added Apprentice Witches
+  * Witches that will throw random potions, even wrong ones
+* Nerfed Spammer skeletons
 
 ## 1.10.2
 * 40% of animals now flee from players

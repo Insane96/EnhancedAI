@@ -31,9 +31,10 @@ public class WitchThrowPotionGoal extends Goal {
     private LivingEntity target;
 
     private int attackTime;
+    private final boolean apprentice;
     private boolean randomPotion = false;
 
-    public WitchThrowPotionGoal(Witch witch, int attackIntervalMin, int attackIntervalMax, float attackRadius, double lingeringChance, double anotherThrowChance) {
+    public WitchThrowPotionGoal(Witch witch, int attackIntervalMin, int attackIntervalMax, float attackRadius, double lingeringChance, double anotherThrowChance, boolean apprentice) {
         this.witch = witch;
         this.attackIntervalMin = attackIntervalMin;
         this.attackIntervalMax = attackIntervalMax;
@@ -42,6 +43,7 @@ public class WitchThrowPotionGoal extends Goal {
         this.attackTime = Mth.floor(Mth.nextInt(witch.getRandom(), this.attackIntervalMin, this.attackIntervalMax)) / 2;
         this.lingeringChance = lingeringChance;
         this.anotherThrowChance = anotherThrowChance;
+        this.apprentice = apprentice;
         this.setFlags(EnumSet.of(Goal.Flag.LOOK));
     }
 
@@ -98,8 +100,15 @@ public class WitchThrowPotionGoal extends Goal {
             return;
 
         Collection<MobEffectInstance> mobEffectInstances = new ArrayList<>();
-        List<MobEffectInstance> listToLoop = this.target instanceof Raider ? WitchPotionThrowing.goodPotionsList : WitchPotionThrowing.badPotionsList;
+        List<MobEffectInstance> listToLoop;
+        if (!this.apprentice)
+            listToLoop = this.target instanceof Raider ? WitchPotionThrowing.goodPotionsList : WitchPotionThrowing.badPotionsList;
+        else
+            listToLoop = this.witch.getRandom().nextBoolean() ? WitchPotionThrowing.goodPotionsList : WitchPotionThrowing.badPotionsList;
         if (this.randomPotion) {
+            mobEffectInstances.add(listToLoop.get(witch.getRandom().nextInt(listToLoop.size())));
+        }
+        else if (this.apprentice) {
             mobEffectInstances.add(listToLoop.get(witch.getRandom().nextInt(listToLoop.size())));
         }
         else {
@@ -134,7 +143,7 @@ public class WitchThrowPotionGoal extends Goal {
         witch.level.addFreshEntity(thrownpotion);
 
         if (witch.getRandom().nextDouble() < this.anotherThrowChance) {
-            this.attackTime = 7;
+            this.attackTime = 8;
             this.randomPotion = true;
         }
     }
