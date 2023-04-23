@@ -200,7 +200,7 @@ public class DarkArtWitchGoal extends Goal {
     private void summonWitch() {
         ServerLevel serverLevel = (ServerLevel) this.witch.level;
         Witch witch = EntityType.WITCH.create(serverLevel);
-        witch.moveTo(this.witch.getX(), this.witch.getY(), this.witch.getZ(), this.witch.getYRot(), this.witch.getXRot());
+        witch.moveTo(this.villager.getX(), this.villager.getY(), this.villager.getZ(), this.villager.getYRot(), this.villager.getXRot());
         witch.finalizeSpawn(serverLevel, this.witch.level.getCurrentDifficultyAt(witch.blockPosition()), MobSpawnType.CONVERSION, null, null);
         witch.getPersistentData().putBoolean(EAStrings.Tags.Witch.DARK_ARTS, false);
         //witch.setPersistenceRequired();
