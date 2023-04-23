@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 1.10.3
 * Skeletons attack cooldown and charge time can now be configured
 * Reduced witches Resistance when performing dark arts
 * Fisher zombies now fish closer to targets
