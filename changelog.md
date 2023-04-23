@@ -1,6 +1,7 @@
 # Changelog
 
 ## Upcoming
+* Skeletons attack cooldown and charge time can now be configured
 * Reduced witches Resistance when performing dark arts
 * Fisher zombies now fish closer to targets
 * Witches now throw Slowness I potions instead of II

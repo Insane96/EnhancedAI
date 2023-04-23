@@ -27,12 +27,20 @@ public class SkeletonShoot extends Feature {
 
 	public static final String STRAFE = EnhancedAI.RESOURCE_PREFIX + "strafe";
 	public static final String SHOOTING_RANGE = EnhancedAI.RESOURCE_PREFIX + "shooting_range";
+	public static final String SHOOTING_COOLDOWN = EnhancedAI.RESOURCE_PREFIX + "shooting_cooldown";
+	public static final String BOW_CHARGE_TICKS = EnhancedAI.RESOURCE_PREFIX + "bow_charge_ticks";
 	public static final String INACCURACY = EnhancedAI.RESOURCE_PREFIX + "inaccuracy";
 	private static final String SPAMMER = EnhancedAI.RESOURCE_PREFIX + "spammer";
 
 	@Config(min = 1, max = 64)
 	@Label(name = "Shooting Range", description = "The range from where a skeleton will shoot a player")
 	public static MinMax shootingRange = new MinMax(24, 32);
+	@Config(min = 0)
+	@Label(name = "Shooting Cooldown", description = "The ticks cooldown after shooting. This is halved in Hard difficulty")
+	public static MinMax shootingCooldown = new MinMax(40, 60);
+	@Config(min = 0)
+	@Label(name = "Bow charge ticks", description = "The ticks the skeleton charges the bow. 20 ticks for a full charge.")
+	public static MinMax bowChargeTicks = new MinMax(15, 30);
 	@Config(min = 0d, max = 1d)
 	@Label(name = "Strafe chance", description = "Chance for a Skeleton to spawn with the ability to strafe (like vanilla)")
 	public static Double strafeChance = 0.333d;
@@ -63,6 +71,8 @@ public class SkeletonShoot extends Feature {
 		int shootingRange1 = NBTUtils.getIntOrPutDefault(persistentData, SHOOTING_RANGE, shootingRange.getIntRandBetween(skeleton.getRandom()));
 		double inaccuracy = NBTUtils.getDoubleOrPutDefault(persistentData, INACCURACY, arrowInaccuracy);
 		boolean spammer = NBTUtils.getBooleanOrPutDefault(persistentData, SPAMMER, skeleton.getRandom().nextDouble() < spammerChance);
+		int shootingCooldown1 = NBTUtils.getIntOrPutDefault(persistentData, SHOOTING_COOLDOWN, shootingCooldown.getIntRandBetween(skeleton.getRandom()));
+		int bowChargeTicks1 = NBTUtils.getIntOrPutDefault(persistentData, BOW_CHARGE_TICKS, bowChargeTicks.getIntRandBetween(skeleton.getRandom()));
 
 		boolean hasAIArrowAttack = false;
 		for (WrappedGoal prioritizedGoal : skeleton.goalSelector.availableGoals) {
@@ -76,19 +86,17 @@ public class SkeletonShoot extends Feature {
 
 		avoidEntityGoals.forEach(skeleton.goalSelector::removeGoal);
 		if (hasAIArrowAttack) {
-			int attackCooldown = 40;
-			int bowChargeTicks = 20;
 			if (spammer) {
-				attackCooldown = 16;
-				bowChargeTicks = 3;
+				shootingCooldown1 = 20;
+				bowChargeTicks1 = 2;
 				inaccuracy *= 2.5d;
 			}
 			if (skeleton.level.getDifficulty().equals(Difficulty.HARD))
-				attackCooldown /= 2;
+				shootingCooldown1 /= 2;
 
 			EARangedBowAttackGoal<AbstractSkeleton> EARangedBowAttackGoal = new EARangedBowAttackGoal<>(skeleton, 1.0d, shootingRange1, strafe)
-					.setAttackCooldown(attackCooldown)
-					.setBowChargeTicks(bowChargeTicks)
+					.setAttackCooldown(shootingCooldown1)
+					.setBowChargeTicks(bowChargeTicks1)
 					.setInaccuracy((float) inaccuracy);
 			skeleton.goalSelector.addGoal(2, EARangedBowAttackGoal);
 		}
