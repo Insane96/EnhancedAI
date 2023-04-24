@@ -20,6 +20,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.PanicGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.Animal;
@@ -39,6 +40,7 @@ public class Animals extends Feature {
 
     public static final String CAN_ATTACK_BACK = EnhancedAI.RESOURCE_PREFIX + "can_attack_back";
     public static final String PLAYER_SCARED = EnhancedAI.RESOURCE_PREFIX + "player_scared";
+    public static final String NOT_TEMPTED = EnhancedAI.RESOURCE_PREFIX + "not_tempted";
 
     @Config
     @Label(name = "Group Flee", description = "If true, when an animal is attacked, all the animals around will flee.")
@@ -47,11 +49,14 @@ public class Animals extends Feature {
     @Label(name = "Flee Range", description = "If Group Flee is enabled, this is the range where the animals will flee.")
     public static Integer groupFleeRange = 16;
     @Config
-    @Label(name = "Fight back chance", description = "Animals have this percentage chance to be able to fight back instead of fleeing. Animals have a slightly bigger range to attack. Attack damage can't be changed via config due to limitation so use mods like Mobs Properties Randomness to change the damage. Base damage is 4")
+    @Label(name = "Fight back chance", description = "Animals have this percentage chance to be able to fight back instead of fleeing. Animals have a slightly bigger range to attack. Attack damage can't be changed via config due to limitation so use mods like Mobs Properties Randomness to change the damage. Base damage is 3.")
     public static Double fightBackChance = 0.2d;
     @Config
     @Label(name = "Players Scared chance", description = "Animals have this percentage chance to be scared by players and run away. Fight back chance has priority over this.")
     public static Double playersScaredChance = 0.4d;
+    @Config
+    @Label(name = "Not tempted chance", description = "Animals have this percentage chance to not be temped by food.")
+    public static Double notTemptedChance = 0.5d;
     @Config(min = 0d, max = 4d)
     @Label(name = "Movement Speed Multiplier", description = "Movement speed multiplier when aggroed.")
     public static Double speedMultiplier = 1.35d;
@@ -98,6 +103,7 @@ public class Animals extends Feature {
         double movementSpeedMultiplier = NBTUtils.getDoubleOrPutDefault(persistentData, EAStrings.Tags.Passive.SPEED_MULTIPLIER_WHEN_AGGROED, speedMultiplier);
         boolean canAttackBack = NBTUtils.getBooleanOrPutDefault(persistentData, CAN_ATTACK_BACK, animal.getRandom().nextDouble() < fightBackChance);
         boolean playerScared = NBTUtils.getBooleanOrPutDefault(persistentData, PLAYER_SCARED, animal.getRandom().nextDouble() < playersScaredChance);
+        boolean notTempted = NBTUtils.getBooleanOrPutDefault(persistentData, NOT_TEMPTED, animal.getRandom().nextDouble() < notTemptedChance);
 
         if (canAttackBack && !animal.isBaby()) {
             animal.targetSelector.addGoal(1, (new HurtByTargetGoal(animal)).setAlertOthers());
@@ -112,6 +118,10 @@ public class Animals extends Feature {
         else if (playerScared) {
             EAAvoidEntityGoal<Player> avoidEntityGoal = new EAAvoidEntityGoal<>(animal, Player.class, (float) 16, (float) 8, 1.25, 1.1);
             animal.goalSelector.addGoal(1, avoidEntityGoal);
+        }
+
+        if (notTempted) {
+            animal.goalSelector.getAvailableGoals().removeIf(wrappedGoal -> wrappedGoal.getGoal() instanceof TemptGoal);
         }
     }
 

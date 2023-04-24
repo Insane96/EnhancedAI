@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* 50% of animals are no longer tempted by food
+
 ## 1.10.3
 * Skeletons attack cooldown and charge time can now be configured
 * Reduced witches Resistance when performing dark arts
