@@ -1,6 +1,7 @@
 # Changelog
 
 ## Upcoming
+* 80%/25%/10% of mobs can now spawn neutral
 * 50% of animals are no longer tempted by food
 
 ## 1.10.3

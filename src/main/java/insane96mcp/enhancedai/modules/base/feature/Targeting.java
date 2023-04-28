@@ -1,10 +1,13 @@
 package insane96mcp.enhancedai.modules.base.feature;
 
+import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.modules.base.ai.EANearestAttackableTarget;
 import insane96mcp.enhancedai.modules.base.ai.EASpiderTargetGoal;
 import insane96mcp.enhancedai.setup.EAAttributes;
 import insane96mcp.enhancedai.setup.EAStrings;
+import insane96mcp.enhancedai.setup.NBTUtils;
+import insane96mcp.enhancedai.utils.LogHelper;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
@@ -41,6 +44,8 @@ import java.util.List;
 @LoadFeature(module = Modules.Ids.BASE)
 public class Targeting extends Feature {
 
+	public static final String IS_NEUTRAL = EnhancedAI.RESOURCE_PREFIX + "is_neutral";
+
 	@Config(min = 0d, max = 128d)
 	@Label(name = "Follow Range Override", description = "How far away can the mobs see the player. This overrides the vanilla value (16 for most mobs). Setting 'Max' to 0 will leave the follow range as vanilla. I recommend using mods like Mobs Properties Randomness to have more control over the attribute.")
 	public static MinMax followRangeOverride = new MinMax(24, 48);
@@ -61,6 +66,9 @@ public class Targeting extends Feature {
 	public static Blacklist entityBlacklist = new Blacklist(List.of(
 			new IdTagMatcher(IdTagMatcher.Type.ID, "minecraft:enderman")
 	), false);
+	@Config
+	@Label(name = "Neutral Chances", description = "Chances for a mob to spawn neutral. The 3 chances are for Easy, Normal and Hard difficulty")
+	public static String neutralChances = "0.8,0.25,0.1";
 
 	public Targeting(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super(module, enabledByDefault, canBeDisabled);
@@ -138,6 +146,21 @@ public class Targeting extends Feature {
 
 		goalsToRemove.forEach(mobEntity.targetSelector::removeGoal);
 
+		String[] split = neutralChances.split(",");
+		if (split.length != 3) {
+			LogHelper.error("Failed to parse neutral chances.");
+		}
+		else {
+			double neutralChance = switch (mobEntity.getLevel().getDifficulty()) {
+				case PEACEFUL, EASY -> Double.parseDouble(split[0]);
+				case NORMAL -> Double.parseDouble(split[1]);
+				case HARD -> Double.parseDouble(split[2]);
+			};
+			boolean isNeutral = NBTUtils.getBooleanOrPutDefault(mobEntity.getPersistentData(), IS_NEUTRAL, mobEntity.getRandom().nextDouble() < neutralChance);
+			if (isNeutral)
+				return;
+		}
+
 		EANearestAttackableTarget<Player> targetGoal;
 
 		if (mobEntity instanceof Spider)
@@ -151,7 +174,7 @@ public class Targeting extends Feature {
 		if (betterPathfinding)
 			mobEntity.getNavigation().setMaxVisitedNodesMultiplier(4f);
 
-		/*ILNearestAttackableTargetGoal<Endermite> targetGoalTest;
+        /*ILNearestAttackableTargetGoal<Endermite> targetGoalTest;
 
 		if (mobEntity instanceof Spider)
 			targetGoalTest = new EASpiderTargetGoal<>((Spider) mobEntity, Endermite.class, true, false, predicate);
