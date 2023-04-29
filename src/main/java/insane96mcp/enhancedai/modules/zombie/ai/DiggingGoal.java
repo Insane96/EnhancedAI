@@ -52,7 +52,7 @@ public class DiggingGoal extends Goal {
 		this.maxDistanceFromTarget = maxDistanceFromTarget == 0 ? 64 * 64 : maxDistanceFromTarget * maxDistanceFromTarget;
 		this.toolOnly = toolOnly;
 		this.properToolOnly = properToolOnly;
-		this.setFlags(EnumSet.of(Flag.LOOK));
+		this.setFlags(EnumSet.of(Flag.LOOK, Flag.MOVE));
 	}
 
 	public boolean canUse() {
