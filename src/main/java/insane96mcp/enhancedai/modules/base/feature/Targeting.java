@@ -7,14 +7,10 @@ import insane96mcp.enhancedai.modules.base.ai.EASpiderTargetGoal;
 import insane96mcp.enhancedai.setup.EAAttributes;
 import insane96mcp.enhancedai.setup.EAStrings;
 import insane96mcp.enhancedai.setup.NBTUtils;
-import insane96mcp.enhancedai.utils.LogHelper;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
-import insane96mcp.insanelib.base.config.Blacklist;
-import insane96mcp.insanelib.base.config.Config;
-import insane96mcp.insanelib.base.config.LoadFeature;
-import insane96mcp.insanelib.base.config.MinMax;
+import insane96mcp.insanelib.base.config.*;
 import insane96mcp.insanelib.util.IdTagMatcher;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.nbt.CompoundTag;
@@ -67,8 +63,8 @@ public class Targeting extends Feature {
 			new IdTagMatcher(IdTagMatcher.Type.ID, "minecraft:enderman")
 	), false);
 	@Config
-	@Label(name = "Neutral Chances", description = "Chances for a mob to spawn neutral. The 3 chances are for Easy, Normal and Hard difficulty")
-	public static String neutralChances = "0.8,0.25,0.1";
+	@Label(name = "Neutral Chances", description = "Chances for a mob to spawn neutral")
+	public static Difficulty neutralChances = new Difficulty(0.7d, 0.25d, 0.1d);
 
 	public Targeting(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super(module, enabledByDefault, canBeDisabled);
@@ -146,20 +142,9 @@ public class Targeting extends Feature {
 
 		goalsToRemove.forEach(mobEntity.targetSelector::removeGoal);
 
-		String[] split = neutralChances.split(",");
-		if (split.length != 3) {
-			LogHelper.error("Failed to parse neutral chances.");
-		}
-		else {
-			double neutralChance = switch (mobEntity.getLevel().getDifficulty()) {
-				case PEACEFUL, EASY -> Double.parseDouble(split[0]);
-				case NORMAL -> Double.parseDouble(split[1]);
-				case HARD -> Double.parseDouble(split[2]);
-			};
-			boolean isNeutral = NBTUtils.getBooleanOrPutDefault(mobEntity.getPersistentData(), IS_NEUTRAL, mobEntity.getRandom().nextDouble() < neutralChance);
-			if (isNeutral)
-				return;
-		}
+		boolean isNeutral = NBTUtils.getBooleanOrPutDefault(mobEntity.getPersistentData(), IS_NEUTRAL, mobEntity.getRandom().nextDouble() < neutralChances.getByDifficulty(mobEntity.level));
+		if (isNeutral)
+			return;
 
 		EANearestAttackableTarget<Player> targetGoal;
 
