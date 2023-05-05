@@ -1,7 +1,10 @@
 # Changelog
 
 ## Upcoming
-* Breaking quartz now alerts Zombified Piglins around
+* Added Iron Golem feature
+  * Iron Golems now have an innate 40% damage resistance and are kept less time on fire
+* Added Zombified Piglins 
+  * Breaking quartz now alerts Zombified Piglins around
 * Heavily reduced neutral mobs chances
 
 ## 1.10.4
