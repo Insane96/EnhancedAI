@@ -8,8 +8,11 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -54,6 +57,9 @@ public class ThrownWebEntity extends ThrowableItemProjectile {
 		if (!(result.getEntity() instanceof LivingEntity entity) || this.level.isClientSide)
 			return;
 
+		if (ThrowingWeb.applySpeed && this.getOwner() instanceof Mob mob && mob.getTarget() == result.getEntity()) {
+			mob.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 100, 1));
+		}
 		ThrowingWeb.applyEffects((LivingEntity) this.getOwner(), entity);
 		ThrowingWeb.applyWeb(entity);
 	}

@@ -5,6 +5,7 @@
   * Iron Golems now have an innate 40% damage resistance and are kept less time on fire
 * Added Zombified Piglins 
   * Breaking quartz now alerts Zombified Piglins around
+* Webbing spiders now gain a speed boost if they hit the target
 * Heavily reduced neutral mobs chances
 
 ## 1.10.4

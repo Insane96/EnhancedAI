@@ -58,20 +58,23 @@ public class ThrowingWeb extends Feature {
 	@Label(name = "Cave spiders poisonous webs", description = "If true cave spiders' thrown web will poison entities hit like when they hit the entity melee.")
 	public static Boolean caveSpidersPoisonousWebs = true;
 	@Config
-	@Label(name = "Apply Slowness", description = "If true entities will get slowness when hit.")
+	@Label(name = "Apply Speed on hit", description = "If true, spiders will gain a speed boost when they hit the target.")
 	public static Boolean applySlowness = true;
+	@Config
+	@Label(name = "Apply Slowness", description = "If true entities will get slowness when hit.")
+	public static Boolean applySpeed = true;
 	//Slowness
 	@Config(min = 0d, max = 6000)
 	@Label(name = "Slowness.Duration", description = "How many ticks of slowness are applied to the target hit by the web?")
 	public static Integer slownessDuration = 120;
-	@Config(min = 0d, max = 128)
+	@Config(min = 0, max = 128)
 	@Label(name = "Slowness.Amplifier", description = "How many levels of slowness are applied to the target hit by the web?")
-	public static Integer slownessAmplifier = 1;
+	public static Integer slownessAmplifier = 0;
 	@Config
 	@Label(name = "Slowness.Stacking Amplifier", description = "Should multiple hits on a target with slowness increase the level of Slowness? (This works with any type of slowness)")
-	public static Boolean stackSlowness = true;
-	@Config(min = 0d, max = 128)
-	@Label(name = "Slowness.Max Amplifier", description = "How many max levels of slowness can be applied to the target?")
+	public static Boolean stackSlowness = false;
+	@Config(min = 0, max = 128)
+	@Label(name = "Slowness.Max Amplifier", description = "How many max levels of slowness can be applied to the target if Staking amplifier is enabled?")
 	public static Integer maxSlowness = 2;
 	@Config
 	@Label(name = "Entity Blacklist", description = "Entities that will not be affected by this feature")
@@ -108,9 +111,9 @@ public class ThrowingWeb extends Feature {
 		MobEffectInstance slowness = entity.getEffect(MobEffects.MOVEMENT_SLOWDOWN);
 
 		if (stackSlowness && slowness != null)
-			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, slownessDuration, Math.min(slowness.getAmplifier() + slownessAmplifier, maxSlowness - 1), true, true, true));
+			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, slownessDuration, Math.min(slowness.getAmplifier() + slownessAmplifier + 1, maxSlowness - 1), true, true, true));
 		else
-			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, slownessDuration, slownessAmplifier - 1, true, true, true));
+			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, slownessDuration, slownessAmplifier, true, true, true));
 	}
 
 	public static void applyPoison(LivingEntity spider, LivingEntity entity) {
