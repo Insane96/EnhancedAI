@@ -1,6 +1,7 @@
 # Changelog
 
 ## Upcoming
+* Breaking quartz now alerts Zombified Piglins around
 * Heavily reduced neutral mobs chances
 
 ## 1.10.4
