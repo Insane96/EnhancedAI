@@ -64,7 +64,7 @@ public class Targeting extends Feature {
 	), false);
 	@Config
 	@Label(name = "Neutral Chances", description = "Chances for a mob to spawn neutral")
-	public static Difficulty neutralChances = new Difficulty(0.7d, 0.25d, 0.1d);
+	public static Difficulty neutralChances = new Difficulty(0.25d, 0.10d, 0.04d);
 
 	public Targeting(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super(module, enabledByDefault, canBeDisabled);
