@@ -71,11 +71,20 @@ public class CreeperSwell extends Feature {
 	@Label(name = "Cena.Particles", description = "If true, Creeper Cena emits particles")
 	public static Boolean cenaParticles = true;
 	@Config
+	@Label(name = "Cena.Name", description = "If true, Creeper Cena will have a name")
+	public static Boolean cenaName = true;
+	@Config
+	@Label(name = "Cena.Force Explosion", description = "When ignited, Cena creepers will not stop swelling")
+	public static Boolean cenaForceExplosion = true;
+	@Config
 	@Label(name = "Cena.Generates fire", description = "If true, Creeper Cena explosion will generate fire")
 	public static Boolean cenaFire = false;
 	@Config(min = 0d, max = 12d)
 	@Label(name = "Cena.Explosion power", description = "Explosion power of Creeper Cena")
 	public static Double cenaExplosionPower = 4d;
+	@Config(min = 0d, max = 10d)
+	@Label(name = "Cena.Explosion Knockback Multiplier", description = "How much more knockback does Creeper Cena deal? Only works with Survival Reimagined Explosion Overhaul")
+	public static Double cenaKnockbackMultiplier = 2d;
 
 	public CreeperSwell(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super(module, enabledByDefault, canBeDisabled);
@@ -120,21 +129,26 @@ public class CreeperSwell extends Feature {
 		boolean cena = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Creeper.CENA, creeper.getRandom().nextDouble() < cenaChance);
 
 		if (cena) {
-			creeper.setCustomName(Component.literal("Creeper Cena"));
 			CompoundTag compoundNBT = new CompoundTag();
 			creeper.addAdditionalSaveData(compoundNBT);
 			compoundNBT.putShort("Fuse", (short)36);
 			compoundNBT.putByte("ExplosionRadius", cenaExplosionPower.byteValue());
 			creeper.readAdditionalSaveData(compoundNBT);
 			MessageCreeperDataSync.syncCreeperToPlayers(creeper);
+			if (cenaName)
+				creeper.setCustomName(Component.literal("Creeper Cena"));
 			if (cenaFire)
 				persistentData.putBoolean(ILStrings.Tags.EXPLOSION_CAUSES_FIRE, true);
+			if (cenaKnockbackMultiplier != 1f)
+				persistentData.putFloat("survivalreimagined:explosion_knockback_multiplier", cenaKnockbackMultiplier.floatValue());
 		}
 
 		AICreeperSwellGoal swellGoal = new AICreeperSwellGoal(creeper)
 				.setWalkingFuse(walkingFuse)
 				.setIgnoreWalls(ignoreWalls)
 				.setBreaching(breach);
+		if (cena)
+			swellGoal.setForceExplode(cenaForceExplosion);
 		creeper.goalSelector.addGoal(2, swellGoal);
 
 		if (launch)

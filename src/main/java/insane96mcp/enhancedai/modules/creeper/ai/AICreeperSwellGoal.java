@@ -29,6 +29,7 @@ public class AICreeperSwellGoal extends Goal {
 	private boolean breaching = false;
 
 	private boolean isBreaching = false;
+	private boolean forceExplode = false;
 
 	private float explosionSize;
 	private float explosionSizeSqr;
@@ -80,14 +81,14 @@ public class AICreeperSwellGoal extends Goal {
 
 	public void tick() {
 		if (this.creeperAttackTarget == null || !this.creeperAttackTarget.isAlive())
-			this.swellingCreeper.setSwellDir(-1);
+			this.cancelSwell();
 		if (this.isBreaching && this.swellingCreeper.distanceToSqr(this.creeperAttackTarget) >= 14 * 14)
-			this.swellingCreeper.setSwellDir(-1);
+			this.cancelSwell();
 		else if (this.swellingCreeper.distanceToSqr(this.creeperAttackTarget) > (explosionSizeSqr * 2d * 2d) && !isBreaching)
-			this.swellingCreeper.setSwellDir(-1);
+			this.cancelSwell();
 		else if (!this.swellingCreeper.getSensing().hasLineOfSight(this.creeperAttackTarget) && !ignoreWalls && !isBreaching)
-			this.swellingCreeper.setSwellDir(-1);
-		else if (this.swellingCreeper.tickCount % 2 == 0) {
+			this.cancelSwell();
+		else if (this.swellingCreeper.tickCount % 3 == 0) {
 			this.swellingCreeper.setSwellDir(1);
 			List<PathfinderMob> creaturesNearby = this.swellingCreeper.level.getEntitiesOfClass(PathfinderMob.class, this.swellingCreeper.getBoundingBox().inflate(explosionSize * 2));
 			for (PathfinderMob creatureEntity : creaturesNearby) {
@@ -100,6 +101,11 @@ public class AICreeperSwellGoal extends Goal {
 				});
 			}
 		}
+	}
+
+	private void cancelSwell() {
+		if (!this.forceExplode)
+			this.swellingCreeper.setSwellDir(-1);
 	}
 
 	public AICreeperSwellGoal setIgnoreWalls(boolean ignoreWalls) {
@@ -119,6 +125,11 @@ public class AICreeperSwellGoal extends Goal {
 
 	public AICreeperSwellGoal setBreaching(boolean breaching) {
 		this.breaching = breaching;
+		return this;
+	}
+
+	public AICreeperSwellGoal setForceExplode(boolean forceExplode) {
+		this.forceExplode = forceExplode;
 		return this;
 	}
 
