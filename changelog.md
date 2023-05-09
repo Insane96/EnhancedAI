@@ -1,12 +1,13 @@
 # Changelog
 
-## Upcoming
+## 1.11.0
 * Added Iron Golem feature
   * Iron Golems now have an innate 40% damage resistance and are kept less time on fire
 * Added Zombified Piglins 
   * Breaking quartz now alerts Zombified Piglins around
 * Webbing spiders now gain a speed boost if they hit the target
-* Heavily reduced neutral mobs chances
+* Heavily reduced neutral mobs chances (~~60%/25%/10%~~ -> 25%/10%/4%)
+* Halved Animals knockback
 
 ## 1.10.4
 * 60%/25%/10% of mobs can now spawn neutral

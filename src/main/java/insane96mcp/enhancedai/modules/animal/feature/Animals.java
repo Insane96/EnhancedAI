@@ -62,7 +62,7 @@ public class Animals extends Feature {
     public static Double speedMultiplier = 1.35d;
     @Config(min = 0d, max = 128d)
     @Label(name = "Knockback", description = "Animals' knockback attribute will be set to this value.")
-    public static Double knockback = 3d;
+    public static Double knockback = 1.5d;
     @Config
     @Label(name = "Entity Blacklist", description = "Entities that shouldn't be affected by this feature")
     public static Blacklist entityBlacklist = new Blacklist(List.of(
