@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Creepers no longer swell when falling
+
 ## 1.11.0
 * Added Iron Golem feature
   * Iron Golems now have an innate 40% damage resistance and are kept less time on fire

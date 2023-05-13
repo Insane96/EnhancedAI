@@ -61,6 +61,10 @@ public class CreeperSwell extends Feature {
 	@Label(name = "Breach Chance", description = "Breaching creepers will try to open an hole in the wall to let mobs in.")
 	public static Double breachChance = 0.075d;
 	@Config
+	@Label(name = "Disable falling swelling", description = "Disables the creeper feature that makes them start swelling when falling.")
+	public static Boolean disableFallingSwelling = true;
+
+	@Config
 	@Label(name = "TNT Like", description = "If true creepers will ignite if damaged by an explosion.")
 	public static Boolean tntLike = false;
 	//Cena
@@ -204,6 +208,10 @@ public class CreeperSwell extends Feature {
 				serverLevel.sendParticles(serverplayer, ParticleTypes.ANGRY_VILLAGER, false, creeper.getX(), creeper.getY() + 1.1d, creeper.getZ(), 1, 0.15, 0.15, 0.15, 0);
 			}
 		}
+	}
+
+	public static boolean shouldDisableFallingSwelling() {
+		return Feature.isEnabled(CreeperSwell.class) && disableFallingSwelling;
 	}
 
 	/*public static boolean onCreeperScale(Creeper creeper, PoseStack poseStack, float partialTicks) {
