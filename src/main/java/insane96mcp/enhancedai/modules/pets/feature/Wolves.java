@@ -43,7 +43,8 @@ public class Wolves extends Feature {
                 || wolf.getPersistentData().contains(ON_SPAWN_PROCESSED))
             return;
 
-        MCUtils.applyModifier(wolf, Attributes.MOVEMENT_SPEED, UUID.fromString("f9353c93-25a5-42f4-a80e-4f4834b12e77"), "More HP for Wolves", 1d, AttributeModifier.Operation.MULTIPLY_BASE, true);
+        MCUtils.applyModifier(wolf, Attributes.MOVEMENT_SPEED, UUID.fromString("4be0baaf-17a5-4bad-af5a-1b1944ed0bf3"), "More Movement speed for Wolves", 0.25d, AttributeModifier.Operation.MULTIPLY_BASE, true);
+        MCUtils.applyModifier(wolf, Attributes.MAX_HEALTH, UUID.fromString("f9353c93-25a5-42f4-a80e-4f4834b12e77"), "More HP for Wolves", 1d, AttributeModifier.Operation.MULTIPLY_BASE, true);
         MCUtils.applyModifier(wolf, Attributes.ATTACK_DAMAGE, UUID.fromString("e5e5bb8d-3eef-4e92-8897-909acdd4be61"), "More Damage for Wolves", 1d, AttributeModifier.Operation.MULTIPLY_BASE, true);
     }
 }
