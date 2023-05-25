@@ -28,7 +28,7 @@ public class Modules {
 		creeper = Module.Builder.create(Ids.CREEPER, "Creepers", ModConfig.Type.COMMON, Config.builder).build();
 		drowned = Module.Builder.create(Ids.DROWNED, "Drowneds", ModConfig.Type.COMMON, Config.builder).build();
 		ghast = Module.Builder.create(Ids.GHAST, "Ghasts", ModConfig.Type.COMMON, Config.builder).build();
-		golem = Module.Builder.create(Ids.GOLEM, "Golem", ModConfig.Type.COMMON, Config.builder).build();
+		golem = Module.Builder.create(Ids.PETS, "Pets", ModConfig.Type.COMMON, Config.builder).build();
 		enderman = Module.Builder.create(Ids.ENDERMAN, "Endermen", ModConfig.Type.COMMON, Config.builder).build();
 		skeleton = Module.Builder.create(Ids.SKELETON, "Skeletons", ModConfig.Type.COMMON, Config.builder).build();
 		spider = Module.Builder.create(Ids.SPIDER, "Spiders", ModConfig.Type.COMMON, Config.builder).build();
@@ -44,7 +44,7 @@ public class Modules {
 		public static final String CREEPER = EnhancedAI.RESOURCE_PREFIX + "creeper";
 		public static final String DROWNED = EnhancedAI.RESOURCE_PREFIX + "drowned";
 		public static final String GHAST = EnhancedAI.RESOURCE_PREFIX + "ghast";
-		public static final String GOLEM = EnhancedAI.RESOURCE_PREFIX + "golem";
+		public static final String PETS = EnhancedAI.RESOURCE_PREFIX + "pets";
 		public static final String ENDERMAN = EnhancedAI.RESOURCE_PREFIX + "enderman";
 		public static final String SKELETON = EnhancedAI.RESOURCE_PREFIX + "skeleton";
 		public static final String SPIDER = EnhancedAI.RESOURCE_PREFIX + "spider";

@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.golems.feature;
+package insane96mcp.enhancedai.modules.pets.feature;
 
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.Feature;
@@ -15,7 +15,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.Collections;
 
 @Label(name = "Iron Golems")
-@LoadFeature(module = Modules.Ids.GOLEM)
+@LoadFeature(module = Modules.Ids.PETS)
 public class IronGolems extends Feature {
     @Config(min = 0d, max = 1d)
     @Label(name = "Innate Resistance", description = "Resistance to damage taken by Iron Golems")
