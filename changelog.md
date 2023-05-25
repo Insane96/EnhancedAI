@@ -5,6 +5,10 @@
   * When a player attacks a mob with no weapon, has a chance to get bite
 * Added Wither Skeletons feature
   * Wither Skellys can spawn with Bow and fire Wither arrows
+* Added Wolves feature
+  * Double Wolves HP and Damage
+* Added Snow Golems feature
+  * Snowballs damage and freeze entities hit
 * Creepers no longer swell when falling
 
 ## 1.11.0
