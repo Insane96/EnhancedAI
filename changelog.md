@@ -1,8 +1,10 @@
 # Changelog
 
 ## Upcoming
-* Added Biting Zombies
+* Added Biting Zombies feature
   * When a player attacks a mob with no weapon, has a chance to get bite
+* Added Wither Skeletons feature
+  * Wither Skellys can spawn with Bow and fire Wither arrows
 * Creepers no longer swell when falling
 
 ## 1.11.0
@@ -56,7 +58,7 @@
 * Spiders Web Throwers
   * Reduced thrown web damage to 3 from 5
   * Fixed stackSlowness = false not working correctly
-* Fixed XRay mobs targeting players from far far away
+* Fixed XRay mobs targeting players from far, far away
 
 ## 1.9.0
 * The update in the number is just to keep 1.19.2 and 1.19.3 separated
@@ -76,7 +78,7 @@
   * Fixed Dark art Witches failing to spawn a villager, causing a crash
 
 ## 1.8.0
-* Added Prevent Infighting. Mobs no longer attack eachother
+* Added Prevent Infighting. Mobs no longer attack each-other
 * Villagers Attacking
   * No longer attack enemies (can be configured)
   * No longer attack players with high enough reputation (defaults to Iron Golem)

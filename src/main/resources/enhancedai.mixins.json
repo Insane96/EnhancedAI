@@ -1,17 +1,18 @@
 {
-	"required": true,
-	"package": "insane96mcp.enhancedai.mixin",
-	"compatibilityLevel": "JAVA_8",
-	"refmap": "enhancedai.refmap.json",
-	"mixins": [
-		"AbstractSkeletonMixin",
-		"CreeperMixin",
-		"MeleeAttackGoalMixin",
-		"MobCategoryMixin",
-		"WitchMixin"
-	],
-	"minVersion": "0.8",
-	"client": [
-		"CreeperRendererMixin"
+    "required": true,
+    "package": "insane96mcp.enhancedai.mixin",
+    "compatibilityLevel": "JAVA_8",
+    "refmap": "enhancedai.refmap.json",
+    "mixins": [
+        "AbstractSkeletonMixin",
+        "CreeperMixin",
+        "MeleeAttackGoalMixin",
+        "MobCategoryMixin",
+        "WitchMixin",
+        "WitherSkeletonMixin"
+    ],
+    "minVersion": "0.8",
+    "client": [
+        "CreeperRendererMixin"
 	]
 }
