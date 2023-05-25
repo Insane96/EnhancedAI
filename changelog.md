@@ -8,7 +8,9 @@
 * Added Wolves feature
   * Double Wolves HP and Damage
 * Added Snow Golems feature
+  * Snow golems attack like skeletons, are more precise and shoot faster
   * Snowballs damage and freeze entities hit
+  * Snowballs heal snow golems
 * Creepers no longer swell when falling
 
 ## 1.11.0

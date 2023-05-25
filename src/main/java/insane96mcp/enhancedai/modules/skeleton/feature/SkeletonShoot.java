@@ -94,11 +94,11 @@ public class SkeletonShoot extends Feature {
 			if (skeleton.level.getDifficulty().equals(Difficulty.HARD))
 				shootingCooldown1 /= 2;
 
-			EARangedBowAttackGoal<AbstractSkeleton> EARangedBowAttackGoal = new EARangedBowAttackGoal<>(skeleton, 1.0d, shootingRange1, strafe)
-					.setAttackCooldown(shootingCooldown1)
+			EARangedBowAttackGoal rangedBowAttackGoal = (EARangedBowAttackGoal) new EARangedBowAttackGoal(skeleton, 1.0d, shootingRange1, strafe)
 					.setBowChargeTicks(bowChargeTicks1)
+					.setAttackCooldown(shootingCooldown1)
 					.setInaccuracy((float) inaccuracy);
-			skeleton.goalSelector.addGoal(2, EARangedBowAttackGoal);
+			skeleton.goalSelector.addGoal(2, rangedBowAttackGoal);
 		}
 	}
 }
