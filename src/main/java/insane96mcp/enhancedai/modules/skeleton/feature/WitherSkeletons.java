@@ -46,7 +46,8 @@ public class WitherSkeletons extends Feature {
 				|| rangedChance == 0d
 				|| !(event.getEntity() instanceof WitherSkeleton witherSkeleton)
 				|| entityBlacklist.isEntityBlackOrNotWhitelist(witherSkeleton)
-				|| witherSkeleton.getPersistentData().contains(ON_SPAWN_PROCESSED))
+				|| witherSkeleton.getPersistentData().contains(ON_SPAWN_PROCESSED)
+				|| witherSkeleton.getRandom().nextDouble() >= rangedChance)
 			return;
 
 		RandomSource randomSource = witherSkeleton.getRandom();

@@ -25,7 +25,7 @@ public abstract class WitherSkeletonMixin extends AbstractSkeleton {
 		if (!WitherSkeletons.witherInsteadOfFire())
 			return;
 		AbstractArrow abstractArrow = cir.getReturnValue();
-		abstractArrow.setSecondsOnFire(0);
+		abstractArrow.clearFire();
 		if (abstractArrow instanceof Arrow arrow) {
 			arrow.addEffect(new MobEffectInstance(MobEffects.WITHER, 200, 0));
 		}
