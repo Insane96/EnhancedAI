@@ -71,7 +71,8 @@ public class Animals extends Feature {
             new IdTagMatcher(IdTagMatcher.Type.ID, "minecraft:bee"),
             new IdTagMatcher(IdTagMatcher.Type.ID, "minecraft:wolf"),
             new IdTagMatcher(IdTagMatcher.Type.ID, "minecraft:bear"),
-            new IdTagMatcher(IdTagMatcher.Type.ID, "minecraft:panda")
+            new IdTagMatcher(IdTagMatcher.Type.ID, "minecraft:panda"),
+            new IdTagMatcher(IdTagMatcher.Type.ID, "minecraft:axolotl")
     ), false);
 
     private static final double BASE_ATTACK_DAMAGE = 3d;
