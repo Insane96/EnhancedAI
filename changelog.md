@@ -1,6 +1,8 @@
 # Changelog
 
 ## Upcoming
+* Added Biting Zombies
+  * When a player attacks a mob with no weapon, has a chance to get bite
 * Creepers no longer swell when falling
 
 ## 1.11.0
