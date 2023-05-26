@@ -1,10 +1,10 @@
 # Changelog
 
-## Upcoming
+## 1.12.0
 * Added Biting Zombies feature
-  * When a player attacks a mob with no weapon, has a chance to get bite
+  * When a player attacks a mob with no weapon, has a chance to get bitten
 * Added Wither Skeletons feature
-  * Wither Skellys can spawn with Bow and fire Wither arrows
+  * Wither Skelly can spawn with Bow and shoot Withered arrows
 * Added Wolves feature
   * Double Wolves HP and Damage
 * Added Snow Golems feature
