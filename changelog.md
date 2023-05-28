@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.12.1
+* Spawning feature (renamed from Base) can now be disabled
+
 ## 1.12.0
 * Added Biting Zombies feature
   * When a player attacks a mob with no weapon, has a chance to get bitten
