@@ -86,9 +86,9 @@ public class CreeperSwell extends Feature {
 	@Config(min = 0d, max = 12d)
 	@Label(name = "Cena.Explosion power", description = "Explosion power of Creeper Cena")
 	public static Double cenaExplosionPower = 4d;
-	@Config(min = 0d, max = 10d)
-	@Label(name = "Cena.Explosion Knockback Multiplier", description = "How much more knockback does Creeper Cena deal? Only works with Survival Reimagined Explosion Overhaul")
-	public static Double cenaKnockbackMultiplier = 2d;
+	@Config
+	@Label(name = "Cena.Survival Reimagined Integration", description = "If Survival Reimagined is installed and Explosion Overhaul is enabled, creeper cena will deal more knockback and break more blocks")
+	public static Boolean survivalReimaginedIntegration = true;
 
 	public CreeperSwell(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super(module, enabledByDefault, canBeDisabled);
@@ -143,8 +143,10 @@ public class CreeperSwell extends Feature {
 				creeper.setCustomName(Component.literal("Creeper Cena"));
 			if (cenaFire)
 				persistentData.putBoolean(ILStrings.Tags.EXPLOSION_CAUSES_FIRE, true);
-			if (cenaKnockbackMultiplier != 1f)
-				persistentData.putFloat("survivalreimagined:explosion_knockback_multiplier", cenaKnockbackMultiplier.floatValue());
+			if (survivalReimaginedIntegration) {
+				persistentData.putFloat("survivalreimagined:explosion_knockback_multiplier", 2f);
+				persistentData.putFloat("survivalreimagined:explosion_ray_strength_multiplier", 0.02f);
+			}
 		}
 
 		AICreeperSwellGoal swellGoal = new AICreeperSwellGoal(creeper)
