@@ -50,7 +50,7 @@ public class Animals extends Feature {
     public static Integer groupFleeRange = 16;
     @Config
     @Label(name = "Fight back chance", description = "Animals have this percentage chance to be able to fight back instead of fleeing. Animals have a slightly bigger range to attack. Attack damage can't be changed via config due to limitation so use mods like Mobs Properties Randomness to change the damage. Base damage is 3.")
-    public static Double fightBackChance = 0.2d;
+    public static Double fightBackChance = 0.3d;
     @Config
     @Label(name = "Players Scared chance", description = "Animals have this percentage chance to be scared by players and run away. Fight back chance has priority over this.")
     public static Double playersScaredChance = 0.4d;
@@ -59,7 +59,7 @@ public class Animals extends Feature {
     public static Double notTemptedChance = 0.5d;
     @Config(min = 0d, max = 4d)
     @Label(name = "Movement Speed Multiplier", description = "Movement speed multiplier when aggroed.")
-    public static Double speedMultiplier = 1.35d;
+    public static Double speedMultiplier = 1.3d;
     @Config(min = 0d, max = 128d)
     @Label(name = "Knockback", description = "Animals' knockback attribute will be set to this value.")
     public static Double knockback = 1.5d;

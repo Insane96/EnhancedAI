@@ -46,16 +46,16 @@ public class CreeperSwell extends Feature {
 	public static Double walkingFuseSpeedModifier = -0.5d;
 	@Config(min = 0d, max = 1d)
 	@Label(name = "Ignore Walls Chance", description = "Percentage chance for a Creeper to ignore walls while targeting a player. This means that a creeper will be able to explode if it's in the correct range from a player even if there's a wall between.")
-	public static Double ignoreWallsChance = 0.1d;
+	public static Double ignoreWallsChance = 0.65d;
 	@Config(min = 0d, max = 1d)
-	@Label(name = "Launch Chance", description = "Launching creepers will try ignite and throw themselves at the player.")
+	@Label(name = "Launch.Chance", description = "Launching creepers will try ignite and throw themselves at the player.")
 	public static Double launchChance = 0.05d;
 	@Config
-	@Label(name = "Launch Particles", description = "If true, Launching Creepers emit particles")
+	@Label(name = "Launch.Particles", description = "If true, Launching Creepers emit particles")
 	public static Boolean launchParticles = true;
 
 	@Config
-	@Label(name = "Launch inaccuracy", description = "The inaccuracy of the launching creeper in Normal difficulty, easy is increased, hard is decreased.")
+	@Label(name = "Launch.inaccuracy", description = "The inaccuracy of the launching creeper in Normal difficulty, easy is increased, hard is decreased.")
 	public static Double launchInaccuracy = 0.5d;
 	@Config(min = 0d, max = 1d)
 	@Label(name = "Breach Chance", description = "Breaching creepers will try to open an hole in the wall to let mobs in.")

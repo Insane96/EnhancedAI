@@ -50,7 +50,7 @@ public class Targeting extends Feature {
 	public static MinMax xrayRangeOverride = new MinMax(12, 24);
 	@Config
 	@Label(name = "Instant Target", description = "Mobs will no longer take random time to target a player.")
-	public static Boolean instaTarget = true;
+	public static Boolean instaTarget = false;
 	@Config
 	@Label(name = "Better Path Finding", description = "Mobs will be able to find better paths to the target. Note that this might hit performance a bit.")
 	public static Boolean betterPathfinding = true;

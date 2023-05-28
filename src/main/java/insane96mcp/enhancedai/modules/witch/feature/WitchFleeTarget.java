@@ -27,16 +27,16 @@ public class WitchFleeTarget extends Feature {
     public static Double attackWhenAvoidingChance = 0.5d;
     @Config(min = 0d, max = 32d)
     @Label(name = "Flee Distance Far", description = "Distance from a player that will make the Witch run away.")
-    public static Double fleeDistanceFar = 16d;
+    public static Double fleeDistanceFar = 13d;
     @Config(min = 0d, max = 32d)
     @Label(name = "Flee Distance Near", description = "Distance from a player that counts as near and will make the Witch run away faster.")
-    public static Double fleeDistanceNear = 8d;
+    public static Double fleeDistanceNear = 7d;
     @Config(min = 0d, max = 4d)
     @Label(name = "Flee speed Multiplier Far", description = "Speed multiplier when the Witch avoids the player and it's farther than 'Flee Distance Near' blocks from him.")
-    public static Double fleeSpeedFar = 1.1d;
+    public static Double fleeSpeedFar = 1d;
     @Config(min = 0d, max = 4d)
     @Label(name = "Flee speed Multiplier Near", description = "Speed multiplier when the Witch avoids the player and it's within 'Flee Distance Near' blocks from him.")
-    public static Double fleeSpeedNear = 1.25d;
+    public static Double fleeSpeedNear = 1.1d;
 
     public WitchFleeTarget(Module module, boolean enabledByDefault, boolean canBeDisabled) {
         super(module, enabledByDefault, canBeDisabled);
