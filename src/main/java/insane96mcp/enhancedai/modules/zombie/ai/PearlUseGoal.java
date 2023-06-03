@@ -32,6 +32,9 @@ public class PearlUseGoal extends Goal {
 		if (!(target instanceof Player))
 			return false;
 
+		if (this.pearler.isInWaterOrBubble())
+			return false;
+
 		//6 blocks distance
 		if (this.pearler.distanceToSqr(target) < 36d)
 			return false;

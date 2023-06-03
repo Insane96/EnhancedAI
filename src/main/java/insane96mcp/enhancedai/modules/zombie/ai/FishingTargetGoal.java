@@ -30,6 +30,9 @@ public class FishingTargetGoal extends Goal {
 		if (!(target instanceof Player))
 			return false;
 
+		if (this.fisher.isInWaterOrBubble())
+			return false;
+
 		//24d & ~2.25d
 		if (this.fisher.distanceToSqr(target) > 576d
 				|| this.fisher.distanceToSqr(target) < 5d
