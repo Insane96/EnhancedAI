@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Launch creepers now have smaller explosion 
+
 ## 1.12.1
 * Spawning feature (renamed from Base) can now be disabled
 * Creeper cena now also breaks more blocks if SR is present

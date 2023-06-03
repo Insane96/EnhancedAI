@@ -57,6 +57,9 @@ public class CreeperSwell extends Feature {
 	@Config
 	@Label(name = "Launch.inaccuracy", description = "The inaccuracy of the launching creeper in Normal difficulty, easy is increased, hard is decreased.")
 	public static Double launchInaccuracy = 0.5d;
+	@Config
+	@Label(name = "Launch.Explosion Radius", description = "The explosion radius of launching creepers. (Overwrites Cena creepers explosion radius)")
+	public static Integer launchExplosionRadius = 2;
 	@Config(min = 0d, max = 1d)
 	@Label(name = "Breach Chance", description = "Breaching creepers will try to open an hole in the wall to let mobs in.")
 	public static Double breachChance = 0.075d;
@@ -132,12 +135,11 @@ public class CreeperSwell extends Feature {
 		boolean launch = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Creeper.LAUNCH, creeper.getRandom().nextDouble() < launchChance);
 		boolean cena = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Creeper.CENA, creeper.getRandom().nextDouble() < cenaChance);
 
+		CompoundTag compoundNBT = new CompoundTag();
+		creeper.addAdditionalSaveData(compoundNBT);
 		if (cena) {
-			CompoundTag compoundNBT = new CompoundTag();
-			creeper.addAdditionalSaveData(compoundNBT);
 			compoundNBT.putShort("Fuse", (short)36);
 			compoundNBT.putByte("ExplosionRadius", cenaExplosionPower.byteValue());
-			creeper.readAdditionalSaveData(compoundNBT);
 			MessageCreeperDataSync.syncCreeperToPlayers(creeper);
 			if (cenaName)
 				creeper.setCustomName(Component.literal("Creeper Cena"));
@@ -157,8 +159,11 @@ public class CreeperSwell extends Feature {
 			swellGoal.setForceExplode(cenaForceExplosion);
 		creeper.goalSelector.addGoal(2, swellGoal);
 
-		if (launch)
+		if (launch) {
 			creeper.goalSelector.addGoal(1, new AICreeperLaunchGoal(creeper));
+			compoundNBT.putByte("ExplosionRadius", launchExplosionRadius.byteValue());
+		}
+		creeper.readAdditionalSaveData(compoundNBT);
 	}
 
 	@SubscribeEvent
