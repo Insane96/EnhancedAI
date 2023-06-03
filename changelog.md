@@ -1,7 +1,8 @@
 # Changelog
 
 ## Upcoming
-* Launch creepers now have smaller explosion 
+* Launch creepers now have a smaller explosion 
+* Launch creepers have now reduced particles
 
 ## 1.12.1
 * Spawning feature (renamed from Base) can now be disabled

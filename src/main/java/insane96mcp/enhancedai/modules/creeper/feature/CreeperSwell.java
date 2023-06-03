@@ -196,7 +196,7 @@ public class CreeperSwell extends Feature {
 		if (creeper.getPersistentData().getBoolean(EAStrings.Tags.Creeper.LAUNCH)) {
 			for(int j = 0; j < serverLevel.players().size(); ++j) {
 				ServerPlayer serverplayer = serverLevel.players().get(j);
-				serverLevel.sendParticles(serverplayer, ParticleTypes.CLOUD, true, creeper.getX(), creeper.getY() + 0.5d, creeper.getZ(), 10, 0.1, 0.1, 0.1, 0.1);
+				serverLevel.sendParticles(serverplayer, ParticleTypes.CLOUD, true, creeper.getX(), creeper.getY() + 0.25d, creeper.getZ(), 8, 0.05, 0.05, 0.05, 0.025);
 			}
 		}
 	}
