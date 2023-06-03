@@ -4,6 +4,7 @@
 * Launch creepers now have a smaller explosion 
 * Launch creepers have now reduced particles
 * Fisher and Pearler zombies no longer use the item if in water
+* Fisher zombies cooldown reduced
 
 ## 1.12.1
 * Spawning feature (renamed from Base) can now be disabled

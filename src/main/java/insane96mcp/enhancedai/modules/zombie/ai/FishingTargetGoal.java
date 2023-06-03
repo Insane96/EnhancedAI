@@ -14,7 +14,7 @@ public class FishingTargetGoal extends Goal {
 	//Runs every other tick
 	private final Zombie fisher;
 	private Player targetPlayer;
-	private int cooldown = reducedTickDelay(50);
+	private int cooldown = reducedTickDelay(60);
 
 	private int reel;
 	private int fishingHookLifetime = 0;
@@ -65,7 +65,7 @@ public class FishingTargetGoal extends Goal {
 		this.fishingHook.shoot(dirX, dirY + distanceXZ * 0.17d, dirZ, 1.1f + ((float)distance / 32f) + (float)Math.max(distanceY / 48d, 0f), 1);
 		this.fisher.level.addFreshEntity(fishingHook);
 		this.reel = reducedTickDelay(30);
-		this.fishingHookLifetime = reducedTickDelay(40);
+		this.fishingHookLifetime = reducedTickDelay(60);
 	}
 
 	public void tick() {
@@ -81,6 +81,6 @@ public class FishingTargetGoal extends Goal {
 	public void stop() {
 		this.targetPlayer = null;
 		this.fishingHook = null;
-		this.cooldown = reducedTickDelay(40);
+		this.cooldown = reducedTickDelay(60);
 	}
 }
