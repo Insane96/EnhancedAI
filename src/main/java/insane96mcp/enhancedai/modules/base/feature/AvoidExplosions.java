@@ -26,6 +26,9 @@ public class AvoidExplosions extends Feature {
 	@Label(name = "Flee speed Multiplier Far", description = "Speed multiplier when the mob runs from explosions and it's farther than 7 blocks from him.")
 	public static Double runSpeedFar = 1.2d;
 	@Config(min = 0d, max = 10d)
+	@Label(name = "Flee TNT", description = "Entities also flee from TnTs")
+	public static Boolean fleeTnt = false;
+	@Config(min = 0d, max = 10d)
 	@Label(name = "Entity Blacklist", description = "Entities that shouldn't be affected by this feature")
 	public static Blacklist entityBlacklist = new Blacklist(Collections.emptyList(), false);
 
@@ -51,6 +54,8 @@ public class AvoidExplosions extends Feature {
 	}
 
 	private void alertTNT(EntityJoinLevelEvent event) {
+		if (!fleeTnt)
+			return;
 		if (!(event.getEntity() instanceof PrimedTnt tnt))
 			return;
 
