@@ -123,7 +123,7 @@ public class WitchThrowPotionGoal extends Goal {
 
         this.randomPotion = false;
 
-        ThrownPotion thrownpotion = new ThrownPotion(witch.level, this.witch);
+        ThrownPotion thrownpotion = new ThrownPotion(witch.level(), this.witch);
         Item potionType = witch.getRandom().nextDouble() < this.lingeringChance ? Items.LINGERING_POTION : Items.SPLASH_POTION;
         thrownpotion.setItem(MCUtils.setCustomEffects(new ItemStack(potionType), mobEffectInstances));
         thrownpotion.setXRot(thrownpotion.getXRot() + 20.0F);
@@ -137,10 +137,10 @@ public class WitchThrowPotionGoal extends Goal {
         double dirY = yPos - thrownpotion.getY();
         thrownpotion.shoot(dirX, dirY + distanceXZ * 0.18d, dirZ, 1.1f + ((float)distance / 32f) + (float)Math.max(distanceY / 48d, 0f), 1f);
         if (!witch.isSilent()) {
-            witch.level.playSound(null, witch.getX(), witch.getY(), witch.getZ(), SoundEvents.WITCH_THROW, witch.getSoundSource(), 1.0F, 0.8F + witch.getRandom().nextFloat() * 0.4F);
+            witch.level().playSound(null, witch.getX(), witch.getY(), witch.getZ(), SoundEvents.WITCH_THROW, witch.getSoundSource(), 1.0F, 0.8F + witch.getRandom().nextFloat() * 0.4F);
         }
 
-        witch.level.addFreshEntity(thrownpotion);
+        witch.level().addFreshEntity(thrownpotion);
 
         if (witch.getRandom().nextDouble() < this.anotherThrowChance) {
             this.attackTime = 8;

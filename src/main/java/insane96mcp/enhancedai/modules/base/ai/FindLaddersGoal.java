@@ -43,7 +43,7 @@ public class FindLaddersGoal extends Goal {
 			int randY = this.goalOwner.getBlockY() + Mth.nextInt(this.goalOwner.getRandom(), -16, 16);
 			int randZ = this.goalOwner.getBlockZ() + Mth.nextInt(this.goalOwner.getRandom(), -16, 16);
 			BlockPos pos = new BlockPos(randX, randY, randZ);
-			if (this.goalOwner.level.getBlockState(pos).isLadder(this.goalOwner.level, pos, this.goalOwner))
+			if (this.goalOwner.level().getBlockState(pos).isLadder(this.goalOwner.level(), pos, this.goalOwner))
 				return new Vec3(pos.getX() + 0.5d, pos.getY() + 0.5d, pos.getZ() + 0.5d);
 		}
 		return null;

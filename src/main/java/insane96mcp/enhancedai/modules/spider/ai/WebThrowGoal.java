@@ -45,7 +45,7 @@ public class WebThrowGoal extends Goal {
 		double distance = this.spider.distanceTo(this.targetPlayer);
 		double distanceY = this.targetPlayer.getY() - this.spider.getY();
 		float f = 2.0F / 3.0F;
-		ThrownWebEntity thrownWeb = new ThrownWebEntity(this.spider.level, this.spider);
+		ThrownWebEntity thrownWeb = new ThrownWebEntity(this.spider.level(), this.spider);
 		double d0 = this.targetPlayer.getX() - this.spider.getX();
 		double d2 = this.targetPlayer.getZ() - this.spider.getZ();
 		double distanceXZ = Math.sqrt(d0 * d0 + d2 * d2);
@@ -54,7 +54,7 @@ public class WebThrowGoal extends Goal {
 		double d1 = yPos - thrownWeb.getY();
 		thrownWeb.shoot(d0, d1 + distanceXZ * 0.18d, d2, f * 1.1f + ((float)distance / 32f) + (float)Math.max(distanceY / 48d, 0f), 0);
 		thrownWeb.setDamage(ThrowingWeb.thrownWebDamage.floatValue());
-		thrownWeb.level.addFreshEntity(thrownWeb);
+		thrownWeb.level().addFreshEntity(thrownWeb);
 		this.spider.playSound(SoundEvents.SPIDER_HURT, 1.0F, 2.0F / (this.spider.getRandom().nextFloat() * 0.4F + 0.8F));
 		this.cooldown = adjustedTickDelay(ThrowingWeb.throwingCooldown.getIntRandBetween(spider.getRandom()));
 	}

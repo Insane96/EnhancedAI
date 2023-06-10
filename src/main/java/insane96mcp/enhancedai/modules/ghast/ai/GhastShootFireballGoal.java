@@ -46,7 +46,7 @@ public class GhastShootFireballGoal extends Goal {
 
         // 64d
         if (target.distanceToSqr(this.ghast) < 4096d && (this.ghast.hasLineOfSight(target) || this.ignoreLineOfSight)) {
-            Level level = this.ghast.level;
+            Level level = this.ghast.level();
             ++this.chargeTime;
             if (this.chargeTime == 0 && !this.ghast.isSilent()) {
                 level.levelEvent(null, 1015, this.ghast.blockPosition(), 0);

@@ -47,7 +47,7 @@ public class EAAvoidEntityGoal<T extends LivingEntity> extends Goal {
 	 * method as well.
 	 */
 	public boolean canUse() {
-		this.avoidTarget = this.entity.level.getNearestEntity(this.classToAvoid, this.builtTargetSelector, this.entity, this.entity.getX(), this.entity.getY(), this.entity.getZ(), this.entity.getBoundingBox().inflate(this.avoidDistance, this.avoidDistance, this.avoidDistance));
+		this.avoidTarget = this.entity.level().getNearestEntity(this.classToAvoid, this.builtTargetSelector, this.entity, this.entity.getX(), this.entity.getY(), this.entity.getZ(), this.entity.getBoundingBox().inflate(this.avoidDistance, this.avoidDistance, this.avoidDistance));
 		if (this.avoidTarget == null) {
 			return false;
 		} else {

@@ -56,7 +56,7 @@ public class AICreeperLaunchGoal extends Goal {
 		if (!this.launchingCreeper.getSensing().hasLineOfSight(target) && !this.launchingCreeper.getPersistentData().contains(EAStrings.Tags.Creeper.BREACH))
 			return false;
 
-		if (this.launchingCreeper.level.getBlockState(this.launchingCreeper.blockPosition().above(3)).getMaterial().blocksMotion())
+		if (this.launchingCreeper.level().getBlockState(this.launchingCreeper.blockPosition().above(3)).blocksMotion())
 			return false;
 
 		if (this.launchingCreeper.distanceToSqr(target) < 12d * 12d)
@@ -67,7 +67,7 @@ public class AICreeperLaunchGoal extends Goal {
 		double z = target.getZ() - this.launchingCreeper.getZ();
 		double xzDistance = x * x + z * z;
 
-		return xzDistance < activationDistanceSqr && yDistance < explosionSize * 2 && this.launchingCreeper.isOnGround();
+		return xzDistance < activationDistanceSqr && yDistance < explosionSize * 2 && this.launchingCreeper.onGround();
 	}
 
 	public void start() {
@@ -76,9 +76,9 @@ public class AICreeperLaunchGoal extends Goal {
 		this.launchingCreeper.ignite();
 		double distance = this.launchingCreeper.distanceTo(this.creeperAttackTarget);
 		float inaccuracy = 0.15f;
-		if (this.launchingCreeper.level.getDifficulty() == Difficulty.EASY)
+		if (this.launchingCreeper.level().getDifficulty() == Difficulty.EASY)
 			inaccuracy = 0.1f;
-		if (this.launchingCreeper.level.getDifficulty() == Difficulty.HARD)
+		if (this.launchingCreeper.level().getDifficulty() == Difficulty.HARD)
 			inaccuracy = 0.05f;
 		this.ticksBeforeLaunching = (int) Math.max((50 - distance) * Mth.randomBetween(this.launchingCreeper.getRandom(), 0.25f + inaccuracy, 0.25f + inaccuracy), 1);
 	}
@@ -102,9 +102,9 @@ public class AICreeperLaunchGoal extends Goal {
 		if (--ticksBeforeLaunching != 0)
 			return;
 
-		if (!this.launchingCreeper.level.isClientSide) {
-			for (ServerPlayer player : ((ServerLevel) this.launchingCreeper.level).players()) {
-				((ServerLevel) this.launchingCreeper.level).sendParticles(player, ParticleTypes.CLOUD, true, this.launchingCreeper.getX(), this.launchingCreeper.getY(), this.launchingCreeper.getZ(), 100, 0.5d, 0.5d, 0.5d, 0.2d);
+		if (!this.launchingCreeper.level().isClientSide) {
+			for (ServerPlayer player : ((ServerLevel) this.launchingCreeper.level()).players()) {
+				((ServerLevel) this.launchingCreeper.level()).sendParticles(player, ParticleTypes.CLOUD, true, this.launchingCreeper.getX(), this.launchingCreeper.getY(), this.launchingCreeper.getZ(), 100, 0.5d, 0.5d, 0.5d, 0.2d);
 			}
 		}
 
@@ -115,9 +115,9 @@ public class AICreeperLaunchGoal extends Goal {
 		double distanceXZ = Math.sqrt(distanceX * distanceX + distanceZ * distanceZ);
 
 		float inaccuracy = CreeperSwell.launchInaccuracy.floatValue();
-		if (this.launchingCreeper.level.getDifficulty() == Difficulty.EASY)
+		if (this.launchingCreeper.level().getDifficulty() == Difficulty.EASY)
 			inaccuracy *= 1.5f;
-		else if (this.launchingCreeper.level.getDifficulty() == Difficulty.HARD)
+		else if (this.launchingCreeper.level().getDifficulty() == Difficulty.HARD)
 			inaccuracy *= 0.5f;
 		distanceX *= Mth.randomBetween(this.launchingCreeper.getRandom(), 1f - inaccuracy, 1f + inaccuracy);
 		distanceZ *= Mth.randomBetween(this.launchingCreeper.getRandom(), 1f - inaccuracy, 1f + inaccuracy);

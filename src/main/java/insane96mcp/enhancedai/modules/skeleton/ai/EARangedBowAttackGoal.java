@@ -98,7 +98,7 @@ public class EARangedBowAttackGoal extends RangedAttackGoal<AbstractSkeleton> {
 		double dirY = yPos - abstractarrowentity.getY();
 		abstractarrowentity.shoot(dirX, dirY + distanceXZ * 0.17d, dirZ, f * 1.1f + ((float)distance / 32f) + (float)Math.max(distanceY / 48d, 0f), this.inaccuracy);
 		entity.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (entity.getRandom().nextFloat() * 0.4F + 0.8F));
-		entity.level.addFreshEntity(abstractarrowentity);
+		entity.level().addFreshEntity(abstractarrowentity);
 	}
 
 }

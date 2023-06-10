@@ -121,9 +121,9 @@ public class ThrowingWeb extends Feature {
 				|| !(spider instanceof CaveSpider caveSpider))
 			return;
 		int i = 0;
-		if (caveSpider.level.getDifficulty() == Difficulty.NORMAL) {
+		if (caveSpider.level().getDifficulty() == Difficulty.NORMAL) {
 			i = 7;
-		} else if (caveSpider.level.getDifficulty() == Difficulty.HARD) {
+		} else if (caveSpider.level().getDifficulty() == Difficulty.HARD) {
 			i = 15;
 		}
 
@@ -136,13 +136,13 @@ public class ThrowingWeb extends Feature {
 		if (!alwaysWeb)
 			return;
 		BlockPos spawnCobwebAt = entity.blockPosition();
-		if (FallingBlock.isFree(entity.level.getBlockState(spawnCobwebAt))) {
-			entity.level.setBlock(spawnCobwebAt, Blocks.COBWEB.defaultBlockState(), 3);
-			ScheduledTasks.schedule(new TemporaryCobwebTask(ThrowingWeb.destroyWebAfter, entity.level, spawnCobwebAt));
+		if (FallingBlock.isFree(entity.level().getBlockState(spawnCobwebAt))) {
+			entity.level().setBlock(spawnCobwebAt, Blocks.COBWEB.defaultBlockState(), 3);
+			ScheduledTasks.schedule(new TemporaryCobwebTask(ThrowingWeb.destroyWebAfter, entity.level(), spawnCobwebAt));
 			for(int i = 0; i < 32; ++i) {
-				entity.level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.COBWEB.defaultBlockState()), spawnCobwebAt.getX() + entity.getRandom().nextDouble(), spawnCobwebAt.getY() + entity.getRandom().nextDouble(), spawnCobwebAt.getZ() + entity.getRandom().nextDouble(), 0d, 0D, 0d);
+				entity.level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.COBWEB.defaultBlockState()), spawnCobwebAt.getX() + entity.getRandom().nextDouble(), spawnCobwebAt.getY() + entity.getRandom().nextDouble(), spawnCobwebAt.getZ() + entity.getRandom().nextDouble(), 0d, 0D, 0d);
 			}
-			entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.SLIME_SQUISH, SoundSource.HOSTILE, 1.0f, 0.5f);
+			entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.SLIME_SQUISH, SoundSource.HOSTILE, 1.0f, 0.5f);
 		}
 	}
 }

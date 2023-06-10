@@ -142,7 +142,7 @@ public class Targeting extends Feature {
 
 		goalsToRemove.forEach(mobEntity.targetSelector::removeGoal);
 
-		boolean isNeutral = NBTUtils.getBooleanOrPutDefault(mobEntity.getPersistentData(), IS_NEUTRAL, mobEntity.getRandom().nextDouble() < neutralChances.getByDifficulty(mobEntity.level));
+		boolean isNeutral = NBTUtils.getBooleanOrPutDefault(mobEntity.getPersistentData(), IS_NEUTRAL, mobEntity.getRandom().nextDouble() < neutralChances.getByDifficulty(mobEntity.level()));
 		if (isNeutral)
 			return;
 

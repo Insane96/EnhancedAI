@@ -127,13 +127,13 @@ public class EABlazeAttackGoal extends Goal {
                     else
                         inaccuracy = 0.3d * this.inaccuracy;
                     if (!this.blaze.isSilent()) {
-                        this.blaze.level.levelEvent(null, 1018, this.blaze.blockPosition(), 0);
+                        this.blaze.level().levelEvent(null, 1018, this.blaze.blockPosition(), 0);
                     }
 
                     for (int i = 0; i < this.fireballsPerShot; i++) {
-                        SmallFireball smallfireball = new SmallFireball(this.blaze.level, this.blaze, xDir + this.blaze.getRandom().nextGaussian() * inaccuracy, yDir, zDir + this.blaze.getRandom().nextGaussian() * inaccuracy);
+                        SmallFireball smallfireball = new SmallFireball(this.blaze.level(), this.blaze, xDir + this.blaze.getRandom().nextGaussian() * inaccuracy, yDir, zDir + this.blaze.getRandom().nextGaussian() * inaccuracy);
                         smallfireball.setPos(smallfireball.getX(), this.blaze.getY(0.5D) + 0.5D, smallfireball.getZ());
-                        this.blaze.level.addFreshEntity(smallfireball);
+                        this.blaze.level().addFreshEntity(smallfireball);
                     }
                 }
             }

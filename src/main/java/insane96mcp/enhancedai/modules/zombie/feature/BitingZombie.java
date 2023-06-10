@@ -44,7 +44,7 @@ public class BitingZombie extends Feature {
 	@SubscribeEvent
 	public void onPlayerAttack(LivingDamageEvent event) {
 		if (!this.isEnabled()
-		 		|| event.getEntity().getLevel().isClientSide
+		 		|| event.getEntity().level().isClientSide
 				|| !(event.getEntity() instanceof Zombie zombie)
 		 		|| entityBlacklist.isEntityBlackOrNotWhitelist(zombie)
 				|| zombie.getAttribute(Attributes.ATTACK_DAMAGE) == null

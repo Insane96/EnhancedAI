@@ -59,7 +59,7 @@ public class AvoidExplosions extends Feature {
 		if (!(event.getEntity() instanceof PrimedTnt tnt))
 			return;
 
-		List<PathfinderMob> creaturesNearby = tnt.level.getEntitiesOfClass(PathfinderMob.class, tnt.getBoundingBox().inflate(8d));
+		List<PathfinderMob> creaturesNearby = tnt.level().getEntitiesOfClass(PathfinderMob.class, tnt.getBoundingBox().inflate(8d));
 		for (PathfinderMob creatureEntity : creaturesNearby) {
 			creatureEntity.goalSelector.availableGoals.forEach(prioritizedGoal -> {
 				if (prioritizedGoal.getGoal() instanceof AvoidExplosionGoal avoidExplosionGoal) {

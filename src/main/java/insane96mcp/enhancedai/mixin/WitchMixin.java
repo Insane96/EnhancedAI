@@ -76,7 +76,7 @@ public abstract class WitchMixin extends Raider {
 		else
 			return;
 
-		if (this.level.isClientSide
+		if (this.level().isClientSide
 				|| !this.isAlive()
 				|| this.getPersistentData().getBoolean(EAStrings.Tags.Witch.PERFORMING_DARK_ARTS)) {
 			super.aiStep();
@@ -147,7 +147,7 @@ public abstract class WitchMixin extends Raider {
 				this.usingTime = this.getMainHandItem().getUseDuration();
 				this.setUsingItem(true);
 				if (!this.isSilent()) {
-					this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.WITCH_DRINK, this.getSoundSource(), 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
+					this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.WITCH_DRINK, this.getSoundSource(), 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
 				}
 
 				AttributeInstance attributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
@@ -162,7 +162,7 @@ public abstract class WitchMixin extends Raider {
 			if (!this.isSilent()) {
 				this.playSound(SoundEvents.WITCH_THROW, 1.0F, 0.8F + this.getRandom().nextFloat() * 0.4F);
 			}
-			this.level.levelEvent(2002, this.blockPosition(), PotionUtils.getColor(stack));
+			this.level().levelEvent(2002, this.blockPosition(), PotionUtils.getColor(stack));
 			List<MobEffectInstance> mobEffects = PotionUtils.getMobEffects(stack);
 			for (MobEffectInstance mobEffect : mobEffects) {
 				this.addEffect(new MobEffectInstance(mobEffect));
@@ -170,10 +170,10 @@ public abstract class WitchMixin extends Raider {
 		}
 
 		if (!this.hasEffect(MobEffects.INVISIBILITY) && --this.invisibilityCooldown <= 0 && this.getHealth() < this.getMaxHealth() * WitchPotionThrowing.healthThresholdInvisibility) {
-			ThrownPotion thrownPotion = new ThrownPotion(this.level, this);
+			ThrownPotion thrownPotion = new ThrownPotion(this.level(), this);
 			thrownPotion.setItem(MCUtils.setCustomEffects(new ItemStack(Items.SPLASH_POTION), List.of(new MobEffectInstance(MobEffects.INVISIBILITY, 200))));
 			thrownPotion.shoot(0, -1d, 0, 0.1f, 2f);
-			this.level.addFreshEntity(thrownPotion);
+			this.level().addFreshEntity(thrownPotion);
 
 			//Try 5 times to find a random spot
 			for (int i = 0; i < 5; i++) {
@@ -188,7 +188,7 @@ public abstract class WitchMixin extends Raider {
 		}
 
 		if (this.random.nextFloat() < 7.5E-4F) {
-			this.level.broadcastEntityEvent(this, (byte)15);
+			this.level().broadcastEntityEvent(this, (byte)15);
 		}
 
 		super.aiStep();

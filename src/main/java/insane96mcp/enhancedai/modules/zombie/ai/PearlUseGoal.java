@@ -52,9 +52,9 @@ public class PearlUseGoal extends Goal {
 	public void start() {
 		this.targetPlayer = (Player) this.pearler.getTarget();
 		EquipmentSlot slot = this.pearler.getMainHandItem().getItem() == Items.ENDER_PEARL ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
-		this.pearler.level.playSound(null, this.pearler.getX(), this.pearler.getY(), this.pearler.getZ(), SoundEvents.ENDER_PEARL_THROW, SoundSource.HOSTILE, 1F, 0.4F / (this.pearler.getRandom().nextFloat() * 0.4F + 0.8F));
+		this.pearler.level().playSound(null, this.pearler.getX(), this.pearler.getY(), this.pearler.getZ(), SoundEvents.ENDER_PEARL_THROW, SoundSource.HOSTILE, 1F, 0.4F / (this.pearler.getRandom().nextFloat() * 0.4F + 0.8F));
 		ItemStack stack = this.pearler.getItemBySlot(slot);
-		this.enderPearlEntity = new ThrownEnderpearl(this.pearler.level, this.pearler);
+		this.enderPearlEntity = new ThrownEnderpearl(this.pearler.level(), this.pearler);
 		enderPearlEntity.setPos(this.pearler.getEyePosition(1f).x, this.pearler.getEyePosition(1f).y, this.pearler.getEyePosition(1f).z);
 		enderPearlEntity.setItem(stack);
 		Vec3 vector3d = this.pearler.getEyePosition(1f);
@@ -65,7 +65,7 @@ public class PearlUseGoal extends Goal {
 		double pitch = Mth.wrapDegrees((float)(-(Mth.atan2(d1, d3) * (double)(180F / (float)Math.PI))));
 		double yaw = Mth.wrapDegrees((float)(Mth.atan2(d2, d0) * (double)(180F / (float)Math.PI)) - 90.0F);
 		enderPearlEntity.shootFromRotation(this.pearler, (float) (pitch - 3f - d1), (float) (yaw), 0.0F, 1.5F, PearlerZombie.inaccuracy);
-		this.pearler.level.addFreshEntity(enderPearlEntity);
+		this.pearler.level().addFreshEntity(enderPearlEntity);
 		stack.shrink(1);
 		this.cooldown = reducedTickDelay(100);
 	}

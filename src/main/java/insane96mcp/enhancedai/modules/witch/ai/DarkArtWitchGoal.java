@@ -49,7 +49,7 @@ public class DarkArtWitchGoal extends Goal {
 
     @Override
     public boolean canContinueToUse() {
-        return this.phase != Phase.END;
+        return this.phase != Phase.END && (this.summonSpot == null || this.witch.distanceToSqr(this.summonSpot) <= 256d);
     }
 
     @Override
@@ -65,7 +65,11 @@ public class DarkArtWitchGoal extends Goal {
     public void stop() {
         this.witch.getPersistentData().putBoolean(EAStrings.Tags.Witch.PERFORMING_DARK_ARTS, false);
         this.witch.removeEffect(MobEffects.DAMAGE_RESISTANCE);
+        this.witch.removeEffect(MobEffects.LEVITATION);
         this.witch.setGlowingTag(false);
+        this.summonSpot = null;
+        if (this.villager != null && !this.villager.isRemoved())
+            this.villager.discard();
     }
 
     @Override
@@ -113,11 +117,11 @@ public class DarkArtWitchGoal extends Goal {
                     z = (int) (Math.floor(Math.sin(angle) * 3.33f) + goal.witch.getZ());
                     y = (int) (goal.witch.getY() + 3);
 
-                    y = MCUtils.getFittingY(EntityType.VILLAGER, new BlockPos(x, y, z), goal.witch.level, 6);
-                    if (y != goal.witch.level.getMinBuildHeight() - 1)
+                    y = MCUtils.getFittingY(EntityType.VILLAGER, new BlockPos(x, y, z), goal.witch.level(), 6);
+                    if (y != goal.witch.level().getMinBuildHeight() - 1)
                         break;
                 }
-                if (y < goal.witch.level.getMinBuildHeight()) {
+                if (y < goal.witch.level().getMinBuildHeight()) {
                     goal.phase = END;
                     return;
                 }
@@ -126,12 +130,12 @@ public class DarkArtWitchGoal extends Goal {
                     goal.phase = LOOK_AT_VILLAGER;
                 }
                 goal.witch.getLookControl().setLookAt(goal.summonSpot.x, goal.summonSpot.y, goal.summonSpot.z, 180, 180);
-                goal.villager = new Villager(EntityType.VILLAGER, goal.witch.level);
+                goal.villager = new Villager(EntityType.VILLAGER, goal.witch.level());
                 goal.villager.setPos(goal.summonSpot);
                 goal.villager.getLookControl().setLookAt(goal.witch);
                 goal.villager.setInvulnerable(true);
                 goal.villager.setNoAi(true);
-                goal.witch.level.addFreshEntity(goal.villager);
+                goal.witch.level().addFreshEntity(goal.villager);
                 goal.phase = LOOK_AT_VILLAGER;
             }
         },
@@ -161,7 +165,7 @@ public class DarkArtWitchGoal extends Goal {
             public void tick(DarkArtWitchGoal goal) {
                 if (goal.phaseTick < LEVITATE_TICK) {
                     goal.witch.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 2, 1));
-                    goal.witch.level.addParticle(ParticleTypes.ANGRY_VILLAGER, true, goal.witch.getX(), goal.witch.getY(), goal.witch.getZ(), 0.1, 0.1, 0.1);
+                    goal.witch.level().addParticle(ParticleTypes.ANGRY_VILLAGER, true, goal.witch.getX(), goal.witch.getY(), goal.witch.getZ(), 0.1, 0.1, 0.1);
                     goal.witch.getLookControl().setLookAt(goal.villager, 180, 180);
                 }
                 else {
@@ -173,11 +177,11 @@ public class DarkArtWitchGoal extends Goal {
             @Override
             public void tick(DarkArtWitchGoal goal) {
                 if (goal.phaseTick == LIGHTNING_STRIKE_TICK) {
-                    LightningBolt lightningBolt = new LightningBolt(EntityType.LIGHTNING_BOLT, goal.witch.level);
+                    LightningBolt lightningBolt = new LightningBolt(EntityType.LIGHTNING_BOLT, goal.witch.level());
                     lightningBolt.setPos(goal.villager.getPosition(1f));
                     lightningBolt.setVisualOnly(true);
                     lightningBolt.setDamage(0f);
-                    goal.witch.level.addFreshEntity(lightningBolt);
+                    goal.witch.level().addFreshEntity(lightningBolt);
                     goal.summonWitch();
                     goal.phase = END;
                 }
@@ -198,10 +202,10 @@ public class DarkArtWitchGoal extends Goal {
     }
 
     private void summonWitch() {
-        ServerLevel serverLevel = (ServerLevel) this.witch.level;
+        ServerLevel serverLevel = (ServerLevel) this.witch.level();
         Witch witch = EntityType.WITCH.create(serverLevel);
         witch.moveTo(this.villager.getX(), this.villager.getY(), this.villager.getZ(), this.villager.getYRot(), this.villager.getXRot());
-        witch.finalizeSpawn(serverLevel, this.witch.level.getCurrentDifficultyAt(witch.blockPosition()), MobSpawnType.CONVERSION, null, null);
+        witch.finalizeSpawn(serverLevel, this.witch.level().getCurrentDifficultyAt(witch.blockPosition()), MobSpawnType.CONVERSION, null, null);
         witch.getPersistentData().putBoolean(EAStrings.Tags.Witch.DARK_ARTS, false);
         //witch.setPersistenceRequired();
         serverLevel.addFreshEntityWithPassengers(witch);

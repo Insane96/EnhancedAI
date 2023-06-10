@@ -48,7 +48,7 @@ public class DarkArtWitch extends Feature {
     @SubscribeEvent
     public void onDeath(LivingDeathEvent event) {
         if (!this.isEnabled()
-                || event.getEntity().level.isClientSide
+                || event.getEntity().level().isClientSide
                 || !(event.getEntity() instanceof Witch witch))
             return;
 

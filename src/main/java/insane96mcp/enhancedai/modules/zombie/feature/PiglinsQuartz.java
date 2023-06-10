@@ -33,6 +33,6 @@ public class PiglinsQuartz extends Feature {
 				|| !event.getState().is(Tags.Blocks.ORES_QUARTZ))
 			return;
 
-		player.level.getEntitiesOfClass(ZombifiedPiglin.class, player.getBoundingBox().inflate(32d)).forEach(zombifiedPiglin -> zombifiedPiglin.setTarget(player));
+		player.level().getEntitiesOfClass(ZombifiedPiglin.class, player.getBoundingBox().inflate(32d)).forEach(zombifiedPiglin -> zombifiedPiglin.setTarget(player));
 	}
 }

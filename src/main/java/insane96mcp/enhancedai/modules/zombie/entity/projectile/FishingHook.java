@@ -49,7 +49,7 @@ public class FishingHook extends Projectile {
     public void onSyncedDataUpdated(EntityDataAccessor<?> p_37153_) {
         if (DATA_HOOKED_ENTITY.equals(p_37153_)) {
             int i = this.getEntityData().get(DATA_HOOKED_ENTITY);
-            this.hookedIn = i > 0 ? this.level.getEntity(i - 1) : null;
+            this.hookedIn = i > 0 ? this.level().getEntity(i - 1) : null;
         }
 
         super.onSyncedDataUpdated(p_37153_);
@@ -72,7 +72,7 @@ public class FishingHook extends Projectile {
         if (this.distanceToSqr(this.getOwner()) > 1024d) {
             this.discard();
         }
-        if (this.onGround) {
+        if (this.onGround()) {
             ++this.life;
             if (this.life >= 1200) {
                 this.discard();
@@ -85,9 +85,9 @@ public class FishingHook extends Projectile {
 
         float f = 0.0F;
         BlockPos blockpos = this.blockPosition();
-        FluidState fluidstate = this.level.getFluidState(blockpos);
+        FluidState fluidstate = this.level().getFluidState(blockpos);
         if (fluidstate.is(FluidTags.WATER)) {
-            f = fluidstate.getHeight(this.level, blockpos);
+            f = fluidstate.getHeight(this.level(), blockpos);
         }
 
         boolean isUnderwater = f > 0.0F;
@@ -109,7 +109,7 @@ public class FishingHook extends Projectile {
         else {
             if (this.currentState == FishHookState.HOOKED_IN_ENTITY) {
                 if (this.hookedIn != null) {
-                    if (!this.hookedIn.isRemoved() && this.hookedIn.level.dimension() == this.level.dimension()) {
+                    if (!this.hookedIn.isRemoved() && this.hookedIn.level().dimension() == this.level().dimension()) {
                         this.setPos(this.hookedIn.getX(), this.hookedIn.getY(0.8D), this.hookedIn.getZ());
                     } else {
                         this.setHookedEntity((Entity)null);
@@ -127,7 +127,7 @@ public class FishingHook extends Projectile {
 
         this.move(MoverType.SELF, this.getDeltaMovement());
         this.updateRotation();
-        if (this.currentState == FishHookState.FLYING && (this.onGround || this.horizontalCollision)) {
+        if (this.currentState == FishHookState.FLYING && (this.onGround() || this.horizontalCollision)) {
             this.setDeltaMovement(Vec3.ZERO);
         }
 
@@ -137,7 +137,7 @@ public class FishingHook extends Projectile {
     }
 
     private void checkCollision() {
-        HitResult hitresult = ProjectileUtil.getHitResult(this, this::canHitEntity);
+        HitResult hitresult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
         if (hitresult.getType() == HitResult.Type.MISS || !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, hitresult)) this.onHit(hitresult);
     }
 
@@ -147,7 +147,7 @@ public class FishingHook extends Projectile {
 
     protected void onHitEntity(EntityHitResult p_37144_) {
         super.onHitEntity(p_37144_);
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             this.setHookedEntity(p_37144_.getEntity());
         }
 
@@ -170,18 +170,18 @@ public class FishingHook extends Projectile {
     }
 
     public void retrieve() {
-        if (this.level.isClientSide
+        if (this.level().isClientSide
                 || this.getOwner() == null)
             return;
         if (this.hookedIn != null) {
             this.pullEntity(this.hookedIn);
-            this.level.broadcastEntityEvent(this, (byte)31);
+            this.level().broadcastEntityEvent(this, (byte)31);
         }
         this.discard();
     }
 
     public void handleEntityEvent(byte p_37123_) {
-        if (p_37123_ == 31 && this.level.isClientSide && this.hookedIn instanceof Player && ((Player)this.hookedIn).isLocalPlayer()) {
+        if (p_37123_ == 31 && this.level().isClientSide && this.hookedIn instanceof Player && ((Player)this.hookedIn).isLocalPlayer()) {
             this.pullEntity(this.hookedIn);
         }
 

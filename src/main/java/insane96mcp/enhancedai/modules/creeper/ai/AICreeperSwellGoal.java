@@ -90,7 +90,7 @@ public class AICreeperSwellGoal extends Goal {
 			this.cancelSwell();
 		else if (this.swellingCreeper.tickCount % 3 == 0) {
 			this.swellingCreeper.setSwellDir(1);
-			List<PathfinderMob> creaturesNearby = this.swellingCreeper.level.getEntitiesOfClass(PathfinderMob.class, this.swellingCreeper.getBoundingBox().inflate(explosionSize * 2));
+			List<PathfinderMob> creaturesNearby = this.swellingCreeper.level().getEntitiesOfClass(PathfinderMob.class, this.swellingCreeper.getBoundingBox().inflate(explosionSize * 2));
 			for (PathfinderMob creatureEntity : creaturesNearby) {
 				if (creatureEntity == this.swellingCreeper)
 					continue;

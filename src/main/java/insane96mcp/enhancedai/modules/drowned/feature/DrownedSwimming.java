@@ -88,7 +88,7 @@ public class DrownedSwimming extends Feature {
 				this.drowned.setPose(Pose.SWIMMING);
 			}
 			else {
-				if (!this.drowned.isOnGround()) {
+				if (!this.drowned.onGround()) {
 					this.drowned.setDeltaMovement(this.drowned.getDeltaMovement().add(0.0D, -0.008D, 0.0D));
 				}
 				this.drowned.setPose(Pose.STANDING);

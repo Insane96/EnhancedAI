@@ -77,7 +77,7 @@ public class DiggingGoal extends Goal {
 		return !this.targetBlocks.isEmpty()
 				&& this.targetBlocks.get(0).distSqr(this.digger.blockPosition()) < this.reachDistance * this.reachDistance
 				&& this.digger.getNavigation().isDone()
-				&& !this.digger.level.getBlockState(this.targetBlocks.get(0)).isAir()
+				&& !this.digger.level().getBlockState(this.targetBlocks.get(0)).isAir()
 				&& this.path != null && this.path.getDistToTarget() > 1.5d;
 	}
 
@@ -93,7 +93,7 @@ public class DiggingGoal extends Goal {
 	public void stop() {
 		this.target = null;
 		if (!this.targetBlocks.isEmpty()) {
-			this.digger.level.destroyBlockProgress(this.digger.getId(), targetBlocks.get(0), -1);
+			this.digger.level().destroyBlockProgress(this.digger.getId(), targetBlocks.get(0), -1);
 			this.targetBlocks.clear();
 		}
 		this.tickToBreak = 0;
@@ -113,18 +113,18 @@ public class DiggingGoal extends Goal {
 		this.digger.getLookControl().setLookAt(this.targetBlocks.get(0).getX() + 0.5d, this.targetBlocks.get(0).getY() + 0.5d, this.targetBlocks.get(0).getZ() + 0.5d);
 		if (this.prevBreakProgress != (int) ((this.breakingTick / (float) this.tickToBreak) * 10)) {
 			this.prevBreakProgress = (int) ((this.breakingTick / (float) this.tickToBreak) * 10);
-			this.digger.level.destroyBlockProgress(this.digger.getId(), targetBlocks.get(0), this.prevBreakProgress);
+			this.digger.level().destroyBlockProgress(this.digger.getId(), targetBlocks.get(0), this.prevBreakProgress);
 		}
 		if (this.breakingTick % 6 == 0) {
 			this.digger.swing(InteractionHand.MAIN_HAND);
 		}
 		if (this.breakingTick % 4 == 0) {
-			SoundType soundType = this.blockState.getSoundType(this.digger.level, this.targetBlocks.get(0), this.digger);
-			this.digger.level.playSound(null, this.targetBlocks.get(0), soundType.getHitSound(), SoundSource.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F);
+			SoundType soundType = this.blockState.getSoundType(this.digger.level(), this.targetBlocks.get(0), this.digger);
+			this.digger.level().playSound(null, this.targetBlocks.get(0), soundType.getHitSound(), SoundSource.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F);
 		}
 		if (this.breakingTick >= this.tickToBreak) {
-			this.digger.level.destroyBlock(targetBlocks.get(0), false, this.digger);
-			this.digger.level.destroyBlockProgress(this.digger.getId(), targetBlocks.get(0), -1);
+			this.digger.level().destroyBlock(targetBlocks.get(0), false, this.digger);
+			this.digger.level().destroyBlockProgress(this.digger.getId(), targetBlocks.get(0), -1);
 			this.targetBlocks.remove(0);
 			if (!this.targetBlocks.isEmpty())
 				initBlockBreak();
@@ -134,7 +134,7 @@ public class DiggingGoal extends Goal {
 	}
 
 	private void initBlockBreak() {
-		this.blockState = this.digger.level.getBlockState(this.targetBlocks.get(0));
+		this.blockState = this.digger.level().getBlockState(this.targetBlocks.get(0));
 		this.tickToBreak = computeTickToBreak();
 		this.breakingTick = 0;
 		this.path = this.digger.getNavigation().createPath(this.target, 1);
@@ -143,7 +143,7 @@ public class DiggingGoal extends Goal {
 	private void fillTargetBlocks() {
 		int mobHeight = Mth.ceil(this.digger.getBbHeight());
 		for (int i = 0; i < mobHeight; i++) {
-			BlockHitResult rayTraceResult = this.digger.level.clip(new ClipContext(this.digger.position().add(0, i + 0.5d, 0), this.target.getEyePosition(1f).add(0, i, 0), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.digger));
+			BlockHitResult rayTraceResult = this.digger.level().clip(new ClipContext(this.digger.position().add(0, i + 0.5d, 0), this.target.getEyePosition(1f).add(0, i, 0), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.digger));
 			if (rayTraceResult.getType() == HitResult.Type.MISS)
 				continue;
 			if (this.targetBlocks.contains(rayTraceResult.getBlockPos()))
@@ -155,9 +155,9 @@ public class DiggingGoal extends Goal {
 			if (distance > this.reachDistance * this.reachDistance)
 				continue;
 
-			BlockState state = this.digger.level.getBlockState(rayTraceResult.getBlockPos());
+			BlockState state = this.digger.level().getBlockState(rayTraceResult.getBlockPos());
 
-			if (state.hasBlockEntity() || state.getDestroySpeed(this.digger.level, rayTraceResult.getBlockPos()) == -1)
+			if (state.hasBlockEntity() || state.getDestroySpeed(this.digger.level(), rayTraceResult.getBlockPos()) == -1)
 				continue;
 
 			if (DiggerZombie.blockBlacklist.isBlockBlackOrNotWhiteListed(state.getBlock()))
@@ -192,7 +192,7 @@ public class DiggingGoal extends Goal {
 	// Copy-paste of vanilla code
 	private int computeTickToBreak() {
 		int canHarvestBlock = this.canHarvestBlock() ? 30 : 100;
-		double diggingSpeed = this.getDigSpeed() / this.blockState.getDestroySpeed(this.digger.level, this.targetBlocks.get(0)) / canHarvestBlock;
+		double diggingSpeed = this.getDigSpeed() / this.blockState.getDestroySpeed(this.digger.level(), this.targetBlocks.get(0)) / canHarvestBlock;
 		return Mth.ceil((1f / diggingSpeed) * DiggerZombie.miningSpeedMultiplier);
 	}
 

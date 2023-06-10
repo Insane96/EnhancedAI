@@ -51,7 +51,7 @@ public class WitherSkeletons extends Feature {
 			return;
 
 		RandomSource randomSource = witherSkeleton.getRandom();
-		float specialMultiplier = witherSkeleton.level.getCurrentDifficultyAt(witherSkeleton.blockPosition()).getSpecialMultiplier();
+		float specialMultiplier = witherSkeleton.level().getCurrentDifficultyAt(witherSkeleton.blockPosition()).getSpecialMultiplier();
 		//TODO AT Mob#enchantSpawnedWeapon
 		witherSkeleton.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.BOW));
 		if (randomSource.nextFloat() < 0.25F * specialMultiplier) {

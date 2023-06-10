@@ -48,7 +48,7 @@ public class GetOverHereGoal extends Goal {
             double y = this.enderman.getY();
 
             player.connection.teleport(x, y, z, player.getYRot(), player.getXRot());
-            this.enderman.level.playSound(null, x, y, z, SoundEvents.CHORUS_FRUIT_TELEPORT, SoundSource.HOSTILE, 1f, 0.5f);
+            this.enderman.level().playSound(null, x, y, z, SoundEvents.CHORUS_FRUIT_TELEPORT, SoundSource.HOSTILE, 1f, 0.5f);
         }
         else {
             this.target.setPos(this.enderman.getX(), this.enderman.getY(), this.enderman.getZ());

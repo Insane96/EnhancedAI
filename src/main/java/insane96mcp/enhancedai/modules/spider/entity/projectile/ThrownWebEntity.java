@@ -51,10 +51,10 @@ public class ThrownWebEntity extends ThrowableItemProjectile {
 		if (!result.getEntity().hurt(this.damageSources().thrown(this, this.getOwner()), this.damage))
 			return;
 		for(int i = 0; i < 32; ++i) {
-			this.level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.COBWEB.defaultBlockState()), result.getEntity().position().x + this.random.nextDouble() - 0.5d, result.getEntity().position().y + this.random.nextDouble() - 0.5d, result.getEntity().position().z + this.random.nextDouble() - 0.5d, 0d, 0D, 0d);
+			this.level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.COBWEB.defaultBlockState()), result.getEntity().position().x + this.random.nextDouble() - 0.5d, result.getEntity().position().y + this.random.nextDouble() - 0.5d, result.getEntity().position().z + this.random.nextDouble() - 0.5d, 0d, 0D, 0d);
 		}
-		this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.SLIME_SQUISH, SoundSource.HOSTILE, 1.0f, 0.5f);
-		if (!(result.getEntity() instanceof LivingEntity entity) || this.level.isClientSide)
+		this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.SLIME_SQUISH, SoundSource.HOSTILE, 1.0f, 0.5f);
+		if (!(result.getEntity() instanceof LivingEntity entity) || this.level().isClientSide)
 			return;
 
 		if (ThrowingWeb.applySpeed && this.getOwner() instanceof Mob mob && mob.getTarget() == result.getEntity()) {
@@ -65,16 +65,16 @@ public class ThrownWebEntity extends ThrowableItemProjectile {
 	}
 
 	protected void onHitBlock(BlockHitResult result) {
-		BlockState blockstate = this.level.getBlockState(result.getBlockPos());
-		blockstate.onProjectileHit(this.level, blockstate, result, this);
+		BlockState blockstate = this.level().getBlockState(result.getBlockPos());
+		blockstate.onProjectileHit(this.level(), blockstate, result, this);
 		BlockPos spawnCobwebAt = result.getBlockPos().offset(result.getDirection().getNormal());
-		if (FallingBlock.isFree(this.level.getBlockState(spawnCobwebAt)) /*&& this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)*/) {
-			this.level.setBlock(spawnCobwebAt, Blocks.COBWEB.defaultBlockState(), 3);
-			ScheduledTasks.schedule(new TemporaryCobwebTask(ThrowingWeb.destroyWebAfter, this.level, spawnCobwebAt));
+		if (FallingBlock.isFree(this.level().getBlockState(spawnCobwebAt)) /*&& this.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)*/) {
+			this.level().setBlock(spawnCobwebAt, Blocks.COBWEB.defaultBlockState(), 3);
+			ScheduledTasks.schedule(new TemporaryCobwebTask(ThrowingWeb.destroyWebAfter, this.level(), spawnCobwebAt));
 			for(int i = 0; i < 32; ++i) {
-				this.level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.COBWEB.defaultBlockState()), spawnCobwebAt.getX() + this.random.nextDouble(), spawnCobwebAt.getY() + this.random.nextDouble(), spawnCobwebAt.getZ() + this.random.nextDouble(), 0d, 0D, 0d);
+				this.level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.COBWEB.defaultBlockState()), spawnCobwebAt.getX() + this.random.nextDouble(), spawnCobwebAt.getY() + this.random.nextDouble(), spawnCobwebAt.getZ() + this.random.nextDouble(), 0d, 0D, 0d);
 			}
-			this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.SLIME_SQUISH, SoundSource.HOSTILE, 1.0f, 0.5f);
+			this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.SLIME_SQUISH, SoundSource.HOSTILE, 1.0f, 0.5f);
 		}
 	}
 

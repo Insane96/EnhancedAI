@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.13.0
+* Port to 1.20
+* Dark art withches now stop the ritual if moved too far from the villager
+* Snow golems no longer attack if out of range
+
 ## 1.12.2
 * Launch creepers now have a smaller explosion 
 * Launch creepers have now reduced particles
@@ -36,7 +41,7 @@
 
 ## 1.10.4
 * 60%/25%/10% of mobs can now spawn neutral
-* 50% of animals are no longer tempted by food
+* Food no longer tempts 50% of animals
 
 ## 1.10.3
 * Skeletons attack cooldown and charge time can now be configured

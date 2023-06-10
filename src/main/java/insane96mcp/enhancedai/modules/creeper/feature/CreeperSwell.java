@@ -181,7 +181,7 @@ public class CreeperSwell extends Feature {
 	public void onCreeperTick(LivingEvent.LivingTickEvent event) {
 		if (!this.isEnabled()
 				|| !(event.getEntity() instanceof Creeper creeper)
-				|| creeper.level.isClientSide)
+				|| creeper.level().isClientSide)
 			return;
 
 		onLaunchCreeperTick(creeper);
@@ -192,7 +192,7 @@ public class CreeperSwell extends Feature {
 		if (creeper.tickCount % 20 != 0
 				|| !launchParticles)
 			return;
-		ServerLevel serverLevel = (ServerLevel) creeper.level;
+		ServerLevel serverLevel = (ServerLevel) creeper.level();
 		if (creeper.getPersistentData().getBoolean(EAStrings.Tags.Creeper.LAUNCH)) {
 			for(int j = 0; j < serverLevel.players().size(); ++j) {
 				ServerPlayer serverplayer = serverLevel.players().get(j);
@@ -205,7 +205,7 @@ public class CreeperSwell extends Feature {
 		if (creeper.tickCount % 40 != 5
 				|| !cenaParticles)
 			return;
-		ServerLevel serverLevel = (ServerLevel) creeper.level;
+		ServerLevel serverLevel = (ServerLevel) creeper.level();
 		if (creeper.getPersistentData().getBoolean(EAStrings.Tags.Creeper.CENA)) {
 			for(int j = 0; j < serverLevel.players().size(); ++j) {
 				ServerPlayer serverplayer = serverLevel.players().get(j);
