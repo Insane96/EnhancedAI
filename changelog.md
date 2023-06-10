@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 1.12.2
 * Launch creepers now have a smaller explosion 
 * Launch creepers have now reduced particles
 * Fisher and Pearler zombies no longer use the item if in water
