@@ -18,7 +18,7 @@ public class RangedSnowGolemAttackGoal extends RangedAttackGoal<SnowGolem> {
     @Override
     protected void attackTick(LivingEntity target, double distanceFromTarget, boolean canSeeTarget) {
         this.mob.getLookControl().setLookAt(target, 30.0F, 30.0F);
-        if (--this.attackTime <= 0 && canSeeTarget && distanceFromTarget < (double)this.maxAttackDistance) {
+        if (--this.attackTime <= 0 && canSeeTarget) {
             this.mob.stopUsingItem();
             attackEntityWithRangedAttack(this.mob, target, 1);
             this.attackTime = this.attackCooldown;

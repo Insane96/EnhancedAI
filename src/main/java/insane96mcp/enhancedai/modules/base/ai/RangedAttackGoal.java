@@ -114,9 +114,10 @@ public abstract class RangedAttackGoal<T extends Mob> extends Goal {
 
 				this.strafingTime = 0;
 			}
+
+			attackTick(target, distanceFromTarget, canSeeTarget);
 		}
 
-		attackTick(target, distanceFromTarget, canSeeTarget);
 	}
 
 	protected boolean canStrafe() {

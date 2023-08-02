@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.13.1
+* MC 1.20.1
+* Fixed ranged targets attacking out of range 
+
 ## 1.13.0
 * Port to 1.20
 * Dark art withches now stop the ritual if moved too far from the villager
