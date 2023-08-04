@@ -35,7 +35,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Predicate;
 
 @Label(name = "Targeting", description = "Change how mobs target players")
 @LoadFeature(module = Modules.Ids.BASE)
@@ -59,7 +58,8 @@ public class Targeting extends Feature {
 	@Config
 	@Label(name = "Entity Blacklist", description = "Entities in here will not be affected by this feature.")
 	public static Blacklist entityBlacklist = new Blacklist(List.of(
-			new IdTagMatcher(IdTagMatcher.Type.ID, "minecraft:enderman")
+			new IdTagMatcher(IdTagMatcher.Type.ID, "minecraft:enderman"),
+			new IdTagMatcher(IdTagMatcher.Type.ID, "autumnity:turkey")
 	), false);
 
 	public Targeting(Module module, boolean enabledByDefault, boolean canBeDisabled) {
@@ -114,9 +114,7 @@ public class Targeting extends Feature {
 	}
 
 	private void processTargetGoal(Mob mobEntity) {
-		boolean hasTargetGoal = false;
-
-		Predicate<LivingEntity> predicate = null;
+		List<WrappedGoal> goalsToAdd = new ArrayList<>();
 
 		ArrayList<Goal> goalsToRemove = new ArrayList<>();
 		for (WrappedGoal prioritizedGoal : mobEntity.targetSelector.availableGoals) {
@@ -126,38 +124,26 @@ public class Targeting extends Feature {
 			if (goal.targetType != Player.class)
 				continue;
 
-			predicate = goal.targetConditions.selector;
-
 			goalsToRemove.add(prioritizedGoal.getGoal());
-			hasTargetGoal = true;
+
+			EANearestAttackableTarget<Player> newTargetGoal;
+
+			if (mobEntity instanceof Spider)
+				newTargetGoal = new EASpiderTargetGoal<>((Spider) mobEntity, Player.class, true, false, goal.targetConditions.selector);
+			else
+				newTargetGoal = new EANearestAttackableTarget<>(mobEntity, Player.class, false, false, goal.targetConditions.selector);
+
+			if (instaTarget)
+				newTargetGoal.setInstaTarget();
+
+			goalsToAdd.add(new WrappedGoal(prioritizedGoal.getPriority(), newTargetGoal));
 		}
 
-		if (!hasTargetGoal)
-			return;
-
 		goalsToRemove.forEach(mobEntity.targetSelector::removeGoal);
+		goalsToAdd.forEach(wrappedGoal -> mobEntity.targetSelector.addGoal(wrappedGoal.getPriority(), wrappedGoal.getGoal()));
 
-		EANearestAttackableTarget<Player> targetGoal;
-
-		if (mobEntity instanceof Spider)
-			targetGoal = new EASpiderTargetGoal<>((Spider) mobEntity, Player.class, true, false, predicate);
-		else
-			targetGoal = new EANearestAttackableTarget<>(mobEntity, Player.class, false, false, predicate);
-
-		if (instaTarget)
-			targetGoal.setInstaTarget();
-		mobEntity.targetSelector.addGoal(2, targetGoal);
 		if (betterPathfinding)
 			mobEntity.getNavigation().setMaxVisitedNodesMultiplier(4f);
-
-		/*ILNearestAttackableTargetGoal<Endermite> targetGoalTest;
-
-		if (mobEntity instanceof Spider)
-			targetGoalTest = new EASpiderTargetGoal<>((Spider) mobEntity, Endermite.class, true, false, predicate);
-		else
-			targetGoalTest = new EANearestAttackableTarget<>(mobEntity, Endermite.class, false, false, predicate);
-
-		mobEntity.targetSelector.addGoal(2, targetGoalTest.setInstaTarget());*/
 	}
 
 	private void processFollowRanges(Mob mobEntity) {

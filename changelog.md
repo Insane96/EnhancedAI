@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.8.2
+* Fixed some target goal selectors not being copied to mod's target goal
+  * This might fix some mobs attacking for no reason
+
 ## 1.8.1
 * Fixed level's `RandomSource` causing crashes
 * Witches summoned by Dark Art Witches can no longer be Dark Art Witches

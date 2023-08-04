@@ -99,8 +99,8 @@ dependencies {
     
     annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
 
-    //implementation fg.deobf("curse.maven:savage-and-ravage-381736:3226442")
-    //implementation fg.deobf("curse.maven:abnormals_core-382216:3457851")
+    implementation fg.deobf("curse.maven:autumnity-365045:4415512")
+    implementation fg.deobf("curse.maven:blueprint-382216:4442628")
 
 }
 
