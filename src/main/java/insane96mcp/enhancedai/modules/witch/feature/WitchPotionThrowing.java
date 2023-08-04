@@ -57,14 +57,14 @@ public class WitchPotionThrowing extends Feature {
     @Label(name = "Throw Range", description = "Range at which Witches throw potions.")
     public static MinMax throwRange = new MinMax(16, 24);
     @Config(min = 0d, max = 1d)
-    @Label(name = "Apprentice Witch Chance", description = "Chance for a Witch to be an apprentice. Apprentice Witches throw random potions instead of in order, and have a chance to throw a wrong potion.")
-    public static Double apprenticeWitchChance = 0.75d;
+    @Label(name = "Apprentice Witch.Chance", description = "Chance for a Witch to be an apprentice. Apprentice Witches throw random potions instead of in order, and have a chance to throw a wrong potion.")
+    public static Double apprenticeWitchChance = 0.6d;
     @Config
     @Label(name = "Use Slow Falling", description = "If true, witches will throw a potion of slow falling at their feet when they're falling for more than 8 blocks.")
     public static Boolean useSlowFalling = true;
     @Config(min = 0d, max = 1d)
     @Label(name = "Health Threshold Invisibility", description = "When below this health percentage Witches will throw Invisibility potions at their feet.")
-    public static Double healthThresholdInvisibility = 0.50d;
+    public static Double healthThresholdInvisibility = 0.40d;
     @Config
     @Label(name = "Entity Blacklist", description = "Entities that will not get affected by this feature")
     public static Blacklist entityBlacklist = new Blacklist(Collections.emptyList(), false);

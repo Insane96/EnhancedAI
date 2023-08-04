@@ -23,7 +23,6 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.player.Player;
@@ -119,9 +118,7 @@ public class Targeting extends Feature {
 	}
 
 	private void processTargetGoal(Mob mobEntity) {
-		boolean hasTargetGoal = false;
-
-		TargetingConditions targetingConditions = null;
+		List<WrappedGoal> goalsToAdd = new ArrayList<>();
 
 		ArrayList<Goal> goalsToRemove = new ArrayList<>();
 		for (WrappedGoal prioritizedGoal : mobEntity.targetSelector.availableGoals) {
@@ -131,42 +128,30 @@ public class Targeting extends Feature {
 			if (goal.targetType != Player.class)
 				continue;
 
-			targetingConditions = goal.targetConditions;
-
 			goalsToRemove.add(prioritizedGoal.getGoal());
-			hasTargetGoal = true;
+
+			boolean isNeutral = NBTUtils.getBooleanOrPutDefault(mobEntity.getPersistentData(), IS_NEUTRAL, mobEntity.getRandom().nextDouble() < neutralChances.getByDifficulty(mobEntity.level));
+			if (isNeutral)
+				return;
+
+			EANearestAttackableTarget<Player> newTargetGoal;
+
+			if (mobEntity instanceof Spider)
+				newTargetGoal = new EASpiderTargetGoal<>((Spider) mobEntity, Player.class, true, false, goal.targetConditions);
+			else
+				newTargetGoal = new EANearestAttackableTarget<>(mobEntity, Player.class, false, false, goal.targetConditions);
+
+			if (instaTarget)
+				newTargetGoal.setInstaTarget();
+
+			goalsToAdd.add(new WrappedGoal(prioritizedGoal.getPriority(), newTargetGoal));
 		}
 
-		if (!hasTargetGoal)
-			return;
-
 		goalsToRemove.forEach(mobEntity.targetSelector::removeGoal);
+		goalsToAdd.forEach(wrappedGoal -> mobEntity.targetSelector.addGoal(wrappedGoal.getPriority(), wrappedGoal.getGoal()));
 
-		boolean isNeutral = NBTUtils.getBooleanOrPutDefault(mobEntity.getPersistentData(), IS_NEUTRAL, mobEntity.getRandom().nextDouble() < neutralChances.getByDifficulty(mobEntity.level()));
-		if (isNeutral)
-			return;
-
-		EANearestAttackableTarget<Player> targetGoal;
-
-		if (mobEntity instanceof Spider)
-			targetGoal = new EASpiderTargetGoal<>((Spider) mobEntity, Player.class, true, false, targetingConditions);
-		else
-			targetGoal = new EANearestAttackableTarget<>(mobEntity, Player.class, false, false, targetingConditions);
-
-		if (instaTarget)
-			targetGoal.setInstaTarget();
-		mobEntity.targetSelector.addGoal(2, targetGoal);
 		if (betterPathfinding)
 			mobEntity.getNavigation().setMaxVisitedNodesMultiplier(4f);
-
-        /*ILNearestAttackableTargetGoal<Endermite> targetGoalTest;
-
-		if (mobEntity instanceof Spider)
-			targetGoalTest = new EASpiderTargetGoal<>((Spider) mobEntity, Endermite.class, true, false, predicate);
-		else
-			targetGoalTest = new EANearestAttackableTarget<>(mobEntity, Endermite.class, false, false, predicate);
-
-		mobEntity.targetSelector.addGoal(2, targetGoalTest.setInstaTarget());*/
 	}
 
 	private void processFollowRanges(Mob mobEntity) {

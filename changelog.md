@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.13.2
+* Nerfed Witches a little bit
+* Fixed some target goal selectors not being copied to mod's target goal
+  * This might fix some mobs attacking for no reason
+
 ## 1.13.1
 * MC 1.20.1
 * Fixed ranged targets attacking out of range 

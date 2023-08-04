@@ -30,7 +30,7 @@ public class ThirstyWitches extends Feature {
     public static Double healingChance = 0.05d;
     @Config(min = 0d, max = 1d)
     @Label(name = "Strong healing Threshold", description = "Below this percentage health, witches will drink strong healing potions instead of normal ones.")
-    public static Double strongHealingThreshold = 0.4d;
+    public static Double strongHealingThreshold = 0.2d;
     @Config(min = 0d, max = 1d)
     @Label(name = "Water Breathing Chance", description = "Chance for a witch to drink a water breathing potion when in water and air meter is at half. Vanilla is 15% and doesn't check the air meter.")
     public static Double waterBreathingChance = 1d;
