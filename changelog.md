@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.12.3
+* Fixed some target goal selectors not being copied to mod's target goal
+  * This might fix some mobs attacking for no reason
+
 ## 1.12.2
 * Launch creepers now have a smaller explosion 
 * Launch creepers have now reduced particles
