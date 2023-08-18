@@ -1,7 +1,9 @@
 # Changelog
 
 ## Upcoming
-* Slowed down explosion flee speed
+* Added Shulker Bullets
+  * Changed duration and amplifier of Levitation (10 seconds I -> 10/5/2.5 seconds II/IV/VIII in easy/normal/hard)
+* Slowed down explosion avoid flee speed
 * Added config options for cena forced explosion
 
 ## 1.13.2
