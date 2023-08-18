@@ -90,6 +90,9 @@ public class CreeperSwell extends Feature {
 	@Label(name = "Cena.Explosion power", description = "Explosion power of Creeper Cena")
 	public static Double cenaExplosionPower = 4d;
 	@Config
+	@Label(name = "Cena.Forced Explosion", description = "Creeper cena will not stop swelling when triggered")
+	public static Boolean cenaForcedExplosion = true;
+	@Config
 	@Label(name = "Cena.Survival Reimagined Integration", description = "If Survival Reimagined is installed and Explosion Overhaul is enabled, creeper cena will deal more knockback and break more blocks")
 	public static Boolean survivalReimaginedIntegration = true;
 
@@ -155,7 +158,7 @@ public class CreeperSwell extends Feature {
 				.setWalkingFuse(walkingFuse)
 				.setIgnoreWalls(ignoreWalls)
 				.setBreaching(breach);
-		if (cena)
+		if (cena && cenaForcedExplosion)
 			swellGoal.setForceExplode(cenaForceExplosion);
 		creeper.goalSelector.addGoal(2, swellGoal);
 

@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Added config options for cena forced explosion
+
 ## 1.13.2
 * Nerfed Witches a little bit
 * Fixed some target goal selectors not being copied to mod's target goal
