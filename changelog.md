@@ -1,6 +1,7 @@
 # Changelog
 
 ## Upcoming
+* Slowed down explosion flee speed
 * Added config options for cena forced explosion
 
 ## 1.13.2

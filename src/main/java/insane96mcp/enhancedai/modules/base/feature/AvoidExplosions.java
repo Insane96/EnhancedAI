@@ -21,10 +21,10 @@ import java.util.List;
 public class AvoidExplosions extends Feature {
 	@Config(min = 0d, max = 10d)
 	@Label(name = "Flee speed Multiplier Near", description = "Speed multiplier when the mob runs from explosions and it's within 7 blocks from him.")
-	public static Double runSpeedNear = 1.4d;
+	public static Double runSpeedNear = 1.25d;
 	@Config(min = 0d, max = 10d)
 	@Label(name = "Flee speed Multiplier Far", description = "Speed multiplier when the mob runs from explosions and it's farther than 7 blocks from him.")
-	public static Double runSpeedFar = 1.2d;
+	public static Double runSpeedFar = 1.1d;
 	@Config(min = 0d, max = 10d)
 	@Label(name = "Flee TNT", description = "Entities also flee from TnTs")
 	public static Boolean fleeTnt = false;
