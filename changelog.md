@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 1.14.1
 * Fixed and nerfed Witches
   * No longer use Invisibility and Slow Falling if drinking a potion
   * Chance to use a water breathing and fire resistance potion is now same as vanilla (lowered a lot)
