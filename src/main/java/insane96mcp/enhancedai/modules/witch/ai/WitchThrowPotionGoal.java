@@ -1,21 +1,17 @@
 package insane96mcp.enhancedai.modules.witch.ai;
 
+import insane96mcp.enhancedai.modules.witch.data.PotionOrMobEffect;
 import insane96mcp.enhancedai.modules.witch.feature.WitchPotionThrowing;
-import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.entity.raid.Raider;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -99,52 +95,50 @@ public class WitchThrowPotionGoal extends Goal {
         if (witch.isDrinkingPotion())
             return;
 
-        Collection<MobEffectInstance> mobEffectInstances = new ArrayList<>();
-        List<MobEffectInstance> listToLoop;
+        List<PotionOrMobEffect> listToLoop;
         if (!this.apprentice)
             listToLoop = this.target instanceof Raider ? WitchPotionThrowing.goodPotionsList : WitchPotionThrowing.badPotionsList;
         else
             listToLoop = this.witch.getRandom().nextBoolean() ? WitchPotionThrowing.goodPotionsList : WitchPotionThrowing.badPotionsList;
-        if (this.randomPotion) {
-            mobEffectInstances.add(listToLoop.get(witch.getRandom().nextInt(listToLoop.size())));
-        }
-        else if (this.apprentice) {
-            mobEffectInstances.add(listToLoop.get(witch.getRandom().nextInt(listToLoop.size())));
+
+        PotionOrMobEffect potionOrMobEffect = null;
+        if (this.randomPotion || this.apprentice) {
+            potionOrMobEffect = listToLoop.get(witch.getRandom().nextInt(listToLoop.size()));
         }
         else {
-            for (MobEffectInstance mobEffectInstance : listToLoop) {
-                if (this.target.hasEffect(mobEffectInstance.getEffect()))
+            for (PotionOrMobEffect pmb : listToLoop) {
+                MobEffect mobEffect = pmb.getMobEffect();
+                if (mobEffect != null && this.target.hasEffect(mobEffect))
                     continue;
 
-                mobEffectInstances.add(new MobEffectInstance(mobEffectInstance));
+                potionOrMobEffect = pmb;
                 break;
             }
         }
 
-        this.randomPotion = false;
-
-        ThrownPotion thrownpotion = new ThrownPotion(witch.level(), this.witch);
-        Item potionType = witch.getRandom().nextDouble() < this.lingeringChance ? Items.LINGERING_POTION : Items.SPLASH_POTION;
-        thrownpotion.setItem(MCUtils.setCustomEffects(new ItemStack(potionType), mobEffectInstances));
-        thrownpotion.setXRot(thrownpotion.getXRot() + 20.0F);
-        double distance = this.witch.distanceTo(target);
-        double dirX = this.target.getX() - this.witch.getX();
-        double distanceY = this.target.getY() - this.witch.getY();
-        double dirZ = this.target.getZ() - this.witch.getZ();
-        double distanceXZ = Math.sqrt(dirX * dirX + dirZ * dirZ);
-        double yPos = this.target.getY(0d);
-        yPos += this.target.getEyeHeight() * 0.1 + (distanceY / distanceXZ);
-        double dirY = yPos - thrownpotion.getY();
-        thrownpotion.shoot(dirX, dirY + distanceXZ * 0.18d, dirZ, 1.1f + ((float)distance / 32f) + (float)Math.max(distanceY / 48d, 0f), 1f);
-        if (!witch.isSilent()) {
-            witch.level().playSound(null, witch.getX(), witch.getY(), witch.getZ(), SoundEvents.WITCH_THROW, witch.getSoundSource(), 1.0F, 0.8F + witch.getRandom().nextFloat() * 0.4F);
-        }
-
-        witch.level().addFreshEntity(thrownpotion);
-
-        if (witch.getRandom().nextDouble() < this.anotherThrowChance) {
-            this.attackTime = 8;
-            this.randomPotion = true;
+        if (potionOrMobEffect != null) {
+            this.randomPotion = false;
+            ThrownPotion thrownpotion = new ThrownPotion(witch.level(), this.witch);
+            ItemStack stack = witch.getRandom().nextDouble() < this.lingeringChance ? potionOrMobEffect.getLingeringPotionStack() : potionOrMobEffect.getSplashPotionStack();
+            thrownpotion.setItem(stack);
+            thrownpotion.setXRot(thrownpotion.getXRot() + 20.0F);
+            double distance = this.witch.distanceTo(target);
+            double dirX = this.target.getX() - this.witch.getX();
+            double distanceY = this.target.getY() - this.witch.getY();
+            double dirZ = this.target.getZ() - this.witch.getZ();
+            double distanceXZ = Math.sqrt(dirX * dirX + dirZ * dirZ);
+            double yPos = this.target.getY(0d);
+            yPos += this.target.getEyeHeight() * 0.1 + (distanceY / distanceXZ);
+            double dirY = yPos - thrownpotion.getY();
+            thrownpotion.shoot(dirX, dirY + distanceXZ * 0.18d, dirZ, 1.1f + ((float) distance / 32f) + (float) Math.max(distanceY / 48d, 0f), 1f);
+            if (!witch.isSilent()) {
+                witch.level().playSound(null, witch.getX(), witch.getY(), witch.getZ(), SoundEvents.WITCH_THROW, witch.getSoundSource(), 1.0F, 0.8F + witch.getRandom().nextFloat() * 0.4F);
+            }
+            witch.level().addFreshEntity(thrownpotion);
+            if (witch.getRandom().nextDouble() < this.anotherThrowChance) {
+                this.attackTime = 8;
+                this.randomPotion = true;
+            }
         }
     }
 }

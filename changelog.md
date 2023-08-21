@@ -1,5 +1,12 @@
 # Changelog
 
+## Upcoming
+* Fixed and nerfed Witches
+  * No longer use Invisibility and Slow Falling if drinking a potion
+  * Chance to use a water breathing and fire resistance potion is now same as vanilla (lowered a lot)
+  * Fixed vanilla potions dropping as "Uncraftable Potion"
+  * Drinkable and throwable potions list in the config now accepts vanilla potions
+
 ## 1.14.0
 * Added Shulker Bullets
   * Changed duration and amplifier of Levitation (10 seconds I -> 10/5/2.5 seconds II/IV/VIII in easy/normal/hard)

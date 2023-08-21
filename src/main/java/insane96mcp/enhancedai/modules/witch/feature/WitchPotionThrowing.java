@@ -3,6 +3,7 @@ package insane96mcp.enhancedai.modules.witch.feature;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.modules.witch.ai.WitchThrowPotionGoal;
+import insane96mcp.enhancedai.modules.witch.data.PotionOrMobEffect;
 import insane96mcp.enhancedai.setup.EAStrings;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
@@ -12,9 +13,7 @@ import insane96mcp.insanelib.base.config.Blacklist;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.LoadFeature;
 import insane96mcp.insanelib.base.config.MinMax;
-import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
@@ -38,11 +37,11 @@ public class WitchPotionThrowing extends Feature {
 
     private static ForgeConfigSpec.ConfigValue<List<? extends String>> badPotionsListConfig;
     private static ForgeConfigSpec.ConfigValue<List<? extends String>> goodPotionsListConfig;
-    public static final List<String> badPotionsListDefault = Arrays.asList("minecraft:weakness,900,0", "minecraft:slowness,1200,0", "minecraft:hunger,600,0", "minecraft:mining_fatigue,600,0", "minecraft:poison,900,0", "minecraft:blindness,120,0", "minecraft:instant_damage,1,0");
-    public static final List<String> goodPotionsListDefault = Arrays.asList("minecraft:regeneration,900,0", "minecraft:speed,1800,0", "minecraft:strength,1800,0", "minecraft:instant_health,1,0");
+    public static final List<String> badPotionsListDefault = Arrays.asList("minecraft:weakness", "minecraft:slowness", "minecraft:hunger,600,0", "minecraft:mining_fatigue,600,0", "minecraft:poison", "minecraft:blindness,120,0", "minecraft:strong_harming");
+    public static final List<String> goodPotionsListDefault = Arrays.asList("minecraft:regeneration", "minecraft:swiftness", "minecraft:strength", "minecraft:healing");
 
-    public static ArrayList<MobEffectInstance> badPotionsList;
-    public static ArrayList<MobEffectInstance> goodPotionsList;
+    public static ArrayList<PotionOrMobEffect> badPotionsList;
+    public static ArrayList<PotionOrMobEffect> goodPotionsList;
 
     @Config(min = 0d, max = 1d)
     @Label(name = "Lingering Chance", description = "Chance for the potions thrown by the Witch to be lingering.")
@@ -57,7 +56,7 @@ public class WitchPotionThrowing extends Feature {
     @Label(name = "Throw Range", description = "Range at which Witches throw potions.")
     public static MinMax throwRange = new MinMax(16, 24);
     @Config(min = 0d, max = 1d)
-    @Label(name = "Apprentice Witch.Chance", description = "Chance for a Witch to be an apprentice. Apprentice Witches throw random potions instead of in order, and have a chance to throw a wrong potion.")
+    @Label(name = "Apprentice Witch.Chance", description = "Chance for a Witch to be an apprentice. Apprentice Witches throw random potions instead of in order, and have a chance to throw a wrong (good) potion.")
     public static Double apprenticeWitchChance = 0.6d;
     @Config
     @Label(name = "Use Slow Falling", description = "If true, witches will throw a potion of slow falling at their feet when they're falling for more than 8 blocks.")
@@ -87,8 +86,8 @@ public class WitchPotionThrowing extends Feature {
     @Override
     public void readConfig(final ModConfigEvent event) {
         super.readConfig(event);
-        badPotionsList = MCUtils.parseMobEffectsList(badPotionsListConfig.get());
-        goodPotionsList = MCUtils.parseMobEffectsList(goodPotionsListConfig.get());
+        badPotionsList = PotionOrMobEffect.parseList(badPotionsListConfig.get());
+        goodPotionsList = PotionOrMobEffect.parseList(goodPotionsListConfig.get());
     }
 
     //Lowest priority so other mods can set persistent data
