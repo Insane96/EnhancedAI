@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Slowed down skeleton shooting
+
 ## 1.14.1
 * Fixed and nerfed Witches
   * No longer use Invisibility and Slow Falling if drinking a potion

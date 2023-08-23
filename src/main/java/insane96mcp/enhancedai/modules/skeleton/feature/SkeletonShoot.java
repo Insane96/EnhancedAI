@@ -37,9 +37,9 @@ public class SkeletonShoot extends Feature {
 	public static MinMax shootingRange = new MinMax(24, 32);
 	@Config(min = 0)
 	@Label(name = "Shooting Cooldown", description = "The ticks cooldown after shooting. This is halved in Hard difficulty")
-	public static MinMax shootingCooldown = new MinMax(40, 60);
+	public static MinMax shootingCooldown = new MinMax(50, 70);
 	@Config(min = 0)
-	@Label(name = "Bow charge ticks", description = "The ticks the skeleton charges the bow. 20 ticks for a full charge.")
+	@Label(name = "Bow charge ticks", description = "The ticks the skeleton charges the bow. at least 20 ticks for a full charge.")
 	public static MinMax bowChargeTicks = new MinMax(15, 30);
 	@Config(min = 0d, max = 1d)
 	@Label(name = "Strafe chance", description = "Chance for a Skeleton to spawn with the ability to strafe (like vanilla)")
