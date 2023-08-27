@@ -1,17 +1,16 @@
 # Changelog
 
-* Slow down skeleton shooting based off distance from player
-
 ## Upcoming
 * Skeletons
   * Skeletons now shoot slower if the target is farther away
   * Increased shooting cooldown
+* Fixed vanilla bug MC-198068 (mobs randomly stop targeting entities)
 
 ## 1.14.1
 * Fixed and nerfed Witches
   * No longer use Invisibility and Slow Falling if drinking a potion
   * Fixed vanilla potions dropping as "Uncraftable Potion"
-  * Drinkable and throwable potions list in the config now accepts vanilla potions
+  * Drinkable and throwable potions list in the config now accepts vanilla potions****
 
 ## 1.14.0
 * Added Shulker Bullets
