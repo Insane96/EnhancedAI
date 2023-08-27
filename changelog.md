@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 1.14.2
 * Skeletons
   * Skeletons now shoot slower if the target is farther away
   * Increased shooting cooldown
