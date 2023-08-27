@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.modules.pets.ai;
 
-import insane96mcp.enhancedai.modules.base.ai.RangedAttackGoal;
+import insane96mcp.enhancedai.modules.base.ai.EARangedAttackGoal;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.SnowGolem;
@@ -9,9 +9,9 @@ import net.minecraft.world.entity.projectile.Snowball;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-public class RangedSnowGolemAttackGoal extends RangedAttackGoal<SnowGolem> {
+public class EARangedSnowGolemAttackGoal extends EARangedAttackGoal<SnowGolem> {
 
-    public RangedSnowGolemAttackGoal(SnowGolem mob, double moveSpeedAmpIn, float maxAttackDistanceIn) {
+    public EARangedSnowGolemAttackGoal(SnowGolem mob, double moveSpeedAmpIn, float maxAttackDistanceIn) {
         super(mob, moveSpeedAmpIn, maxAttackDistanceIn, false);
     }
 

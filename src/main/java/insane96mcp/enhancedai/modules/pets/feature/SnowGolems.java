@@ -2,7 +2,7 @@ package insane96mcp.enhancedai.modules.pets.feature;
 
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.enhancedai.modules.pets.ai.RangedSnowGolemAttackGoal;
+import insane96mcp.enhancedai.modules.pets.ai.EARangedSnowGolemAttackGoal;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
@@ -96,7 +96,7 @@ public class SnowGolems extends Feature {
         int shootingCooldown = NBTUtils.getIntOrPutDefault(persistentData, SHOOTING_COOLDOWN, 10);
 
         snowGolem.goalSelector.availableGoals.removeIf(wrappedGoal -> wrappedGoal.getGoal() instanceof RangedAttackGoal);
-        snowGolem.goalSelector.addGoal(1, new RangedSnowGolemAttackGoal(snowGolem, 1f, 24f).setAttackCooldown(shootingCooldown));
+        snowGolem.goalSelector.addGoal(1, new EARangedSnowGolemAttackGoal(snowGolem, 1f, 24f).setAttackCooldown(shootingCooldown));
 
         if (persistentData.contains(ON_SPAWN_PROCESSED))
             return;

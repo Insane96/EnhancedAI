@@ -87,7 +87,7 @@ public class PotionOrMobEffect {
 	public static Potion parsePotion(String s) {
 		ResourceLocation effectRL = ResourceLocation.tryParse(s);
 		if (effectRL == null) {
-			LogHelper.warn("%s mob effect is not valid", s);
+			LogHelper.warn("%s mob effect is not a valid potion", s);
 			return null;
 		}
 		return ForgeRegistries.POTIONS.getValue(effectRL);

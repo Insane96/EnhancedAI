@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.modules.skeleton.ai;
 
-import insane96mcp.enhancedai.modules.base.ai.RangedAttackGoal;
+import insane96mcp.enhancedai.modules.base.ai.EARangedAttackGoal;
 import insane96mcp.enhancedai.setup.Reflection;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
@@ -11,7 +11,7 @@ import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-public class EARangedBowAttackGoal extends RangedAttackGoal<AbstractSkeleton> {
+public class EARangedBowAttackGoal extends EARangedAttackGoal<AbstractSkeleton> {
 
 	protected int bowChargeTicks;
 
@@ -45,8 +45,8 @@ public class EARangedBowAttackGoal extends RangedAttackGoal<AbstractSkeleton> {
 
 	@Override
 	protected void attackTick(LivingEntity target, double distanceFromTarget, boolean canSeeTarget) {
-		int i = this.mob.getTicksUsingItem();
-		if (i > 12) {
+		int ticksUsingItem = this.mob.getTicksUsingItem();
+		if (ticksUsingItem > 12) {
 			this.mob.getNavigation().stop();
 			this.mob.lookAt(target, 30.0F, 30.0F);
 			this.mob.getLookControl().setLookAt(target, 30.0F, 30.0F);
@@ -68,16 +68,29 @@ public class EARangedBowAttackGoal extends RangedAttackGoal<AbstractSkeleton> {
 				this.mob.stopUsingItem();
 			}
 			else if (canSeeTarget) {
-				if (i >= this.bowChargeTicks) {
+				if (ticksUsingItem >= getBowChargeTicks(target)) {
 					this.mob.stopUsingItem();
-					attackEntityWithRangedAttack(this.mob, target, i);
-					this.attackTime = this.attackCooldown;
+					attackEntityWithRangedAttack(this.mob, target, ticksUsingItem);
+					this.attackTime = getAttackCooldown(target);
 				}
 			}
 		}
 		else if (--this.attackTime <= 0 && this.seeTime >= -60) {
 			this.mob.startUsingItem(ProjectileUtil.getWeaponHoldingHand(this.mob, item -> item == Items.BOW));
 		}
+	}
+
+	private int getAttackCooldown(LivingEntity target) {
+		return this.attackCooldown;
+	}
+
+	private int getBowChargeTicks(LivingEntity target) {
+		double distanceFromTarget = this.mob.distanceToSqr(target);
+		if (distanceFromTarget < 12d * 12d)
+			return this.bowChargeTicks;
+
+		distanceFromTarget -= 12d * 12d;
+		return (int) (this.bowChargeTicks + (Math.sqrt(distanceFromTarget)));
 	}
 
 	protected void attackEntityWithRangedAttack(AbstractSkeleton entity, LivingEntity target, int chargeTicks) {

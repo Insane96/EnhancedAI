@@ -1,7 +1,11 @@
 # Changelog
 
+* Slow down skeleton shooting based off distance from player
+
 ## Upcoming
-* Slowed down skeleton shooting
+* Skeletons
+  * Skeletons now shoot slower if the target is farther away
+  * Increased shooting cooldown
 
 ## 1.14.1
 * Fixed and nerfed Witches

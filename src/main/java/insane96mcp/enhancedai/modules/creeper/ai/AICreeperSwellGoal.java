@@ -43,6 +43,7 @@ public class AICreeperSwellGoal extends Goal {
 
 	public boolean canUse() {
 		if (explosionSize == 0f) {
+			//Cache the explosion size
 			explosionSize = CreeperUtils.getExplosionSize(this.swellingCreeper);
 			explosionSizeSqr = explosionSize * explosionSize;
 		}
@@ -52,7 +53,7 @@ public class AICreeperSwellGoal extends Goal {
 			return false;
 
 		boolean canBreach = breaching && canBreach(this.swellingCreeper, this.creeperAttackTarget);
-		boolean ignoresWalls = ignoreWalls && this.swellingCreeper.distanceToSqr(this.creeperAttackTarget) < (explosionSizeSqr * 1d * 1d);
+		boolean ignoresWalls = ignoreWalls && this.swellingCreeper.distanceToSqr(this.creeperAttackTarget) < explosionSizeSqr;
 
 		if (canBreach)
 			isBreaching = true;

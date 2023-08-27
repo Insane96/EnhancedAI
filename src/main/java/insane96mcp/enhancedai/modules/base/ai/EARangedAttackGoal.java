@@ -6,7 +6,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 
 import java.util.EnumSet;
 
-public abstract class RangedAttackGoal<T extends Mob> extends Goal {
+public abstract class EARangedAttackGoal<T extends Mob> extends Goal {
 	protected final T mob;
 	protected final double moveSpeedAmp;
 	protected int attackCooldown;
@@ -19,7 +19,7 @@ public abstract class RangedAttackGoal<T extends Mob> extends Goal {
 	protected boolean strafingBackwards;
 	protected int strafingTime = -1;
 
-	public RangedAttackGoal(T mob, double moveSpeedAmpIn, float maxAttackDistanceIn, boolean canStrafe) {
+	public EARangedAttackGoal(T mob, double moveSpeedAmpIn, float maxAttackDistanceIn, boolean canStrafe) {
 		this.mob = mob;
 		this.moveSpeedAmp = moveSpeedAmpIn;
 		this.maxAttackDistance = maxAttackDistanceIn * maxAttackDistanceIn;
@@ -27,12 +27,12 @@ public abstract class RangedAttackGoal<T extends Mob> extends Goal {
 		this.setFlags(EnumSet.of(Flag.LOOK));
 	}
 
-	public RangedAttackGoal<T> setAttackCooldown(int attackCooldownIn) {
+	public EARangedAttackGoal<T> setAttackCooldown(int attackCooldownIn) {
 		this.attackCooldown = attackCooldownIn;
 		return this;
 	}
 
-	public RangedAttackGoal<T> setInaccuracy(float inaccuracy) {
+	public EARangedAttackGoal<T> setInaccuracy(float inaccuracy) {
 		this.inaccuracy = inaccuracy;
 		return this;
 	}
