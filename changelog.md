@@ -5,6 +5,7 @@
   * Skeletons now shoot slower if the target is farther away
   * Increased shooting cooldown
 * Fixed vanilla bug MC-198068 (mobs randomly stop targeting entities)
+* Fixed vanilla bug where mobs switch target when hit even if the target is the same
 
 ## 1.14.1
 * Fixed and nerfed Witches
