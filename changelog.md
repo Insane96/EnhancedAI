@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Slightly lowered fisher zombie pull force 
+
 ## 1.14.2
 * Skeletons
   * Skeletons now shoot slower if the target is farther away
