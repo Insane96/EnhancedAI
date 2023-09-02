@@ -29,7 +29,7 @@ public class DiggerZombie extends Feature {
 	public static Double diggerChance = 0.07d;
 	@Config
 	@Label(name = "Digger Tool Only", description = "Zombies with Digger AI will mine only if they have any tool in the off-hand")
-	public static Boolean diggerToolOnly = false;
+	public static Boolean diggerToolOnly = true;
 	@Config
 	@Label(name = "Digger Proper Tool Only", description = "Zombies with Digger AI will mine only if their off-hand tool can mine targeted blocks (e.g. zombies with shovels will not mine stone). Blocks that require no tool (e.g. planks) will be minable regardless of proper tool or not.")
 	public static Boolean diggerProperToolOnly = false;
@@ -47,7 +47,7 @@ public class DiggerZombie extends Feature {
 	public static Boolean blacklistTileEntities = false;
 	@Config(min = 0d, max = 128d)
 	@Label(name = "Digger Speed Multiplier", description = "Multiplier for digger zombies mining speed. E.g. with this set to 2, zombies will take twice the time to mine a block.")
-	public static Double miningSpeedMultiplier = 1d;
+	public static Double miningSpeedMultiplier = 1.5d;
 	@Config
 	@Label(name = "Block Blacklist", description = "Blocks in here will not be minable by zombies (or will be the only minable in case it's whitelist)")
 	public static Blacklist blockBlacklist = new Blacklist(Collections.emptyList(), false);

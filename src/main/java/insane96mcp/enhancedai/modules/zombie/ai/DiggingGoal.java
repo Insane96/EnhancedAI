@@ -2,6 +2,7 @@ package insane96mcp.enhancedai.modules.zombie.ai;
 
 import insane96mcp.enhancedai.modules.zombie.feature.DiggerZombie;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -9,14 +10,18 @@ import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -109,22 +114,27 @@ public class DiggingGoal extends Goal {
 			return;
 		if (this.properToolOnly && this.blockState != null && !this.canHarvestBlock())
 			return;
+		BlockPos pos = this.targetBlocks.get(0);
 		this.breakingTick++;
-		this.digger.getLookControl().setLookAt(this.targetBlocks.get(0).getX() + 0.5d, this.targetBlocks.get(0).getY() + 0.5d, this.targetBlocks.get(0).getZ() + 0.5d);
+		this.digger.getLookControl().setLookAt(pos.getX() + 0.5d, pos.getY() + 0.5d, pos.getZ() + 0.5d);
 		if (this.prevBreakProgress != (int) ((this.breakingTick / (float) this.tickToBreak) * 10)) {
 			this.prevBreakProgress = (int) ((this.breakingTick / (float) this.tickToBreak) * 10);
-			this.digger.level().destroyBlockProgress(this.digger.getId(), targetBlocks.get(0), this.prevBreakProgress);
+			this.digger.level().destroyBlockProgress(this.digger.getId(), pos, this.prevBreakProgress);
 		}
 		if (this.breakingTick % 6 == 0) {
 			this.digger.swing(InteractionHand.MAIN_HAND);
 		}
 		if (this.breakingTick % 4 == 0) {
-			SoundType soundType = this.blockState.getSoundType(this.digger.level(), this.targetBlocks.get(0), this.digger);
-			this.digger.level().playSound(null, this.targetBlocks.get(0), soundType.getHitSound(), SoundSource.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F);
+			SoundType soundType = this.blockState.getSoundType(this.digger.level(), pos, this.digger);
+			this.digger.level().playSound(null, pos, soundType.getHitSound(), SoundSource.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F);
 		}
-		if (this.breakingTick >= this.tickToBreak) {
-			this.digger.level().destroyBlock(targetBlocks.get(0), false, this.digger);
-			this.digger.level().destroyBlockProgress(this.digger.getId(), targetBlocks.get(0), -1);
+		if (this.breakingTick >= this.tickToBreak && this.digger.level() instanceof ServerLevel level) {
+			BlockEntity blockentity = this.blockState.hasBlockEntity() ? this.digger.level().getBlockEntity(pos) : null;
+			LootParams.Builder lootparams$builder = (new LootParams.Builder(level)).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos)).withParameter(LootContextParams.TOOL, this.digger.getOffhandItem()).withOptionalParameter(LootContextParams.BLOCK_ENTITY, blockentity).withOptionalParameter(LootContextParams.THIS_ENTITY, this.digger);
+			this.blockState.spawnAfterBreak(level, pos, this.digger.getOffhandItem(), true);
+			this.blockState.getDrops(lootparams$builder).forEach((itemStack) -> level.addFreshEntity(new ItemEntity(level, pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f, itemStack)));
+			this.digger.level().destroyBlock(pos, false, this.digger);
+			this.digger.level().destroyBlockProgress(this.digger.getId(), pos, -1);
 			this.targetBlocks.remove(0);
 			if (!this.targetBlocks.isEmpty())
 				initBlockBreak();

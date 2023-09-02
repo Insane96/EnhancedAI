@@ -27,7 +27,7 @@ archivesBaseName = 'EnhancedAI'
 java.toolchain.languageVersion = JavaLanguageVersion.of(17) // Mojang ships Java 8 to end users, so your mod should target Java 8.
 
 minecraft {
-    mappings channel: 'official', version: "${mc_version}"
+    mappings channel: 'parchment', version: "2023.06.26-1.20.1"
     
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
