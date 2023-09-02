@@ -1,8 +1,10 @@
 # Changelog
 
+* Make miner zombies drop mined blocks
+
 ## 1.15.0
 * Added Attacking>Melee Attack Speed Based
-  * Makes melee mobs attack rate based off attack speed (reduced by 40% compared to players)
+  * Makes melee mobs attack rate based off attack speed (reduced by 60%/50%/40% on Easy/Normal/Hard compared to players)
 * Added 'Wearden Interactions'
   * Mobs will attack the Warden
   * Can be set so mobs flee from the warden instead

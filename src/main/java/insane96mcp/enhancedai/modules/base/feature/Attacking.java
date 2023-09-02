@@ -5,6 +5,7 @@ import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
+import insane96mcp.insanelib.base.config.Difficulty;
 import insane96mcp.insanelib.base.config.LoadFeature;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -24,8 +25,8 @@ public class Attacking extends Feature {
 	@Label(name = "Attack Speed.Enabled", description = "If true melee monsters (zombies, etc) attack rate is defined by their attack speed -40%, minumum once every 0.5 seconds with no weapon. This effectively buffs any mob that has no weapon.")
 	public static Boolean meleeAttackSpeedBased = true;
 	@Config(min = 0d, max = 4d)
-	@Label(name = "Attack Speed.Multiplier", description = "Multiplies the attack speed of monsters by this value. By default 0.6 means that mobs attack 40% slower than the player with the same equipment")
-	public static Double attackSpeedMultiplier = 0.6d;
+	@Label(name = "Attack Speed.Multiplier", description = "Multiplies the attack speed of monsters by this value. E.g. 0.6 means that mobs attack 40% slower than the player with the same equipment")
+	public static Difficulty attackSpeedMultiplier = new Difficulty(0.4d, 0.5d, 0.6d);
 
 	public Attacking(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super(module, enabledByDefault, canBeDisabled);
