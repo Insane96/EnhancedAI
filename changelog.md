@@ -1,6 +1,8 @@
 # Changelog
 
 ## Upcoming
+* Added Attacking>Melee Attack Speed Based
+  * Makes melee mobs attack rate based off attack speed (reduced by 40% compared to players)
 * Added 'Wearden Interactions'
   * Mobs will attack the Warden
   * Can be set so mobs flee from the warden instead

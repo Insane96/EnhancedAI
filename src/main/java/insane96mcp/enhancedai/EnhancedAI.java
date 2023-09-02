@@ -33,7 +33,7 @@ public class EnhancedAI
         Reflection.init();
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(Animals::attribute);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(Attacking::attackRangeAttribute);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(Attacking::attributeModificationEvent);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(Targeting::xrayRangeAttribute);
     }
 
