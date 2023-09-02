@@ -26,13 +26,10 @@ public class AntiCheese extends Feature {
 
     @SubscribeEvent
     public void onMobMount(EntityMountEvent event) {
-        if (!this.isEnabled())
-            return;
-
-        if (!(event.getEntityMounting() instanceof Enemy))
-            return;
-
-        if (!(event.getEntityBeingMounted() instanceof Boat) && !(event.getEntityBeingMounted() instanceof Minecart))
+        if (!this.isEnabled()
+                || !preventBoating
+                || !(event.getEntityMounting() instanceof Enemy)
+                || !(event.getEntityBeingMounted() instanceof Boat) && !(event.getEntityBeingMounted() instanceof Minecart))
             return;
 
         event.setCanceled(true);

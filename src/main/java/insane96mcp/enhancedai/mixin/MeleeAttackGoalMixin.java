@@ -33,8 +33,6 @@ public abstract class MeleeAttackGoalMixin extends Goal {
 
 	@Shadow private int ticksUntilNextAttack;
 
-	@Shadow protected abstract int getAttackInterval();
-
 	@Inject(at = @At(value = "RETURN"), method = "getAttackReachSqr", cancellable = true)
 	public void onGetAttackReachSqr(LivingEntity livingEntity, CallbackInfoReturnable<Double> callbackInfo) {
 		if (!Attacking.shouldChangeAttackRange())
