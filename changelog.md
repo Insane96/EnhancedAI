@@ -7,6 +7,7 @@
   * Mobs will attack the Warden
   * Can be set so mobs flee from the warden instead
 * Digger Zombies now finally drop blocks they mine
+  * Decreased mining speed and made them require a tool to mine (zombies with a fishing rod will no longer mine)
 * Slightly lowered fisher zombie pull force 
 
 ## 1.14.2
