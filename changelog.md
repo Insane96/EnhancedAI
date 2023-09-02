@@ -1,6 +1,9 @@
 # Changelog
 
 ## Upcoming
+* Added 'Wearden Interactions'
+  * Mobs will attack the Warden
+  * Can be set so mobs flee from the warden instead
 * Slightly lowered fisher zombie pull force 
 
 ## 1.14.2

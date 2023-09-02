@@ -138,8 +138,9 @@ public class Targeting extends Feature {
 
 			if (mobEntity instanceof Spider)
 				newTargetGoal = new EASpiderTargetGoal<>((Spider) mobEntity, Player.class, true, false, goal.targetConditions);
-			else
+			else {
 				newTargetGoal = new EANearestAttackableTarget<>(mobEntity, Player.class, false, false, goal.targetConditions);
+			}
 
 			if (instaTarget)
 				newTargetGoal.setInstaTarget();
