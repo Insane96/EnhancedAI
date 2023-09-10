@@ -1,8 +1,8 @@
 # Changelog
 
 ## 1.15.1
-* Digger zombies
-  * Block breaking sound is now the same as player breaking
+* Mobs maximum attack speed can now be set (and has been lowered (2 attacks/sec -> 1.25))
+* Digger zombies: Block breaking sound is now the same as player breaking
 
 ## 1.15.0
 * Added Attacking>Melee Attack Speed Based

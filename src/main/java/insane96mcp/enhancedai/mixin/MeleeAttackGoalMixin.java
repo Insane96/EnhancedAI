@@ -76,7 +76,7 @@ public abstract class MeleeAttackGoalMixin extends Goal {
 			attackSpeed = this.mob.getAttributeValue(Attributes.ATTACK_SPEED);
 		}
 		attackSpeed *= Attacking.attackSpeedMultiplier.getByDifficulty(this.mob.level());
-		if (attackSpeed > 2f) attackSpeed = 2f;
+		if (attackSpeed > Attacking.attackSpeedMaximum) attackSpeed = Attacking.attackSpeedMaximum;
 		return this.adjustedTickDelay((int) (1d / attackSpeed * 20d));
 	}
 }
