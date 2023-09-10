@@ -126,7 +126,7 @@ public class DiggingGoal extends Goal {
 		}
 		if (this.breakingTick % 4 == 0) {
 			SoundType soundType = this.blockState.getSoundType(this.digger.level(), pos, this.digger);
-			this.digger.level().playSound(null, pos, soundType.getHitSound(), SoundSource.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F);
+			this.digger.level().playSound(null, pos, soundType.getHitSound(), SoundSource.BLOCKS, (soundType.getVolume() + 1.0F) / 8.0F, soundType.getPitch() * 0.5F);
 		}
 		if (this.breakingTick >= this.tickToBreak && this.digger.level() instanceof ServerLevel level) {
 			BlockEntity blockentity = this.blockState.hasBlockEntity() ? this.digger.level().getBlockEntity(pos) : null;

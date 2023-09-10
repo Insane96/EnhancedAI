@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.15.1
+* Digger zombies
+  * Block breaking sound is now the same as player breaking
+
 ## 1.15.0
 * Added Attacking>Melee Attack Speed Based
   * Makes melee mobs attack rate based off attack speed (reduced by 60%/50%/40% on Easy/Normal/Hard compared to players)
