@@ -12,7 +12,7 @@ import insane96mcp.insanelib.base.config.Blacklist;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.LoadFeature;
 import insane96mcp.insanelib.base.config.MinMax;
-import insane96mcp.insanelib.util.IdTagMatcher;
+import insane96mcp.insanelib.data.IdTagMatcher;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -53,7 +53,7 @@ public class SkeletonShoot extends Feature {
 	@Config
 	@Label(name = "Entity Blacklist", description = "Entities that will not get affected by this feature")
 	public static Blacklist entityBlacklist = new Blacklist(List.of(
-			new IdTagMatcher(IdTagMatcher.Type.ID, "quark:forgotten")
+			IdTagMatcher.newId("quark:forgotten")
 	), false);
 
 	public SkeletonShoot(Module module, boolean enabledByDefault, boolean canBeDisabled) {

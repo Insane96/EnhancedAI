@@ -11,7 +11,7 @@ import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.*;
-import insane96mcp.insanelib.util.IdTagMatcher;
+import insane96mcp.insanelib.data.IdTagMatcher;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EntityType;
@@ -59,7 +59,7 @@ public class Targeting extends Feature {
 	@Config
 	@Label(name = "Entity Blacklist", description = "Entities in here will not be affected by this feature.")
 	public static Blacklist entityBlacklist = new Blacklist(List.of(
-			new IdTagMatcher(IdTagMatcher.Type.ID, "minecraft:enderman")
+			IdTagMatcher.newId("minecraft:enderman")
 	), false);
 	@Config
 	@Label(name = "Neutral Chances", description = "Chances for a mob to spawn neutral")

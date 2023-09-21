@@ -8,7 +8,7 @@ import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Blacklist;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.LoadFeature;
-import insane96mcp.insanelib.util.IdTagMatcher;
+import insane96mcp.insanelib.data.IdTagMatcher;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
@@ -30,7 +30,7 @@ public class AvoidExplosions extends Feature {
 	public static Boolean fleeTnt = false;
 	@Config(min = 0d, max = 10d)
 	@Label(name = "Entity Blacklist", description = "Entities that shouldn't be affected by this feature")
-	public static Blacklist entityBlacklist = new Blacklist(List.of(new IdTagMatcher(IdTagMatcher.Type.ID, "minecraft:warden")), false);
+	public static Blacklist entityBlacklist = new Blacklist(List.of(IdTagMatcher.newId("minecraft:warden")), false);
 
 	public AvoidExplosions(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super(module, enabledByDefault, canBeDisabled);

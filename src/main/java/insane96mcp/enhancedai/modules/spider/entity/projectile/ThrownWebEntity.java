@@ -2,7 +2,7 @@ package insane96mcp.enhancedai.modules.spider.entity.projectile;
 
 import insane96mcp.enhancedai.modules.spider.feature.ThrowingWeb;
 import insane96mcp.enhancedai.setup.EAEntities;
-import insane96mcp.insanelib.util.scheduled.ScheduledTasks;
+import insane96mcp.insanelib.world.scheduled.ScheduledTasks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;

@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.15.2
+* Now requires InsaneLib 1.11.1
+
 ## 1.15.1
 * Mobs maximum attack speed can now be set (and has been lowered (2 attacks/sec -> 1.25))
 * Digger zombies: Block breaking sound is now the same as player breaking

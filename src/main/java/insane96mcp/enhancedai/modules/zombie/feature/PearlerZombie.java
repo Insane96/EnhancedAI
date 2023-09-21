@@ -8,7 +8,7 @@ import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Blacklist;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.LoadFeature;
-import insane96mcp.insanelib.util.IdTagMatcher;
+import insane96mcp.insanelib.data.IdTagMatcher;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.ItemStack;
@@ -33,7 +33,7 @@ public class PearlerZombie extends Feature {
 	@Config(min = 1, max = 128)
 	@Label(name = "Entity Blacklist", description = "Entities that will not be affected by this module.")
 	public static Blacklist entityBlacklist = new Blacklist(List.of(
-			new IdTagMatcher(IdTagMatcher.Type.ID, "quark:forgotten")
+			IdTagMatcher.newId("quark:forgotten")
 	), false);
 
 	public PearlerZombie(Module module, boolean enabledByDefault, boolean canBeDisabled) {

@@ -25,7 +25,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -37,8 +36,8 @@ public class WitchPotionThrowing extends Feature {
 
     private static ForgeConfigSpec.ConfigValue<List<? extends String>> badPotionsListConfig;
     private static ForgeConfigSpec.ConfigValue<List<? extends String>> goodPotionsListConfig;
-    public static final List<String> badPotionsListDefault = Arrays.asList("minecraft:weakness", "minecraft:slowness", "minecraft:hunger,600,0", "minecraft:mining_fatigue,600,0", "minecraft:poison", "minecraft:blindness,120,0", "minecraft:strong_harming");
-    public static final List<String> goodPotionsListDefault = Arrays.asList("minecraft:regeneration", "minecraft:swiftness", "minecraft:strength", "minecraft:healing");
+    public static final List<String> badPotionsListDefault = List.of("minecraft:weakness", "minecraft:slowness", "minecraft:hunger,600,0", "minecraft:mining_fatigue,600,0", "minecraft:poison", "minecraft:blindness,120,0", "minecraft:strong_harming");
+    public static final List<String> goodPotionsListDefault = List.of("minecraft:regeneration", "minecraft:swiftness", "minecraft:strength", "minecraft:healing");
 
     public static ArrayList<PotionOrMobEffect> badPotionsList;
     public static ArrayList<PotionOrMobEffect> goodPotionsList;

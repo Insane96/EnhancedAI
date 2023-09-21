@@ -10,7 +10,7 @@ import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Blacklist;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.LoadFeature;
-import insane96mcp.insanelib.util.IdTagMatcher;
+import insane96mcp.insanelib.data.IdTagMatcher;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
@@ -43,7 +43,7 @@ public class SkeletonFleeTarget extends Feature {
     @Config
     @Label(name = "Entity Blacklist", description = "Entities that will not be affected by this feature")
     public static Blacklist entityBlacklist = new Blacklist(List.of(
-            new IdTagMatcher(IdTagMatcher.Type.ID, "quark:forgotten")
+            IdTagMatcher.newId("quark:forgotten")
     ), false);
 
     public SkeletonFleeTarget(Module module, boolean enabledByDefault, boolean canBeDisabled) {

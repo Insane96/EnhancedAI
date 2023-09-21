@@ -12,7 +12,7 @@ import insane96mcp.insanelib.base.config.Blacklist;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.LoadFeature;
 import insane96mcp.insanelib.base.config.MinMax;
-import insane96mcp.insanelib.util.scheduled.ScheduledTasks;
+import insane96mcp.insanelib.world.scheduled.ScheduledTasks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;

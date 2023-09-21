@@ -11,7 +11,7 @@ import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Blacklist;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.LoadFeature;
-import insane96mcp.insanelib.util.IdTagMatcher;
+import insane96mcp.insanelib.data.IdTagMatcher;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -66,13 +66,13 @@ public class Animals extends Feature {
     @Config
     @Label(name = "Entity Blacklist", description = "Entities that shouldn't be affected by this feature")
     public static Blacklist entityBlacklist = new Blacklist(List.of(
-            new IdTagMatcher(IdTagMatcher.Type.ID, "minecraft:llama"),
-            new IdTagMatcher(IdTagMatcher.Type.ID, "minecraft:trader_llama"),
-            new IdTagMatcher(IdTagMatcher.Type.ID, "minecraft:bee"),
-            new IdTagMatcher(IdTagMatcher.Type.ID, "minecraft:wolf"),
-            new IdTagMatcher(IdTagMatcher.Type.ID, "minecraft:bear"),
-            new IdTagMatcher(IdTagMatcher.Type.ID, "minecraft:panda"),
-            new IdTagMatcher(IdTagMatcher.Type.ID, "minecraft:axolotl")
+            IdTagMatcher.newId("minecraft:llama"),
+            IdTagMatcher.newId("minecraft:trader_llama"),
+            IdTagMatcher.newId("minecraft:bee"),
+            IdTagMatcher.newId("minecraft:wolf"),
+            IdTagMatcher.newId("minecraft:bear"),
+            IdTagMatcher.newId("minecraft:panda"),
+            IdTagMatcher.newId("minecraft:axolotl")
     ), false);
 
     private static final double BASE_ATTACK_DAMAGE = 3d;
