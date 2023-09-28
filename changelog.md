@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Biting zombies now have a higher to bite in hard
+
 ## 1.15.2
 * Now requires InsaneLib 1.11.1
 

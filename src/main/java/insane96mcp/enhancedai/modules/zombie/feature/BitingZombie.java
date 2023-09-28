@@ -7,6 +7,7 @@ import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Blacklist;
 import insane96mcp.insanelib.base.config.Config;
+import insane96mcp.insanelib.base.config.Difficulty;
 import insane96mcp.insanelib.base.config.LoadFeature;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -29,10 +30,10 @@ public class BitingZombie extends Feature {
 
 	@Config(min = 0d, max = 1d)
 	@Label(name = "Chance", description = "Chance for a Zombie to bite a player")
-	public static Double chance = 0.2d;
+	public static Difficulty chance = new Difficulty(0.2d, 0.2d, 0.3d);
 	@Config(min = 0d)
 	@Label(name = "Damage", description = "The damage dealt to the player when bit")
-	public static Double damageMultiplier = 3d;
+	public static Double damage = 3d;
 	@Config
 	@Label(name = "Entity Blacklist", description = "Entities in this list will not be affected by this feature")
 	public static Blacklist entityBlacklist = new Blacklist(Collections.emptyList(), false);
@@ -52,9 +53,9 @@ public class BitingZombie extends Feature {
 				|| player.getMainHandItem().getAttributeModifiers(EquipmentSlot.MAINHAND).containsKey(Attributes.ATTACK_DAMAGE))
 			return;
 
-		if (zombie.getRandom().nextDouble() < chance) {
+		if (zombie.getRandom().nextDouble() < chance.getByDifficulty(event.getEntity().level())) {
 			DamageSource damageSource = zombie.damageSources().source(BITE_DAMAGE_TYPE,  zombie);
-			player.hurt(damageSource, 3f);
+			player.hurt(damageSource, damage.floatValue());
 		}
 	}
 }
