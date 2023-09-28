@@ -22,6 +22,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.SwellGoal;
+import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.phys.Vec3;
@@ -121,12 +122,18 @@ public class CreeperSwell extends Feature {
 				|| event.getLevel().isClientSide
 				|| !(event.getEntity() instanceof Creeper creeper)) return;
 
+		boolean hasSwellGoal = false;
 		//Remove Creeper Swell Goal
 		ArrayList<Goal> goalsToRemove = new ArrayList<>();
-		creeper.goalSelector.availableGoals.forEach(prioritizedGoal -> {
-			if (prioritizedGoal.getGoal() instanceof SwellGoal)
+		for (WrappedGoal prioritizedGoal : creeper.goalSelector.availableGoals) {
+			if (prioritizedGoal.getGoal() instanceof SwellGoal) {
 				goalsToRemove.add(prioritizedGoal.getGoal());
-		});
+				hasSwellGoal = true;
+			}
+		}
+
+		if (!hasSwellGoal)
+			return;
 
 		goalsToRemove.forEach(creeper.goalSelector::removeGoal);
 
