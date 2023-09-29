@@ -191,8 +191,8 @@ public class FishingHook extends Projectile {
     protected void pullEntity(Entity entity) {
         Entity owner = this.getOwner();
         if (owner != null) {
-            //TODO Add some min Y force (1d)
             Vec3 vec3 = (new Vec3(owner.getX() - this.getX(), Math.max(owner.getY() - this.getY(), 1d), owner.getZ() - this.getZ())).scale(0.3D);
+            entity.stopRiding();
             entity.setDeltaMovement(entity.getDeltaMovement().add(vec3));
         }
     }
