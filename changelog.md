@@ -4,6 +4,7 @@
 * Biting zombies now have a higher chance to bite in hard
 * Fishing zombies now dismount entities
 * Fixed modded creepers exploding even if they aren't supposed to 
+* Fixed launching creepers no longer launching
 
 ## 1.15.2
 * Now requires InsaneLib 1.11.1

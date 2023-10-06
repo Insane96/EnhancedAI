@@ -31,6 +31,7 @@ public class AICreeperLaunchGoal extends Goal {
 	private float explosionSize;
 	private float explosionSizeSqr;
 	private float activationDistanceSqr;
+	private float minActivationDistanceSqr;
 
 	public AICreeperLaunchGoal(Creeper creeper) {
 		this.launchingCreeper = creeper;
@@ -43,7 +44,8 @@ public class AICreeperLaunchGoal extends Goal {
 			fuse = CreeperUtils.getFuse(this.launchingCreeper);
 			explosionSize = CreeperUtils.getExplosionSize(this.launchingCreeper);
 			explosionSizeSqr = explosionSize * explosionSize;
-			activationDistanceSqr = explosionSizeSqr * 5f * 5f;
+			activationDistanceSqr = Math.max(144f, explosionSizeSqr * 5f * 5f);
+			minActivationDistanceSqr = Math.max(64f, explosionSizeSqr * 3f * 3f);
 		}
 
 		LivingEntity target = this.launchingCreeper.getTarget();
@@ -59,15 +61,15 @@ public class AICreeperLaunchGoal extends Goal {
 		if (this.launchingCreeper.level().getBlockState(this.launchingCreeper.blockPosition().above(3)).blocksMotion())
 			return false;
 
-		if (this.launchingCreeper.distanceToSqr(target) < 12d * 12d)
-			return false;
+		//if (this.launchingCreeper.distanceToSqr(target) < 12d * 12d)
+			//return false;
 
 		double yDistance = this.launchingCreeper.getY() - target.getY();
 		double x = target.getX() - this.launchingCreeper.getX();
 		double z = target.getZ() - this.launchingCreeper.getZ();
 		double xzDistance = x * x + z * z;
 
-		return xzDistance < activationDistanceSqr && yDistance < explosionSize * 2 && this.launchingCreeper.onGround();
+		return xzDistance < activationDistanceSqr && xzDistance > minActivationDistanceSqr && yDistance < explosionSize * 2 && this.launchingCreeper.onGround();
 	}
 
 	public void start() {
@@ -75,9 +77,9 @@ public class AICreeperLaunchGoal extends Goal {
 		this.creeperAttackTarget = this.launchingCreeper.getTarget();
 		this.launchingCreeper.ignite();
 		double distance = this.launchingCreeper.distanceTo(this.creeperAttackTarget);
-		float inaccuracy = 0.15f;
+		float inaccuracy = 0.1f;
 		if (this.launchingCreeper.level().getDifficulty() == Difficulty.EASY)
-			inaccuracy = 0.1f;
+			inaccuracy = 0.15f;
 		if (this.launchingCreeper.level().getDifficulty() == Difficulty.HARD)
 			inaccuracy = 0.05f;
 		this.ticksBeforeLaunching = (int) Math.max((50 - distance) * Mth.randomBetween(this.launchingCreeper.getRandom(), 0.25f + inaccuracy, 0.25f + inaccuracy), 1);
