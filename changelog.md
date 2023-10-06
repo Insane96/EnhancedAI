@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 1.15.3
 * Biting zombies now have a higher chance to bite in hard
 * Fishing zombies now dismount entities
 * Fixed modded creepers exploding even if they aren't supposed to 
