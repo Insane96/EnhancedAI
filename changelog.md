@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.15.4
+* Fixed world freezing when a Wither Skeleton loaded
+
 ## 1.15.3
 * Biting zombies now have a higher chance to bite in hard
 * Fishing zombies now dismount entities

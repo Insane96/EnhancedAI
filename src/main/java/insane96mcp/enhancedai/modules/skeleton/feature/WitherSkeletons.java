@@ -8,13 +8,10 @@ import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Blacklist;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.LoadFeature;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.monster.WitherSkeleton;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -50,13 +47,8 @@ public class WitherSkeletons extends Feature {
 				|| witherSkeleton.getRandom().nextDouble() >= rangedChance)
 			return;
 
-		RandomSource randomSource = witherSkeleton.getRandom();
-		float specialMultiplier = witherSkeleton.level().getCurrentDifficultyAt(witherSkeleton.blockPosition()).getSpecialMultiplier();
-		//TODO AT Mob#enchantSpawnedWeapon
+		//TODO AT Mob#enchantSpawnedWeapon - Probably can't do that since the local difficulty can't be obtained here as freezes the game
 		witherSkeleton.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.BOW));
-		if (randomSource.nextFloat() < 0.25F * specialMultiplier) {
-			witherSkeleton.setItemSlot(EquipmentSlot.MAINHAND, EnchantmentHelper.enchantItem(randomSource, witherSkeleton.getMainHandItem(), (int)(5.0F + specialMultiplier * (float)randomSource.nextInt(18)), false));
-		}
 		witherSkeleton.getPersistentData().putBoolean(ON_SPAWN_PROCESSED, true);
 	}
 
