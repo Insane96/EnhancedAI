@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.6.6
+* Skeletons can now use Tinkers' bows
+  * Basic support, some modifiers might not work due to requiring Crit Arrows which are only shot by players
+  * Bows only, no crossbows
+
 ## 1.6.5
 * Witches summoned by Dark Art Witches can no longer be Dark Art Witches
 * Fixed Dark art Witches failing to spawn a villager, causing a crash

@@ -1,0 +1,14 @@
+{
+    "replace": false,
+    "values": [
+        "minecraft:bow",
+        {
+            "id": "tconstruct:longbow",
+            "required": false
+        },
+        {
+            "id": "tinkers_things:shortbow",
+            "required": false
+        }
+    ]
+}

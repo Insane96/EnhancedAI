@@ -1,5 +1,6 @@
 package insane96mcp.enhancedai.modules.skeleton.feature;
 
+import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.base.ai.EAAvoidEntityGoal;
 import insane96mcp.enhancedai.modules.skeleton.ai.EARangedBowAttackGoal;
 import insane96mcp.enhancedai.setup.Config;
@@ -10,17 +11,23 @@ import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.config.Blacklist;
 import insane96mcp.insanelib.config.MinMax;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.List;
 
 @Label(name = "Skeleton Shoot", description = "Skeletons are more precise when shooting and strafing is removed, can hit a target from up to 64 blocks and try to stay away from the target.")
 public class SkeletonShoot extends Feature {
+
+	public static final TagKey<Item> BOWS = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(EnhancedAI.MOD_ID, "bows"));
 
 	private final MinMax.Config shootingRangeConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> strafeChanceConfig;
@@ -87,10 +94,14 @@ public class SkeletonShoot extends Feature {
 		}
 		List<Goal> avoidEntityGoals = skeleton.goalSelector.availableGoals.stream()
 				.map(WrappedGoal::getGoal)
-				.filter(g -> g instanceof EAAvoidEntityGoal<?>)
+				.filter(g -> g instanceof EAAvoidEntityGoal<?> || g.equals(skeleton.bowGoal))
 				.toList();
 
 		avoidEntityGoals.forEach(skeleton.goalSelector::removeGoal);
+		if (!hasAIArrowAttack && skeleton.isHolding(stack -> stack.is(BOWS))) {
+			hasAIArrowAttack = true;
+			skeleton.goalSelector.removeGoal(skeleton.meleeGoal);
+		}
 		if (hasAIArrowAttack) {
 			int attackCooldown = 20;
 			int bowChargeTicks = 20;

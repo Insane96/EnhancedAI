@@ -1,8 +1,11 @@
 package insane96mcp.enhancedai.modules.skeleton.ai;
 
 import insane96mcp.enhancedai.modules.base.ai.EAAvoidEntityGoal;
+import insane96mcp.enhancedai.modules.base.integration.TinkersConstruct;
+import insane96mcp.enhancedai.modules.skeleton.feature.SkeletonShoot;
 import insane96mcp.enhancedai.setup.Reflection;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
@@ -12,9 +15,10 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraftforge.fml.ModList;
 
 import java.util.EnumSet;
+import java.util.function.Predicate;
 
 public class EARangedBowAttackGoal<T extends Monster & RangedAttackMob> extends Goal {
 	private final T entity;
@@ -58,18 +62,18 @@ public class EARangedBowAttackGoal<T extends Monster & RangedAttackMob> extends 
 	 * method as well.
 	 */
 	public boolean canUse() {
-		return this.entity.getTarget() != null && this.isBowInMainhand();
+		return this.entity.getTarget() != null && isBowInMainhand(this.entity);
 	}
 
-	protected boolean isBowInMainhand() {
-		return this.entity.isHolding(stack -> stack.getItem() instanceof BowItem);
+	public static boolean isBowInMainhand(LivingEntity entity) {
+		return entity.isHolding(stack -> stack.is(SkeletonShoot.BOWS));
 	}
 
 	/**
 	 * Returns whether an in-progress EntityAIBase should continue executing
 	 */
 	public boolean canContinueToUse() {
-		return this.canUse() && this.isBowInMainhand();
+		return this.canUse() && isBowInMainhand(this.entity);
 	}
 
 	/**
@@ -166,9 +170,17 @@ public class EARangedBowAttackGoal<T extends Monster & RangedAttackMob> extends 
 				}
 			}
 			else if (--this.attackTime <= 0 && this.seeTime >= -60) {
-				this.entity.startUsingItem(ProjectileUtil.getWeaponHoldingHand(this.entity, item -> item == Items.BOW));
+				this.entity.startUsingItem(getWeaponHoldingHand(this.entity, stack -> stack.is(SkeletonShoot.BOWS)));
 			}
 		}
+	}
+
+	public static InteractionHand getWeaponHoldingHand(LivingEntity livingEntity, Predicate<ItemStack> itemPredicate) {
+		return itemPredicate.test(livingEntity.getMainHandItem()) ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
+	}
+
+	public static ItemStack getWeaponStack(LivingEntity livingEntity, Predicate<ItemStack> itemPredicate) {
+		return livingEntity.getItemInHand(itemPredicate.test(livingEntity.getMainHandItem()) ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND);
 	}
 
 	private boolean canStrafe() {
@@ -176,28 +188,30 @@ public class EARangedBowAttackGoal<T extends Monster & RangedAttackMob> extends 
 	}
 
 	private void attackEntityWithRangedAttack(T entity, LivingEntity target, int chargeTicks) {
-		ItemStack itemstack = entity.getProjectile(entity.getItemInHand(ProjectileUtil.getWeaponHoldingHand(entity, item -> item == Items.BOW)));
+		ItemStack itemstack = entity.getProjectile(getWeaponStack(entity, stack -> stack.is(SkeletonShoot.BOWS)));
 		double distance = entity.distanceTo(target);
 		double distanceY = target.getY() - entity.getY();
 		float f = 1; //distanceFactor / 20.0F;
 		f = (f * f + f * 2.0F) / 3.0F;
-		AbstractArrow abstractarrowentity;
+		AbstractArrow shootArrow;
 		if (entity instanceof AbstractSkeleton skeleton)
-			abstractarrowentity = Reflection.AbstractSkeleton_getArrow(skeleton, itemstack, BowItem.getPowerForTime(chargeTicks));
+			shootArrow = Reflection.AbstractSkeleton_getArrow(skeleton, itemstack, BowItem.getPowerForTime(chargeTicks));
 		else
-			abstractarrowentity = ProjectileUtil.getMobArrow(entity, itemstack, f);
-		//abstractarrowentity.setBaseDamage(abstractarrowentity.getBaseDamage() * (distanceFactor / 20f));
+			shootArrow = ProjectileUtil.getMobArrow(entity, itemstack, f);
+		//shootArrow.setBaseDamage(shootArrow.getBaseDamage() * (distanceFactor / 20f));
 		if (entity.getMainHandItem().getItem() instanceof net.minecraft.world.item.BowItem)
-			abstractarrowentity = ((net.minecraft.world.item.BowItem)entity.getMainHandItem().getItem()).customArrow(abstractarrowentity);
+			shootArrow = ((net.minecraft.world.item.BowItem)entity.getMainHandItem().getItem()).customArrow(shootArrow);
 		double dirX = target.getX() - entity.getX();
 		double dirZ = target.getZ() - entity.getZ();
 		double distanceXZ = Math.sqrt(dirX * dirX + dirZ * dirZ);
 		double yPos = target.getY(0d);
 		yPos += target.getEyeHeight() * 0.5 + (distanceY / distanceXZ);
-		double dirY = yPos - abstractarrowentity.getY();
-		abstractarrowentity.shoot(dirX, dirY + distanceXZ * 0.17d, dirZ, f * 1.1f + ((float)distance / 32f) + (float)Math.max(distanceY / 48d, 0f), this.inaccuracy);
+		double dirY = yPos - shootArrow.getY();
+		shootArrow.shoot(dirX, dirY + distanceXZ * 0.17d, dirZ, f * 1.1f + ((float)distance / 32f) + (float)Math.max(distanceY / 48d, 0f), this.inaccuracy);
+		if (ModList.get().isLoaded("tconstruct"))
+			TinkersConstruct.setProjectileModifiers(getWeaponStack(entity, stack -> stack.is(SkeletonShoot.BOWS)), entity, shootArrow);
 		entity.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (entity.getRandom().nextFloat() * 0.4F + 0.8F));
-		entity.level.addFreshEntity(abstractarrowentity);
+		entity.level.addFreshEntity(shootArrow);
 	}
 
 	public boolean requiresUpdateEveryTick() {
