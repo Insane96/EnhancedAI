@@ -22,7 +22,7 @@ import java.util.Collections;
 public class WardenInteractions extends Feature {
 	@Config
 	@Label(name = "Mobs flee from the Warden")
-	public static Boolean flee = false;
+	public static Boolean flee = true;
 	@Config(min = 0d, max = 10d)
 	@Label(name = "Flee speed Multiplier Near", description = "Speed multiplier when the mob runs from explosions and it's within 7 blocks from him.")
 	public static Double runSpeedNear = 1.25d;
@@ -31,7 +31,7 @@ public class WardenInteractions extends Feature {
 	public static Double runSpeedFar = 1.1d;
 	@Config
 	@Label(name = "Mobs target the Warden")
-	public static Boolean target = true;
+	public static Boolean target = false;
 	@Config(min = 0d, max = 10d)
 	@Label(name = "Entity Blacklist", description = "Entities that shouldn't be affected by this feature")
 	public static Blacklist entityBlacklist = new Blacklist(Collections.emptyList(), false);
