@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.6.7
+* Skeletons are less painful to fight now (and more configurable)
+
 ## 1.6.6
 * Skeletons can now use Tinkers' bows
   * Basic support, some modifiers might not work due to requiring Crit Arrows which are only shot by players

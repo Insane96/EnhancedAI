@@ -40,11 +40,6 @@ public class EAStrings {
 			public static final String GET_OVER_HERE = EnhancedAI.RESOURCE_PREFIX + "get_over_here";
 		}
 
-		public static class Skeleton {
-			public static final String STRAFE = EnhancedAI.RESOURCE_PREFIX + "strafe";
-			public static final String SHOOTING_RANGE = EnhancedAI.RESOURCE_PREFIX + "shooting_range";
-		}
-
 		public static class Zombie {
 			public static final String MINER = EnhancedAI.RESOURCE_PREFIX + "miner";
 			public static final String TOOL_ONLY = EnhancedAI.RESOURCE_PREFIX + "tool_only";

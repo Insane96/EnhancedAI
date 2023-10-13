@@ -4,7 +4,6 @@ import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.base.ai.EAAvoidEntityGoal;
 import insane96mcp.enhancedai.modules.skeleton.ai.EARangedBowAttackGoal;
 import insane96mcp.enhancedai.setup.Config;
-import insane96mcp.enhancedai.setup.EAStrings;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
@@ -29,18 +28,29 @@ public class SkeletonShoot extends Feature {
 
 	public static final TagKey<Item> BOWS = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(EnhancedAI.MOD_ID, "bows"));
 
+	public static final String STRAFE = EnhancedAI.RESOURCE_PREFIX + "strafe";
+	public static final String SHOOTING_RANGE = EnhancedAI.RESOURCE_PREFIX + "shooting_range";
+	public static final String SHOOTING_COOLDOWN = EnhancedAI.RESOURCE_PREFIX + "shooting_cooldown";
+	public static final String BOW_CHARGE_TICKS = EnhancedAI.RESOURCE_PREFIX + "bow_charge_ticks";
+	public static final String INACCURACY = EnhancedAI.RESOURCE_PREFIX + "inaccuracy";
+	private static final String SPAMMER = EnhancedAI.RESOURCE_PREFIX + "spammer";
+
 	private final MinMax.Config shootingRangeConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> strafeChanceConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> arrowInaccuracyConfig;
 	private final ForgeConfigSpec.ConfigValue<Double> spammerChanceConfig;
+	private final MinMax.Config shootingCooldownConfig;
+	private final MinMax.Config bowChargeTicksConfig;
 	private final Blacklist.Config entityBlacklistConfig;
 
 	private final List<String> defaultBlacklist = List.of("quark:forgotten");
 
 	public MinMax shootingRange = new MinMax(24, 32);
 	public double strafeChance = 0.333d;
-	public double arrowInaccuracy = 2;
+	public double arrowInaccuracy = 4d;
 	public double spammerChance = 0.07d;
+	public MinMax shootingCooldown = new MinMax(40, 60);
+	public MinMax bowChargeTicks = new MinMax(15, 30);
 	public Blacklist entityBlacklist;
 
 	public SkeletonShoot(Module module) {
@@ -58,6 +68,12 @@ public class SkeletonShoot extends Feature {
 		spammerChanceConfig = Config.builder
 				.comment("Chance for a Skeleton to spawn as a spammer, which spams arrows instead of fully charging the bow")
 				.defineInRange("Spammer chance", this.spammerChance, 0d, 1d);
+		this.shootingCooldownConfig = new MinMax.Config(Config.builder, "Shooting Cooldown", "The ticks cooldown after shooting. This is halved in Hard difficulty")
+				.setMinMax(1, 1200, this.shootingCooldown)
+				.build();
+		this.bowChargeTicksConfig = new MinMax.Config(Config.builder, "Bow charge ticks", "The ticks the skeleton charges the bow. at least 20 ticks for a full charge.")
+				.setMinMax(1, 1200, this.bowChargeTicks)
+				.build();
 		entityBlacklistConfig = new Blacklist.Config(Config.builder, "Entity Blacklist", "Entities that shouldn't get the enhanced Shoot AI")
 				.setDefaultList(defaultBlacklist)
 				.setIsDefaultWhitelist(false)
@@ -72,6 +88,8 @@ public class SkeletonShoot extends Feature {
 		this.strafeChance = this.strafeChanceConfig.get();
 		this.arrowInaccuracy = this.arrowInaccuracyConfig.get();
 		this.spammerChance = this.spammerChanceConfig.get();
+		this.shootingCooldown = this.shootingCooldownConfig.get();
+		this.bowChargeTicks = this.bowChargeTicksConfig.get();
 		this.entityBlacklist = this.entityBlacklistConfig.get();
 	}
 
@@ -84,8 +102,11 @@ public class SkeletonShoot extends Feature {
 
 		CompoundTag persistentData = skeleton.getPersistentData();
 
-		boolean strafe = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Skeleton.STRAFE, skeleton.level.random.nextDouble() < this.strafeChance);
-		int shootingRange = NBTUtils.getIntOrPutDefault(persistentData, EAStrings.Tags.Skeleton.SHOOTING_RANGE, this.shootingRange.getIntRandBetween(skeleton.getRandom()));
+		boolean strafe = NBTUtils.getBooleanOrPutDefault(persistentData, STRAFE, skeleton.level.random.nextDouble() < this.strafeChance);
+		int shootingRange = NBTUtils.getIntOrPutDefault(persistentData, SHOOTING_RANGE, this.shootingRange.getIntRandBetween(skeleton.getRandom()));
+		boolean spammer = NBTUtils.getBooleanOrPutDefault(persistentData, SPAMMER, skeleton.level.random.nextDouble() < this.spammerChance);
+		int shootingCooldown1 = NBTUtils.getIntOrPutDefault(persistentData, SHOOTING_COOLDOWN, shootingCooldown.getIntRandBetween(skeleton.getRandom()));
+		int bowChargeTicks1 = NBTUtils.getIntOrPutDefault(persistentData, BOW_CHARGE_TICKS, bowChargeTicks.getIntRandBetween(skeleton.getRandom()));
 
 		boolean hasAIArrowAttack = false;
 		for (WrappedGoal prioritizedGoal : skeleton.goalSelector.availableGoals) {
@@ -103,20 +124,18 @@ public class SkeletonShoot extends Feature {
 			skeleton.goalSelector.removeGoal(skeleton.meleeGoal);
 		}
 		if (hasAIArrowAttack) {
-			int attackCooldown = 20;
-			int bowChargeTicks = 20;
 			double inaccuracy = this.arrowInaccuracy;
-			if (skeleton.level.random.nextDouble() < this.spammerChance) {
-				attackCooldown = 5;
-				bowChargeTicks = 5;
-				inaccuracy *= 2d;
+			if (spammer) {
+				shootingCooldown1 = 30;
+				bowChargeTicks1 = 1;
+				inaccuracy *= 2.5d;
 			}
-			if (!skeleton.level.getDifficulty().equals(Difficulty.HARD))
-				attackCooldown *= 2;
+			if (skeleton.level.getDifficulty().equals(Difficulty.HARD))
+				shootingCooldown1 /= 2;
 
 			EARangedBowAttackGoal<AbstractSkeleton> EARangedBowAttackGoal = new EARangedBowAttackGoal<>(skeleton, 1.0d, shootingRange, strafe)
-					.setAttackCooldown(attackCooldown)
-					.setBowChargeTicks(bowChargeTicks)
+					.setAttackCooldown(shootingCooldown1)
+					.setBowChargeTicks(bowChargeTicks1)
 					.setInaccuracy((float) inaccuracy);
 			skeleton.goalSelector.addGoal(2, EARangedBowAttackGoal);
 		}
