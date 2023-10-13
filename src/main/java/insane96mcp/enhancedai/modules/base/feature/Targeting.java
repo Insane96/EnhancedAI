@@ -64,6 +64,9 @@ public class Targeting extends Feature {
 	@Config
 	@Label(name = "Neutral Chances", description = "Chances for a mob to spawn neutral")
 	public static Difficulty neutralChances = new Difficulty(0.25d, 0.10d, 0.04d);
+	@Config
+	@Label(name = "Blindness range multiplier", description = "If the mobs' affected by blindness effect the target range is multiplied by this value")
+	public static Double blindnessRangeMultiplier = .1d;
 
 	public Targeting(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super(module, enabledByDefault, canBeDisabled);
@@ -132,7 +135,7 @@ public class Targeting extends Feature {
 
 			boolean isNeutral = NBTUtils.getBooleanOrPutDefault(mobEntity.getPersistentData(), IS_NEUTRAL, mobEntity.getRandom().nextDouble() < neutralChances.getByDifficulty(mobEntity.level()));
 			if (isNeutral)
-				return;
+				continue;
 
 			EANearestAttackableTarget<Player> newTargetGoal;
 

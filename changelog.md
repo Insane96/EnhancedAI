@@ -2,6 +2,7 @@
 
 ## Upcoming
 * Mobs now flee from the warden instead of attaking it
+* Fixed neutral mobs not working
 
 ## 1.15.4
 * Fixed world freezing when a Wither Skeleton loaded
