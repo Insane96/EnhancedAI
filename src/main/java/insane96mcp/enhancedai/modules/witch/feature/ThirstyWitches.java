@@ -26,6 +26,9 @@ public class ThirstyWitches extends Feature {
     @Label(name = "Healing Chance", description = "Chance for a witch to drink a healing potion when not full health. Defaults to Vanilla")
     public static Double healingChance = 0.05d;
     @Config(min = 0d, max = 1d)
+    @Label(name = "Hhealing Threshold", description = "Below this percentage health, witches will try to drink healing potions.")
+    public static Double healingThreshold = 0.7d;
+    @Config(min = 0d, max = 1d)
     @Label(name = "Strong healing Threshold", description = "Below this percentage health, witches will drink strong healing potions instead of normal ones.")
     public static Double strongHealingThreshold = 0.4d;
     @Config(min = 0d, max = 1d)

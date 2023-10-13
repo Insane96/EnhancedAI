@@ -129,7 +129,7 @@ public abstract class WitchMixin extends Raider {
 				else if (this.random.nextFloat() < ThirstyWitches.fireResistanceChance && (this.isOnFire() || this.getLastDamageSource() != null && this.getLastDamageSource().is(DamageTypeTags.IS_FIRE)) && !this.hasEffect(MobEffects.FIRE_RESISTANCE)) {
 					stack = PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.FIRE_RESISTANCE);
 				}
-				else if (this.random.nextFloat() < ThirstyWitches.healingChance && this.getHealth() < this.getMaxHealth() - 3) {
+				else if (this.getHealth() / this.getMaxHealth() < ThirstyWitches.healingThreshold && this.random.nextFloat() < ThirstyWitches.healingChance) {
 					if (this.getHealth() < this.getMaxHealth() * ThirstyWitches.strongHealingThreshold)
 						stack = PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.STRONG_HEALING);
 					else
