@@ -1,8 +1,6 @@
-package insane96mcp.enhancedai.modules.creeper.feature;
+package insane96mcp.enhancedai.modules.creeper;
 
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.enhancedai.modules.creeper.ai.AICreeperLaunchGoal;
-import insane96mcp.enhancedai.modules.creeper.ai.AICreeperSwellGoal;
 import insane96mcp.enhancedai.setup.EASounds;
 import insane96mcp.enhancedai.setup.EAStrings;
 import insane96mcp.enhancedai.setup.NBTUtils;

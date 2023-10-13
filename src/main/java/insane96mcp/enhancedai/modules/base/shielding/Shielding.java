@@ -1,7 +1,6 @@
-package insane96mcp.enhancedai.modules.base.feature;
+package insane96mcp.enhancedai.modules.base.shielding;
 
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.enhancedai.modules.base.ai.ShieldingGoal;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;

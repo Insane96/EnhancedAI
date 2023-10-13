@@ -1,9 +1,7 @@
-package insane96mcp.enhancedai.modules.base.feature;
+package insane96mcp.enhancedai.modules.base.targeting;
 
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.enhancedai.modules.base.ai.EANearestAttackableTarget;
-import insane96mcp.enhancedai.modules.base.ai.EASpiderTargetGoal;
 import insane96mcp.enhancedai.setup.EAAttributes;
 import insane96mcp.enhancedai.setup.EAStrings;
 import insane96mcp.enhancedai.setup.NBTUtils;
@@ -143,9 +141,8 @@ public class Targeting extends Feature {
 
 			if (mobEntity instanceof Spider)
 				newTargetGoal = new EASpiderTargetGoal<>((Spider) mobEntity, Player.class, true, false, goal.targetConditions);
-			else {
+			else
 				newTargetGoal = new EANearestAttackableTarget<>(mobEntity, Player.class, false, false, goal.targetConditions);
-			}
 
 			if (instaTarget)
 				newTargetGoal.setInstaTarget();

@@ -1,7 +1,5 @@
-package insane96mcp.enhancedai.modules.creeper.ai;
+package insane96mcp.enhancedai.modules.creeper;
 
-import insane96mcp.enhancedai.modules.creeper.feature.CreeperSwell;
-import insane96mcp.enhancedai.modules.creeper.utils.CreeperUtils;
 import insane96mcp.enhancedai.setup.EAStrings;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;

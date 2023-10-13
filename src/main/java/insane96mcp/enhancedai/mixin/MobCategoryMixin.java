@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.mixin;
 
-import insane96mcp.enhancedai.modules.base.feature.Spawning;
+import insane96mcp.enhancedai.modules.base.Spawning;
 import insane96mcp.insanelib.base.Feature;
 import net.minecraft.world.entity.MobCategory;
 import org.spongepowered.asm.mixin.Mixin;

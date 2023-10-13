@@ -1,8 +1,6 @@
-package insane96mcp.enhancedai.modules.base.feature;
+package insane96mcp.enhancedai.modules.base.movement;
 
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.enhancedai.modules.base.ai.ClimbLaddersGoal;
-import insane96mcp.enhancedai.modules.base.ai.FindLaddersGoal;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;

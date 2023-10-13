@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.base.ai;
+package insane96mcp.enhancedai.modules.base.targeting;
 
 import insane96mcp.enhancedai.setup.EAAttributes;
 import insane96mcp.insanelib.ai.ILNearestAttackableTargetGoal;

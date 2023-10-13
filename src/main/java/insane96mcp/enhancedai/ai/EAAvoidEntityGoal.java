@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.base.ai;
+package insane96mcp.enhancedai.ai;
 
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;

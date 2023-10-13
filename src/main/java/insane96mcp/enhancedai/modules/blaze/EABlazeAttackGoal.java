@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.blaze.ai;
+package insane96mcp.enhancedai.modules.blaze;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;

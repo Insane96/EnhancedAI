@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.mixin;
 
-import insane96mcp.enhancedai.modules.creeper.feature.CreeperSwell;
+import insane96mcp.enhancedai.modules.creeper.CreeperSwell;
 import insane96mcp.enhancedai.setup.EASounds;
 import insane96mcp.enhancedai.setup.EAStrings;
 import net.minecraft.world.damagesource.DamageSource;

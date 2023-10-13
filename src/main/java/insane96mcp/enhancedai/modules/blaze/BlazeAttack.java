@@ -1,7 +1,6 @@
-package insane96mcp.enhancedai.modules.blaze.feature;
+package insane96mcp.enhancedai.modules.blaze;
 
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.enhancedai.modules.blaze.ai.EABlazeAttackGoal;
 import insane96mcp.enhancedai.setup.EAStrings;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;

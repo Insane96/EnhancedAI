@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.mixin;
 
-import insane96mcp.enhancedai.modules.base.feature.Attacking;
+import insane96mcp.enhancedai.modules.base.Attacking;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;

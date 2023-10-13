@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.modules.skeleton.ai;
 
-import insane96mcp.enhancedai.modules.base.ai.EARangedAttackGoal;
+import insane96mcp.enhancedai.ai.EARangedAttackGoal;
 import insane96mcp.enhancedai.setup.Reflection;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;

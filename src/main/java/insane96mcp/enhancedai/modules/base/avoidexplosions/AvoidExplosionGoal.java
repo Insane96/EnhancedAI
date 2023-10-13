@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.base.ai;
+package insane96mcp.enhancedai.modules.base.avoidexplosions;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.PathfinderMob;

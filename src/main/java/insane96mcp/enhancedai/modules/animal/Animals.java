@@ -1,8 +1,8 @@
-package insane96mcp.enhancedai.modules.animal.feature;
+package insane96mcp.enhancedai.modules.animal;
 
 import insane96mcp.enhancedai.EnhancedAI;
+import insane96mcp.enhancedai.ai.EAAvoidEntityGoal;
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.enhancedai.modules.base.ai.EAAvoidEntityGoal;
 import insane96mcp.enhancedai.setup.EAStrings;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;

@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.creeper.utils;
+package insane96mcp.enhancedai.modules.creeper;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.monster.Creeper;
