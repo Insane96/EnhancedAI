@@ -1,6 +1,7 @@
 # Changelog
 
 ## Upcoming
+* Mobs are now affected by blindness (They see only 10% of range)
 * Mobs now flee from the warden instead of attaking it
 * Fixed neutral mobs not working
 

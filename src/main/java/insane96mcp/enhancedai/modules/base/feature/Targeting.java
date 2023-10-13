@@ -14,6 +14,7 @@ import insane96mcp.insanelib.base.config.*;
 import insane96mcp.insanelib.data.IdTagMatcher;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -28,6 +29,7 @@ import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -64,7 +66,7 @@ public class Targeting extends Feature {
 	@Config
 	@Label(name = "Neutral Chances", description = "Chances for a mob to spawn neutral")
 	public static Difficulty neutralChances = new Difficulty(0.25d, 0.10d, 0.04d);
-	@Config
+	@Config(min = 0d, max = 1d)
 	@Label(name = "Blindness range multiplier", description = "If the mobs' affected by blindness effect the target range is multiplied by this value")
 	public static Double blindnessRangeMultiplier = .1d;
 
@@ -172,5 +174,15 @@ public class Targeting extends Feature {
 			}
 			persistentData.putBoolean(EAStrings.Tags.FOLLOW_RANGES_PROCESSED, true);
 		}
+	}
+
+	@SubscribeEvent
+	public void onTargetDistanceMultiplier(LivingEvent.LivingVisibilityEvent event) {
+		if (!this.isEnabled()
+				|| blindnessRangeMultiplier == 1d)
+			return;
+
+		if (event.getLookingEntity() instanceof LivingEntity livingEntity && livingEntity.hasEffect(MobEffects.BLINDNESS))
+			event.modifyVisibility(blindnessRangeMultiplier);
 	}
 }
