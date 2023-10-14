@@ -5,6 +5,7 @@
     "refmap": "enhancedai.refmap.json",
     "mixins": [
         "AbstractSkeletonMixin",
+        "BehaviorUtilsMixin",
         "CreeperMixin",
         "MeleeAttackGoalMixin",
         "MobCategoryMixin",

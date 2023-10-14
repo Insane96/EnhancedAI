@@ -45,6 +45,7 @@ minecraft {
 
             property 'forge.logging.console.level', 'debug'
             arg "-mixin.config=enhancedai.mixins.json"
+            property 'mixin.debug.export', 'true'
 
             mods {
                 enhancedai {
