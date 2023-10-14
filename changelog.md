@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.8.3
+* Backported 1.20.2 attack reach change [https://minecraft.wiki/w/Java_Edition_1.20.2#Mobs]
+  * This is automatically applied if the Attacking feature is enabled
+  * Melee Attacks Attribute Based is now enabled by default as it works much better thanks to the backport
+
 ## 1.8.2
 * Fixed some target goal selectors not being copied to mod's target goal
   * This might fix some mobs attacking for no reason
