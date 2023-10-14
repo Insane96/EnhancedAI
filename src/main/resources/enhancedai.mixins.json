@@ -9,6 +9,7 @@
         "HurtByTargetGoalMixin",
         "MeleeAttackGoalMixin",
         "MobCategoryMixin",
+        "MobMixin",
         "ShulkerBulletMixin",
         "SnowballMixin",
         "WitchMixin",

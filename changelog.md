@@ -1,6 +1,9 @@
 # Changelog
 
 ## Upcoming
+* Backported 1.20.2 mob attack reach change [(Minecraft Wiki)](https://minecraft.wiki/w/Java_Edition_1.20.2#Mobs)
+  * This is automatically applied if the Attacking feature is enabled
+  * Melee Attacks Attribute Based is now enabled by default as it works much better thanks to the backport
 * Mobs are now affected by blindness (They see only 10% of range)
 * Drowned should get stuck less
 * Witches no longer heal themselves if above 70% health
