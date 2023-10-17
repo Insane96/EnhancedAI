@@ -29,7 +29,7 @@ public class MiscIllagers extends Feature {
     }
 
     @SubscribeEvent
-    public void onHit(EntityJoinLevelEvent event) {
+    public void onIllagerSpawn(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
                 || !(event.getEntity() instanceof AbstractIllager illager)
                 || event.getLevel().isClientSide)

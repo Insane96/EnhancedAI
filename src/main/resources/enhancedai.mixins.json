@@ -11,6 +11,7 @@
         "MobCategoryMixin",
         "MobMixin",
         "ShulkerBulletMixin",
+        "SlimeMixin",
         "SnowballMixin",
         "WitchMixin",
         "WitherSkeletonMixin"
