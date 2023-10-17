@@ -1,7 +1,7 @@
 package insane96mcp.enhancedai.modules.blaze;
 
+import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.enhancedai.setup.EAStrings;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
@@ -24,6 +24,12 @@ import java.util.Collections;
 @LoadFeature(module = Modules.Ids.BLAZE)
 public class BlazeAttack extends Feature {
 
+    public static final String TIME_BETWEEN_FIREBALLS = EnhancedAI.RESOURCE_PREFIX + "time_between_fireballs";
+    public static final String FIREBALLS_SHOT = EnhancedAI.RESOURCE_PREFIX + "fireballs_shot";
+    public static final String RECHARGE_TIME = EnhancedAI.RESOURCE_PREFIX + "recharge_time";
+    public static final String CHARGE_TIME = EnhancedAI.RESOURCE_PREFIX + "charge_time";
+    public static final String FIREBALLS_PER_SHOT = EnhancedAI.RESOURCE_PREFIX + "fireballs_per_shot";
+    public static final String INACCURACY = EnhancedAI.RESOURCE_PREFIX + "inaccuracy";
     @Config(min = 1, max = 300)
     @Label(name = "Time Between Fireballs", description = "How many ticks pass between shooting fireballs. Vanilla is 6")
     public static MinMax timeBetweenFireballs = new MinMax(4, 10);
@@ -60,12 +66,12 @@ public class BlazeAttack extends Feature {
 
         CompoundTag persistentData = blaze.getPersistentData();
 
-        int timeBetweenFireballs1 = NBTUtils.getIntOrPutDefault(persistentData, EAStrings.Tags.Blaze.TIME_BETWEEN_FIREBALLS, timeBetweenFireballs.getIntRandBetween(blaze.getRandom()));
-        int fireballsShot1 = NBTUtils.getIntOrPutDefault(persistentData, EAStrings.Tags.Blaze.FIREBALLS_SHOT, fireballsShot.getIntRandBetween(blaze.getRandom()));
-        int rechargeTime1 = NBTUtils.getIntOrPutDefault(persistentData, EAStrings.Tags.Blaze.RECHARGE_TIME, rechargeTime.getIntRandBetween(blaze.getRandom()));
-        int chargeTime1 = NBTUtils.getIntOrPutDefault(persistentData, EAStrings.Tags.Blaze.CHARGE_TIME, chargeTime.getIntRandBetween(blaze.getRandom()));
-        int fireballsPerShot1 = NBTUtils.getIntOrPutDefault(persistentData, EAStrings.Tags.Blaze.FIREBALLS_PER_SHOT, fireballsPerShot.getIntRandBetween(blaze.getRandom()));
-        int inaccuracy1 = NBTUtils.getIntOrPutDefault(persistentData, EAStrings.Tags.Blaze.INACCURACY, inaccuracy.getIntRandBetween(blaze.getRandom()));
+        int timeBetweenFireballs1 = NBTUtils.getIntOrPutDefault(persistentData, TIME_BETWEEN_FIREBALLS, timeBetweenFireballs.getIntRandBetween(blaze.getRandom()));
+        int fireballsShot1 = NBTUtils.getIntOrPutDefault(persistentData, FIREBALLS_SHOT, fireballsShot.getIntRandBetween(blaze.getRandom()));
+        int rechargeTime1 = NBTUtils.getIntOrPutDefault(persistentData, RECHARGE_TIME, rechargeTime.getIntRandBetween(blaze.getRandom()));
+        int chargeTime1 = NBTUtils.getIntOrPutDefault(persistentData, CHARGE_TIME, chargeTime.getIntRandBetween(blaze.getRandom()));
+        int fireballsPerShot1 = NBTUtils.getIntOrPutDefault(persistentData, FIREBALLS_PER_SHOT, fireballsPerShot.getIntRandBetween(blaze.getRandom()));
+        int inaccuracy1 = NBTUtils.getIntOrPutDefault(persistentData, INACCURACY, inaccuracy.getIntRandBetween(blaze.getRandom()));
 
         ArrayList<Goal> goalsToRemove = new ArrayList<>();
         blaze.goalSelector.availableGoals.forEach(prioritizedGoal -> {

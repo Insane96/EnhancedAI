@@ -18,6 +18,7 @@
 * Drowned should get stuck less
 * Witches no longer heal themselves if above 70% health
 * Mobs now flee from the warden instead of attaking it
+* Fixed reloading the world giving zombies ender pearls or fishing rods
 * Fixed neutral mobs not working
 
 ## 1.15.4

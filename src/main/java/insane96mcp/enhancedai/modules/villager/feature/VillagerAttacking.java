@@ -2,7 +2,7 @@ package insane96mcp.enhancedai.modules.villager.feature;
 
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.modules.villager.EAVillagerHurtByTargetGoal;
-import insane96mcp.enhancedai.setup.EAStrings;
+import insane96mcp.enhancedai.setup.EATags;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
@@ -52,7 +52,7 @@ public class VillagerAttacking extends Feature {
 
         CompoundTag persistentData = villager.getPersistentData();
 
-        double movementSpeedMultiplier = NBTUtils.getDoubleOrPutDefault(persistentData, EAStrings.Tags.Passive.SPEED_MULTIPLIER_WHEN_AGGROED, speedMultiplier);
+        double movementSpeedMultiplier = NBTUtils.getDoubleOrPutDefault(persistentData, EATags.Passive.SPEED_MULTIPLIER_WHEN_AGGROED, speedMultiplier);
 
         if (villagersFightBack) {
             villager.targetSelector.addGoal(1, (new EAVillagerHurtByTargetGoal(villager)).setAlertOthers());

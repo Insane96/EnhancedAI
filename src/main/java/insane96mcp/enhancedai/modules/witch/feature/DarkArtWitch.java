@@ -1,8 +1,8 @@
 package insane96mcp.enhancedai.modules.witch.feature;
 
+import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.modules.witch.ai.DarkArtWitchGoal;
-import insane96mcp.enhancedai.setup.EAStrings;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
@@ -19,6 +19,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 @Label(name = "Dark Arts Witches", description = "Witches summon Villagers and cast a lightning upon them.")
 @LoadFeature(module = Modules.Ids.WITCH)
 public class DarkArtWitch extends Feature {
+    public static final String DARK_ARTS = EnhancedAI.RESOURCE_PREFIX + "dark_arts";
+    public static final String PERFORMING_DARK_ARTS = EnhancedAI.RESOURCE_PREFIX + "performing_dark_arts";
     @Config(min = 0d, max = 1d)
     @Label(name = "Dark Art Chance", description = "Chance for a witch to get the Dark Art AI (as soon as they have a target and are less than 10 blocks away from the target will summon a Villager and cast a lightning bolt on them")
     public static Double darkArtChance = 0.333d;
@@ -36,7 +38,7 @@ public class DarkArtWitch extends Feature {
             return;
 
         CompoundTag persistentData = witch.getPersistentData();
-        boolean darkArt = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Witch.DARK_ARTS, witch.getRandom().nextDouble() < darkArtChance);
+        boolean darkArt = NBTUtils.getBooleanOrPutDefault(persistentData, DARK_ARTS, witch.getRandom().nextDouble() < darkArtChance);
 
         if (!darkArt)
             return;

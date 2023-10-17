@@ -1,9 +1,9 @@
 package insane96mcp.enhancedai.modules.spider.feature;
 
+import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.modules.spider.ai.WebThrowGoal;
 import insane96mcp.enhancedai.modules.spider.entity.projectile.TemporaryCobwebTask;
-import insane96mcp.enhancedai.setup.EAStrings;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
@@ -36,6 +36,7 @@ import java.util.Collections;
 @Label(name = "Throwing Web", description = "Makes spiders throw a web at a player, slowing them.")
 @LoadFeature(module = Modules.Ids.SPIDER)
 public class ThrowingWeb extends Feature {
+	public static final String WEB_THROWER = EnhancedAI.RESOURCE_PREFIX + "web_thrower";
 	@Config(min = 0d, max = 1d)
 	@Label(name = "Web Throw Chance", description = "Chance for a Spider to spawn with the ability to throw webs at the target.")
 	public static Double webThrowChance = 0.1d;
@@ -94,7 +95,7 @@ public class ThrowingWeb extends Feature {
 
 		CompoundTag persistentData = spider.getPersistentData();
 
-		boolean webThrower = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Spider.WEB_THROWER, spider.getRandom().nextDouble() < webThrowChance);
+		boolean webThrower = NBTUtils.getBooleanOrPutDefault(persistentData, WEB_THROWER, spider.getRandom().nextDouble() < webThrowChance);
 
 		if (webThrower)
 			spider.goalSelector.addGoal(2, new WebThrowGoal(spider));

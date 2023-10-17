@@ -1,8 +1,8 @@
 package insane96mcp.enhancedai.modules.creeper;
 
+import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.setup.EASounds;
-import insane96mcp.enhancedai.setup.EAStrings;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
@@ -37,6 +37,11 @@ import java.util.ArrayList;
 @LoadFeature(module = Modules.Ids.CREEPER)
 public class CreeperSwell extends Feature {
 
+	public static final String LAUNCH = EnhancedAI.RESOURCE_PREFIX + "launch";
+	public static final String BREACH = EnhancedAI.RESOURCE_PREFIX + "breach";
+	public static final String CENA = EnhancedAI.RESOURCE_PREFIX + "cena";
+	public static final String WALKING_FUSE = EnhancedAI.RESOURCE_PREFIX + "walking_fuse";
+	public static final String IGNORE_WALLS = EnhancedAI.RESOURCE_PREFIX + "ignore_walls";
 	@Config(min = 0d, max = 1d)
 	@Label(name = "Walking Fuse Chance", description = "Percentage chance for a Creeper to keep walking while exploding.")
 	public static Double walkingFuseChance = 0.1d;
@@ -109,7 +114,7 @@ public class CreeperSwell extends Feature {
 		if (!(e.getExploder() instanceof Creeper creeper))
 			return;
 
-		if (creeper.getPersistentData().getBoolean(EAStrings.Tags.Creeper.CENA))
+		if (creeper.getPersistentData().getBoolean(CENA))
 			creeper.playSound(EASounds.CREEPER_CENA_EXPLODE.get(), 4.0f, 1.0f);
 	}
 
@@ -137,11 +142,11 @@ public class CreeperSwell extends Feature {
 
 		CompoundTag persistentData = creeper.getPersistentData();
 
-		boolean walkingFuse = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Creeper.WALKING_FUSE, creeper.getRandom().nextDouble() < walkingFuseChance);
-		boolean ignoreWalls = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Creeper.IGNORE_WALLS, creeper.getRandom().nextDouble() < ignoreWallsChance);
-		boolean breach = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Creeper.BREACH, creeper.getRandom().nextDouble() < breachChance);
-		boolean launch = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Creeper.LAUNCH, creeper.getRandom().nextDouble() < launchChance);
-		boolean cena = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Creeper.CENA, creeper.getRandom().nextDouble() < cenaChance);
+		boolean walkingFuse = NBTUtils.getBooleanOrPutDefault(persistentData, WALKING_FUSE, creeper.getRandom().nextDouble() < walkingFuseChance);
+		boolean ignoreWalls = NBTUtils.getBooleanOrPutDefault(persistentData, IGNORE_WALLS, creeper.getRandom().nextDouble() < ignoreWallsChance);
+		boolean breach = NBTUtils.getBooleanOrPutDefault(persistentData, BREACH, creeper.getRandom().nextDouble() < breachChance);
+		boolean launch = NBTUtils.getBooleanOrPutDefault(persistentData, LAUNCH, creeper.getRandom().nextDouble() < launchChance);
+		boolean cena = NBTUtils.getBooleanOrPutDefault(persistentData, CENA, creeper.getRandom().nextDouble() < cenaChance);
 
 		CompoundTag compoundNBT = new CompoundTag();
 		creeper.addAdditionalSaveData(compoundNBT);
@@ -201,7 +206,7 @@ public class CreeperSwell extends Feature {
 				|| !launchParticles)
 			return;
 		ServerLevel serverLevel = (ServerLevel) creeper.level();
-		if (creeper.getPersistentData().getBoolean(EAStrings.Tags.Creeper.LAUNCH)) {
+		if (creeper.getPersistentData().getBoolean(LAUNCH)) {
 			for(int j = 0; j < serverLevel.players().size(); ++j) {
 				ServerPlayer serverplayer = serverLevel.players().get(j);
 				serverLevel.sendParticles(serverplayer, ParticleTypes.CLOUD, true, creeper.getX(), creeper.getY() + 0.25d, creeper.getZ(), 8, 0.05, 0.05, 0.05, 0.025);
@@ -214,7 +219,7 @@ public class CreeperSwell extends Feature {
 				|| !cenaParticles)
 			return;
 		ServerLevel serverLevel = (ServerLevel) creeper.level();
-		if (creeper.getPersistentData().getBoolean(EAStrings.Tags.Creeper.CENA)) {
+		if (creeper.getPersistentData().getBoolean(CENA)) {
 			for(int j = 0; j < serverLevel.players().size(); ++j) {
 				ServerPlayer serverplayer = serverLevel.players().get(j);
 				BlockPos blockpos = serverplayer.blockPosition();

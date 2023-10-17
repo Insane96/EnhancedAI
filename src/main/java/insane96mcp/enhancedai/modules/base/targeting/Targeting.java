@@ -3,7 +3,6 @@ package insane96mcp.enhancedai.modules.base.targeting;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.setup.EAAttributes;
-import insane96mcp.enhancedai.setup.EAStrings;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
@@ -40,8 +39,9 @@ import java.util.List;
 public class Targeting extends Feature {
 
 	public static final String IS_NEUTRAL = EnhancedAI.RESOURCE_PREFIX + "is_neutral";
+    public static final String FOLLOW_RANGES_PROCESSED = EnhancedAI.RESOURCE_PREFIX + "follow_ranges_processed";
 
-	@Config(min = 0d, max = 128d)
+    @Config(min = 0d, max = 128d)
 	@Label(name = "Follow Range Override", description = "How far away can the mobs see the player. This overrides the vanilla value (16 for most mobs). Setting 'Max' to 0 will leave the follow range as vanilla. I recommend using mods like Mobs Properties Randomness to have more control over the attribute.")
 	public static MinMax followRangeOverride = new MinMax(24, 48);
 	@Config(min = 0d, max = 128d)
@@ -159,7 +159,7 @@ public class Targeting extends Feature {
 
 	private void processFollowRanges(Mob mobEntity) {
 		CompoundTag persistentData = mobEntity.getPersistentData();
-		if (!persistentData.getBoolean(EAStrings.Tags.FOLLOW_RANGES_PROCESSED)) {
+		if (!persistentData.getBoolean(FOLLOW_RANGES_PROCESSED)) {
 			//noinspection ConstantConditions
 			if (followRangeOverride.min != 0d && mobEntity.getAttribute(Attributes.FOLLOW_RANGE) != null && mobEntity.getAttribute(Attributes.FOLLOW_RANGE).getBaseValue() < followRangeOverride.min) {
 				MCUtils.setAttributeValue(mobEntity, Attributes.FOLLOW_RANGE, followRangeOverride.getIntRandBetween(mobEntity.getRandom()));
@@ -169,7 +169,7 @@ public class Targeting extends Feature {
 			if (xrayRangeOverride.min != 0d && mobEntity.getAttribute(EAAttributes.XRAY_FOLLOW_RANGE.get()) != null && mobEntity.getAttribute(EAAttributes.XRAY_FOLLOW_RANGE.get()).getBaseValue() < xrayRangeOverride.min) {
 				MCUtils.setAttributeValue(mobEntity, EAAttributes.XRAY_FOLLOW_RANGE.get(), xrayRangeOverride.getIntRandBetween(mobEntity.getRandom()));
 			}
-			persistentData.putBoolean(EAStrings.Tags.FOLLOW_RANGES_PROCESSED, true);
+			persistentData.putBoolean(FOLLOW_RANGES_PROCESSED, true);
 		}
 	}
 

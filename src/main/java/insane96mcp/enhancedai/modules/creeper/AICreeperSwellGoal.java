@@ -1,7 +1,6 @@
 package insane96mcp.enhancedai.modules.creeper;
 
 import insane96mcp.enhancedai.modules.base.avoidexplosions.AvoidExplosionGoal;
-import insane96mcp.enhancedai.setup.EAStrings;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
@@ -17,7 +16,7 @@ import java.util.UUID;
 
 public class AICreeperSwellGoal extends Goal {
 
-	private static final UUID WALKING_FUSE_SPEED_MODIFIER = UUID.fromString("ab376fec-5a15-4d3e-8fa2-0be4b6bc1849");
+	private static final UUID WALKING_FUSE_SPEED_MODIFIER_UUID = UUID.fromString("ab376fec-5a15-4d3e-8fa2-0be4b6bc1849");
 
 	protected final Creeper swellingCreeper;
 	private LivingEntity creeperAttackTarget;
@@ -66,7 +65,7 @@ public class AICreeperSwellGoal extends Goal {
 		if (!walkingFuse)
 			this.swellingCreeper.getNavigation().stop();
 		else
-			MCUtils.applyModifier(this.swellingCreeper, Attributes.MOVEMENT_SPEED, WALKING_FUSE_SPEED_MODIFIER, "Walking fuse speed modifier", CreeperSwell.walkingFuseSpeedModifier, AttributeModifier.Operation.MULTIPLY_BASE, false);
+			MCUtils.applyModifier(this.swellingCreeper, Attributes.MOVEMENT_SPEED, WALKING_FUSE_SPEED_MODIFIER_UUID, "Walking fuse speed modifier", CreeperSwell.walkingFuseSpeedModifier, AttributeModifier.Operation.MULTIPLY_BASE, false);
 	}
 
 	public void stop() {
@@ -75,7 +74,7 @@ public class AICreeperSwellGoal extends Goal {
 		this.swellingCreeper.setSwellDir(-1);
 		AttributeInstance movementSpeed = this.swellingCreeper.getAttribute(Attributes.MOVEMENT_SPEED);
 		if (movementSpeed != null)
-			movementSpeed.removeModifier(WALKING_FUSE_SPEED_MODIFIER);
+			movementSpeed.removeModifier(WALKING_FUSE_SPEED_MODIFIER_UUID);
 	}
 
 	public void tick() {
@@ -133,7 +132,7 @@ public class AICreeperSwellGoal extends Goal {
 	}
 
 	public static boolean canBreach(Creeper creeper, LivingEntity target) {
-		if (!creeper.getPersistentData().contains(EAStrings.Tags.Creeper.BREACH))
+		if (!creeper.getPersistentData().contains(CreeperSwell.BREACH))
 			return false;
 		double yDistance = creeper.getY() - target.getY();
 		double x = target.getX() - creeper.getX();

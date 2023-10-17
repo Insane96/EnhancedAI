@@ -2,7 +2,6 @@ package insane96mcp.enhancedai.mixin;
 
 import insane96mcp.enhancedai.modules.creeper.CreeperSwell;
 import insane96mcp.enhancedai.setup.EASounds;
-import insane96mcp.enhancedai.setup.EAStrings;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Creeper;
@@ -23,7 +22,7 @@ public class CreeperMixin extends Monster {
 	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/monster/Creeper;playSound(Lnet/minecraft/sounds/SoundEvent;FF)V"), method = "tick()V")
 	public void tickOnPlaySound(CallbackInfo callbackInfo) {
 		Creeper $this = (Creeper) (Object) this;
-		if ($this.getPersistentData().getBoolean(EAStrings.Tags.Creeper.CENA))
+		if ($this.getPersistentData().getBoolean(CreeperSwell.CENA))
 			$this.playSound(EASounds.CREEPER_CENA_FUSE.get(), 5.0f, 1.0f);
 	}
 

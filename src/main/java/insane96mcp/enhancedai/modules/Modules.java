@@ -22,7 +22,7 @@ public class Modules {
 	public static Module spider;
 	public static Module villager;
 	public static Module witch;
-	public static Module zombie;
+	public static Module mobs;
 
 	public static void init() {
 		base = Module.Builder.create(Ids.BASE, "Base", ModConfig.Type.COMMON, Config.builder).build();
@@ -40,7 +40,7 @@ public class Modules {
 		spider = Module.Builder.create(Ids.SPIDER, "Spiders", ModConfig.Type.COMMON, Config.builder).build();
 		villager = Module.Builder.create(Ids.VILLAGER, "Villagers", ModConfig.Type.COMMON, Config.builder).build();
 		witch = Module.Builder.create(Ids.WITCH, "Witches", ModConfig.Type.COMMON, Config.builder).build();
-		zombie = Module.Builder.create(Ids.ZOMBIE, "Zombies", ModConfig.Type.COMMON, Config.builder).build();
+		mobs = Module.Builder.create(Ids.MOBS, "Mobs", ModConfig.Type.COMMON, Config.builder).build();
 	}
 
 	public static class Ids {
@@ -59,6 +59,6 @@ public class Modules {
 		public static final String SPIDER = EnhancedAI.RESOURCE_PREFIX + "spider";
 		public static final String VILLAGER = EnhancedAI.RESOURCE_PREFIX + "villager";
 		public static final String WITCH = EnhancedAI.RESOURCE_PREFIX + "witch";
-		public static final String ZOMBIE = EnhancedAI.RESOURCE_PREFIX + "zombie";
+		public static final String MOBS = EnhancedAI.RESOURCE_PREFIX + "mobs";
 	}
 }

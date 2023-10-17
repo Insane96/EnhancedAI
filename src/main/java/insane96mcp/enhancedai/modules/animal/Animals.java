@@ -3,7 +3,7 @@ package insane96mcp.enhancedai.modules.animal;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.ai.EAAvoidEntityGoal;
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.enhancedai.setup.EAStrings;
+import insane96mcp.enhancedai.setup.EATags;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
@@ -101,7 +101,7 @@ public class Animals extends Feature {
 
         CompoundTag persistentData = animal.getPersistentData();
 
-        double movementSpeedMultiplier = NBTUtils.getDoubleOrPutDefault(persistentData, EAStrings.Tags.Passive.SPEED_MULTIPLIER_WHEN_AGGROED, speedMultiplier);
+        double movementSpeedMultiplier = NBTUtils.getDoubleOrPutDefault(persistentData, EATags.Passive.SPEED_MULTIPLIER_WHEN_AGGROED, speedMultiplier);
         boolean canAttackBack = NBTUtils.getBooleanOrPutDefault(persistentData, CAN_ATTACK_BACK, animal.getRandom().nextDouble() < fightBackChance);
         boolean playerScared = NBTUtils.getBooleanOrPutDefault(persistentData, PLAYER_SCARED, animal.getRandom().nextDouble() < playersScaredChance);
         boolean notTempted = NBTUtils.getBooleanOrPutDefault(persistentData, NOT_TEMPTED, animal.getRandom().nextDouble() < notTemptedChance);

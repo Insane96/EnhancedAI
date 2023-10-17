@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.modules.witch.ai;
 
-import insane96mcp.enhancedai.setup.EAStrings;
+import insane96mcp.enhancedai.modules.witch.feature.DarkArtWitch;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -55,7 +55,7 @@ public class DarkArtWitchGoal extends Goal {
     @Override
     public void start() {
         this.target = this.witch.getTarget();
-        this.witch.getPersistentData().putBoolean(EAStrings.Tags.Witch.PERFORMING_DARK_ARTS, true);
+        this.witch.getPersistentData().putBoolean(DarkArtWitch.PERFORMING_DARK_ARTS, true);
         this.witch.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 100, 2));
         this.witch.setGlowingTag(true);
         this.witch.setDeltaMovement(0d, this.witch.getDeltaMovement().y, 0d);
@@ -63,7 +63,7 @@ public class DarkArtWitchGoal extends Goal {
 
     @Override
     public void stop() {
-        this.witch.getPersistentData().putBoolean(EAStrings.Tags.Witch.PERFORMING_DARK_ARTS, false);
+        this.witch.getPersistentData().putBoolean(DarkArtWitch.PERFORMING_DARK_ARTS, false);
         this.witch.removeEffect(MobEffects.DAMAGE_RESISTANCE);
         this.witch.removeEffect(MobEffects.LEVITATION);
         this.witch.setGlowingTag(false);
@@ -206,7 +206,7 @@ public class DarkArtWitchGoal extends Goal {
         Witch witch = EntityType.WITCH.create(serverLevel);
         witch.moveTo(this.villager.getX(), this.villager.getY(), this.villager.getZ(), this.villager.getYRot(), this.villager.getXRot());
         witch.finalizeSpawn(serverLevel, this.witch.level().getCurrentDifficultyAt(witch.blockPosition()), MobSpawnType.CONVERSION, null, null);
-        witch.getPersistentData().putBoolean(EAStrings.Tags.Witch.DARK_ARTS, false);
+        witch.getPersistentData().putBoolean(DarkArtWitch.DARK_ARTS, false);
         //witch.setPersistenceRequired();
         serverLevel.addFreshEntityWithPassengers(witch);
         this.villager.discard();

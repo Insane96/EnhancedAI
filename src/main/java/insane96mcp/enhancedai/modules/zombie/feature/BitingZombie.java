@@ -24,7 +24,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.Collections;
 
 @Label(name = "Biting Zombie", description = "Zombies can bite the player if are attacked with non-weapons")
-@LoadFeature(module = Modules.Ids.ZOMBIE)
+@LoadFeature(module = Modules.Ids.MOBS)
 public class BitingZombie extends Feature {
 	ResourceKey<DamageType> BITE_DAMAGE_TYPE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "zombie_bite"));
 

@@ -1,5 +1,6 @@
 package insane96mcp.enhancedai.modules.zombie.feature;
 
+import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.modules.zombie.ai.FishingTargetGoal;
 import insane96mcp.insanelib.base.Feature;
@@ -18,8 +19,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.Collections;
 
 @Label(name = "Fisher Zombie", description = "Let zombies use Fishing Rods, reeling players in. Either put a Fishing Rod in main or off hand and when near enough from the player they will throw it.")
-@LoadFeature(module = Modules.Ids.ZOMBIE)
+@LoadFeature(module = Modules.Ids.MOBS)
 public class FisherZombie extends Feature {
+	public static final String HAS_FISHING_ROD_BEEN_GIVEN = EnhancedAI.RESOURCE_PREFIX + "has_fishing_rod_been_given";
 
 	@Config(min = 0d, max = 1d)
 	@Label(name = "Equip Fishing Rod Chance", description = "Chance for a Zombie to spawn with a Fishing Rod in the offhand. I highly recommend using something like Mobs Properties Randomness to have more control over mobs equipment.")
@@ -37,12 +39,14 @@ public class FisherZombie extends Feature {
 		if (!this.isEnabled()
 				|| event.getLevel().isClientSide
 				|| !(event.getEntity() instanceof Zombie zombie)
-				|| entityBlacklist.isEntityBlackOrNotWhitelist(zombie))
+				|| entityBlacklist.isEntityBlackOrNotWhitelist(zombie)
+				|| zombie.getPersistentData().getBoolean(HAS_FISHING_ROD_BEEN_GIVEN))
 			return;
 
 		if (zombie.getOffhandItem().isEmpty() && zombie.getRandom().nextDouble() < equipFishingRodChance)
 			zombie.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.FISHING_ROD));
 
+		zombie.getPersistentData().putBoolean(HAS_FISHING_ROD_BEEN_GIVEN, true);
 		zombie.goalSelector.addGoal(2, new FishingTargetGoal(zombie));
 	}
 }

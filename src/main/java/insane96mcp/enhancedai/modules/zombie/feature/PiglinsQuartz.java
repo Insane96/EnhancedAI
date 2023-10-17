@@ -16,7 +16,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.Collections;
 
 @Label(name = "Piglins Quartz", description = "Zombiefied Piglins get angry at players mining Quartz")
-@LoadFeature(module = Modules.Ids.ZOMBIE)
+@LoadFeature(module = Modules.Ids.MOBS)
 public class PiglinsQuartz extends Feature {
 	@Config
 	@Label(name = "Entity Blacklist", description = "Entities in this list will not be affected by this feature")

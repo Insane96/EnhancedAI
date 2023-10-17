@@ -1,8 +1,8 @@
 package insane96mcp.enhancedai.modules.ghast.feature;
 
+import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.modules.ghast.ai.GhastShootFireballGoal;
-import insane96mcp.enhancedai.setup.EAStrings;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
@@ -24,6 +24,9 @@ import java.util.Collections;
 @Label(name = "Ghast Shoot", description = "Various changes to ghast shooting.")
 @LoadFeature(module = Modules.Ids.GHAST)
 public class GhastShoot extends Feature {
+    public static final String ATTACK_COOLDOWN = EnhancedAI.RESOURCE_PREFIX + "attack_cooldown";
+    public static final String FIREBALLS_SHOT = EnhancedAI.RESOURCE_PREFIX + "fireballs_shot";
+    public static final String SHOOT_WHEN_NOT_SEEN = EnhancedAI.RESOURCE_PREFIX + "shoot_when_not_seen";
     @Config(min = 1, max = 300)
     @Label(name = "Attack Cooldown", description = "How many ticks pass between shooting fireballs. Vanilla is 40")
     public static MinMax attackCooldown = new MinMax(40, 50);
@@ -52,9 +55,9 @@ public class GhastShoot extends Feature {
 
         CompoundTag persistentData = ghast.getPersistentData();
 
-        int attackCooldown1 = NBTUtils.getIntOrPutDefault(persistentData, EAStrings.Tags.Ghast.ATTACK_COOLDOWN, attackCooldown.getIntRandBetween(ghast.getRandom()));
-        int fireballsShot1 = NBTUtils.getIntOrPutDefault(persistentData, EAStrings.Tags.Ghast.FIREBALLS_SHOT, fireballsShot.getIntRandBetween(ghast.getRandom()));
-        boolean shootWhenNotSeen = NBTUtils.getBooleanOrPutDefault(persistentData, EAStrings.Tags.Ghast.SHOOT_WHEN_NOT_SEEN, ghast.getRandom().nextDouble() < shootWhenNotSeenChance);
+        int attackCooldown1 = NBTUtils.getIntOrPutDefault(persistentData, ATTACK_COOLDOWN, attackCooldown.getIntRandBetween(ghast.getRandom()));
+        int fireballsShot1 = NBTUtils.getIntOrPutDefault(persistentData, FIREBALLS_SHOT, fireballsShot.getIntRandBetween(ghast.getRandom()));
+        boolean shootWhenNotSeen = NBTUtils.getBooleanOrPutDefault(persistentData, SHOOT_WHEN_NOT_SEEN, ghast.getRandom().nextDouble() < shootWhenNotSeenChance);
 
         ArrayList<Goal> goalsToRemove = new ArrayList<>();
         ghast.goalSelector.availableGoals.forEach(prioritizedGoal -> {

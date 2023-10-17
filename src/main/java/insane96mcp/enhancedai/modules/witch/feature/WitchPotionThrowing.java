@@ -4,7 +4,6 @@ import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.modules.witch.ai.WitchThrowPotionGoal;
 import insane96mcp.enhancedai.modules.witch.data.PotionOrMobEffect;
-import insane96mcp.enhancedai.setup.EAStrings;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
@@ -33,6 +32,10 @@ import java.util.List;
 public class WitchPotionThrowing extends Feature {
 
     public static final String APPRENTICE = EnhancedAI.RESOURCE_PREFIX + "apprentice";
+    public static final String ATTACK_SPEED = EnhancedAI.RESOURCE_PREFIX + "attack_speed";
+    public static final String ATTACK_RANGE = EnhancedAI.RESOURCE_PREFIX + "attack_range";
+    public static final String LINGERING_CHANCE = EnhancedAI.RESOURCE_PREFIX + "lingering_chance";
+    public static final String ANOTHER_THROW_CHANCE = EnhancedAI.RESOURCE_PREFIX + "another_throw_chance";
 
     private static ForgeConfigSpec.ConfigValue<List<? extends String>> badPotionsListConfig;
     private static ForgeConfigSpec.ConfigValue<List<? extends String>> goodPotionsListConfig;
@@ -99,10 +102,10 @@ public class WitchPotionThrowing extends Feature {
             return;
 
         CompoundTag persistentData = witch.getPersistentData();
-        int attackSpeed = NBTUtils.getIntOrPutDefault(persistentData, EAStrings.Tags.Witch.ATTACK_SPEED, throwSpeed.getIntRandBetween(witch.getRandom()));
-        int attackRange = NBTUtils.getIntOrPutDefault(persistentData, EAStrings.Tags.Witch.ATTACK_RANGE, throwRange.getIntRandBetween(witch.getRandom()));
-        double lingeringChance1 = NBTUtils.getDoubleOrPutDefault(persistentData, EAStrings.Tags.Witch.LINGERING_CHANCE, lingeringChance);
-        double anotherThrowChance1 = NBTUtils.getDoubleOrPutDefault(persistentData, EAStrings.Tags.Witch.ANOTHER_THROW_CHANCE, anotherThrowChance);
+        int attackSpeed = NBTUtils.getIntOrPutDefault(persistentData, ATTACK_SPEED, throwSpeed.getIntRandBetween(witch.getRandom()));
+        int attackRange = NBTUtils.getIntOrPutDefault(persistentData, ATTACK_RANGE, throwRange.getIntRandBetween(witch.getRandom()));
+        double lingeringChance1 = NBTUtils.getDoubleOrPutDefault(persistentData, LINGERING_CHANCE, lingeringChance);
+        double anotherThrowChance1 = NBTUtils.getDoubleOrPutDefault(persistentData, ANOTHER_THROW_CHANCE, anotherThrowChance);
         boolean apprentice = NBTUtils.getBooleanOrPutDefault(persistentData, APPRENTICE, witch.getRandom().nextDouble() < apprenticeWitchChance);
 
         List<Goal> rangedAttackGoals = witch.goalSelector.availableGoals.stream()

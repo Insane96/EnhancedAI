@@ -1,5 +1,6 @@
 package insane96mcp.enhancedai.modules.zombie.feature;
 
+import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.modules.zombie.ai.PearlUseGoal;
 import insane96mcp.insanelib.base.Feature;
@@ -19,8 +20,10 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.List;
 
 @Label(name = "Pearler Zombie", description = "Let zombies use ender pearls. Either put ender pearls in main or off hand and when far enough from the player they will throw it.")
-@LoadFeature(module = Modules.Ids.ZOMBIE)
+@LoadFeature(module = Modules.Ids.MOBS)
 public class PearlerZombie extends Feature {
+	public static final String HAS_ENDER_PEARL_BEEN_GIVEN = EnhancedAI.RESOURCE_PREFIX + "has_ender_pearl_been_given";
+
 	@Config(min = 0d, max = 1d)
 	@Label(name = "Equip Ender Pearl Chance", description = "Chance for a Zombie to spawn with an ender pearl in the offhand. I highly recommend using something like Mobs Properties Randomness to have more control over mobs equipment.")
 	public static Double equipEnderPearlChance = 0.05;
@@ -45,12 +48,14 @@ public class PearlerZombie extends Feature {
 		if (!this.isEnabled()
 				|| event.getLevel().isClientSide
 				|| !(event.getEntity() instanceof Zombie zombie)
-				|| entityBlacklist.isEntityBlackOrNotWhitelist(zombie))
+				|| entityBlacklist.isEntityBlackOrNotWhitelist(zombie)
+				|| zombie.getPersistentData().getBoolean(HAS_ENDER_PEARL_BEEN_GIVEN))
 			return;
 
 		if (zombie.getOffhandItem().isEmpty() && zombie.getRandom().nextDouble() < equipEnderPearlChance)
 			zombie.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.ENDER_PEARL, enderPearlAmount));
 
+		zombie.getPersistentData().putBoolean(HAS_ENDER_PEARL_BEEN_GIVEN, true);
 		zombie.goalSelector.addGoal(2, new PearlUseGoal(zombie));
 	}
 }
