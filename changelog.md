@@ -6,6 +6,9 @@
   * Melee Attacks Attribute Based is now enabled by default as it works much better thanks to the backport
 * Added Illagers module
   * Added Misc feature. Illagers can now open doors at any time
+* Added Riding
+  * Some mobs now search for a spider to ride
+  * If a mob takes too much damage while riding will dismount
 * Added Break trapping vehicles
   * Most mobs now break boats and minecarts if trapped in them 
   * Disabled "Prevent boating and minecarting"
