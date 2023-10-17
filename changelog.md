@@ -6,6 +6,9 @@
   * Melee Attacks Attribute Based is now enabled by default as it works much better thanks to the backport
 * Added Illagers module
   * Added Misc feature. Illagers can now open doors at any time
+* Added Break trapping vehicles
+  * Most mobs now break boats and minecarts if trapped in them 
+  * Disabled "Prevent boating and minecarting"
 * Added Slimes module and feature
   * Slimes can now spawn bigger and jump more often
 * Mobs are now affected by blindness (They see only 10% of range)
