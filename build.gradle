@@ -100,8 +100,8 @@ dependencies {
     
     annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
 
-    //implementation fg.deobf("curse.maven:savage-and-ravage-381736:3226442")
-    //implementation fg.deobf("curse.maven:abnormals_core-382216:3457851")
+    implementation fg.deobf("curse.maven:majrusz-library-437409:4703098")
+    implementation fg.deobf("curse.maven:majruszs-progressive-difficulty-430642:4753802")
 
 }
 
