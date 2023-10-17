@@ -6,8 +6,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrownEnderpearl;
 import net.minecraft.world.item.ItemStack;
@@ -17,13 +17,13 @@ import net.minecraft.world.phys.Vec3;
 public class PearlUseGoal extends Goal {
 
 	//Runs every other tick
-	private final Zombie pearler;
+	private final Mob pearler;
 	private Player targetPlayer;
 	private int cooldown = reducedTickDelay(50);
 
 	ThrownEnderpearl enderPearlEntity;
 
-	public PearlUseGoal(Zombie pearler){
+	public PearlUseGoal(Mob pearler){
 		this.pearler = pearler;
 	}
 
