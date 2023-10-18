@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.base.riding;
+package insane96mcp.enhancedai.modules.mobs.riding;
 
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;

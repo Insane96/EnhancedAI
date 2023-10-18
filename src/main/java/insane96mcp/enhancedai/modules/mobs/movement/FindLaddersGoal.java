@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.base.movement;
+package insane96mcp.enhancedai.modules.mobs.movement;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;

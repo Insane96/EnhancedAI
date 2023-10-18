@@ -65,7 +65,7 @@ public class PearlUseGoal extends Goal {
 		thrownEnderPearl.shootFromRotation(this.pearler, (float) (pitch - 3f - d1), (float) (yaw), 0.0F, 1.5F, PearlerMobs.inaccuracy);
 		this.pearler.level().addFreshEntity(thrownEnderPearl);
 		stack.shrink(1);
-		this.cooldown = reducedTickDelay(100);
+		this.cooldown = reducedTickDelay(50);
 	}
 
 	public void stop() {

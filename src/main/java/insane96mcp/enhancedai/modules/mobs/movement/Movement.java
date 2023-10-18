@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.base.movement;
+package insane96mcp.enhancedai.modules.mobs.movement;
 
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.Feature;
@@ -16,7 +16,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.UUID;
 
 @Label(name = "Movement", description = "Makes mobs be able to move in more ways, like climbing or swim.")
-@LoadFeature(module = Modules.Ids.BASE)
+@LoadFeature(module = Modules.Ids.MOBS)
 public class Movement extends Feature {
 
     final UUID UUID_SWIM_SPEED_MULTIPLIER = UUID.fromString("6d2cb27e-e5e3-41b9-8108-f74131a90cce");

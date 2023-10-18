@@ -29,6 +29,8 @@
   * Moved to mobs module
 * Avoid Explosions
   * Added `enhancedai:no_run_from_explosion`
+* Warden Interactions
+  * Added `enhancedai:ignore_warden_interaction`
 * Digger Zombies -> Miner Mobs
   * Miner's AI can now be applied to any mob in the entity type tag (`enhancedai:can_be_miner`) (by default, only zombies, like before)
   * Blocks can now be blacklisted with a block tag (`enhancedai:miner_block_blacklist`)
@@ -43,6 +45,7 @@
   * Pearler's AI can now be applied to any mob in the entity type tag (`enhancedai:can_be_pearler`) (by default, only zombies, like before)
   * Increased ender pearls in hand by 1
   * Increased throwing accuracy
+  * Halved cooldown
 * Biting Zombies -> Biting Mobs
   * Any mob can now bite as long as it's in the entity type tag (`enhancedai:can_bite`) (by default, only zombies, like before)
 * Piglin Quartz -> Break Anger
@@ -53,6 +56,8 @@
 * Drowned should get stuck less
 * Witches no longer heal themselves if above 70% health
 * Mobs now flee from the warden instead of attaking it
+* Removed shielding
+  * Barely worked and making it work basically requires rewriting mobs
 * Fixed reloading the world giving zombies ender pearls or fishing rods
 * Fixed neutral mobs not working
 

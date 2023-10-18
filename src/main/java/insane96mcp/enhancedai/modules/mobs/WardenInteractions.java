@@ -1,25 +1,28 @@
-package insane96mcp.enhancedai.modules.base;
+package insane96mcp.enhancedai.modules.mobs;
 
+import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.ai.EAAvoidEntityGoal;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.modules.base.targeting.EANearestAttackableTarget;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
-import insane96mcp.insanelib.base.config.Blacklist;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.LoadFeature;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import java.util.Collections;
-
-@Label(name = "Warden Interacting", description = "Mobs can flee or attack Wardens")
-@LoadFeature(module = Modules.Ids.BASE)
+@Label(name = "Warden Interacting", description = "Mobs can flee or attack Wardens. Use the entity type tag enhancedai:ignore_warden_interaction to blacklist mobs.")
+@LoadFeature(module = Modules.Ids.MOBS)
 public class WardenInteractions extends Feature {
+	public static final TagKey<EntityType<?>> IGNORE_WARDEN_INTERACTION = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "ignore_warden_interaction"));
 	@Config
 	@Label(name = "Mobs flee from the Warden")
 	public static Boolean flee = true;
@@ -32,9 +35,6 @@ public class WardenInteractions extends Feature {
 	@Config
 	@Label(name = "Mobs target the Warden")
 	public static Boolean target = false;
-	@Config(min = 0d, max = 10d)
-	@Label(name = "Entity Blacklist", description = "Entities that shouldn't be affected by this feature")
-	public static Blacklist entityBlacklist = new Blacklist(Collections.emptyList(), false);
 
 	public WardenInteractions(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super(module, enabledByDefault, canBeDisabled);
@@ -44,7 +44,8 @@ public class WardenInteractions extends Feature {
 	public void onMobSpawn(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
 				|| event.getLevel().isClientSide
-				|| !(event.getEntity() instanceof PathfinderMob entity))
+				|| !(event.getEntity() instanceof PathfinderMob entity)
+				|| entity.getType().is(IGNORE_WARDEN_INTERACTION))
 			return;
 		if (target) {
 			entity.targetSelector.addGoal(2, new EANearestAttackableTarget<>(entity, Warden.class, false, false, TargetingConditions.forCombat()));

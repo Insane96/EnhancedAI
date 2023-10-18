@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.base.riding;
+package insane96mcp.enhancedai.modules.mobs.riding;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;

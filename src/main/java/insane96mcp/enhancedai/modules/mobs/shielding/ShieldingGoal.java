@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.base.shielding;
+package insane96mcp.enhancedai.modules.mobs.shielding;
 
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Mob;
