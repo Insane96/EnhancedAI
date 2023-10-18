@@ -23,7 +23,7 @@ public class Movement extends Feature {
 
     @Config
     @Label(name = "Allow Climbing", description = "If true, mobs will be able to climb (up and down)")
-    public static Boolean allowClimbing = false;
+    public static Boolean allowClimbing = true;
     @Config
     @Label(name = "Target Ladders", description = "If true, mobs try to find climbable blocks to reach the target")
     public static Boolean targetLadders = false;

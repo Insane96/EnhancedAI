@@ -39,9 +39,9 @@ public class FindLaddersGoal extends Goal {
 	public Vec3 findClimbable() {
 		for (int i = 0; i < 100; i++) {
 			//Find a climbable block in a 16 block radius
-			int randX = this.goalOwner.getBlockX() + Mth.nextInt(this.goalOwner.getRandom(), -16, 16);
-			int randY = this.goalOwner.getBlockY() + Mth.nextInt(this.goalOwner.getRandom(), -16, 16);
-			int randZ = this.goalOwner.getBlockZ() + Mth.nextInt(this.goalOwner.getRandom(), -16, 16);
+			int randX = this.goalOwner.getBlockX() + Mth.nextInt(this.goalOwner.getRandom(), -8, 8);
+			int randY = this.goalOwner.getBlockY() + Mth.nextInt(this.goalOwner.getRandom(), -4, 4);
+			int randZ = this.goalOwner.getBlockZ() + Mth.nextInt(this.goalOwner.getRandom(), -8, 8);
 			BlockPos pos = new BlockPos(randX, randY, randZ);
 			if (this.goalOwner.level().getBlockState(pos).isLadder(this.goalOwner.level(), pos, this.goalOwner))
 				return new Vec3(pos.getX() + 0.5d, pos.getY() + 0.5d, pos.getZ() + 0.5d);
