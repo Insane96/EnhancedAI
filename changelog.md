@@ -14,6 +14,8 @@
   * Disabled "Prevent boating and minecarting"
 * Added Slimes module and feature
   * Slimes can now spawn bigger and jump more often
+* Implemented Enderman Item Disruption
+  * Whenever an enderman attacks a player, there's a chance for the player's held item(s) to fall
 * Animals has been split into 3 features
   * Animals Scared Attack
     * Make animals fight back or be scared by players
@@ -50,7 +52,7 @@
 * Piglin Quartz -> Break Anger
   * Can now be fully configured with which blocks are broken and which mobs are angered
   * By default, it's the same as before: Zombified Piglins get angry if players break quartz
-* "Allow Climbing" is much more reliable and mobs no longer get stuckat the top of a ladder so it's now enabled by default
+* "Allow Climbing" is much more reliable and mobs no longer get stuckat the top of a ladder, so it's now enabled by default
 * Mobs are now affected by blindness (They see only 10% of range)
 * Drowned should get stuck less
 * Witches no longer heal themselves if above 70% health
