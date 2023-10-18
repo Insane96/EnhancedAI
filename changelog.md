@@ -27,6 +27,8 @@
 * Anti-Cheese
   * Added `enhancedai:ignore_anti_cheese` entity type tag
   * Moved to mobs module
+* Avoid Explosions
+  * Added `enhancedai:no_run_from_explosion`
 * Digger Zombies -> Miner Mobs
   * Miner's AI can now be applied to any mob in the entity type tag (`enhancedai:can_be_miner`) (by default, only zombies, like before)
   * Blocks can now be blacklisted with a block tag (`enhancedai:miner_block_blacklist`)

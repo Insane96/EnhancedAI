@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.modules.creeper;
 
-import insane96mcp.enhancedai.modules.base.avoidexplosions.AvoidExplosionGoal;
+import insane96mcp.enhancedai.modules.mobs.avoidexplosions.AvoidExplosionGoal;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
@@ -79,29 +79,32 @@ public class AICreeperSwellGoal extends Goal {
 
 	public void tick() {
 		if (this.creeperAttackTarget == null || !this.creeperAttackTarget.isAlive())
-			this.cancelSwell();
+			this.tryCancelSwell();
 		if (this.isBreaching && this.swellingCreeper.distanceToSqr(this.creeperAttackTarget) >= 14 * 14)
-			this.cancelSwell();
+			this.tryCancelSwell();
 		else if (this.swellingCreeper.distanceToSqr(this.creeperAttackTarget) > (explosionSizeSqr * 2d * 2d) && !isBreaching)
-			this.cancelSwell();
+			this.tryCancelSwell();
 		else if (!this.swellingCreeper.getSensing().hasLineOfSight(this.creeperAttackTarget) && !ignoreWalls && !isBreaching)
-			this.cancelSwell();
-		else if (this.swellingCreeper.tickCount % 3 == 0) {
+			this.tryCancelSwell();
+		else if (this.swellingCreeper.tickCount % 15 == 0) {
 			this.swellingCreeper.setSwellDir(1);
-			List<PathfinderMob> creaturesNearby = this.swellingCreeper.level().getEntitiesOfClass(PathfinderMob.class, this.swellingCreeper.getBoundingBox().inflate(explosionSize * 2));
-			for (PathfinderMob creatureEntity : creaturesNearby) {
-				if (creatureEntity == this.swellingCreeper)
-					continue;
-				creatureEntity.goalSelector.availableGoals.forEach(prioritizedGoal -> {
-					if (prioritizedGoal.getGoal() instanceof AvoidExplosionGoal avoidExplosionGoal) {
-						avoidExplosionGoal.run(this.swellingCreeper, explosionSize);
-					}
-				});
-			}
 		}
 	}
 
-	private void cancelSwell() {
+	private void alertNearby() {
+		List<PathfinderMob> creaturesNearby = this.swellingCreeper.level().getEntitiesOfClass(PathfinderMob.class, this.swellingCreeper.getBoundingBox().inflate(explosionSize * 2));
+		for (PathfinderMob creatureEntity : creaturesNearby) {
+			if (creatureEntity == this.swellingCreeper)
+				continue;
+			creatureEntity.goalSelector.availableGoals.forEach(prioritizedGoal -> {
+				if (prioritizedGoal.getGoal() instanceof AvoidExplosionGoal avoidExplosionGoal) {
+					avoidExplosionGoal.run(this.swellingCreeper, explosionSize);
+				}
+			});
+		}
+	}
+
+	private void tryCancelSwell() {
 		if (!this.forceExplode)
 			this.swellingCreeper.setSwellDir(-1);
 	}
