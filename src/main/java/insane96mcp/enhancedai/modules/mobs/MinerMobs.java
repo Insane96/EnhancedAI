@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.humanoid;
+package insane96mcp.enhancedai.modules.mobs;
 
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;

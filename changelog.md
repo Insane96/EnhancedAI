@@ -20,6 +20,10 @@
   * Added 'Always require proper tool'
   * Added `enhancedai:time_to_break_multiplier` nbt tag that can be used to set the multiplier on time to break blocks
   * Upgraded the Wooden Pickaxe to a Stone Pickaxe
+* Fisher Zombies -> Fisher Mobs
+  * Fisher's AI can now be applied to any mob in an entity eype tag (`enhancedai:can_be_fisher`) (by default, only zombies, like before)
+  * Fishers now fish from closer to the target 
+  * Fishers can now fish any entity and no longer players only
 * Mobs are now affected by blindness (They see only 10% of range)
 * Drowned should get stuck less
 * Witches no longer heal themselves if above 70% health
