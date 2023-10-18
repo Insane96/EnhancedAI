@@ -24,6 +24,9 @@
   * Not Tempted Animals
     * Makes animals not tempted by food
     * Added a new entity type tag `enhancedai:can_ignore_food_temptation`. Only animals in this tag can have the chance to not be tempted by food
+* Anti-Cheese
+  * Added `enhancedai:ignore_anti_cheese` entity type tag
+  * Moved to mobs module
 * Digger Zombies -> Miner Mobs
   * Miner's AI can now be applied to any mob in the entity type tag (`enhancedai:can_be_miner`) (by default, only zombies, like before)
   * Blocks can now be blacklisted with a block tag (`enhancedai:miner_block_blacklist`)

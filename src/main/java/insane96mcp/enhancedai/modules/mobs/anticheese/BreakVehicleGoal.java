@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.base.anticheese;
+package insane96mcp.enhancedai.modules.mobs.anticheese;
 
 import insane96mcp.enhancedai.EnhancedAI;
 import net.minecraft.core.registries.Registries;
