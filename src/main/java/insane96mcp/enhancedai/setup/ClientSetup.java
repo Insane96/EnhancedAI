@@ -1,7 +1,7 @@
 package insane96mcp.enhancedai.setup;
 
 import insane96mcp.enhancedai.EnhancedAI;
-import insane96mcp.enhancedai.modules.zombie.client.renderer.entity.FishingHookRenderer;
+import insane96mcp.enhancedai.modules.mobs.fisher.FishingHookRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;

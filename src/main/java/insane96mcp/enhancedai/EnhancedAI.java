@@ -20,6 +20,8 @@ public class EnhancedAI
 	public static final String MOD_ID = "enhancedai";
 	public static final String RESOURCE_PREFIX = MOD_ID + ":";
     public static final Logger LOGGER = LogManager.getLogger();
+
+    public static final String CONFIG_FOLDER = "config/" + MOD_ID;
     
     public EnhancedAI() {
         ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, Config.COMMON_SPEC);

@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## Upcoming - The update that expanded customization
 * Backported 1.20.2 mob attack reach change [(Minecraft Wiki)](https://minecraft.wiki/w/Java_Edition_1.20.2#Mobs)
   * This is automatically applied if the Attacking feature is enabled
   * Melee Attacks Attribute Based is now enabled by default as it works much better thanks to the backport
@@ -15,15 +15,24 @@
 * Added Slimes module and feature
   * Slimes can now spawn bigger and jump more often
 * Digger Zombies -> Miner Mobs
-  * Miner's AI can now be applied to any mob in an entity eype tag (`enhancedai:can_be_miner`) (by default, only zombies, like before)
+  * Miner's AI can now be applied to any mob in the entity type tag (`enhancedai:can_be_miner`) (by default, only zombies, like before)
   * Blocks can now be blacklisted with a block tag (`enhancedai:miner_block_blacklist`)
   * Added 'Always require proper tool'
   * Added `enhancedai:time_to_break_multiplier` nbt tag that can be used to set the multiplier on time to break blocks
   * Upgraded the Wooden Pickaxe to a Stone Pickaxe
 * Fisher Zombies -> Fisher Mobs
-  * Fisher's AI can now be applied to any mob in an entity eype tag (`enhancedai:can_be_fisher`) (by default, only zombies, like before)
-  * Fishers now fish from closer to the target 
+  * Fisher's AI can now be applied to any mob in the entity type tag (`enhancedai:can_be_fisher`) (by default, only zombies, like before)
+  * Fishers now fish from closer to the target
   * Fishers can now fish any entity and no longer players only
+* Pearler Zombies -> Pearler Mobs
+  * Pearler's AI can now be applied to any mob in the entity type tag (`enhancedai:can_be_pearler`) (by default, only zombies, like before)
+  * Increased ender pearls in hand by 1
+  * Increased throwing accuracy
+* Biting Zombies -> Biting Mobs
+  * Any mob can now bite as long as it's in the entity type tag (`enhancedai:can_bite`) (by default, only zombies, like before)
+* Piglin Quartz -> Break Anger
+  * Can now be fully configured with which blocks are broken and which mobs are angered
+  * By default, it's the same as before: Zombified Piglins get angry if players break quartz
 * Mobs are now affected by blindness (They see only 10% of range)
 * Drowned should get stuck less
 * Witches no longer heal themselves if above 70% health

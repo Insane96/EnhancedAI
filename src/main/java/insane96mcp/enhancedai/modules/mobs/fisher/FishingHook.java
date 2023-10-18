@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.zombie.entity.projectile;
+package insane96mcp.enhancedai.modules.mobs.fisher;
 
 import insane96mcp.enhancedai.setup.EAEntities;
 import net.minecraft.core.BlockPos;

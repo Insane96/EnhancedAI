@@ -1,8 +1,7 @@
-package insane96mcp.enhancedai.modules.mobs;
+package insane96mcp.enhancedai.modules.mobs.miner;
 
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.enhancedai.modules.zombie.ai.BlockBreakerGoal;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;

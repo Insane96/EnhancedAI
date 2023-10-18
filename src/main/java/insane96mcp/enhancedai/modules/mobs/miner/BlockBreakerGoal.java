@@ -1,6 +1,5 @@
-package insane96mcp.enhancedai.modules.zombie.ai;
+package insane96mcp.enhancedai.modules.mobs.miner;
 
-import insane96mcp.enhancedai.modules.mobs.MinerMobs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;

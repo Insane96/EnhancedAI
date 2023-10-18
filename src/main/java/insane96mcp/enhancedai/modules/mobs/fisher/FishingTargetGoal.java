@@ -1,6 +1,5 @@
-package insane96mcp.enhancedai.modules.zombie.ai;
+package insane96mcp.enhancedai.modules.mobs.fisher;
 
-import insane96mcp.enhancedai.modules.zombie.entity.projectile.FishingHook;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
