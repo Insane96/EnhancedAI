@@ -14,6 +14,16 @@
   * Disabled "Prevent boating and minecarting"
 * Added Slimes module and feature
   * Slimes can now spawn bigger and jump more often
+* Animals has been split into 3 features
+  * Animals Scared Attack
+    * Make animals fight back or be scared by players
+    * Knockback is now based off their size
+    * Added two entity type tags `enhancedai:can_fight_back` and `enhancedai:can_be_scared_by_players`. Only animals in these tags are affected by the feature
+  * Animals Group Flee
+    * Make animals flee/fight back when one is attacked
+  * Not Tempted Animals
+    * Makes animals not tempted by food
+    * Added a new entity type tag `enhancedai:can_ignore_food_temptation`. Only animals in this tag can have the chance to not be tempted by food
 * Digger Zombies -> Miner Mobs
   * Miner's AI can now be applied to any mob in the entity type tag (`enhancedai:can_be_miner`) (by default, only zombies, like before)
   * Blocks can now be blacklisted with a block tag (`enhancedai:miner_block_blacklist`)
