@@ -1,8 +1,8 @@
 package insane96mcp.enhancedai;
 
 import insane96mcp.enhancedai.modules.animal.AnimalScaredAttack;
-import insane96mcp.enhancedai.modules.base.Attacking;
-import insane96mcp.enhancedai.modules.base.targeting.Targeting;
+import insane96mcp.enhancedai.modules.mobs.Attacking;
+import insane96mcp.enhancedai.modules.mobs.targeting.Targeting;
 import insane96mcp.enhancedai.setup.*;
 import net.minecraft.server.commands.DebugPathCommand;
 import net.minecraftforge.common.MinecraftForge;

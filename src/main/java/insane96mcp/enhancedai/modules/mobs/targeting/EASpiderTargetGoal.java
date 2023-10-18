@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.base.targeting;
+package insane96mcp.enhancedai.modules.mobs.targeting;
 
 
 import net.minecraft.world.entity.LivingEntity;

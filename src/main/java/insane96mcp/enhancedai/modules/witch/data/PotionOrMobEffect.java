@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.modules.witch.data;
 
-import insane96mcp.insanelib.util.LogHelper;
+import insane96mcp.enhancedai.utils.LogHelper;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
@@ -75,6 +75,8 @@ public class PotionOrMobEffect {
 				MobEffectInstance mobEffectInstance = MCUtils.parseEffectInstance(s);
 				if (mobEffectInstance != null)
 					potionOrMobEffects.add(new PotionOrMobEffect(mobEffectInstance));
+				else
+					LogHelper.warn("%s is not a valid potion or a mob effect instance", s);
 			}
 		}
 		return potionOrMobEffects;
@@ -87,7 +89,6 @@ public class PotionOrMobEffect {
 	public static Potion parsePotion(String s) {
 		ResourceLocation effectRL = ResourceLocation.tryParse(s);
 		if (effectRL == null) {
-			LogHelper.warn("%s mob effect is not a valid potion", s);
 			return null;
 		}
 		return ForgeRegistries.POTIONS.getValue(effectRL);

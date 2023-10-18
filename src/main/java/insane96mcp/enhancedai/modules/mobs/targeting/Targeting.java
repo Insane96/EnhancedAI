@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.base.targeting;
+package insane96mcp.enhancedai.modules.mobs.targeting;
 
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
@@ -35,7 +35,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Label(name = "Targeting", description = "Change how mobs target players")
-@LoadFeature(module = Modules.Ids.BASE)
+@LoadFeature(module = Modules.Ids.MOBS)
 public class Targeting extends Feature {
 
 	public static final String IS_NEUTRAL = EnhancedAI.RESOURCE_PREFIX + "is_neutral";

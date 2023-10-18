@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.base;
+package insane96mcp.enhancedai.modules.mobs;
 
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.Feature;
@@ -17,7 +17,7 @@ import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 
 @Label(name = "Attacking", description = "Changes attack range to use the 1.20.2 mechanic")
-@LoadFeature(module = Modules.Ids.BASE)
+@LoadFeature(module = Modules.Ids.MOBS)
 public class Attacking extends Feature {
 
 	@Config

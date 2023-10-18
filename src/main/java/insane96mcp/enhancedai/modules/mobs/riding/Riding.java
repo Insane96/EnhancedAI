@@ -20,7 +20,7 @@ import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 @Label(name = "Riding", description = "Makes mobs ride other mobs")
-@LoadFeature(module = Modules.Ids.BASE)
+@LoadFeature(module = Modules.Ids.MOBS)
 public class Riding extends Feature {
     public static final TagKey<EntityType<?>> CAN_BE_MOUNTED = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "can_be_mounted"));
     public static final TagKey<EntityType<?>> CAN_MOUNT = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "can_mount"));

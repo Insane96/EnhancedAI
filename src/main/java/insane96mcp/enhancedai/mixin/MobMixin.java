@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.mixin;
 
-import insane96mcp.enhancedai.modules.base.Attacking;
+import insane96mcp.enhancedai.modules.mobs.Attacking;
 import insane96mcp.insanelib.base.Feature;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;

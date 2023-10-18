@@ -6,8 +6,6 @@ import insane96mcp.insanelib.base.Module;
 import net.minecraftforge.fml.config.ModConfig;
 
 public class Modules {
-
-	public static Module base;
 	public static Module animal;
 	public static Module blaze;
 	public static Module creeper;
@@ -26,7 +24,6 @@ public class Modules {
 	public static Module warden;
 
 	public static void init() {
-		base = Module.Builder.create(Ids.BASE, "Base", ModConfig.Type.COMMON, Config.builder).build();
 		animal = Module.Builder.create(Ids.ANIMAL, "Animals", ModConfig.Type.COMMON, Config.builder).build();
 		blaze = Module.Builder.create(Ids.BLAZE, "Blazes", ModConfig.Type.COMMON, Config.builder).build();
 		creeper = Module.Builder.create(Ids.CREEPER, "Creepers", ModConfig.Type.COMMON, Config.builder).build();
@@ -46,7 +43,6 @@ public class Modules {
 	}
 
 	public static class Ids {
-		public static final String BASE = EnhancedAI.RESOURCE_PREFIX + "base";
 		public static final String ANIMAL = EnhancedAI.RESOURCE_PREFIX + "animal";
 		public static final String BLAZE = EnhancedAI.RESOURCE_PREFIX + "blaze";
 		public static final String CREEPER = EnhancedAI.RESOURCE_PREFIX + "creeper";

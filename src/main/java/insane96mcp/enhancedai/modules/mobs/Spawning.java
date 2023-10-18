@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.base;
+package insane96mcp.enhancedai.modules.mobs;
 
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.Feature;
@@ -11,7 +11,7 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
 
 
 @Label(name = "Spawning")
-@LoadFeature(module = Modules.Ids.BASE)
+@LoadFeature(module = Modules.Ids.MOBS)
 public class Spawning extends Feature {
 
 	@Config(min = 0, max = 128)

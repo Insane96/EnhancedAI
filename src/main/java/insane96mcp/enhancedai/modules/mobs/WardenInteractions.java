@@ -3,7 +3,7 @@ package insane96mcp.enhancedai.modules.mobs;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.ai.EAAvoidEntityGoal;
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.enhancedai.modules.base.targeting.EANearestAttackableTarget;
+import insane96mcp.enhancedai.modules.mobs.targeting.EANearestAttackableTarget;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;

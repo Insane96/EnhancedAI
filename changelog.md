@@ -26,7 +26,6 @@
     * Added a new entity type tag `enhancedai:can_ignore_food_temptation`. Only animals in this tag can have the chance to not be tempted by food
 * Anti-Cheese
   * Added `enhancedai:ignore_anti_cheese` entity type tag
-  * Moved to mobs module
 * Avoid Explosions
   * Added `enhancedai:no_run_from_explosion`
 * Warden Interactions
@@ -51,13 +50,15 @@
 * Piglin Quartz -> Break Anger
   * Can now be fully configured with which blocks are broken and which mobs are angered
   * By default, it's the same as before: Zombified Piglins get angry if players break quartz
-* "Allow Climbing" is much more reliable and mobs no longer get stuckat the top of a ladder
+* "Allow Climbing" is much more reliable and mobs no longer get stuckat the top of a ladder so it's now enabled by default
 * Mobs are now affected by blindness (They see only 10% of range)
 * Drowned should get stuck less
 * Witches no longer heal themselves if above 70% health
 * Mobs now flee from the warden instead of attaking it
+* Changed "Base" module to "Mobs"
 * Removed shielding
   * Barely worked and making it work basically requires rewriting mobs
+* Fixed witch potion warning in logs
 * Fixed reloading the world giving zombies ender pearls or fishing rods
 * Fixed neutral mobs not working
 
