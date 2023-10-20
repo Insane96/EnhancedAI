@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.mixin;
 
-import insane96mcp.enhancedai.modules.pets.feature.SnowGolems;
+import insane96mcp.enhancedai.modules.pets.snowgolem.SnowGolems;
 import insane96mcp.insanelib.base.Feature;
 import net.minecraft.world.entity.projectile.Snowball;
 import net.minecraft.world.phys.EntityHitResult;

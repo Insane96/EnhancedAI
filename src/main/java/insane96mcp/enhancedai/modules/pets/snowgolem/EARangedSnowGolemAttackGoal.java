@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.pets.ai;
+package insane96mcp.enhancedai.modules.pets.snowgolem;
 
 import insane96mcp.enhancedai.ai.EARangedAttackGoal;
 import net.minecraft.sounds.SoundEvents;

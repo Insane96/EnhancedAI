@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.enderman.ai;
+package insane96mcp.enhancedai.modules.enderman.getoverhere;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -24,7 +24,7 @@ public class GetOverHereGoal extends Goal {
         if (this.enderman.getTarget() == null)
             return false;
 
-        if (this.enderman.getTarget().distanceToSqr(this.enderman) > 8d) {
+        if (this.enderman.getTarget().distanceToSqr(this.enderman) >= 8d) {
             this.awayFromTargetTick++;
         }
         else {

@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.pets.feature;
+package insane96mcp.enhancedai.modules.pets;
 
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;

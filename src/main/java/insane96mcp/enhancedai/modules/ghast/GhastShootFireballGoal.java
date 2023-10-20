@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.ghast.ai;
+package insane96mcp.enhancedai.modules.ghast;
 
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;

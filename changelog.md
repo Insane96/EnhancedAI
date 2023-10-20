@@ -26,6 +26,11 @@
   * Not Tempted Animals
     * Makes animals not tempted by food
     * Added a new entity type tag `enhancedai:can_ignore_food_temptation`. Only animals in this tag can have the chance to not be tempted by food
+* Added Shulker Armor
+  * Higher armor of the shulker when it's closed, when it's peeking and when it's open (Vanilla is 20 armor when it's closed)
+* Added Shulker Attack
+  * Customizable shulker attack speed (now fire faster)
+  * Shulkers now close when lower health
 * Anti-Cheese
   * Added `enhancedai:ignore_anti_cheese` entity type tag
 * Avoid Explosions
