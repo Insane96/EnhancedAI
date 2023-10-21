@@ -1,6 +1,5 @@
-package insane96mcp.enhancedai.modules.witch.ai;
+package insane96mcp.enhancedai.modules.witch.darkart;
 
-import insane96mcp.enhancedai.modules.witch.feature.DarkArtWitch;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;

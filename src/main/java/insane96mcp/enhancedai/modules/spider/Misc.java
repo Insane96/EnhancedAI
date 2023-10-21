@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.spider.feature;
+package insane96mcp.enhancedai.modules.spider;
 
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.Feature;

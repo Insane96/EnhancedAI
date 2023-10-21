@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.skeleton.feature;
+package insane96mcp.enhancedai.modules.skeleton;
 
 import insane96mcp.enhancedai.ai.EAAvoidEntityGoal;
 import insane96mcp.enhancedai.modules.Modules;

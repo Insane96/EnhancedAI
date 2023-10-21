@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.skeleton.feature;
+package insane96mcp.enhancedai.modules.skeleton;
 
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
@@ -47,8 +47,11 @@ public class WitherSkeletons extends Feature {
 				|| witherSkeleton.getRandom().nextDouble() >= rangedChance)
 			return;
 
-		//TODO AT Mob#enchantSpawnedWeapon - Probably can't do that since the local difficulty can't be obtained here as freezes the game
 		witherSkeleton.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.BOW));
+		//Freezes the game
+		/*if (!witherSkeleton.getMainHandItem().isEmpty() && witherSkeleton.getRandom().nextFloat() < 0.25F * pChanceMultiplier) {
+			witherSkeleton.setItemSlot(EquipmentSlot.MAINHAND, EnchantmentHelper.enchantItem(witherSkeleton.getRandom(), witherSkeleton.getMainHandItem(), (int)(5.0F + pChanceMultiplier * (float)witherSkeleton.getRandom().nextInt(18)), false));
+		}*/
 		witherSkeleton.getPersistentData().putBoolean(ON_SPAWN_PROCESSED, true);
 	}
 

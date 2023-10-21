@@ -1,6 +1,5 @@
-package insane96mcp.enhancedai.modules.spider.entity.projectile;
+package insane96mcp.enhancedai.modules.spider.webber;
 
-import insane96mcp.enhancedai.modules.spider.feature.ThrowingWeb;
 import insane96mcp.enhancedai.setup.EAEntities;
 import insane96mcp.insanelib.world.scheduled.ScheduledTasks;
 import net.minecraft.core.BlockPos;

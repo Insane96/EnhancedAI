@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.skeleton.ai;
+package insane96mcp.enhancedai.modules.skeleton.shoot;
 
 import insane96mcp.enhancedai.ai.EARangedAttackGoal;
 import insane96mcp.enhancedai.setup.Reflection;

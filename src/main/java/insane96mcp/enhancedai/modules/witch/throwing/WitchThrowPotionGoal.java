@@ -1,7 +1,6 @@
-package insane96mcp.enhancedai.modules.witch.ai;
+package insane96mcp.enhancedai.modules.witch.throwing;
 
-import insane96mcp.enhancedai.modules.witch.data.PotionOrMobEffect;
-import insane96mcp.enhancedai.modules.witch.feature.WitchPotionThrowing;
+import insane96mcp.enhancedai.data.PotionOrMobEffect;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;

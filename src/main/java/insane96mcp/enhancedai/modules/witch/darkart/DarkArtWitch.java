@@ -1,8 +1,7 @@
-package insane96mcp.enhancedai.modules.witch.feature;
+package insane96mcp.enhancedai.modules.witch.darkart;
 
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.enhancedai.modules.witch.ai.DarkArtWitchGoal;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;

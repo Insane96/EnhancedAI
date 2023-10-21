@@ -2,7 +2,7 @@ package insane96mcp.enhancedai.setup;
 
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.mobs.fisher.FishingHook;
-import insane96mcp.enhancedai.modules.spider.entity.projectile.ThrownWebEntity;
+import insane96mcp.enhancedai.modules.spider.webber.ThrownWebEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.registries.DeferredRegister;

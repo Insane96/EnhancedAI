@@ -1,7 +1,7 @@
-package insane96mcp.enhancedai.modules.witch.feature;
+package insane96mcp.enhancedai.modules.witch;
 
+import insane96mcp.enhancedai.data.PotionOrMobEffect;
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.enhancedai.modules.witch.data.PotionOrMobEffect;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;

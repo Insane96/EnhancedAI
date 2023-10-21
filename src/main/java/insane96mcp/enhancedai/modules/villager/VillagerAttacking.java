@@ -1,7 +1,6 @@
-package insane96mcp.enhancedai.modules.villager.feature;
+package insane96mcp.enhancedai.modules.villager;
 
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.enhancedai.modules.villager.EAVillagerHurtByTargetGoal;
 import insane96mcp.enhancedai.setup.EATags;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;

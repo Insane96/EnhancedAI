@@ -1,10 +1,10 @@
 package insane96mcp.enhancedai.mixin;
 
+import insane96mcp.enhancedai.data.PotionOrMobEffect;
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.enhancedai.modules.witch.data.PotionOrMobEffect;
-import insane96mcp.enhancedai.modules.witch.feature.DarkArtWitch;
-import insane96mcp.enhancedai.modules.witch.feature.ThirstyWitches;
-import insane96mcp.enhancedai.modules.witch.feature.WitchPotionThrowing;
+import insane96mcp.enhancedai.modules.witch.ThirstyWitches;
+import insane96mcp.enhancedai.modules.witch.darkart.DarkArtWitch;
+import insane96mcp.enhancedai.modules.witch.throwing.WitchPotionThrowing;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;

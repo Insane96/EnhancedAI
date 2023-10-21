@@ -1,9 +1,7 @@
-package insane96mcp.enhancedai.modules.spider.feature;
+package insane96mcp.enhancedai.modules.spider.webber;
 
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.enhancedai.modules.spider.ai.WebThrowGoal;
-import insane96mcp.enhancedai.modules.spider.entity.projectile.TemporaryCobwebTask;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;

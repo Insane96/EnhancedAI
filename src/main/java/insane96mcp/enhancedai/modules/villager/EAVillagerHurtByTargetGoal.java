@@ -1,6 +1,5 @@
 package insane96mcp.enhancedai.modules.villager;
 
-import insane96mcp.enhancedai.modules.villager.feature.VillagerAttacking;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.monster.Enemy;

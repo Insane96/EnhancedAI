@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.witch.data;
+package insane96mcp.enhancedai.data;
 
 import insane96mcp.enhancedai.utils.LogHelper;
 import insane96mcp.insanelib.util.MCUtils;

@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.witch.ai;
+package insane96mcp.enhancedai.modules.witch.throwing;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;

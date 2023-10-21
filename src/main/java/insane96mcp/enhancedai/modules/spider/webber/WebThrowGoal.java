@@ -1,7 +1,5 @@
-package insane96mcp.enhancedai.modules.spider.ai;
+package insane96mcp.enhancedai.modules.spider.webber;
 
-import insane96mcp.enhancedai.modules.spider.entity.projectile.ThrownWebEntity;
-import insane96mcp.enhancedai.modules.spider.feature.ThrowingWeb;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
