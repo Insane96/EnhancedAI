@@ -57,6 +57,8 @@
 * Piglin Quartz -> Break Anger
   * Can now be fully configured with which blocks are broken and which mobs are angered
   * By default, it's the same as before: Zombified Piglins get angry if players break quartz
+* Creeper Cena is now Angry Creeper
+  * Cena sounds can be re-enabled in the config
 * "Allow Climbing" is much more reliable and mobs no longer get stuckat the top of a ladder, so it's now enabled by default
 * Mobs are now affected by blindness (They see only 10% of range)
 * Drowned should get stuck less

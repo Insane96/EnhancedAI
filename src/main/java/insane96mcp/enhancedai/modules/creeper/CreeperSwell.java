@@ -13,11 +13,17 @@ import insane96mcp.insanelib.network.MessageCreeperDataSync;
 import insane96mcp.insanelib.setup.ILStrings;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.SwellGoal;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
@@ -36,10 +42,11 @@ import java.util.ArrayList;
 @Label(name = "Creeper Swell", description = "Various changes to Creepers exploding. Ignoring Walls, Walking Fuse and smarter exploding based off explosion size")
 @LoadFeature(module = Modules.Ids.CREEPER)
 public class CreeperSwell extends Feature {
+	public static final TagKey<EntityType<?>> CHANGE_CREEPER_SWELL = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "change_creeper_swell"));
 
 	public static final String LAUNCH = EnhancedAI.RESOURCE_PREFIX + "launch";
 	public static final String BREACH = EnhancedAI.RESOURCE_PREFIX + "breach";
-	public static final String CENA = EnhancedAI.RESOURCE_PREFIX + "cena";
+	public static final String ANGRY = EnhancedAI.RESOURCE_PREFIX + "angry";
 	public static final String WALKING_FUSE = EnhancedAI.RESOURCE_PREFIX + "walking_fuse";
 	public static final String IGNORE_WALLS = EnhancedAI.RESOURCE_PREFIX + "ignore_walls";
 	@Config(min = 0d, max = 1d)
@@ -76,28 +83,31 @@ public class CreeperSwell extends Feature {
 	public static Boolean tntLike = false;
 	//Cena
 	@Config(min = 0d, max = 1d)
-	@Label(name = "Cena.Chance", description = "AND HIS NAME IS ...")
-	public static Double cenaChance = 0.02d;
+	@Label(name = "Angry Creeper.Chance", description = "Chance for a creeper to spawn angry")
+	public static Double angryChance = 0.03d;
 	@Config
-	@Label(name = "Cena.Particles", description = "If true, Creeper Cena emits particles")
-	public static Boolean cenaParticles = true;
+	@Label(name = "Angry Creeper.Particles", description = "If true, Angry Creeper emits particles")
+	public static Boolean angryParticles = true;
 	@Config
-	@Label(name = "Cena.Name", description = "If true, Creeper Cena will have a name")
-	public static Boolean cenaName = true;
+	@Label(name = "Angry Creeper.Cena Sound", description = "If true, Angry Creeper will use the John Cena sound effect")
+	public static Boolean angryCenaSounds = false;
 	@Config
-	@Label(name = "Cena.Force Explosion", description = "When ignited, Cena creepers will not stop swelling")
-	public static Boolean cenaForceExplosion = true;
+	@Label(name = "Angry Creeper.Name", description = "If true, Angry Creeper will have a name")
+	public static Boolean angryName = true;
 	@Config
-	@Label(name = "Cena.Generates fire", description = "If true, Creeper Cena explosion will generate fire")
-	public static Boolean cenaFire = false;
+	@Label(name = "Angry Creeper.Force Explosion", description = "When ignited, Angry Creeper will not stop swelling")
+	public static Boolean angryForceExplosion = true;
+	@Config
+	@Label(name = "Angry Creeper.Generates fire", description = "If true, Angry Creeper explosion will generate fire")
+	public static Boolean angryFire = false;
 	@Config(min = 0d, max = 12d)
-	@Label(name = "Cena.Explosion power", description = "Explosion power of Creeper Cena")
-	public static Double cenaExplosionPower = 4d;
+	@Label(name = "Angry Creeper.Explosion power", description = "Explosion power of Angry Creeper")
+	public static Double angryExplosionPower = 4d;
 	@Config
-	@Label(name = "Cena.Forced Explosion", description = "Creeper cena will not stop swelling when triggered")
-	public static Boolean cenaForcedExplosion = true;
+	@Label(name = "Angry Creeper.Forced Explosion", description = "Angry Creeper will not stop swelling when triggered")
+	public static Boolean angryForcedExplosion = true;
 	@Config
-	@Label(name = "Cena.Survival Reimagined Integration", description = "If Survival Reimagined is installed and Explosion Overhaul is enabled, creeper cena will deal more knockback and break more blocks")
+	@Label(name = "Angry Creeper.Survival Reimagined Integration", description = "If Survival Reimagined is installed and Explosion Overhaul is enabled, creeper cena will deal more knockback and break more blocks")
 	public static Boolean survivalReimaginedIntegration = true;
 
 	public CreeperSwell(Module module, boolean enabledByDefault, boolean canBeDisabled) {
@@ -114,8 +124,11 @@ public class CreeperSwell extends Feature {
 		if (!(e.getExploder() instanceof Creeper creeper))
 			return;
 
-		if (creeper.getPersistentData().getBoolean(CENA))
-			creeper.playSound(EASounds.CREEPER_CENA_EXPLODE.get(), 4.0f, 1.0f);
+		if (creeper.getPersistentData().getBoolean(ANGRY)) {
+			SoundEvent soundEvent = angryCenaSounds ? EASounds.CREEPER_CENA_EXPLODE.get() : SoundEvents.GENERIC_EXPLODE;
+			float pitch = angryCenaSounds ? 1.0f : 0.5f;
+			creeper.playSound(soundEvent, 4.0f, pitch);
+		}
 	}
 
 	//Lowest priority so other mods can set persistent data
@@ -123,7 +136,9 @@ public class CreeperSwell extends Feature {
 	public void eventEntityJoinWorld(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
 				|| event.getLevel().isClientSide
-				|| !(event.getEntity() instanceof Creeper creeper)) return;
+				|| !(event.getEntity() instanceof Creeper creeper)
+				|| !creeper.getType().is(CHANGE_CREEPER_SWELL))
+			return;
 
 		boolean hasSwellGoal = false;
 		//Remove Creeper Swell Goal
@@ -146,17 +161,16 @@ public class CreeperSwell extends Feature {
 		boolean ignoreWalls = NBTUtils.getBooleanOrPutDefault(persistentData, IGNORE_WALLS, creeper.getRandom().nextDouble() < ignoreWallsChance);
 		boolean breach = NBTUtils.getBooleanOrPutDefault(persistentData, BREACH, creeper.getRandom().nextDouble() < breachChance);
 		boolean launch = NBTUtils.getBooleanOrPutDefault(persistentData, LAUNCH, creeper.getRandom().nextDouble() < launchChance);
-		boolean cena = NBTUtils.getBooleanOrPutDefault(persistentData, CENA, creeper.getRandom().nextDouble() < cenaChance);
+		boolean angry = NBTUtils.getBooleanOrPutDefault(persistentData, ANGRY, creeper.getRandom().nextDouble() < angryChance);
 
 		CompoundTag compoundNBT = new CompoundTag();
 		creeper.addAdditionalSaveData(compoundNBT);
-		if (cena) {
-			compoundNBT.putShort("Fuse", (short)36);
-			compoundNBT.putByte("ExplosionRadius", cenaExplosionPower.byteValue());
-			MessageCreeperDataSync.syncCreeperToPlayers(creeper);
-			if (cenaName)
-				creeper.setCustomName(Component.literal("Creeper Cena"));
-			if (cenaFire)
+		if (angry) {
+			compoundNBT.putShort("Fuse", (short) 36);
+			compoundNBT.putByte("ExplosionRadius", angryExplosionPower.byteValue());
+			if (angryName)
+				creeper.setCustomName(Component.literal("Angry Creeper"));
+			if (angryFire)
 				persistentData.putBoolean(ILStrings.Tags.EXPLOSION_CAUSES_FIRE, true);
 			if (survivalReimaginedIntegration) {
 				persistentData.putFloat("survivalreimagined:explosion_knockback_multiplier", 2f);
@@ -168,8 +182,8 @@ public class CreeperSwell extends Feature {
 				.setWalkingFuse(walkingFuse)
 				.setIgnoreWalls(ignoreWalls)
 				.setBreaching(breach);
-		if (cena && cenaForcedExplosion)
-			swellGoal.setForceExplode(cenaForceExplosion);
+		if (angry && angryForcedExplosion)
+			swellGoal.setForceExplode(angryForceExplosion);
 		creeper.goalSelector.addGoal(2, swellGoal);
 
 		if (launch) {
@@ -177,6 +191,7 @@ public class CreeperSwell extends Feature {
 			compoundNBT.putByte("ExplosionRadius", launchExplosionRadius.byteValue());
 		}
 		creeper.readAdditionalSaveData(compoundNBT);
+		MessageCreeperDataSync.syncCreeperToPlayers(creeper);
 	}
 
 	@SubscribeEvent
@@ -216,10 +231,10 @@ public class CreeperSwell extends Feature {
 
 	public void onCenaCreeperTick(Creeper creeper) {
 		if (creeper.tickCount % 40 != 5
-				|| !cenaParticles)
+				|| !angryParticles)
 			return;
 		ServerLevel serverLevel = (ServerLevel) creeper.level();
-		if (creeper.getPersistentData().getBoolean(CENA)) {
+		if (creeper.getPersistentData().getBoolean(ANGRY)) {
 			for(int j = 0; j < serverLevel.players().size(); ++j) {
 				ServerPlayer serverplayer = serverLevel.players().get(j);
 				BlockPos blockpos = serverplayer.blockPosition();

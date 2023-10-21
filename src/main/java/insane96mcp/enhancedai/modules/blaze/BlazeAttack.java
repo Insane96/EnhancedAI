@@ -6,11 +6,14 @@ import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
-import insane96mcp.insanelib.base.config.Blacklist;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.LoadFeature;
 import insane96mcp.insanelib.base.config.MinMax;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Blaze;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
@@ -18,11 +21,11 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 @Label(name = "Blaze Attack", description = "Make blazes fire faster/more fireballs")
 @LoadFeature(module = Modules.Ids.BLAZE)
 public class BlazeAttack extends Feature {
+    public static final TagKey<EntityType<?>> CHANGE_BLAZE_ATTACK = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "change_blaze_attack"));
 
     public static final String TIME_BETWEEN_FIREBALLS = EnhancedAI.RESOURCE_PREFIX + "time_between_fireballs";
     public static final String FIREBALLS_SHOT = EnhancedAI.RESOURCE_PREFIX + "fireballs_shot";
@@ -48,9 +51,6 @@ public class BlazeAttack extends Feature {
     @Config(min = -1, max = 32)
     @Label(name = "Inaccuracy", description = "The higher the more spread up shots will be. Setting both to -1 will use the vanilla behaviour (farther = more inaccuracy)")
     public static MinMax inaccuracy = new MinMax(2, 8);
-    @Config
-    @Label(name = "Entity Blacklist", description = "Entities that shouldn't be affected by this feature")
-    public static Blacklist entityBlacklist = new Blacklist(Collections.emptyList(), false);
 
     public BlazeAttack(Module module, boolean enabledByDefault, boolean canBeDisabled) {
         super(module, enabledByDefault, canBeDisabled);
@@ -61,7 +61,7 @@ public class BlazeAttack extends Feature {
     public void onSpawn(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
                 || !(event.getEntity() instanceof Blaze blaze)
-                || entityBlacklist.isEntityBlackOrNotWhitelist(blaze))
+                || !blaze.getType().is(CHANGE_BLAZE_ATTACK))
             return;
 
         CompoundTag persistentData = blaze.getPersistentData();

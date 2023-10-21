@@ -24,7 +24,7 @@ public class EnhancedAI
     public static final String CONFIG_FOLDER = "config/" + MOD_ID;
     
     public EnhancedAI() {
-        ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, Config.COMMON_SPEC);
+        ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, Config.COMMON_SPEC, "config/common.toml");
 
         MinecraftForge.EVENT_BUS.register(this);
 
