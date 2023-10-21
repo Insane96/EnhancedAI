@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 2.0.0
 * Backported 1.20.2 mob attack reach change [(Minecraft Wiki)](https://minecraft.wiki/w/Java_Edition_1.20.2#Mobs)
   * This is automatically applied if the Attacking feature is enabled
   * Melee Attacks Attribute Based is now enabled by default as it works much better thanks to the backport
@@ -59,6 +59,7 @@
   * By default, it's the same as before: Zombified Piglins get angry if players break quartz
 * Creeper Cena is now Angry Creeper
   * Cena sounds can be re-enabled in the config
+  * Also fixed fuse animation not matching the fuse time
 * "Allow Climbing" is much more reliable and mobs no longer get stuckat the top of a ladder, so it's now enabled by default
 * Mobs are now affected by blindness (They see only 10% of range)
 * Drowned should get stuck less
