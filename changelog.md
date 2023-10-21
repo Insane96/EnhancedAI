@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.6.9
+* Fixed crash if Tinkers Construct is not installed and the feature is
+
 ## 1.6.8
 * Backported 1.20.2 attack reach change [https://minecraft.wiki/w/Java_Edition_1.20.2#Mobs]
   * This is automatically applied if the Attacking feature is enabled

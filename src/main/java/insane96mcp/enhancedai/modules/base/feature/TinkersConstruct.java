@@ -8,6 +8,7 @@ import insane96mcp.insanelib.base.Module;
 import net.minecraft.world.entity.Mob;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 
 @Label(name = "Tinkers Construct", description = "Makes mobs be able to use TiCon stuff.")
 public class TinkersConstruct extends Feature {
@@ -23,7 +24,9 @@ public class TinkersConstruct extends Feature {
     @SubscribeEvent
     public void onMobSpawn(EntityJoinWorldEvent event) {
         if (!this.isEnabled()
-                || !(event.getEntity() instanceof Mob mob)) return;
+                || !(event.getEntity() instanceof Mob mob)
+                || !ModList.get().isLoaded("tconstruct"))
+            return;
 
         mob.goalSelector.addGoal(3, new UseTiConStuffGoal(mob));
     }
