@@ -7,6 +7,7 @@
   * Now drops the item on left or right
 * Many more tags and tags are now always listed in the feature description in the config
 * Launch creepers are now less accurate on hard and more accurate on easy
+* Launch creeper explosion radius override can now be disabled
 * Fixed creeper starting exploding after up to 0.75 seconds
 
 ## 2.0.0
