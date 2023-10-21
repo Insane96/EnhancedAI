@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.0.1
+* Item disruption
+  * No longer only for endermen (but by default only for them)
+  * Chance is now saved in the mob (and can be changed)
+  * Now drops the item on left or right
+* Many more tags and tags are now always listed in the feature description in the config
+* Launch creepers are now less accurate on hard and more accurate on easy
+* Fixed creeper starting exploding after up to 0.75 seconds
+
 ## 2.0.0
 * Backported 1.20.2 mob attack reach change [(Minecraft Wiki)](https://minecraft.wiki/w/Java_Edition_1.20.2#Mobs)
   * This is automatically applied if the Attacking feature is enabled

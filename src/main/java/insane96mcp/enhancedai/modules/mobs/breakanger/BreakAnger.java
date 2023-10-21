@@ -15,7 +15,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-@Label(name = "Break Anger", description = "Make mobs angry when a block is broken")
+@Label(name = "Break Anger", description = "Make mobs angry when a block is broken. Check the Mobs/Break Anger/break_anger_config.json to change blocks and entities triggered.")
 @LoadFeature(module = Modules.Ids.MOBS)
 public class BreakAnger extends JsonFeature {
 

@@ -1,15 +1,19 @@
 package insane96mcp.enhancedai.modules.drowned;
 
+import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
-import insane96mcp.insanelib.base.config.Blacklist;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.LoadFeature;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -24,21 +28,18 @@ import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import java.util.List;
 import java.util.UUID;
 
-@Label(name = "Drowned Swimming", description = "Makes drowned swim speed based off swim speed attribute instead of movement speed.")
+@Label(name = "Drowned Swimming", description = "Makes drowned swim speed based off swim speed attribute instead of movement speed. Only drowneds in the enhancedai:change_drowned_swimming entity type tag are affected by this feature.")
 @LoadFeature(module = Modules.Ids.DROWNED)
 public class DrownedSwimming extends Feature {
+	public static final TagKey<EntityType<?>> CHANGE_DROWNED_SWIMMING = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "change_drowned_swimming"));
 
 	final UUID UUID_SWIM_SPEED_MULTIPLIER = UUID.fromString("ba2adf05-2438-4d1f-8165-89173f0a1eae");
 
 	@Config(min = 0d, max = 4d)
 	@Label(name = "Swim Speed Multiplier", description = "Multiplier for the swim speed of Drowneds. Note that the swim speed is also affected by the Movement Feature. Set to 0 to disable the multiplier.")
 	public static Double swimSpeedMultiplier = 0.3d;
-	@Config
-	@Label(name = "Entity Blacklist", description = "Entities that shouldn't get the Swim Control from drowneds")
-	public static Blacklist entityBlacklist = new Blacklist(List.of(), false);
 
 	public DrownedSwimming(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super(module, enabledByDefault, canBeDisabled);
@@ -48,7 +49,7 @@ public class DrownedSwimming extends Feature {
 	public void onSpawn(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
 				|| !(event.getEntity() instanceof Drowned drowned)
-				|| entityBlacklist.isEntityBlackOrNotWhitelist(drowned))
+				|| !drowned.getType().is(CHANGE_DROWNED_SWIMMING))
 			return;
 
 		drowned.moveControl = new EADrownedMoveControl(drowned);

@@ -22,7 +22,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
 
-@Label(name = "Blaze Attack", description = "Make blazes fire faster/more fireballs")
+@Label(name = "Blaze Attack", description = "Make blazes fire faster/more fireballs. Only mobs in enhancedai:change_blaze_attack entity type tag are affected by this feature.")
 @LoadFeature(module = Modules.Ids.BLAZE)
 public class BlazeAttack extends Feature {
     public static final TagKey<EntityType<?>> CHANGE_BLAZE_ATTACK = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "change_blaze_attack"));

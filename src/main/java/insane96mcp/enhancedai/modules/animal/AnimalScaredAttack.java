@@ -30,7 +30,7 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@Label(name = "Animals Scared Attack", description = "Make animals fight back or be scared by players. Use the entity type tag enhancedai:can_fight_back and enhancedai:can_be_scared_by_players to change animals")
+@Label(name = "Animals Scared Attack", description = "Make animals fight back or be scared by players. Use the entity type tag enhancedai:can_fight_back and enhancedai:can_be_scared_by_players to add/remove animals.")
 @LoadFeature(module = Modules.Ids.ANIMAL)
 public class AnimalScaredAttack extends Feature {
     public static final TagKey<EntityType<?>> CAN_FIGHT_BACK = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "can_fight_back"));
@@ -39,10 +39,10 @@ public class AnimalScaredAttack extends Feature {
     public static final String PLAYER_SCARED = EnhancedAI.RESOURCE_PREFIX + "player_scared";
 
     @Config
-    @Label(name = "Fight back chance", description = "Animals have this percentage chance to be able to fight back instead of fleeing. Animals have a slightly bigger range to attack. Attack damage can't be changed via config due to limitation so use mods like Mobs Properties Randomness to change the damage. Base damage is 3.")
+    @Label(name = "Fight back chance", description = "Animals have this percentage chance to be able to fight back instead of fleeing. Animals have a slightly bigger range to attack. Attack damage can't be changed via config due to limitation so use mods like Mobs Properties Randomness to change the damage. Base damage is 3")
     public static Double fightBackChance = 0.3d;
     @Config
-    @Label(name = "Players Scared chance", description = "Animals have this percentage chance to be scared by players and run away. Fight back chance has priority over this.")
+    @Label(name = "Players Scared chance", description = "Animals have this percentage chance to be scared by players and run away. Fight back chance has priority over this")
     public static Double playersScaredChance = 0.4d;
     @Config(min = 0d, max = 4d)
     @Label(name = "Movement Speed Multiplier", description = "Movement speed multiplier when aggroed.")

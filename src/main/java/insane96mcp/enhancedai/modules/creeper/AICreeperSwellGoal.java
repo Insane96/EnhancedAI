@@ -66,6 +66,7 @@ public class AICreeperSwellGoal extends Goal {
 			this.swellingCreeper.getNavigation().stop();
 		else
 			MCUtils.applyModifier(this.swellingCreeper, Attributes.MOVEMENT_SPEED, WALKING_FUSE_SPEED_MODIFIER_UUID, "Walking fuse speed modifier", CreeperSwell.walkingFuseSpeedModifier, AttributeModifier.Operation.MULTIPLY_BASE, false);
+		this.swellingCreeper.setSwellDir(1);
 	}
 
 	public void stop() {

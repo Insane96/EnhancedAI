@@ -85,7 +85,10 @@ public class AICreeperLaunchGoal extends Goal {
 	public boolean canContinueToUse() {
 		if (this.launchingCreeper.swell >= fuse - 2 && this.launchingCreeper.distanceToSqr(this.creeperAttackTarget) > (explosionSizeSqr * 2d * 2d)) {
 			this.fails++;
-			this.cooldown = 60 + (this.fails * 60);
+			if (AICreeperSwellGoal.canBreach(this.launchingCreeper, this.creeperAttackTarget))
+				this.cooldown = 60 + (this.fails * 60);
+			else
+				this.cooldown = CreeperUtils.getFuse(this.launchingCreeper);
 			return false;
 		}
 		else if ((this.launchingCreeper.verticalCollision || this.launchingCreeper.horizontalCollision) && this.hasLaunched && AICreeperSwellGoal.canBreach(this.launchingCreeper, this.creeperAttackTarget)) {
@@ -115,13 +118,13 @@ public class AICreeperLaunchGoal extends Goal {
 
 		float inaccuracy = CreeperSwell.launchInaccuracy.floatValue();
 		if (this.launchingCreeper.level().getDifficulty() == Difficulty.EASY)
-			inaccuracy *= 1.5f;
+			inaccuracy *= 1.25f;
 		else if (this.launchingCreeper.level().getDifficulty() == Difficulty.HARD)
-			inaccuracy *= 0.5f;
+			inaccuracy *= 0.75f;
 		distanceX *= Mth.randomBetween(this.launchingCreeper.getRandom(), 1f - inaccuracy, 1f + inaccuracy);
 		distanceZ *= Mth.randomBetween(this.launchingCreeper.getRandom(), 1f - inaccuracy, 1f + inaccuracy);
 		//TODO better Y speed, right now when creeper Y distance is below 7 you always get 7 which isn't good when the creeper's Y distance is 0, and when the Y Distance is higher than about 25 the creeper will go to space
-		Vec3 motion = new Vec3(distanceX * 0.15d, Mth.clamp(distanceY, 7d, 40d) / 10d + distanceXZ / 72d, distanceZ * 0.15d);
+		Vec3 motion = new Vec3(distanceX * 0.2d, Mth.clamp(distanceY, 7d, 40d) / 10d + distanceXZ / 72d, distanceZ * 0.2d);
 		this.launchingCreeper.setDeltaMovement(motion);
 		this.hasLaunched = true;
 	}

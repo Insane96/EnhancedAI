@@ -6,11 +6,14 @@ import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
-import insane96mcp.insanelib.base.config.Blacklist;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.LoadFeature;
 import insane96mcp.insanelib.base.config.MinMax;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Ghast;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
@@ -18,11 +21,11 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
-@Label(name = "Ghast Shoot", description = "Various changes to ghast shooting.")
+@Label(name = "Ghast Shoot", description = "Various changes to ghast shooting. Only ghasts in enhancedai:change_ghast_shooting entity type tag are affected by this feature.")
 @LoadFeature(module = Modules.Ids.GHAST)
 public class GhastShoot extends Feature {
+    public static final TagKey<EntityType<?>> CHANGE_GHAST_SHOOT = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "change_ghast_shoot"));
     public static final String ATTACK_COOLDOWN = EnhancedAI.RESOURCE_PREFIX + "attack_cooldown";
     public static final String FIREBALLS_SHOT = EnhancedAI.RESOURCE_PREFIX + "fireballs_shot";
     public static final String SHOOT_WHEN_NOT_SEEN = EnhancedAI.RESOURCE_PREFIX + "shoot_when_not_seen";
@@ -36,10 +39,6 @@ public class GhastShoot extends Feature {
     @Label(name = "Shoot when not seen Chance", description = "Chance for a Ghast to try and shoot the target even if can't see it. If enabled and the Ghast can't see the target, he will shoot 4 times as fast to breach.")
     public static Double shootWhenNotSeenChance = 0.3d;
 
-    @Config
-    @Label(name = "Entity Blacklist", description = "Entities that will not be affected by this feature.")
-    public static Blacklist entityBlacklist = new Blacklist(Collections.emptyList(), false);
-
     public GhastShoot(Module module, boolean enabledByDefault, boolean canBeDisabled) {
         super(module, enabledByDefault, canBeDisabled);
     }
@@ -49,7 +48,7 @@ public class GhastShoot extends Feature {
     public void onSpawn(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
                 || !(event.getEntity() instanceof Ghast ghast)
-                || entityBlacklist.isEntityBlackOrNotWhitelist(ghast))
+                || !ghast.getType().is(CHANGE_GHAST_SHOOT))
             return;
 
         CompoundTag persistentData = ghast.getPersistentData();
