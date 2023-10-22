@@ -18,7 +18,7 @@ import net.minecraft.world.item.Items;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@Label(name = "Pearler Mobs", description = "Let mobs use ender pearls. Either put ender pearls in main or off hand and when far enough from the target they will throw it.")
+@Label(name = "Pearler Mobs", description = "Let mobs use ender pearls. Either put ender pearls in main or off hand and when far enough from the target they will throw it. Only mobs in the enhancedai:can_be_pearler entity type tag can be pearler.")
 @LoadFeature(module = Modules.Ids.MOBS)
 public class PearlerMobs extends Feature {
 	public static final TagKey<EntityType<?>> CAN_BE_PEARLER = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "can_be_pearler"));

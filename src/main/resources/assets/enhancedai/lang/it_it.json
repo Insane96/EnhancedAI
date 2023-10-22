@@ -2,5 +2,5 @@
 	"enhancedai.subtitle.creeper_cena_fuse": "AND HIS NAME IS ...",
 	"enhancedai.subtitle.creeper_cena_explode": "... JOHN CENA",
 
-	"death.attack.zombie_bite": "%s è stato morso/a da %s"
+	"death.attack.bite": "%s è stato morso/a da %s"
 }

@@ -22,11 +22,11 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@Label(name = "Biting Mobs", description = "Mobs can bite if are attacked with non-weapons")
+@Label(name = "Biting Mobs", description = "Mobs can bite if are attacked with non-weapons. Only mobs in the enhancedai:can_bite entity type tag can bite.")
 @LoadFeature(module = Modules.Ids.MOBS)
 public class BitingMobs extends Feature {
 	public static final TagKey<EntityType<?>> CAN_BITE = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "can_bite"));
-	ResourceKey<DamageType> BITE_DAMAGE_TYPE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "zombie_bite"));
+	ResourceKey<DamageType> BITE_DAMAGE_TYPE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "bite"));
 
 	@Config(min = 0d, max = 1d)
 	@Label(name = "Chance", description = "Chance for a Mob to bite the attacker")

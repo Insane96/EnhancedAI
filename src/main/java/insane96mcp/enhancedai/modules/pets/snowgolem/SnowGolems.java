@@ -6,12 +6,15 @@ import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
-import insane96mcp.insanelib.base.config.Blacklist;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.LoadFeature;
 import insane96mcp.insanelib.util.MCUtils;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -23,12 +26,12 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import java.util.Collections;
 import java.util.UUID;
 
-@Label(name = "Snow Golems")
+@Label(name = "Snow Golems", description = "Use the enhancedai:change_snow_golems entity type tag to add more snow golems.")
 @LoadFeature(module = Modules.Ids.PETS)
 public class SnowGolems extends Feature {
+    public static final TagKey<EntityType<?>> CHANGE_SNOW_GOLEMS = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "change_snow_golems"));
     public static final String SHOOTING_COOLDOWN = EnhancedAI.RESOURCE_PREFIX + "shooting_cooldown";
     private static final String ON_SPAWN_PROCESSED = EnhancedAI.RESOURCE_PREFIX + "snow_golems_on_spawn_processed";
     @Config
@@ -41,10 +44,6 @@ public class SnowGolems extends Feature {
     @Label(name = "Healing Snowballs", description = "If true, snowballs hitting snow golems will heal them.")
     public static Boolean healingSnowballs = true;
 
-    @Config
-    @Label(name = "Entity Blacklist", description = "Entities that will not be affected by this feature.")
-    public static Blacklist entityBlacklist = new Blacklist(Collections.emptyList(), false);
-
     public SnowGolems(Module module, boolean enabledByDefault, boolean canBeDisabled) {
         super(module, enabledByDefault, canBeDisabled);
     }
@@ -54,7 +53,7 @@ public class SnowGolems extends Feature {
         if (!this.isEnabled()
                 || (!damagingSnowballs && !freezingSnowballs)
                 || !(event.getProjectile().getOwner() instanceof SnowGolem snowGolem)
-                || entityBlacklist.isEntityBlackOrNotWhitelist(snowGolem)
+                || !snowGolem.getType().is(CHANGE_SNOW_GOLEMS)
                 || !(event.getRayTraceResult() instanceof EntityHitResult entityHitResult)
                 || !(entityHitResult.getEntity() instanceof LivingEntity entityHit)
                 || entityHitResult.getEntity() instanceof SnowGolem)
@@ -62,10 +61,10 @@ public class SnowGolems extends Feature {
 
         if (damagingSnowballs) {
             DamageSource damageSource = snowGolem.damageSources().mobProjectile(event.getProjectile(), snowGolem);
-            entityHit.hurt(damageSource, 1f);
+            entityHit.hurt(damageSource, 0.5f);
         }
         if (freezingSnowballs) {
-            entityHit.setTicksFrozen(140);
+            entityHit.setTicksFrozen(entityHit.getTicksFrozen() + 30);
         }
     }
 
@@ -76,7 +75,7 @@ public class SnowGolems extends Feature {
                 || !(event.getProjectile() instanceof Snowball)
                 || !(event.getRayTraceResult() instanceof EntityHitResult entityHitResult)
                 || !(entityHitResult.getEntity() instanceof SnowGolem snowGolemHit)
-                || entityBlacklist.isEntityBlackOrNotWhitelist(snowGolemHit))
+                || !snowGolemHit.getType().is(CHANGE_SNOW_GOLEMS))
             return;
 
         snowGolemHit.heal(1f);
@@ -88,7 +87,7 @@ public class SnowGolems extends Feature {
         if (!this.isEnabled()
                 || event.getLevel().isClientSide
                 || !(event.getEntity() instanceof SnowGolem snowGolem)
-                || entityBlacklist.isEntityBlackOrNotWhitelist(snowGolem))
+                || !snowGolem.getType().is(CHANGE_SNOW_GOLEMS))
             return;
 
         CompoundTag persistentData = snowGolem.getPersistentData();

@@ -7,10 +7,15 @@ import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
-import insane96mcp.insanelib.base.config.*;
-import insane96mcp.insanelib.data.IdTagMatcher;
+import insane96mcp.insanelib.base.config.Config;
+import insane96mcp.insanelib.base.config.Difficulty;
+import insane96mcp.insanelib.base.config.LoadFeature;
+import insane96mcp.insanelib.base.config.MinMax;
 import insane96mcp.insanelib.util.MCUtils;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -34,9 +39,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Label(name = "Targeting", description = "Change how mobs target players")
+@Label(name = "Targeting", description = "Change how mobs target players. Use the enhancedai:no_target_changes and enhancedai:no_follow_range_changes entity type tag to blacklist mobs.")
 @LoadFeature(module = Modules.Ids.MOBS)
 public class Targeting extends Feature {
+	public static final TagKey<EntityType<?>> NO_TARGET_CHANGES = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "no_target_changes"));
+	public static final TagKey<EntityType<?>> NO_FOLLOW_RANGE_CHANGES = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "no_follow_range_changes"));
 
 	public static final String IS_NEUTRAL = EnhancedAI.RESOURCE_PREFIX + "is_neutral";
     public static final String FOLLOW_RANGES_PROCESSED = EnhancedAI.RESOURCE_PREFIX + "follow_ranges_processed";
@@ -56,11 +63,6 @@ public class Targeting extends Feature {
 	@Config
 	@Label(name = "Prevent Infighting", description = "Mobs will no longer attack each other.")
 	public static Boolean preventInfighting = true;
-	@Config
-	@Label(name = "Entity Blacklist", description = "Entities in here will not be affected by this feature.")
-	public static Blacklist entityBlacklist = new Blacklist(List.of(
-			IdTagMatcher.newId("minecraft:enderman")
-	), false);
 	@Config
 	@Label(name = "Neutral Chances", description = "Chances for a mob to spawn neutral")
 	public static Difficulty neutralChances = new Difficulty(0.25d, 0.10d, 0.04d);
@@ -86,45 +88,47 @@ public class Targeting extends Feature {
 	public void onMobSpawn(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
 				|| event.getLevel().isClientSide
-				|| !(event.getEntity() instanceof Mob mobEntity)
-				|| entityBlacklist.isEntityBlackOrNotWhitelist(mobEntity))
+				|| !(event.getEntity() instanceof Mob mob))
 			return;
 
-		processFollowRanges(mobEntity);
-		processTargetGoal(mobEntity);
-		processHurtByGoal(mobEntity);
+		processFollowRanges(mob);
+		processTargetGoal(mob);
+		processHurtByGoal(mob);
 	}
 
-	private void processHurtByGoal(Mob mobEntity) {
+	private void processHurtByGoal(Mob mob) {
 		if (!preventInfighting
-				|| !(mobEntity instanceof PathfinderMob mob))
+				|| !(mob instanceof PathfinderMob pathfinderMob)
+				|| pathfinderMob.getType().is(NO_TARGET_CHANGES))
 			return;
 
 		HurtByTargetGoal toRemove = null;
-		for (WrappedGoal prioritizedGoal : mob.targetSelector.availableGoals) {
+		for (WrappedGoal prioritizedGoal : pathfinderMob.targetSelector.availableGoals) {
 			if (!(prioritizedGoal.getGoal() instanceof HurtByTargetGoal goal))
 				continue;
 			toRemove = goal;
 
 			List<Class<?>> toIgnoreDamage = new ArrayList<>(Arrays.asList(goal.toIgnoreDamage));
 			toIgnoreDamage.add(Enemy.class);
-			HurtByTargetGoal newGoal = new HurtByTargetGoal(mob, toIgnoreDamage.toArray(Class[]::new));
+			HurtByTargetGoal newGoal = new HurtByTargetGoal(pathfinderMob, toIgnoreDamage.toArray(Class[]::new));
 			if (goal.toIgnoreAlert != null)
 				newGoal = newGoal.setAlertOthers(goal.toIgnoreAlert);
-			mob.targetSelector.addGoal(prioritizedGoal.getPriority(), newGoal);
+			pathfinderMob.targetSelector.addGoal(prioritizedGoal.getPriority(), newGoal);
 
 			break;
 		}
 
 		if (toRemove != null)
-			mobEntity.targetSelector.removeGoal(toRemove);
+			mob.targetSelector.removeGoal(toRemove);
 	}
 
-	private void processTargetGoal(Mob mobEntity) {
+	private void processTargetGoal(Mob mob) {
+		if (mob.getType().is(NO_TARGET_CHANGES))
+			return;
 		List<WrappedGoal> goalsToAdd = new ArrayList<>();
 
 		ArrayList<Goal> goalsToRemove = new ArrayList<>();
-		for (WrappedGoal prioritizedGoal : mobEntity.targetSelector.availableGoals) {
+		for (WrappedGoal prioritizedGoal : mob.targetSelector.availableGoals) {
 			if (!(prioritizedGoal.getGoal() instanceof NearestAttackableTargetGoal<?> goal))
 				continue;
 
@@ -133,16 +137,16 @@ public class Targeting extends Feature {
 
 			goalsToRemove.add(prioritizedGoal.getGoal());
 
-			boolean isNeutral = NBTUtils.getBooleanOrPutDefault(mobEntity.getPersistentData(), IS_NEUTRAL, mobEntity.getRandom().nextDouble() < neutralChances.getByDifficulty(mobEntity.level()));
+			boolean isNeutral = NBTUtils.getBooleanOrPutDefault(mob.getPersistentData(), IS_NEUTRAL, mob.getRandom().nextDouble() < neutralChances.getByDifficulty(mob.level()));
 			if (isNeutral)
 				continue;
 
 			EANearestAttackableTarget<Player> newTargetGoal;
 
-			if (mobEntity instanceof Spider)
-				newTargetGoal = new EASpiderTargetGoal<>((Spider) mobEntity, Player.class, true, false, goal.targetConditions);
+			if (mob instanceof Spider)
+				newTargetGoal = new EASpiderTargetGoal<>((Spider) mob, Player.class, true, false, goal.targetConditions);
 			else
-				newTargetGoal = new EANearestAttackableTarget<>(mobEntity, Player.class, false, false, goal.targetConditions);
+				newTargetGoal = new EANearestAttackableTarget<>(mob, Player.class, false, false, goal.targetConditions);
 
 			if (instaTarget)
 				newTargetGoal.setInstaTarget();
@@ -150,24 +154,26 @@ public class Targeting extends Feature {
 			goalsToAdd.add(new WrappedGoal(prioritizedGoal.getPriority(), newTargetGoal));
 		}
 
-		goalsToRemove.forEach(mobEntity.targetSelector::removeGoal);
-		goalsToAdd.forEach(wrappedGoal -> mobEntity.targetSelector.addGoal(wrappedGoal.getPriority(), wrappedGoal.getGoal()));
+		goalsToRemove.forEach(mob.targetSelector::removeGoal);
+		goalsToAdd.forEach(wrappedGoal -> mob.targetSelector.addGoal(wrappedGoal.getPriority(), wrappedGoal.getGoal()));
 
 		if (betterPathfinding)
-			mobEntity.getNavigation().setMaxVisitedNodesMultiplier(4f);
+			mob.getNavigation().setMaxVisitedNodesMultiplier(4f);
 	}
 
-	private void processFollowRanges(Mob mobEntity) {
-		CompoundTag persistentData = mobEntity.getPersistentData();
+	private void processFollowRanges(Mob mob) {
+		if (mob.getType().is(NO_FOLLOW_RANGE_CHANGES))
+			return;
+		CompoundTag persistentData = mob.getPersistentData();
 		if (!persistentData.getBoolean(FOLLOW_RANGES_PROCESSED)) {
 			//noinspection ConstantConditions
-			if (followRangeOverride.min != 0d && mobEntity.getAttribute(Attributes.FOLLOW_RANGE) != null && mobEntity.getAttribute(Attributes.FOLLOW_RANGE).getBaseValue() < followRangeOverride.min) {
-				MCUtils.setAttributeValue(mobEntity, Attributes.FOLLOW_RANGE, followRangeOverride.getIntRandBetween(mobEntity.getRandom()));
+			if (followRangeOverride.min != 0d && mob.getAttribute(Attributes.FOLLOW_RANGE) != null && mob.getAttribute(Attributes.FOLLOW_RANGE).getBaseValue() < followRangeOverride.min) {
+				MCUtils.setAttributeValue(mob, Attributes.FOLLOW_RANGE, followRangeOverride.getIntRandBetween(mob.getRandom()));
 			}
 
 			//noinspection ConstantConditions
-			if (xrayRangeOverride.min != 0d && mobEntity.getAttribute(EAAttributes.XRAY_FOLLOW_RANGE.get()) != null && mobEntity.getAttribute(EAAttributes.XRAY_FOLLOW_RANGE.get()).getBaseValue() < xrayRangeOverride.min) {
-				MCUtils.setAttributeValue(mobEntity, EAAttributes.XRAY_FOLLOW_RANGE.get(), xrayRangeOverride.getIntRandBetween(mobEntity.getRandom()));
+			if (xrayRangeOverride.min != 0d && mob.getAttribute(EAAttributes.XRAY_FOLLOW_RANGE.get()) != null && mob.getAttribute(EAAttributes.XRAY_FOLLOW_RANGE.get()).getBaseValue() < xrayRangeOverride.min) {
+				MCUtils.setAttributeValue(mob, EAAttributes.XRAY_FOLLOW_RANGE.get(), xrayRangeOverride.getIntRandBetween(mob.getRandom()));
 			}
 			persistentData.putBoolean(FOLLOW_RANGES_PROCESSED, true);
 		}

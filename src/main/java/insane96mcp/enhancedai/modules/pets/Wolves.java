@@ -5,30 +5,29 @@ import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
-import insane96mcp.insanelib.base.config.Blacklist;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.LoadFeature;
 import insane96mcp.insanelib.util.MCUtils;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import java.util.Collections;
 import java.util.UUID;
 
-@Label(name = "Wolves")
+@Label(name = "Wolves", description = "Use the enhancedai:change_wolves entity type tag to add more wolves.")
 @LoadFeature(module = Modules.Ids.PETS)
 public class Wolves extends Feature {
+    public static final TagKey<EntityType<?>> CHANGE_WOLVES = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "change_wolves"));
     private static final String ON_SPAWN_PROCESSED = EnhancedAI.RESOURCE_PREFIX + "wolves_on_spawn_processed";
     @Config
     @Label(name = "Double HP and Damage")
     public static Boolean doubleHpAndDamage = true;
-
-    @Config
-    @Label(name = "Entity Blacklist", description = "Entities that will not be affected by this feature.")
-    public static Blacklist entityBlacklist = new Blacklist(Collections.emptyList(), false);
 
     public Wolves(Module module, boolean enabledByDefault, boolean canBeDisabled) {
         super(module, enabledByDefault, canBeDisabled);
@@ -39,7 +38,7 @@ public class Wolves extends Feature {
         if (!this.isEnabled()
                 || !doubleHpAndDamage
                 || !(event.getEntity() instanceof Wolf wolf)
-                || entityBlacklist.isEntityBlackOrNotWhitelist(wolf)
+                || !wolf.getType().is(CHANGE_WOLVES)
                 || wolf.getPersistentData().contains(ON_SPAWN_PROCESSED))
             return;
 

@@ -1,7 +1,6 @@
 package insane96mcp.enhancedai.mixin;
 
 import insane96mcp.enhancedai.modules.shulker.ShulkerArmor;
-import insane96mcp.insanelib.base.Feature;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -27,7 +26,7 @@ public class ShulkerMixin extends AbstractGolem {
     @Inject(method = "setRawPeekAmount", at = @At("RETURN"))
     public void onSetRawPeekAmount(int peekAmount, CallbackInfo ci) {
         if (this.level().isClientSide
-                || !Feature.isEnabled(ShulkerArmor.class))
+                || !ShulkerArmor.isAffectedByArmorModifers((Shulker) (Object) this))
             return;
 
         this.getAttribute(Attributes.ARMOR).removeModifier(COVERED_ARMOR_MODIFIER);

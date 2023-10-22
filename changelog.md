@@ -5,6 +5,8 @@
   * No longer only for endermen (but by default only for them)
   * Chance is now saved in the mob (and can be changed)
   * Now drops the item on left or right
+* Misc Illagers removed, any mob can now open doors (by default only Illagers)
+* Halved Snow golems snowballs damage
 * Many more tags and tags are now always listed in the feature description in the config
 * Launch creepers are now less accurate on hard and more accurate on easy
 * Launch creeper explosion radius override can now be disabled
