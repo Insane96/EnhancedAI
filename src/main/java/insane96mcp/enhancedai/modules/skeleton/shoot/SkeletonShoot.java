@@ -7,22 +7,26 @@ import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
-import insane96mcp.insanelib.base.config.Blacklist;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.LoadFeature;
 import insane96mcp.insanelib.base.config.MinMax;
-import insane96mcp.insanelib.data.IdTagMatcher;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
 
 import java.util.List;
 
-@Label(name = "Skeleton Shoot", description = "Skeletons are more precise when shooting and strafing is removed, can hit a target from up to 64 blocks and try to stay away from the target.")
+@Label(name = "Skeleton Shoot", description = "Skeletons are more precise when shooting and strafing is removed, can hit a target from up to 64 blocks and try to stay away from the target. Use the enhancedai:better_skeleton_shoot entity type tag to add more skeletons that are affected by this feature")
 @LoadFeature(module = Modules.Ids.SKELETON)
 public class SkeletonShoot extends Feature {
+
+	public static final TagKey<EntityType<?>> BETTER_SKELETON_SHOOT = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "better_skeleton_shoot"));
 
 	public static final String STRAFE = EnhancedAI.RESOURCE_PREFIX + "strafe";
 	public static final String SHOOTING_RANGE = EnhancedAI.RESOURCE_PREFIX + "shooting_range";
@@ -49,11 +53,6 @@ public class SkeletonShoot extends Feature {
 	@Config(min = 0d, max = 1d)
 	@Label(name = "Spammer chance", description = "Chance for a Skeleton to spawn as a spammer, which spams arrows instead of fully charging the bow")
 	public static Double spammerChance = 0.07d;
-	@Config
-	@Label(name = "Entity Blacklist", description = "Entities that will not get affected by this feature")
-	public static Blacklist entityBlacklist = new Blacklist(List.of(
-			IdTagMatcher.newId("quark:forgotten")
-	), false);
 
 	public SkeletonShoot(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super(module, enabledByDefault, canBeDisabled);
@@ -61,7 +60,7 @@ public class SkeletonShoot extends Feature {
 
 	public static void onReassessWeaponGoal(AbstractSkeleton skeleton) {
 		if (!isEnabled(SkeletonShoot.class)
-				|| entityBlacklist.isEntityBlackOrNotWhitelist(skeleton))
+				|| !skeleton.getType().is(BETTER_SKELETON_SHOOT))
 			return;
 
 		CompoundTag persistentData = skeleton.getPersistentData();

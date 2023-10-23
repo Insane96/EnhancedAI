@@ -17,10 +17,10 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
 
 import java.util.UUID;
 
-@Label(name = "Shulker Armor", description = "Use the enhancedai:apply_armor_modifiers to add more shulkers that are affected by this feature.")
+@Label(name = "Shulker Armor", description = "Use the enhancedai:apply_shulker_armor_modifiers to add more shulkers that are affected by this feature.")
 @LoadFeature(module = Modules.Ids.SHULKER)
 public class ShulkerArmor extends Feature {
-    public static final TagKey<EntityType<?>> APPLY_ARMOR_MODIFIERS = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "apply_armor_modifiers"));
+    public static final TagKey<EntityType<?>> APPLY_ARMOR_MODIFIERS = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "apply_shulker_armor_modifiers"));
     @Config(min = 1, max = 40)
     @Label(name = "Armor when closed")
     public static Double armorWhenClosed = 30d;

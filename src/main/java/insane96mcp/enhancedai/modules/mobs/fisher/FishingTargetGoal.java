@@ -5,7 +5,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 
 public class FishingTargetGoal extends Goal {
@@ -49,7 +48,7 @@ public class FishingTargetGoal extends Goal {
 	}
 
 	public void start() {
-		this.target = (Player) this.fisher.getTarget();
+		this.target = this.fisher.getTarget();
 		this.fisher.level().playSound(null, this.fisher.getX(), this.fisher.getY(), this.fisher.getZ(), SoundEvents.FISHING_BOBBER_THROW, SoundSource.HOSTILE, 1F, 0.4F / (this.fisher.getRandom().nextFloat() * 0.4F + 0.8F));
 		this.fishingHook = new FishingHook(this.fisher, this.fisher.level());
 		this.fishingHook.setPos(this.fisher.getEyePosition(1f).x, this.fisher.getEyePosition(1f).y + 0.1d, this.fisher.getEyePosition(1f).z);

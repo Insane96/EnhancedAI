@@ -5,7 +5,6 @@ import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
-import insane96mcp.insanelib.base.config.Blacklist;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.LoadFeature;
 import net.minecraft.world.InteractionHand;
@@ -14,8 +13,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-
-import java.util.Collections;
 
 @Label(name = "Wither Skeletons", description = "Wither skeletons can spawn with a bow and shoot Wither arrows.")
 @LoadFeature(module = Modules.Ids.SKELETON)
@@ -29,9 +26,6 @@ public class WitherSkeletons extends Feature {
 	@Config
 	@Label(name = "Wither instead of Fire", description = "Wither skeletons shoot Withered arrows instead of arrows on fire")
 	public static Boolean witherInsteadOfFire = true;
-	@Config
-	@Label(name = "Entity Blacklist", description = "Entities that will not get affected by this feature")
-	public static Blacklist entityBlacklist = new Blacklist(Collections.emptyList(), false);
 
 	public WitherSkeletons(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super(module, enabledByDefault, canBeDisabled);
@@ -42,7 +36,6 @@ public class WitherSkeletons extends Feature {
 		if (!this.isEnabled()
 				|| rangedChance == 0d
 				|| !(event.getEntity() instanceof WitherSkeleton witherSkeleton)
-				|| entityBlacklist.isEntityBlackOrNotWhitelist(witherSkeleton)
 				|| witherSkeleton.getPersistentData().contains(ON_SPAWN_PROCESSED)
 				|| witherSkeleton.getRandom().nextDouble() >= rangedChance)
 			return;

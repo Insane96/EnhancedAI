@@ -6,7 +6,6 @@ import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
-import insane96mcp.insanelib.base.config.Blacklist;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.LoadFeature;
 import insane96mcp.insanelib.base.config.MinMax;
@@ -14,12 +13,16 @@ import insane96mcp.insanelib.world.scheduled.ScheduledTasks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.CaveSpider;
 import net.minecraft.world.entity.monster.Spider;
@@ -29,11 +32,10 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import java.util.Collections;
-
-@Label(name = "Throwing Web", description = "Makes spiders throw a web at a player, slowing them.")
+@Label(name = "Throwing Web", description = "Makes spiders throw a web at a player, slowing them. Use the enhancedai:")
 @LoadFeature(module = Modules.Ids.SPIDER)
 public class ThrowingWeb extends Feature {
+	public static final TagKey<EntityType<?>> CAN_THROW_WEBS = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "can_throw_webs"));
 	public static final String WEB_THROWER = EnhancedAI.RESOURCE_PREFIX + "web_thrower";
 	@Config(min = 0d, max = 1d)
 	@Label(name = "Web Throw Chance", description = "Chance for a Spider to spawn with the ability to throw webs at the target.")
@@ -58,10 +60,10 @@ public class ThrowingWeb extends Feature {
 	public static Boolean caveSpidersPoisonousWebs = true;
 	@Config
 	@Label(name = "Apply Speed on hit", description = "If true, spiders will gain a speed boost when they hit the target.")
-	public static Boolean applySlowness = true;
+	public static Boolean applySpeed = true;
 	@Config
 	@Label(name = "Apply Slowness", description = "If true entities will get slowness when hit.")
-	public static Boolean applySpeed = true;
+	public static Boolean applySlowness = true;
 	//Slowness
 	@Config(min = 0d, max = 6000)
 	@Label(name = "Slowness.Duration", description = "How many ticks of slowness are applied to the target hit by the web?")
@@ -75,9 +77,6 @@ public class ThrowingWeb extends Feature {
 	@Config(min = 0, max = 128)
 	@Label(name = "Slowness.Max Amplifier", description = "How many max levels of slowness can be applied to the target if Staking amplifier is enabled?")
 	public static Integer maxSlowness = 2;
-	@Config
-	@Label(name = "Entity Blacklist", description = "Entities that will not be affected by this feature")
-	public static Blacklist entityBlacklist = new Blacklist(Collections.emptyList(), false);
 
 	public ThrowingWeb(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super(module, enabledByDefault, canBeDisabled);
@@ -88,7 +87,7 @@ public class ThrowingWeb extends Feature {
 	public void onSpawn(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
 				|| !(event.getEntity() instanceof Spider spider)
-				|| entityBlacklist.isEntityBlackOrNotWhitelist(spider))
+				|| !spider.getType().is(CAN_THROW_WEBS))
 			return;
 
 		CompoundTag persistentData = spider.getPersistentData();

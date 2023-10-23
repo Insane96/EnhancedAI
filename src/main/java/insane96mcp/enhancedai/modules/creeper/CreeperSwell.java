@@ -52,7 +52,7 @@ public class CreeperSwell extends Feature {
 	@Config(min = 0d, max = 1d)
 	@Label(name = "Walking Fuse Chance", description = "Percentage chance for a Creeper to keep walking while exploding.")
 	public static Double walkingFuseChance = 0.1d;
-	@Config
+	@Config(min = -1d, max = 64d)
 	@Label(name = "Walking Fuse Speed Modifier", description = "Speed modifier when a walking fuse creeper is swelling.")
 	public static Double walkingFuseSpeedModifier = -0.5d;
 	@Config(min = 0d, max = 1d)
@@ -65,10 +65,10 @@ public class CreeperSwell extends Feature {
 	@Label(name = "Launch.Particles", description = "If true, Launching Creepers emit particles")
 	public static Boolean launchParticles = true;
 
-	@Config
+	@Config(min = 0d, max = 8d)
 	@Label(name = "Launch.inaccuracy", description = "The inaccuracy of the launching creeper in Normal difficulty, easy is increased, hard is decreased.")
 	public static Double launchInaccuracy = 0.5d;
-	@Config
+	@Config(min = 0, max = 127)
 	@Label(name = "Launch.Explosion Radius", description = "The explosion radius of launching creepers. Set to 0 to not change. (Overrides Cena creepers explosion radius)")
 	public static Integer launchExplosionRadius = 2;
 	@Config(min = 0d, max = 1d)

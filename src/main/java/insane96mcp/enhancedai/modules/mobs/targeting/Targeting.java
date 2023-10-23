@@ -63,7 +63,7 @@ public class Targeting extends Feature {
 	@Config
 	@Label(name = "Prevent Infighting", description = "Mobs will no longer attack each other.")
 	public static Boolean preventInfighting = true;
-	@Config
+	@Config(min = 0d, max = 1d)
 	@Label(name = "Neutral Chances", description = "Chances for a mob to spawn neutral")
 	public static Difficulty neutralChances = new Difficulty(0.25d, 0.10d, 0.04d);
 	@Config(min = 0d, max = 1d)

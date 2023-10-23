@@ -26,7 +26,7 @@ public class NotTemptedAnimals extends Feature {
     public static final TagKey<EntityType<?>> CAN_IGNORE_FOOD_TEMPTATION = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "can_ignore_food_temptation"));
     public static final String NOT_TEMPTED = EnhancedAI.RESOURCE_PREFIX + "not_tempted";
 
-    @Config
+    @Config(min = 0d, max = 1d)
     @Label(name = "Not tempted chance", description = "Animals have this percentage chance to not be temped by food.")
     public static Double notTemptedChance = 0.5d;
 

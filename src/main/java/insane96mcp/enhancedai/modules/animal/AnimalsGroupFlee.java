@@ -15,12 +15,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 @Label(name = "Animals Group Flee", description = "Make animals flee/fight back when one is attacked")
 @LoadFeature(module = Modules.Ids.ANIMAL)
 public class AnimalsGroupFlee extends Feature {
-    @Config
-    @Label(name = "Group Flee/Fight Back", description = "If true, when an animal is attacked, all the animals around will flee/fight back.")
-    public static Boolean groupFlee = true;
-    @Config
-    @Label(name = "Flee Range", description = "If Group Flee is enabled, this is the range where the animals will flee.")
-    public static Integer groupFleeRange = 16;
+    @Config(min = 1)
+    @Label(name = "Flee Range", description = "Range at which an animal alerts other animals.")
+    public static Integer groupFleeRange = 24;
 
     public AnimalsGroupFlee(Module module, boolean enabledByDefault, boolean canBeDisabled) {
         super(module, enabledByDefault, canBeDisabled);
@@ -29,7 +26,6 @@ public class AnimalsGroupFlee extends Feature {
     @SubscribeEvent
     public void onAttacked(LivingDamageEvent event) {
         if (!this.isEnabled()
-                || !groupFlee
                 || !(event.getEntity() instanceof Animal animal)
                 || !(event.getSource().getEntity() instanceof LivingEntity attacker))
             return;

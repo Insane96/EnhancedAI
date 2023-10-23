@@ -1,5 +1,6 @@
 package insane96mcp.enhancedai.modules.witch;
 
+import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.ai.EAAvoidEntityGoal;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.setup.EATags;
@@ -9,7 +10,11 @@ import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.LoadFeature;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
@@ -19,6 +24,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 @Label(name = "Witch Flee Target", description = "Witches flee from the target.")
 @LoadFeature(module = Modules.Ids.WITCH)
 public class WitchFleeTarget extends Feature {
+    public static final TagKey<EntityType<?>> WITCH_FLEE = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "witch_flee"));
     @Config(min = 0d, max = 1d)
     @Label(name = "Avoid Player chance", description = "Chance for a Witch to spawn with the ability to avoid the player")
     public static Double avoidPlayerChance = 1d;
@@ -47,7 +53,8 @@ public class WitchFleeTarget extends Feature {
     public void onSpawn(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
                 || event.getLevel().isClientSide
-                || !(event.getEntity() instanceof Witch witch))
+                || !(event.getEntity() instanceof Witch witch)
+                || !witch.getType().is(WITCH_FLEE))
             return;
 
         CompoundTag persistentData = witch.getPersistentData();

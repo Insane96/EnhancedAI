@@ -7,11 +7,14 @@ import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
-import insane96mcp.insanelib.base.config.Blacklist;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.LoadFeature;
 import insane96mcp.insanelib.base.config.MinMax;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
@@ -23,13 +26,12 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-@Label(name = "Witch Potion Throwing", description = "Witches throw potions farther, faster and more potion types. Also no longer chase player if they can't see him.")
+@Label(name = "Witch Potion Throwing", description = "Witches throw potions farther, faster and more potion types. Also no longer chase player if they can't see him. Use the enhancedai:better_potion_throwing entity type tag to add more witches that are affected by this feature.")
 @LoadFeature(module = Modules.Ids.WITCH)
 public class WitchPotionThrowing extends Feature {
-
+    public static final TagKey<EntityType<?>> BETTER_POTION_THROWING = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "better_potion_throwing"));
     public static final String APPRENTICE = EnhancedAI.RESOURCE_PREFIX + "apprentice";
     public static final String ATTACK_SPEED = EnhancedAI.RESOURCE_PREFIX + "attack_speed";
     public static final String ATTACK_RANGE = EnhancedAI.RESOURCE_PREFIX + "attack_range";
@@ -65,9 +67,6 @@ public class WitchPotionThrowing extends Feature {
     @Config(min = 0d, max = 1d)
     @Label(name = "Health Threshold Invisibility", description = "When below this health percentage Witches will throw Invisibility potions at their feet.")
     public static Double healthThresholdInvisibility = 0.40d;
-    @Config
-    @Label(name = "Entity Blacklist", description = "Entities that will not get affected by this feature")
-    public static Blacklist entityBlacklist = new Blacklist(Collections.emptyList(), false);
 
     public WitchPotionThrowing(Module module, boolean enabledByDefault, boolean canBeDisabled) {
         super(module, enabledByDefault, canBeDisabled);
@@ -97,7 +96,7 @@ public class WitchPotionThrowing extends Feature {
         if (!this.isEnabled()
                 || event.getLevel().isClientSide
                 || !(event.getEntity() instanceof Witch witch)
-                || entityBlacklist.isEntityBlackOrNotWhitelist(witch))
+                || !witch.getType().is(BETTER_POTION_THROWING))
             return;
 
         CompoundTag persistentData = witch.getPersistentData();
