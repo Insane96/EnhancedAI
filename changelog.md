@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.12.5
+* Digger Zombies will no longer mine if the `LivingDestroyBlockEvent` is canceled
+* Fixed ranged mobs attacking out of range
+
 ## 1.12.4
 * Backported 1.20.2 mob attack reach change [(Minecraft Wiki)](https://minecraft.wiki/w/Java_Edition_1.20.2#Mobs)
   * This is automatically applied if the Attacking feature is enabled

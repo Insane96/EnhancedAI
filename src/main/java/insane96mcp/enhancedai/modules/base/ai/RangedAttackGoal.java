@@ -95,7 +95,6 @@ public abstract class RangedAttackGoal<T extends Mob> extends Goal {
 		if (distanceFromTarget > (double)this.maxAttackDistance)
 			this.mob.getNavigation().moveTo(target, this.moveSpeedAmp);
 		else {
-
 			if (distanceFromTarget >= 49d && distanceFromTarget <= (double)this.maxAttackDistance && this.seeTime >= 20 && this.canStrafe()) {
 				++this.strafingTime;
 			}
@@ -114,9 +113,9 @@ public abstract class RangedAttackGoal<T extends Mob> extends Goal {
 
 				this.strafingTime = 0;
 			}
+			attackTick(target, distanceFromTarget, canSeeTarget);
 		}
 
-		attackTick(target, distanceFromTarget, canSeeTarget);
 	}
 
 	protected boolean canStrafe() {
