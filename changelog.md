@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.8.4
+* Digger Zombies will no longer mine if the `LivingDestroyBlockEvent` is canceled
+
 ## 1.8.3
 * Backported 1.20.2 attack reach change [https://minecraft.wiki/w/Java_Edition_1.20.2#Mobs]
   * This is automatically applied if the Attacking feature is enabled

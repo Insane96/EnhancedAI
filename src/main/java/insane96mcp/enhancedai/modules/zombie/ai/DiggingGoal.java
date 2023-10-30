@@ -21,6 +21,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
+import net.minecraftforge.event.ForgeEventFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -227,6 +228,8 @@ public class DiggingGoal extends Goal {
 	}
 
 	private boolean canHarvestBlock() {
+		if (!ForgeEventFactory.onEntityDestroyBlock(this.miner, this.targetBlocks.get(0), this.blockState))
+			return false;
 		if (!this.blockState.requiresCorrectToolForDrops())
 			return true;
 
