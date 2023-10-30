@@ -228,7 +228,7 @@ public class DiggingGoal extends Goal {
 	}
 
 	private boolean canHarvestBlock() {
-		if (!ForgeEventFactory.onEntityDestroyBlock(this.miner, this.targetBlocks.get(0), this.blockState))
+		if (!ForgeEventFactory.onEntityDestroyBlock(this.digger, this.targetBlocks.get(0), this.blockState))
 			return false;
 		if (!this.blockState.requiresCorrectToolForDrops())
 			return true;
