@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.6.10
+* Digger zombies will no longer dig if the `LivingDestroyBlockEvent` is canceled
+
 ## 1.6.9
 * Fixed crash if Tinkers Construct is not installed and the feature is
 
