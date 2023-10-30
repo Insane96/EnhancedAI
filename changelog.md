@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Miner mobs will no longer mine if the `LivingDestroyBlockEvent` is canceled
+
 ## 2.0.1
 * Item disruption
   * No longer only for endermen (but by default only for them)
