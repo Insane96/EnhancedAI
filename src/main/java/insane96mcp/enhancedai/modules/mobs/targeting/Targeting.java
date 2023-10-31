@@ -1,6 +1,7 @@
 package insane96mcp.enhancedai.modules.mobs.targeting;
 
 import insane96mcp.enhancedai.EnhancedAI;
+import insane96mcp.enhancedai.ai.EAHurtByTargetGoal;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.setup.EAAttributes;
 import insane96mcp.enhancedai.setup.NBTUtils;
@@ -39,11 +40,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Label(name = "Targeting", description = "Change how mobs target players. Use the enhancedai:no_target_changes and enhancedai:no_follow_range_changes entity type tag to blacklist mobs.")
+@Label(name = "Targeting", description = "Change how mobs target players. Use the enhancedai:no_target_changes and enhancedai:no_follow_range_changes entity type tag to blacklist mobs. Add mobs to enhancedai:allow_target_change entity type tag to allow these mobs to be able to switch targets when hit (e.g. Creepers can't normally do that).")
 @LoadFeature(module = Modules.Ids.MOBS)
 public class Targeting extends Feature {
 	public static final TagKey<EntityType<?>> NO_TARGET_CHANGES = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "no_target_changes"));
 	public static final TagKey<EntityType<?>> NO_FOLLOW_RANGE_CHANGES = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "no_follow_range_changes"));
+	public static final TagKey<EntityType<?>> ALLOW_TARGET_CHANGE = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "allow_target_change"));
 
 	public static final String IS_NEUTRAL = EnhancedAI.RESOURCE_PREFIX + "is_neutral";
     public static final String FOLLOW_RANGES_PROCESSED = EnhancedAI.RESOURCE_PREFIX + "follow_ranges_processed";
@@ -61,7 +63,10 @@ public class Targeting extends Feature {
 	@Label(name = "Better Path Finding", description = "Mobs will be able to find better paths to the target. Note that this might hit performance a bit.")
 	public static Boolean betterPathfinding = true;
 	@Config
-	@Label(name = "Prevent Infighting", description = "Mobs will no longer attack each other.")
+	@Label(name = "Hurt by target.Better version", description = "Mobs will no longer switch target if it's the same or if the current one it's closer.")
+	public static Boolean betterHurtByTarget = true;
+	@Config
+	@Label(name = "Hurt by target.Prevent infighting", description = "Mobs will no longer attack each other.")
 	public static Boolean preventInfighting = true;
 	@Config(min = 0d, max = 1d)
 	@Label(name = "Neutral Chances", description = "Chances for a mob to spawn neutral")
@@ -97,7 +102,7 @@ public class Targeting extends Feature {
 	}
 
 	private void processHurtByGoal(Mob mob) {
-		if (!preventInfighting
+		if (!betterHurtByTarget
 				|| !(mob instanceof PathfinderMob pathfinderMob)
 				|| pathfinderMob.getType().is(NO_TARGET_CHANGES))
 			return;
@@ -109,8 +114,10 @@ public class Targeting extends Feature {
 			toRemove = goal;
 
 			List<Class<?>> toIgnoreDamage = new ArrayList<>(Arrays.asList(goal.toIgnoreDamage));
-			toIgnoreDamage.add(Enemy.class);
-			HurtByTargetGoal newGoal = new HurtByTargetGoal(pathfinderMob, toIgnoreDamage.toArray(Class[]::new));
+			//Prevent infighting
+			if (preventInfighting && mob instanceof Enemy)
+				toIgnoreDamage.add(Enemy.class);
+			EAHurtByTargetGoal newGoal = new EAHurtByTargetGoal(pathfinderMob, toIgnoreDamage.toArray(Class[]::new));
 			if (goal.toIgnoreAlert != null)
 				newGoal = newGoal.setAlertOthers(goal.toIgnoreAlert);
 			pathfinderMob.targetSelector.addGoal(prioritizedGoal.getPriority(), newGoal);
@@ -118,8 +125,17 @@ public class Targeting extends Feature {
 			break;
 		}
 
-		if (toRemove != null)
+		if (toRemove != null) {
 			mob.targetSelector.removeGoal(toRemove);
+		}
+		else if (mob.getType().is(ALLOW_TARGET_CHANGE)) {
+			List<Class<?>> toIgnoreDamage = new ArrayList<>();
+			//Prevent infighting
+			if (preventInfighting)
+				toIgnoreDamage.add(Enemy.class);
+			EAHurtByTargetGoal newGoal = new EAHurtByTargetGoal(pathfinderMob, toIgnoreDamage.toArray(Class[]::new));
+			pathfinderMob.targetSelector.addGoal(1, newGoal);
+		}
 	}
 
 	private void processTargetGoal(Mob mob) {

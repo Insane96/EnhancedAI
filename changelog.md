@@ -2,6 +2,7 @@
 
 ## Upcoming
 * Miner mobs will no longer mine if the `LivingDestroyBlockEvent` is canceled
+* Better targeting when hit
 
 ## 2.0.1
 * Item disruption

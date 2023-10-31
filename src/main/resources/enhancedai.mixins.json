@@ -6,7 +6,6 @@
     "mixins": [
         "AbstractSkeletonMixin",
         "CreeperMixin",
-        "HurtByTargetGoalMixin",
         "MeleeAttackGoalMixin",
         "MobCategoryMixin",
         "MobMixin",
