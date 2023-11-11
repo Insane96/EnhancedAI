@@ -43,6 +43,7 @@ public class SnowGolems extends Feature {
     @Config
     @Label(name = "Healing Snowballs", description = "If true, snowballs hitting snow golems will heal them.")
     public static Boolean healingSnowballs = true;
+    //TODO Shooting cooldown
 
     public SnowGolems(Module module, boolean enabledByDefault, boolean canBeDisabled) {
         super(module, enabledByDefault, canBeDisabled);

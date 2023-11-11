@@ -52,6 +52,7 @@ public class AvoidExplosionGoal extends Goal {
 
 	public void start() {
 		this.entity.getNavigation().moveTo(this.path, this.farSpeed);
+		this.entity.stopRiding();
 	}
 
 	public void stop() {

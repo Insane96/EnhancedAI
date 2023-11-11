@@ -42,6 +42,7 @@ public class ItemDisruption extends Feature {
     @SubscribeEvent
     public void onHit(LivingDamageEvent event) {
         if (!this.isEnabled()
+                //TODO allow for any mob
                 || !(event.getEntity() instanceof ServerPlayer player)
                 || !(event.getSource().getDirectEntity() instanceof Mob mob))
             return;

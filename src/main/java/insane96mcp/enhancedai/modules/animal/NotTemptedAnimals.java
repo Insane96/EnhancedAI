@@ -23,6 +23,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 @Label(name = "Not Tempted Animals", description = "Makes animals not tempted by food. Use the entity type tag enhancedai:can_ignore_food_temptation to change animals.")
 @LoadFeature(module = Modules.Ids.ANIMAL)
 public class NotTemptedAnimals extends Feature {
+    //TODO Some animals should attack the player with the food in the hand
     public static final TagKey<EntityType<?>> CAN_IGNORE_FOOD_TEMPTATION = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "can_ignore_food_temptation"));
     public static final String NOT_TEMPTED = EnhancedAI.RESOURCE_PREFIX + "not_tempted";
 

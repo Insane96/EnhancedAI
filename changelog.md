@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.0.3
+* Mobs that run from explosions will now also dismount to run away
+
 ## 2.0.2
 * Miner mobs will no longer mine if the `LivingDestroyBlockEvent` is canceled
 * Better targeting when hit
