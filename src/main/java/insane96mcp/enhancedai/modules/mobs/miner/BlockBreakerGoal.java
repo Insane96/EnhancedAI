@@ -95,8 +95,10 @@ public class BlockBreakerGoal extends Goal {
 		if (this.target == null)
 			return;
 		fillTargetBlocks();
-		if (!this.targetBlocks.isEmpty())
+		if (!this.targetBlocks.isEmpty()) {
 			initBlockBreak();
+			this.miner.setAggressive(true);
+		}
 	}
 
 	public void stop() {
@@ -111,6 +113,7 @@ public class BlockBreakerGoal extends Goal {
 		this.prevBreakProgress = 0;
 		this.lastPosition = null;
 		this.path = null;
+		this.miner.setAggressive(false);
 	}
 
 	public void tick() {
