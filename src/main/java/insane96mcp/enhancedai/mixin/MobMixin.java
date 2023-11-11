@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.mixin;
 
-import insane96mcp.enhancedai.modules.mobs.Attacking;
+import insane96mcp.enhancedai.modules.mobs.MeleeAttacking;
 import insane96mcp.insanelib.base.Feature;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -13,8 +13,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MobMixin {
     @Inject(at = @At(value = "HEAD"), method = "isWithinMeleeAttackRange", cancellable = true)
     private void changeIsWithinMeleeAttackRange(LivingEntity attacked, CallbackInfoReturnable<Boolean> cir) {
-        if (!Feature.isEnabled(Attacking.class))
+        if (!Feature.isEnabled(MeleeAttacking.class))
             return;
-        cir.setReturnValue(Attacking.isWithinMeleeAttackRange((Mob) (Object) this, attacked));
+        cir.setReturnValue(MeleeAttacking.isWithinMeleeAttackRange((Mob) (Object) this, attacked));
     }
 }

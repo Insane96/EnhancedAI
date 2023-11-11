@@ -1,8 +1,10 @@
 # Changelog
 
-## Upcoming
+## 2.0.2
 * Miner mobs will no longer mine if the `LivingDestroyBlockEvent` is canceled
 * Better targeting when hit
+  * Mobs will now switch target if the entity that hit them is closer
+  * Will also prefer targeting players over other entities (e.g. if a zombie is attacking a golem, will always switch to players)
 
 ## 2.0.1
 * Item disruption

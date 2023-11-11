@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.mixin;
 
-import insane96mcp.enhancedai.modules.mobs.Attacking;
+import insane96mcp.enhancedai.modules.mobs.MeleeAttacking;
 import insane96mcp.insanelib.base.Feature;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
@@ -40,9 +40,9 @@ public abstract class MeleeAttackGoalMixin extends Goal {
 
 	@Inject(at = @At(value = "HEAD"), method = "checkAndPerformAttack", cancellable = true)
 	public void getAttackReachSqr(LivingEntity attacked, double distanceSqr, CallbackInfo ci) {
-		if (!Feature.isEnabled(Attacking.class))
+		if (!Feature.isEnabled(MeleeAttacking.class))
 			return;
-		if (Attacking.isWithinMeleeAttackRange(this.mob, attacked) && this.isTimeToAttack() && this.mob.getSensing().hasLineOfSight(attacked)) {
+		if (MeleeAttacking.isWithinMeleeAttackRange(this.mob, attacked) && this.isTimeToAttack() && this.mob.getSensing().hasLineOfSight(attacked)) {
 			this.resetAttackCooldown();
 			this.mob.swing(InteractionHand.MAIN_HAND);
 			this.mob.doHurtTarget(attacked);
@@ -63,14 +63,14 @@ public abstract class MeleeAttackGoalMixin extends Goal {
 
 	@Inject(at = @At(value = "RETURN"), method = "getAttackInterval", cancellable = true)
 	public void onGetAttackCooldown(CallbackInfoReturnable<Integer> cir) {
-		if (!Attacking.shouldUseAttackSpeedAttribute())
+		if (!MeleeAttacking.shouldUseAttackSpeedAttribute())
 			return;
 		cir.setReturnValue(this.enhancedAI$getTicksUntilNextAttack());
 	}
 
 	@Inject(at = @At(value = "HEAD"), method = "resetAttackCooldown", cancellable = true)
 	public void onResetAttackCooldown(CallbackInfo ci) {
-		if (!Attacking.shouldUseAttackSpeedAttribute())
+		if (!MeleeAttacking.shouldUseAttackSpeedAttribute())
 			return;
 		this.ticksUntilNextAttack = this.enhancedAI$getTicksUntilNextAttack();
 		ci.cancel();
@@ -84,8 +84,8 @@ public abstract class MeleeAttackGoalMixin extends Goal {
 			if (instance != null) instance.setDirty();
 			attackSpeed = this.mob.getAttributeValue(Attributes.ATTACK_SPEED);
 		}
-		attackSpeed *= Attacking.attackSpeedMultiplier.getByDifficulty(this.mob.level());
-		if (attackSpeed > Attacking.attackSpeedMaximum) attackSpeed = Attacking.attackSpeedMaximum;
+		attackSpeed *= MeleeAttacking.attackSpeedMultiplier.getByDifficulty(this.mob.level());
+		if (attackSpeed > MeleeAttacking.attackSpeedMaximum) attackSpeed = MeleeAttacking.attackSpeedMaximum;
 		return this.adjustedTickDelay((int) (1d / attackSpeed * 20d));
 	}
 }

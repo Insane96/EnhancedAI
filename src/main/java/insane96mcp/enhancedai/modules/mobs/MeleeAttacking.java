@@ -16,16 +16,19 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 
-@Label(name = "Attacking", description = "Changes attack range to use the 1.20.2 mechanic")
+@Label(name = "Melee Attacking", description = "Changes attack range to use the 1.20.2 mechanic")
 @LoadFeature(module = Modules.Ids.MOBS)
-public class Attacking extends Feature {
+public class MeleeAttacking extends Feature {
+
+	//Directly stolen from 1.20.2
+	private static final double DEFAULT_ATTACK_REACH = Math.sqrt(2.04F) - (double)0.6F;
 
 	@Config
 	@Label(name = "Melee Attacks Attribute Based", description = "If true melee monsters (zombies, etc) will attack based off the forge:entity_reach attribute instead of a fixed ~0.82 blocks. By default, mobs' forge:attack_range is set to 0.82 blocks, like vanilla 1.20.2.")
-	public static Boolean meleeAttacksAttributeBased = false;
+	public static Boolean meleeAttacksAttributeBased = true;
 
 	@Config
-	@Label(name = "Attack Speed.Enabled", description = "If true melee monsters (zombies, etc) attack rate is defined by their attack speed -40%, minumum once every 0.5 seconds with no weapon. This effectively buffs any mob that has no weapon.")
+	@Label(name = "Attack Speed.Enabled", description = "If true melee monsters (zombies, etc) attack rate is defined by their attack speed -40%, minimum once every 0.5 seconds with no weapon. This effectively buffs any mob that has no weapon.")
 	public static Boolean meleeAttackSpeedBased = true;
 	@Config(min = 0d, max = 4d)
 	@Label(name = "Attack Speed.Multiplier", description = "Multiplies the attack speed of monsters by this value. E.g. 0.6 means that mobs attack 40% slower than the player with the same equipment")
@@ -34,7 +37,7 @@ public class Attacking extends Feature {
 	@Label(name = "Attack Speed.Maximum", description = "The maximum attack speed a mob can attack with (in attacks per second, 2 is an attach every 0.5 seconds, 1.25 is an attack every 0.8s, 1 is an attack every 1s). In vanilla mobs have 1 attack speed.")
 	public static Double attackSpeedMaximum = 1.25d;
 
-	public Attacking(Module module, boolean enabledByDefault, boolean canBeDisabled) {
+	public MeleeAttacking(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super(module, enabledByDefault, canBeDisabled);
 	}
 
@@ -48,15 +51,12 @@ public class Attacking extends Feature {
 	}
 
 	public static Boolean shouldChangeAttackRange() {
-		return isEnabled(Attacking.class) && meleeAttacksAttributeBased;
+		return isEnabled(MeleeAttacking.class) && meleeAttacksAttributeBased;
 	}
 
 	public static Boolean shouldUseAttackSpeedAttribute() {
-		return isEnabled(Attacking.class) && meleeAttackSpeedBased;
+		return isEnabled(MeleeAttacking.class) && meleeAttackSpeedBased;
 	}
-
-	//Directly stolen from 1.20.2
-	private static final double DEFAULT_ATTACK_REACH = Math.sqrt(2.04F) - (double)0.6F;
 
 	public static boolean isWithinMeleeAttackRange(LivingEntity attacker, LivingEntity attacked) {
 		return getAttackBoundingBox(attacker).intersects(getHitbox(attacked));
@@ -75,7 +75,7 @@ public class Attacking extends Feature {
 		}
 
 		double attackReach = DEFAULT_ATTACK_REACH;
-		if (Attacking.shouldChangeAttackRange())
+		if (MeleeAttacking.shouldChangeAttackRange())
 			attackReach = attacker.getAttributeValue(ForgeMod.ENTITY_REACH.get());
 		return aabb.inflate(attackReach, 0.0D, attackReach);
 	}
