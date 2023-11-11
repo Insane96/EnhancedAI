@@ -3,6 +3,7 @@
 ## 2.0.3
 * Mobs that run from explosions will now also dismount to run away
 * Miner mobs are now set "aggressive" when mining (zombies and vindicators should rise their hands)
+* Fixed vindicators not being able to open doors
 
 ## 2.0.2
 * Miner mobs will no longer mine if the `LivingDestroyBlockEvent` is canceled

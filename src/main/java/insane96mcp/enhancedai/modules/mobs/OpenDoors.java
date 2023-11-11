@@ -31,14 +31,14 @@ public class OpenDoors extends Feature {
 
     @SubscribeEvent
     public void onEntityJoinLevel(EntityJoinLevelEvent event) {
-        if (!this.isEnabled()
-                || !(event.getEntity() instanceof Mob mob)
-                || event.getLevel().isClientSide
-                || !mob.getType().is(CAN_OPEN_DOORS))
+        if (!(event.getEntity() instanceof Mob mob)
+                || !shouldBeAbleToOpenDoors(mob)
+                || event.getLevel().isClientSide)
             return;
 
         if (mob.getNavigation() instanceof GroundPathNavigation groundPathNavigation) {
             groundPathNavigation.setCanOpenDoors(true);
+            groundPathNavigation.setCanPassDoors(true);
             List<Goal> toRemove = new ArrayList<>();
             for (var wrappedGoal : mob.goalSelector.getAvailableGoals()) {
                 if (wrappedGoal.getGoal() instanceof OpenDoorGoal) {
@@ -48,5 +48,9 @@ public class OpenDoors extends Feature {
             toRemove.forEach(mob.goalSelector::removeGoal);
             mob.goalSelector.addGoal(2, new OpenDoorGoal(mob, false));
         }
+    }
+
+    public static boolean shouldBeAbleToOpenDoors(Mob mob) {
+        return Feature.isEnabled(OpenDoors.class) && mob.getType().is(CAN_OPEN_DOORS);
     }
 }

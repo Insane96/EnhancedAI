@@ -13,6 +13,7 @@
         "ShulkerMixin",
         "SlimeMixin",
         "SnowballMixin",
+        "VindicatorMixin",
         "WitchMixin",
         "WitherSkeletonMixin"
     ],
