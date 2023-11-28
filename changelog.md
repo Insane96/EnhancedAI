@@ -2,6 +2,7 @@
 
 ## Upcoming
 * Fixed Better hurt by target removing the "alert others" feature
+* Hopefully fixed Dark Art Witches crashing with some other mod
 
 ## 2.0.3
 * Mobs that run from explosions will now also dismount to run away

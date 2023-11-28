@@ -48,7 +48,7 @@ public class DarkArtWitchGoal extends Goal {
 
     @Override
     public boolean canContinueToUse() {
-        return this.phase != Phase.END && (this.summonSpot == null || this.witch.distanceToSqr(this.summonSpot) <= 256d);
+        return this.witch.getTarget() != null && this.phase != Phase.END && (this.summonSpot == null || this.witch.distanceToSqr(this.summonSpot) <= 256d);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class DarkArtWitchGoal extends Goal {
     @Override
     public void tick() {
         this.witch.getNavigation().stop();
-        this.phase.tick( this);
+        this.phase.tick(this);
         this.phaseTick++;
     }
 
