@@ -120,6 +120,8 @@ public class Targeting extends Feature {
 			EAHurtByTargetGoal newGoal = new EAHurtByTargetGoal(pathfinderMob, toIgnoreDamage.toArray(Class[]::new));
 			if (goal.toIgnoreAlert != null)
 				newGoal = newGoal.setAlertOthers(goal.toIgnoreAlert);
+			if (goal.alertSameType)
+				newGoal.setAlertOthers(goal.toIgnoreAlert);
 			pathfinderMob.targetSelector.addGoal(prioritizedGoal.getPriority(), newGoal);
 
 			break;
