@@ -14,7 +14,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.UUID;
 
-public class AICreeperSwellGoal extends Goal {
+public class EACreeperSwellGoal extends Goal {
 
 	private static final UUID WALKING_FUSE_SPEED_MODIFIER_UUID = UUID.fromString("ab376fec-5a15-4d3e-8fa2-0be4b6bc1849");
 
@@ -34,7 +34,7 @@ public class AICreeperSwellGoal extends Goal {
 	@SuppressWarnings("FieldCanBeLocal")
 	private final double IGNITE_DISTANCE_MULTIPLIER_SQR = 1.35d * 1.35d;
 
-	public AICreeperSwellGoal(Creeper creeper) {
+	public EACreeperSwellGoal(Creeper creeper) {
 		this.swellingCreeper = creeper;
 	}
 
@@ -87,8 +87,9 @@ public class AICreeperSwellGoal extends Goal {
 			this.tryCancelSwell();
 		else if (!this.swellingCreeper.getSensing().hasLineOfSight(this.creeperAttackTarget) && !ignoreWalls && !isBreaching)
 			this.tryCancelSwell();
-		else if (this.swellingCreeper.tickCount % 15 == 0) {
+		else if (this.swellingCreeper.tickCount % 5 == 0) {
 			this.swellingCreeper.setSwellDir(1);
+			alertNearby();
 		}
 	}
 
@@ -110,12 +111,12 @@ public class AICreeperSwellGoal extends Goal {
 			this.swellingCreeper.setSwellDir(-1);
 	}
 
-	public AICreeperSwellGoal setIgnoreWalls(boolean ignoreWalls) {
+	public EACreeperSwellGoal setIgnoreWalls(boolean ignoreWalls) {
 		this.ignoreWalls = ignoreWalls;
 		return this;
 	}
 
-	public AICreeperSwellGoal setWalkingFuse(boolean walkingFuse) {
+	public EACreeperSwellGoal setWalkingFuse(boolean walkingFuse) {
 		if (walkingFuse)
 			this.setFlags(EnumSet.noneOf(Goal.Flag.class));
 		else
@@ -125,12 +126,12 @@ public class AICreeperSwellGoal extends Goal {
 		return this;
 	}
 
-	public AICreeperSwellGoal setBreaching(boolean breaching) {
+	public EACreeperSwellGoal setBreaching(boolean breaching) {
 		this.breaching = breaching;
 		return this;
 	}
 
-	public AICreeperSwellGoal setForceExplode(boolean forceExplode) {
+	public EACreeperSwellGoal setForceExplode(boolean forceExplode) {
 		this.forceExplode = forceExplode;
 		return this;
 	}

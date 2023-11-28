@@ -178,7 +178,7 @@ public class CreeperSwell extends Feature {
 			}
 		}
 
-		AICreeperSwellGoal swellGoal = new AICreeperSwellGoal(creeper)
+		EACreeperSwellGoal swellGoal = new EACreeperSwellGoal(creeper)
 				.setWalkingFuse(walkingFuse)
 				.setIgnoreWalls(ignoreWalls)
 				.setBreaching(breach);
@@ -187,7 +187,7 @@ public class CreeperSwell extends Feature {
 		creeper.goalSelector.addGoal(2, swellGoal);
 
 		if (launch) {
-			creeper.goalSelector.addGoal(1, new AICreeperLaunchGoal(creeper));
+			creeper.goalSelector.addGoal(1, new EACreeperLaunchGoal(creeper));
 			if (launchExplosionRadius > 0)
 				compoundNBT.putByte("ExplosionRadius", launchExplosionRadius.byteValue());
 		}
