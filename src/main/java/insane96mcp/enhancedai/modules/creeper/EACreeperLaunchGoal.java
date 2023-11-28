@@ -13,7 +13,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 
-public class AICreeperLaunchGoal extends Goal {
+public class EACreeperLaunchGoal extends Goal {
 
 	protected final Creeper launchingCreeper;
 	private LivingEntity creeperAttackTarget;
@@ -30,7 +30,7 @@ public class AICreeperLaunchGoal extends Goal {
 	private float activationDistanceSqr;
 	private float minActivationDistanceSqr;
 
-	public AICreeperLaunchGoal(Creeper creeper) {
+	public EACreeperLaunchGoal(Creeper creeper) {
 		this.launchingCreeper = creeper;
 		this.setFlags(EnumSet.of(Flag.MOVE));
 	}
@@ -63,10 +63,12 @@ public class AICreeperLaunchGoal extends Goal {
 
 		double yDistance = this.launchingCreeper.getY() - target.getY();
 		double x = target.getX() - this.launchingCreeper.getX();
+		double y = target.getY() - this.launchingCreeper.getY();
 		double z = target.getZ() - this.launchingCreeper.getZ();
 		double xzDistance = x * x + z * z;
+		double distance = x * x + y * y + z * z;
 
-		return xzDistance < activationDistanceSqr && xzDistance > minActivationDistanceSqr && yDistance < explosionSize * 2 && this.launchingCreeper.onGround();
+		return xzDistance < activationDistanceSqr && distance > minActivationDistanceSqr && yDistance < explosionSize * 2 && this.launchingCreeper.onGround();
 	}
 
 	public void start() {
@@ -85,13 +87,13 @@ public class AICreeperLaunchGoal extends Goal {
 	public boolean canContinueToUse() {
 		if (this.launchingCreeper.swell >= fuse - 2 && this.launchingCreeper.distanceToSqr(this.creeperAttackTarget) > (explosionSizeSqr * 2d * 2d)) {
 			this.fails++;
-			if (AICreeperSwellGoal.canBreach(this.launchingCreeper, this.creeperAttackTarget))
+			if (EACreeperSwellGoal.canBreach(this.launchingCreeper, this.creeperAttackTarget))
 				this.cooldown = 60 + (this.fails * 60);
 			else
 				this.cooldown = CreeperUtils.getFuse(this.launchingCreeper);
 			return false;
 		}
-		else if ((this.launchingCreeper.verticalCollision || this.launchingCreeper.horizontalCollision) && this.hasLaunched && AICreeperSwellGoal.canBreach(this.launchingCreeper, this.creeperAttackTarget)) {
+		else if ((this.launchingCreeper.verticalCollision || this.launchingCreeper.horizontalCollision) && this.hasLaunched && EACreeperSwellGoal.canBreach(this.launchingCreeper, this.creeperAttackTarget)) {
 			this.launchingCreeper.explodeCreeper();
 			return false;
 		}
