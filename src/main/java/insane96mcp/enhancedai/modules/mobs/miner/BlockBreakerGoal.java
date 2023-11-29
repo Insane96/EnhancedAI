@@ -72,7 +72,7 @@ public class BlockBreakerGoal extends Goal {
 			return false;
 
 		return this.isStuck()
-				&& this.miner.distanceToSqr(miner.getTarget()) > 2d
+				&& (this.miner.distanceToSqr(miner.getTarget()) > 2d || !this.miner.hasLineOfSight(miner.getTarget()))
 				&& this.miner.distanceToSqr(miner.getTarget()) < maxDistanceFromTarget;
 	}
 
@@ -87,7 +87,7 @@ public class BlockBreakerGoal extends Goal {
 				&& this.targetBlocks.get(0).distSqr(this.miner.blockPosition()) < this.reachDistance * this.reachDistance
 				&& this.miner.getNavigation().isDone()
 				&& !this.miner.level().getBlockState(this.targetBlocks.get(0)).isAir()
-				&& this.path != null && this.path.getDistToTarget() > 1.5d;
+				&& this.path != null && (this.path.getDistToTarget() > 1.5d || !this.miner.hasLineOfSight(this.target));
 	}
 
 	public void start() {

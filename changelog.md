@@ -5,6 +5,7 @@
 * Hopefully fixed Dark Art Witches crashing with some other mod
 * Fixed mobs no longer running from creepers
 * Fixed launching creepers no longer launching vertical
+* Fixed miner mobs not breaking blocks if too close to target but can't see it
 
 ## 2.0.3
 * Mobs that run from explosions will now also dismount to run away
