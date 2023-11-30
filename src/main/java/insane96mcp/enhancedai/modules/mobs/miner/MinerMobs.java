@@ -6,8 +6,10 @@ import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
+import insane96mcp.insanelib.base.config.Blacklist;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.LoadFeature;
+import insane96mcp.insanelib.data.IdTagMatcher;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -17,6 +19,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -59,6 +62,9 @@ public class MinerMobs extends Feature {
 	@Config(min = 0d, max = 128d)
 	@Label(name = "Time to break multiplier", description = "Multiplier for the time a mob takes to break blocks. E.g. with this set to 2, mobs will take twice the time to mine a block.")
 	public static Double timeToBreakMultiplier = 1.5d;
+	@Config
+	@Label(name = "Dimension Blacklist", description = "Dimensions where mobs can't spawn with the ability to mine.")
+	public static Blacklist dimensionBlacklist = new Blacklist();
 
 	public MinerMobs(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super(module, enabledByDefault, canBeDisabled);
@@ -70,7 +76,8 @@ public class MinerMobs extends Feature {
 		if (!this.isEnabled()
 		 		|| event.getLevel().isClientSide
 				|| !(event.getEntity() instanceof Mob mob)
-		 		|| !mob.getType().is(CAN_BE_MINER))
+		 		|| !mob.getType().is(CAN_BE_MINER)
+				|| MinerMobs.isDimensionBlackOrNotWhitelisted(event.getLevel()))
 			return;
 
 		CompoundTag persistentData = mob.getPersistentData();
@@ -89,5 +96,22 @@ public class MinerMobs extends Feature {
 				mob.setDropChance(EquipmentSlot.OFFHAND, -1f);
 			}
 		}
+	}
+
+	public static boolean isDimensionBlackOrNotWhitelisted(Level level) {
+		//Check for black/whitelist
+		boolean isInWhitelist = false;
+		boolean isInBlacklist = false;
+		for (IdTagMatcher blacklistEntry : dimensionBlacklist.blacklist) {
+			if (blacklistEntry.location.equals(level.dimension().location())) {
+				if (!dimensionBlacklist.blacklistAsWhitelist)
+					isInBlacklist = true;
+				else
+					isInWhitelist = true;
+				break;
+			}
+		}
+
+		return isInBlacklist || (!isInWhitelist && dimensionBlacklist.blacklistAsWhitelist);
 	}
 }
