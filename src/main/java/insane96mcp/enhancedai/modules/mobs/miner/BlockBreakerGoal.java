@@ -77,14 +77,15 @@ public class BlockBreakerGoal extends Goal {
 	}
 
 	public boolean canContinueToUse() {
+		if (this.targetBlocks.isEmpty())
+			return false;
 		if (this.properToolOnly && this.blockState != null && !this.canHarvestBlock())
 			return false;
 
 		if (this.target == null || !this.target.isAlive())
 			return false;
 
-		return !this.targetBlocks.isEmpty()
-				&& this.targetBlocks.get(0).distSqr(this.miner.blockPosition()) < this.reachDistance * this.reachDistance
+		return this.targetBlocks.get(0).distSqr(this.miner.blockPosition()) < this.reachDistance * this.reachDistance
 				&& this.miner.getNavigation().isDone()
 				&& !this.miner.level().getBlockState(this.targetBlocks.get(0)).isAir()
 				&& this.path != null && (this.path.getDistToTarget() > 1.5d || !this.miner.hasLineOfSight(this.target));

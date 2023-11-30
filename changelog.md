@@ -3,6 +3,7 @@
 ## Upcoming
 * Added Dimension Blacklist for miner mobs
 * Fixed "Better hurt by target" "alert others" not working
+* Fixed Miner Mobs crashing the game
 * Fixed server hanging if skeletons distance from target was 0
 
 ## 2.0.4
