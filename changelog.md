@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.8.5
+* Fixed server hanging if skeletons distance from target was 0
+
 ## 1.8.4
 * Digger Zombies will no longer mine if the `LivingDestroyBlockEvent` is canceled
 
