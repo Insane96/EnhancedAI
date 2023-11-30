@@ -96,7 +96,7 @@ public class EAHurtByTargetGoal extends TargetGoal {
 						break;
 					}
 				}
-				if (!isClassToIgnore)
+				if (isClassToIgnore)
 					continue;
 			}
 			this.alertOther(mobNearby, this.mob.getLastHurtByMob());

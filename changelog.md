@@ -1,7 +1,10 @@
 # Changelog
 
+## Upcoming
+* Fixed "Better hurt by target" "alert others" not working
+
 ## 2.0.4
-* Fixed Better hurt by target removing the "alert others" feature
+* Fixed "Better hurt by target" removing the "alert others" feature
 * Hopefully fixed Dark Art Witches crashing with some other mod
 * Fixed mobs no longer running from creepers
 * Fixed launching creepers no longer launching vertical
