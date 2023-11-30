@@ -2,6 +2,7 @@
 
 ## Upcoming
 * Fixed "Better hurt by target" "alert others" not working
+* Fixed server hanging if skeletons distance from target was 0
 
 ## 2.0.4
 * Fixed "Better hurt by target" removing the "alert others" feature
