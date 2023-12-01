@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 2.0.5
 * Added Dimension Blacklist for miner mobs
 * Fixed "Better hurt by target" "alert others" not working
 * Fixed Miner Mobs crashing the game

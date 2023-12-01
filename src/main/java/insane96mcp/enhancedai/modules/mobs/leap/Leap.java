@@ -15,7 +15,7 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 @Label(name = "Leap", description = "Makes mobs be able to leap over a few blocks.")
-@LoadFeature(module = Modules.Ids.MOBS)
+@LoadFeature(module = Modules.Ids.MOBS, enabledByDefault = false)
 public class Leap extends Feature {
     public static final TagKey<EntityType<?>> ALLOW_LEAPING = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "allow_leaping"));
 
