@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Fixed Witches throwing potions from farther than their throw range
+
 ## 2.0.5
 * Added Dimension Blacklist for miner mobs
 * Fixed "Better hurt by target" "alert others" not working

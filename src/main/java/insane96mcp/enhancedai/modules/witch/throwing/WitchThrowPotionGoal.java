@@ -73,16 +73,16 @@ public class WitchThrowPotionGoal extends Goal {
         double distanceToTarget = this.witch.distanceToSqr(this.target.getX(), this.target.getY(), this.target.getZ());
         boolean canSee = this.witch.getSensing().hasLineOfSight(this.target);
 
-        if (distanceToTarget > (double) this.attackRadiusSqr && !canSee) {
+        if (!canSee)
+            return;
+
+        if (distanceToTarget > (double) this.attackRadiusSqr) {
             this.witch.getNavigation().moveTo(this.target, 1d);
             return;
         }
 
         this.witch.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
         if (--this.attackTime <= 0) {
-            if (!canSee) {
-                return;
-            }
             this.witch.getNavigation().stop();
 
             this.attackTime = Mth.floor(Mth.nextInt(witch.getRandom(), this.attackIntervalMin, this.attackIntervalMax));
