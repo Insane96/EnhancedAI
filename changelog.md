@@ -1,6 +1,8 @@
 # Changelog
 
 ## Upcoming
+* Added Pillager shoot
+  * Pillagers can now shoot from farther away
 * Fixed Witches throwing potions from farther than their throw range
 
 ## 2.0.5
