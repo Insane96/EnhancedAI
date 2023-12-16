@@ -3,6 +3,8 @@
 ## Upcoming
 * Added Pillager shoot
   * Pillagers can now shoot from farther away
+* Skeleton inaccuracy is now configurable per difficulty
+  * Slightly decreased accuracy in hard
 * Fixed Witches throwing potions from farther than their throw range
 
 ## 2.0.5

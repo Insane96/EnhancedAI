@@ -49,7 +49,7 @@ public class SkeletonShoot extends Feature {
 	public static Double strafeChance = 0.333d;
 	@Config(min = 0d, max = 30d)
 	@Label(name = "Arrow Inaccuracy", description = "How much inaccuracy does the arrow fired by skeletons have. Vanilla skeletons have 10/6/2 inaccuracy in easy/normal/hard difficulty.")
-	public static Double arrowInaccuracy = 2d;
+	public static insane96mcp.insanelib.base.config.Difficulty arrowInaccuracy = new insane96mcp.insanelib.base.config.Difficulty(6, 5, 3);
 	@Config(min = 0d, max = 1d)
 	@Label(name = "Spammer chance", description = "Chance for a Skeleton to spawn as a spammer, which spams arrows instead of fully charging the bow")
 	public static Double spammerChance = 0.07d;
@@ -67,7 +67,7 @@ public class SkeletonShoot extends Feature {
 
 		boolean strafe = NBTUtils.getBooleanOrPutDefault(persistentData, STRAFE, skeleton.getRandom().nextDouble() < strafeChance);
 		int shootingRange1 = NBTUtils.getIntOrPutDefault(persistentData, SHOOTING_RANGE, shootingRange.getIntRandBetween(skeleton.getRandom()));
-		double inaccuracy = NBTUtils.getDoubleOrPutDefault(persistentData, INACCURACY, arrowInaccuracy);
+		double inaccuracy = NBTUtils.getDoubleOrPutDefault(persistentData, INACCURACY, arrowInaccuracy.getByDifficulty(skeleton.level()));
 		boolean spammer = NBTUtils.getBooleanOrPutDefault(persistentData, SPAMMER, skeleton.getRandom().nextDouble() < spammerChance);
 		int shootingCooldown1 = NBTUtils.getIntOrPutDefault(persistentData, SHOOTING_COOLDOWN, shootingCooldown.getIntRandBetween(skeleton.getRandom()));
 		int bowChargeTicks1 = NBTUtils.getIntOrPutDefault(persistentData, BOW_CHARGE_TICKS, bowChargeTicks.getIntRandBetween(skeleton.getRandom()));
