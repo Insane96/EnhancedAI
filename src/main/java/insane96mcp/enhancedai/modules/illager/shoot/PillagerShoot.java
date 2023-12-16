@@ -25,7 +25,6 @@ public class PillagerShoot extends Feature {
 
 	public static final TagKey<EntityType<?>> BETTER_PILLAGER_SHOOT = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "better_pillager_shoot"));
 
-	public static final String STRAFE = EnhancedAI.RESOURCE_PREFIX + "strafe";
 	public static final String SHOOTING_RANGE = EnhancedAI.RESOURCE_PREFIX + "shooting_range";
 	public static final String SHOOTING_COOLDOWN = EnhancedAI.RESOURCE_PREFIX + "shooting_cooldown";
 	public static final String INACCURACY = EnhancedAI.RESOURCE_PREFIX + "inaccuracy";
@@ -34,14 +33,11 @@ public class PillagerShoot extends Feature {
 	@Label(name = "Shooting Range", description = "The range from where a pillager will shoot a player")
 	public static MinMax shootingRange = new MinMax(24, 32);
 	@Config(min = 0)
-	@Label(name = "Shooting Cooldown", description = "The ticks cooldown after shooting. This is halved in Hard difficulty")
-	public static MinMax shootingCooldown = new MinMax(50, 70);
-	@Config(min = 0d, max = 1d)
-	@Label(name = "Strafe chance", description = "Chance for a Skeleton to spawn with the ability to strafe (like vanilla)")
-	public static Double strafeChance = 0.333d;
+	@Label(name = "Shooting Cooldown", description = "The ticks cooldown before shooting. Vanilla is random between 20 and 40")
+	public static MinMax shootingCooldown = new MinMax(20, 40);
 	@Config(min = 0d, max = 30d)
-	@Label(name = "Arrow Inaccuracy", description = "How much inaccuracy does the arrow fired by skeletons have. Vanilla skeletons have 10/6/2 inaccuracy in easy/normal/hard difficulty.")
-	public static Double arrowInaccuracy = 2d;
+	@Label(name = "Arrow Inaccuracy", description = "How much inaccuracy does the arrow fired by pillagers have. Vanilla pillagers have 10/6/2 inaccuracy in easy/normal/hard difficulty.")
+	public static insane96mcp.insanelib.base.config.Difficulty arrowInaccuracy = new insane96mcp.insanelib.base.config.Difficulty(5, 3, 1);
 
 	public PillagerShoot(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super(module, enabledByDefault, canBeDisabled);
@@ -56,9 +52,8 @@ public class PillagerShoot extends Feature {
 
 		CompoundTag persistentData = pillager.getPersistentData();
 
-		boolean strafe = NBTUtils.getBooleanOrPutDefault(persistentData, STRAFE, pillager.getRandom().nextDouble() < strafeChance);
 		int shootingRange1 = NBTUtils.getIntOrPutDefault(persistentData, SHOOTING_RANGE, shootingRange.getIntRandBetween(pillager.getRandom()));
-		double inaccuracy = NBTUtils.getDoubleOrPutDefault(persistentData, INACCURACY, arrowInaccuracy);
+		double inaccuracy = NBTUtils.getDoubleOrPutDefault(persistentData, INACCURACY, arrowInaccuracy.getByDifficulty(pillager.level()));
 		int shootingCooldown1 = NBTUtils.getIntOrPutDefault(persistentData, SHOOTING_COOLDOWN, shootingCooldown.getIntRandBetween(pillager.getRandom()));
 
 		//Remove Crossbow Goal
@@ -72,7 +67,7 @@ public class PillagerShoot extends Feature {
 				.setAttackCooldown(shootingCooldown1)
 				.setInaccuracy((float) inaccuracy);
 		skeleton.goalSelector.addGoal(2, rangedBowAttackGoal);*/
-		EAPillagerAttackGoal attackGoal = new EAPillagerAttackGoal(pillager, 1d, shootingRange1);
+		EAPillagerAttackGoal attackGoal = new EAPillagerAttackGoal(pillager, 1d, shootingRange1, shootingCooldown1, (float) inaccuracy);
 		pillager.goalSelector.addGoal(3, attackGoal);
 	}
 
