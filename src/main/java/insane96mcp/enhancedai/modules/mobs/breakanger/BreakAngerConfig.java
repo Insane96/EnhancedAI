@@ -38,7 +38,6 @@ public class BreakAngerConfig {
             JsonObject jObject = new JsonObject();
             jObject.add("block", context.serialize(src.block));
             jObject.add("entity", context.serialize(src.entity));
-            jObject.add("block", context.serialize(src.block));
             jObject.addProperty("range", src.range);
             return jObject;
         }

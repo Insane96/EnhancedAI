@@ -5,6 +5,8 @@
   * Pillagers can now shoot from farther away
   * Inaccuracy and shooting cooldown is now configurable
 * Added Pillager Flee
+* Added a Custom Hostile config so any mob can target any mob
+  * By default, skeletons, creepers and spiders attack villagers
 * Fisher Mobs
   * Now have 40% chance to hook items in the player's inventory
   * Mobs now reel in the hook faster if it's on the ground
@@ -13,6 +15,8 @@
 * Skeleton inaccuracy is now configurable per difficulty
   * Slightly decreased accuracy in hard
 * Fixed Witches throwing potions from farther than their throw range
+* Fixed miner mobs breaking blocks way faster than they should've
+  * With this, Time to break multiplier has been set back to 1
 
 ## 2.0.5
 * Added Dimension Blacklist for miner mobs

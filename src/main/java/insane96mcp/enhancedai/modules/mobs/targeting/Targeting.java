@@ -5,13 +5,14 @@ import insane96mcp.enhancedai.ai.EAHurtByTargetGoal;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.setup.EAAttributes;
 import insane96mcp.enhancedai.setup.NBTUtils;
-import insane96mcp.insanelib.base.Feature;
+import insane96mcp.insanelib.base.JsonFeature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.Difficulty;
 import insane96mcp.insanelib.base.config.LoadFeature;
 import insane96mcp.insanelib.base.config.MinMax;
+import insane96mcp.insanelib.data.IdTagMatcher;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -27,6 +28,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.player.Player;
@@ -42,13 +44,19 @@ import java.util.List;
 
 @Label(name = "Targeting", description = "Change how mobs target players. Use the enhancedai:no_target_changes and enhancedai:no_follow_range_changes entity type tag to blacklist mobs. Add mobs to enhancedai:allow_target_change entity type tag to allow these mobs to be able to switch targets when hit (e.g. Creepers can't normally do that).")
 @LoadFeature(module = Modules.Ids.MOBS)
-public class Targeting extends Feature {
+public class Targeting extends JsonFeature {
 	public static final TagKey<EntityType<?>> NO_TARGET_CHANGES = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "no_target_changes"));
 	public static final TagKey<EntityType<?>> NO_FOLLOW_RANGE_CHANGES = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "no_follow_range_changes"));
 	public static final TagKey<EntityType<?>> ALLOW_TARGET_CHANGE = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "allow_target_change"));
 
 	public static final String IS_NEUTRAL = EnhancedAI.RESOURCE_PREFIX + "is_neutral";
     public static final String FOLLOW_RANGES_PROCESSED = EnhancedAI.RESOURCE_PREFIX + "follow_ranges_processed";
+
+	public static final List<CustomHostileConfig> CUSTOM_HOSTILE_DEFAULT_LIST = List.of(
+			new CustomHostileConfig(IdTagMatcher.newTag("enhancedai:config/can_attack_villagers"), IdTagMatcher.newId("minecraft:villager"), 0.5f)
+	);
+
+	public static final List<CustomHostileConfig> customHostile = new ArrayList<>();
 
     @Config(min = 0d, max = 128d)
 	@Label(name = "Follow Range Override", description = "How far away can the mobs see the player. This overrides the vanilla value (16 for most mobs). Setting 'Max' to 0 will leave the follow range as vanilla. I recommend using mods like Mobs Properties Randomness to have more control over the attribute.")
@@ -77,6 +85,12 @@ public class Targeting extends Feature {
 
 	public Targeting(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super(module, enabledByDefault, canBeDisabled);
+		JSON_CONFIGS.add(new JsonConfig<>("custom_hostile.json", customHostile, CUSTOM_HOSTILE_DEFAULT_LIST, CustomHostileConfig.LIST_TYPE));
+	}
+
+	@Override
+	public String getModConfigFolder() {
+		return EnhancedAI.CONFIG_FOLDER;
 	}
 
 	public static void xrayRangeAttribute(EntityAttributeModificationEvent event) {
@@ -98,6 +112,7 @@ public class Targeting extends Feature {
 
 		processFollowRanges(mob);
 		processTargetGoal(mob);
+		processCustomTargetGoal(mob);
 		processHurtByGoal(mob);
 	}
 
@@ -175,6 +190,21 @@ public class Targeting extends Feature {
 
 		if (betterPathfinding)
 			mob.getNavigation().setMaxVisitedNodesMultiplier(4f);
+	}
+
+	private void processCustomTargetGoal(Mob mob) {
+		if (customHostile.isEmpty())
+			return;
+		for (CustomHostileConfig chc : customHostile) {
+			if (!chc.attacker.matchesEntity(mob))
+				continue;
+
+			EANearestAttackableTarget<LivingEntity> targetGoal = new EANearestAttackableTarget<>(mob, LivingEntity.class, chc.victim, false, false, TargetingConditions.DEFAULT);
+
+			if (instaTarget)
+				targetGoal.setInstaTarget();
+			mob.targetSelector.addGoal(3, targetGoal);
+		}
 	}
 
 	private void processFollowRanges(Mob mob) {
