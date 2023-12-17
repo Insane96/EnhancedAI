@@ -79,7 +79,7 @@ public class BlockBreakerGoal extends Goal {
 	public boolean canContinueToUse() {
 		if (this.targetBlocks.isEmpty())
 			return false;
-		if (this.properToolOnly && this.blockState != null && !this.canHarvestBlock())
+		if (this.properToolOnly && this.blockState != null && !this.canBreakBlock())
 			return false;
 
 		if (this.target == null || !this.target.isAlive())
@@ -120,7 +120,7 @@ public class BlockBreakerGoal extends Goal {
 	public void tick() {
 		if (this.targetBlocks.isEmpty())
 			return;
-		if (this.properToolOnly && this.blockState != null && !this.canHarvestBlock())
+		if (this.properToolOnly && this.blockState != null && !this.canBreakBlock())
 			return;
 		BlockPos pos = this.targetBlocks.get(0);
 		this.breakingTick++;
@@ -242,10 +242,21 @@ public class BlockBreakerGoal extends Goal {
 		return digSpeed;
 	}
 
-	private boolean canHarvestBlock() {
+	private boolean canBreakBlock() {
 		if (!ForgeEventFactory.onEntityDestroyBlock(this.miner, this.targetBlocks.get(0), this.blockState))
 			return false;
 		if (!this.blockState.requiresCorrectToolForDrops() || !this.properToolRequired)
+			return true;
+
+		ItemStack stack = this.miner.getOffhandItem();
+		if (stack.isEmpty())
+			return false;
+
+		return stack.isCorrectToolForDrops(this.blockState);
+	}
+
+	private boolean canHarvestBlock() {
+		if (!this.blockState.requiresCorrectToolForDrops())
 			return true;
 
 		ItemStack stack = this.miner.getOffhandItem();
