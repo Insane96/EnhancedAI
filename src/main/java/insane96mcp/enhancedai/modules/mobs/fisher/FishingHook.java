@@ -173,8 +173,8 @@ public class FishingHook extends Projectile {
                 || this.getOwner() == null)
             return;
         if (this.hookedIn != null) {
-            if (isInventoryHooked) {
-                if (this.hookedIn instanceof Player player && !player.getInventory().isEmpty()) {
+            if (this.hookedIn instanceof Player player && isInventoryHooked) {
+                if (!player.getInventory().isEmpty()) {
                     int slot;
                     ItemStack itemStack;
                     int blowUpPrevention = 64;
@@ -191,10 +191,6 @@ public class FishingHook extends Projectile {
                         this.level().addFreshEntity(itemEntity);
                         player.getInventory().removeItem(slot, 256);
                     }
-                }
-                else if (this.hookedIn instanceof LivingEntity livingEntity){
-                    //TODO Steal in hand or armor items
-                    //livingEntity.getItemBySlot(EquipmentSlot.)
                 }
             }
             else {
