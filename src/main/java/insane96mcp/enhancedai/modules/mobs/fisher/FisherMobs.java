@@ -6,6 +6,7 @@ import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
+import insane96mcp.insanelib.base.config.Difficulty;
 import insane96mcp.insanelib.base.config.LoadFeature;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -28,6 +29,14 @@ public class FisherMobs extends Feature {
 	@Label(name = "Equip Fishing Rod Chance", description = "Chance for a mob in the entity type tag enhancedai:can_be_fisher to spawn with a Fishing Rod in the offhand.\nI recommend Mobs Properties Randomness to have more control over mobs equipment.")
 	public static Double equipFishingRodChance = 0.07;
 
+	@Config(min = 0d, max = 1d)
+	@Label(name = "Hook Inventory Chance", description = "Chance for a fisher mob to steal an item from the players' inventory instead of reeling the player.")
+	public static Double hookInventoryChance = 0.4d;
+
+	@Config
+	@Label(name = "Reel in ticks", description = "How fast will a mob reel in the grappled entity (or if the hook is on the ground).")
+	public static Difficulty reelInTicks = new Difficulty(40, 30, 20);
+
 	public FisherMobs(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super(module, enabledByDefault, canBeDisabled);
 	}
@@ -37,11 +46,10 @@ public class FisherMobs extends Feature {
 		if (!this.isEnabled()
 				|| event.getLevel().isClientSide
 				|| !(event.getEntity() instanceof Mob mob)
-				|| !mob.getType().is(CAN_BE_FISHER)
-				|| mob.getPersistentData().getBoolean(HAS_FISHING_ROD_BEEN_GIVEN))
+				|| !mob.getType().is(CAN_BE_FISHER))
 			return;
 
-		if (mob.getOffhandItem().isEmpty() && mob.getRandom().nextDouble() < equipFishingRodChance)
+		if (!mob.getPersistentData().getBoolean(HAS_FISHING_ROD_BEEN_GIVEN) && mob.getOffhandItem().isEmpty() && mob.getRandom().nextDouble() < equipFishingRodChance)
 			mob.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.FISHING_ROD));
 
 		mob.getPersistentData().putBoolean(HAS_FISHING_ROD_BEEN_GIVEN, true);

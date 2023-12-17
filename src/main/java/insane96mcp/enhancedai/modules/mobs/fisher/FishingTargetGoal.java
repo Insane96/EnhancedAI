@@ -62,16 +62,19 @@ public class FishingTargetGoal extends Goal {
 		double dirY = yPos - this.fishingHook.getY();
 		this.fishingHook.shoot(dirX, dirY + distanceXZ * 0.17d, dirZ, 1.1f + ((float)distance / 32f) + (float)Math.max(distanceY / 48d, 0f), 1);
 		this.fisher.level().addFreshEntity(fishingHook);
-		this.reel = reducedTickDelay(30);
+		this.reel = reducedTickDelay((int) FisherMobs.reelInTicks.getByDifficulty(this.fisher.level()));
 		this.fishingHookLifetime = reducedTickDelay(60);
 	}
 
 	public void tick() {
 		this.fisher.getLookControl().setLookAt(this.target);
-		if (this.fishingHook.onGround() || this.fishingHook.getHookedIn() != null || --this.fishingHookLifetime <= 0) {
+		boolean isOnGround = this.fishingHook.onGround();
+		if (isOnGround || this.fishingHook.getHookedIn() != null || --this.fishingHookLifetime <= 0) {
+			if (isOnGround)
+				--this.reel;
 			if (--this.reel <= 0) {
 				this.fishingHook.level().playSound(null, this.fisher.getX(), this.fisher.getY(), this.fisher.getZ(), SoundEvents.FISHING_BOBBER_RETRIEVE, SoundSource.HOSTILE, 1.0F, 0.4F / (this.fisher.getRandom().nextFloat() * 0.4F + 0.8F));
-				this.fishingHook.retrieve();
+				this.fishingHook.retrieve(this.fisher.getRandom().nextDouble() < FisherMobs.hookInventoryChance);
 			}
 		}
 	}

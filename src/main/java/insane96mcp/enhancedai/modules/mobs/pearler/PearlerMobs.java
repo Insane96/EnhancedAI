@@ -25,7 +25,7 @@ public class PearlerMobs extends Feature {
 	public static final String HAS_ENDER_PEARL_BEEN_GIVEN = EnhancedAI.RESOURCE_PREFIX + "has_ender_pearl_been_given";
 
 	@Config(min = 0d, max = 1d)
-	@Label(name = "Equip Ender Pearl Chance", description = "Chance for a mob in the entity type tag enhancedai:can_be_pearler to spawn with a Fishing Rod in the offhand.\nI recommend Mobs Properties Randomness to have more control over mobs equipment.")
+	@Label(name = "Equip Ender Pearl Chance", description = "Chance for a mob in the entity type tag enhancedai:can_be_pearler to spawn with Ender Pearls in the offhand.\nI recommend Mobs Properties Randomness to have more control over mobs equipment.")
 	public static Double equipEnderPearlChance = 0.05;
 	@Config(min = 0, max = 16)
 	@Label(name = "Ender Pearl Amount", description = "How many ender pearls will Mobs spawn with.")

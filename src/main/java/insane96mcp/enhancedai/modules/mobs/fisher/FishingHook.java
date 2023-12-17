@@ -8,13 +8,12 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -169,13 +168,39 @@ public class FishingHook extends Projectile {
     public void readAdditionalSaveData(CompoundTag p_37151_) {
     }
 
-    public void retrieve() {
+    public void retrieve(boolean isInventoryHooked) {
         if (this.level().isClientSide
                 || this.getOwner() == null)
             return;
         if (this.hookedIn != null) {
-            this.pullEntity(this.hookedIn);
-            this.level().broadcastEntityEvent(this, (byte)31);
+            if (isInventoryHooked) {
+                if (this.hookedIn instanceof Player player && !player.getInventory().isEmpty()) {
+                    int slot;
+                    ItemStack itemStack;
+                    int blowUpPrevention = 64;
+                    do {
+                        slot = this.random.nextInt(36);
+                        itemStack = player.getInventory().getItem(slot);
+                        if (--blowUpPrevention <= 0)
+                            break;
+                    } while (itemStack.isEmpty());
+                    if (!itemStack.isEmpty()) {
+                        ItemEntity itemEntity = new ItemEntity(this.level(), this.hookedIn.position().x, this.hookedIn.getEyeY(), this.hookedIn.position().z, itemStack.copy(), 0, 0, 0);
+                        itemEntity.setDefaultPickUpDelay();
+                        this.pullEntity(itemEntity);
+                        this.level().addFreshEntity(itemEntity);
+                        player.getInventory().removeItem(slot, 256);
+                    }
+                }
+                else if (this.hookedIn instanceof LivingEntity livingEntity){
+                    //TODO Steal in hand or armor items
+                    //livingEntity.getItemBySlot(EquipmentSlot.)
+                }
+            }
+            else {
+                this.pullEntity(this.hookedIn);
+                this.level().broadcastEntityEvent(this, EntityEvent.FISHING_ROD_REEL_IN);
+            }
         }
         this.discard();
     }
@@ -191,7 +216,7 @@ public class FishingHook extends Projectile {
     protected void pullEntity(Entity entity) {
         Entity owner = this.getOwner();
         if (owner != null) {
-            Vec3 vec3 = (new Vec3(owner.getX() - this.getX(), Math.max(owner.getY() - this.getY(), 1d), owner.getZ() - this.getZ())).scale(0.3D);
+            Vec3 vec3 = (new Vec3(owner.getX() - this.getX(), Math.max(owner.getY() - this.getY(), 1d), owner.getZ() - this.getZ())).scale(entity instanceof LivingEntity ? 0.3D : 0.1d);
             entity.stopRiding();
             entity.setDeltaMovement(entity.getDeltaMovement().add(vec3));
         }

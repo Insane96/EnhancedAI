@@ -5,6 +5,11 @@
   * Pillagers can now shoot from farther away
   * Inaccuracy and shooting cooldown is now configurable
 * Added Pillager Flee
+* Fisher Mobs
+  * Now have 40% chance to hook items in the player's inventory
+  * Mobs now reel in the hook faster if it's on the ground
+  * Reel in time is now configurable (and lower in Hard 😈)
+  * Fixed a bug where when re-joining the world fishers would no longer fish
 * Skeleton inaccuracy is now configurable per difficulty
   * Slightly decreased accuracy in hard
 * Fixed Witches throwing potions from farther than their throw range
