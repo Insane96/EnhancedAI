@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 2.1.0
 * Added Pillager shoot
   * Pillagers can now shoot from farther away
   * Inaccuracy and shooting cooldown is now configurable
