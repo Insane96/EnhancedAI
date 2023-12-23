@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.modules.creeper;
 
-import insane96mcp.enhancedai.modules.mobs.avoidexplosions.AvoidExplosionGoal;
+import insane96mcp.enhancedai.modules.mobs.avoidexplosion.AvoidExplosionGoal;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;

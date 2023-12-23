@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.mobs.avoidexplosions;
+package insane96mcp.enhancedai.modules.mobs.avoidexplosion;
 
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
