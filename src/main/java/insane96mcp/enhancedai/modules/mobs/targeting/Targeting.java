@@ -53,7 +53,7 @@ public class Targeting extends JsonFeature {
     public static final String FOLLOW_RANGES_PROCESSED = EnhancedAI.RESOURCE_PREFIX + "follow_ranges_processed";
 
 	public static final List<CustomHostileConfig> CUSTOM_HOSTILE_DEFAULT_LIST = List.of(
-			new CustomHostileConfig(IdTagMatcher.newTag("enhancedai:config/can_attack_villagers"), IdTagMatcher.newId("minecraft:villager"), 0.5f)
+			new CustomHostileConfig(2, IdTagMatcher.newTag("enhancedai:config/can_attack_villagers"), IdTagMatcher.newId("minecraft:villager"), 0.5f)
 	);
 
 	public static final List<CustomHostileConfig> customHostile = new ArrayList<>();
@@ -199,11 +199,11 @@ public class Targeting extends JsonFeature {
 			if (!chc.attacker.matchesEntity(mob))
 				continue;
 
-			EANearestAttackableTarget<LivingEntity> targetGoal = new EANearestAttackableTarget<>(mob, LivingEntity.class, chc.victim, false, false, TargetingConditions.DEFAULT);
+			EANearestAttackableTarget<LivingEntity> targetGoal = new EANearestAttackableTarget<>(mob, LivingEntity.class, chc.victim, chc.mustSee, false, TargetingConditions.DEFAULT);
 
 			if (instaTarget)
 				targetGoal.setInstaTarget();
-			mob.targetSelector.addGoal(3, targetGoal);
+			mob.targetSelector.addGoal(chc.priority, targetGoal);
 		}
 	}
 
