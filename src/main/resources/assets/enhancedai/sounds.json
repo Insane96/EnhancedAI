@@ -1,12 +1,22 @@
 {
   "creeper_cena_fuse": {
     "category": "hostile",
-    "subtitle": "enhancedai.subtitle.creeper_cena_fuse",
+    "subtitle": "enhancedai.subtitle.angry_creeper_fuse",
     "sounds": [ "enhancedai:creeper_cena_fuse" ]
   },
   "creeper_cena_explode": {
     "category": "hostile",
-    "subtitle": "enhancedai.subtitle.creeper_cena_explode",
+    "subtitle": "enhancedai.subtitle.angry_creeper_explode",
     "sounds": [ "enhancedai:creeper_cena_explode" ]
+  },
+  "wtf_boom_fuse": {
+    "category": "hostile",
+    "subtitle": "enhancedai.subtitle.angry_creeper_fuse",
+    "sounds": [ "enhancedai:wtf_boom_fuse" ]
+  },
+  "wtf_boom_explode": {
+    "category": "hostile",
+    "subtitle": "enhancedai.subtitle.angry_creeper_explode",
+    "sounds": [ "enhancedai:wtf_boom_explode" ]
   }
 }

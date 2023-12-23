@@ -20,7 +20,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
@@ -37,7 +36,9 @@ import net.minecraftforge.event.level.ExplosionEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.function.Supplier;
 
 @Label(name = "Creeper Swell", description = "Various changes to Creepers exploding. Ignoring Walls, Walking Fuse and smarter exploding based off explosion size. Only creepers in the enhancedai:change_creeper_swell entity type tag are affected by this feature.")
 @LoadFeature(module = Modules.Ids.CREEPER)
@@ -89,8 +90,8 @@ public class CreeperSwell extends Feature {
 	@Label(name = "Angry Creeper.Particles", description = "If true, Angry Creeper emits particles")
 	public static Boolean angryParticles = true;
 	@Config
-	@Label(name = "Angry Creeper.Cena Sound", description = "If true, Angry Creeper will use the John Cena sound effect")
-	public static Boolean angryCenaSounds = false;
+	@Label(name = "Angry Creeper.Sounds", description = "The special sound effect that the Angry Creeper plays")
+	public static AngryCreeperSounds angryCreeperSounds = AngryCreeperSounds.WTF_BOOM;
 	@Config
 	@Label(name = "Angry Creeper.Name", description = "If true, Angry Creeper will have a name")
 	public static Boolean angryName = true;
@@ -124,10 +125,8 @@ public class CreeperSwell extends Feature {
 		if (!(e.getExploder() instanceof Creeper creeper))
 			return;
 
-		if (creeper.getPersistentData().getBoolean(ANGRY)) {
-			SoundEvent soundEvent = angryCenaSounds ? EASounds.CREEPER_CENA_EXPLODE.get() : SoundEvents.GENERIC_EXPLODE;
-			float pitch = angryCenaSounds ? 1.0f : 0.5f;
-			creeper.playSound(soundEvent, 4.0f, pitch);
+		if (creeper.getPersistentData().getBoolean(ANGRY) && angryCreeperSounds.explode != null) {
+			creeper.playSound(angryCreeperSounds.explode.get(), 4.0f, 1.0f);
 		}
 	}
 
@@ -266,4 +265,20 @@ public class CreeperSwell extends Feature {
 		poseStack.scale(f2, f3, f2);
 		return true;
 	}*/
+
+	public enum AngryCreeperSounds {
+		NONE(null, null),
+		CENA(EASounds.CREEPER_CENA_FUSE, EASounds.CREEPER_CENA_EXPLODE),
+		WTF_BOOM(EASounds.WTF_BOOM_FUSE, EASounds.WTF_BOOM_EXPLODE);
+
+		@Nullable
+		public final Supplier<SoundEvent> fuse;
+		@Nullable
+		public final Supplier<SoundEvent> explode;
+
+		AngryCreeperSounds(@Nullable Supplier<SoundEvent> fuse, @Nullable Supplier<SoundEvent> explode) {
+			this.fuse = fuse;
+			this.explode = explode;
+		}
+	}
 }

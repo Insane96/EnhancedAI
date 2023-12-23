@@ -12,4 +12,6 @@ public class EASounds {
 
 	public static final RegistryObject<SoundEvent> CREEPER_CENA_FUSE = SOUND_EVENTS.register("creeper_cena_fuse", () -> SoundEvent.createFixedRangeEvent(new ResourceLocation(EnhancedAI.MOD_ID, "creeper_cena_fuse"), 64f));
 	public static final RegistryObject<SoundEvent> CREEPER_CENA_EXPLODE = SOUND_EVENTS.register("creeper_cena_explode", () -> SoundEvent.createFixedRangeEvent(new ResourceLocation(EnhancedAI.MOD_ID, "creeper_cena_explode"), 64f));
+	public static final RegistryObject<SoundEvent> WTF_BOOM_FUSE = SOUND_EVENTS.register("wtf_boom_fuse", () -> SoundEvent.createFixedRangeEvent(new ResourceLocation(EnhancedAI.MOD_ID, "wtf_boom_fuse"), 64f));
+	public static final RegistryObject<SoundEvent> WTF_BOOM_EXPLODE = SOUND_EVENTS.register("wtf_boom_explode", () -> SoundEvent.createFixedRangeEvent(new ResourceLocation(EnhancedAI.MOD_ID, "wtf_boom_explode"), 64f));
 }

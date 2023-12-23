@@ -4,6 +4,7 @@
 * Added a custom flee config
   * A json config where you can specify which mobs should run from which
 * Added `must_see` and `priority` to Custom hostile config
+* Added a new sound for Angry Creepers 😏
 
 ## 2.1.0
 * Added Pillager shoot
