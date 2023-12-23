@@ -1,5 +1,6 @@
 package insane96mcp.enhancedai.ai;
 
+import insane96mcp.insanelib.data.IdTagMatcher;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
@@ -30,6 +31,10 @@ public class EAAvoidEntityGoal<T extends LivingEntity> extends Goal {
 		this(entityIn, classToAvoidIn, (livingEntity) -> true, avoidDistance, avoidDistanceNear, nearSpeed, farSpeed, EntitySelector.NO_CREATIVE_OR_SPECTATOR::test);
 	}
 
+	public EAAvoidEntityGoal(PathfinderMob entityIn, Class<T> classToAvoidIn, IdTagMatcher idTagMatcher, float avoidDistance, float avoidDistanceNear, double nearSpeed, double farSpeed) {
+		this(entityIn, classToAvoidIn, idTagMatcher, (livingEntity) -> true, avoidDistance, avoidDistanceNear, nearSpeed, farSpeed, EntitySelector.NO_CREATIVE_OR_SPECTATOR::test);
+	}
+
 	public EAAvoidEntityGoal(PathfinderMob entityIn, Class<T> avoidClass, Predicate<LivingEntity> targetPredicate, float avoidDistance, float avoidDistanceNear, double nearSpeedIn, double farSpeedIn, Predicate<LivingEntity> p_i48859_9_) {
 		this.entity = entityIn;
 		this.classToAvoid = avoidClass;
@@ -40,6 +45,18 @@ public class EAAvoidEntityGoal<T extends LivingEntity> extends Goal {
 		this.farSpeed = farSpeedIn;
 		this.predicateOnAvoidEntity = p_i48859_9_;
 		this.builtTargetSelector = TargetingConditions.forCombat().range(avoidDistance).selector(p_i48859_9_.and(targetPredicate));
+	}
+
+	public EAAvoidEntityGoal(PathfinderMob entityIn, Class<T> avoidClass, IdTagMatcher idTagMatcher, Predicate<LivingEntity> targetPredicate, float avoidDistance, float avoidDistanceNear, double nearSpeedIn, double farSpeedIn, Predicate<LivingEntity> predicate) {
+		this.entity = entityIn;
+		this.classToAvoid = avoidClass;
+		this.avoidTargetSelector = targetPredicate;
+		this.avoidDistance = avoidDistance * avoidDistance;
+		this.avoidDistanceNear = avoidDistanceNear * avoidDistanceNear;
+		this.nearSpeed = nearSpeedIn;
+		this.farSpeed = farSpeedIn;
+		this.predicateOnAvoidEntity = predicate;
+		this.builtTargetSelector = TargetingConditions.forCombat().range(avoidDistance).selector(predicate.and(targetPredicate).and(idTagMatcher::matchesEntity));
 	}
 
 	/**

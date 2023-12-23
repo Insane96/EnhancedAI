@@ -1,5 +1,10 @@
 # Changelog
 
+## Upcoming
+* Added a custom flee config
+  * A json config where you can specify which mobs should run from which
+* Added `must_see` and `priority` to Custom hostile config
+
 ## 2.1.0
 * Added Pillager shoot
   * Pillagers can now shoot from farther away
