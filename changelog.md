@@ -1,6 +1,8 @@
 # Changelog
 
 ## Upcoming
+* Added Silverfish feature
+  * They now call more friends when hurt
 * Added a custom flee config
   * A json config where you can specify which mobs should run from which
 * Added `must_see` and `priority` to Custom hostile config

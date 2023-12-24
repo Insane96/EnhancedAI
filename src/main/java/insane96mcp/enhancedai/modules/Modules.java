@@ -16,6 +16,7 @@ public class Modules {
 	public static Module golem;
 	public static Module illager;
 	public static Module enderman;
+	public static Module bugs;
 	public static Module skeleton;
 	public static Module spider;
 	public static Module villager;
@@ -34,6 +35,7 @@ public class Modules {
 		mobs = Module.Builder.create(Ids.MOBS, "Mobs", ModConfig.Type.COMMON, Config.builder).build();
 		illager = Module.Builder.create(Ids.ILLAGER, "Illagers", ModConfig.Type.COMMON, Config.builder).build();
 		shulker = Module.Builder.create(Ids.SHULKER, "Shulkers", ModConfig.Type.COMMON, Config.builder).build();
+		bugs = Module.Builder.create(Ids.BUGS, "Bugs", ModConfig.Type.COMMON, Config.builder).build();
 		skeleton = Module.Builder.create(Ids.SKELETON, "Skeletons", ModConfig.Type.COMMON, Config.builder).build();
 		slime = Module.Builder.create(Ids.SLIME, "Slimes", ModConfig.Type.COMMON, Config.builder).build();
 		spider = Module.Builder.create(Ids.SPIDER, "Spiders", ModConfig.Type.COMMON, Config.builder).build();
@@ -52,6 +54,7 @@ public class Modules {
 		public static final String ILLAGER = EnhancedAI.RESOURCE_PREFIX + "illager";
 		public static final String MOBS = EnhancedAI.RESOURCE_PREFIX + "mobs";
 		public static final String PETS = EnhancedAI.RESOURCE_PREFIX + "pets";
+		public static final String BUGS = EnhancedAI.RESOURCE_PREFIX + "bugs";
 		public static final String SKELETON = EnhancedAI.RESOURCE_PREFIX + "skeleton";
 		public static final String SPIDER = EnhancedAI.RESOURCE_PREFIX + "spider";
 		public static final String SHULKER = EnhancedAI.RESOURCE_PREFIX + "shulker";

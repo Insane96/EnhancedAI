@@ -13,10 +13,10 @@ import net.minecraft.world.level.block.Block;
 
 @Label(name = "Ravager", description = "Changes to Ravagers")
 @LoadFeature(module = Modules.Ids.ILLAGER, canBeDisabled = false)
-public class Ravager extends Feature {
+public class RavagerFeature extends Feature {
     public static final TagKey<Block> BREAKABLE_BY_RAVAGER = TagKey.create(Registries.BLOCK, new ResourceLocation(EnhancedAI.MOD_ID, "breakable_by_ravager"));
 
-    public Ravager(Module module, boolean enabledByDefault, boolean canBeDisabled) {
+    public RavagerFeature(Module module, boolean enabledByDefault, boolean canBeDisabled) {
         super(module, enabledByDefault, canBeDisabled);
     }
 }
