@@ -5,6 +5,8 @@
   * They now call more friends when hurt
 * Added a custom flee config
   * A json config where you can specify which mobs should run from which
+* Added Ravager Feature
+  * Makes the ravager break any block in the `enhancedai:breakable_by_ravager` block tag
 * Added `must_see` and `priority` to Custom hostile config
 * Added a new sound for Angry Creepers 😏
 

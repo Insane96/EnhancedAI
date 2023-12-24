@@ -3,13 +3,14 @@ package insane96mcp.enhancedai.mixin;
 import insane96mcp.enhancedai.modules.illager.RavagerFeature;
 import net.minecraft.world.entity.monster.Ravager;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LeavesBlock;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Constant;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
 @Mixin(Ravager.class)
 public class RavagerMixin {
-	@Redirect(method = "aiStep()V", at = @At(value = "CONSTANT", args = "classValue=net/minecraft/world/level/block/Block/LeavesBlock", ordinal = 0))
+	@ModifyConstant(method = "aiStep()V", constant = @Constant(classValue = LeavesBlock.class))
 	public boolean aiStep_onInstanceOf(Object targetObj, Class<?> classValue) {
 		return ((Block)targetObj).builtInRegistryHolder().is(RavagerFeature.BREAKABLE_BY_RAVAGER);
 	}
