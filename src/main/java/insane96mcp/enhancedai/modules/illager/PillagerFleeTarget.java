@@ -18,6 +18,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Pillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 @Label(name = "Pillager Flee", description = "Pillagers try to stay away from the target. Use the enhancedai:pillager_flee entity type tag to add/remove skeletons that are affected by this feature")
@@ -47,7 +48,7 @@ public class PillagerFleeTarget extends Feature {
         super(module, enabledByDefault, canBeDisabled);
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onSpawn(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
                 || !(event.getEntity() instanceof Pillager pillager)

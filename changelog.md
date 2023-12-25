@@ -9,6 +9,7 @@
   * Makes the ravager break any block in the `enhancedai:breakable_by_ravager` block tag
 * Added `must_see` and `priority` to Custom hostile config
 * Added a new sound for Angry Creepers 😏
+* Fixed pillagers features having wrong priority making it not possible to use NBT to change the data
 
 ## 2.1.0
 * Added Pillager shoot
