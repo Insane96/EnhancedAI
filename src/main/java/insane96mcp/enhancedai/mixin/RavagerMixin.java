@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 public class RavagerMixin {
 	@ModifyConstant(method = "aiStep()V", constant = @Constant(classValue = LeavesBlock.class))
 	public boolean aiStep_onInstanceOf(Object targetObj, Class<?> classValue) {
-		return ((Block)targetObj).builtInRegistryHolder().is(RavagerFeature.BREAKABLE_BY_RAVAGER);
+		return targetObj != null && ((Block)targetObj).builtInRegistryHolder().is(RavagerFeature.BREAKABLE_BY_RAVAGER);
 	}
 
 	/*@ModifyConstant(method = "aiStep()V", constant = @Constant(classValue = LeavesBlock.class))
