@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 2.2.0
 * Added Silverfish feature
   * They now call more friends when hurt
 * Added a custom flee config
