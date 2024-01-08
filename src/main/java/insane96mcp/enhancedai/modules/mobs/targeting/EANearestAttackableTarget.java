@@ -16,8 +16,6 @@ public class EANearestAttackableTarget<T extends LivingEntity> extends ILNearest
 
     public TargetingConditions targetEntitySelectorXRay;
 
-    public IdTagMatcher targetIdTag;
-
     public EANearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, boolean mustSee, boolean mustReach, TargetingConditions targetingConditions) {
         super(goalOwnerIn, targetClassIn, mustSee, mustReach, null);
         this.targetEntitySelector = targetingConditions;

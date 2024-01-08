@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Fixed mobs having a lower priority Hurt By Target Goal not switching target
+
 ## 2.2.0
 * Added Silverfish feature
   * They now call more friends when hurt

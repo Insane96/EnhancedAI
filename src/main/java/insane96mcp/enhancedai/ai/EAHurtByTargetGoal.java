@@ -1,7 +1,6 @@
 package insane96mcp.enhancedai.ai;
 
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
@@ -9,7 +8,6 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.phys.AABB;
 
 import javax.annotation.Nullable;
-import java.util.EnumSet;
 import java.util.List;
 
 public class EAHurtByTargetGoal extends TargetGoal {
@@ -23,7 +21,7 @@ public class EAHurtByTargetGoal extends TargetGoal {
 	public EAHurtByTargetGoal(PathfinderMob pMob, Class<?>... pToIgnoreDamage) {
 		super(pMob, true);
 		this.toIgnoreDamage = pToIgnoreDamage;
-		this.setFlags(EnumSet.of(Goal.Flag.TARGET));
+		//this.setFlags(EnumSet.of(Goal.Flag.TARGET));
 	}
 
 	public boolean canUse() {
