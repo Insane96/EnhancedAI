@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 2.2.1
 * Creepers no longer alert their vehicle
 * Pigs are no longer eligible to be ridden
   * Can't figure out why they stop moving
