@@ -1,10 +1,13 @@
 # Changelog
 
+* Change all blacklists to whitelists
+
 ## 2.2.1
 * Creepers no longer alert their vehicle
 * Pigs are no longer eligible to be ridden
   * Can't figure out why they stop moving
 * Fixed mobs having a lower priority Hurt By Target Goal not switching target
+* Fixed Custom Flee and Custom Hostile ignoring chance
 
 ## 2.2.0
 * Added Silverfish feature

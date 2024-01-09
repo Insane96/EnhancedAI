@@ -196,7 +196,7 @@ public class Targeting extends JsonFeature {
 		if (customHostile.isEmpty())
 			return;
 		for (CustomHostileConfig chc : customHostile) {
-			if (!chc.attacker.matchesEntity(mob))
+			if (!chc.attacker.matchesEntity(mob) || mob.getRandom().nextFloat() > chc.chance)
 				continue;
 
 			EANearestAttackableTarget<LivingEntity> targetGoal = new EANearestAttackableTarget<>(mob, LivingEntity.class, chc.victim, chc.mustSee, false, TargetingConditions.DEFAULT);

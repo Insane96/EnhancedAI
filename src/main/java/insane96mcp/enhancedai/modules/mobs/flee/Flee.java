@@ -41,7 +41,7 @@ public class Flee extends JsonFeature {
 			return;
 
 		for (CustomFleeConfig cfc : customFlee) {
-			if (!cfc.entity.matchesEntity(mob))
+			if (!cfc.entity.matchesEntity(mob) || mob.getRandom().nextFloat() > cfc.chance)
 				continue;
 
 			EAAvoidEntityGoal<LivingEntity> avoidEntityGoal = new EAAvoidEntityGoal<>(mob, LivingEntity.class, cfc.fleeFrom, (float) cfc.avoidDistance, (float) cfc.avoidDistanceNear, cfc.speedMultiplier, cfc.speedMultiplierNear);
