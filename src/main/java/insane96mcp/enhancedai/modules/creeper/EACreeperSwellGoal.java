@@ -96,7 +96,8 @@ public class EACreeperSwellGoal extends Goal {
 	private void alertNearby() {
 		List<PathfinderMob> creaturesNearby = this.swellingCreeper.level().getEntitiesOfClass(PathfinderMob.class, this.swellingCreeper.getBoundingBox().inflate(explosionSize * 2));
 		for (PathfinderMob creatureEntity : creaturesNearby) {
-			if (creatureEntity == this.swellingCreeper)
+			if (creatureEntity == this.swellingCreeper
+					|| creatureEntity == this.swellingCreeper.getVehicle())
 				continue;
 			creatureEntity.goalSelector.availableGoals.forEach(prioritizedGoal -> {
 				if (prioritizedGoal.getGoal() instanceof AvoidExplosionGoal avoidExplosionGoal) {

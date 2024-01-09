@@ -31,7 +31,7 @@ public class VillagerAttacking extends Feature {
     @Label(name = "Villagers Fight back Enemies", description = "If false villagers will not attack back monsters")
     public static Boolean villagersFightBackEnemies = false;
     @Config
-    @Label(name = "Reputation for Fight back", description = "Villagers will only attack players that have below this reputation (like Iron Golems by default). https://minecraft.fandom.com/wiki/Villager#Gossiping")
+    @Label(name = "Reputation for Fight back", description = "Villagers will only attack players that have below this reputation (like Iron Golems by default). https://minecraft.wiki/w/Villager#Gossiping")
     public static Integer minReputationFightBack = -100;
     @Config(min = 0d, max = 4d)
     @Label(name = "Movement Speed Multiplier", description = "Movement speed multiplier when attacking")

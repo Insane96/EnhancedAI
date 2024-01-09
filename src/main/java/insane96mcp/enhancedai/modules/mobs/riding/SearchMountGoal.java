@@ -32,6 +32,11 @@ public class SearchMountGoal extends Goal {
     }
 
     @Override
+    public void start() {
+        this.mob.getNavigation().stop();
+    }
+
+    @Override
     public void stop() {
         this.mount = null;
         this.unreachableTime = 0;
@@ -43,6 +48,7 @@ public class SearchMountGoal extends Goal {
 
     @Override
     public void tick() {
+        this.mob.getLookControl().setLookAt(this.mount);
         if (this.mob.getNavigation().isDone()) {
             this.mob.getNavigation().moveTo(this.mount, 1d);
         }

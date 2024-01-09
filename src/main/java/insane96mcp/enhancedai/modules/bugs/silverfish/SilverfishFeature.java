@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.mobs.bugs.silverfish;
+package insane96mcp.enhancedai.modules.bugs.silverfish;
 
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.Feature;

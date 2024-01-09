@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.mobs.bugs.silverfish;
+package insane96mcp.enhancedai.modules.bugs.silverfish;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;

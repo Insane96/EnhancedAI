@@ -1,6 +1,9 @@
 # Changelog
 
 ## Upcoming
+* Creepers no longer alert their vehicle
+* Pigs are no longer eligible to be ridden
+  * Can't figure out why they stop moving
 * Fixed mobs having a lower priority Hurt By Target Goal not switching target
 
 ## 2.2.0
