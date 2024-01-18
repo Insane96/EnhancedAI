@@ -57,7 +57,7 @@ public class EAPillagerAttackGoal extends Goal {
     }
 
     public boolean canContinueToUse() {
-        return this.isValidTarget() && (this.canUse() || !this.mob.getNavigation().isDone()) && this.isHoldingCrossbow();
+        return this.canUse() || !this.mob.getNavigation().isDone();
     }
 
     private boolean isValidTarget() {
@@ -67,7 +67,7 @@ public class EAPillagerAttackGoal extends Goal {
     public void stop() {
         super.stop();
         this.mob.setAggressive(false);
-        this.mob.setTarget(null);
+        //this.mob.setTarget(null);
         this.seeTime = 0;
         if (this.mob.isUsingItem()) {
             this.mob.stopUsingItem();
