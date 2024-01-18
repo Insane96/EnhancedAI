@@ -49,6 +49,7 @@ public class FishingTargetGoal extends Goal {
 
 	public void start() {
 		this.target = this.fisher.getTarget();
+		this.fisher.setAggressive(true);
 		this.fisher.level().playSound(null, this.fisher.getX(), this.fisher.getY(), this.fisher.getZ(), SoundEvents.FISHING_BOBBER_THROW, SoundSource.HOSTILE, 1F, 0.4F / (this.fisher.getRandom().nextFloat() * 0.4F + 0.8F));
 		this.fishingHook = new FishingHook(this.fisher, this.fisher.level());
 		this.fishingHook.setPos(this.fisher.getEyePosition(1f).x, this.fisher.getEyePosition(1f).y + 0.1d, this.fisher.getEyePosition(1f).z);
@@ -70,8 +71,8 @@ public class FishingTargetGoal extends Goal {
 		this.fisher.getLookControl().setLookAt(this.target);
 		boolean isOnGround = this.fishingHook.onGround();
 		if (isOnGround || this.fishingHook.getHookedIn() != null || --this.fishingHookLifetime <= 0) {
-			if (isOnGround)
-				--this.reel;
+			//if (isOnGround)
+			--this.reel;
 			if (--this.reel <= 0) {
 				this.fishingHook.level().playSound(null, this.fisher.getX(), this.fisher.getY(), this.fisher.getZ(), SoundEvents.FISHING_BOBBER_RETRIEVE, SoundSource.HOSTILE, 1.0F, 0.4F / (this.fisher.getRandom().nextFloat() * 0.4F + 0.8F));
 				this.fishingHook.retrieve(this.fisher.getRandom().nextDouble() < FisherMobs.hookInventoryChance);
@@ -83,5 +84,6 @@ public class FishingTargetGoal extends Goal {
 		this.target = null;
 		this.fishingHook = null;
 		this.cooldown = reducedTickDelay(60);
+		this.fisher.setAggressive(false);
 	}
 }

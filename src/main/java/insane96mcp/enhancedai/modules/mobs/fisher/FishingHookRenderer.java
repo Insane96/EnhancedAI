@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
@@ -32,7 +32,7 @@ public class FishingHookRenderer extends EntityRenderer<FishingHook> {
 
     public void render(FishingHook fishingHook, float p_114706_, float p_114707_, PoseStack poseStack, MultiBufferSource multiBufferSource, int p_114710_) {
         Entity entity = fishingHook.getOwner();
-        if (entity instanceof Zombie zombie) {
+        if (entity instanceof Mob mob) {
             poseStack.pushPose();
             poseStack.pushPose();
             poseStack.scale(0.5F, 0.5F, 0.5F);
@@ -47,13 +47,13 @@ public class FishingHookRenderer extends EntityRenderer<FishingHook> {
             vertex(vertexconsumer, matrix4f, matrix3f, p_114710_, 1.0F, 1, 1, 0);
             vertex(vertexconsumer, matrix4f, matrix3f, p_114710_, 0.0F, 1, 0, 0);
             poseStack.popPose();
-            int i = zombie.getMainArm() == HumanoidArm.RIGHT ? 1 : -1;
-            ItemStack itemstack = zombie.getMainHandItem();
+            int i = mob.getMainArm() == HumanoidArm.RIGHT ? 1 : -1;
+            ItemStack itemstack = mob.getMainHandItem();
             if (!itemstack.is(Items.FISHING_ROD)) {
                 i = -i;
             }
 
-            float f2 = Mth.lerp(p_114707_, zombie.yBodyRotO, zombie.yBodyRot) * ((float)Math.PI / 180F);
+            float f2 = Mth.lerp(p_114707_, mob.yBodyRotO, mob.yBodyRot) * ((float)Math.PI / 180F);
             double d0 = Mth.sin(f2);
             double d1 = Mth.cos(f2);
             double d2 = (double)i * 0.35D;

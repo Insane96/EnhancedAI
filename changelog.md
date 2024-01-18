@@ -2,6 +2,9 @@
 
 * Change all blacklists to whitelists
 
+## Upcoming
+* Fixed fishing hook not rendering for non-zombie entities
+
 ## 2.2.1
 * Creepers no longer alert their vehicle
 * Pigs are no longer eligible to be ridden
