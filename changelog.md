@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.6.11
+* Fixed Digger Zombies crashing the game
+
 ## 1.6.10
 * Digger zombies will no longer dig if the `LivingDestroyBlockEvent` is canceled
 

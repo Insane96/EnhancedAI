@@ -67,6 +67,8 @@ public class DiggingGoal extends Goal {
 	}
 
 	public boolean canContinueToUse() {
+		if (this.targetBlocks.isEmpty())
+			return false;
 		if (this.properToolOnly && this.blockState != null && !this.canHarvestBlock())
 			return false;
 
@@ -76,8 +78,7 @@ public class DiggingGoal extends Goal {
 		//TODO move to initBlockBeak
 		Path path = this.digger.getNavigation().createPath(this.target, 1);
 
-		return !this.targetBlocks.isEmpty()
-				&& this.targetBlocks.get(0).distSqr(this.digger.blockPosition()) < this.reachDistance * this.reachDistance
+		return this.targetBlocks.get(0).distSqr(this.digger.blockPosition()) < this.reachDistance * this.reachDistance
 				&& this.digger.getNavigation().isDone()
 				&& !this.digger.level.getBlockState(this.targetBlocks.get(0)).isAir()
 				&& path != null && path.getDistToTarget() > 1.5d;
