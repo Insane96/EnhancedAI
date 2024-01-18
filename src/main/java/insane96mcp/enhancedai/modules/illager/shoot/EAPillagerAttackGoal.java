@@ -105,7 +105,7 @@ public class EAPillagerAttackGoal extends Goal {
                 this.updatePathDelay = PATHFINDING_DELAY_RANGE.sample(this.mob.getRandom());
             }
         }
-        else {
+        else if (this.crossbowState == CrossbowState.CHARGED){
             this.updatePathDelay = 0;
             this.mob.getNavigation().stop();
         }

@@ -33,10 +33,10 @@ public class PillagerFleeTarget extends Feature {
     public static Double attackWhenAvoidingChance = 0.5d;
     @Config(min = 0d, max = 32d)
     @Label(name = "Flee Distance Near", description = "Distance from a player that counts as near and will make the skeleton run away faster.")
-    public static Double fleeDistanceNear = 8d;
+    public static Double fleeDistanceNear = 7d;
     @Config(min = 0d, max = 32d)
     @Label(name = "Flee Distance Far", description = "Distance from a player that will make the skeleton run away.")
-    public static Double fleeDistanceFar = 16d;
+    public static Double fleeDistanceFar = 12d;
     @Config(min = 0d, max = 4d)
     @Label(name = "Flee speed Multiplier Near", description = "Speed multiplier when the skeleton avoids the player and it's within 'Flee Distance Near' blocks from him.")
     public static Double fleeSpeedNear = 1.1d;

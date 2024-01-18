@@ -3,6 +3,7 @@
 * Change all blacklists to whitelists
 
 ## Upcoming
+* Fixed pillagers Attack When Avoiding completely breaking Flee
 * Fixed fishing hook not rendering for non-zombie entities
 
 ## 2.2.1
