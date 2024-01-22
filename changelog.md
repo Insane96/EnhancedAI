@@ -6,6 +6,7 @@
 * Fixed pillagers Attack When Avoiding completely breaking Flee
 * Fixed fishing hook not rendering for non-zombie entities
 * The pillager attack goal will no longer reset the target
+* Phantoms are no longer affected by targeting changes
 
 ## 2.2.1
 * Creepers no longer alert their vehicle
