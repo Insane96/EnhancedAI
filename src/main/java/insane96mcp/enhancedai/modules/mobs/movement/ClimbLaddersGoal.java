@@ -1,13 +1,15 @@
 package insane96mcp.enhancedai.modules.mobs.movement;
 
-import net.minecraft.sounds.SoundEvents;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
+import java.util.Optional;
 
 public class ClimbLaddersGoal extends Goal {
 	protected LivingEntity target;
@@ -42,7 +44,12 @@ public class ClimbLaddersGoal extends Goal {
 		this.goalOwner.lookAt(this.target, 30, 30);
 		this.goalOwner.setDeltaMovement(this.goalOwner.getDeltaMovement().multiply(0.1, 1, 0.1));
 		this.goalOwner.setDeltaMovement(this.goalOwner.getDeltaMovement().add(0, yMotion, 0));
-		if (this.goalOwner.tickCount % 5 == 0)
-			this.goalOwner.playSound(SoundEvents.LADDER_STEP);
+		if (this.goalOwner.tickCount % 5 == 0) {
+			BlockPos blockpos = this.goalOwner.blockPosition();
+			BlockState blockstate = this.goalOwner.getFeetBlockState();
+			Optional<BlockPos> ladderPos = net.minecraftforge.common.ForgeHooks.isLivingOnLadder(blockstate, this.goalOwner.level(), blockpos, this.goalOwner);
+			if (ladderPos.isPresent())
+				this.goalOwner.playSound(blockstate.getBlock().getSoundType(blockstate, this.goalOwner.level(), blockpos, this.goalOwner).getStepSound());
+		}
 	}
 }
