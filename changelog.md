@@ -2,12 +2,12 @@
 
 * Change all blacklists to whitelists
 
-## Upcoming
+## 2.2.2
 * Fixed pillagers Attack When Avoiding completely breaking Flee
 * Fixed fishing hook not rendering for non-zombie entities
 * The pillager attack goal will no longer reset the target
 * Phantoms are no longer affected by targeting changes
-* Fixed mobs climbing always playing ladder sound
+* Fixed climbing mobs always playing ladder sound
 
 ## 2.2.1
 * Creepers no longer alert their vehicle
