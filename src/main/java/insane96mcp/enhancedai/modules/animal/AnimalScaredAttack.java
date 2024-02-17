@@ -16,6 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -83,9 +84,9 @@ public class AnimalScaredAttack extends Feature {
         boolean canAttackBack = NBTUtils.getBooleanOrPutDefault(persistentData, CAN_ATTACK_BACK, animal.getType().is(CAN_FIGHT_BACK) && animal.getRandom().nextDouble() < fightBackChance);
         boolean playerScared = NBTUtils.getBooleanOrPutDefault(persistentData, PLAYER_SCARED, !canAttackBack && animal.getType().is(CAN_BE_SCARED_BY_PLAYERS) && animal.getRandom().nextDouble() < playersScaredChance);
 
-        if (canAttackBack && !animal.isBaby()) {
+        if (canAttackBack) {
             animal.targetSelector.addGoal(1, (new HurtByTargetGoal(animal)).setAlertOthers());
-            animal.goalSelector.addGoal(1, new MeleeAttackGoal(animal, movementSpeedMultiplier, true));
+            animal.goalSelector.addGoal(1, new AnimalMeleeAttackGoal(animal, movementSpeedMultiplier, true));
             animal.goalSelector.availableGoals.removeIf(wrappedGoal -> wrappedGoal.getGoal() instanceof PanicGoal);
             if (knockback > 0d) {
                 double baseSize = 1.053d; // Sheep square meters size
@@ -100,6 +101,18 @@ public class AnimalScaredAttack extends Feature {
         else if (playerScared) {
             EAAvoidEntityGoal<Player> avoidEntityGoal = new EAAvoidEntityGoal<>(animal, Player.class, (float) 16, (float) 8, 1.25, 1.1);
             animal.goalSelector.addGoal(1, avoidEntityGoal);
+        }
+    }
+
+    public static class AnimalMeleeAttackGoal extends MeleeAttackGoal{
+
+        public AnimalMeleeAttackGoal(PathfinderMob pMob, double pSpeedModifier, boolean pFollowingTargetEvenIfNotSeen) {
+            super(pMob, pSpeedModifier, pFollowingTargetEvenIfNotSeen);
+        }
+
+        @Override
+        public boolean canUse() {
+            return super.canUse() && !this.mob.isBaby();
         }
     }
 }

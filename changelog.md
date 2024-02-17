@@ -1,6 +1,8 @@
 # Changelog
 
 * Change all blacklists to whitelists
+## Upcoming
+* Baby animals now also get attack AI, but don't use it until grown up
 
 ## 2.2.2
 * Fixed pillagers Attack When Avoiding completely breaking Flee
