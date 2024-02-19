@@ -19,7 +19,7 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@Label(name = "Anti-Cheese", description = "Prevent players from abusing some game mechanics to stop mobs. Mobs in the entity type tag enhancedai:ignore_anti_cheese will not be affected by this feature.")
+@Label(name = "Anti-Cheese", description = "Prevent players from abusing some game mechanics to stop mobs. Only mobs in the entity type tag enhancedai:can_use_anti_cheese will be affected by this feature.")
 @LoadFeature(module = Modules.Ids.MOBS)
 public class AntiCheese extends Feature {
     public static final TagKey<EntityType<?>> CAN_USE_ANTI_CHEESE = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "can_use_anti_cheese"));

@@ -18,10 +18,10 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.List;
 
-@Label(name = "Avoid Explosions", description = "Mobs will run away from exploding creepers / TNT. Use the entity type tag enhancedai:no_run_from_explosion to blacklist them")
+@Label(name = "Avoid Explosions", description = "Mobs will run away from exploding creepers / TNT. Use the entity type tag enhancedai:no_run_from_explosion to whitelist them")
 @LoadFeature(module = Modules.Ids.MOBS)
 public class AvoidExplosions extends Feature {
-	public static final TagKey<EntityType<?>> NO_RUN_FROM_EXPLOSION = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "no_run_from_explosion"));
+	public static final TagKey<EntityType<?>> CAN_RUN_FROM_EXPLOSION = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "can_run_from_explosion"));
 	@Config(min = 0d, max = 10d)
 	@Label(name = "Flee speed Multiplier Near", description = "Speed multiplier when the mob runs from explosions and it's within 7 blocks from him.")
 	public static Double runSpeedNear = 1.25d;
@@ -39,7 +39,7 @@ public class AvoidExplosions extends Feature {
 	@SubscribeEvent
 	public void onMobSpawn(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
-				|| event.getEntity().getType().is(NO_RUN_FROM_EXPLOSION))
+				|| !event.getEntity().getType().is(CAN_RUN_FROM_EXPLOSION))
 			return;
 
 		addAvoidAI(event);
