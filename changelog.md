@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 2.3.0
 * All features are now opt-in
   * Anti-Cheese `ignore_anti_cheese` tag is now `can_use_anti_cheese`
   * Avoid Explosions `no_run_from_explosion` tag is now `can_run_from_explosion`
