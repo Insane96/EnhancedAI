@@ -42,11 +42,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Label(name = "Targeting", description = "Change how mobs target players. Use the enhancedai:use_target_changes and enhancedai:no_follow_range_changes entity type tag to blacklist mobs. Add mobs to enhancedai:allow_target_switch entity type tag to allow these mobs to be able to switch targets when hit (e.g. Creepers can't normally do that).")
+@Label(name = "Targeting", description = "Change how mobs target players. Use the enhancedai:use_target_changes and enhancedai:use_follow_range_changes entity type tag to whitelist mobs. Add mobs to enhancedai:allow_target_switch entity type tag to allow these mobs to be able to switch targets when hit (e.g. Creepers can't normally do that).")
 @LoadFeature(module = Modules.Ids.MOBS)
 public class Targeting extends JsonFeature {
-	public static final TagKey<EntityType<?>> NO_TARGET_CHANGES = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "no_target_changes"));
-	public static final TagKey<EntityType<?>> NO_FOLLOW_RANGE_CHANGES = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "no_follow_range_changes"));
+	public static final TagKey<EntityType<?>> USE_TARGET_CHANGES = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "use_target_changes"));
+	public static final TagKey<EntityType<?>> USE_FOLLOW_RANGE_CHANGES = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "use_follow_range_changes"));
 	public static final TagKey<EntityType<?>> ALLOW_TARGET_SWITCH = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "allow_target_switch"));
 
 	public static final String IS_NEUTRAL = EnhancedAI.RESOURCE_PREFIX + "is_neutral";
@@ -120,7 +120,7 @@ public class Targeting extends JsonFeature {
 	private void processHurtByGoal(Mob mob) {
 		if (!betterHurtByTarget
 				|| !(mob instanceof PathfinderMob pathfinderMob)
-				|| pathfinderMob.getType().is(NO_TARGET_CHANGES))
+				|| !pathfinderMob.getType().is(USE_TARGET_CHANGES))
 			return;
 
 		HurtByTargetGoal toRemove = null;
@@ -155,7 +155,7 @@ public class Targeting extends JsonFeature {
 	}
 
 	private void processTargetGoal(Mob mob) {
-		if (mob.getType().is(NO_TARGET_CHANGES))
+		if (!mob.getType().is(USE_TARGET_CHANGES))
 			return;
 		List<WrappedGoal> goalsToAdd = new ArrayList<>();
 
@@ -209,7 +209,7 @@ public class Targeting extends JsonFeature {
 	}
 
 	private void processFollowRanges(Mob mob) {
-		if (mob.getType().is(NO_FOLLOW_RANGE_CHANGES))
+		if (!mob.getType().is(USE_FOLLOW_RANGE_CHANGES))
 			return;
 		CompoundTag persistentData = mob.getPersistentData();
 		if (!persistentData.getBoolean(FOLLOW_RANGES_PROCESSED)) {

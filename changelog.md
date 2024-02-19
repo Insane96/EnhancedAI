@@ -4,6 +4,7 @@
 * All features are now opt-in
   * Anti-Cheese `ignore_anti_cheese` tag is now `can_use_anti_cheese`
   * Avoid Explosions `no_run_from_explosion` tag is now `can_run_from_explosion`
+  * Targeting `no_target_changes` and `no_follow_range_changes` tags are now `use_target_changes` and `use_follow_range_changes`
 * `allow_target_change` has been renamed to `allow_target_switch`
 * Baby animals now also get attack AI, but don't use it until grown up
 * Snowman attack speed can now be configured
