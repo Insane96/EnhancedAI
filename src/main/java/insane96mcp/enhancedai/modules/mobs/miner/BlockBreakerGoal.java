@@ -15,6 +15,7 @@ import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -243,7 +244,7 @@ public class BlockBreakerGoal extends Goal {
 	}
 
 	private boolean canBreakBlock() {
-		if (!ForgeEventFactory.onEntityDestroyBlock(this.miner, this.targetBlocks.get(0), this.blockState))
+		if (!ForgeEventFactory.onEntityDestroyBlock(this.miner, this.targetBlocks.get(0), this.blockState) || !this.miner.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING))
 			return false;
 		if (!this.blockState.requiresCorrectToolForDrops() || !this.properToolRequired)
 			return true;
