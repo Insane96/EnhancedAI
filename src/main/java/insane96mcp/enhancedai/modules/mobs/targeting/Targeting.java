@@ -42,18 +42,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Label(name = "Targeting", description = "Change how mobs target players. Use the enhancedai:no_target_changes and enhancedai:no_follow_range_changes entity type tag to blacklist mobs. Add mobs to enhancedai:allow_target_change entity type tag to allow these mobs to be able to switch targets when hit (e.g. Creepers can't normally do that).")
+@Label(name = "Targeting", description = "Change how mobs target players. Use the enhancedai:use_target_changes and enhancedai:no_follow_range_changes entity type tag to blacklist mobs. Add mobs to enhancedai:allow_target_switch entity type tag to allow these mobs to be able to switch targets when hit (e.g. Creepers can't normally do that).")
 @LoadFeature(module = Modules.Ids.MOBS)
 public class Targeting extends JsonFeature {
 	public static final TagKey<EntityType<?>> NO_TARGET_CHANGES = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "no_target_changes"));
 	public static final TagKey<EntityType<?>> NO_FOLLOW_RANGE_CHANGES = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "no_follow_range_changes"));
-	public static final TagKey<EntityType<?>> ALLOW_TARGET_CHANGE = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "allow_target_change"));
+	public static final TagKey<EntityType<?>> ALLOW_TARGET_SWITCH = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "allow_target_switch"));
 
 	public static final String IS_NEUTRAL = EnhancedAI.RESOURCE_PREFIX + "is_neutral";
     public static final String FOLLOW_RANGES_PROCESSED = EnhancedAI.RESOURCE_PREFIX + "follow_ranges_processed";
 
 	public static final List<CustomHostileConfig> CUSTOM_HOSTILE_DEFAULT_LIST = List.of(
-			new CustomHostileConfig(2, IdTagMatcher.newTag("enhancedai:config/can_attack_villagers"), IdTagMatcher.newId("minecraft:villager"), 0.5f)
+			new CustomHostileConfig(2, IdTagMatcher.newTag("enhancedai:config/can_attack_villagers"), IdTagMatcher.newId("minecraft:villager"), 0.5f),
+			new CustomHostileConfig(2, IdTagMatcher.newTag("enhancedai:config/can_attack_iron_golem"), IdTagMatcher.newId("minecraft:iron_golem"), 0.5f)
 	);
 
 	public static final List<CustomHostileConfig> customHostile = new ArrayList<>();
@@ -143,7 +144,7 @@ public class Targeting extends JsonFeature {
 		if (toRemove != null) {
 			mob.targetSelector.removeGoal(toRemove);
 		}
-		else if (mob.getType().is(ALLOW_TARGET_CHANGE)) {
+		else if (mob.getType().is(ALLOW_TARGET_SWITCH)) {
 			List<Class<?>> toIgnoreDamage = new ArrayList<>();
 			//Prevent infighting
 			if (preventInfighting)

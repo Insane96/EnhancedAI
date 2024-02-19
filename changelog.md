@@ -1,9 +1,12 @@
 # Changelog
 
-* Change all blacklists to whitelists
 ## Upcoming
+* All features are now opt-in
+  * Anti-Cheese `ignore_anti_cheese` tag is now `can_use_anti_cheese`
+  * Avoid Explosions `no_run_from_explosion` tag is now `can_run_from_explosion`
+* `allow_target_change` has been renamed to `allow_target_switch`
 * Baby animals now also get attack AI, but don't use it until grown up
-* shootingCooldown
+* Snowman attack speed can now be configured
 * Miner mobs no longer mine if mobGriefing is set to false
 
 ## 2.2.2
