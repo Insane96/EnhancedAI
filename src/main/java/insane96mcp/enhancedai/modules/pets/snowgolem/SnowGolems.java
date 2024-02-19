@@ -43,7 +43,9 @@ public class SnowGolems extends Feature {
     @Config
     @Label(name = "Healing Snowballs", description = "If true, snowballs hitting snow golems will heal them.")
     public static Boolean healingSnowballs = true;
-    //TODO Shooting cooldown
+    @Config(min = 0)
+    @Label(name = "Shooting Cooldown", description = "Ticks between snowballs")
+    public static Integer shootingCooldown = 10;
 
     public SnowGolems(Module module, boolean enabledByDefault, boolean canBeDisabled) {
         super(module, enabledByDefault, canBeDisabled);
@@ -92,10 +94,10 @@ public class SnowGolems extends Feature {
             return;
 
         CompoundTag persistentData = snowGolem.getPersistentData();
-        int shootingCooldown = NBTUtils.getIntOrPutDefault(persistentData, SHOOTING_COOLDOWN, 10);
+        int shootingCooldown1 = NBTUtils.getIntOrPutDefault(persistentData, SHOOTING_COOLDOWN, shootingCooldown);
 
         snowGolem.goalSelector.availableGoals.removeIf(wrappedGoal -> wrappedGoal.getGoal() instanceof RangedAttackGoal);
-        snowGolem.goalSelector.addGoal(1, new EARangedSnowGolemAttackGoal(snowGolem, 1f, 24f).setAttackCooldown(shootingCooldown));
+        snowGolem.goalSelector.addGoal(1, new EARangedSnowGolemAttackGoal(snowGolem, 1f, 24f).setAttackCooldown(shootingCooldown1));
 
         if (persistentData.contains(ON_SPAWN_PROCESSED))
             return;

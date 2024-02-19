@@ -3,6 +3,7 @@
 * Change all blacklists to whitelists
 ## Upcoming
 * Baby animals now also get attack AI, but don't use it until grown up
+* shootingCooldown
 * Miner mobs no longer mine if mobGriefing is set to false
 
 ## 2.2.2
