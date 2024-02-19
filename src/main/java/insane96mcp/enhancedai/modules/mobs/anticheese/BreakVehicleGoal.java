@@ -58,6 +58,7 @@ public class BreakVehicleGoal extends Goal {
 		}
 		else {
 			this.veichle.playSound(SoundEvents.PLAYER_ATTACK_WEAK);
+			this.mob.playAmbientSound();
 			this.mob.swing(InteractionHand.MAIN_HAND);
 			this.mob.doHurtTarget(this.veichle);
 		}

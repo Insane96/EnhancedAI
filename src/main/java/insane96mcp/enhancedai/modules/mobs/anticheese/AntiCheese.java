@@ -22,7 +22,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 @Label(name = "Anti-Cheese", description = "Prevent players from abusing some game mechanics to stop mobs. Mobs in the entity type tag enhancedai:ignore_anti_cheese will not be affected by this feature.")
 @LoadFeature(module = Modules.Ids.MOBS)
 public class AntiCheese extends Feature {
-    public static final TagKey<EntityType<?>> IGNORE_ANTI_CHEESE = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "ignore_anti_cheese"));
+    public static final TagKey<EntityType<?>> CAN_USE_ANTI_CHEESE = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "can_use_anti_cheese"));
 
     @Config
     @Label(name = "Prevent Boating & Minecarting", description = "If true, 'Enemies' will no longer be able to be Boated and Minecarted.")
@@ -41,7 +41,7 @@ public class AntiCheese extends Feature {
         if (!this.isEnabled()
                 || !(event.getEntityMounting() instanceof Enemy)
                 || !(event.getEntityBeingMounted() instanceof Boat) && !(event.getEntityBeingMounted() instanceof Minecart)
-                || event.getEntityMounting().getType().is(IGNORE_ANTI_CHEESE))
+                || !event.getEntityMounting().getType().is(CAN_USE_ANTI_CHEESE))
             return;
 
         if (preventBoating)
@@ -52,7 +52,7 @@ public class AntiCheese extends Feature {
     public void onJoinLevel(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
                 || !(event.getEntity() instanceof Mob mob)
-                || mob.getType().is(IGNORE_ANTI_CHEESE))
+                || !mob.getType().is(CAN_USE_ANTI_CHEESE))
             return;
 
         if (antiBoatAndMinecart)

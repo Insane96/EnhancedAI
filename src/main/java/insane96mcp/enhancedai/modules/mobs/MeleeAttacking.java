@@ -16,7 +16,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 
-@Label(name = "Melee Attacking", description = "Changes attack range to use the 1.20.2 mechanic")
+@Label(name = "Melee Attacking", description = "Changes mobs attack range to use the 1.20.2 mechanic")
 @LoadFeature(module = Modules.Ids.MOBS)
 public class MeleeAttacking extends Feature {
 
