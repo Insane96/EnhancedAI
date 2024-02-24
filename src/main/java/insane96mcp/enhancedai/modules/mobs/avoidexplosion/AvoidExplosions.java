@@ -18,7 +18,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.List;
 
-@Label(name = "Avoid Explosions", description = "Mobs will run away from exploding creepers / TNT. Use the entity type tag enhancedai:no_run_from_explosion to whitelist them")
+@Label(name = "Avoid Explosions", description = "Mobs will run away from exploding creepers / TNT. Use the entity type tag enhancedai:can_run_from_explosion to whitelist them")
 @LoadFeature(module = Modules.Ids.MOBS)
 public class AvoidExplosions extends Feature {
 	public static final TagKey<EntityType<?>> CAN_RUN_FROM_EXPLOSION = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "can_run_from_explosion"));

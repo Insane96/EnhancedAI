@@ -15,7 +15,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -48,6 +50,11 @@ public abstract class MeleeAttackGoalMixin extends Goal {
 			this.mob.doHurtTarget(attacked);
 		}
 		ci.cancel();
+	}
+
+	@ModifyConstant(method = "canUse", constant = @Constant(longValue = 20L))
+	public long onCanUse(long constant) {
+		return 0L;
 	}
 
 	@Inject(at = @At(value = "RETURN"), method = "canContinueToUse", cancellable = true)

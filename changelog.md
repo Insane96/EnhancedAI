@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.3.1
+* Potential fix for [MC-198068](https://bugs.mojang.com/browse/MC-198068)
+
 ## 2.3.0
 * All features are now opt-in
   * Anti-Cheese `ignore_anti_cheese` tag is now `can_use_anti_cheese`
