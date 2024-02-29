@@ -7,6 +7,7 @@ import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
+import insane96mcp.insanelib.base.config.Difficulty;
 import insane96mcp.insanelib.base.config.LoadFeature;
 import insane96mcp.insanelib.base.config.MinMax;
 import net.minecraft.core.registries.Registries;
@@ -38,7 +39,7 @@ public class PillagerShoot extends Feature {
 	public static MinMax shootingCooldown = new MinMax(20, 40);
 	@Config(min = 0d, max = 30d)
 	@Label(name = "Arrow Inaccuracy", description = "How much inaccuracy does the arrow fired by pillagers have. Vanilla pillagers have 10/6/2 inaccuracy in easy/normal/hard difficulty.")
-	public static insane96mcp.insanelib.base.config.Difficulty arrowInaccuracy = new insane96mcp.insanelib.base.config.Difficulty(5, 3, 1);
+	public static Difficulty arrowInaccuracy = new Difficulty(5, 3, 1);
 
 	public PillagerShoot(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super(module, enabledByDefault, canBeDisabled);

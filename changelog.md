@@ -1,6 +1,7 @@
 # Changelog
 
 ## Upcoming
+* Increased mounting chance
 * Slightly slowed down miner mobs
 
 ## 2.3.1

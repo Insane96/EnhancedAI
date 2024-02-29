@@ -28,7 +28,7 @@ public class Riding extends Feature {
     public static final String SUFFOCATION_WHILE_RIDING = EnhancedAI.RESOURCE_PREFIX + "suffocation_while_riding";
     @Config(min = 0d, max = 1d)
     @Label(name = "Chance to have Riding AI", description = "Chance for a mob to have an AI to go and ride mobs. Use enhancedai:can_be_mounted and enhancedai:can_mount entity type tags")
-    public static Difficulty ridingAiChance = new Difficulty(0.025d, 0.05d, 0.075d);
+    public static Difficulty ridingAiChance = new Difficulty(0.03d, 0.06d, 0.1d);
 
     @Config
     @Label(name = "Stop mounting if too much suffocation", description = "If true, riding mobs will dismount if take too much suffocation damage.")
