@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Slightly slowed down miner mobs
+
 ## 2.3.1
 * Potential fix for [MC-198068](https://bugs.mojang.com/browse/MC-198068)
 

@@ -61,7 +61,7 @@ public class MinerMobs extends Feature {
 	public static Boolean blacklistTileEntities = false;
 	@Config(min = 0d, max = 128d)
 	@Label(name = "Time to break multiplier", description = "Multiplier for the time a mob takes to break blocks. E.g. with this set to 2, mobs will take twice the time to mine a block.")
-	public static Double timeToBreakMultiplier = 1d;
+	public static Double timeToBreakMultiplier = 1.25d;
 	@Config
 	@Label(name = "Dimension Blacklist", description = "Dimensions where mobs can't spawn with the ability to mine.")
 	public static Blacklist dimensionBlacklist = new Blacklist();
