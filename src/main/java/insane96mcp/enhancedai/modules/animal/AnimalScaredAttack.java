@@ -41,10 +41,10 @@ public class AnimalScaredAttack extends Feature {
 
     @Config(min = 0d, max = 1d)
     @Label(name = "Fight back chance", description = "Animals have this percentage chance to be able to fight back instead of fleeing. Animals have a slightly bigger range to attack. Attack damage can't be changed via config due to limitation so use mods like Mobs Properties Randomness to change the damage. Base damage is 3")
-    public static Double fightBackChance = 0.3d;
+    public static Double fightBackChance = 0.35d;
     @Config(min = 0d, max = 1d)
     @Label(name = "Players Scared chance", description = "Animals have this percentage chance to be scared by players and run away. Fight back chance has priority over this")
-    public static Double playersScaredChance = 0.4d;
+    public static Double playersScaredChance = 0.25d;
     @Config(min = 0d, max = 4d)
     @Label(name = "Movement Speed Multiplier", description = "Movement speed multiplier when aggroed.")
     public static Double speedMultiplier = 1.1d;
