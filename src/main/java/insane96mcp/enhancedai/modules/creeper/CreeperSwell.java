@@ -108,7 +108,7 @@ public class CreeperSwell extends Feature {
 	@Label(name = "Angry Creeper.Forced Explosion", description = "Angry Creeper will not stop swelling when triggered")
 	public static Boolean angryForcedExplosion = true;
 	@Config
-	@Label(name = "Angry Creeper.Survival Reimagined Integration", description = "If Survival Reimagined is installed and Explosion Overhaul is enabled, creeper cena will deal more knockback and break more blocks")
+	@Label(name = "Angry Creeper.IguanaTweaks Reborn Integration", description = "If IguanaTweaks Reborn is installed and Explosion Overhaul is enabled, Angry creeper will deal more knockback and break more blocks")
 	public static Boolean survivalReimaginedIntegration = true;
 
 	public CreeperSwell(Module module, boolean enabledByDefault, boolean canBeDisabled) {
@@ -172,8 +172,8 @@ public class CreeperSwell extends Feature {
 			if (angryFire)
 				persistentData.putBoolean(ILStrings.Tags.EXPLOSION_CAUSES_FIRE, true);
 			if (survivalReimaginedIntegration) {
-				persistentData.putFloat("survivalreimagined:explosion_knockback_multiplier", 2f);
-				persistentData.putFloat("survivalreimagined:explosion_ray_strength_multiplier", 0.02f);
+				persistentData.putFloat("iguanatweaksreborn:explosion_knockback_multiplier", 2f);
+				persistentData.putFloat("iguanatweaksreborn:explosion_ray_strength_multiplier", 0.02f);
 			}
 		}
 
