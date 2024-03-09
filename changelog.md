@@ -1,6 +1,8 @@
 # Changelog
 
 ## Upcoming
+* Added Warden
+  * Increased sonic boom range and darkness range
 * Increased mounting chance
 * Slightly slowed down miner mobs
 * Fixed Angry creeper integration with ITR
