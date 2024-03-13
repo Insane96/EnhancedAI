@@ -2,6 +2,8 @@ package insane96mcp.enhancedai.modules.creeper;
 
 import insane96mcp.enhancedai.modules.mobs.avoidexplosion.AvoidExplosionGoal;
 import insane96mcp.insanelib.util.MCUtils;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -9,6 +11,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -33,6 +36,10 @@ public class EACreeperSwellGoal extends Goal {
 
 	@SuppressWarnings("FieldCanBeLocal")
 	private final double IGNITE_DISTANCE_MULTIPLIER_SQR = 1.35d * 1.35d;
+
+	boolean beta = false;
+	float angle = 0;
+	boolean betaStrafeLeft;
 
 	public EACreeperSwellGoal(Creeper creeper) {
 		this.swellingCreeper = creeper;
@@ -67,6 +74,10 @@ public class EACreeperSwellGoal extends Goal {
 		else
 			MCUtils.applyModifier(this.swellingCreeper, Attributes.MOVEMENT_SPEED, WALKING_FUSE_SPEED_MODIFIER_UUID, "Walking fuse speed modifier", CreeperSwell.walkingFuseSpeedModifier, AttributeModifier.Operation.MULTIPLY_BASE, false);
 		this.swellingCreeper.setSwellDir(1);
+		this.swellingCreeper.lookAt(this.creeperAttackTarget, 30f, 30f);
+		this.angle = (float) Math.toDegrees(Math.atan2(this.swellingCreeper.getZ() - this.creeperAttackTarget.getZ(), this.swellingCreeper.getX() - this.creeperAttackTarget.getX())) - 90;
+		if (this.betaStrafeLeft)
+			this.angle += 180;
 	}
 
 	public void stop() {
@@ -76,6 +87,7 @@ public class EACreeperSwellGoal extends Goal {
 		AttributeInstance movementSpeed = this.swellingCreeper.getAttribute(Attributes.MOVEMENT_SPEED);
 		if (movementSpeed != null)
 			movementSpeed.removeModifier(WALKING_FUSE_SPEED_MODIFIER_UUID);
+		this.angle = 0;
 	}
 
 	public void tick() {
@@ -87,9 +99,24 @@ public class EACreeperSwellGoal extends Goal {
 			this.tryCancelSwell();
 		else if (!this.swellingCreeper.getSensing().hasLineOfSight(this.creeperAttackTarget) && !ignoreWalls && !isBreaching)
 			this.tryCancelSwell();
-		else if (this.swellingCreeper.tickCount % 5 == 0) {
-			this.swellingCreeper.setSwellDir(1);
-			alertNearby();
+		else {
+			if (this.swellingCreeper.tickCount % 5 == 0) {
+				this.swellingCreeper.setSwellDir(1);
+				alertNearby();
+			}
+			this.swellingCreeper.lookAt(this.creeperAttackTarget, 30f, 30f);
+			if (this.beta && !this.walkingFuse && this.swellingCreeper.onGround()) {
+				Vec3 mov = new Vec3(this.swellingCreeper.getDeltaMovement().x + Math.cos(Math.toRadians(angle)) * (this.explosionSize / 50f), this.swellingCreeper.getDeltaMovement().y, this.swellingCreeper.getDeltaMovement().z + Math.sin(Math.toRadians(angle)) * (this.explosionSize / 50f));
+				this.swellingCreeper.setDeltaMovement(mov);
+				Direction direction = Direction.fromYRot(angle - 90);
+				BlockPos.MutableBlockPos blockPos = new BlockPos.MutableBlockPos(this.swellingCreeper.getX() + mov.x, this.swellingCreeper.getY(), this.swellingCreeper.getZ() + mov.z).move(direction);
+				if (this.swellingCreeper.level().getBlockState(blockPos).isSolid())
+					this.swellingCreeper.getJumpControl().jump();
+                if (this.betaStrafeLeft)
+                    angle += (1f / this.explosionSize) * 12;
+                else
+                    angle -= (1f / this.explosionSize) * 12;
+            }
 		}
 	}
 
@@ -134,6 +161,13 @@ public class EACreeperSwellGoal extends Goal {
 
 	public EACreeperSwellGoal setForceExplode(boolean forceExplode) {
 		this.forceExplode = forceExplode;
+		return this;
+	}
+
+	public EACreeperSwellGoal setBeta(boolean beta) {
+		this.beta = beta;
+		if (beta)
+			this.betaStrafeLeft = this.swellingCreeper.getRandom().nextBoolean();
 		return this;
 	}
 

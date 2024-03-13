@@ -50,8 +50,9 @@ public class CreeperSwell extends Feature {
 	public static final String ANGRY = EnhancedAI.RESOURCE_PREFIX + "angry";
 	public static final String WALKING_FUSE = EnhancedAI.RESOURCE_PREFIX + "walking_fuse";
 	public static final String IGNORE_WALLS = EnhancedAI.RESOURCE_PREFIX + "ignore_walls";
+	public static final String BETA = EnhancedAI.RESOURCE_PREFIX + "beta";
 	@Config(min = 0d, max = 1d)
-	@Label(name = "Walking Fuse Chance", description = "Percentage chance for a Creeper to keep walking while exploding.")
+	@Label(name = "Walking Fuse Chance", description = "Percentage chance for a Creeper to keep walking while exploding. This is overwritten if the creeper has the beta property.")
 	public static Double walkingFuseChance = 0.1d;
 	@Config(min = -1d, max = 64d)
 	@Label(name = "Walking Fuse Speed Modifier", description = "Speed modifier when a walking fuse creeper is swelling.")
@@ -75,6 +76,9 @@ public class CreeperSwell extends Feature {
 	@Config(min = 0d, max = 1d)
 	@Label(name = "Breach Chance", description = "Breaching creepers will try to open an hole in the wall to let mobs in.")
 	public static Double breachChance = 0.075d;
+	@Config(min = 0d, max = 1d)
+	@Label(name = "Beta Creeper Chance", description = "Beta creepers when exploding will walk around the target, like the creepers in pre-1.2.")
+	public static Double betaCreeperChance = 0.35d;
 	@Config
 	@Label(name = "Disable falling swelling", description = "Disables the creeper feature that makes them start swelling when falling.")
 	public static Boolean disableFallingSwelling = true;
@@ -161,6 +165,7 @@ public class CreeperSwell extends Feature {
 		boolean breach = NBTUtils.getBooleanOrPutDefault(persistentData, BREACH, creeper.getRandom().nextDouble() < breachChance);
 		boolean launch = NBTUtils.getBooleanOrPutDefault(persistentData, LAUNCH, creeper.getRandom().nextDouble() < launchChance);
 		boolean angry = NBTUtils.getBooleanOrPutDefault(persistentData, ANGRY, creeper.getRandom().nextDouble() < angryChance);
+		boolean beta = NBTUtils.getBooleanOrPutDefault(persistentData, BETA, creeper.getRandom().nextDouble() < betaCreeperChance);
 
 		CompoundTag compoundNBT = new CompoundTag();
 		creeper.addAdditionalSaveData(compoundNBT);
@@ -178,9 +183,10 @@ public class CreeperSwell extends Feature {
 		}
 
 		EACreeperSwellGoal swellGoal = new EACreeperSwellGoal(creeper)
-				.setWalkingFuse(walkingFuse)
+				.setWalkingFuse(walkingFuse && !beta)
 				.setIgnoreWalls(ignoreWalls)
-				.setBreaching(breach);
+				.setBreaching(breach)
+				.setBeta(beta);
 		if (angry && angryForcedExplosion)
 			swellGoal.setForceExplode(angryForceExplosion);
 		creeper.goalSelector.addGoal(2, swellGoal);
