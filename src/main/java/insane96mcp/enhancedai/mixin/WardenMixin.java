@@ -17,6 +17,6 @@ public abstract class WardenMixin extends Monster {
 
 	@ModifyConstant(method = "customServerAiStep", constant = {@Constant(intValue = 20)})
 	private int onCustomServerAiStep(int range) {
-		return (int) insane96mcp.enhancedai.modules.warden.Warden.increaseSonicBoomRange(range);
+		return (int) insane96mcp.enhancedai.modules.warden.Warden.increaseDarknessRange(range);
 	}
 }

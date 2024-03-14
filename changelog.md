@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Fixed Darkness range multiplier not being applied
+
 ## 2.4.0
 * Added Warden
   * Increased sonic boom range and darkness range
