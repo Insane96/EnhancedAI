@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 2.4.0
 * Added Warden
   * Increased sonic boom range and darkness range
 * Added Beta Creepers

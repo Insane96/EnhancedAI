@@ -66,6 +66,8 @@ public class BlockBreakerGoal extends Goal {
 	}
 
 	public boolean canUse() {
+		if (!this.miner.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING))
+			return false;
 		if (this.toolOnly && !(this.miner.getOffhandItem().getItem() instanceof DiggerItem))
 			return false;
 
@@ -244,7 +246,7 @@ public class BlockBreakerGoal extends Goal {
 	}
 
 	private boolean canBreakBlock() {
-		if (!ForgeEventFactory.onEntityDestroyBlock(this.miner, this.targetBlocks.get(0), this.blockState) || !this.miner.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING))
+		if (!ForgeEventFactory.onEntityDestroyBlock(this.miner, this.targetBlocks.get(0), this.blockState))
 			return false;
 		if (!this.blockState.requiresCorrectToolForDrops() || !this.properToolRequired)
 			return true;
