@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 2.4.1
 * Fixed some mobs losing the ability to attack, like phantoms and wolves
 * Fixed Darkness range multiplier not being applied
 
