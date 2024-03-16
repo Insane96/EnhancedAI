@@ -200,7 +200,7 @@ public class Targeting extends JsonFeature {
 			if (!chc.attacker.matchesEntity(mob) || mob.getRandom().nextFloat() > chc.chance)
 				continue;
 
-			EANearestAttackableTarget<LivingEntity> targetGoal = new EANearestAttackableTarget<>(mob, LivingEntity.class, chc.victim, chc.mustSee, false, TargetingConditions.DEFAULT);
+			EANearestAttackableTarget<LivingEntity> targetGoal = new EANearestAttackableTarget<>(mob, LivingEntity.class, chc.victim, chc.mustSee, false, TargetingConditions.forCombat());
 
 			if (instaTarget)
 				targetGoal.setInstaTarget();
