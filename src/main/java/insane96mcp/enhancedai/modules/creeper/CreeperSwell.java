@@ -112,8 +112,8 @@ public class CreeperSwell extends Feature {
 	@Label(name = "Angry Creeper.Forced Explosion", description = "Angry Creeper will not stop swelling when triggered")
 	public static Boolean angryForcedExplosion = true;
 	@Config
-	@Label(name = "Angry Creeper.IguanaTweaks Reborn Integration", description = "If IguanaTweaks Reborn is installed and Explosion Overhaul is enabled, Angry creeper will deal more knockback and break more blocks")
-	public static Boolean survivalReimaginedIntegration = true;
+	@Label(name = "IguanaTweaks Reborn Integration", description = "If IguanaTweaks Reborn is installed and Explosion Overhaul is enabled, Angry creeper will deal more knockback and break more blocks and breaching creepers will break more blocks")
+	public static Boolean iguanaTweaksIntegration = true;
 
 	public CreeperSwell(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super(module, enabledByDefault, canBeDisabled);
@@ -176,11 +176,13 @@ public class CreeperSwell extends Feature {
 				creeper.setCustomName(Component.literal("Angry Creeper"));
 			if (angryFire)
 				persistentData.putBoolean(ILStrings.Tags.EXPLOSION_CAUSES_FIRE, true);
-			if (survivalReimaginedIntegration) {
+			if (iguanaTweaksIntegration) {
 				persistentData.putFloat("iguanatweaksreborn:explosion_knockback_multiplier", 2f);
 				persistentData.putFloat("iguanatweaksreborn:explosion_ray_strength_multiplier", 0.02f);
 			}
 		}
+		if (breach && iguanaTweaksIntegration)
+			persistentData.putFloat("iguanatweaksreborn:explosion_ray_strength_multiplier", 0.01f);
 
 		EACreeperSwellGoal swellGoal = new EACreeperSwellGoal(creeper)
 				.setWalkingFuse(walkingFuse && !beta)
