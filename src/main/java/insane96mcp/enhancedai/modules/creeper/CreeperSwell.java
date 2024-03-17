@@ -181,8 +181,10 @@ public class CreeperSwell extends Feature {
 				persistentData.putFloat("iguanatweaksreborn:explosion_ray_strength_multiplier", 0.02f);
 			}
 		}
-		if (breach && iguanaTweaksIntegration)
-			persistentData.putFloat("iguanatweaksreborn:explosion_ray_strength_multiplier", 0.01f);
+		if (breach && iguanaTweaksIntegration) {
+			persistentData.putFloat("iguanatweaksreborn:explosion_ray_strength_multiplier", 0);
+			persistentData.putFloat("iguanatweaksreborn:explosion_base_resistance_add", 0);
+		}
 
 		EACreeperSwellGoal swellGoal = new EACreeperSwellGoal(creeper)
 				.setWalkingFuse(walkingFuse && !beta)
