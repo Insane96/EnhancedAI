@@ -1,6 +1,7 @@
 # Changelog
 
 ## Upcoming
+* Lowered cooldown from skeleton shooting in Easy and Normal
 * If Iguana Tweaks Reborn is installed, Breaching creepers now have bigger explosions
 
 ## 2.4.1
