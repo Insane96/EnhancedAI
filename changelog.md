@@ -3,6 +3,7 @@
 ## Upcoming
 * Lowered cooldown from skeleton shooting in Easy and Normal
 * If Iguana Tweaks Reborn is installed, Breaching creepers now have bigger explosions
+* Fixed mobs not dismounting correctly when taking suffocation damage 
 
 ## 2.4.1
 * Fixed some mobs losing the ability to attack, like phantoms and wolves

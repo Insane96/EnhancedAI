@@ -53,7 +53,8 @@ public class SearchMountGoal extends Goal {
             this.mob.getNavigation().moveTo(this.mount, 1d);
         }
         if (this.mob.distanceToSqr(this.mount) <= 3f) {
-            this.mob.startRiding(this.mount, true);
+            this.mob.startRiding(this.mount, false);
+            this.stop();
         }
         if (++this.unreachableTime > reducedTickDelay(200)) {
             this.cooldown = reducedTickDelay(200);

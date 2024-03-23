@@ -66,6 +66,6 @@ public class Riding extends Feature {
         if (suffocatingDamageTaken >= 6f)
             event.getEntity().stopRiding();
         else
-            event.getEntity().getPersistentData().putFloat(SUFFOCATION_WHILE_RIDING, 6f);
+            event.getEntity().getPersistentData().putFloat(SUFFOCATION_WHILE_RIDING, suffocatingDamageTaken);
     }
 }
