@@ -78,6 +78,9 @@ public class EACreeperSwellGoal extends Goal {
 		this.angle = (float) Math.toDegrees(Math.atan2(this.swellingCreeper.getZ() - this.creeperAttackTarget.getZ(), this.swellingCreeper.getX() - this.creeperAttackTarget.getX())) - 90;
 		if (this.betaStrafeLeft)
 			this.angle += 180;
+		//Update the explosion size in case the creeper becomes charged
+		explosionSize = CreeperUtils.getExplosionSize(this.swellingCreeper);
+		explosionSizeSqr = explosionSize * explosionSize;
 	}
 
 	public void stop() {
