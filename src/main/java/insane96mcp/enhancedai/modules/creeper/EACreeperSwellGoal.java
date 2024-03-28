@@ -56,15 +56,12 @@ public class EACreeperSwellGoal extends Goal {
 		if (creeperAttackTarget == null)
 			return false;
 
-		boolean canBreach = breaching && canBreach(this.swellingCreeper, this.creeperAttackTarget);
+		this.isBreaching = breaching && canBreach(this.swellingCreeper, this.creeperAttackTarget);
 		boolean ignoresWalls = ignoreWalls && this.swellingCreeper.distanceToSqr(this.creeperAttackTarget) < explosionSizeSqr;
-
-		if (canBreach)
-			isBreaching = true;
 
 		return (this.swellingCreeper.getSwellDir() > 0) ||
 				ignoresWalls ||
-				canBreach ||
+				this.isBreaching ||
 				(this.swellingCreeper.getSensing().hasLineOfSight(this.creeperAttackTarget) && this.swellingCreeper.distanceToSqr(this.creeperAttackTarget) < explosionSizeSqr * IGNITE_DISTANCE_MULTIPLIER_SQR);
 	}
 
@@ -81,6 +78,10 @@ public class EACreeperSwellGoal extends Goal {
 		//Update the explosion size in case the creeper becomes charged
 		explosionSize = CreeperUtils.getExplosionSize(this.swellingCreeper);
 		explosionSizeSqr = explosionSize * explosionSize;
+		if (CreeperSwell.iguanaTweaksIntegration) {
+			this.swellingCreeper.getPersistentData().putFloat("iguanatweaksreborn:explosion_ray_strength_multiplier", this.isBreaching ? 0 : 0.3f);
+			this.swellingCreeper.getPersistentData().putFloat("iguanatweaksreborn:explosion_base_resistance_add", this.isBreaching ? 0 : 0.3f);
+		}
 	}
 
 	public void stop() {

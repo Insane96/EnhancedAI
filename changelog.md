@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Fixed breaching creepers with ITR making huge holes when not breaching
+
 ## 2.4.2
 * Lowered cooldown from skeleton shooting in Easy and Normal
 * If Iguana Tweaks Reborn is installed, Breaching creepers now have bigger explosions
