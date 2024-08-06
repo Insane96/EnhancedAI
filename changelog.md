@@ -1,5 +1,7 @@
 # Changelog
 
+* 
+
 ## Upcoming
 * Added a config option to allow targeting changes to work on non-players target (e.g. Zombies targeting Villagers)
 * Breaching creepers can now breach from 24 blocks instead of the radius times 5
@@ -9,6 +11,7 @@
   * Fishing in player's inventory now has a cooldown (after fishing in the players' inventory the fisher needs to hook 4 times before being able to fish players' inventory again)
   * No longer need to be on ground to hook
 * Reduced max slime sizes spawn
+* Fixed Launching Creepers launching to the target without cooldown when can't see the target
 
 ## 2.4.7
 * Fixed mobs staying at close distance but not reaching for attacking
