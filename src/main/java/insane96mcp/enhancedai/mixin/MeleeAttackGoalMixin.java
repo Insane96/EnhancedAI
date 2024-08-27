@@ -85,7 +85,14 @@ public abstract class MeleeAttackGoalMixin extends Goal {
 	}*/
 
 	@ModifyExpressionValue(method = "canContinueToUse", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/ai/goal/MeleeAttackGoal;followingTargetEvenIfNotSeen:Z"))
-	public boolean onFollowingTargetEvenIfNotSeen(boolean value) {
+	public boolean onFollowingTargetEvenIfNotSeen_canContinueToUse(boolean value) {
+		if (Feature.isEnabled(MeleeAttacking.class))
+			return true;
+		return value;
+	}
+
+	@ModifyExpressionValue(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/ai/goal/MeleeAttackGoal;followingTargetEvenIfNotSeen:Z"))
+	public boolean onFollowingTargetEvenIfNotSeen_tick(boolean value) {
 		if (Feature.isEnabled(MeleeAttacking.class))
 			return true;
 		return value;

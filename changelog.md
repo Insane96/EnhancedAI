@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Fixed mobs no longer pathfinding to target if no longer seen
+
 ## 2.4.8
 * Added a config option to allow targeting changes to work on non-players target (e.g. Zombies targeting Villagers)
 * Breaching creepers can now breach from 24 blocks instead of the radius times 5
