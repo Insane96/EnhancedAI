@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 2.4.9
 * Fixed Beta creepers ignoring movement speed changes
 * Fixed mobs no longer pathfinding to target if no longer seen
 * Fixed mobs trying to ride entities not on ground
