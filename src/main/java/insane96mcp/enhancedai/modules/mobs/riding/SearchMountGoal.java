@@ -16,7 +16,7 @@ public class SearchMountGoal extends Goal {
     int cooldown;
     public SearchMountGoal(Mob mob) {
         this.mob = mob;
-        this.targetingConditions = TargetingConditions.forNonCombat().range(this.getFollowDistance()).selector(livingEntity -> livingEntity.getType().is(Riding.CAN_BE_MOUNTED) && !livingEntity.isVehicle());
+        this.targetingConditions = TargetingConditions.forNonCombat().range(this.getFollowDistance()).selector(livingEntity -> livingEntity.getType().is(Riding.CAN_BE_MOUNTED) && !livingEntity.isVehicle() && livingEntity.onGround());
         this.setFlags(EnumSet.of(Flag.TARGET, Flag.MOVE, Flag.LOOK));
     }
 
