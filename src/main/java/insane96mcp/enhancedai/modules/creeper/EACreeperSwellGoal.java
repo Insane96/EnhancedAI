@@ -114,16 +114,20 @@ public class EACreeperSwellGoal extends Goal {
 			}
 			this.swellingCreeper.lookAt(this.creeperAttackTarget, 30f, 30f);
 			if (this.beta && !this.walkingFuse && this.swellingCreeper.onGround()) {
-				Vec3 mov = new Vec3(this.swellingCreeper.getDeltaMovement().x + Math.cos(Math.toRadians(angle)) * (this.explosionSize / 50f), this.swellingCreeper.getDeltaMovement().y, this.swellingCreeper.getDeltaMovement().z + Math.sin(Math.toRadians(angle)) * (this.explosionSize / 50f));
+				Vec3 mov = new Vec3(
+						this.swellingCreeper.getDeltaMovement().x + Math.cos(Math.toRadians(angle)) * (this.explosionSize * 0.075f) * this.swellingCreeper.getAttributeValue(Attributes.MOVEMENT_SPEED),
+						this.swellingCreeper.getDeltaMovement().y,
+						this.swellingCreeper.getDeltaMovement().z + Math.sin(Math.toRadians(angle)) * (this.explosionSize * 0.075f) * this.swellingCreeper.getAttributeValue(Attributes.MOVEMENT_SPEED));
 				this.swellingCreeper.setDeltaMovement(mov);
 				Direction direction = Direction.fromYRot(angle - 90);
 				BlockPos.MutableBlockPos blockPos = new BlockPos.MutableBlockPos(this.swellingCreeper.getX() + mov.x, this.swellingCreeper.getY(), this.swellingCreeper.getZ() + mov.z).move(direction);
 				if (this.swellingCreeper.level().getBlockState(blockPos).isSolid())
 					this.swellingCreeper.getJumpControl().jump();
+				float angleDelta = (float) ((1f / this.explosionSize) * 25f * this.swellingCreeper.getAttributeValue(Attributes.MOVEMENT_SPEED));
                 if (this.betaStrafeLeft)
-                    angle += (1f / this.explosionSize) * 12;
+                    angle += angleDelta;
                 else
-                    angle -= (1f / this.explosionSize) * 12;
+                    angle -= angleDelta;
             }
 		}
 	}
