@@ -1,5 +1,10 @@
 # Changelog
 
+## Upcoming
+* Removed `use_follow_range_changes` entity type tag
+  * Replaced with `change_follow_range` that applies only the follow range override
+  * Also with `apply_xray` that applies only the xray range override
+
 ## 2.4.9
 * Fixed Beta creepers ignoring movement speed changes
 * Fixed mobs no longer pathfinding to target if no longer seen
