@@ -50,6 +50,7 @@ public class Targeting extends JsonFeature {
 	public static final TagKey<EntityType<?>> APPLY_XRAY = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "apply_xray"));
 	public static final TagKey<EntityType<?>> ALLOW_TARGET_SWITCH = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "allow_target_switch"));
 
+	public static final String SPRINT = EnhancedAI.RESOURCE_PREFIX + "sprint";
 	public static final String IS_NEUTRAL = EnhancedAI.RESOURCE_PREFIX + "is_neutral";
     public static final String FOLLOW_RANGES_PROCESSED = EnhancedAI.RESOURCE_PREFIX + "follow_ranges_processed";
 
@@ -119,6 +120,10 @@ public class Targeting extends JsonFeature {
 		processTargetGoal(mob);
 		processCustomTargetGoal(mob);
 		processHurtByGoal(mob);
+
+		boolean sprint = NBTUtils.getBooleanOrPutDefault(mob.getPersistentData(), SPRINT, false);
+		if (sprint)
+			mob.setSprinting(true);
 	}
 
 	private void processHurtByGoal(Mob mob) {
