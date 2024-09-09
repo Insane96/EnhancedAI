@@ -179,9 +179,11 @@ public class BlockBreakerGoal extends Goal {
 
             if (state.hasBlockEntity()
 					|| state.getDestroySpeed(this.miner.level(), rayTraceResult.getBlockPos()) == -1
-					|| state.is(MinerMobs.BLOCK_BLACKLIST)
 					|| state.hasBlockEntity() && MinerMobs.blacklistTileEntities)
                 continue;
+
+			if ((!MinerMobs.blockBlacklistAsWhitelist && state.is(MinerMobs.BLOCK_BLACKLIST)) || (MinerMobs.blockBlacklistAsWhitelist && !state.is(MinerMobs.BLOCK_BLACKLIST)))
+				continue;
 
             this.targetBlocks.add(rayTraceResult.getBlockPos());
 		}

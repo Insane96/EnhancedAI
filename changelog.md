@@ -4,6 +4,7 @@
 * Removed `use_follow_range_changes` entity type tag
   * Replaced with `change_follow_range` that applies only the follow range override
   * Also with `apply_xray` that applies only the xray range override
+* Added "Block Blacklist as Whitelist" for Miner Mobs
 
 ## 2.4.9
 * Fixed Beta creepers ignoring movement speed changes
