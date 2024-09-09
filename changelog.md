@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 2.4.10
 * Removed `use_follow_range_changes` entity type tag
   * Replaced with `change_follow_range` that applies only the follow range override
   * Also with `apply_xray` that applies only the xray range override
