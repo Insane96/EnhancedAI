@@ -1,5 +1,9 @@
 # Changelog
 
+## Upcoming
+* Added a new explosion sound for Angry Creepers. It's now the default
+  * The fuse sound is vanilla but the explosion sound is the old minecraft beta one
+
 ## 2.4.9
 * Fixed Beta creepers ignoring movement speed changes
 * Fixed mobs no longer pathfinding to target if no longer seen

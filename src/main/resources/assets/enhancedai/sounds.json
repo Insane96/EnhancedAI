@@ -18,5 +18,10 @@
     "category": "hostile",
     "subtitle": "enhancedai.subtitle.angry_creeper_explode",
     "sounds": [ "enhancedai:wtf_boom_explode" ]
+  },
+  "old_explode": {
+    "category": "hostile",
+    "subtitle": "enhancedai.subtitle.angry_creeper_explode",
+    "sounds": [ "enhancedai:old_explode1", "enhancedai:old_explode2", "enhancedai:old_explode3", "enhancedai:old_explode4" ]
   }
 }

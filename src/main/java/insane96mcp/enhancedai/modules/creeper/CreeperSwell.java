@@ -20,6 +20,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
@@ -100,7 +101,7 @@ public class CreeperSwell extends Feature {
 	public static Boolean angryParticles = true;
 	@Config
 	@Label(name = "Angry Creeper.Sounds", description = "The special sound effect that the Angry Creeper plays")
-	public static AngryCreeperSounds angryCreeperSounds = AngryCreeperSounds.WTF_BOOM;
+	public static AngryCreeperSounds angryCreeperSounds = AngryCreeperSounds.OLD_EXPLOSION;
 	@Config
 	@Label(name = "Angry Creeper.Name", description = "If true, Angry Creeper will have a name")
 	public static Boolean angryName = true;
@@ -302,7 +303,8 @@ public class CreeperSwell extends Feature {
 	public enum AngryCreeperSounds {
 		NONE(null, null),
 		CENA(EASounds.CREEPER_CENA_FUSE, EASounds.CREEPER_CENA_EXPLODE),
-		WTF_BOOM(EASounds.WTF_BOOM_FUSE, EASounds.WTF_BOOM_EXPLODE);
+		WTF_BOOM(EASounds.WTF_BOOM_FUSE, EASounds.WTF_BOOM_EXPLODE),
+		OLD_EXPLOSION(() -> SoundEvents.CREEPER_PRIMED, EASounds.OLD_EXPLODE);
 
 		@Nullable
 		public final Supplier<SoundEvent> fuse;
