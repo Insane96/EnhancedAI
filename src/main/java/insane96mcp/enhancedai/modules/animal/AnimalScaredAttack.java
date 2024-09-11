@@ -46,6 +46,12 @@ public class AnimalScaredAttack extends Feature {
     @Label(name = "Players Scared chance", description = "Animals have this percentage chance to be scared by players and run away. Fight back chance has priority over this")
     public static Double playersScaredChance = 0.25d;
     @Config(min = 0d, max = 4d)
+    @Label(name = "Flee speed Multiplier Near", description = "Speed multiplier when the animal avoids the player and it's within 8 blocks from him.")
+    public static Double fleeSpeedNear = 1.1d;
+    @Config(min = 0d, max = 4d)
+    @Label(name = "Flee speed Multiplier Far", description = "Speed multiplier when the animal avoids the player and it's farther than 16 blocks from him.")
+    public static Double fleeSpeedFar = 1d;
+    @Config(min = 0d, max = 4d)
     @Label(name = "Movement Speed Multiplier", description = "Movement speed multiplier when aggroed.")
     public static Double speedMultiplier = 1.1d;
     @Config(min = 0d, max = 128d)
@@ -99,7 +105,7 @@ public class AnimalScaredAttack extends Feature {
             }
         }
         else if (playerScared) {
-            EAAvoidEntityGoal<Player> avoidEntityGoal = new EAAvoidEntityGoal<>(animal, Player.class, (float) 16, (float) 8, 1.25, 1.1);
+            EAAvoidEntityGoal<Player> avoidEntityGoal = new EAAvoidEntityGoal<>(animal, Player.class, (float) 16, (float) 8, fleeSpeedNear, fleeSpeedFar);
             animal.goalSelector.addGoal(1, avoidEntityGoal);
         }
     }
