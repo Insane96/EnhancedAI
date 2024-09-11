@@ -46,9 +46,11 @@ import java.util.List;
 @LoadFeature(module = Modules.Ids.MOBS)
 public class Targeting extends JsonFeature {
 	public static final TagKey<EntityType<?>> USE_TARGET_CHANGES = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "use_target_changes"));
-	public static final TagKey<EntityType<?>> USE_FOLLOW_RANGE_CHANGES = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "use_follow_range_changes"));
+	public static final TagKey<EntityType<?>> CHANGE_FOLLOW_RANGE = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "change_follow_range"));
+	public static final TagKey<EntityType<?>> APPLY_XRAY = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "apply_xray"));
 	public static final TagKey<EntityType<?>> ALLOW_TARGET_SWITCH = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "allow_target_switch"));
 
+	public static final String SPRINT = EnhancedAI.RESOURCE_PREFIX + "sprint";
 	public static final String IS_NEUTRAL = EnhancedAI.RESOURCE_PREFIX + "is_neutral";
     public static final String FOLLOW_RANGES_PROCESSED = EnhancedAI.RESOURCE_PREFIX + "follow_ranges_processed";
 
@@ -60,10 +62,10 @@ public class Targeting extends JsonFeature {
 	public static final List<CustomHostileConfig> customHostile = new ArrayList<>();
 
     @Config(min = 0d, max = 128d)
-	@Label(name = "Follow Range Override", description = "How far away can the mobs see the player. This overrides the vanilla value (16 for most mobs). Setting 'Max' to 0 will leave the follow range as vanilla. I recommend using mods like Mobs Properties Randomness to have more control over the attribute.")
+	@Label(name = "Follow Range Override", description = "How far away can the mobs see the player. This overrides the vanilla value (16 for most mobs). Setting 'Max' to 0 will leave the follow range as vanilla. I recommend using mods like Mobs Properties Randomness to have more control over the attribute. Only mobs in the entity type tag `enhancedai:change_follow_range` will be affected by this override")
 	public static MinMax followRangeOverride = new MinMax(24, 48);
 	@Config(min = 0d, max = 128d)
-	@Label(name = "XRay Range Override", description = "How far away can the mobs see the player even through walls. Setting 'Max' to 0 will make mobs not able to see through walls. I recommend using mods like Mobs Properties Randomness to have more control over the attribute; the attribute name is 'enhancedai:generic.xray_follow_range'.")
+	@Label(name = "XRay Range Override", description = "How far away can the mobs see the player even through walls. Setting 'Max' to 0 will make mobs not able to see through walls. I recommend using mods like Mobs Properties Randomness to have more control over the attribute; the attribute name is 'enhancedai:generic.xray_follow_range'. Only mobs in the entity type tag `enhancedai:apply_xray` will be affected by this override.")
 	public static MinMax xrayRangeOverride = new MinMax(12, 24);
 	@Config
 	@Label(name = "Targeting Override for non-Players", description = "By default, the new targeting AI only changes for targeting players. Setting this to true allows overriding target AI for entities other than players. Please note this might break specific AIs")
@@ -118,6 +120,10 @@ public class Targeting extends JsonFeature {
 		processTargetGoal(mob);
 		processCustomTargetGoal(mob);
 		processHurtByGoal(mob);
+
+		boolean sprint = NBTUtils.getBooleanOrPutDefault(mob.getPersistentData(), SPRINT, false);
+		if (sprint)
+			mob.setSprinting(true);
 	}
 
 	private void processHurtByGoal(Mob mob) {
@@ -212,17 +218,15 @@ public class Targeting extends JsonFeature {
 	}
 
 	private void processFollowRanges(Mob mob) {
-		if (!mob.getType().is(USE_FOLLOW_RANGE_CHANGES))
-			return;
 		CompoundTag persistentData = mob.getPersistentData();
 		if (!persistentData.getBoolean(FOLLOW_RANGES_PROCESSED)) {
 			//noinspection ConstantConditions
-			if (followRangeOverride.min != 0d && mob.getAttribute(Attributes.FOLLOW_RANGE) != null && mob.getAttribute(Attributes.FOLLOW_RANGE).getBaseValue() < followRangeOverride.min) {
+			if (mob.getType().is(CHANGE_FOLLOW_RANGE) && followRangeOverride.min != 0d && mob.getAttribute(Attributes.FOLLOW_RANGE) != null && mob.getAttribute(Attributes.FOLLOW_RANGE).getBaseValue() < followRangeOverride.min) {
 				MCUtils.setAttributeValue(mob, Attributes.FOLLOW_RANGE, followRangeOverride.getIntRandBetween(mob.getRandom()));
 			}
 
 			//noinspection ConstantConditions
-			if (xrayRangeOverride.min != 0d && mob.getAttribute(EAAttributes.XRAY_FOLLOW_RANGE.get()) != null && mob.getAttribute(EAAttributes.XRAY_FOLLOW_RANGE.get()).getBaseValue() < xrayRangeOverride.min) {
+			if (mob.getType().is(APPLY_XRAY) && xrayRangeOverride.min != 0d && mob.getAttribute(EAAttributes.XRAY_FOLLOW_RANGE.get()) != null && mob.getAttribute(EAAttributes.XRAY_FOLLOW_RANGE.get()).getBaseValue() < xrayRangeOverride.min) {
 				MCUtils.setAttributeValue(mob, EAAttributes.XRAY_FOLLOW_RANGE.get(), xrayRangeOverride.getIntRandBetween(mob.getRandom()));
 			}
 			persistentData.putBoolean(FOLLOW_RANGES_PROCESSED, true);

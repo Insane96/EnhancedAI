@@ -63,6 +63,9 @@ public class MinerMobs extends Feature {
 	@Label(name = "Time to break multiplier", description = "Multiplier for the time a mob takes to break blocks. E.g. with this set to 2, mobs will take twice the time to mine a block.")
 	public static Double timeToBreakMultiplier = 1.25d;
 	@Config
+	@Label(name = "Block Blacklist as Whitelist", description = "If true, the block tag `enhancedai:miner_block_blacklist` will be treated as a whitelist instead of blacklist")
+	public static Boolean blockBlacklistAsWhitelist = false;
+	@Config
 	@Label(name = "Dimension Blacklist", description = "Dimensions where mobs can't spawn with the ability to mine.")
 	public static Blacklist dimensionBlacklist = new Blacklist();
 
