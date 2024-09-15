@@ -29,23 +29,20 @@ public class FishingTargetGoal extends Goal {
 		if (target == null)
 			return false;
 
+		if (this.fisher.getMainHandItem().getItem() == Items.FISHING_ROD || this.fisher.getOffhandItem().getItem() == Items.FISHING_ROD)
+			return false;
+
 		if (this.fisher.isUnderWater())
 			return false;
 
 		//24 & 1 blocks
 		if (this.fisher.distanceToSqr(target) > 576d
-				|| this.fisher.distanceToSqr(target) <= 1d)
+				|| this.fisher.distanceToSqr(target) <= 1d
+				|| !this.fisher.getSensing().hasLineOfSight(target))
 			return false;
 
-		if (this.cooldown > 1)
-			return false;
-
-		if (!this.fisher.getSensing().hasLineOfSight(target))
-			return false;
-
-		this.cooldown--;
-		return this.fisher.getMainHandItem().getItem() == Items.FISHING_ROD || this.fisher.getOffhandItem().getItem() == Items.FISHING_ROD;
-	}
+        return --this.cooldown <= 0;
+    }
 
 	public boolean canContinueToUse() {
 		return this.fishingHook != null && this.fishingHook.isAlive();
