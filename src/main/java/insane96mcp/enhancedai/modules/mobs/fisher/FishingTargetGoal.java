@@ -34,13 +34,16 @@ public class FishingTargetGoal extends Goal {
 
 		//24 & 1 blocks
 		if (this.fisher.distanceToSqr(target) > 576d
-				|| this.fisher.distanceToSqr(target) <= 1d
-				|| !this.fisher.getSensing().hasLineOfSight(target))
+				|| this.fisher.distanceToSqr(target) <= 1d)
 			return false;
 
-		if (--this.cooldown > 0)
+		if (this.cooldown > 1)
 			return false;
 
+		if (!this.fisher.getSensing().hasLineOfSight(target))
+			return false;
+
+		this.cooldown--;
 		return this.fisher.getMainHandItem().getItem() == Items.FISHING_ROD || this.fisher.getOffhandItem().getItem() == Items.FISHING_ROD;
 	}
 

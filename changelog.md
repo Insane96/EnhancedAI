@@ -4,6 +4,7 @@
 * Added a new explosion sound for Angry Creepers. It's now the default
     * The fuse sound is vanilla but the explosion sound is the old minecraft beta one
 * Configurable Animal flee speed
+* Minor performance improvement for fisher mobs
 
 ## 2.4.10
 * Removed `use_follow_range_changes` entity type tag

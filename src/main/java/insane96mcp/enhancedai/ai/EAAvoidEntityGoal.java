@@ -59,10 +59,6 @@ public class EAAvoidEntityGoal<T extends LivingEntity> extends Goal {
 		this.builtTargetSelector = TargetingConditions.forCombat().range(avoidDistance).selector(predicate.and(targetPredicate).and(idTagMatcher::matchesEntity));
 	}
 
-	/**
-	 * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
-	 * method as well.
-	 */
 	public boolean canUse() {
 		this.avoidTarget = this.entity.level().getNearestEntity(this.classToAvoid, this.builtTargetSelector, this.entity, this.entity.getX(), this.entity.getY(), this.entity.getZ(), this.entity.getBoundingBox().inflate(this.avoidDistance, this.avoidDistance, this.avoidDistance));
 		if (this.avoidTarget == null) {
@@ -80,30 +76,18 @@ public class EAAvoidEntityGoal<T extends LivingEntity> extends Goal {
 		}
 	}
 
-	/**
-	 * Returns whether an in-progress EntityAIBase should continue executing
-	 */
 	public boolean canContinueToUse() {
 		return !this.entity.getNavigation().isDone();
 	}
 
-	/**
-	 * Execute a one shot task or start executing a continuous task
-	 */
 	public void start() {
 		this.entity.getNavigation().moveTo(this.path, this.farSpeed);
 	}
 
-	/**
-	 * Reset the task's internal state. Called when this task is interrupted by another one
-	 */
 	public void stop() {
 		this.avoidTarget = null;
 	}
 
-	/**
-	 * Keep ticking a continuous task that has already been started
-	 */
 	public void tick() {
 		if (this.entity.distanceToSqr(this.avoidTarget) < this.avoidDistanceNear) {
 			this.entity.getNavigation().setSpeedModifier(this.nearSpeed);
