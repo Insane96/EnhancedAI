@@ -80,6 +80,9 @@ public class Targeting extends JsonFeature {
 	@Label(name = "Hurt by target.Better version", description = "Mobs will no longer switch target if it's the same or if the current one it's closer.")
 	public static Boolean betterHurtByTarget = true;
 	@Config
+	@Label(name = "Hurt by target.Prefer players", description = "Mobs will prefer to attack players instead of other mobs (Note that 'Prevent infighting' should be disabled).")
+	public static Boolean preferPlayers = true;
+	@Config
 	@Label(name = "Hurt by target.Prevent infighting", description = "Mobs will no longer attack each other.")
 	public static Boolean preventInfighting = true;
 	@Config(min = 0d, max = 1d)
