@@ -77,7 +77,7 @@ public class Targeting extends JsonFeature {
 	@Label(name = "Better Path Finding", description = "Mobs will be able to find better paths to the target. Note that this might hit performance a bit.")
 	public static Boolean betterPathfinding = true;
 	@Config
-	@Label(name = "Hurt by target.Better version", description = "Mobs will no longer switch target if it's the same or if the current one it's closer.")
+	@Label(name = "Hurt by target.Better version", description = "Mobs will actually switch target when attacked unless it's the same or if the current one it's closer.")
 	public static Boolean betterHurtByTarget = true;
 	@Config
 	@Label(name = "Hurt by target.Prefer players", description = "Mobs will prefer to attack players instead of other mobs (Note that 'Prevent infighting' should be disabled).")
