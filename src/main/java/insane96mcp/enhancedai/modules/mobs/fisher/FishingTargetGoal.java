@@ -32,7 +32,7 @@ public class FishingTargetGoal extends Goal {
 		if (--this.cooldown > 0)
 			return false;
 
-		if (this.fisher.getMainHandItem().getItem() == Items.FISHING_ROD || this.fisher.getOffhandItem().getItem() == Items.FISHING_ROD)
+		if (this.fisher.getMainHandItem().getItem() != Items.FISHING_ROD && this.fisher.getOffhandItem().getItem() != Items.FISHING_ROD)
 			return false;
 
 		if (this.fisher.isUnderWater())

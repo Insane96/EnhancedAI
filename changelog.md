@@ -1,6 +1,8 @@
 # Changelog
 
 ## Upcoming
+* Added Jump feature
+  * If the mob is below the target by a few blocks, he will jump trying to hit him
 * Added a new explosion sound for Angry Creepers. It's now the default
     * The fuse sound is vanilla but the explosion sound is the old minecraft beta one
 * Configurable Animal flee speed
