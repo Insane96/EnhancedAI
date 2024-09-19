@@ -3,9 +3,9 @@ package insane96mcp.enhancedai.modules.warden;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
+import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
-import insane96mcp.insanelib.base.config.LoadFeature;
 
 @Label(name = "Warden Attacking")
 @LoadFeature(module = Modules.Ids.WARDEN)

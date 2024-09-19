@@ -5,7 +5,7 @@ import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.Module;
-import insane96mcp.insanelib.base.config.LoadFeature;
+import insane96mcp.insanelib.base.LoadFeature;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -63,7 +63,8 @@ public class Jump extends Feature {
                 return false;
             }
             double yDistance = this.target.getY() - this.goalOwner.getY();
-            return yDistance > 0 && yDistance <= 1 + Mth.ceil(this.goalOwner.getBbHeight()) && ticksWithoutPath > adjustedTickDelay(20);
+            double distance = this.goalOwner.distanceToSqr(this.target);
+            return distance < 36 && yDistance > 0 && yDistance <= 1 + Mth.ceil(this.goalOwner.getBbHeight()) && ticksWithoutPath > adjustedTickDelay(25);
         }
 
         @Override

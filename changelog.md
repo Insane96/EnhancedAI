@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.5.1
+* Requires InsaneLib 1.15.0
+* Mobs no longer jump if the target is more than 6 blocks away
+* Pillagers, Skeletons and Piglin have been removed from the `allow_jumping` entity type tag (they can no longer jump)
+
 ## 2.5.0
 * Added Jump feature
   * If the mob is below the target by a few blocks, he will jump trying to hit him
