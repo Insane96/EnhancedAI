@@ -32,7 +32,7 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@Label(name = "Throwing Web", description = "Makes spiders throw a web at a player, slowing them. Use the enhancedai:")
+@Label(name = "Throwing Web", description = "Makes spiders throw a web at a player, slowing them")
 @LoadFeature(module = Modules.Ids.SPIDER)
 public class ThrowingWeb extends Feature {
 	public static final TagKey<EntityType<?>> CAN_THROW_WEBS = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "can_throw_webs"));

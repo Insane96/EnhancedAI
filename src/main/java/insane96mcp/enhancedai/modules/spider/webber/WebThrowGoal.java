@@ -57,6 +57,10 @@ public class WebThrowGoal extends Goal {
 		this.cooldown = adjustedTickDelay(ThrowingWeb.throwingCooldown.getIntRandBetween(spider.getRandom()));
 	}
 
+	public void onHit() {
+		this.cooldown *= adjustedTickDelay(100);
+	}
+
 	public void stop() {
 		this.targetPlayer = null;
 	}

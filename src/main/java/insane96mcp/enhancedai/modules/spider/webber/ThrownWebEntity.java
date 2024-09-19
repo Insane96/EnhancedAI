@@ -58,6 +58,11 @@ public class ThrownWebEntity extends ThrowableItemProjectile {
 
 		if (ThrowingWeb.applySpeed && this.getOwner() instanceof Mob mob && mob.getTarget() == result.getEntity()) {
 			mob.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 100, 1));
+			mob.goalSelector.availableGoals.forEach(prioritizedGoal -> {
+				if (!(prioritizedGoal.getGoal() instanceof WebThrowGoal webThrowGoal))
+					return;
+				webThrowGoal.onHit();
+			});
 		}
 		ThrowingWeb.applyEffects((LivingEntity) this.getOwner(), entity);
 		ThrowingWeb.applyWeb(entity);

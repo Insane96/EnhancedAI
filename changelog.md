@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* When Webber spiders now hit the target, the web cooldown is now increased by 5 seconds
+
 ## 2.5.1
 * Requires InsaneLib 1.15.0
 * Mobs no longer jump if the target is more than 6 blocks away
