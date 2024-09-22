@@ -122,7 +122,7 @@ public class CreeperSwell extends Feature {
 	public static Boolean angryForcedExplosion = true;
 	@Config
 	@Label(name = "Blow up on death", description = "Makes creepers blow up on death like when they were added back in 0.30")
-	public static BlowUpOnDeath blowUpOnDeath = BlowUpOnDeath.NONE;
+	public static BlowUpOnDeath blowUpOnDeath = BlowUpOnDeath.CHARGED;
 	@Config
 	@Label(name = "IguanaTweaks Reborn Integration", description = "If IguanaTweaks Reborn is installed and Explosion Overhaul is enabled, Angry creeper will deal more knockback and break more blocks and breaching creepers will break more blocks")
 	public static Boolean iguanaTweaksIntegration = true;
@@ -227,17 +227,33 @@ public class CreeperSwell extends Feature {
 	public void onCreeperRemoved(EntityLeaveLevelEvent event) {
 		if (!this.isEnabled()
 				|| !(event.getEntity() instanceof Creeper creeper)
-				|| !creeper.isDeadOrDying())
+				|| !creeper.isDeadOrDying()
+				|| creeper.level().isClientSide)
 			return;
 
 		if (blowUpOnDeath == BlowUpOnDeath.ALL || (blowUpOnDeath == BlowUpOnDeath.CHARGED && creeper.isPowered()) || (creeper.getPersistentData().getBoolean(ANGRY) && angryExplodeOnDeath)) {
-			if (!creeper.level().isClientSide) {
-				float f = creeper.isPowered() ? 2.0F : 1.0F;
-				creeper.level().explode(creeper, creeper.getX(), creeper.getY(), creeper.getZ(), (float)creeper.explosionRadius * f, Level.ExplosionInteraction.MOB);
-				creeper.spawnLingeringCloud();
-			}
+			float f = creeper.isPowered() ? 2.0F : 1.0F;
+			creeper.level().explode(creeper, creeper.getX(), creeper.getY(), creeper.getZ(), (float)creeper.explosionRadius * f, Level.ExplosionInteraction.MOB);
+			creeper.spawnLingeringCloud();
 		}
 	}
+
+	/*@SubscribeEvent
+	public void onCreeperDeath(LivingDeathEvent event) {
+		if (!this.isEnabled()
+				|| !(event.getEntity() instanceof Creeper creeper))
+			return;
+
+		if (blowUpOnDeath == BlowUpOnDeath.ALL || (blowUpOnDeath == BlowUpOnDeath.CHARGED && creeper.isPowered()) || (creeper.getPersistentData().getBoolean(ANGRY) && angryExplodeOnDeath)) {
+			event.setCanceled(true);
+			creeper.setHealth(1f);
+			//creeper.setInvulnerable(true);
+			creeper.ignite();
+			creeper.invulnerableTime = 1000;
+			//creeper.setNoAi(true);
+			//creeper.setDeltaMovement(Vec3.ZERO);
+		}
+	}*/
 
 	@SubscribeEvent
 	public void onCreeperTick(LivingEvent.LivingTickEvent event) {
@@ -269,7 +285,7 @@ public class CreeperSwell extends Feature {
 			return;
 		ServerLevel serverLevel = (ServerLevel) creeper.level();
 		if (creeper.getPersistentData().getBoolean(ANGRY)) {
-			for(int j = 0; j < serverLevel.players().size(); ++j) {
+			for (int j = 0; j < serverLevel.players().size(); ++j) {
 				ServerPlayer serverplayer = serverLevel.players().get(j);
 				BlockPos blockpos = serverplayer.blockPosition();
 				if (!blockpos.closerToCenterThan(new Vec3(creeper.getX(), creeper.getY() + 0.5d, creeper.getZ()), 16))
