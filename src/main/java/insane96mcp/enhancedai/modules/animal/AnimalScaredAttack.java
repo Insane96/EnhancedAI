@@ -16,6 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -105,7 +106,7 @@ public class AnimalScaredAttack extends Feature {
             }
         }
         else if (playerScared) {
-            EAAvoidEntityGoal<Player> avoidEntityGoal = new EAAvoidEntityGoal<>(animal, Player.class, (float) 16, (float) 8, fleeSpeedNear, fleeSpeedFar);
+            AnimalAvoidPlayersGoal avoidEntityGoal = new AnimalAvoidPlayersGoal(animal, Player.class, (float) 16, (float) 8, fleeSpeedNear, fleeSpeedFar);
             animal.goalSelector.addGoal(1, avoidEntityGoal);
         }
     }
@@ -119,6 +120,22 @@ public class AnimalScaredAttack extends Feature {
         @Override
         public boolean canUse() {
             return super.canUse() && !this.mob.isBaby();
+        }
+    }
+
+    public static class AnimalAvoidPlayersGoal extends EAAvoidEntityGoal<Player> {
+        private Animal animal;
+
+        public AnimalAvoidPlayersGoal(PathfinderMob entity, Class<Player> classToAvoidIn, float avoidDistance, float avoidDistanceNear, double nearSpeed, double farSpeed) {
+            super(entity, classToAvoidIn, avoidDistance, avoidDistanceNear, nearSpeed, farSpeed);
+            this.animal = (Animal) entity;
+        }
+
+        @Override
+        public boolean canUse() {
+            if (animal instanceof OwnableEntity ownableEntity && ownableEntity.getOwner() != null)
+                return false;
+            return super.canUse();
         }
     }
 }

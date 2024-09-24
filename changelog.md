@@ -2,6 +2,7 @@
 
 ## Upcoming
 * When Webber spiders now hit the target, the web cooldown is now increased by 5 seconds
+* Tamable animals no longer flee from players
 
 ## 2.5.1
 * Requires InsaneLib 1.15.0
