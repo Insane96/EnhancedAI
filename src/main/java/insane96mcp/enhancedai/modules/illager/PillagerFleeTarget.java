@@ -1,7 +1,7 @@
 package insane96mcp.enhancedai.modules.illager;
 
 import insane96mcp.enhancedai.EnhancedAI;
-import insane96mcp.enhancedai.ai.EAAvoidEntityGoal;
+import insane96mcp.enhancedai.ai.EAAvoidTargetGoal;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.setup.EATags;
 import insane96mcp.enhancedai.setup.NBTUtils;
@@ -16,7 +16,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Pillager;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -67,8 +66,8 @@ public class PillagerFleeTarget extends Feature {
         if (!avoidTarget)
             return;
 
-        EAAvoidEntityGoal<Player> avoidEntityGoal = new EAAvoidEntityGoal<>(pillager, Player.class, (float) fleeDistanceFar1, (float) fleeDistanceNear1, fleeSpeedNear1, fleeSpeedFar1);
-        avoidEntityGoal.setAttackWhenRunning(attackWhenAvoiding);
-        pillager.goalSelector.addGoal(1, avoidEntityGoal);
+        EAAvoidTargetGoal avoidTargetGoal = new EAAvoidTargetGoal(pillager, (float) fleeDistanceFar1, (float) fleeDistanceNear1, fleeSpeedNear1, fleeSpeedFar1);
+        avoidTargetGoal.setAttackWhenRunning(attackWhenAvoiding);
+        pillager.goalSelector.addGoal(1, avoidTargetGoal);
     }
 }

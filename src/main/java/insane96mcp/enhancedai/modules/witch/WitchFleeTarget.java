@@ -1,7 +1,7 @@
 package insane96mcp.enhancedai.modules.witch;
 
 import insane96mcp.enhancedai.EnhancedAI;
-import insane96mcp.enhancedai.ai.EAAvoidEntityGoal;
+import insane96mcp.enhancedai.ai.EAAvoidTargetGoal;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.setup.EATags;
 import insane96mcp.enhancedai.setup.NBTUtils;
@@ -16,7 +16,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Witch;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -69,8 +68,8 @@ public class WitchFleeTarget extends Feature {
         if (!avoidTarget)
             return;
 
-        EAAvoidEntityGoal<Player> avoidEntityGoal = new EAAvoidEntityGoal<>(witch, Player.class, (float) fleeDistanceFar1, (float) fleeDistanceNear1, fleeSpeedNear1, fleeSpeedFar1);
-        avoidEntityGoal.setAttackWhenRunning(attackWhenAvoiding);
-        witch.goalSelector.addGoal(1, avoidEntityGoal);
+        EAAvoidTargetGoal avoidTargetGoal = new EAAvoidTargetGoal(witch, (float) fleeDistanceFar1, (float) fleeDistanceNear1, fleeSpeedNear1, fleeSpeedFar1);
+        avoidTargetGoal.setAttackWhenRunning(attackWhenAvoiding);
+        witch.goalSelector.addGoal(1, avoidTargetGoal);
     }
 }

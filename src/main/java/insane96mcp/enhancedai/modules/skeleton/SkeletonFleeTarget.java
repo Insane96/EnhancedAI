@@ -2,6 +2,7 @@ package insane96mcp.enhancedai.modules.skeleton;
 
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.ai.EAAvoidEntityGoal;
+import insane96mcp.enhancedai.ai.EAAvoidTargetGoal;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.setup.EATags;
 import insane96mcp.enhancedai.setup.NBTUtils;
@@ -18,7 +19,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
-import net.minecraft.world.entity.player.Player;
 
 import java.util.List;
 
@@ -78,9 +78,9 @@ public class SkeletonFleeTarget extends Feature {
 
         avoidEntityGoals.forEach(skeleton.goalSelector::removeGoal);
         if (hasAIArrowAttack) {
-            EAAvoidEntityGoal<Player> avoidEntityGoal = new EAAvoidEntityGoal<>(skeleton, Player.class, (float) fleeDistanceFar1, (float) fleeDistanceNear1, fleeSpeedNear1, fleeSpeedFar1);
-            avoidEntityGoal.setAttackWhenRunning(attackWhenAvoiding);
-            skeleton.goalSelector.addGoal(1, avoidEntityGoal);
+            EAAvoidTargetGoal avoidTargetGoal = new EAAvoidTargetGoal(skeleton, (float) fleeDistanceFar1, (float) fleeDistanceNear1, fleeSpeedNear1, fleeSpeedFar1);
+            avoidTargetGoal.setAttackWhenRunning(attackWhenAvoiding);
+            skeleton.goalSelector.addGoal(1, avoidTargetGoal);
         }
     }
 }

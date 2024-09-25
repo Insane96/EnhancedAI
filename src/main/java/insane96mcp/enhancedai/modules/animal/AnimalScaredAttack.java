@@ -111,7 +111,7 @@ public class AnimalScaredAttack extends Feature {
         }
     }
 
-    public static class AnimalMeleeAttackGoal extends MeleeAttackGoal{
+    public static class AnimalMeleeAttackGoal extends MeleeAttackGoal {
 
         public AnimalMeleeAttackGoal(PathfinderMob pMob, double pSpeedModifier, boolean pFollowingTargetEvenIfNotSeen) {
             super(pMob, pSpeedModifier, pFollowingTargetEvenIfNotSeen);
