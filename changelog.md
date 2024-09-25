@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 2.5.2
 * Witches, Skeletons and Pillagers now actually flee from the target instead of running away from any Player
   * This should increase the performance of the features since they don't have to get the nearest entity anymore
 * Wolves can now heal like Horses: 1 in 900 chance each tick
