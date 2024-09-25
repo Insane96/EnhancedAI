@@ -1,6 +1,7 @@
 # Changelog
 
 ## Upcoming
+* Wolves can now heal like Horses: 1 in 900 chance each tick
 * When Webber spiders now hit the target, the web cooldown is now increased by 5 seconds
 * Tamable animals no longer flee from players
 

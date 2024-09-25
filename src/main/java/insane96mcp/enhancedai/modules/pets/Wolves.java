@@ -16,6 +16,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.UUID;
@@ -28,6 +29,12 @@ public class Wolves extends Feature {
     @Config
     @Label(name = "Double HP and Damage")
     public static Boolean doubleHpAndDamage = true;
+    @Config
+    @Label(name = "Bonus Movement Speed")
+    public static Boolean bonusMovementSpeed = true;
+    @Config
+    @Label(name = "Passive Heal Speed", description = "Wolves will slowly heal like horses. This is 1 in x chance to heal 1 hp each tick.")
+    public static Integer passiveHealSpeed = 900;
 
     public Wolves(Module module, boolean enabledByDefault, boolean canBeDisabled) {
         super(module, enabledByDefault, canBeDisabled);
@@ -36,14 +43,29 @@ public class Wolves extends Feature {
     @SubscribeEvent
     public void onSpawn(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
-                || !doubleHpAndDamage
+                || !doubleHpAndDamage && !bonusMovementSpeed
                 || !(event.getEntity() instanceof Wolf wolf)
                 || !wolf.getType().is(CHANGE_WOLVES)
                 || wolf.getPersistentData().contains(ON_SPAWN_PROCESSED))
             return;
 
-        MCUtils.applyModifier(wolf, Attributes.MOVEMENT_SPEED, UUID.fromString("4be0baaf-17a5-4bad-af5a-1b1944ed0bf3"), "More Movement speed for Wolves", 0.25d, AttributeModifier.Operation.MULTIPLY_BASE, true);
-        MCUtils.applyModifier(wolf, Attributes.MAX_HEALTH, UUID.fromString("f9353c93-25a5-42f4-a80e-4f4834b12e77"), "More HP for Wolves", 1d, AttributeModifier.Operation.MULTIPLY_BASE, true);
-        MCUtils.applyModifier(wolf, Attributes.ATTACK_DAMAGE, UUID.fromString("e5e5bb8d-3eef-4e92-8897-909acdd4be61"), "More Damage for Wolves", 1d, AttributeModifier.Operation.MULTIPLY_BASE, true);
+        if (bonusMovementSpeed)
+            MCUtils.applyModifier(wolf, Attributes.MOVEMENT_SPEED, UUID.fromString("4be0baaf-17a5-4bad-af5a-1b1944ed0bf3"), "More Movement speed for Wolves", 0.25d, AttributeModifier.Operation.MULTIPLY_BASE, true);
+        if (doubleHpAndDamage) {
+            MCUtils.applyModifier(wolf, Attributes.MAX_HEALTH, UUID.fromString("f9353c93-25a5-42f4-a80e-4f4834b12e77"), "More HP for Wolves", 1d, AttributeModifier.Operation.MULTIPLY_BASE, true);
+            MCUtils.applyModifier(wolf, Attributes.ATTACK_DAMAGE, UUID.fromString("e5e5bb8d-3eef-4e92-8897-909acdd4be61"), "More Damage for Wolves", 1d, AttributeModifier.Operation.MULTIPLY_BASE, true);
+        }
+    }
+
+    @SubscribeEvent
+    public void onHeal(LivingEvent.LivingTickEvent event) {
+        if (!this.isEnabled()
+                || passiveHealSpeed == 0
+                || !(event.getEntity() instanceof Wolf wolf)
+                || !wolf.getType().is(CHANGE_WOLVES))
+            return;
+
+        if (wolf.getHealth() < wolf.getMaxHealth() && wolf.getRandom().nextInt(passiveHealSpeed) == 0)
+            wolf.heal(1);
     }
 }
