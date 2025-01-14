@@ -90,7 +90,7 @@ public class SkeletonShoot extends Feature {
 				inaccuracy *= 2.5d;
 			}
 			if (skeleton.level().getDifficulty().equals(Difficulty.HARD))
-				shootingCooldown1 /= 1.5f;
+				shootingCooldown1 = (int) (shootingCooldown1 * 0.67f);
 
 			EARangedBowAttackGoal rangedBowAttackGoal = (EARangedBowAttackGoal) new EARangedBowAttackGoal(skeleton, 1.0d, shootingRange1, strafe)
 					.setBowChargeTicks(bowChargeTicks1)
