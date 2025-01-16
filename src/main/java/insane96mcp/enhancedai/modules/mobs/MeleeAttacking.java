@@ -3,10 +3,10 @@ package insane96mcp.enhancedai.modules.mobs;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
+import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.Difficulty;
-import insane96mcp.insanelib.base.LoadFeature;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -35,7 +35,7 @@ public class MeleeAttacking extends Feature {
 	public static Difficulty attackSpeedMultiplier = new Difficulty(0.4d, 0.5d, 0.6d);
 	@Config(min = 0f, max = 4f)
 	@Label(name = "Attack Speed.Maximum", description = "The maximum attack speed a mob can attack with (in attacks per second, 2 is an attack every 0.5 seconds, 1.25 is an attack every 0.8s, 1 is an attack every 1s). In vanilla mobs have 1 attack speed.")
-	public static Double attackSpeedMaximum = 1.25d;
+	public static Double attackSpeedMaximum = 2d;
 
 	public MeleeAttacking(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super(module, enabledByDefault, canBeDisabled);

@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.5.3
+* Fixed mobs attack speed being doubled
+  * Mojang's melee attack goal uses a method that halves the attack speed cooldown ... for no reason
+* Mobs max attack speed is now 2 instead of 1.25
+
 ## 2.5.2
 * Witches, Skeletons and Pillagers now actually flee from the target instead of running away from any Player
   * This should increase the performance of the features since they don't have to get the nearest entity anymore
