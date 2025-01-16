@@ -3,6 +3,7 @@
 ## 2.5.3
 * Fixed mobs attack speed being doubled
   * Mojang's melee attack goal uses a method that halves the attack speed cooldown ... for no reason
+* Miner zombies no longer reset the attack goal if within attack range
 * Mobs max attack speed is now 2 instead of 1.25
 * Decreased skeleton's shooting cooldown
   * Also, hard mode no longer makes skeletons shoot faster

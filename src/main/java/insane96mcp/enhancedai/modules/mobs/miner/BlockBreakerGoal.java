@@ -201,6 +201,8 @@ public class BlockBreakerGoal extends Goal {
 		if (this.miner.getTarget() == null)
 			return false;
 
+		if (this.miner.distanceTo(this.miner.getTarget()) <= 2.25)
+			return false;
 		if (this.lastPosition == null || this.miner.distanceToSqr(this.lastPosition) > 2.25d) {
 			this.lastPosition = this.miner.position();
 			this.lastPositionTickstamp = this.miner.tickCount;
