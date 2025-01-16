@@ -14,7 +14,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
@@ -39,8 +38,8 @@ public class SkeletonShoot extends Feature {
 	@Label(name = "Shooting Range", description = "The range from where a skeleton will shoot a player")
 	public static MinMax shootingRange = new MinMax(24, 32);
 	@Config(min = 0)
-	@Label(name = "Shooting Cooldown", description = "The ticks cooldown after shooting. This is reduced by 33% in Hard difficulty")
-	public static MinMax shootingCooldown = new MinMax(40, 55);
+	@Label(name = "Shooting Cooldown", description = "The ticks cooldown after shooting")
+	public static MinMax shootingCooldown = new MinMax(35, 40);
 	@Config(min = 0)
 	@Label(name = "Bow charge ticks", description = "The ticks the skeleton charges the bow. at least 20 ticks for a full charge.")
 	public static MinMax bowChargeTicks = new MinMax(15, 30);
@@ -89,8 +88,6 @@ public class SkeletonShoot extends Feature {
 				bowChargeTicks1 = 1;
 				inaccuracy *= 2.5d;
 			}
-			if (skeleton.level().getDifficulty().equals(Difficulty.HARD))
-				shootingCooldown1 = (int) (shootingCooldown1 * 0.67f);
 
 			EARangedBowAttackGoal rangedBowAttackGoal = (EARangedBowAttackGoal) new EARangedBowAttackGoal(skeleton, 1.0d, shootingRange1, strafe)
 					.setBowChargeTicks(bowChargeTicks1)
