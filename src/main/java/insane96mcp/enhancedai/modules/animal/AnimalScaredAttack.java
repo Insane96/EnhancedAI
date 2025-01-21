@@ -119,7 +119,7 @@ public class AnimalScaredAttack extends Feature {
 
         @Override
         public boolean canUse() {
-            return super.canUse() && !this.mob.isBaby();
+            return !this.mob.isBaby() && super.canUse();
         }
     }
 

@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Reduced lag caused by the Animal Attack AI with many baby animals
+
 ## 2.5.3
 * Fixed mobs attack speed being doubled
   * Mojang's melee attack goal uses a method that halves the attack speed cooldown ... for no reason
