@@ -14,6 +14,10 @@
         "minecraft:pig",
         "minecraft:rabbit",
         "minecraft:sheep",
-        "minecraft:sniffer"
+        "minecraft:sniffer",
+        {
+            "required": false,
+            "id": "environmental:duck"
+        }
     ]
 }

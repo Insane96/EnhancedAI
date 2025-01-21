@@ -2,6 +2,7 @@
 
 ## Upcoming
 * Reduced lag caused by the Animal Attack AI with many baby animals
+* Environmental ducks now can flee and fight back
 
 ## 2.5.3
 * Fixed mobs attack speed being doubled
