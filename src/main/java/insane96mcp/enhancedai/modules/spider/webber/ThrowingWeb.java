@@ -109,9 +109,9 @@ public class ThrowingWeb extends Feature {
 		MobEffectInstance slowness = entity.getEffect(MobEffects.MOVEMENT_SLOWDOWN);
 
 		if (stackSlowness && slowness != null)
-			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, slownessDuration, Math.min(slowness.getAmplifier() + slownessAmplifier + 1, maxSlowness - 1), true, true, true));
+			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, slownessDuration, Math.min(slowness.getAmplifier() + slownessAmplifier + 1, maxSlowness - 1), false, false, true));
 		else
-			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, slownessDuration, slownessAmplifier, true, true, true));
+			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, slownessDuration, slownessAmplifier, false, false, true));
 	}
 
 	public static void applyPoison(LivingEntity spider, LivingEntity entity) {
