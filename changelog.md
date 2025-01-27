@@ -1,6 +1,7 @@
 # Changelog
 
 ## Upcoming
+* Item Disruption now has a 10 seconds cooldown
 * Reduced lag caused by the Animal Attack AI with many baby animals
 * Environmental ducks now can flee and fight back
 * Web Throwers slowness no longer counts as a Beacon effect

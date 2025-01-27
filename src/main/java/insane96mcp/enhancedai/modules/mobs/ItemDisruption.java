@@ -4,10 +4,10 @@ import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
+import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.Difficulty;
-import insane96mcp.insanelib.base.LoadFeature;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -30,10 +30,15 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 public class ItemDisruption extends Feature {
     public static final TagKey<EntityType<?>> CAN_DISRUPT_ITEM = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "can_disrupt_item"));
     public static final String ITEM_DISRUPTION_CHANCE = EnhancedAI.RESOURCE_PREFIX + "item_disruption_chance";
+    public static final String LAST_DISRUPTION = EnhancedAI.RESOURCE_PREFIX + "last_disruption";
 
     @Config(min = 0d, max = 1d)
     @Label(name = "Chance", description = "Chance can be changed within entity data's ForgeData.\"enhancedai:item_disruption_chance\"")
     public static Difficulty chance = new Difficulty(0.25d, 0.25d, 0.35d);
+
+    @Config
+    @Label(name = "Cooldown", description = "Cooldown (in ticks) before being able to use the ability again.")
+    public static Integer cooldown = 200;
 
     public ItemDisruption(Module module, boolean enabledByDefault, boolean canBeDisabled) {
         super(module, enabledByDefault, canBeDisabled);
@@ -46,46 +51,51 @@ public class ItemDisruption extends Feature {
                 || !(event.getSource().getDirectEntity() instanceof Mob mob))
             return;
 
-        if (mob.getRandom().nextFloat() < mob.getPersistentData().getFloat(ITEM_DISRUPTION_CHANCE)) {
-            ItemStack stack;
-            ItemStack mainHandItem = player.getItemInHand(InteractionHand.MAIN_HAND);
-            ItemStack offHandItem = player.getItemInHand(InteractionHand.OFF_HAND);
-            if (mainHandItem.isEmpty() && offHandItem.isEmpty())
-                return;
+        if (mob.level().getGameTime() - mob.getPersistentData().getInt(LAST_DISRUPTION) < cooldown)
+            return;
 
-            if (!mainHandItem.isEmpty()) {
-                if (!offHandItem.isEmpty())
-                    stack = mob.getRandom().nextBoolean() ? mainHandItem.copy() : offHandItem.copy();
-                else
-                    stack = mainHandItem.copy();
-            }
-            else
-                stack = offHandItem.copy();
+        if (mob.getRandom().nextFloat() >= mob.getPersistentData().getFloat(ITEM_DISRUPTION_CHANCE))
+            return;
 
-            event.setCanceled(true);
-            player.level().playSound(null, player, SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1.0f, 0.5f);
-            Inventory inventory = player.getInventory();
-            int slot = inventory.findSlotMatchingItem(stack);
-            if (slot == -1)
-                slot = Inventory.SLOT_OFFHAND;
-            inventory.removeItem(slot, stack.getCount());
-            if (player.getUseItem() == stack && stack.getCount() == 1)
-                player.stopUsingItem(); // Forge: fix MC-231097 on the serverside
-            player.containerMenu.findSlot(inventory, slot).ifPresent((i) -> {
-                player.containerMenu.setRemoteSlot(i, inventory.getItem(i));
-                player.containerMenu.sendAllDataToRemote();
-            });
-            ItemEntity itementity = new ItemEntity(player.level(), player.getX(), player.getY() + player.getBbHeight() / 2f, player.getZ(), stack);
-            double x = player.getX() - mob.getX();
-            double z = player.getZ() - mob.getZ();
-            Vec2 dir = new Vec2((float) x, (float) z).normalized();
-            if (mob.getRandom().nextBoolean())
-                itementity.setDeltaMovement(itementity.getDeltaMovement().add(-dir.y * 0.4f, 0, dir.x * 0.4f));
+        ItemStack stack;
+        ItemStack mainHandItem = player.getItemInHand(InteractionHand.MAIN_HAND);
+        ItemStack offHandItem = player.getItemInHand(InteractionHand.OFF_HAND);
+        if (mainHandItem.isEmpty() && offHandItem.isEmpty())
+            return;
+
+        if (!mainHandItem.isEmpty()) {
+            if (!offHandItem.isEmpty())
+                stack = mob.getRandom().nextBoolean() ? mainHandItem.copy() : offHandItem.copy();
             else
-                itementity.setDeltaMovement(itementity.getDeltaMovement().add(dir.y * 0.4f, 0, -dir.x * 0.4f));
-            itementity.setPickUpDelay(40);
-            player.getCommandSenderWorld().addFreshEntity(itementity);
+                stack = mainHandItem.copy();
         }
+        else
+            stack = offHandItem.copy();
+
+        event.setCanceled(true);
+        player.level().playSound(null, player, SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1.0f, 0.5f);
+        Inventory inventory = player.getInventory();
+        int slot = inventory.findSlotMatchingItem(stack);
+        if (slot == -1)
+            slot = Inventory.SLOT_OFFHAND;
+        inventory.removeItem(slot, stack.getCount());
+        if (player.getUseItem() == stack && stack.getCount() == 1)
+            player.stopUsingItem(); // Forge: fix MC-231097 on the serverside
+        player.containerMenu.findSlot(inventory, slot).ifPresent((i) -> {
+            player.containerMenu.setRemoteSlot(i, inventory.getItem(i));
+            player.containerMenu.sendAllDataToRemote();
+        });
+        ItemEntity itementity = new ItemEntity(player.level(), player.getX(), player.getY() + player.getBbHeight() / 2f, player.getZ(), stack);
+        double x = player.getX() - mob.getX();
+        double z = player.getZ() - mob.getZ();
+        Vec2 dir = new Vec2((float) x, (float) z).normalized();
+        if (mob.getRandom().nextBoolean())
+            itementity.setDeltaMovement(itementity.getDeltaMovement().add(-dir.y * 0.4f, 0.1f, dir.x * 0.4f));
+        else
+            itementity.setDeltaMovement(itementity.getDeltaMovement().add(dir.y * 0.4f, 0.1f, -dir.x * 0.4f));
+        itementity.setDefaultPickUpDelay();
+        mob.level().addFreshEntity(itementity);
+        mob.getPersistentData().putLong(LAST_DISRUPTION, mob.level().getGameTime());
     }
 
     @SubscribeEvent
