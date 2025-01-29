@@ -6,6 +6,7 @@
 * Environmental ducks now can flee and fight back
 * Web Throwers slowness no longer counts as a Beacon effect
 * Caverns and Chasms Deepers are now affected by the Swelling Creeper feature
+* Creepers can no longer attack villagers and iron golems
 
 ## 2.5.3
 * Fixed mobs attack speed being doubled
