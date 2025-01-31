@@ -1,13 +1,13 @@
 # Changelog
 
-## Upcoming
+## 2.5.4
 * Item Disruption now has a 10 seconds cooldown
 * Reduced lag caused by the Animal Attack AI with many baby animals
 * Environmental ducks now can flee and fight back
 * Web Throwers slowness no longer counts as a Beacon effect
 * Caverns and Chasms Deepers and Savage and Ravage Creepie are now affected by the Swelling Creeper feature
-* Creepers can no longer attack villagers and iron golems
 * Added a new entity type tag `enhancedai:can_creeper_launch` which defines which creepers can launch (by default only vanilla creepers)
+* Creepers can no longer attack villagers and iron golems
 
 ## 2.5.3
 * Fixed mobs attack speed being doubled
