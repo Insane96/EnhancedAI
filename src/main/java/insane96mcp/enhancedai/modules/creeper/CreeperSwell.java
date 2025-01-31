@@ -47,6 +47,7 @@ import java.util.function.Supplier;
 @LoadFeature(module = Modules.Ids.CREEPER)
 public class CreeperSwell extends Feature {
 	public static final TagKey<EntityType<?>> CHANGE_CREEPER_SWELL = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "change_creeper_swell"));
+	public static final TagKey<EntityType<?>> CAN_CREEPER_LAUNCH = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "can_creeper_launch"));
 
 	public static final String LAUNCH = EnhancedAI.RESOURCE_PREFIX + "launch";
 	public static final String BREACH = EnhancedAI.RESOURCE_PREFIX + "breach";
@@ -175,7 +176,7 @@ public class CreeperSwell extends Feature {
 		boolean walkingFuse = NBTUtils.getBooleanOrPutDefault(persistentData, WALKING_FUSE, creeper.getRandom().nextDouble() < walkingFuseChance);
 		boolean ignoreWalls = NBTUtils.getBooleanOrPutDefault(persistentData, IGNORE_WALLS, creeper.getRandom().nextDouble() < ignoreWallsChance);
 		boolean breach = NBTUtils.getBooleanOrPutDefault(persistentData, BREACH, creeper.getRandom().nextDouble() < breachChance);
-		boolean launch = NBTUtils.getBooleanOrPutDefault(persistentData, LAUNCH, creeper.getRandom().nextDouble() < launchChance);
+		boolean launch = creeper.getType().is(CAN_CREEPER_LAUNCH) && NBTUtils.getBooleanOrPutDefault(persistentData, LAUNCH, creeper.getRandom().nextDouble() < launchChance);
 		boolean angry = NBTUtils.getBooleanOrPutDefault(persistentData, ANGRY, creeper.getRandom().nextDouble() < angryChance);
 		boolean beta = NBTUtils.getBooleanOrPutDefault(persistentData, BETA, creeper.getRandom().nextDouble() < betaCreeperChance);
 
