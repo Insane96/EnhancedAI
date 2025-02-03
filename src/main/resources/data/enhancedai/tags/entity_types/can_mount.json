@@ -7,6 +7,10 @@
         "minecraft:drowned",
         "minecraft:skeleton",
         "minecraft:stray",
-        "minecraft:cave_spider"
+        "minecraft:cave_spider",
+        {
+            "required": false,
+            "id": "caverns_and_chasms:deeper"
+        }
     ]
 }

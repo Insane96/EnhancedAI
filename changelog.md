@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Added Caverns and Chasms Deepers to many entity type tags
+
 ## 2.5.4
 * Item Disruption now has a 10 seconds cooldown
 * Reduced lag caused by the Animal Attack AI with many baby animals

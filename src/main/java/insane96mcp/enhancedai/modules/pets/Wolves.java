@@ -58,7 +58,7 @@ public class Wolves extends Feature {
     }
 
     @SubscribeEvent
-    public void onHeal(LivingEvent.LivingTickEvent event) {
+    public void tryHealOnTick(LivingEvent.LivingTickEvent event) {
         if (!this.isEnabled()
                 || passiveHealSpeed == 0
                 || !(event.getEntity() instanceof Wolf wolf)

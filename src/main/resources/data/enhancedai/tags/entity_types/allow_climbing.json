@@ -16,6 +16,10 @@
         "minecraft:vindicator",
         "minecraft:witch",
         "minecraft:wither_skeleton",
-        "minecraft:zombie_villager"
+        "minecraft:zombie_villager",
+        {
+            "required": false,
+            "id": "caverns_and_chasms:deeper"
+        }
     ]
 }
