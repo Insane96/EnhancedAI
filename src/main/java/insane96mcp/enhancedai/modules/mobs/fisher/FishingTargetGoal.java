@@ -12,11 +12,12 @@ public class FishingTargetGoal extends Goal {
 	//Runs every other tick
 	private final Mob fisher;
 	private LivingEntity target;
-	private int cooldown = reducedTickDelay(60);
+	private int cooldown = 0;
 	private int inventoryHookCooldown = 0;
 
 	private int reel;
 	private int fishingHookLifetime = 0;
+	private boolean hasHookedEntity = false;
 
 	FishingHook fishingHook;
 
@@ -29,10 +30,10 @@ public class FishingTargetGoal extends Goal {
 		if (target == null)
 			return false;
 
-		if (--this.cooldown > 0)
+		if (this.fisher.getMainHandItem().getItem() != Items.FISHING_ROD && this.fisher.getOffhandItem().getItem() != Items.FISHING_ROD)
 			return false;
 
-		if (this.fisher.getMainHandItem().getItem() != Items.FISHING_ROD && this.fisher.getOffhandItem().getItem() != Items.FISHING_ROD)
+		if (--this.cooldown > 0)
 			return false;
 
 		if (this.fisher.isUnderWater())
@@ -73,11 +74,13 @@ public class FishingTargetGoal extends Goal {
 		if (this.fishingHook.getHookedIn() != null || --this.fishingHookLifetime <= 0) {
 			--this.reel;
 			if (--this.reel <= 0) {
+				if (this.fishingHook.getHookedIn() != null)
+					this.hasHookedEntity = true;
 				this.fishingHook.level().playSound(null, this.fisher.getX(), this.fisher.getY(), this.fisher.getZ(), SoundEvents.FISHING_BOBBER_RETRIEVE, SoundSource.HOSTILE, 1.0F, 0.4F / (this.fisher.getRandom().nextFloat() * 0.4F + 0.8F));
-				boolean isInventoryHooked = this.fisher.getRandom().nextDouble() < FisherMobs.hookInventoryChance;
-				this.fishingHook.retrieve(--inventoryHookCooldown <= 0 && isInventoryHooked);
-				if (inventoryHookCooldown <= 0 && isInventoryHooked)
-					inventoryHookCooldown = 4;
+				boolean isInventoryHooked = --this.inventoryHookCooldown <= 0 && this.fisher.getRandom().nextDouble() < FisherMobs.hookHandsChance;
+				this.fishingHook.retrieve(isInventoryHooked);
+				if (isInventoryHooked)
+					this.inventoryHookCooldown = 4;
 			}
 		}
 	}
@@ -85,7 +88,10 @@ public class FishingTargetGoal extends Goal {
 	public void stop() {
 		this.target = null;
 		this.fishingHook = null;
-		this.cooldown = reducedTickDelay(60);
+		this.cooldown = reducedTickDelay((int) FisherMobs.cooldown.getByDifficulty(this.fisher.level()));
+		if (hasHookedEntity)
+			this.cooldown *= 2;
 		this.fisher.setAggressive(false);
+		this.hasHookedEntity = false;
 	}
 }

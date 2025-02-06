@@ -30,12 +30,16 @@ public class FisherMobs extends Feature {
 	public static Double equipFishingRodChance = 0.07;
 
 	@Config(min = 0d, max = 1d)
-	@Label(name = "Hook Inventory Chance", description = "Chance for a fisher mob to steal an item from the players' inventory instead of reeling the player.")
-	public static Double hookInventoryChance = 0.4d;
+	@Label(name = "Hook Hands Chance", description = "Chance for a fisher mob to steal an entity item in the hands instead of reeling the player.")
+	public static Double hookHandsChance = 0.4d;
 
 	@Config
 	@Label(name = "Reel in ticks", description = "How fast will a mob reel in the grappled entity (or if the hook is on the ground).")
-	public static Difficulty reelInTicks = new Difficulty(40, 30, 20);
+	public static Difficulty reelInTicks = new Difficulty(30, 30, 20);
+
+	@Config
+	@Label(name = "Cooldown", description = "How much will a mob wait before casting the bobber again. The cooldown is doubled if successfully reels in someone.")
+	public static Difficulty cooldown = new Difficulty(80, 80, 60);
 
 	public FisherMobs(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super(module, enabledByDefault, canBeDisabled);

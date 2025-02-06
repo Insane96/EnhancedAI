@@ -1,6 +1,10 @@
 # Changelog
 
 ## Upcoming
+* Fisher mobs
+  * Now only hooks main or off-hand items
+  * Items reeling now works on any entity not only players
+  * Cooldown configurable and doubled if reels in someone
 * Added Caverns and Chasms Deepers to many entity type tags
 
 ## 2.5.4

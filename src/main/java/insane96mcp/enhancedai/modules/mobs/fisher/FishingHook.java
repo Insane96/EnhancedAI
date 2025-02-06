@@ -10,6 +10,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
@@ -173,32 +174,34 @@ public class FishingHook extends Projectile {
                 || this.getOwner() == null)
             return;
         if (this.hookedIn != null) {
-            if (this.hookedIn instanceof Player player && isInventoryHooked) {
-                if (!player.getInventory().isEmpty()) {
-                    int slot;
-                    ItemStack itemStack;
-                    int blowUpPrevention = 64;
-                    do {
-                        slot = this.random.nextInt(36);
-                        itemStack = player.getInventory().getItem(slot);
-                        if (--blowUpPrevention <= 0)
-                            break;
-                    } while (itemStack.isEmpty());
-                    if (!itemStack.isEmpty()) {
-                        ItemEntity itemEntity = new ItemEntity(this.level(), this.hookedIn.position().x, this.hookedIn.getEyeY(), this.hookedIn.position().z, itemStack.copy(), 0, 0, 0);
-                        itemEntity.setDefaultPickUpDelay();
-                        this.pullEntity(itemEntity);
-                        this.level().addFreshEntity(itemEntity);
-                        player.getInventory().removeItem(slot, 256);
-                    }
+            if (this.hookedIn instanceof LivingEntity living && isInventoryHooked) {
+                ItemStack itemStack;
+                EquipmentSlot slot = EquipmentSlot.byTypeAndIndex(EquipmentSlot.Type.HAND, this.random.nextInt(2));
+                if (living.getItemBySlot(slot).isEmpty())
+                    slot = slot == EquipmentSlot.MAINHAND ? EquipmentSlot.OFFHAND : EquipmentSlot.MAINHAND;
+                if (living.getItemBySlot(slot).isEmpty()) {
+                    reelIn();
+                }
+                else {
+                    itemStack = living.getItemBySlot(slot);
+                    ItemEntity itemEntity = new ItemEntity(this.level(), this.hookedIn.position().x, this.hookedIn.getEyeY(), this.hookedIn.position().z, itemStack.copy(), 0, 0, 0);
+                    itemEntity.setDefaultPickUpDelay();
+                    this.pullEntity(itemEntity);
+                    this.level().addFreshEntity(itemEntity);
+                    if (living instanceof Player player)
+                        player.getInventory().removeItem(slot == EquipmentSlot.OFFHAND ? Inventory.SLOT_OFFHAND : player.getInventory().selected, 256);
                 }
             }
             else {
-                this.pullEntity(this.hookedIn);
-                this.level().broadcastEntityEvent(this, EntityEvent.FISHING_ROD_REEL_IN);
+                reelIn();
             }
         }
         this.discard();
+    }
+
+    private void reelIn() {
+        this.pullEntity(this.hookedIn);
+        this.level().broadcastEntityEvent(this, EntityEvent.FISHING_ROD_REEL_IN);
     }
 
     public void handleEntityEvent(byte p_37123_) {
