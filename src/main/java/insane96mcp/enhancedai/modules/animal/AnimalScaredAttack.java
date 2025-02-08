@@ -112,28 +112,26 @@ public class AnimalScaredAttack extends Feature {
     }
 
     public static class AnimalMeleeAttackGoal extends MeleeAttackGoal {
-
         public AnimalMeleeAttackGoal(PathfinderMob pMob, double pSpeedModifier, boolean pFollowingTargetEvenIfNotSeen) {
             super(pMob, pSpeedModifier, pFollowingTargetEvenIfNotSeen);
         }
 
         @Override
         public boolean canUse() {
+            if (this.mob instanceof OwnableEntity ownableEntity && ownableEntity.getOwner() != null)
+                return false;
             return !this.mob.isBaby() && super.canUse();
         }
     }
 
     public static class AnimalAvoidPlayersGoal extends EAAvoidEntityGoal<Player> {
-        private Animal animal;
-
         public AnimalAvoidPlayersGoal(PathfinderMob entity, Class<Player> classToAvoidIn, float avoidDistance, float avoidDistanceNear, double nearSpeed, double farSpeed) {
             super(entity, classToAvoidIn, avoidDistance, avoidDistanceNear, nearSpeed, farSpeed);
-            this.animal = (Animal) entity;
         }
 
         @Override
         public boolean canUse() {
-            if (animal instanceof OwnableEntity ownableEntity && ownableEntity.getOwner() != null)
+            if (this.goalOwner instanceof OwnableEntity ownableEntity && ownableEntity.getOwner() != null)
                 return false;
             return super.canUse();
         }

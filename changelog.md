@@ -6,6 +6,7 @@
   * Items reeling now works on any entity not only players
   * Cooldown configurable and doubled if reels in someone
 * Added Caverns and Chasms Deepers to many entity type tags
+* Fixed Animals attacking if they had an owner
 
 ## 2.5.4
 * Item Disruption now has a 10 seconds cooldown

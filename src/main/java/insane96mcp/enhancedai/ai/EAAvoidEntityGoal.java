@@ -14,7 +14,7 @@ import java.util.EnumSet;
 import java.util.function.Predicate;
 
 public class EAAvoidEntityGoal<T extends LivingEntity> extends Goal {
-	protected final PathfinderMob entity;
+	protected final PathfinderMob goalOwner;
 	private final double farSpeed;
 	private final double nearSpeed;
 	protected T avoidTarget;
@@ -36,7 +36,7 @@ public class EAAvoidEntityGoal<T extends LivingEntity> extends Goal {
 	}
 
 	public EAAvoidEntityGoal(PathfinderMob entityIn, Class<T> avoidClass, Predicate<LivingEntity> targetPredicate, float avoidDistance, float avoidDistanceNear, double nearSpeedIn, double farSpeedIn, Predicate<LivingEntity> p_i48859_9_) {
-		this.entity = entityIn;
+		this.goalOwner = entityIn;
 		this.classToAvoid = avoidClass;
 		this.avoidTargetSelector = targetPredicate;
 		this.avoidDistance = avoidDistance * avoidDistance;
@@ -48,7 +48,7 @@ public class EAAvoidEntityGoal<T extends LivingEntity> extends Goal {
 	}
 
 	public EAAvoidEntityGoal(PathfinderMob entityIn, Class<T> avoidClass, IdTagMatcher idTagMatcher, Predicate<LivingEntity> targetPredicate, float avoidDistance, float avoidDistanceNear, double nearSpeedIn, double farSpeedIn, Predicate<LivingEntity> predicate) {
-		this.entity = entityIn;
+		this.goalOwner = entityIn;
 		this.classToAvoid = avoidClass;
 		this.avoidTargetSelector = targetPredicate;
 		this.avoidDistance = avoidDistance * avoidDistance;
@@ -60,28 +60,28 @@ public class EAAvoidEntityGoal<T extends LivingEntity> extends Goal {
 	}
 
 	public boolean canUse() {
-		this.avoidTarget = this.entity.level().getNearestEntity(this.classToAvoid, this.builtTargetSelector, this.entity, this.entity.getX(), this.entity.getY(), this.entity.getZ(), this.entity.getBoundingBox().inflate(this.avoidDistance, this.avoidDistance, this.avoidDistance));
+		this.avoidTarget = this.goalOwner.level().getNearestEntity(this.classToAvoid, this.builtTargetSelector, this.goalOwner, this.goalOwner.getX(), this.goalOwner.getY(), this.goalOwner.getZ(), this.goalOwner.getBoundingBox().inflate(this.avoidDistance, this.avoidDistance, this.avoidDistance));
 		if (this.avoidTarget == null) {
 			return false;
 		} else {
-			Vec3 vector3d = DefaultRandomPos.getPosAway(this.entity, 16, 7, this.avoidTarget.position());
+			Vec3 vector3d = DefaultRandomPos.getPosAway(this.goalOwner, 16, 7, this.avoidTarget.position());
 			if (vector3d == null) {
 				return false;
-			} else if (this.avoidTarget.distanceToSqr(vector3d.x, vector3d.y, vector3d.z) < this.avoidTarget.distanceToSqr(this.entity)) {
+			} else if (this.avoidTarget.distanceToSqr(vector3d.x, vector3d.y, vector3d.z) < this.avoidTarget.distanceToSqr(this.goalOwner)) {
 				return false;
 			} else {
-				this.path = this.entity.getNavigation().createPath(vector3d.x, vector3d.y, vector3d.z, 0);
+				this.path = this.goalOwner.getNavigation().createPath(vector3d.x, vector3d.y, vector3d.z, 0);
 				return this.path != null;
 			}
 		}
 	}
 
 	public boolean canContinueToUse() {
-		return !this.entity.getNavigation().isDone();
+		return !this.goalOwner.getNavigation().isDone();
 	}
 
 	public void start() {
-		this.entity.getNavigation().moveTo(this.path, this.farSpeed);
+		this.goalOwner.getNavigation().moveTo(this.path, this.farSpeed);
 	}
 
 	public void stop() {
@@ -89,10 +89,10 @@ public class EAAvoidEntityGoal<T extends LivingEntity> extends Goal {
 	}
 
 	public void tick() {
-		if (this.entity.distanceToSqr(this.avoidTarget) < this.avoidDistanceNear) {
-			this.entity.getNavigation().setSpeedModifier(this.nearSpeed);
+		if (this.goalOwner.distanceToSqr(this.avoidTarget) < this.avoidDistanceNear) {
+			this.goalOwner.getNavigation().setSpeedModifier(this.nearSpeed);
 		} else {
-			this.entity.getNavigation().setSpeedModifier(this.farSpeed);
+			this.goalOwner.getNavigation().setSpeedModifier(this.farSpeed);
 		}
 
 	}
