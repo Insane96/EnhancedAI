@@ -5,6 +5,7 @@
   * Now only hooks main or off-hand items
   * Items reeling now works on any entity not only players
   * Cooldown configurable and doubled if reels in someone
+* Witches no longer throw invisibility potions if aren't on ground
 * Added Caverns and Chasms Deepers to many entity type tags
 * Fixed Animals attacking if they had an owner
 
