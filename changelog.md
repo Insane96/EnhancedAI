@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 2.5.5
 * Fisher mobs
   * Now only hooks main or off-hand items
   * Items reeling now works on any entity not only players
