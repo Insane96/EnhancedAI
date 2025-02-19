@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Caverns and Chasms Mimes now have most of the AI changes applied
+
 ## 2.5.5
 * Fisher mobs
   * Now only hooks main or off-hand items
