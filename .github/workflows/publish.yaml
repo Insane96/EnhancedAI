@@ -3,7 +3,7 @@ name: Publish on CurseForge & Modrinth    #The name of your GitHub Action on git
 on: [ workflow_dispatch ]                 #When your GitHub Action will be executed ('pull_request' -> on every Merge(/Pull) Request; 'workflow_dispatch' -> allows manual execution through github.com
 
 env:                                      #Environment variables that can later be referenced using ${{ env.MINECRAFT_VERSION }}. These are useful for repeating information and allow for quick changes for new mod updates
-  VERSION: 2.5.5
+  VERSION: 2.5.6
   MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
   CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
 
