@@ -4,10 +4,10 @@ import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
+import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.Difficulty;
-import insane96mcp.insanelib.base.LoadFeature;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -26,6 +26,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 @LoadFeature(module = Modules.Ids.MOBS)
 public class BitingMobs extends Feature {
 	public static final TagKey<EntityType<?>> CAN_BITE = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "can_bite"));
+	public static final TagKey<EntityType<?>> UNAFFECTED_BY_BITE = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "unaffected_by_biting_mobs"));
 	ResourceKey<DamageType> BITE_DAMAGE_TYPE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "bite"));
 
 	@Config(min = 0d, max = 1d)
@@ -47,6 +48,7 @@ public class BitingMobs extends Feature {
 				|| !mob.getType().is(CAN_BITE)
 				|| mob.getAttribute(Attributes.ATTACK_DAMAGE) == null
 				|| !(event.getSource().getDirectEntity() instanceof LivingEntity attacker)
+				|| attacker.getType().is(UNAFFECTED_BY_BITE)
 				|| attacker.getMainHandItem().getAttributeModifiers(EquipmentSlot.MAINHAND).containsKey(Attributes.ATTACK_DAMAGE))
 			return;
 

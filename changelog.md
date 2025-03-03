@@ -1,6 +1,7 @@
 # Changelog
 
 ## Upcoming
+* Wolves are no longer affected by biting mobs
 * Caverns and Chasms Mimes now have most of the AI changes applied
 
 ## 2.5.5

@@ -1,0 +1,52 @@
+name: Publish on CurseForge & Modrinth    #The name of your GitHub Action on github.com
+
+on: [ workflow_dispatch ]                 #When your GitHub Action will be executed ('pull_request' -> on every Merge(/Pull) Request; 'workflow_dispatch' -> allows manual execution through github.com
+
+env:                                      #Environment variables that can later be referenced using ${{ env.MINECRAFT_VERSION }}. These are useful for repeating information and allow for quick changes for new mod updates
+  VERSION: 2.5.5
+  MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+  CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
+
+permissions:
+  contents: write
+
+jobs:                                     #The place where you actually tell the GitHub server what to do.
+  build:                                  #To publish your mod you only need one 'job', here it is called 'build'.
+    runs-on: ubuntu-latest                #'runs-on' specifies the operating system (linux).
+    steps:                                #Under 'steps' you will list all the individual commands, such as MC-Publish by Kir-Antipov.
+      - name: Check Environment Variables
+        run: env
+
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: "temurin"
+          java-version: 17
+
+      - name: Make Gradle Wrapper Executable
+        if: ${{ runner.os != 'Windows' }}
+        run: chmod +x ./gradlew
+
+      - name: Build
+        run: ./gradlew clean build
+
+      - name: Publish (CurseForge+Modrinth)
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          curseforge-id: 515276
+          curseforge-token: "${{env.CURSEFORGE_TOKEN}}"
+
+          modrinth-id: TDdoftI1
+          modrinth-token: "${{env.MODRINTH_TOKEN}}"
+
+          files: |
+            build/libs/!(*-@(slim)).jar
+
+          changelog: https://github.com/Insane96/EnhancedAI/blob/1.20.1/changelog.md
+          name: "${{env.VERSION}}"
+          version: "${{env.VERSION}}"
