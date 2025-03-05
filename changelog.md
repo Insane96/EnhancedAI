@@ -1,6 +1,7 @@
 # Changelog
 
 ## 2.5.6
+* Requires InsaneLib 1.18.3 and Forge 47.4.0
 * Wolves are no longer affected by biting mobs
 * Caverns and Chasms Mimes now have most of the AI changes applied
 

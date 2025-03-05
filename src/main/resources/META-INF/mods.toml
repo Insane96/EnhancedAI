@@ -1,35 +1,32 @@
 modLoader="javafml"
-loaderVersion="[46,)"
-license="All rights reserved"
-issueTrackerURL="https://github.com/Insane96/EnhancedAI/issues"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
 [[mods]]
-modId="enhancedai"
-version="${file.jarVersion}"
-displayName="Enhanced AI"
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/enhanced-ai"
-# logoFile="examplemod.png"
-# credits="Thanks for this example mod goes to Java"
-authors="Insane96MCP"
-description='''
-Give more AI variants to mobs, from Creepers breaching to Zombies mining.
+authors="${mod_authors}"
 
-Also His name is John Cena.
-'''
-[[dependencies.enhancedai]]
-    modId="forge"
-    mandatory=true
-    versionRange="[46,)"
-    ordering="NONE"
-    side="BOTH"
-[[dependencies.enhancedai]]
-    modId="minecraft"
-    mandatory=true
-    versionRange="[1.20,)"
-    ordering="NONE"
-    side="BOTH"
-[[dependencies.enhancedai]]
-    modId = "insanelib"
-    mandatory = true
-    versionRange = "[1.15.0,)"
-    ordering = "NONE"
-    side = "BOTH"
+description='''${mod_description}'''
+
+[[dependencies.${mod_id}]]
+modId="forge"
+mandatory=true
+versionRange="${forge_version_range}"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="minecraft"
+mandatory=true
+versionRange="${minecraft_version_range}"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="insanelib"
+mandatory=true
+versionRange="${insanelib_version_range}"
+ordering="NONE"
+side="BOTH"
