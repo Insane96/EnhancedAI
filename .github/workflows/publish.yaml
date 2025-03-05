@@ -2,8 +2,7 @@ name: Publish on CurseForge & Modrinth    #The name of your GitHub Action on git
 
 on: [ workflow_dispatch ]                 #When your GitHub Action will be executed ('pull_request' -> on every Merge(/Pull) Request; 'workflow_dispatch' -> allows manual execution through github.com
 
-env:                                      #Environment variables that can later be referenced using ${{ env.MINECRAFT_VERSION }}. These are useful for repeating information and allow for quick changes for new mod updates
-  VERSION: 2.5.6
+env:
   MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
   CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
 
@@ -48,5 +47,3 @@ jobs:                                     #The place where you actually tell the
             build/libs/!(*-@(slim)).jar
 
           changelog: https://github.com/Insane96/EnhancedAI/blob/1.20.1/changelog.md
-          name: "${{env.VERSION}}"
-          version: "${{env.VERSION}}"
