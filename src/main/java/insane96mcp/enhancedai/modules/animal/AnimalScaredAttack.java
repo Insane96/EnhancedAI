@@ -3,6 +3,8 @@ package insane96mcp.enhancedai.modules.animal;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.ai.EAAvoidEntityGoal;
 import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.modules.mobs.targeting.EANearestAttackableTarget;
+import insane96mcp.enhancedai.setup.EAAttributes;
 import insane96mcp.enhancedai.setup.EATags;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
@@ -10,6 +12,7 @@ import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
+import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -24,6 +27,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.PanicGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
@@ -32,17 +36,24 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@Label(name = "Animals Scared Attack", description = "Make animals fight back or be scared by players. Use the entity type tag enhancedai:can_fight_back and enhancedai:can_be_scared_by_players to add/remove animals.")
+import java.util.UUID;
+
+@Label(name = "Animals Scared Attack", description = "Make animals fight back or be scared by players. Use the entity type tag enhancedai:can_be_neutral, enhancedai:can_be_hostile, and enhancedai:can_be_scared_by_players to add/remove animals.")
 @LoadFeature(module = Modules.Ids.ANIMAL)
 public class AnimalScaredAttack extends Feature {
-    public static final TagKey<EntityType<?>> CAN_FIGHT_BACK = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "can_fight_back"));
-    public static final TagKey<EntityType<?>> CAN_BE_SCARED_BY_PLAYERS = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "can_be_scared_by_players"));
-    public static final String CAN_ATTACK_BACK = EnhancedAI.RESOURCE_PREFIX + "can_attack_back";
+    public static final TagKey<EntityType<?>> CAN_BE_NEUTRAL = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(EnhancedAI.MOD_ID, "can_be_neutral"));
+    public static final TagKey<EntityType<?>> CAN_BE_HOSTILE = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(EnhancedAI.MOD_ID, "can_be_hostile"));
+    public static final TagKey<EntityType<?>> SCARED_BY_PLAYERS = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(EnhancedAI.MOD_ID, "can_be_scared_by_players"));
+    public static final String NEUTRAL = EnhancedAI.RESOURCE_PREFIX + "neutral";
+    public static final String HOSTILE = EnhancedAI.RESOURCE_PREFIX + "hostile";
     public static final String PLAYER_SCARED = EnhancedAI.RESOURCE_PREFIX + "player_scared";
 
     @Config(min = 0d, max = 1d)
-    @Label(name = "Fight back chance", description = "Animals have this percentage chance to be able to fight back instead of fleeing. Animals have a slightly bigger range to attack. Attack damage can't be changed via config due to limitation so use mods like Mobs Properties Randomness to change the damage. Base damage is 3")
-    public static Double fightBackChance = 0.35d;
+    @Label(description = "Animals have this percentage chance to be able to fight back instead of fleeing. Animals have a slightly bigger range to attack. Attack damage can't be changed via config due to limitations so use mods like Mobs Properties Randomness to change the damage. Base damage is 3")
+    public static Double neutralChance = 0.35d;
+    @Config(min = 0d, max = 1d)
+    @Label(description = "Animals have this percentage chance to be hostile")
+    public static Double hostileChance = 0.10d;
     @Config(min = 0d, max = 1d)
     @Label(name = "Players Scared chance", description = "Animals have this percentage chance to be scared by players and run away. Fight back chance has priority over this")
     public static Double playersScaredChance = 0.25d;
@@ -88,10 +99,11 @@ public class AnimalScaredAttack extends Feature {
         CompoundTag persistentData = animal.getPersistentData();
 
         double movementSpeedMultiplier = NBTUtils.getDoubleOrPutDefault(persistentData, EATags.Passive.SPEED_MULTIPLIER_WHEN_AGGROED, speedMultiplier);
-        boolean canAttackBack = NBTUtils.getBooleanOrPutDefault(persistentData, CAN_ATTACK_BACK, animal.getType().is(CAN_FIGHT_BACK) && animal.getRandom().nextDouble() < fightBackChance);
-        boolean playerScared = NBTUtils.getBooleanOrPutDefault(persistentData, PLAYER_SCARED, !canAttackBack && animal.getType().is(CAN_BE_SCARED_BY_PLAYERS) && animal.getRandom().nextDouble() < playersScaredChance);
+        boolean neutral = NBTUtils.getBooleanOrPutDefault(persistentData, NEUTRAL, animal.getType().is(CAN_BE_NEUTRAL) && animal.getRandom().nextDouble() < neutralChance);
+        boolean hostile = NBTUtils.getBooleanOrPutDefault(persistentData, HOSTILE, animal.getType().is(CAN_BE_HOSTILE) && animal.getRandom().nextDouble() < hostileChance);
+        boolean playerScared = NBTUtils.getBooleanOrPutDefault(persistentData, PLAYER_SCARED, !neutral && animal.getType().is(SCARED_BY_PLAYERS) && animal.getRandom().nextDouble() < playersScaredChance);
 
-        if (canAttackBack) {
+        if (neutral || hostile) {
             animal.targetSelector.addGoal(1, (new HurtByTargetGoal(animal)).setAlertOthers());
             animal.goalSelector.addGoal(1, new AnimalMeleeAttackGoal(animal, movementSpeedMultiplier, true));
             animal.goalSelector.availableGoals.removeIf(wrappedGoal -> wrappedGoal.getGoal() instanceof PanicGoal);
@@ -103,6 +115,11 @@ public class AnimalScaredAttack extends Feature {
                 AttributeInstance kbAttribute = animal.getAttribute(Attributes.ATTACK_KNOCKBACK);
                 if (kbAttribute != null)
                     kbAttribute.addPermanentModifier(new AttributeModifier("Animal knockback", actualKnockback, AttributeModifier.Operation.ADDITION));
+            }
+            if (hostile) {
+                animal.targetSelector.addGoal(2, new EANearestAttackableTarget<>(animal, Player.class, false, false, TargetingConditions.forCombat()));
+                MCUtils.applyModifier(animal, Attributes.FOLLOW_RANGE, UUID.fromString("62e016b0-90d0-4e72-9d40-fffac566df20"), "Reduced follow range for hostile Animals", -0.8d, AttributeModifier.Operation.MULTIPLY_BASE, true);
+                MCUtils.applyModifier(animal, EAAttributes.XRAY_FOLLOW_RANGE.get(), UUID.fromString("62e016b0-90d0-4e72-9d40-fffac566df20"), "Reduced follow range for hostile Animals", -0.8d, AttributeModifier.Operation.MULTIPLY_BASE, true);
             }
         }
         else if (playerScared) {
