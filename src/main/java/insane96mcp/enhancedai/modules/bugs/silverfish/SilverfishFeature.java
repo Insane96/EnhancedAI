@@ -22,7 +22,7 @@ public class SilverfishFeature extends Feature {
 	public static Integer ticksAfterHurtToWakeUpFriends = 10;
 	@Config(min = 1)
 	@Label(name = "Chance to stop waking up friends", description = "In vanilla everytime a silverfish is woken up there is 1 in 2 chance to stop waking up more silverfish. This changes the 1 in x chance.")
-	public static Integer chanceToStopWakingUpFriends = 10;
+	public static Integer chanceToStopWakingUpFriends = 5;
 	@Config(min = 1, max = 32)
 	@Label(name = "Vertical Wake up Range", description = "Y range on which a hurt silverfish checks for infested stone to break. Vanilla is 5.")
 	public static Integer verticalWakeUpRange = 5;
