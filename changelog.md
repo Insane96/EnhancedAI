@@ -1,7 +1,12 @@
 # Changelog
 
 ## Upcoming
-* Possibly fixed incompatibility with mods messing with the Warden 
+* Warden
+  * Added Listen range multiplier
+    * Increases range at which vibrations reach Wardens
+  * Added Step Up
+    * Makes warden step up blocks like horses without needing to jump
+  * Possibly fixed incompatibility with mods messing with the Warden 
 
 ## 2.5.7
 * Animals now have a small chance to be hostile
