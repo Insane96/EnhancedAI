@@ -25,9 +25,10 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 @Label(name = "Biting Mobs", description = "Mobs can bite if are attacked with non-weapons. Only mobs in the enhancedai:can_bite entity type tag can bite.")
 @LoadFeature(module = Modules.Ids.MOBS)
 public class BitingMobs extends Feature {
-	public static final TagKey<EntityType<?>> CAN_BITE = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "can_bite"));
-	public static final TagKey<EntityType<?>> UNAFFECTED_BY_BITE = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "unaffected_by_biting_mobs"));
-	ResourceKey<DamageType> BITE_DAMAGE_TYPE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "bite"));
+	public static final TagKey<EntityType<?>> CAN_BITE = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(EnhancedAI.MOD_ID, "can_bite"));
+	public static final TagKey<EntityType<?>> UNAFFECTED_BY_BITE = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(EnhancedAI.MOD_ID, "unaffected_by_biting_mobs"));
+	public static final TagKey<DamageType> DOESNT_TRIGGER_BITE = TagKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(EnhancedAI.MOD_ID, "doesnt_trigger_bite"));
+	ResourceKey<DamageType> BITE_DAMAGE_TYPE = ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(EnhancedAI.MOD_ID, "bite"));
 
 	@Config(min = 0d, max = 1d)
 	@Label(name = "Chance", description = "Chance for a Mob to bite the attacker")
@@ -45,6 +46,7 @@ public class BitingMobs extends Feature {
 		if (!this.isEnabled()
 		 		|| event.getEntity().level().isClientSide
 				|| !(event.getEntity() instanceof Mob mob)
+				|| event.getSource().is(DOESNT_TRIGGER_BITE)
 				|| !mob.getType().is(CAN_BITE)
 				|| mob.getAttribute(Attributes.ATTACK_DAMAGE) == null
 				|| !(event.getSource().getDirectEntity() instanceof LivingEntity attacker)

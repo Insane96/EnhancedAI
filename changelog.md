@@ -4,7 +4,9 @@
 * Animals now have a small chance to be hostile
   * `enhancedai:can_fight_back` entity type tag has been renamed to `enhancedai:can_be_neutral`
   * New `enhancedai:can_be_hostile` entity type tag
-* Halved the chance for silverfish to call other silvefish
+* Added `enhancedai:doesnt_trigger_bite` damage type tag
+  * Damage types in this tag will not trigger biting mobs
+* Halved the chance for silverfish to call other silverfish
 
 ## 2.5.6
 * Requires InsaneLib 1.18.3 and Forge 47.4.0
