@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Possibly fixed incompatibility with mods messing with the Warden 
+
 ## 2.5.7
 * Animals now have a small chance to be hostile
   * `enhancedai:can_fight_back` entity type tag has been renamed to `enhancedai:can_be_neutral`

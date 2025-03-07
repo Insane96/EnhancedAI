@@ -1,13 +1,14 @@
 package insane96mcp.enhancedai.mixin;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import insane96mcp.enhancedai.modules.warden.WardenFeature;
 import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.entity.ai.behavior.warden.SonicBoom;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.monster.warden.Warden;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.Constant;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.Map;
 
@@ -18,14 +19,23 @@ public abstract class SonicBoomMixin extends Behavior<Warden> {
 		super(pEntryCondition);
 	}
 
-	//TODO MixinExtras
-	@ModifyConstant(method = "lambda$tick$1", constant = {@Constant(doubleValue = 15d), @Constant(doubleValue = 20d)})
-	private static double onRange(double range) {
-		return insane96mcp.enhancedai.modules.warden.Warden.increaseSonicBoomRange(range);
+	@ModifyExpressionValue(method = "lambda$tick$1", at = @At(value = "CONSTANT", args = {"doubleValue=15.0"}))
+	private static double enhancedai$onRange1(double range) {
+		return WardenFeature.increaseSonicBoomRange(range);
 	}
 
-	@ModifyConstant(method = "checkExtraStartConditions(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/monster/warden/Warden;)Z", constant = {@Constant(doubleValue = 15d), @Constant(doubleValue = 20d)})
-	private double onExtraConditionsRange(double range) {
-		return insane96mcp.enhancedai.modules.warden.Warden.increaseSonicBoomRange(range);
+	@ModifyExpressionValue(method = "lambda$tick$1", at = @At(value = "CONSTANT", args = {"doubleValue=20.0"}))
+	private static double enhancedai$onRange2(double range) {
+		return WardenFeature.increaseSonicBoomRange(range);
+	}
+
+	@ModifyExpressionValue(method = "checkExtraStartConditions(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/monster/warden/Warden;)Z", at = @At(value = "CONSTANT", args = {"doubleValue=15.0"}))
+	private double enhancedai$onExtraConditionsRange1(double range) {
+		return WardenFeature.increaseSonicBoomRange(range);
+	}
+
+	@ModifyExpressionValue(method = "checkExtraStartConditions(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/monster/warden/Warden;)Z", at = @At(value = "CONSTANT", args = {"doubleValue=20.0"}))
+	private double enhancedai$onExtraConditionsRange2(double range) {
+		return WardenFeature.increaseSonicBoomRange(range);
 	}
 }
