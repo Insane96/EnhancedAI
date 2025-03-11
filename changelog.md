@@ -6,7 +6,7 @@
     * Increases range at which vibrations reach Wardens
   * Added Step Up
     * Makes warden step up blocks like horses without needing to jump
-  * Possibly fixed incompatibility with mods messing with the Warden 
+  * Temporarily disabled "Increase sonic boom range" as was crashing the game 
 
 ## 2.5.7
 * Animals now have a small chance to be hostile

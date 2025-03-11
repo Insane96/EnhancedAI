@@ -19,7 +19,7 @@ public abstract class SonicBoomMixin extends Behavior<Warden> {
 		super(pEntryCondition);
 	}
 
-	@ModifyExpressionValue(method = "lambda$tick$1", at = @At(value = "CONSTANT", args = {"doubleValue=15.0"}))
+	/*@ModifyExpressionValue(method = "lambda$tick$1", at = @At(value = "CONSTANT", args = {"doubleValue=15.0"}))
 	private static double enhancedai$onRange1(double range) {
 		return WardenFeature.increaseSonicBoomRange(range);
 	}
@@ -27,7 +27,7 @@ public abstract class SonicBoomMixin extends Behavior<Warden> {
 	@ModifyExpressionValue(method = "lambda$tick$1", at = @At(value = "CONSTANT", args = {"doubleValue=20.0"}))
 	private static double enhancedai$onRange2(double range) {
 		return WardenFeature.increaseSonicBoomRange(range);
-	}
+	}*/
 
 	@ModifyExpressionValue(method = "checkExtraStartConditions(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/monster/warden/Warden;)Z", at = @At(value = "CONSTANT", args = {"doubleValue=15.0"}))
 	private double enhancedai$onExtraConditionsRange1(double range) {
