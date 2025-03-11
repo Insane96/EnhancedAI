@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 2.5.8
 * Warden
   * Added Listen range multiplier
     * Increases range at which vibrations reach Wardens
