@@ -57,14 +57,14 @@ public class SkeletonFleeTarget extends Feature {
         CompoundTag persistentData = skeleton.getPersistentData();
 
         boolean avoidTarget = NBTUtils.getBooleanOrPutDefault(persistentData, EATags.Flee.AVOID_TARGET, skeleton.getRandom().nextDouble() < avoidPlayerChance);
+        if (!avoidTarget)
+            return;
+
         boolean attackWhenAvoiding = NBTUtils.getBooleanOrPutDefault(persistentData, EATags.Flee.ATTACK_WHEN_AVOIDING, skeleton.getRandom().nextDouble() < attackWhenAvoidingChance);
         double fleeDistanceFar1 = NBTUtils.getDoubleOrPutDefault(persistentData, EATags.Flee.FLEE_DISTANCE_FAR, fleeDistanceFar);
         double fleeDistanceNear1 = NBTUtils.getDoubleOrPutDefault(persistentData, EATags.Flee.FLEE_DISTANCE_NEAR, fleeDistanceNear);
         double fleeSpeedFar1 = NBTUtils.getDoubleOrPutDefault(persistentData, EATags.Flee.FLEE_SPEED_FAR, fleeSpeedFar);
         double fleeSpeedNear1 = NBTUtils.getDoubleOrPutDefault(persistentData, EATags.Flee.FLEE_SPEED_NEAR, fleeSpeedNear);
-
-        if (!avoidTarget)
-            return;
 
         boolean hasAIArrowAttack = false;
         for (WrappedGoal prioritizedGoal : skeleton.goalSelector.availableGoals) {
