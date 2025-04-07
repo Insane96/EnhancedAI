@@ -4,8 +4,8 @@ import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.Label;
-import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.LoadFeature;
+import insane96mcp.insanelib.base.Module;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -46,7 +46,7 @@ public class Jump extends Feature {
         public JumpGoal(Mob goalOwner) {
             super();
             this.goalOwner = goalOwner;
-            this.setFlags(EnumSet.of(Flag.MOVE, Flag.JUMP));
+            this.setFlags(EnumSet.of(Flag.JUMP));
         }
 
         @Override

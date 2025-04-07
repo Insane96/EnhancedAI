@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Fixed a bug that made jumping mobs reset the mob's attack cooldown
+
 ## 2.5.8
 * Warden
   * Added Listen range multiplier

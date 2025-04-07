@@ -32,7 +32,7 @@ public class MeleeAttacking extends Feature {
 	public static Boolean meleeAttackSpeedBased = true;
 	@Config(min = 0d, max = 4d)
 	@Label(name = "Attack Speed.Multiplier", description = "Multiplies the attack speed of monsters by this value. E.g. 0.6 means that mobs attack 40% slower than the player with the same equipment")
-	public static Difficulty attackSpeedMultiplier = new Difficulty(0.4d, 0.5d, 0.6d);
+	public static Difficulty attackSpeedMultiplier = new Difficulty(0.5d, 0.5d, 0.5d);
 	@Config(min = 0f, max = 4f)
 	@Label(name = "Attack Speed.Maximum", description = "The maximum attack speed a mob can attack with (in attacks per second, 2 is an attack every 0.5 seconds, 1.25 is an attack every 0.8s, 1 is an attack every 1s). In vanilla mobs have 1 attack speed.")
 	public static Double attackSpeedMaximum = 2d;
