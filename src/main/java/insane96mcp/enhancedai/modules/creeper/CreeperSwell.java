@@ -46,8 +46,8 @@ import java.util.function.Supplier;
 @Label(name = "Creeper Swell", description = "Various changes to Creepers exploding. Ignoring Walls, Walking Fuse and smarter exploding based off explosion size. Only creepers in the enhancedai:change_creeper_swell entity type tag are affected by this feature.")
 @LoadFeature(module = Modules.Ids.CREEPER)
 public class CreeperSwell extends Feature {
-	public static final TagKey<EntityType<?>> CHANGE_CREEPER_SWELL = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "change_creeper_swell"));
-	public static final TagKey<EntityType<?>> CAN_CREEPER_LAUNCH = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "can_creeper_launch"));
+	public static final TagKey<EntityType<?>> CHANGE_CREEPER_SWELL = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(EnhancedAI.MOD_ID, "change_creeper_swell"));
+	public static final TagKey<EntityType<?>> CAN_CREEPER_LAUNCH = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(EnhancedAI.MOD_ID, "can_creeper_launch"));
 
 	public static final String LAUNCH = EnhancedAI.RESOURCE_PREFIX + "launch";
 	public static final String BREACH = EnhancedAI.RESOURCE_PREFIX + "breach";
@@ -107,7 +107,7 @@ public class CreeperSwell extends Feature {
 	@Label(name = "Angry Creeper.Name", description = "If true, Angry Creeper will have a name")
 	public static Boolean angryName = true;
 	@Config
-	@Label(name = "Angry Creeper.Force Explosion", description = "When ignited, Angry Creeper will not stop swelling")
+	@Label(name = "Angry Creeper.Forced Explosion", description = "When ignited, Angry Creeper will not stop swelling")
 	public static Boolean angryForceExplosion = false;
 	@Config
 	@Label(name = "Angry Creeper.Explode on death", description = "Makes angry creepers blow up on death like when they were added back in 0.30")
@@ -118,9 +118,6 @@ public class CreeperSwell extends Feature {
 	@Config(min = 0d, max = 12d)
 	@Label(name = "Angry Creeper.Explosion power", description = "Explosion power of Angry Creeper")
 	public static Double angryExplosionPower = 4d;
-	@Config
-	@Label(name = "Angry Creeper.Forced Explosion", description = "Angry Creeper will not stop swelling when triggered")
-	public static Boolean angryForcedExplosion = true;
 	@Config
 	@Label(name = "Blow up on death", description = "Makes creepers blow up on death like when they were added back in 0.30")
 	public static BlowUpOnDeath blowUpOnDeath = BlowUpOnDeath.CHARGED;
@@ -191,7 +188,7 @@ public class CreeperSwell extends Feature {
 				persistentData.putBoolean(ILStrings.Tags.EXPLOSION_CAUSES_FIRE, true);
 			if (iguanaTweaksIntegration) {
 				persistentData.putFloat("iguanatweaksreborn:explosion_knockback_multiplier", 2f);
-				persistentData.putFloat("iguanatweaksreborn:explosion_ray_strength_multiplier", 0.03f);
+				persistentData.putFloat("iguanatweaksreborn:explosion_ray_strength_multiplier", 0.01f);
 			}
 		}
 
@@ -200,7 +197,7 @@ public class CreeperSwell extends Feature {
 				.setIgnoreWalls(ignoreWalls)
 				.setBreaching(breach)
 				.setBeta(beta);
-		if (angry && angryForcedExplosion)
+		if (angry && angryForceExplosion)
 			swellGoal.setForceExplode(angryForceExplosion);
 		creeper.goalSelector.addGoal(2, swellGoal);
 

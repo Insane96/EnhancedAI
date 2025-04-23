@@ -2,6 +2,7 @@
 
 ## Upcoming
 * Fixed a bug that made jumping mobs reset the mob's attack cooldown
+* Fixed Angry Creeper.Forced Explosion being duplicated
 
 ## 2.5.8
 * Warden
