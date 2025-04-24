@@ -20,7 +20,6 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.Vec2;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -28,7 +27,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 @Label(name = "Item Disruption", description = "Endermen will make the player's item fall from his hands. Add/remove mobs via the enhancedai:can_disrupt_item entity type tag")
 @LoadFeature(module = Modules.Ids.MOBS)
 public class ItemDisruption extends Feature {
-    public static final TagKey<EntityType<?>> CAN_DISRUPT_ITEM = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "can_disrupt_item"));
+    public static final TagKey<EntityType<?>> CAN_DISRUPT_ITEM = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(EnhancedAI.MOD_ID, "can_disrupt_item"));
     public static final String ITEM_DISRUPTION_CHANCE = EnhancedAI.RESOURCE_PREFIX + "item_disruption_chance";
     public static final String LAST_DISRUPTION = EnhancedAI.RESOURCE_PREFIX + "last_disruption";
 
@@ -88,12 +87,12 @@ public class ItemDisruption extends Feature {
         ItemEntity itementity = new ItemEntity(player.level(), player.getX(), player.getY() + player.getBbHeight() / 2f, player.getZ(), stack);
         double x = player.getX() - mob.getX();
         double z = player.getZ() - mob.getZ();
-        Vec2 dir = new Vec2((float) x, (float) z).normalized();
+        /*Vec2 dir = new Vec2((float) x, (float) z).normalized();
         if (mob.getRandom().nextBoolean())
             itementity.setDeltaMovement(itementity.getDeltaMovement().add(-dir.y * 0.4f, 0.1f, dir.x * 0.4f));
         else
-            itementity.setDeltaMovement(itementity.getDeltaMovement().add(dir.y * 0.4f, 0.1f, -dir.x * 0.4f));
-        itementity.setDefaultPickUpDelay();
+            itementity.setDeltaMovement(itementity.getDeltaMovement().add(dir.y * 0.4f, 0.1f, -dir.x * 0.4f));*/
+        itementity.setPickUpDelay(30);
         mob.level().addFreshEntity(itementity);
         mob.getPersistentData().putLong(LAST_DISRUPTION, mob.level().getGameTime());
     }

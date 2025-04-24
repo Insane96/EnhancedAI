@@ -1,6 +1,7 @@
 # Changelog
 
 ## Upcoming
+* Enderman disrupting items no longer throws them away, but simply under the player with a pickup delay of 1.5s
 * Fixed a bug that made jumping mobs reset the mob's attack cooldown
 * Fixed Angry Creeper.Forced Explosion being duplicated
 
