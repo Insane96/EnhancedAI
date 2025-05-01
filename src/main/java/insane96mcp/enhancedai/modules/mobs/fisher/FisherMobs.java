@@ -57,6 +57,6 @@ public class FisherMobs extends Feature {
 			mob.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.FISHING_ROD));
 
 		mob.getPersistentData().putBoolean(HAS_FISHING_ROD_BEEN_GIVEN, true);
-		mob.goalSelector.addGoal(2, new FishingTargetGoal(mob));
+		mob.goalSelector.addGoal(1, new FishingTargetGoal(mob));
 	}
 }

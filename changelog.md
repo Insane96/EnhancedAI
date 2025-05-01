@@ -1,7 +1,9 @@
 # Changelog
 
-## Upcoming
-* Enderman disrupting items no longer throws them away, but simply under the player with a pickup delay of 1.5s
+## 2.6.0
+* Mini rework Fisher Mobs
+  * They no longer approach the target if farther than 4 blocks, they'll just reel it in
+* Endermen disrupting items no longer throws them away, but simply under the player with a pickup delay of 1.5s
 * Fixed a bug that made jumping mobs reset the mob's attack cooldown
 * Fixed Angry Creeper.Forced Explosion being duplicated
 

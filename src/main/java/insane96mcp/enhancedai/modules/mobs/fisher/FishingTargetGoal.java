@@ -6,6 +6,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.pathfinder.Path;
+
+import java.util.EnumSet;
 
 public class FishingTargetGoal extends Goal {
 
@@ -23,6 +26,7 @@ public class FishingTargetGoal extends Goal {
 
 	public FishingTargetGoal(Mob fisher){
 		this.fisher = fisher;
+		this.setFlags(EnumSet.of(Flag.MOVE));
 	}
 
 	public boolean canUse() {
@@ -33,45 +37,56 @@ public class FishingTargetGoal extends Goal {
 		if (this.fisher.getMainHandItem().getItem() != Items.FISHING_ROD && this.fisher.getOffhandItem().getItem() != Items.FISHING_ROD)
 			return false;
 
-		if (--this.cooldown > 0)
-			return false;
-
 		if (this.fisher.isUnderWater())
 			return false;
 
-		//24 & 1 blocks
-        return this.fisher.distanceToSqr(target) <= 576d
-                && this.fisher.distanceToSqr(target) > 2d
+		--this.cooldown;
+		return this.fisher.distanceToSqr(target) > 16d //4 blocks
                 && this.fisher.getSensing().hasLineOfSight(target);
     }
 
 	public boolean canContinueToUse() {
-		return this.fishingHook != null && this.fishingHook.isAlive();
+		return this.canUse();
 	}
 
 	public void start() {
 		this.target = this.fisher.getTarget();
-		this.fisher.setAggressive(true);
-		this.fisher.level().playSound(null, this.fisher.getX(), this.fisher.getY(), this.fisher.getZ(), SoundEvents.FISHING_BOBBER_THROW, SoundSource.HOSTILE, 1F, 0.4F / (this.fisher.getRandom().nextFloat() * 0.4F + 0.8F));
-		this.fishingHook = new FishingHook(this.fisher, this.fisher.level());
-		this.fishingHook.setPos(this.fisher.getEyePosition(1f).x, this.fisher.getEyePosition(1f).y + 0.1d, this.fisher.getEyePosition(1f).z);
+		double distance = this.fisher.distanceTo(this.target);
+        if (distance <= 576)
+            this.fisher.getNavigation().stop();
+    }
+
+	public void tick() {
+		this.fisher.getLookControl().setLookAt(this.target);
+		if (--this.cooldown > 0)
+			return;
 		double distance = this.fisher.distanceTo(this.target);
 		double distanceY = this.target.getY() - this.fisher.getY();
 		double dirX = this.target.getX() - this.fisher.getX();
 		double dirZ = this.target.getZ() - this.fisher.getZ();
 		double distanceXZ = Math.sqrt(dirX * dirX + dirZ * dirZ);
-		double yPos = this.target.getY(0d);
-		yPos += this.target.getEyeHeight() * 0.5 + (distanceY / distanceXZ);
-		double dirY = yPos - this.fishingHook.getY();
-		this.fishingHook.shoot(dirX, dirY + distanceXZ * 0.17d, dirZ, 1.1f + ((float)distance / 32f) + (float)Math.max(distanceY / 48d, 0f), 1);
-		this.fisher.level().addFreshEntity(fishingHook);
-		this.reel = reducedTickDelay((int) FisherMobs.reelInTicks.getByDifficulty(this.fisher.level()));
-		this.fishingHookLifetime = reducedTickDelay(60);
-	}
+		if (distance > 24) {
+			if (this.fisher.getNavigation().isDone()) {
+				Path path = this.fisher.getNavigation().createPath(this.target, 24);
+				if (path != null)
+					this.fisher.getNavigation().moveTo(path, 1);
+			}
+		}
+		else if (this.reel <= 0) {
+			this.fisher.setAggressive(true);
+			this.fishingHook = new FishingHook(this.fisher, this.fisher.level());
+			this.fishingHook.setPos(this.fisher.getEyePosition(1f).x, this.fisher.getEyePosition(1f).y + 0.1d, this.fisher.getEyePosition(1f).z);
+			double yPos = this.target.getY(0d);
+			yPos += this.target.getEyeHeight() * 0.5 + (distanceY / distanceXZ);
+			double dirY = yPos - this.fishingHook.getY();
+			this.fishingHook.shoot(dirX, dirY + distanceXZ * 0.17d, dirZ, 1.1f + ((float)distance / 32f) + (float)Math.max(distanceY / 48d, 0f), 1);
+			this.fisher.level().addFreshEntity(fishingHook);
+			this.fisher.level().playSound(null, this.fisher.getX(), this.fisher.getY(), this.fisher.getZ(), SoundEvents.FISHING_BOBBER_THROW, SoundSource.HOSTILE, 1F, 0.4F / (this.fisher.getRandom().nextFloat() * 0.4F + 0.8F));
+			this.reel = reducedTickDelay((int) FisherMobs.reelInTicks.getByDifficulty(this.fisher.level()));
+			this.fishingHookLifetime = reducedTickDelay(60);
+		}
 
-	public void tick() {
-		this.fisher.getLookControl().setLookAt(this.target);
-		if (this.fishingHook.getHookedIn() != null || --this.fishingHookLifetime <= 0) {
+		if (this.fishingHook != null && (this.fishingHook.getHookedIn() != null || --this.fishingHookLifetime <= 0 || this.fishingHook.onGround())) {
 			--this.reel;
 			if (--this.reel <= 0) {
 				if (this.fishingHook.getHookedIn() != null)
@@ -81,6 +96,9 @@ public class FishingTargetGoal extends Goal {
 				this.fishingHook.retrieve(isInventoryHooked);
 				if (isInventoryHooked)
 					this.inventoryHookCooldown = 4;
+				this.cooldown = reducedTickDelay((int) FisherMobs.cooldown.getByDifficulty(this.fisher.level()));
+				if (hasHookedEntity)
+					this.cooldown *= 2;
 			}
 		}
 	}
@@ -88,9 +106,7 @@ public class FishingTargetGoal extends Goal {
 	public void stop() {
 		this.target = null;
 		this.fishingHook = null;
-		this.cooldown = reducedTickDelay((int) FisherMobs.cooldown.getByDifficulty(this.fisher.level()));
-		if (hasHookedEntity)
-			this.cooldown *= 2;
+		this.reel = 0;
 		this.fisher.setAggressive(false);
 		this.hasHookedEntity = false;
 	}
