@@ -46,7 +46,7 @@ public class FishingTargetGoal extends Goal {
     }
 
 	public boolean canContinueToUse() {
-		return this.canUse();
+		return this.fisher.getTarget() != null && this.fisher.getTarget().isAlive();
 	}
 
 	public void start() {
@@ -105,7 +105,10 @@ public class FishingTargetGoal extends Goal {
 
 	public void stop() {
 		this.target = null;
-		this.fishingHook = null;
+		if (this.fishingHook != null) {
+			this.fishingHook.kill();
+			this.fishingHook = null;
+		}
 		this.reel = 0;
 		this.fisher.setAggressive(false);
 		this.hasHookedEntity = false;

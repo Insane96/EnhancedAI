@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Fixed some wonkyness with the new fisher mobs
+
 ## 2.6.0
 * Mini rework Fisher Mobs
   * They no longer approach the target if farther than 4 blocks, they'll just reel it in
