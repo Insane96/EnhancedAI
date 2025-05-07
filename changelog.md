@@ -2,6 +2,8 @@
 
 ## Upcoming
 * Fixed some wonkyness with the new fisher mobs
+* Fixed Universal Anger breaking Hurt By Target
+  * I have no idea what is this check, so I've removed it
 
 ## 2.6.0
 * Mini rework Fisher Mobs

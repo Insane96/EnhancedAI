@@ -5,7 +5,6 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.phys.AABB;
 
 import javax.annotation.Nullable;
@@ -41,8 +40,8 @@ public class EAHurtByTargetGoal extends TargetGoal {
 		if (currentTarget != null && this.mob.distanceToSqr(currentTarget) < this.mob.distanceToSqr(hypotheticalNewMob))
 			return false;
 
-		if (hypotheticalNewMob.getType() == EntityType.PLAYER && this.mob.level().getGameRules().getBoolean(GameRules.RULE_UNIVERSAL_ANGER))
-			return false;
+		//if (hypotheticalNewMob.getType() == EntityType.PLAYER && this.mob.level().getGameRules().getBoolean(GameRules.RULE_UNIVERSAL_ANGER))
+		//	return false;
 
 		for (Class<?> oclass : this.toIgnoreDamage) {
 			if (oclass.isAssignableFrom(hypotheticalNewMob.getClass())) {

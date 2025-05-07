@@ -7,10 +7,10 @@ import insane96mcp.enhancedai.setup.EAAttributes;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.JsonFeature;
 import insane96mcp.insanelib.base.Label;
+import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.Difficulty;
-import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.config.MinMax;
 import insane96mcp.insanelib.data.IdTagMatcher;
 import insane96mcp.insanelib.util.MCUtils;
@@ -135,11 +135,11 @@ public class Targeting extends JsonFeature {
 				|| !pathfinderMob.getType().is(USE_TARGET_CHANGES))
 			return;
 
-		HurtByTargetGoal toRemove = null;
+		List<HurtByTargetGoal> toRemove = new ArrayList<>();
 		for (WrappedGoal prioritizedGoal : pathfinderMob.targetSelector.availableGoals) {
 			if (!(prioritizedGoal.getGoal() instanceof HurtByTargetGoal goal))
 				continue;
-			toRemove = goal;
+			toRemove.add(goal);
 
 			List<Class<?>> toIgnoreDamage = new ArrayList<>(Arrays.asList(goal.toIgnoreDamage));
 			//Prevent infighting
@@ -149,13 +149,10 @@ public class Targeting extends JsonFeature {
 			if (goal.toIgnoreAlert != null)
 				newGoal.setAlertOthers(goal.toIgnoreAlert);
 			pathfinderMob.targetSelector.addGoal(prioritizedGoal.getPriority(), newGoal);
-
-			break;
 		}
 
-		if (toRemove != null) {
-			mob.targetSelector.removeGoal(toRemove);
-		}
+		if (!toRemove.isEmpty())
+			toRemove.forEach(pathfinderMob.targetSelector::removeGoal);
 		else if (mob.getType().is(ALLOW_TARGET_SWITCH)) {
 			List<Class<?>> toIgnoreDamage = new ArrayList<>();
 			//Prevent infighting
