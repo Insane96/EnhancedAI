@@ -4,6 +4,7 @@
 * Fixed some wonkyness with the new fisher mobs
 * Fixed Universal Anger breaking Hurt By Target
   * I have no idea what is this check, so I've removed it
+* Breaching creepers should blow up less randomly
 
 ## 2.6.0
 * Mini rework Fisher Mobs

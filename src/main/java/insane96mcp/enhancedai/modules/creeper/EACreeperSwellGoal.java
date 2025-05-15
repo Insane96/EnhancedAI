@@ -212,7 +212,7 @@ public class EACreeperSwellGoal extends Goal {
 		if (this.swellingCreeper.getTarget() == null)
 			return false;
 
-		if (this.lastPosition == null || this.swellingCreeper.distanceToSqr(this.lastPosition) > 2.25d) {
+		if (this.lastPosition == null || this.swellingCreeper.distanceToSqr(this.lastPosition) > 1d) {
 			this.lastPosition = this.swellingCreeper.position();
 			this.lastPositionTickstamp = this.swellingCreeper.tickCount;
 		}
