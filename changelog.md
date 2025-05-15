@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.6.2
+* Fixed possible crash with Hurt By Target
+
 ## 2.6.1
 * Fixed some wonkyness with the new fisher mobs
 * Fixed Universal Anger breaking Hurt By Target

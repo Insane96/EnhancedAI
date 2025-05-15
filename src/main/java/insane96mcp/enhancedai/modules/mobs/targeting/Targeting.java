@@ -136,6 +136,7 @@ public class Targeting extends JsonFeature {
 			return;
 
 		List<HurtByTargetGoal> toRemove = new ArrayList<>();
+		List<WrappedGoal> toAdd = new ArrayList<>();
 		for (WrappedGoal prioritizedGoal : pathfinderMob.targetSelector.availableGoals) {
 			if (!(prioritizedGoal.getGoal() instanceof HurtByTargetGoal goal))
 				continue;
@@ -148,9 +149,10 @@ public class Targeting extends JsonFeature {
 			EAHurtByTargetGoal newGoal = new EAHurtByTargetGoal(pathfinderMob, toIgnoreDamage.toArray(Class[]::new));
 			if (goal.toIgnoreAlert != null)
 				newGoal.setAlertOthers(goal.toIgnoreAlert);
-			pathfinderMob.targetSelector.addGoal(prioritizedGoal.getPriority(), newGoal);
+			toAdd.add(new WrappedGoal(prioritizedGoal.getPriority(), newGoal));
 		}
 
+		toAdd.forEach(wrappedGoal -> pathfinderMob.targetSelector.addGoal(wrappedGoal.getPriority(), wrappedGoal.getGoal()));
 		if (!toRemove.isEmpty())
 			toRemove.forEach(pathfinderMob.targetSelector::removeGoal);
 		else if (mob.getType().is(ALLOW_TARGET_SWITCH)) {
