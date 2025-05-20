@@ -28,13 +28,14 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 @Label(name = "Miner Mobs", description = "Mobs can mine blocks to reach the target. Uses offhand item to mine. Only mobs in the entity type tag enhancedai:can_be_miner can spawn with the ability to mine and blocks in the tag enhancedai:miner_block_blacklist cannot be mined.")
 @LoadFeature(module = Modules.Ids.MOBS)
 public class MinerMobs extends Feature {
-	public static final TagKey<EntityType<?>> CAN_BE_MINER = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "can_be_miner"));
-	public static final TagKey<Block> BLOCK_BLACKLIST = TagKey.create(Registries.BLOCK, new ResourceLocation(EnhancedAI.MOD_ID, "miner_block_blacklist"));
+	public static final TagKey<EntityType<?>> CAN_BE_MINER = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(EnhancedAI.MOD_ID, "can_be_miner"));
+	public static final TagKey<Block> BLOCK_BLACKLIST = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(EnhancedAI.MOD_ID, "miner_block_blacklist"));
 	public static final String MINER = EnhancedAI.RESOURCE_PREFIX + "miner";
 	public static final String TIME_TO_BREAK_MULTIPLIER = EnhancedAI.RESOURCE_PREFIX + "time_to_break_multiplier";
 	public static final String TOOL_ONLY = EnhancedAI.RESOURCE_PREFIX + "tool_only";
 	public static final String PROPER_TOOL_ONLY = EnhancedAI.RESOURCE_PREFIX + "proper_tool_only";
 	public static final String ALWAYS_REQUIRE_PROPER_TOOL = EnhancedAI.RESOURCE_PREFIX + "always_require_proper_tool";
+
 	@Config(min = 0d, max = 1d)
 	@Label(name = "Miner Chance", description = "Chance for a mob in the entity type tag enhancedai:can_be_miner to spawn with the miner ability")
 	public static Double minerChance = 0.07d;

@@ -91,6 +91,8 @@ dependencies {
         jarJar.ranged(it, "[${mixinextras_version},)")
     }
 
+    implementation fg.deobf("curse.maven:zeta-968868:6432578")
+    implementation fg.deobf("curse.maven:quark-243121:6427817")
 }
 
 tasks.named('processResources', ProcessResources).configure {
