@@ -10,6 +10,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -63,8 +65,14 @@ public class Jump extends Feature {
                 return false;
             }
             double yDistance = this.target.getY() - this.goalOwner.getY();
-            double distance = this.goalOwner.distanceToSqr(this.target);
-            return distance < 36 && yDistance > 0 && yDistance <= 1 + Mth.ceil(this.goalOwner.getBbHeight()) && ticksWithoutPath > adjustedTickDelay(25);
+            double x = target.getX() - this.goalOwner.getX();
+            double z = target.getZ() - this.goalOwner.getZ();
+            double xzDistance = x * x + z * z;
+            MobEffectInstance jumpBoost = this.goalOwner.getEffect(MobEffects.JUMP);
+            double bonusJumpBoost = 0;
+            if (jumpBoost != null)
+                bonusJumpBoost = (jumpBoost.getAmplifier() + 1) * 0.75f;
+            return xzDistance < 8 && yDistance > 0 && yDistance <= 1 + bonusJumpBoost + Mth.ceil(this.goalOwner.getBbHeight()) && ticksWithoutPath > adjustedTickDelay(25);
         }
 
         @Override

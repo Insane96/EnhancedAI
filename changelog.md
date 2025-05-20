@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Jumping mobs now take into account jump boost
+
 ## 2.6.2
 * Fixed possible crash with Hurt By Target
 
