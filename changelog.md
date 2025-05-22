@@ -2,6 +2,7 @@
 
 ## Upcoming
 * Jumping mobs now take into account jump boost
+* Animals baby born (so usually from breeding) can no longer be hostile
 
 ## 2.6.2
 * Fixed possible crash with Hurt By Target
