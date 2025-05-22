@@ -46,7 +46,10 @@ public class FishingTargetGoal extends Goal {
     }
 
 	public boolean canContinueToUse() {
-		return this.fisher.getTarget() != null && this.fisher.getTarget().isAlive();
+		return this.fisher.getTarget() != null
+				&& this.fisher.getTarget().isAlive()
+				&& this.fisher.distanceToSqr(target) > 16d //4 blocks
+				&& this.fisher.getSensing().hasLineOfSight(target);
 	}
 
 	public void start() {

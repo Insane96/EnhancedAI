@@ -1,8 +1,9 @@
 # Changelog
 
-## Upcoming
+## 2.6.3
 * Jumping mobs now take into account jump boost
 * Animals baby born (so usually from breeding) can no longer be hostile
+* Fixed Fisher mobs no longer attacking when target was close enough
 
 ## 2.6.2
 * Fixed possible crash with Hurt By Target
