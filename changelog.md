@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Update for latest InsaneLib
+
 ## 2.6.3
 * Jumping mobs now take into account jump boost
 * Animals baby born (so usually from breeding) can no longer be hostile

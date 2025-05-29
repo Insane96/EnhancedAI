@@ -9,8 +9,8 @@ import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
+import insane96mcp.insanelib.module.base.TagsFeature;
 import insane96mcp.insanelib.network.MessageCreeperDataSync;
-import insane96mcp.insanelib.setup.ILStrings;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -185,7 +185,7 @@ public class CreeperSwell extends Feature {
 			if (angryName)
 				creeper.setCustomName(Component.literal("Angry Creeper"));
 			if (angryFire)
-				persistentData.putBoolean(ILStrings.Tags.EXPLOSION_CAUSES_FIRE, true);
+				TagsFeature.setExplosionCausesFire(true, creeper);
 			if (iguanaTweaksIntegration) {
 				persistentData.putFloat("iguanatweaksreborn:explosion_knockback_multiplier", 2f);
 				persistentData.putFloat("iguanatweaksreborn:explosion_ray_strength_multiplier", 0.01f);
