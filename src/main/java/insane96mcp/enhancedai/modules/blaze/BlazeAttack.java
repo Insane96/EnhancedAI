@@ -38,19 +38,19 @@ public class BlazeAttack extends Feature {
     public static MinMax timeBetweenFireballs = new MinMax(4, 10);
     @Config(min = 1, max = 64)
     @Label(name = "Fireballs shot", description = "How many fireballs blazes shoots. Vanilla is 3")
-    public static MinMax fireballsShot = new MinMax(3, 8);
+    public static MinMax fireballsShot = new MinMax(2, 6);
     @Config(min = 1, max = 600)
     @Label(name = "Recharge time", description = "Time (in ticks) taken by the blaze to recharge (before setting himself on fire). Vanilla is 100")
-    public static MinMax rechargeTime = new MinMax(60, 100);
+    public static MinMax rechargeTime = new MinMax(60, 120);
     @Config(min = 1, max = 600)
     @Label(name = "Charge time", description = "Time (in ticks) taken by the blaze to charge (while on fire before shooting fireballs). Vanilla is 60")
-    public static MinMax chargeTime = new MinMax(30, 60);
+    public static MinMax chargeTime = new MinMax(30, 80);
     @Config(min = 1, max = 8)
     @Label(name = "Fireballs Per Shot", description = "How many fireballs are shot per shot. Vanilla is 1")
     public static MinMax fireballsPerShot = new MinMax(1, 2);
     @Config(min = -1, max = 32)
     @Label(name = "Inaccuracy", description = "The higher the more spread up shots will be. Setting both to -1 will use the vanilla behaviour (farther = more inaccuracy)")
-    public static MinMax inaccuracy = new MinMax(2, 8);
+    public static MinMax inaccuracy = new MinMax(2, 14);
 
     public BlazeAttack(Module module, boolean enabledByDefault, boolean canBeDisabled) {
         super(module, enabledByDefault, canBeDisabled);
