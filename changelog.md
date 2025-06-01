@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 2.6.4
 * Lowered Blaze Attack stats
 * Update for latest InsaneLib
 
