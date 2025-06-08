@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.6.5
+* Fixed compat with latest InsaneLib
+
 ## 2.6.4
 * Lowered Blaze Attack stats
 * Update for latest InsaneLib

@@ -10,7 +10,7 @@ import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.module.base.TagsFeature;
-import insane96mcp.insanelib.network.MessageCreeperDataSync;
+import insane96mcp.insanelib.network.message.MessageCreeperDataSync;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
