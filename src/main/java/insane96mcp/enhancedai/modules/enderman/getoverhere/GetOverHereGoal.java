@@ -21,7 +21,8 @@ public class GetOverHereGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (this.enderman.getTarget() == null)
+        if (this.enderman.getTarget() == null
+                || this.enderman.getTarget().getType().is(GetOverHere.TELEPORT_BLACKLIST))
             return false;
 
         if (this.enderman.getTarget().distanceToSqr(this.enderman) >= 8d) {

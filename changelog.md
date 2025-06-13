@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.6.6
+* Bosses can no longer be teleported by the Over Here feature
+  * Added a new Entity Type Tag `enhancedai:get_over_here_teleport_blacklist`
+
 ## 2.6.5
 * Fixed compat with latest InsaneLib
 

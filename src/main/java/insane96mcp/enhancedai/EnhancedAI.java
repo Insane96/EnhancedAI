@@ -4,11 +4,11 @@ import insane96mcp.enhancedai.modules.animal.AnimalScaredAttack;
 import insane96mcp.enhancedai.modules.mobs.MeleeAttacking;
 import insane96mcp.enhancedai.modules.mobs.targeting.Targeting;
 import insane96mcp.enhancedai.setup.*;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.commands.DebugPathCommand;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
@@ -18,29 +18,35 @@ import org.apache.logging.log4j.Logger;
 public class EnhancedAI
 {
 	public static final String MOD_ID = "enhancedai";
+    @Deprecated
+    /// Use EnhancedAI.location instead
 	public static final String RESOURCE_PREFIX = MOD_ID + ":";
     public static final Logger LOGGER = LogManager.getLogger();
 
     public static final String CONFIG_FOLDER = "config/" + MOD_ID;
     
-    public EnhancedAI() {
-        ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, Config.COMMON_SPEC, MOD_ID + "/common.toml");
+    public EnhancedAI(FMLJavaModLoadingContext context) {
+        context.registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, Config.COMMON_SPEC, MOD_ID + "/common.toml");
 
         MinecraftForge.EVENT_BUS.register(this);
 
-        EASounds.SOUND_EVENTS.register(FMLJavaModLoadingContext.get().getModEventBus());
-		EAAttributes.ATTRIBUTES.register(FMLJavaModLoadingContext.get().getModEventBus());
-		EAEntities.ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
+        EASounds.SOUND_EVENTS.register(context.getModEventBus());
+		EAAttributes.ATTRIBUTES.register(context.getModEventBus());
+		EAEntities.ENTITIES.register(context.getModEventBus());
 
         Reflection.init();
 
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(AnimalScaredAttack::attribute);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(MeleeAttacking::attributeModificationEvent);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(Targeting::xrayRangeAttribute);
+        context.getModEventBus().addListener(AnimalScaredAttack::attribute);
+        context.getModEventBus().addListener(MeleeAttacking::attributeModificationEvent);
+        context.getModEventBus().addListener(Targeting::xrayRangeAttribute);
     }
 
     @SubscribeEvent
     public void registerCommands(RegisterCommandsEvent event) {
         DebugPathCommand.register(event.getDispatcher());
+    }
+
+    public static ResourceLocation location(String path) {
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
     }
 }
