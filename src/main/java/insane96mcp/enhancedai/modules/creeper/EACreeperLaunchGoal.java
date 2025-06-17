@@ -118,7 +118,7 @@ public class EACreeperLaunchGoal extends Goal {
 		double distanceZ = this.creeperAttackTarget.getZ() - this.launchingCreeper.getZ();
 		double distanceXZ = Math.sqrt(distanceX * distanceX + distanceZ * distanceZ);
 
-		float inaccuracy = CreeperSwell.launchInaccuracy.floatValue();
+		float inaccuracy = CreeperSwell.launch$inaccuracy.floatValue();
 		if (this.launchingCreeper.level().getDifficulty() == Difficulty.EASY)
 			inaccuracy *= 1.25f;
 		else if (this.launchingCreeper.level().getDifficulty() == Difficulty.HARD)
