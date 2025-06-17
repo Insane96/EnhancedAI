@@ -3,13 +3,11 @@ package insane96mcp.enhancedai.modules.mobs;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.Feature;
-import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.Difficulty;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -24,19 +22,16 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@Label(name = "Item Disruption", description = "Endermen will make the player's item fall from his hands. Add/remove mobs via the enhancedai:can_disrupt_item entity type tag")
-@LoadFeature(module = Modules.Ids.MOBS)
+@LoadFeature(module = Modules.Ids.MOBS, description = "Endermen will make the player's item fall from his hands. Add/remove mobs via the enhancedai:can_disrupt_item entity type tag")
 public class ItemDisruption extends Feature {
-    public static final TagKey<EntityType<?>> CAN_DISRUPT_ITEM = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(EnhancedAI.MOD_ID, "can_disrupt_item"));
+    public static final TagKey<EntityType<?>> CAN_DISRUPT_ITEM = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("can_disrupt_item"));
     public static final String ITEM_DISRUPTION_CHANCE = EnhancedAI.RESOURCE_PREFIX + "item_disruption_chance";
     public static final String LAST_DISRUPTION = EnhancedAI.RESOURCE_PREFIX + "last_disruption";
 
-    @Config(min = 0d, max = 1d)
-    @Label(name = "Chance", description = "Chance can be changed within entity data's ForgeData.\"enhancedai:item_disruption_chance\"")
+    @Config(min = 0d, max = 1d, description = "Chance can be changed within entity data's ForgeData.\"enhancedai:item_disruption_chance\"")
     public static Difficulty chance = new Difficulty(0.25d, 0.25d, 0.35d);
 
-    @Config
-    @Label(name = "Cooldown", description = "Cooldown (in ticks) before being able to use the ability again.")
+    @Config(description = "Cooldown (in ticks) before being able to use the ability again.")
     public static Integer cooldown = 200;
 
     public ItemDisruption(Module module, boolean enabledByDefault, boolean canBeDisabled) {

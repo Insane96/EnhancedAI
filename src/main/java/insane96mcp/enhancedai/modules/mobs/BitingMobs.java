@@ -3,14 +3,12 @@ package insane96mcp.enhancedai.modules.mobs;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.Feature;
-import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.Difficulty;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
@@ -22,19 +20,16 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@Label(name = "Biting Mobs", description = "Mobs can bite if are attacked with non-weapons. Only mobs in the enhancedai:can_bite entity type tag can bite.")
-@LoadFeature(module = Modules.Ids.MOBS)
+@LoadFeature(module = Modules.Ids.MOBS, description = "Mobs can bite if are attacked with non-weapons. Only mobs in the enhancedai:can_bite entity type tag can bite.")
 public class BitingMobs extends Feature {
-	public static final TagKey<EntityType<?>> CAN_BITE = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(EnhancedAI.MOD_ID, "can_bite"));
-	public static final TagKey<EntityType<?>> UNAFFECTED_BY_BITE = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(EnhancedAI.MOD_ID, "unaffected_by_biting_mobs"));
-	public static final TagKey<DamageType> DOESNT_TRIGGER_BITE = TagKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(EnhancedAI.MOD_ID, "doesnt_trigger_bite"));
-	ResourceKey<DamageType> BITE_DAMAGE_TYPE = ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(EnhancedAI.MOD_ID, "bite"));
+	public static final TagKey<EntityType<?>> CAN_BITE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("can_bite"));
+	public static final TagKey<EntityType<?>> UNAFFECTED_BY_BITE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("unaffected_by_biting_mobs"));
+	public static final TagKey<DamageType> DOESNT_TRIGGER_BITE = TagKey.create(Registries.DAMAGE_TYPE, EnhancedAI.location("doesnt_trigger_bite"));
+	ResourceKey<DamageType> BITE_DAMAGE_TYPE = ResourceKey.create(Registries.DAMAGE_TYPE, EnhancedAI.location("bite"));
 
-	@Config(min = 0d, max = 1d)
-	@Label(name = "Chance", description = "Chance for a Mob to bite the attacker")
+	@Config(min = 0d, max = 1d, description = "Chance for a Mob to bite the attacker")
 	public static Difficulty chance = new Difficulty(0.2d, 0.2d, 0.3d);
-	@Config(min = 0d)
-	@Label(name = "Damage", description = "The damage dealt to the attacker when bit")
+	@Config(min = 0d, description = "The damage dealt to the attacker when bit")
 	public static Double damage = 3d;
 
 	public BitingMobs(Module module, boolean enabledByDefault, boolean canBeDisabled) {

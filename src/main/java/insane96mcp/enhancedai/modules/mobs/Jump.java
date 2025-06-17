@@ -3,11 +3,9 @@ package insane96mcp.enhancedai.modules.mobs;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.Feature;
-import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -21,10 +19,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.EnumSet;
 
-@Label(name = "Jump", description = "Makes mobs be able to jump in place when target is a few blocks above the mob.")
-@LoadFeature(module = Modules.Ids.MOBS)
+@LoadFeature(module = Modules.Ids.MOBS, description = "Makes mobs be able to jump in place when target is a few blocks above the mob.")
 public class Jump extends Feature {
-    public static final TagKey<EntityType<?>> ALLOW_JUMPING = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "allow_jumping"));
+    public static final TagKey<EntityType<?>> ALLOW_JUMPING = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("allow_jumping"));
 
     public Jump(Module module, boolean enabledByDefault, boolean canBeDisabled) {
         super(module, enabledByDefault, canBeDisabled);
