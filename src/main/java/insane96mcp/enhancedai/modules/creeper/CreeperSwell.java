@@ -15,7 +15,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -44,8 +43,8 @@ import java.util.function.Supplier;
 
 @LoadFeature(module = Modules.Ids.CREEPER, description = "Various changes to Creepers exploding. Ignoring Walls, Walking Fuse and smarter exploding based off explosion size. Only creepers in the enhancedai:change_creeper_swell entity type tag are affected by this feature.")
 public class CreeperSwell extends Feature {
-	public static final TagKey<EntityType<?>> CHANGE_CREEPER_SWELL = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(EnhancedAI.MOD_ID, "change_creeper_swell"));
-	public static final TagKey<EntityType<?>> CAN_CREEPER_LAUNCH = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(EnhancedAI.MOD_ID, "can_creeper_launch"));
+	public static final TagKey<EntityType<?>> CHANGE_CREEPER_SWELL = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("change_creeper_swell"));
+	public static final TagKey<EntityType<?>> CAN_CREEPER_LAUNCH = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("can_creeper_launch"));
 
 	public static final String LAUNCH = EnhancedAI.RESOURCE_PREFIX + "launch";
 	public static final String BREACH = EnhancedAI.RESOURCE_PREFIX + "breach";
