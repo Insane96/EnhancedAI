@@ -33,7 +33,7 @@ public class EAHurtByTargetGoal extends TargetGoal {
 		if (currentTarget != null && currentTarget == hypotheticalNewMob)
 			return false;
 		//New check to prefer players oven non-player entities if enabled
-		if (currentTarget instanceof Player && !(hypotheticalNewMob instanceof Player) && Targeting.preferPlayers)
+		if (currentTarget instanceof Player && !(hypotheticalNewMob instanceof Player) && Targeting.betterHurtByTarget$preferPlayers)
 			return false;
 
 		//New check to not switch target if the current one is closer

@@ -6,7 +6,6 @@ import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.setup.EAAttributes;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.JsonFeature;
-import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
@@ -16,7 +15,6 @@ import insane96mcp.insanelib.data.IdTagMatcher;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
@@ -42,13 +40,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Label(name = "Targeting", description = "Change how mobs target players. Use the enhancedai:use_target_changes and enhancedai:use_follow_range_changes entity type tag to whitelist mobs. Add mobs to enhancedai:allow_target_switch entity type tag to allow these mobs to be able to switch targets when hit (e.g. Creepers can't normally do that).")
-@LoadFeature(module = Modules.Ids.MOBS)
+@LoadFeature(module = Modules.Ids.MOBS, description = "Change how mobs target players. Use the enhancedai:use_target_changes and enhancedai:use_follow_range_changes entity type tag to whitelist mobs. Add mobs to enhancedai:allow_target_switch entity type tag to allow these mobs to be able to switch targets when hit (e.g. Creepers can't normally do that).")
 public class Targeting extends JsonFeature {
-	public static final TagKey<EntityType<?>> USE_TARGET_CHANGES = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "use_target_changes"));
-	public static final TagKey<EntityType<?>> CHANGE_FOLLOW_RANGE = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "change_follow_range"));
-	public static final TagKey<EntityType<?>> APPLY_XRAY = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "apply_xray"));
-	public static final TagKey<EntityType<?>> ALLOW_TARGET_SWITCH = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "allow_target_switch"));
+	public static final TagKey<EntityType<?>> USE_TARGET_CHANGES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("use_target_changes"));
+	public static final TagKey<EntityType<?>> CHANGE_FOLLOW_RANGE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("change_follow_range"));
+	public static final TagKey<EntityType<?>> APPLY_XRAY = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("apply_xray"));
+	public static final TagKey<EntityType<?>> ALLOW_TARGET_SWITCH = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("allow_target_switch"));
 
 	public static final String SPRINT = EnhancedAI.RESOURCE_PREFIX + "sprint";
 	public static final String IS_NEUTRAL = EnhancedAI.RESOURCE_PREFIX + "is_neutral";
@@ -61,35 +58,25 @@ public class Targeting extends JsonFeature {
 
 	public static final List<CustomHostileConfig> customHostile = new ArrayList<>();
 
-    @Config(min = 0d, max = 128d)
-	@Label(name = "Follow Range Override", description = "How far away can the mobs see the player. This overrides the vanilla value (16 for most mobs). Setting 'Max' to 0 will leave the follow range as vanilla. I recommend using mods like Mobs Properties Randomness to have more control over the attribute. Only mobs in the entity type tag `enhancedai:change_follow_range` will be affected by this override")
+    @Config(min = 0d, max = 128d, description = "How far away can the mobs see the player. This overrides the vanilla value (16 for most mobs). Setting 'Max' to 0 will leave the follow range as vanilla. I recommend using mods like Mobs Properties Randomness to have more control over the attribute. Only mobs in the entity type tag `enhancedai:change_follow_range` will be affected by this override")
 	public static MinMax followRangeOverride = new MinMax(24, 48);
-	@Config(min = 0d, max = 128d)
-	@Label(name = "XRay Range Override", description = "How far away can the mobs see the player even through walls. Setting 'Max' to 0 will make mobs not able to see through walls. I recommend using mods like Mobs Properties Randomness to have more control over the attribute; the attribute name is 'enhancedai:generic.xray_follow_range'. Only mobs in the entity type tag `enhancedai:apply_xray` will be affected by this override.")
+	@Config(min = 0d, max = 128d, description = "How far away can the mobs see the player even through walls. Setting 'Max' to 0 will make mobs not able to see through walls. I recommend using mods like Mobs Properties Randomness to have more control over the attribute; the attribute name is 'enhancedai:generic.xray_follow_range'. Only mobs in the entity type tag `enhancedai:apply_xray` will be affected by this override.")
 	public static MinMax xrayRangeOverride = new MinMax(12, 24);
-	@Config
-	@Label(name = "Targeting Override for non-Players", description = "By default, the new targeting AI only changes for targeting players. Setting this to true allows overriding target AI for entities other than players. Please note this might break specific AIs")
+	@Config(description = "By default, the new targeting AI only changes for targeting players. Setting this to true allows overriding target AI for entities other than players. Please note this might break specific AIs")
 	public static Boolean targetingOverrideForNonPlayers = false;
-	@Config
-	@Label(name = "Instant Target", description = "Mobs will no longer take random time to target a player.")
-	public static Boolean instaTarget = false;
-	@Config
-	@Label(name = "Better Path Finding", description = "Mobs will be able to find better paths to the target. Note that this might hit performance a bit.")
+	@Config(description = "Mobs will no longer take random time to target a player.")
+	public static Boolean instantTarget = false;
+	@Config(description = "Mobs will be able to find better paths to the target. Note that this might hit performance a bit.")
 	public static Boolean betterPathfinding = true;
-	@Config
-	@Label(name = "Hurt by target.Better version", description = "Mobs will actually switch target when attacked unless it's the same or if the current one it's closer.")
-	public static Boolean betterHurtByTarget = true;
-	@Config
-	@Label(name = "Hurt by target.Prefer players", description = "Mobs will prefer to attack players instead of other mobs (Note that 'Prevent infighting' should be disabled).")
-	public static Boolean preferPlayers = true;
-	@Config
-	@Label(name = "Hurt by target.Prevent infighting", description = "Mobs will no longer attack each other.")
-	public static Boolean preventInfighting = true;
-	@Config(min = 0d, max = 1d)
-	@Label(name = "Neutral Chances", description = "Chances for a mob to spawn neutral")
+	@Config(description = "Mobs will actually switch target when attacked unless it's the same or if the current one it's closer.")
+	public static Boolean betterHurtByTarget$enable = true;
+	@Config(description = "Mobs will prefer to attack players instead of other mobs (Note that 'Prevent infighting' should be disabled).")
+	public static Boolean betterHurtByTarget$preferPlayers = true;
+	@Config(min = 0d, max = 1d, description = "Change for a mob to not attack other mobs when hit.")
+	public static Double betterHurtByTarget$preventInfighting = 0.9d;
+	@Config(min = 0d, max = 1d, description = "Chances for a mob to spawn neutral")
 	public static Difficulty neutralChances = new Difficulty(0.25d, 0.10d, 0.04d);
-	@Config(min = 0d, max = 1d)
-	@Label(name = "Blindness range multiplier", description = "If the mobs' affected by blindness effect the target range is multiplied by this value")
+	@Config(min = 0d, max = 1d, description = "If the mobs' affected by blindness effect the target range is multiplied by this value")
 	public static Double blindnessRangeMultiplier = .1d;
 
 	public Targeting(Module module, boolean enabledByDefault, boolean canBeDisabled) {
@@ -130,7 +117,7 @@ public class Targeting extends JsonFeature {
 	}
 
 	private void processHurtByGoal(Mob mob) {
-		if (!betterHurtByTarget
+		if (!betterHurtByTarget$enable
 				|| !(mob instanceof PathfinderMob pathfinderMob)
 				|| !pathfinderMob.getType().is(USE_TARGET_CHANGES))
 			return;
@@ -144,7 +131,7 @@ public class Targeting extends JsonFeature {
 
 			List<Class<?>> toIgnoreDamage = new ArrayList<>(Arrays.asList(goal.toIgnoreDamage));
 			//Prevent infighting
-			if (preventInfighting && mob instanceof Enemy)
+			if (betterHurtByTarget$preventInfighting > 0 && mob.getRandom().nextFloat() < betterHurtByTarget$preventInfighting && mob instanceof Enemy)
 				toIgnoreDamage.add(Enemy.class);
 			EAHurtByTargetGoal newGoal = new EAHurtByTargetGoal(pathfinderMob, toIgnoreDamage.toArray(Class[]::new));
 			if (goal.toIgnoreAlert != null)
@@ -158,7 +145,7 @@ public class Targeting extends JsonFeature {
 		else if (mob.getType().is(ALLOW_TARGET_SWITCH)) {
 			List<Class<?>> toIgnoreDamage = new ArrayList<>();
 			//Prevent infighting
-			if (preventInfighting)
+			if (betterHurtByTarget$preventInfighting > 0 && mob.getRandom().nextFloat() < betterHurtByTarget$preventInfighting)
 				toIgnoreDamage.add(Enemy.class);
 			EAHurtByTargetGoal newGoal = new EAHurtByTargetGoal(pathfinderMob, toIgnoreDamage.toArray(Class[]::new));
 			pathfinderMob.targetSelector.addGoal(1, newGoal);
@@ -191,7 +178,7 @@ public class Targeting extends JsonFeature {
 			else
 				newTargetGoal = new EANearestAttackableTarget<>(mob, goal.targetType, false, false, goal.targetConditions);
 
-			if (instaTarget)
+			if (instantTarget)
 				newTargetGoal.setInstaTarget();
 
 			goalsToAdd.add(new WrappedGoal(prioritizedGoal.getPriority(), newTargetGoal));
@@ -213,7 +200,7 @@ public class Targeting extends JsonFeature {
 
 			EANearestAttackableTarget<LivingEntity> targetGoal = new EANearestAttackableTarget<>(mob, LivingEntity.class, chc.victim, chc.mustSee, false, TargetingConditions.forCombat());
 
-			if (instaTarget)
+			if (instantTarget)
 				targetGoal.setInstaTarget();
 			mob.targetSelector.addGoal(chc.priority, targetGoal);
 		}

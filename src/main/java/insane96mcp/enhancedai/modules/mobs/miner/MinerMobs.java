@@ -12,7 +12,6 @@ import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.data.IdTagMatcher;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -28,46 +27,35 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 @Label(name = "Miner Mobs", description = "Mobs can mine blocks to reach the target. Uses offhand item to mine. Only mobs in the entity type tag enhancedai:can_be_miner can spawn with the ability to mine and blocks in the tag enhancedai:miner_block_blacklist cannot be mined.")
 @LoadFeature(module = Modules.Ids.MOBS)
 public class MinerMobs extends Feature {
-	public static final TagKey<EntityType<?>> CAN_BE_MINER = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(EnhancedAI.MOD_ID, "can_be_miner"));
-	public static final TagKey<Block> BLOCK_BLACKLIST = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(EnhancedAI.MOD_ID, "miner_block_blacklist"));
+	public static final TagKey<EntityType<?>> CAN_BE_MINER = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("can_be_miner"));
+	public static final TagKey<Block> BLOCK_BLACKLIST = TagKey.create(Registries.BLOCK, EnhancedAI.location("miner_block_blacklist"));
 	public static final String MINER = EnhancedAI.RESOURCE_PREFIX + "miner";
 	public static final String TIME_TO_BREAK_MULTIPLIER = EnhancedAI.RESOURCE_PREFIX + "time_to_break_multiplier";
 	public static final String TOOL_ONLY = EnhancedAI.RESOURCE_PREFIX + "tool_only";
 	public static final String PROPER_TOOL_ONLY = EnhancedAI.RESOURCE_PREFIX + "proper_tool_only";
 	public static final String ALWAYS_REQUIRE_PROPER_TOOL = EnhancedAI.RESOURCE_PREFIX + "always_require_proper_tool";
 
-	@Config(min = 0d, max = 1d)
-	@Label(name = "Miner Chance", description = "Chance for a mob in the entity type tag enhancedai:can_be_miner to spawn with the miner ability")
+	@Config(min = 0d, max = 1d, description = "Chance for a mob in the entity type tag enhancedai:can_be_miner to spawn with the miner ability")
 	public static Double minerChance = 0.07d;
-	@Config
-	@Label(name = "Can mine with tool only", description = "Mobs with the miner AI will mine only if they have any tool in the off-hand")
+	@Config(description = "Mobs with the miner AI will mine only if they have any tool in the off-hand")
 	public static Boolean canMineWithToolOnly = true;
-	@Config
-	@Label(name = "Can mine with proper tool only", description = "Mobs with the miner AI will mine only if their off-hand tool can mine targeted blocks (e.g. zombies with shovels will not mine stone). Blocks that require no tool (e.g. planks) will be minable regardless of proper tool or not.")
+	@Config(description = "Mobs with the miner AI will mine only if their off-hand tool can mine targeted blocks (e.g. zombies with shovels will not mine stone). Blocks that require no tool (e.g. planks) will be minable regardless of proper tool or not.")
 	public static Boolean canMineWithProperToolOnly = false;
-	@Config
-	@Label(name = "Always require proper tool", description = "If 'Can mine with proper tool only' is enabled, mobs with the miner AI will mine blocks that don't require a tool only with the proper tool.")
+	@Config(description = "If 'Can mine with proper tool only' is enabled, mobs with the miner AI will mine blocks that don't require a tool only with the proper tool.")
 	public static Boolean alwaysRequireProperTool = false;
-	@Config
-	@Label(name = "Equip Stone Pick", description = "Mobs with Miner AI will spawn with a Stone Pickaxe that never drops.")
+	@Config(description = "Mobs with Miner AI will spawn with a Stone Pickaxe that never drops.")
 	public static Boolean equipStonePick = true;
-	@Config(min = -512, max = 1024)
-	@Label(name = "Max Y", description = "Mobs can mine from the bottom of the world to this Y level.")
+	@Config(min = -512, max = 1024, description = "Mobs can mine from the bottom of the world to this Y level.")
 	public static Integer maxY = 320;
-	@Config(min = 0, max = 128)
-	@Label(name = "Max Distance", description = "The maximum distance from the target at which the Mobs can mine. Set to 0 to always mine.")
+	@Config(min = 0, max = 128, description = "The maximum distance from the target at which the Mobs can mine. Set to 0 to always mine.")
 	public static Integer maxDistance = 0;
-	@Config
-	@Label(name = "Blacklist Tile Entities", description = "Mobs with Miner AI will not be able to break tile entities")
+	@Config(description = "Mobs with Miner AI will not be able to break tile entities")
 	public static Boolean blacklistTileEntities = false;
-	@Config(min = 0d, max = 128d)
-	@Label(name = "Time to break multiplier", description = "Multiplier for the time a mob takes to break blocks. E.g. with this set to 2, mobs will take twice the time to mine a block.")
+	@Config(min = 0d, max = 128d, description = "Multiplier for the time a mob takes to break blocks. E.g. with this set to 2, mobs will take twice the time to mine a block.")
 	public static Double timeToBreakMultiplier = 1.25d;
-	@Config
-	@Label(name = "Block Blacklist as Whitelist", description = "If true, the block tag `enhancedai:miner_block_blacklist` will be treated as a whitelist instead of blacklist")
+	@Config(description = "If true, the block tag `enhancedai:miner_block_blacklist` will be treated as a whitelist instead of blacklist")
 	public static Boolean blockBlacklistAsWhitelist = false;
-	@Config
-	@Label(name = "Dimension Blacklist", description = "Dimensions where mobs can't spawn with the ability to mine.")
+	@Config(description = "Dimensions where mobs can't spawn with the ability to mine.")
 	public static Blacklist dimensionBlacklist = new Blacklist();
 
 	public MinerMobs(Module module, boolean enabledByDefault, boolean canBeDisabled) {
