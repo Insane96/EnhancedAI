@@ -22,8 +22,8 @@ public class CreeperMixin extends Monster {
 	@Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/monster/Creeper;playSound(Lnet/minecraft/sounds/SoundEvent;FF)V"), method = "tick()V")
 	public void tickOnPlaySound(Creeper instance, SoundEvent soundEvent, float volume, float pitch) {
 		if (this.getPersistentData().getBoolean(CreeperSwell.ANGRY)) {
-			if (CreeperSwell.angryCreeperSounds.fuse != null) {
-				soundEvent = CreeperSwell.angryCreeperSounds.fuse.get();
+			if (CreeperSwell.angry$creeperSounds.fuse != null) {
+				soundEvent = CreeperSwell.angry$creeperSounds.fuse.get();
 				pitch = 1.0f;
 			}
 			else

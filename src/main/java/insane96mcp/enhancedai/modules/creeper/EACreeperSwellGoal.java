@@ -83,7 +83,7 @@ public class EACreeperSwellGoal extends Goal {
 		//Update the explosion size in case the creeper becomes charged
 		explosionSize = CreeperUtils.getExplosionSize(this.swellingCreeper);
 		explosionSizeSqr = explosionSize * explosionSize;
-		if (CreeperSwell.iguanaTweaksIntegration) {
+		if (CreeperSwell.insaneSurvivalOverhaulIntegration) {
 			this.swellingCreeper.getPersistentData().putFloat("iguanatweaksreborn:explosion_ray_strength_multiplier", this.isBreaching ? 0.01f : 0.3f);
 		}
 	}
@@ -193,7 +193,7 @@ public class EACreeperSwellGoal extends Goal {
 		return this.isStuck()
 				&& !creeper.getSensing().hasLineOfSight(target)
 				&& !creeper.isInWater()
-				&& xzDistance < CreeperSwell.breachHorizontalRange * CreeperSwell.breachHorizontalRange
+				&& xzDistance < CreeperSwell.breach$horizontalRange * CreeperSwell.breach$horizontalRange
 				&& yDistance > -CreeperUtils.getExplosionSize(creeper) - 2;
 	}
 
