@@ -1,5 +1,10 @@
 # Changelog
 
+## Upcoming
+* Snow Golems' snowballs damage and freeze are now configurable 
+* Fixed Ravager feature not working
+* Fixed Iron Golem's "fire tick faster" not working as intended 
+
 ## 2.6.6
 * Bosses can no longer be teleported by the Over Here feature
   * Added a new Entity Type Tag `enhancedai:get_over_here_teleport_blacklist`

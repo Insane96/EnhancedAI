@@ -4,14 +4,12 @@ import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
-import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.MinMax;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -22,10 +20,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
 
-@Label(name = "Blaze Attack", description = "Make blazes fire faster/more fireballs. Only mobs in enhancedai:change_blaze_attack entity type tag are affected by this feature.")
-@LoadFeature(module = Modules.Ids.BLAZE)
+@LoadFeature(module = Modules.Ids.BLAZE, description = "Make blazes fire faster/more fireballs. Only mobs in enhancedai:change_blaze_attack entity type tag are affected by this feature.")
 public class BlazeAttack extends Feature {
-    public static final TagKey<EntityType<?>> CHANGE_BLAZE_ATTACK = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "change_blaze_attack"));
+    public static final TagKey<EntityType<?>> CHANGE_BLAZE_ATTACK = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("change_blaze_attack"));
 
     public static final String TIME_BETWEEN_FIREBALLS = EnhancedAI.RESOURCE_PREFIX + "time_between_fireballs";
     public static final String FIREBALLS_SHOT = EnhancedAI.RESOURCE_PREFIX + "fireballs_shot";
@@ -33,23 +30,17 @@ public class BlazeAttack extends Feature {
     public static final String CHARGE_TIME = EnhancedAI.RESOURCE_PREFIX + "charge_time";
     public static final String FIREBALLS_PER_SHOT = EnhancedAI.RESOURCE_PREFIX + "fireballs_per_shot";
     public static final String INACCURACY = EnhancedAI.RESOURCE_PREFIX + "inaccuracy";
-    @Config(min = 1, max = 300)
-    @Label(name = "Time Between Fireballs", description = "How many ticks pass between shooting fireballs. Vanilla is 6")
+    @Config(min = 1, max = 300, description = "How many ticks pass between shooting fireballs. Vanilla is 6")
     public static MinMax timeBetweenFireballs = new MinMax(4, 10);
-    @Config(min = 1, max = 64)
-    @Label(name = "Fireballs shot", description = "How many fireballs blazes shoots. Vanilla is 3")
+    @Config(min = 1, max = 64, description = "How many fireballs blazes shoots. Vanilla is 3")
     public static MinMax fireballsShot = new MinMax(2, 6);
-    @Config(min = 1, max = 600)
-    @Label(name = "Recharge time", description = "Time (in ticks) taken by the blaze to recharge (before setting himself on fire). Vanilla is 100")
+    @Config(min = 1, max = 600, description = "Time (in ticks) taken by the blaze to recharge (before setting himself on fire). Vanilla is 100")
     public static MinMax rechargeTime = new MinMax(60, 120);
-    @Config(min = 1, max = 600)
-    @Label(name = "Charge time", description = "Time (in ticks) taken by the blaze to charge (while on fire before shooting fireballs). Vanilla is 60")
+    @Config(min = 1, max = 600, description = "Time (in ticks) taken by the blaze to charge (while on fire before shooting fireballs). Vanilla is 60")
     public static MinMax chargeTime = new MinMax(30, 80);
-    @Config(min = 1, max = 8)
-    @Label(name = "Fireballs Per Shot", description = "How many fireballs are shot per shot. Vanilla is 1")
+    @Config(min = 1, max = 8, description = "How many fireballs are shot per shot. Vanilla is 1")
     public static MinMax fireballsPerShot = new MinMax(1, 2);
-    @Config(min = -1, max = 32)
-    @Label(name = "Inaccuracy", description = "The higher the more spread up shots will be. Setting both to -1 will use the vanilla behaviour (farther = more inaccuracy)")
+    @Config(min = -1, max = 32, description = "The higher the more spread up shots will be. Setting both to -1 will use the vanilla behaviour (farther = more inaccuracy)")
     public static MinMax inaccuracy = new MinMax(2, 14);
 
     public BlazeAttack(Module module, boolean enabledByDefault, boolean canBeDisabled) {

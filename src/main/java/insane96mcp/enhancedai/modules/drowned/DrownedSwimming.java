@@ -3,14 +3,12 @@ package insane96mcp.enhancedai.modules.drowned;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.Feature;
-import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
@@ -30,15 +28,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.UUID;
 
-@Label(name = "Drowned Swimming", description = "Makes drowned swim speed based off swim speed attribute instead of movement speed. Only drowneds in the enhancedai:change_drowned_swimming entity type tag are affected by this feature.")
-@LoadFeature(module = Modules.Ids.DROWNED)
+@LoadFeature(module = Modules.Ids.DROWNED, description = "Makes drowned swim speed based off swim speed attribute instead of movement speed. Only drowneds in the enhancedai:change_drowned_swimming entity type tag are affected by this feature.")
 public class DrownedSwimming extends Feature {
-	public static final TagKey<EntityType<?>> CHANGE_DROWNED_SWIMMING = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "change_drowned_swimming"));
+	public static final TagKey<EntityType<?>> CHANGE_DROWNED_SWIMMING = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("change_drowned_swimming"));
 
 	final UUID UUID_SWIM_SPEED_MULTIPLIER = UUID.fromString("ba2adf05-2438-4d1f-8165-89173f0a1eae");
 
-	@Config(min = 0d, max = 4d)
-	@Label(name = "Swim Speed Multiplier", description = "Multiplier for the swim speed of Drowneds. Note that the swim speed is also affected by the Movement Feature. Set to 0 to disable the multiplier.")
+	@Config(min = 0d, max = 4d, description = "Multiplier for the swim speed of Drowned. Note that the swim speed is also affected by the Movement Feature. Set to 0 to disable the multiplier.")
 	public static Double swimSpeedMultiplier = 0.3d;
 
 	public DrownedSwimming(Module module, boolean enabledByDefault, boolean canBeDisabled) {
@@ -59,7 +55,7 @@ public class DrownedSwimming extends Feature {
 		drowned.goalSelector.addGoal(6, new DrownedSwimUpGoal(drowned, 1.0D, drowned.level().getSeaLevel()));;
 
 		if (swimSpeedMultiplier > 0d) {
-			MCUtils.applyModifier(drowned, ForgeMod.SWIM_SPEED.get(), UUID_SWIM_SPEED_MULTIPLIER, "Enhanced AI Drowneds Swim Speed Multiplier", swimSpeedMultiplier - 1, AttributeModifier.Operation.MULTIPLY_TOTAL);
+			MCUtils.applyModifier(drowned, ForgeMod.SWIM_SPEED.get(), UUID_SWIM_SPEED_MULTIPLIER, "Enhanced AI Drowned Swim Speed Multiplier", swimSpeedMultiplier - 1, AttributeModifier.Operation.MULTIPLY_TOTAL);
 		}
 	}
 
@@ -102,9 +98,6 @@ public class DrownedSwimming extends Feature {
 				if (!this.drowned.onGround()) {
 					this.drowned.setDeltaMovement(this.drowned.getDeltaMovement().add(0.0D, -0.008D, 0.0D));
 				}
-				/*else {
-					this.drowned.getNavigation().stop();
-				}*/
 				this.drowned.setPose(Pose.STANDING);
 
 				super.tick();

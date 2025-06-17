@@ -4,14 +4,13 @@ import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
-import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
+import insane96mcp.insanelib.base.config.MinMax;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -28,24 +27,19 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.UUID;
 
-@Label(name = "Snow Golems", description = "Use the enhancedai:change_snow_golems entity type tag to add more snow golems.")
-@LoadFeature(module = Modules.Ids.PETS)
+@LoadFeature(module = Modules.Ids.PETS, description = "Use the enhancedai:change_snow_golems entity type tag to add more snow golems.")
 public class SnowGolems extends Feature {
-    public static final TagKey<EntityType<?>> CHANGE_SNOW_GOLEMS = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "change_snow_golems"));
+    public static final TagKey<EntityType<?>> CHANGE_SNOW_GOLEMS = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("change_snow_golems"));
     public static final String SHOOTING_COOLDOWN = EnhancedAI.RESOURCE_PREFIX + "shooting_cooldown";
     private static final String ON_SPAWN_PROCESSED = EnhancedAI.RESOURCE_PREFIX + "snow_golems_on_spawn_processed";
-    @Config
-    @Label(name = "Damaging Snowballs")
-    public static Boolean damagingSnowballs = true;
-    @Config
-    @Label(name = "Freezing Snowballs")
-    public static Boolean freezingSnowballs = true;
-    @Config
-    @Label(name = "Healing Snowballs", description = "If true, snowballs hitting snow golems will heal them.")
-    public static Boolean healingSnowballs = true;
     @Config(min = 0)
-    @Label(name = "Shooting Cooldown", description = "Ticks between snowballs")
-    public static Integer shootingCooldown = 10;
+    public static Double damagingSnowballs = 0.5d;
+    @Config(min = 0)
+    public static Integer freezingSnowballs = 30;
+    @Config(description = "If true, snowballs hitting snow golems will heal them.")
+    public static Boolean healingSnowballs = true;
+    @Config(min = 0, description = "Ticks between snowballs")
+    public static MinMax shootingCooldown = new MinMax(10, 20);
 
     public SnowGolems(Module module, boolean enabledByDefault, boolean canBeDisabled) {
         super(module, enabledByDefault, canBeDisabled);
@@ -54,7 +48,7 @@ public class SnowGolems extends Feature {
     @SubscribeEvent
     public void onProjectileImpactEvent(ProjectileImpactEvent event) {
         if (!this.isEnabled()
-                || (!damagingSnowballs && !freezingSnowballs)
+                || (damagingSnowballs == 0f && freezingSnowballs == 0)
                 || !(event.getProjectile().getOwner() instanceof SnowGolem snowGolem)
                 || !snowGolem.getType().is(CHANGE_SNOW_GOLEMS)
                 || !(event.getRayTraceResult() instanceof EntityHitResult entityHitResult)
@@ -62,13 +56,12 @@ public class SnowGolems extends Feature {
                 || entityHitResult.getEntity() instanceof SnowGolem)
             return;
 
-        if (damagingSnowballs) {
+        if (damagingSnowballs > 0f) {
             DamageSource damageSource = snowGolem.damageSources().mobProjectile(event.getProjectile(), snowGolem);
-            entityHit.hurt(damageSource, 0.5f);
+            entityHit.hurt(damageSource, damagingSnowballs.floatValue());
         }
-        if (freezingSnowballs) {
-            entityHit.setTicksFrozen(entityHit.getTicksFrozen() + 30);
-        }
+        if (freezingSnowballs == 0)
+            entityHit.setTicksFrozen(entityHit.getTicksFrozen() + freezingSnowballs);
     }
 
     @SubscribeEvent
@@ -94,7 +87,7 @@ public class SnowGolems extends Feature {
             return;
 
         CompoundTag persistentData = snowGolem.getPersistentData();
-        int shootingCooldown1 = NBTUtils.getIntOrPutDefault(persistentData, SHOOTING_COOLDOWN, shootingCooldown);
+        int shootingCooldown1 = NBTUtils.getIntOrPutDefault(persistentData, SHOOTING_COOLDOWN, shootingCooldown.getIntRandBetween(snowGolem.getRandom()));
 
         snowGolem.goalSelector.availableGoals.removeIf(wrappedGoal -> wrappedGoal.getGoal() instanceof RangedAttackGoal);
         snowGolem.goalSelector.addGoal(1, new EARangedSnowGolemAttackGoal(snowGolem, 1f, 24f).setAttackCooldown(shootingCooldown1));
