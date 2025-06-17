@@ -4,7 +4,6 @@ import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
-import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
@@ -15,7 +14,6 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
@@ -32,50 +30,36 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@Label(name = "Throwing Web", description = "Makes spiders throw a web at a player, slowing them")
-@LoadFeature(module = Modules.Ids.SPIDER)
+@LoadFeature(module = Modules.Ids.SPIDER, description = "Makes spiders throw a web at a player, slowing them")
 public class ThrowingWeb extends Feature {
-	public static final TagKey<EntityType<?>> CAN_THROW_WEBS = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "can_throw_webs"));
+	public static final TagKey<EntityType<?>> CAN_THROW_WEBS = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("can_throw_webs"));
 	public static final String WEB_THROWER = EnhancedAI.RESOURCE_PREFIX + "web_thrower";
-	@Config(min = 0d, max = 1d)
-	@Label(name = "Web Throw Chance", description = "Chance for a Spider to spawn with the ability to throw webs at the target.")
-	public static Double webThrowChance = 0.1d;
-	@Config(min = 0, max = 6000)
-	@Label(name = "Destroy Web After", description = "After how many ticks will the cobweb placed by the web projectile be destroyed?")
+	@Config(min = 0d, max = 1d, description = "Chance for a Spider to spawn with the ability to throw webs at the target.")
+	public static Double chance = 0.1d;
+	@Config(min = 0, max = 6000, description = "After how many ticks will the cobweb placed by the web projectile be destroyed?")
 	public static Integer destroyWebAfter = 100;
-	@Config(min = 0, max = 128d)
-	@Label(name = "Web Damage", description = "Damage when the projectiles hits a mob. The damage is set for normal difficulty. Hard difficulty gets +50% damage and Easy gets (-50% + 1) damage.")
-	public static Double thrownWebDamage = 3d;
-	@Config(min = 1, max = 1200)
-	@Label(name = "Cooldown", description = "Every how many ticks do spiders throw the projectile")
-	public static MinMax throwingCooldown = new MinMax(40, 60);
-	@Config(min = 0d, max = 64d)
-	@Label(name = "Distance Required", description = "Distance Required for the spider to throw webs. Setting 'Minimum' to 0 will make the spider throw webs even when attacking the player.")
+	@Config(min = 0, max = 128d, description = "Damage when the projectiles hits a mob. The damage is set for normal difficulty. Hard difficulty gets +50% damage and Easy gets (-50% + 1) damage.")
+	public static Double damage = 3d;
+	@Config(min = 1, max = 1200, description = "Every how many ticks do spiders throw the projectile")
+	public static MinMax cooldown = new MinMax(40, 60);
+	@Config(min = 0d, max = 64d, description = "Distance Required for the spider to throw webs. Setting 'Minimum' to 0 will make the spider throw webs even when attacking the player.")
 	public static MinMax distance = new MinMax(2.5d, 32d);
-	@Config
-	@Label(name = "Always web", description = "If true entities will get webbed when hit.")
+	@Config(description = "If true entities will get webbed when hit.")
 	public static Boolean alwaysWeb = false;
-	@Config
-	@Label(name = "Cave spiders poisonous webs", description = "If true cave spiders' thrown web will poison entities hit like when they hit the entity melee.")
+	@Config(description = "If true cave spiders' thrown web will poison entities hit like when they hit the entity melee.")
 	public static Boolean caveSpidersPoisonousWebs = true;
-	@Config
-	@Label(name = "Apply Speed on hit", description = "If true, spiders will gain a speed boost when they hit the target.")
+	@Config(description = "If true, spiders will gain a speed boost when they hit the target.")
 	public static Boolean applySpeed = true;
-	@Config
-	@Label(name = "Apply Slowness", description = "If true entities will get slowness when hit.")
+	@Config(description = "If true entities will get slowness when hit.")
 	public static Boolean applySlowness = true;
 	//Slowness
-	@Config(min = 0d, max = 6000)
-	@Label(name = "Slowness.Duration", description = "How many ticks of slowness are applied to the target hit by the web?")
-	public static Integer slownessDuration = 120;
-	@Config(min = 0, max = 128)
-	@Label(name = "Slowness.Amplifier", description = "How many levels of slowness are applied to the target hit by the web?")
-	public static Integer slownessAmplifier = 0;
-	@Config
-	@Label(name = "Slowness.Stacking Amplifier", description = "Should multiple hits on a target with slowness increase the level of Slowness? (This works with any type of slowness)")
-	public static Boolean stackSlowness = false;
-	@Config(min = 0, max = 128)
-	@Label(name = "Slowness.Max Amplifier", description = "How many max levels of slowness can be applied to the target if Staking amplifier is enabled?")
+	@Config(min = 0d, max = 6000, description = "How many ticks of slowness are applied to the target hit by the web?")
+	public static Integer slowness$duration = 120;
+	@Config(min = 0, max = 128, description = "How many levels of slowness are applied to the target hit by the web?")
+	public static Integer slowness$amplifier = 0;
+	@Config(description = "Should multiple hits on a target with slowness increase the level of Slowness? (This works with any type of slowness)")
+	public static Boolean slowness$stackAmplifier = false;
+	@Config(min = 0, max = 128, description = "How many max levels of slowness can be applied to the target if Staking amplifier is enabled?")
 	public static Integer maxSlowness = 2;
 
 	public ThrowingWeb(Module module, boolean enabledByDefault, boolean canBeDisabled) {
@@ -92,7 +76,7 @@ public class ThrowingWeb extends Feature {
 
 		CompoundTag persistentData = spider.getPersistentData();
 
-		boolean webThrower = NBTUtils.getBooleanOrPutDefault(persistentData, WEB_THROWER, spider.getRandom().nextDouble() < webThrowChance);
+		boolean webThrower = NBTUtils.getBooleanOrPutDefault(persistentData, WEB_THROWER, spider.getRandom().nextDouble() < chance);
 
 		if (webThrower)
 			spider.goalSelector.addGoal(2, new WebThrowGoal(spider));
@@ -108,10 +92,10 @@ public class ThrowingWeb extends Feature {
 			return;
 		MobEffectInstance slowness = entity.getEffect(MobEffects.MOVEMENT_SLOWDOWN);
 
-		if (stackSlowness && slowness != null)
-			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, slownessDuration, Math.min(slowness.getAmplifier() + slownessAmplifier + 1, maxSlowness - 1), false, false, true));
+		if (slowness$stackAmplifier && slowness != null)
+			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, slowness$duration, Math.min(slowness.getAmplifier() + slowness$amplifier + 1, maxSlowness - 1), false, false, true));
 		else
-			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, slownessDuration, slownessAmplifier, false, false, true));
+			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, slowness$duration, slowness$amplifier, false, false, true));
 	}
 
 	public static void applyPoison(LivingEntity spider, LivingEntity entity) {
