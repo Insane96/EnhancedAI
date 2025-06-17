@@ -26,7 +26,7 @@ public class ShulkerMixin extends AbstractGolem {
     @Inject(method = "setRawPeekAmount", at = @At("RETURN"))
     public void onSetRawPeekAmount(int peekAmount, CallbackInfo ci) {
         if (this.level().isClientSide
-                || !ShulkerArmor.isAffectedByArmorModifers((Shulker) (Object) this))
+                || !ShulkerArmor.isAffectedByArmorModifiers((Shulker) (Object) this))
             return;
 
         this.getAttribute(Attributes.ARMOR).removeModifier(COVERED_ARMOR_MODIFIER);

@@ -7,13 +7,11 @@ import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.setup.EATags;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
-import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -22,27 +20,20 @@ import net.minecraft.world.entity.monster.AbstractSkeleton;
 
 import java.util.List;
 
-@Label(name = "Skeleton Flee", description = "Skeletons try to stay away from the target. Use the enhancedai:skeleton_flee entity type tag to add/remove skeletons that are affected by this feature")
-@LoadFeature(module = Modules.Ids.SKELETON)
+@LoadFeature(module = Modules.Ids.SKELETON, description = "Skeletons try to stay away from the target. Use the enhancedai:skeleton_flee entity type tag to add/remove skeletons that are affected by this feature")
 public class SkeletonFleeTarget extends Feature {
-    public static final TagKey<EntityType<?>> SKELETON_FLEE = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "skeleton_flee"));
-    @Config(min = 0d, max = 1d)
-    @Label(name = "Avoid Player chance", description = "Chance for a Skeleton to spawn with the ability to avoid the player")
+    public static final TagKey<EntityType<?>> SKELETON_FLEE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("skeleton_flee"));
+    @Config(min = 0d, max = 1d, description = "Chance for a Skeleton to spawn with the ability to avoid the player")
     public static Double avoidPlayerChance = 0.5d;
-    @Config(min = 0d, max = 1d)
-    @Label(name = "Attack When Avoiding Chance", description = "Chance for a Skeleton to be able to shoot while running from a player")
+    @Config(min = 0d, max = 1d, description = "Chance for a Skeleton to be able to shoot while running from a player")
     public static Double attackWhenAvoidingChance = 0.5d;
-    @Config(min = 0d, max = 32d)
-    @Label(name = "Flee Distance Near", description = "Distance from a player that counts as near and will make the skeleton run away faster.")
+    @Config(min = 0d, max = 32d, description = "Distance from a player that counts as near and will make the skeleton run away faster.")
     public static Double fleeDistanceNear = 8d;
-    @Config(min = 0d, max = 32d)
-    @Label(name = "Flee Distance Far", description = "Distance from a player that will make the skeleton run away.")
+    @Config(min = 0d, max = 32d, description = "Distance from a player that will make the skeleton run away.")
     public static Double fleeDistanceFar = 16d;
-    @Config(min = 0d, max = 4d)
-    @Label(name = "Flee speed Multiplier Near", description = "Speed multiplier when the skeleton avoids the player and it's within 'Flee Distance Near' blocks from him.")
+    @Config(min = 0d, max = 4d, description = "Speed multiplier when the skeleton avoids the player and it's within 'Flee Distance Near' blocks from him.")
     public static Double fleeSpeedNear = 1.25d;
-    @Config(min = 0d, max = 4d)
-    @Label(name = "Flee speed Multiplier Far", description = "Speed multiplier when the skeleton avoids the player and it's farther than 'Flee Distance Far' blocks from him.")
+    @Config(min = 0d, max = 4d, description = "Speed multiplier when the skeleton avoids the player and it's farther than 'Flee Distance Far' blocks from him.")
     public static Double fleeSpeedFar = 1.1d;
 
     public SkeletonFleeTarget(Module module, boolean enabledByDefault, boolean canBeDisabled) {

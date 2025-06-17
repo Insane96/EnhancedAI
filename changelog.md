@@ -1,7 +1,10 @@
 # Changelog
 
 ## Upcoming
-* Snow Golems' snowballs damage and freeze are now configurable 
+**Config options might have changed, please backup your config file**
+
+* Snow Golems' snowballs damage and freeze are now configurable
+* Increased shulker bullets levitation duration and amplifier
 * Fixed Ravager feature not working
 * Fixed Iron Golem's "fire tick faster" not working as intended 
 
