@@ -3,13 +3,11 @@ package insane96mcp.enhancedai.modules.pets;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.Feature;
-import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -21,19 +19,15 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.UUID;
 
-@Label(name = "Wolves", description = "Use the enhancedai:change_wolves entity type tag to add more wolves.")
-@LoadFeature(module = Modules.Ids.PETS)
+@LoadFeature(module = Modules.Ids.PETS, description = "Use the enhancedai:change_wolves entity type tag to add more wolves.")
 public class Wolves extends Feature {
-    public static final TagKey<EntityType<?>> CHANGE_WOLVES = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "change_wolves"));
+    public static final TagKey<EntityType<?>> CHANGE_WOLVES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("change_wolves"));
     private static final String ON_SPAWN_PROCESSED = EnhancedAI.RESOURCE_PREFIX + "wolves_on_spawn_processed";
     @Config
-    @Label(name = "Double HP and Damage")
     public static Boolean doubleHpAndDamage = true;
     @Config
-    @Label(name = "Bonus Movement Speed")
     public static Boolean bonusMovementSpeed = true;
-    @Config
-    @Label(name = "Passive Heal Speed", description = "Wolves will slowly heal like horses. This is 1 in x chance to heal 1 hp each tick.")
+    @Config(description = "Wolves will slowly heal like horses. This is 1 in x chance to heal 1 hp each tick.")
     public static Integer passiveHealSpeed = 900;
 
     public Wolves(Module module, boolean enabledByDefault, boolean canBeDisabled) {

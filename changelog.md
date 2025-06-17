@@ -1,11 +1,9 @@
 # Changelog
 
-## 2.6.8
-* Monsters can now forget their target
-* Fishing min and max distance can now be changed
-
-## 2.6.7
-* Fixed a huge bug that made animals fleeing very performance heavy
+## Upcoming
+* Snow Golems' snowballs damage and freeze are now configurable 
+* Fixed Ravager feature not working
+* Fixed Iron Golem's "fire tick faster" not working as intended 
 
 ## 2.6.6
 * Bosses can no longer be teleported by the Over Here feature

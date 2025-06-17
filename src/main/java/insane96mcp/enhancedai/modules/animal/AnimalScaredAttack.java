@@ -8,7 +8,6 @@ import insane96mcp.enhancedai.setup.EAAttributes;
 import insane96mcp.enhancedai.setup.EATags;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
-import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
@@ -38,8 +37,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.UUID;
 
-@Label(name = "Animals Scared Attack", description = "Make animals fight back or be scared by players. Use the entity type tag enhancedai:can_be_neutral, enhancedai:can_be_hostile, and enhancedai:can_be_scared_by_players to add/remove animals.")
-@LoadFeature(module = Modules.Ids.ANIMAL)
+@LoadFeature(module = Modules.Ids.ANIMAL, description = "Make animals fight back or be scared by players. Use the entity type tag enhancedai:can_be_neutral, enhancedai:can_be_hostile, and enhancedai:can_be_scared_by_players to add/remove animals.")
 public class AnimalScaredAttack extends Feature {
     public static final TagKey<EntityType<?>> CAN_BE_NEUTRAL = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(EnhancedAI.MOD_ID, "can_be_neutral"));
     public static final TagKey<EntityType<?>> CAN_BE_HOSTILE = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(EnhancedAI.MOD_ID, "can_be_hostile"));
@@ -48,29 +46,21 @@ public class AnimalScaredAttack extends Feature {
     public static final String HOSTILE = EnhancedAI.RESOURCE_PREFIX + "hostile";
     public static final String PLAYER_SCARED = EnhancedAI.RESOURCE_PREFIX + "player_scared";
 
-    @Config(min = 0d, max = 1d)
-    @Label(description = "Animals have this percentage chance to be able to fight back instead of fleeing. Animals have a slightly bigger range to attack. Attack damage can't be changed via config due to limitations so use mods like Mobs Properties Randomness to change the damage. Base damage is 3")
+    @Config(min = 0d, max = 1d, description = "Animals have this percentage chance to be able to fight back instead of fleeing. Animals have a slightly bigger range to attack. Attack damage can't be changed via config due to limitations so use mods like Mobs Properties Randomness to change the damage. Base damage is 3")
     public static Double neutralChance = 0.35d;
-    @Config(min = 0d, max = 1d)
-    @Label(description = "Animals have this percentage chance to be hostile")
+    @Config(min = 0d, max = 1d, description = "Animals have this percentage chance to be hostile")
     public static Double hostileChance = 0.10d;
-    @Config(min = 0d, max = 1d)
-    @Label(name = "Players Scared chance", description = "Animals have this percentage chance to be scared by players and run away. Fight back chance has priority over this")
+    @Config(min = 0d, max = 1d, description = "Animals have this percentage chance to be scared by players and run away. Fight back chance has priority over this")
     public static Double playersScaredChance = 0.25d;
-    @Config(min = 0d, max = 4d)
-    @Label(name = "Flee speed Multiplier Near", description = "Speed multiplier when the animal avoids the player and it's within 8 blocks from him.")
+    @Config(min = 0d, max = 4d, description = "Speed multiplier when the animal avoids the player and it's within 8 blocks from him.")
     public static Double fleeSpeedNear = 1.1d;
-    @Config(min = 0d, max = 4d)
-    @Label(name = "Flee speed Multiplier Far", description = "Speed multiplier when the animal avoids the player and it's farther than 16 blocks from him.")
+    @Config(min = 0d, max = 4d, description = "Speed multiplier when the animal avoids the player and it's farther than 16 blocks from him.")
     public static Double fleeSpeedFar = 1d;
-    @Config(min = 0d, max = 4d)
-    @Label(name = "Movement Speed Multiplier", description = "Movement speed multiplier when aggroed.")
+    @Config(min = 0d, max = 4d, description = "Movement speed multiplier when aggroed.")
     public static Double speedMultiplier = 1.1d;
-    @Config(min = 0d, max = 128d)
-    @Label(name = "Knockback", description = "Animals' knockback attribute will be set to this value.")
+    @Config(min = 0d, max = 128d, description = "Animals' knockback attribute will be set to this value.")
     public static Double knockback = 1.5d;
-    @Config
-    @Label(name = "Knockback size based", description = "Animals' knockback attribute will be increased/decreased based on the side of the mob.")
+    @Config(description = "Animals' knockback attribute will be increased/decreased based on the side of the mob.")
     public static Boolean knockbackSizeBased = true;
 
     private static final double BASE_ATTACK_DAMAGE = 3d;

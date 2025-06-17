@@ -25,7 +25,7 @@ public class GetOverHere extends Feature {
     public static final TagKey<EntityType<?>> TELEPORT_BLACKLIST = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(EnhancedAI.MOD_ID, "get_over_here_teleport_blacklist"));
 
     public static final ResourceLocation GET_OVER_HERE = EnhancedAI.location("get_over_here");
-    @Config(min = 0d, max = 1d, name = "Get Over Here Chance", description = "Chance for a enderman to get the Get Over Here AI")
+    @Config(min = 0d, max = 1d, description = "Chance for a enderman to get the Get Over Here AI")
     public static Double getOverHereChance = 0.15d;
 
     public GetOverHere(Module module, boolean enabledByDefault, boolean canBeDisabled) {

@@ -52,6 +52,7 @@ public class CreeperSwell extends Feature {
 	public static final String WALKING_FUSE = EnhancedAI.RESOURCE_PREFIX + "walking_fuse";
 	public static final String IGNORE_WALLS = EnhancedAI.RESOURCE_PREFIX + "ignore_walls";
 	public static final String BETA = EnhancedAI.RESOURCE_PREFIX + "beta";
+
 	@Config(min = 0d, max = 1d, description = "Percentage chance for a Creeper to keep walking while exploding. This is overwritten if the creeper has the beta property.")
 	public static Double walkingFuseChance = 0.1d;
 	@Config(min = -1d, max = 64d, description = "Speed modifier when a walking fuse creeper is swelling.")
