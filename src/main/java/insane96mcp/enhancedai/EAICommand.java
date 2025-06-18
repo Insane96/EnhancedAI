@@ -61,6 +61,6 @@ public class EAICommand {
 
     @SuppressWarnings("unchecked")
     private static <T> void apply(EAIData<T> data, Mob mob, Object value) {
-        data.consume(mob, (T) value);
+        data.apply(mob, (T) value);
     }
 }

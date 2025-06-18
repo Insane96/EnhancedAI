@@ -24,6 +24,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.SwellGoal;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.level.Explosion;
@@ -54,11 +55,12 @@ public class CreeperSwell extends Feature {
 	public static EAIData<Boolean> DISABLE_FALLING_SWELLING;
 	public static EAIData<Boolean> TNT_LIKE;
 	public static EAIData<Boolean> BLOW_UP_ON_DEATH;
-	//TODO Data driven sound
+	public static EAIData<Boolean> FORCE_EXPLODE;
 	public static EAIData<Boolean> ANGRY;
 	public static EAIData<Boolean> LAUNCH;
 	public static EAIData<Double> LAUNCH_INACCURACY;
 	public static EAIData<Boolean> LAUNCH_PARTICLES;
+	public static EAIData<String> EXPLOSION_SOUND;
 
 	@Config(min = 0d, max = 1d, description = "Percentage chance for a Creeper to keep walking while exploding. This is overwritten if the creeper has the beta property.")
 	public static Double walkingFuse$chance = 0.1d;
@@ -78,8 +80,8 @@ public class CreeperSwell extends Feature {
 	public static Double breach$chance = 0.075d;
 	@Config(min = 0, description = "How far away (horizontally) from the target breaching creepers can breach.")
 	public static Integer breach$horizontalRange = 24;
-	@Config(min = 0d, max = 1d, description = "Beta creepers when exploding will walk around the target, like the creepers in pre-1.2.")
-	public static Double betaCreeperChance = 0.35d;
+	@Config(min = 0d, max = 1d, description = "Beta creepers when exploding will walk around the target, like the creepers in pre-1.2. This takes precedence over walking fuse.")
+	public static Double beta$chance = 0.35d;
 	@Config(description = "Disables the creeper feature that makes them start swelling when falling.")
 	public static Boolean disableFallingSwelling = true;
 
@@ -91,7 +93,7 @@ public class CreeperSwell extends Feature {
 	@Config(description = "If true, Angry Creeper emits particles")
 	public static Boolean angry$particles = true;
 	@Config(description = "The special sound effect that the Angry Creeper plays")
-	public static AngryCreeperSounds angry$creeperSounds = AngryCreeperSounds.OLD_EXPLOSION;
+	public static FuseExplodeSounds angry$sounds = FuseExplodeSounds.OLD;
 	@Config(description = "If true, Angry Creeper will have a name")
 	public static Boolean angry$name = true;
 	@Config(description = "When ignited, Angry Creeper will not stop swelling")
@@ -112,23 +114,18 @@ public class CreeperSwell extends Feature {
 		WALKING_FUSE = EAIData.ofBool(this.createDataKey("walking_fuse"), (mob, walkingFuse) -> {
 			GoalHelper.getGoal(mob, EACreeperSwellGoal.class).ifPresent(eaCreeperSwellGoal -> eaCreeperSwellGoal.setWalkingFuse(walkingFuse));
 		});
-		WALKING_FUSE_SPEED_MODIFIER = EAIData.ofDouble(this.createDataKey("walking_fuse_speed_modifier"), (mob, speedModifier) -> {});
-		IGNORE_WALLS = EAIData.ofBool(this.createDataKey("ignore_walls"), (mob, ignoreWalls) -> {
-			GoalHelper.getGoal(mob, EACreeperSwellGoal.class).ifPresent(eaCreeperSwellGoal -> eaCreeperSwellGoal.setIgnoreWalls(ignoreWalls));
-		});
-		BREACH = EAIData.ofBool(this.createDataKey("breach"), (mob, breach) -> {
-			GoalHelper.getGoal(mob, EACreeperSwellGoal.class).ifPresent(eaCreeperSwellGoal -> eaCreeperSwellGoal.setBreaching(breach));
-		});
-		BREACH_HORIZONTAL_RANGE = EAIData.ofDouble(this.createDataKey("breach_horizontal_range"), (mob, horizontalRange) -> {});
+		WALKING_FUSE_SPEED_MODIFIER = EAIData.ofDouble(this.createDataKey("walking_fuse_speed_modifier"));
+		IGNORE_WALLS = EAIData.ofBool(this.createDataKey("ignore_walls"));
+		BREACH = EAIData.ofBool(this.createDataKey("breach"));
+		BREACH_HORIZONTAL_RANGE = EAIData.ofDouble(this.createDataKey("breach_horizontal_range"));
 		BETA = EAIData.ofBool(this.createDataKey("beta"), (mob, beta) -> {
 			GoalHelper.getGoal(mob, EACreeperSwellGoal.class).ifPresent(eaCreeperSwellGoal -> eaCreeperSwellGoal.setBeta(beta));
 		});
-		BETA_LEFT_STRAFE = EAIData.ofBool(this.createDataKey("beta_left_strafe"), (mob, leftStrafe) -> {
-			GoalHelper.getGoal(mob, EACreeperSwellGoal.class).ifPresent(eaCreeperSwellGoal -> eaCreeperSwellGoal.betaStrafeLeft = leftStrafe);
-		});
-		DISABLE_FALLING_SWELLING = EAIData.ofBool(this.createDataKey("disable_falling_swelling"), (mob, disable) -> {});
-		TNT_LIKE = EAIData.ofBool(this.createDataKey("tnt_like"), (mob, tntLike) -> {});
-		BLOW_UP_ON_DEATH = EAIData.ofBool(this.createDataKey("blow_up_on_death"), (mob, blowUpOnDeath) -> {});
+		BETA_LEFT_STRAFE = EAIData.ofBool(this.createDataKey("beta_left_strafe"));
+		DISABLE_FALLING_SWELLING = EAIData.ofBool(this.createDataKey("disable_falling_swelling"));
+		TNT_LIKE = EAIData.ofBool(this.createDataKey("tnt_like"));
+		BLOW_UP_ON_DEATH = EAIData.ofBool(this.createDataKey("blow_up_on_death"));
+		FORCE_EXPLODE = EAIData.ofBool(this.createDataKey("force_explode"));
 		ANGRY = EAIData.ofBool(this.createDataKey("angry"), (mob, angry) -> {
 			if (!(mob instanceof Creeper creeper))
 				return;
@@ -146,7 +143,8 @@ public class CreeperSwell extends Feature {
 					creeper.getPersistentData().putFloat("iguanatweaksreborn:explosion_ray_strength_multiplier", 0.01f);
 				}
 				if (angry$forceExplosion)
-					GoalHelper.getGoal(mob, EACreeperSwellGoal.class).ifPresent(eaCreeperSwellGoal -> eaCreeperSwellGoal.setForceExplode(true));
+					FORCE_EXPLODE.apply(creeper, true);
+				EXPLOSION_SOUND.apply(creeper, angry$sounds.name);
 			}
 			else {
 				compoundNBT.putShort("Fuse", (short) 30);
@@ -160,7 +158,8 @@ public class CreeperSwell extends Feature {
 					creeper.getPersistentData().remove("iguanatweaksreborn:explosion_ray_strength_multiplier");
 				}
 				if (angry$forceExplosion)
-					GoalHelper.getGoal(mob, EACreeperSwellGoal.class).ifPresent(eaCreeperSwellGoal -> eaCreeperSwellGoal.setForceExplode(false));
+					FORCE_EXPLODE.apply(creeper, false);
+				EXPLOSION_SOUND.apply(creeper, FuseExplodeSounds.NONE.name);
 			}
 			creeper.readAdditionalSaveData(compoundNBT);
 			MessageCreeperDataSync.syncCreeperToPlayers(creeper);
@@ -182,8 +181,9 @@ public class CreeperSwell extends Feature {
 			creeper.readAdditionalSaveData(compoundNBT);
 			MessageCreeperDataSync.syncCreeperToPlayers(creeper);
 		});
-		LAUNCH_INACCURACY = EAIData.ofDouble(this.createDataKey("launch_inaccuracy"), (mob, inaccuracy) -> {});
-		LAUNCH_PARTICLES = EAIData.ofBool(this.createDataKey("launch_particles"), (mob, particles) -> {});
+		LAUNCH_INACCURACY = EAIData.ofDouble(this.createDataKey("launch_inaccuracy"));
+		LAUNCH_PARTICLES = EAIData.ofBool(this.createDataKey("launch_particles"));
+		EXPLOSION_SOUND = EAIData.ofString(this.createDataKey("explosion_sound"));
 	}
 
 	@SubscribeEvent
@@ -193,11 +193,13 @@ public class CreeperSwell extends Feature {
 
 		Explosion e = event.getExplosion();
 
-		if (!(e.getExploder() instanceof Creeper creeper))
+		if (!(e.getExploder() instanceof LivingEntity living))
 			return;
 
-		if (ANGRY.get(creeper) && angry$creeperSounds.explode != null)
-			creeper.playSound(angry$creeperSounds.explode.get(), 4.0f, 1.0f);
+		FuseExplodeSounds fuseExplodeSounds = FuseExplodeSounds.get(living);
+		if (fuseExplodeSounds != FuseExplodeSounds.NONE)
+            //noinspection DataFlowIssue
+            living.playSound(fuseExplodeSounds.explode.get(), 4.0f, 1f);
 	}
 
 	//Lowest priority so other mods can set persistent data
@@ -214,19 +216,19 @@ public class CreeperSwell extends Feature {
 
 		EACreeperSwellGoal swellGoal = new EACreeperSwellGoal(creeper);
 		creeper.goalSelector.addGoal(2, swellGoal);
-		WALKING_FUSE.consume(creeper, creeper.getRandom().nextDouble() < walkingFuse$chance);
-		WALKING_FUSE_SPEED_MODIFIER.consume(creeper, walkingFuse$speedModifier);
-		IGNORE_WALLS.consume(creeper, creeper.getRandom().nextDouble() < ignoreWallsChance);
-		BREACH.consume(creeper, creeper.getRandom().nextDouble() < breach$chance);
-		BREACH_HORIZONTAL_RANGE.consume(creeper, breach$horizontalRange.doubleValue());
-		BETA.consume(creeper, creeper.getRandom().nextDouble() < betaCreeperChance);
-		DISABLE_FALLING_SWELLING.consume(creeper, disableFallingSwelling);
-		TNT_LIKE.consume(creeper, tntLike);
-		BLOW_UP_ON_DEATH.consume(creeper, blowUpOnDeath == BlowUpOnDeath.ALL || (blowUpOnDeath == BlowUpOnDeath.CHARGED && creeper.isPowered()) || (ANGRY.get(creeper) && angry$explodeOnDeath));
-		ANGRY.consume(creeper, creeper.getRandom().nextDouble() < angry$chance);
-		LAUNCH.consume(creeper, creeper.getRandom().nextDouble() < launch$chance && creeper.getType().is(CAN_CREEPER_LAUNCH));
-		LAUNCH_INACCURACY.consume(creeper, launch$inaccuracy.getByDifficulty(creeper.level()));
-		LAUNCH_PARTICLES.consume(creeper, launch$particles);
+		WALKING_FUSE.apply(creeper, creeper.getRandom().nextDouble() < walkingFuse$chance);
+		WALKING_FUSE_SPEED_MODIFIER.apply(creeper, walkingFuse$speedModifier);
+		IGNORE_WALLS.apply(creeper, creeper.getRandom().nextDouble() < ignoreWallsChance);
+		BREACH.apply(creeper, creeper.getRandom().nextDouble() < breach$chance);
+		BREACH_HORIZONTAL_RANGE.apply(creeper, breach$horizontalRange.doubleValue());
+		BETA.apply(creeper, creeper.getRandom().nextDouble() < beta$chance);
+		DISABLE_FALLING_SWELLING.apply(creeper, disableFallingSwelling);
+		TNT_LIKE.apply(creeper, tntLike);
+		BLOW_UP_ON_DEATH.apply(creeper, blowUpOnDeath == BlowUpOnDeath.ALL || (blowUpOnDeath == BlowUpOnDeath.CHARGED && creeper.isPowered()) || (ANGRY.get(creeper) && angry$explodeOnDeath));
+		ANGRY.apply(creeper, creeper.getRandom().nextDouble() < angry$chance);
+		LAUNCH.apply(creeper, creeper.getRandom().nextDouble() < launch$chance && creeper.getType().is(CAN_CREEPER_LAUNCH));
+		LAUNCH_INACCURACY.apply(creeper, launch$inaccuracy.getByDifficulty(creeper.level()));
+		LAUNCH_PARTICLES.apply(creeper, launch$particles);
 	}
 
 	@SubscribeEvent
@@ -249,7 +251,7 @@ public class CreeperSwell extends Feature {
 				|| !BLOW_UP_ON_DEATH.get(creeper))
 			return;
 
-		BLOW_UP_ON_DEATH.consume(creeper, false);
+		BLOW_UP_ON_DEATH.apply(creeper, false);
 		creeper.explodeCreeper();
 	}
 
@@ -289,20 +291,33 @@ public class CreeperSwell extends Feature {
 		}
 	}
 
-	public enum AngryCreeperSounds {
-		NONE(null, null),
-		CENA(EASounds.CREEPER_CENA_FUSE, EASounds.CREEPER_CENA_EXPLODE),
-		WTF_BOOM(EASounds.WTF_BOOM_FUSE, EASounds.WTF_BOOM_EXPLODE),
-		OLD_EXPLOSION(() -> SoundEvents.CREEPER_PRIMED, EASounds.OLD_EXPLODE);
+	public enum FuseExplodeSounds {
+		NONE("none", null, null),
+		CENA("cena", EASounds.CREEPER_CENA_FUSE, EASounds.CREEPER_CENA_EXPLODE),
+		WTF_BOOM("wtf_boom", EASounds.WTF_BOOM_FUSE, EASounds.WTF_BOOM_EXPLODE),
+		OLD("old", () -> SoundEvents.CREEPER_PRIMED, EASounds.OLD_EXPLODE);
 
+		public final String name;
 		@Nullable
 		public final Supplier<SoundEvent> fuse;
 		@Nullable
 		public final Supplier<SoundEvent> explode;
 
-		AngryCreeperSounds(@Nullable Supplier<SoundEvent> fuse, @Nullable Supplier<SoundEvent> explode) {
+		FuseExplodeSounds(String name, @Nullable Supplier<SoundEvent> fuse, @Nullable Supplier<SoundEvent> explode) {
+			this.name = name;
 			this.fuse = fuse;
 			this.explode = explode;
+		}
+
+		public static FuseExplodeSounds get(LivingEntity living) {
+			String sound = CreeperSwell.EXPLOSION_SOUND.get(living);
+			if (sound.isEmpty())
+				return NONE;
+			for (FuseExplodeSounds fuseExplodeSounds : values()) {
+				if (fuseExplodeSounds.name.equals(sound))
+					return fuseExplodeSounds;
+			}
+			return NONE;
 		}
 	}
 

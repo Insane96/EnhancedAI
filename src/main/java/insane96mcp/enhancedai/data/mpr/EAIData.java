@@ -2,7 +2,7 @@ package insane96mcp.enhancedai.data.mpr;
 
 import insane96mcp.insanelib.util.ModNBTData;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public final class EAIData<T> {
         this.type = type;
     }
 
-    public void consume(Mob mob, T value) {
+    public void apply(Mob mob, T value) {
         ModNBTData.put(mob, this.id, value);
         consumer.accept(mob, value);
     }
@@ -38,6 +38,22 @@ public final class EAIData<T> {
 
     public Class<T> type() {
         return type;
+    }
+
+    public static EAIData<Boolean> ofBool(ResourceLocation id) {
+        return ofBool(id, (mob, value) -> {});
+    }
+
+    public static EAIData<Integer> ofInt(ResourceLocation id) {
+        return ofInt(id, (mob, value) -> {});
+    }
+
+    public static EAIData<Double> ofDouble(ResourceLocation id) {
+        return ofDouble(id, (mob, value) -> {});
+    }
+
+    public static EAIData<String> ofString(ResourceLocation id) {
+        return ofString(id, (mob, value) -> {});
     }
 
     public static EAIData<Boolean> ofBool(ResourceLocation id, BiConsumer<Mob, Boolean> consumer) {
@@ -58,7 +74,13 @@ public final class EAIData<T> {
         return data;
     }
 
-    public T get(LivingEntity entity) {
+    public static EAIData<String> ofString(ResourceLocation id, BiConsumer<Mob, String> consumer) {
+        var data = new EAIData<>(id, consumer, String.class);
+        DATA.add(data);
+        return data;
+    }
+
+    public T get(Entity entity) {
         return ModNBTData.get(entity, this.id, this.type);
     }
 
@@ -84,11 +106,13 @@ public final class EAIData<T> {
     }
 
     public T parse(String input) {
+        if (type == String.class)
+            return type.cast(input);
         if (type == Boolean.class)
             return type.cast(Boolean.parseBoolean(input));
-        else if (type == Integer.class)
+        if (type == Integer.class)
             return type.cast(Integer.parseInt(input));
-        else if (type == Double.class)
+        if (type == Double.class)
             return type.cast(Double.parseDouble(input));
         else
             throw new IllegalStateException("Unsupported type: " + type);
