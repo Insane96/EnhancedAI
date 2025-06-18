@@ -22,17 +22,13 @@ public class CreeperMixin extends Monster {
 
 	@WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/monster/Creeper;playSound(Lnet/minecraft/sounds/SoundEvent;FF)V"), method = "tick()V")
 	public void tickOnPlaySound(Creeper instance, SoundEvent soundEvent, float volume, float pitch, Operation<Void> original) {
-		if (CreeperSwell.ANGRY.get(instance)) {
-			if (CreeperSwell.angry$creeperSounds.fuse != null) {
-				soundEvent = CreeperSwell.angry$creeperSounds.fuse.get();
-				pitch = 1.0f;
-			}
-			else
-				pitch = 0.25f;
-			this.playSound(soundEvent, 4.0f, pitch);
-		}
-		else
+		CreeperSwell.FuseExplodeSounds fuseExplodeSounds = CreeperSwell.FuseExplodeSounds.get(instance);
+		if (fuseExplodeSounds == CreeperSwell.FuseExplodeSounds.NONE) {
 			original.call(instance, soundEvent, volume, pitch);
+			return;
+		}
+        //noinspection DataFlowIssue
+        this.playSound(fuseExplodeSounds.fuse.get(), volume, 1f);
 	}
 
 	@Inject(method = "causeFallDamage", at = @At("HEAD"), cancellable = true)
