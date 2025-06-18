@@ -54,9 +54,9 @@ public class PillagerShoot extends Feature {
 
 		CompoundTag persistentData = pillager.getPersistentData();
 
-		int shootingRange1 = NBTUtils.getIntOrPutDefault(persistentData, SHOOTING_RANGE, shootingRange.getIntRandBetween(pillager.getRandom()));
-		double inaccuracy = NBTUtils.getDoubleOrPutDefault(persistentData, INACCURACY, arrowInaccuracy.getByDifficulty(pillager.level()));
-		int shootingCooldown1 = NBTUtils.getIntOrPutDefault(persistentData, SHOOTING_COOLDOWN, shootingCooldown.getIntRandBetween(pillager.getRandom()));
+		int shootingRange1 = NBTUtils.getIntOrPutDefaultLegacy(persistentData, SHOOTING_RANGE, shootingRange.getIntRandBetween(pillager.getRandom()));
+		double inaccuracy = NBTUtils.getDoubleOrPutDefaultLegacy(persistentData, INACCURACY, arrowInaccuracy.getByDifficulty(pillager.level()));
+		int shootingCooldown1 = NBTUtils.getIntOrPutDefaultLegacy(persistentData, SHOOTING_COOLDOWN, shootingCooldown.getIntRandBetween(pillager.getRandom()));
 
 		//Remove Crossbow Goal
 		pillager.goalSelector.removeAllGoals(goal -> goal instanceof RangedCrossbowAttackGoal<?>);

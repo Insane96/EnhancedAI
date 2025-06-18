@@ -90,11 +90,11 @@ public class WitchPotionThrowing extends Feature {
             return;
 
         CompoundTag persistentData = witch.getPersistentData();
-        int attackSpeed = NBTUtils.getIntOrPutDefault(persistentData, ATTACK_SPEED, throwSpeed.getIntRandBetween(witch.getRandom()));
-        int attackRange = NBTUtils.getIntOrPutDefault(persistentData, ATTACK_RANGE, throwRange.getIntRandBetween(witch.getRandom()));
-        double lingeringChance1 = NBTUtils.getDoubleOrPutDefault(persistentData, LINGERING_CHANCE, lingeringChance);
-        double anotherThrowChance1 = NBTUtils.getDoubleOrPutDefault(persistentData, ANOTHER_THROW_CHANCE, anotherThrowChance);
-        boolean apprentice = NBTUtils.getBooleanOrPutDefault(persistentData, APPRENTICE, witch.getRandom().nextDouble() < apprenticeWitchChance);
+        int attackSpeed = NBTUtils.getIntOrPutDefaultLegacy(persistentData, ATTACK_SPEED, throwSpeed.getIntRandBetween(witch.getRandom()));
+        int attackRange = NBTUtils.getIntOrPutDefaultLegacy(persistentData, ATTACK_RANGE, throwRange.getIntRandBetween(witch.getRandom()));
+        double lingeringChance1 = NBTUtils.getDoubleOrPutDefaultLegacy(persistentData, LINGERING_CHANCE, lingeringChance);
+        double anotherThrowChance1 = NBTUtils.getDoubleOrPutDefaultLegacy(persistentData, ANOTHER_THROW_CHANCE, anotherThrowChance);
+        boolean apprentice = NBTUtils.getBooleanOrPutDefaultLegacy(persistentData, APPRENTICE, witch.getRandom().nextDouble() < apprenticeWitchChance);
 
         List<Goal> rangedAttackGoals = witch.goalSelector.availableGoals.stream()
                 .map(WrappedGoal::getGoal)

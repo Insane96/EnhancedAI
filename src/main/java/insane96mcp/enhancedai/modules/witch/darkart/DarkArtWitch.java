@@ -34,7 +34,7 @@ public class DarkArtWitch extends Feature {
             return;
 
         CompoundTag persistentData = witch.getPersistentData();
-        boolean darkArt = NBTUtils.getBooleanOrPutDefault(persistentData, DARK_ARTS, witch.getRandom().nextDouble() < chance);
+        boolean darkArt = NBTUtils.getBooleanOrPutDefaultLegacy(persistentData, DARK_ARTS, witch.getRandom().nextDouble() < chance);
 
         if (!darkArt)
             return;

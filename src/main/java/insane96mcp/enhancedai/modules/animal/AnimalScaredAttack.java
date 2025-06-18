@@ -88,10 +88,10 @@ public class AnimalScaredAttack extends Feature {
 
         CompoundTag persistentData = animal.getPersistentData();
 
-        double movementSpeedMultiplier = NBTUtils.getDoubleOrPutDefault(persistentData, EATags.Passive.SPEED_MULTIPLIER_WHEN_AGGROED, speedMultiplier);
-        boolean neutral = NBTUtils.getBooleanOrPutDefault(persistentData, NEUTRAL, animal.getType().is(CAN_BE_NEUTRAL) && animal.getRandom().nextDouble() < neutralChance);
-        boolean hostile = NBTUtils.getBooleanOrPutDefault(persistentData, HOSTILE, animal.getType().is(CAN_BE_HOSTILE) && !animal.isBaby() && animal.getRandom().nextDouble() < hostileChance);
-        boolean playerScared = NBTUtils.getBooleanOrPutDefault(persistentData, PLAYER_SCARED, !neutral && animal.getType().is(SCARED_BY_PLAYERS) && animal.getRandom().nextDouble() < playersScaredChance);
+        double movementSpeedMultiplier = NBTUtils.getDoubleOrPutDefaultLegacy(persistentData, EATags.Passive.SPEED_MULTIPLIER_WHEN_AGGROED, speedMultiplier);
+        boolean neutral = NBTUtils.getBooleanOrPutDefaultLegacy(persistentData, NEUTRAL, animal.getType().is(CAN_BE_NEUTRAL) && animal.getRandom().nextDouble() < neutralChance);
+        boolean hostile = NBTUtils.getBooleanOrPutDefaultLegacy(persistentData, HOSTILE, animal.getType().is(CAN_BE_HOSTILE) && !animal.isBaby() && animal.getRandom().nextDouble() < hostileChance);
+        boolean playerScared = NBTUtils.getBooleanOrPutDefaultLegacy(persistentData, PLAYER_SCARED, !neutral && animal.getType().is(SCARED_BY_PLAYERS) && animal.getRandom().nextDouble() < playersScaredChance);
 
         if (neutral || hostile) {
             animal.targetSelector.addGoal(1, (new HurtByTargetGoal(animal)).setAlertOthers());

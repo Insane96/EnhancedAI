@@ -74,11 +74,11 @@ public class MinerMobs extends Feature {
 
 		CompoundTag persistentData = mob.getPersistentData();
 
-		boolean miner = NBTUtils.getBooleanOrPutDefault(persistentData, MINER, mob.getRandom().nextDouble() < minerChance);
-		double timeToBreakMultiplier1 = NBTUtils.getDoubleOrPutDefault(persistentData, TIME_TO_BREAK_MULTIPLIER, timeToBreakMultiplier);
-		boolean toolOnly = NBTUtils.getBooleanOrPutDefault(persistentData, TOOL_ONLY, canMineWithToolOnly);
-		boolean properToolOnly = NBTUtils.getBooleanOrPutDefault(persistentData, PROPER_TOOL_ONLY, canMineWithProperToolOnly);
-		boolean properToolRequired = NBTUtils.getBooleanOrPutDefault(persistentData, ALWAYS_REQUIRE_PROPER_TOOL, alwaysRequireProperTool);
+		boolean miner = NBTUtils.getBooleanOrPutDefaultLegacy(persistentData, MINER, mob.getRandom().nextDouble() < minerChance);
+		double timeToBreakMultiplier1 = NBTUtils.getDoubleOrPutDefaultLegacy(persistentData, TIME_TO_BREAK_MULTIPLIER, timeToBreakMultiplier);
+		boolean toolOnly = NBTUtils.getBooleanOrPutDefaultLegacy(persistentData, TOOL_ONLY, canMineWithToolOnly);
+		boolean properToolOnly = NBTUtils.getBooleanOrPutDefaultLegacy(persistentData, PROPER_TOOL_ONLY, canMineWithProperToolOnly);
+		boolean properToolRequired = NBTUtils.getBooleanOrPutDefaultLegacy(persistentData, ALWAYS_REQUIRE_PROPER_TOOL, alwaysRequireProperTool);
 
 		if (miner) {
 			mob.goalSelector.addGoal(1, new BlockBreakerGoal(mob, maxDistance, timeToBreakMultiplier1, toolOnly, properToolOnly, properToolRequired));

@@ -2,7 +2,6 @@ package insane96mcp.enhancedai.modules.creeper;
 
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
@@ -52,7 +51,7 @@ public class EACreeperLaunchGoal extends Goal {
 		if (--cooldown > 0)
 			return false;
 
-		if (!this.launchingCreeper.getSensing().hasLineOfSight(target) && !this.launchingCreeper.getPersistentData().contains(CreeperSwell.BREACH))
+		if (!this.launchingCreeper.getSensing().hasLineOfSight(target) && !CreeperSwell.BREACH.get(this.launchingCreeper))
 			return false;
 
 		if (this.launchingCreeper.level().getBlockState(this.launchingCreeper.blockPosition().above(3)).blocksMotion())
@@ -106,11 +105,20 @@ public class EACreeperLaunchGoal extends Goal {
 		if (--ticksBeforeLaunching != 0)
 			return;
 
-		if (!this.launchingCreeper.level().isClientSide) {
-			for (ServerPlayer player : ((ServerLevel) this.launchingCreeper.level()).players()) {
-				((ServerLevel) this.launchingCreeper.level()).sendParticles(player, ParticleTypes.CLOUD, true, this.launchingCreeper.getX(), this.launchingCreeper.getY(), this.launchingCreeper.getZ(), 100, 0.5d, 0.5d, 0.5d, 0.2d);
-			}
-		}
+        ((ServerLevel) this.launchingCreeper.level())
+				.players()
+				.forEach(player
+						-> ((ServerLevel) this.launchingCreeper.level()).sendParticles(player,
+						ParticleTypes.FIREWORK,
+						true,
+						this.launchingCreeper.getX(),
+						this.launchingCreeper.getY(),
+						this.launchingCreeper.getZ(),
+						50,
+						0.2d,
+						0.2d,
+						0.2d,
+						0.1d));
 
 		this.launchingCreeper.playSound(SoundEvents.FIREWORK_ROCKET_LAUNCH, 6.0f, 0.5f);
 		double distanceY = this.creeperAttackTarget.getY() - this.launchingCreeper.getY();
@@ -118,15 +126,11 @@ public class EACreeperLaunchGoal extends Goal {
 		double distanceZ = this.creeperAttackTarget.getZ() - this.launchingCreeper.getZ();
 		double distanceXZ = Math.sqrt(distanceX * distanceX + distanceZ * distanceZ);
 
-		float inaccuracy = CreeperSwell.launch$inaccuracy.floatValue();
-		if (this.launchingCreeper.level().getDifficulty() == Difficulty.EASY)
-			inaccuracy *= 1.25f;
-		else if (this.launchingCreeper.level().getDifficulty() == Difficulty.HARD)
-			inaccuracy *= 0.75f;
-		distanceX *= Mth.randomBetween(this.launchingCreeper.getRandom(), 1f - inaccuracy, 1f + inaccuracy);
-		distanceZ *= Mth.randomBetween(this.launchingCreeper.getRandom(), 1f - inaccuracy, 1f + inaccuracy);
+		float inaccuracy = CreeperSwell.LAUNCH_INACCURACY.get(this.launchingCreeper).floatValue();
+		distanceX += Mth.randomBetween(this.launchingCreeper.getRandom(), -inaccuracy, inaccuracy);
+		distanceZ += Mth.randomBetween(this.launchingCreeper.getRandom(), -inaccuracy, inaccuracy);
 		//TODO better Y speed, right now when creeper Y distance is below 7 you always get 7 which isn't good when the creeper's Y distance is 0, and when the Y Distance is higher than about 25 the creeper will go to space
-		Vec3 motion = new Vec3(distanceX * 0.2d, Mth.clamp(distanceY, 7d, 40d) / 10d + distanceXZ / 72d, distanceZ * 0.2d);
+		Vec3 motion = new Vec3(distanceX * 0.2d, Mth.clamp(distanceY, 6d, 40d) / 10d + distanceXZ / 72d, distanceZ * 0.2d);
 		this.launchingCreeper.setDeltaMovement(motion);
 		this.hasLaunched = true;
 	}

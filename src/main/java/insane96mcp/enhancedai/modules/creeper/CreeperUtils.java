@@ -1,10 +1,10 @@
 package insane96mcp.enhancedai.modules.creeper;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.Mob;
 
 public class CreeperUtils {
-	public static float getExplosionSize(Creeper creeper) {
+	public static float getExplosionSize(Mob creeper) {
 		CompoundTag compoundNBT = new CompoundTag();
 		creeper.addAdditionalSaveData(compoundNBT);
 		float explosionSize = compoundNBT.getByte("ExplosionRadius");
@@ -12,17 +12,17 @@ public class CreeperUtils {
 		return explosionSize;
 	}
 
-	public static float getExplosionSizeSqr(Creeper creeper) {
+	public static float getExplosionSizeSqr(Mob creeper) {
 		return (float) Math.pow(getExplosionSize(creeper), 2);
 	}
 
-	public static short getFuse(Creeper creeper) {
+	public static short getFuse(Mob creeper) {
 		CompoundTag compoundNBT = new CompoundTag();
 		creeper.addAdditionalSaveData(compoundNBT);
 		return compoundNBT.getShort("Fuse");
 	}
 
-	public static void setFuseTime(Creeper creeper, short fuse) {
+	public static void setFuseTime(Mob creeper, short fuse) {
 		CompoundTag compoundNBT = new CompoundTag();
 		compoundNBT.putShort("Fuse", fuse);
 		creeper.readAdditionalSaveData(compoundNBT);

@@ -116,7 +116,7 @@ public class Targeting extends JsonFeature {
 		processCustomTargetGoal(mob);
 		processHurtByGoal(mob);
 
-		boolean sprint = NBTUtils.getBooleanOrPutDefault(mob.getPersistentData(), SPRINT, false);
+		boolean sprint = NBTUtils.getBooleanOrPutDefaultLegacy(mob.getPersistentData(), SPRINT, false);
 		if (sprint)
 			mob.setSprinting(true);
 	}
@@ -172,9 +172,9 @@ public class Targeting extends JsonFeature {
 
 			goalsToRemove.add(prioritizedGoal.getGoal());
 
-			boolean isNeutral = NBTUtils.getBooleanOrPutDefault(mob.getPersistentData(), IS_NEUTRAL, mob.getRandom().nextDouble() < neutralChances.getByDifficulty(mob.level()));
-			boolean canForgetUnseen = NBTUtils.getBooleanOrPutDefault(mob.getPersistentData(), CAN_FORGET_TARGET, mob.getRandom().nextDouble() < forgetTargetChance);
-			int unseenTargetTicks = NBTUtils.getIntOrPutDefault(mob.getPersistentData(), CAN_FORGET_TARGET, unseenForgotTicks);
+			boolean isNeutral = NBTUtils.getBooleanOrPutDefaultLegacy(mob.getPersistentData(), IS_NEUTRAL, mob.getRandom().nextDouble() < neutralChances.getByDifficulty(mob.level()));
+			boolean canForgetUnseen = NBTUtils.getBooleanOrPutDefaultLegacy(mob.getPersistentData(), CAN_FORGET_TARGET, mob.getRandom().nextDouble() < forgetTargetChance);
+			int unseenTargetTicks = NBTUtils.getIntOrPutDefaultLegacy(mob.getPersistentData(), CAN_FORGET_TARGET, unseenForgotTicks);
 
 			if (isNeutral)
 				continue;

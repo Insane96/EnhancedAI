@@ -57,12 +57,12 @@ public class BlazeAttack extends Feature {
 
         CompoundTag persistentData = blaze.getPersistentData();
 
-        int timeBetweenFireballs1 = NBTUtils.getIntOrPutDefault(persistentData, TIME_BETWEEN_FIREBALLS, timeBetweenFireballs.getIntRandBetween(blaze.getRandom()));
-        int fireballsShot1 = NBTUtils.getIntOrPutDefault(persistentData, FIREBALLS_SHOT, fireballsShot.getIntRandBetween(blaze.getRandom()));
-        int rechargeTime1 = NBTUtils.getIntOrPutDefault(persistentData, RECHARGE_TIME, rechargeTime.getIntRandBetween(blaze.getRandom()));
-        int chargeTime1 = NBTUtils.getIntOrPutDefault(persistentData, CHARGE_TIME, chargeTime.getIntRandBetween(blaze.getRandom()));
-        int fireballsPerShot1 = NBTUtils.getIntOrPutDefault(persistentData, FIREBALLS_PER_SHOT, fireballsPerShot.getIntRandBetween(blaze.getRandom()));
-        int inaccuracy1 = NBTUtils.getIntOrPutDefault(persistentData, INACCURACY, inaccuracy.getIntRandBetween(blaze.getRandom()));
+        int timeBetweenFireballs1 = NBTUtils.getIntOrPutDefaultLegacy(persistentData, TIME_BETWEEN_FIREBALLS, timeBetweenFireballs.getIntRandBetween(blaze.getRandom()));
+        int fireballsShot1 = NBTUtils.getIntOrPutDefaultLegacy(persistentData, FIREBALLS_SHOT, fireballsShot.getIntRandBetween(blaze.getRandom()));
+        int rechargeTime1 = NBTUtils.getIntOrPutDefaultLegacy(persistentData, RECHARGE_TIME, rechargeTime.getIntRandBetween(blaze.getRandom()));
+        int chargeTime1 = NBTUtils.getIntOrPutDefaultLegacy(persistentData, CHARGE_TIME, chargeTime.getIntRandBetween(blaze.getRandom()));
+        int fireballsPerShot1 = NBTUtils.getIntOrPutDefaultLegacy(persistentData, FIREBALLS_PER_SHOT, fireballsPerShot.getIntRandBetween(blaze.getRandom()));
+        int inaccuracy1 = NBTUtils.getIntOrPutDefaultLegacy(persistentData, INACCURACY, inaccuracy.getIntRandBetween(blaze.getRandom()));
 
         ArrayList<Goal> goalsToRemove = new ArrayList<>();
         blaze.goalSelector.availableGoals.forEach(prioritizedGoal -> {

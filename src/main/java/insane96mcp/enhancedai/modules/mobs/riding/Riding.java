@@ -41,7 +41,7 @@ public class Riding extends Feature {
                 || !mob.getType().is(CAN_MOUNT))
             return;
 
-        boolean canSearchMount = NBTUtils.getBooleanOrPutDefault(mob.getPersistentData(), CAN_SEARCH_MOUNT, mob.getRandom().nextDouble() < chance.getByDifficulty(mob.level()));
+        boolean canSearchMount = NBTUtils.getBooleanOrPutDefaultLegacy(mob.getPersistentData(), CAN_SEARCH_MOUNT, mob.getRandom().nextDouble() < chance.getByDifficulty(mob.level()));
         if (!canSearchMount)
             return;
 

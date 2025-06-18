@@ -76,7 +76,7 @@ public class ThrowingWeb extends Feature {
 
 		CompoundTag persistentData = spider.getPersistentData();
 
-		boolean webThrower = NBTUtils.getBooleanOrPutDefault(persistentData, WEB_THROWER, spider.getRandom().nextDouble() < chance);
+		boolean webThrower = NBTUtils.getBooleanOrPutDefaultLegacy(persistentData, WEB_THROWER, spider.getRandom().nextDouble() < chance);
 
 		if (webThrower)
 			spider.goalSelector.addGoal(2, new WebThrowGoal(spider));

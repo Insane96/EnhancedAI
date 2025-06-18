@@ -81,6 +81,7 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
     implementation fg.deobf("blank:insanelib:${insanelib_version}")
+    implementation fg.deobf("blank:mobspropertiesrandomness:${mpr_version}")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
@@ -102,7 +103,7 @@ tasks.named('processResources', ProcessResources).configure {
             loader_version_range: loader_version_range,
             mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
             mod_authors: mod_authors, mod_description: mod_description,
-            insanelib_version_range: insanelib_version_range,
+            insanelib_version_range: insanelib_version_range, mpr_version_range: mpr_version_range
     ]
     inputs.properties replaceProperties
 

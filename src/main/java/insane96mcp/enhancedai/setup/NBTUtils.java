@@ -1,12 +1,15 @@
 package insane96mcp.enhancedai.setup;
 
+import insane96mcp.insanelib.util.ModNBTData;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 
 public class NBTUtils {
     /**
      * Returns the int read from the compoundTag or if absent puts the defaultValue in the compoundTag and returns it
      */
-    public static int getIntOrPutDefault(CompoundTag compoundTag, String tagName, int defaultValue) {
+    public static int getIntOrPutDefaultLegacy(CompoundTag compoundTag, String tagName, int defaultValue) {
         int result = defaultValue;
         if (compoundTag.contains(tagName)) {
             result = compoundTag.getInt(tagName);
@@ -20,7 +23,7 @@ public class NBTUtils {
     /**
      * Returns the double read from the compoundTag or if absent puts the defaultValue in the compoundTag and returns it
      */
-    public static double getDoubleOrPutDefault(CompoundTag compoundTag, String tagName, double defaultValue) {
+    public static double getDoubleOrPutDefaultLegacy(CompoundTag compoundTag, String tagName, double defaultValue) {
         double result = defaultValue;
         if (compoundTag.contains(tagName)) {
             result = compoundTag.getDouble(tagName);
@@ -32,9 +35,9 @@ public class NBTUtils {
     }
 
     /**
-     * Returns the double read from the compoundTag or if absent puts the defaultValue in the compoundTag and returns it
+     * Returns the boolean read from the compoundTag or if absent puts the defaultValue in the compoundTag and returns it
      */
-    public static boolean getBooleanOrPutDefault(CompoundTag compoundTag, String tagName, boolean defaultValue) {
+    public static boolean getBooleanOrPutDefaultLegacy(CompoundTag compoundTag, String tagName, boolean defaultValue) {
         boolean result = defaultValue;
         if (compoundTag.contains(tagName)) {
             result = compoundTag.getBoolean(tagName);
@@ -43,5 +46,27 @@ public class NBTUtils {
             compoundTag.putBoolean(tagName, defaultValue);
         }
         return result;
+    }
+
+    /**
+     * Returns the boolean read from the compoundTag or if absent puts the defaultValue in the compoundTag and returns it
+     */
+    public static boolean getBooleanOrPutDefault(Entity entity, ResourceLocation key, boolean defaultValue) {
+        if (!ModNBTData.contains(entity, key)) {
+            ModNBTData.put(entity, key, defaultValue);
+            return defaultValue;
+        }
+        return ModNBTData.get(entity, key, Boolean.class);
+    }
+
+    /**
+     * Returns the boolean read from the compoundTag or if absent puts the defaultValue in the compoundTag and returns it
+     */
+    public static int getIntOrPutDefault(Entity entity, ResourceLocation key, int defaultValue) {
+        if (!ModNBTData.contains(entity, key)) {
+            ModNBTData.put(entity, key, defaultValue);
+            return defaultValue;
+        }
+        return ModNBTData.get(entity, key, Integer.class);
     }
 }

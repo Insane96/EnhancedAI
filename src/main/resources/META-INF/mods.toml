@@ -30,3 +30,10 @@ mandatory=true
 versionRange="${insanelib_version_range}"
 ordering="NONE"
 side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="mobspropertiesrandomness"
+mandatory=false
+versionRange="${mpr_version_range}"
+ordering="NONE"
+side="BOTH"

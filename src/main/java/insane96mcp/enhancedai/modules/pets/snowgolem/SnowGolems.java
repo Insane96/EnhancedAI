@@ -87,7 +87,7 @@ public class SnowGolems extends Feature {
             return;
 
         CompoundTag persistentData = snowGolem.getPersistentData();
-        int shootingCooldown1 = NBTUtils.getIntOrPutDefault(persistentData, SHOOTING_COOLDOWN, shootingCooldown.getIntRandBetween(snowGolem.getRandom()));
+        int shootingCooldown1 = NBTUtils.getIntOrPutDefaultLegacy(persistentData, SHOOTING_COOLDOWN, shootingCooldown.getIntRandBetween(snowGolem.getRandom()));
 
         snowGolem.goalSelector.availableGoals.removeIf(wrappedGoal -> wrappedGoal.getGoal() instanceof RangedAttackGoal);
         snowGolem.goalSelector.addGoal(1, new EARangedSnowGolemAttackGoal(snowGolem, 1f, 24f).setAttackCooldown(shootingCooldown1));

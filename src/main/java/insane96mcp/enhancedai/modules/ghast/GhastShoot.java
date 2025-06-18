@@ -48,9 +48,9 @@ public class GhastShoot extends Feature {
 
         CompoundTag persistentData = ghast.getPersistentData();
 
-        int attackCooldown1 = NBTUtils.getIntOrPutDefault(persistentData, ATTACK_COOLDOWN, attackCooldown.getIntRandBetween(ghast.getRandom()));
-        int fireballsShot1 = NBTUtils.getIntOrPutDefault(persistentData, FIREBALLS_SHOT, fireballsShot.getIntRandBetween(ghast.getRandom()));
-        boolean shootWhenNotSeen = NBTUtils.getBooleanOrPutDefault(persistentData, SHOOT_WHEN_NOT_SEEN, ghast.getRandom().nextDouble() < shootWhenNotSeenChance);
+        int attackCooldown1 = NBTUtils.getIntOrPutDefaultLegacy(persistentData, ATTACK_COOLDOWN, attackCooldown.getIntRandBetween(ghast.getRandom()));
+        int fireballsShot1 = NBTUtils.getIntOrPutDefaultLegacy(persistentData, FIREBALLS_SHOT, fireballsShot.getIntRandBetween(ghast.getRandom()));
+        boolean shootWhenNotSeen = NBTUtils.getBooleanOrPutDefaultLegacy(persistentData, SHOOT_WHEN_NOT_SEEN, ghast.getRandom().nextDouble() < shootWhenNotSeenChance);
 
         ArrayList<Goal> goalsToRemove = new ArrayList<>();
         ghast.goalSelector.availableGoals.forEach(prioritizedGoal -> {
