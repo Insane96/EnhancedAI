@@ -41,7 +41,7 @@ public class NotTemptedAnimals extends Feature {
 
         CompoundTag persistentData = animal.getPersistentData();
 
-        boolean notTempted = NBTUtils.getBooleanOrPutDefault(persistentData, NOT_TEMPTED, animal.getType().is(CAN_IGNORE_FOOD_TEMPTATION) && animal.getRandom().nextDouble() < notTemptedChance);
+        boolean notTempted = NBTUtils.getBooleanOrPutDefaultLegacy(persistentData, NOT_TEMPTED, animal.getType().is(CAN_IGNORE_FOOD_TEMPTATION) && animal.getRandom().nextDouble() < notTemptedChance);
 
         if (notTempted) {
             animal.goalSelector.getAvailableGoals().removeIf(wrappedGoal -> wrappedGoal.getGoal() instanceof TemptGoal);

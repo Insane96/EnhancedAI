@@ -56,12 +56,12 @@ public class PillagerFleeTarget extends Feature {
 
         CompoundTag persistentData = pillager.getPersistentData();
 
-        boolean avoidTarget = NBTUtils.getBooleanOrPutDefault(persistentData, EATags.Flee.AVOID_TARGET, pillager.getRandom().nextDouble() < avoidPlayerChance);
-        boolean attackWhenAvoiding = NBTUtils.getBooleanOrPutDefault(persistentData, EATags.Flee.ATTACK_WHEN_AVOIDING, pillager.getRandom().nextDouble() < attackWhenAvoidingChance);
-        double fleeDistanceFar1 = NBTUtils.getDoubleOrPutDefault(persistentData, EATags.Flee.FLEE_DISTANCE_FAR, fleeDistanceFar);
-        double fleeDistanceNear1 = NBTUtils.getDoubleOrPutDefault(persistentData, EATags.Flee.FLEE_DISTANCE_NEAR, fleeDistanceNear);
-        double fleeSpeedFar1 = NBTUtils.getDoubleOrPutDefault(persistentData, EATags.Flee.FLEE_SPEED_FAR, fleeSpeedFar);
-        double fleeSpeedNear1 = NBTUtils.getDoubleOrPutDefault(persistentData, EATags.Flee.FLEE_SPEED_NEAR, fleeSpeedNear);
+        boolean avoidTarget = NBTUtils.getBooleanOrPutDefaultLegacy(persistentData, EATags.Flee.AVOID_TARGET, pillager.getRandom().nextDouble() < avoidPlayerChance);
+        boolean attackWhenAvoiding = NBTUtils.getBooleanOrPutDefaultLegacy(persistentData, EATags.Flee.ATTACK_WHEN_AVOIDING, pillager.getRandom().nextDouble() < attackWhenAvoidingChance);
+        double fleeDistanceFar1 = NBTUtils.getDoubleOrPutDefaultLegacy(persistentData, EATags.Flee.FLEE_DISTANCE_FAR, fleeDistanceFar);
+        double fleeDistanceNear1 = NBTUtils.getDoubleOrPutDefaultLegacy(persistentData, EATags.Flee.FLEE_DISTANCE_NEAR, fleeDistanceNear);
+        double fleeSpeedFar1 = NBTUtils.getDoubleOrPutDefaultLegacy(persistentData, EATags.Flee.FLEE_SPEED_FAR, fleeSpeedFar);
+        double fleeSpeedNear1 = NBTUtils.getDoubleOrPutDefaultLegacy(persistentData, EATags.Flee.FLEE_SPEED_NEAR, fleeSpeedNear);
 
         if (!avoidTarget)
             return;

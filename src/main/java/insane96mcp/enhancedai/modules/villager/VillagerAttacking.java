@@ -42,7 +42,7 @@ public class VillagerAttacking extends Feature {
 
         CompoundTag persistentData = villager.getPersistentData();
 
-        double movementSpeedMultiplier = NBTUtils.getDoubleOrPutDefault(persistentData, EATags.Passive.SPEED_MULTIPLIER_WHEN_AGGROED, speedMultiplier);
+        double movementSpeedMultiplier = NBTUtils.getDoubleOrPutDefaultLegacy(persistentData, EATags.Passive.SPEED_MULTIPLIER_WHEN_AGGROED, speedMultiplier);
 
         villager.targetSelector.addGoal(1, (new EAVillagerHurtByTargetGoal(villager)).setAlertOthers());
         villager.goalSelector.addGoal(1, new MeleeAttackGoal(villager, movementSpeedMultiplier, false));

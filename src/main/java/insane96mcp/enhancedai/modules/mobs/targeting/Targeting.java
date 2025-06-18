@@ -111,7 +111,7 @@ public class Targeting extends JsonFeature {
 		processCustomTargetGoal(mob);
 		processHurtByGoal(mob);
 
-		boolean sprint = NBTUtils.getBooleanOrPutDefault(mob.getPersistentData(), SPRINT, false);
+		boolean sprint = NBTUtils.getBooleanOrPutDefaultLegacy(mob.getPersistentData(), SPRINT, false);
 		if (sprint)
 			mob.setSprinting(true);
 	}
@@ -167,7 +167,7 @@ public class Targeting extends JsonFeature {
 
 			goalsToRemove.add(prioritizedGoal.getGoal());
 
-			boolean isNeutral = NBTUtils.getBooleanOrPutDefault(mob.getPersistentData(), IS_NEUTRAL, mob.getRandom().nextDouble() < neutralChances.getByDifficulty(mob.level()));
+			boolean isNeutral = NBTUtils.getBooleanOrPutDefaultLegacy(mob.getPersistentData(), IS_NEUTRAL, mob.getRandom().nextDouble() < neutralChances.getByDifficulty(mob.level()));
 			if (isNeutral)
 				continue;
 

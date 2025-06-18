@@ -39,7 +39,7 @@ public class GetOverHere extends Feature {
                 || !(event.getEntity() instanceof EnderMan enderman))
             return;
 
-        boolean getOverHere = NBTUtils.getBooleanOrPutDefault(enderman.getPersistentData(), GET_OVER_HERE.toString(), enderman.getRandom().nextDouble() < getOverHereChance);
+        boolean getOverHere = NBTUtils.getBooleanOrPutDefaultLegacy(enderman.getPersistentData(), GET_OVER_HERE.toString(), enderman.getRandom().nextDouble() < getOverHereChance);
 
         if (!getOverHere)
             return;

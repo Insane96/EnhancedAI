@@ -55,8 +55,8 @@ public class ShulkerAttack extends Feature {
 
         CompoundTag persistentData = shulker.getPersistentData();
 
-        int baseAttackSpeed1 = NBTUtils.getIntOrPutDefault(persistentData, BASE_ATTACK_SPEED, baseAttackSpeed.getIntRandBetween(shulker.getRandom()));
-        int attackSpeedBonusHalfSeconds1 = NBTUtils.getIntOrPutDefault(persistentData, ATTACK_SPEED_BONUS_HALF_SECONDS, attackSpeedBonusHalfSeconds.getIntRandBetween(shulker.getRandom()));
+        int baseAttackSpeed1 = NBTUtils.getIntOrPutDefaultLegacy(persistentData, BASE_ATTACK_SPEED, baseAttackSpeed.getIntRandBetween(shulker.getRandom()));
+        int attackSpeedBonusHalfSeconds1 = NBTUtils.getIntOrPutDefaultLegacy(persistentData, ATTACK_SPEED_BONUS_HALF_SECONDS, attackSpeedBonusHalfSeconds.getIntRandBetween(shulker.getRandom()));
 
         EAShulkerAttackGoal attackGoal = new EAShulkerAttackGoal(shulker, baseAttackSpeed1, attackSpeedBonusHalfSeconds1);
         shulker.goalSelector.addGoal(2, attackGoal);

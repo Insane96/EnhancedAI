@@ -61,7 +61,7 @@ public class EACreeperSwellGoal extends Goal {
 		if (creeperAttackTarget == null)
 			return false;
 
-		this.isBreaching = breaching && canBreach(this.swellingCreeper, this.creeperAttackTarget);
+		this.isBreaching = breaching && canBreach(this.creeperAttackTarget);
 		boolean ignoresWalls = ignoreWalls && this.swellingCreeper.distanceToSqr(this.creeperAttackTarget) < explosionSizeSqr;
 
 		return (this.swellingCreeper.getSwellDir() > 0) ||
@@ -74,7 +74,7 @@ public class EACreeperSwellGoal extends Goal {
 		if (!walkingFuse)
 			this.swellingCreeper.getNavigation().stop();
 		else
-			MCUtils.applyModifier(this.swellingCreeper, Attributes.MOVEMENT_SPEED, WALKING_FUSE_SPEED_MODIFIER_UUID, "Walking fuse speed modifier", CreeperSwell.walkingFuseSpeedModifier, AttributeModifier.Operation.MULTIPLY_BASE, false);
+			MCUtils.applyModifier(this.swellingCreeper, Attributes.MOVEMENT_SPEED, WALKING_FUSE_SPEED_MODIFIER_UUID, "Walking fuse speed modifier", CreeperSwell.WALKING_FUSE_SPEED_MODIFIER.get(this.swellingCreeper), AttributeModifier.Operation.MULTIPLY_BASE, false);
 		this.swellingCreeper.setSwellDir(1);
 		this.swellingCreeper.lookAt(this.creeperAttackTarget, 30f, 30f);
 		this.angle = (float) Math.toDegrees(Math.atan2(this.swellingCreeper.getZ() - this.creeperAttackTarget.getZ(), this.swellingCreeper.getX() - this.creeperAttackTarget.getX())) - 90;
@@ -183,18 +183,19 @@ public class EACreeperSwellGoal extends Goal {
 		return this;
 	}
 
-	public boolean canBreach(Creeper creeper, LivingEntity target) {
-		if (!creeper.getPersistentData().contains(CreeperSwell.BREACH))
+	public boolean canBreach(LivingEntity target) {
+		if (!CreeperSwell.BREACH.get(this.swellingCreeper))
 			return false;
-		double yDistance = creeper.getY() - target.getY();
-		double x = target.getX() - creeper.getX();
-		double z = target.getZ() - creeper.getZ();
+		double yDistance = this.swellingCreeper.getY() - target.getY();
+		double x = target.getX() - this.swellingCreeper.getX();
+		double z = target.getZ() - this.swellingCreeper.getZ();
 		double xzDistance = x * x + z * z;
+		double horizontalRange = CreeperSwell.BREACH_HORIZONTAL_RANGE.get(this.swellingCreeper);
 		return this.isStuck()
-				&& !creeper.getSensing().hasLineOfSight(target)
-				&& !creeper.isInWater()
-				&& xzDistance < CreeperSwell.breach$horizontalRange * CreeperSwell.breach$horizontalRange
-				&& yDistance > -CreeperUtils.getExplosionSize(creeper) - 2;
+				&& !this.swellingCreeper.getSensing().hasLineOfSight(target)
+				&& !this.swellingCreeper.isInWater()
+				&& xzDistance < horizontalRange * horizontalRange
+				&& yDistance > -CreeperUtils.getExplosionSize(this.swellingCreeper) - 2;
 	}
 
 	public static boolean canCreeperBreach(Creeper creeper, LivingEntity target) {
@@ -202,7 +203,7 @@ public class EACreeperSwellGoal extends Goal {
 
 		return availableGoals.stream()
 				.filter(wrappedGoal -> wrappedGoal.getGoal() instanceof EACreeperSwellGoal)
-				.anyMatch(eaCreeperSwellGoal -> ((EACreeperSwellGoal) eaCreeperSwellGoal.getGoal()).canBreach(creeper, target));
+				.anyMatch(eaCreeperSwellGoal -> ((EACreeperSwellGoal) eaCreeperSwellGoal.getGoal()).canBreach(target));
 	}
 
 	/**

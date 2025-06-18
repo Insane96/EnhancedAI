@@ -57,12 +57,12 @@ public class SkeletonShoot extends Feature {
 
 		CompoundTag persistentData = skeleton.getPersistentData();
 
-		boolean strafe = NBTUtils.getBooleanOrPutDefault(persistentData, STRAFE, skeleton.getRandom().nextDouble() < strafeChance);
-		int shootingRange1 = NBTUtils.getIntOrPutDefault(persistentData, SHOOTING_RANGE, shootingRange.getIntRandBetween(skeleton.getRandom()));
-		double inaccuracy = NBTUtils.getDoubleOrPutDefault(persistentData, INACCURACY, arrowInaccuracy.getByDifficulty(skeleton.level()));
-		boolean spammer = NBTUtils.getBooleanOrPutDefault(persistentData, SPAMMER, skeleton.getRandom().nextDouble() < spammerChance);
-		int shootingCooldown1 = NBTUtils.getIntOrPutDefault(persistentData, SHOOTING_COOLDOWN, shootingCooldown.getIntRandBetween(skeleton.getRandom()));
-		int bowChargeTicks1 = NBTUtils.getIntOrPutDefault(persistentData, BOW_CHARGE_TICKS, bowChargeTicks.getIntRandBetween(skeleton.getRandom()));
+		boolean strafe = NBTUtils.getBooleanOrPutDefaultLegacy(persistentData, STRAFE, skeleton.getRandom().nextDouble() < strafeChance);
+		int shootingRange1 = NBTUtils.getIntOrPutDefaultLegacy(persistentData, SHOOTING_RANGE, shootingRange.getIntRandBetween(skeleton.getRandom()));
+		double inaccuracy = NBTUtils.getDoubleOrPutDefaultLegacy(persistentData, INACCURACY, arrowInaccuracy.getByDifficulty(skeleton.level()));
+		boolean spammer = NBTUtils.getBooleanOrPutDefaultLegacy(persistentData, SPAMMER, skeleton.getRandom().nextDouble() < spammerChance);
+		int shootingCooldown1 = NBTUtils.getIntOrPutDefaultLegacy(persistentData, SHOOTING_COOLDOWN, shootingCooldown.getIntRandBetween(skeleton.getRandom()));
+		int bowChargeTicks1 = NBTUtils.getIntOrPutDefaultLegacy(persistentData, BOW_CHARGE_TICKS, bowChargeTicks.getIntRandBetween(skeleton.getRandom()));
 
 		boolean hasAIArrowAttack = false;
 		for (WrappedGoal prioritizedGoal : skeleton.goalSelector.availableGoals) {
