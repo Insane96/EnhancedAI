@@ -28,5 +28,5 @@ If applicable, add screenshots to help explain your problem.
 Use a paste site (**pastebin, gist**) to send the game logs (both logs and crash if applicable)  
 For the love of god, don't paste the logs here
 
-**Can the issue be reproduced with EnhancedAI only (or with a minimal set of mods)?**  
+**Have you manged to reproduce this with Enhanced AI only or with a minimal set of mods? Expecially try without Syntra connector or similar mods**  
 Yes/No
