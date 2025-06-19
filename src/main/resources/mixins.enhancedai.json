@@ -26,6 +26,7 @@
         "WardenMixin",
         "WitchMixin",
         "WitherSkeletonMixin",
+        "accessors.MeleeAttackGoalAccessor",
         "accessors.PanicGoalAccessor"
     ],
     "minVersion": "0.8",

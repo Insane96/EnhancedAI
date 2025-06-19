@@ -3,6 +3,7 @@ package insane96mcp.enhancedai.modules.animal;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.ai.EAAvoidEntityGoal;
 import insane96mcp.enhancedai.data.EAIData;
+import insane96mcp.enhancedai.mixin.accessors.MeleeAttackGoalAccessor;
 import insane96mcp.enhancedai.mixin.accessors.PanicGoalAccessor;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.modules.mobs.targeting.EANearestAttackableTarget;
@@ -24,7 +25,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.PanicGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
@@ -80,37 +80,38 @@ public class AnimalScaredAttack extends Feature {
         NEUTRAL = EAIData.ofBool(this.createDataKey("neutral"), (mob, neutral) -> {
             if (!(mob instanceof PathfinderMob pathfinderMob))
                 return;
-            mob.targetSelector.getAvailableGoals().removeIf(goal -> goal.getGoal() instanceof HurtByTargetGoal);
-            mob.goalSelector.getAvailableGoals().removeIf(goal -> goal.getGoal() instanceof AnimalMeleeAttackGoal);
+            GoalHelper.removeGoal(mob.targetSelector, HurtByTargetGoal.class);
+            GoalHelper.removeGoal(mob.goalSelector, AnimalMeleeAttackGoal.class);
             if (!GoalHelper.hasGoal(mob.goalSelector, PanicGoal.class))
                 mob.goalSelector.addGoal(0, new PanicGoal(pathfinderMob, ModNBTData.get(mob, PANIC_SPEED_MODIFIER, Double.class)));
             if (neutral) {
                 mob.targetSelector.addGoal(1, (new HurtByTargetGoal(pathfinderMob)).setAlertOthers());
                 mob.goalSelector.addGoal(1, new AnimalMeleeAttackGoal(pathfinderMob, ATTACK_MOVEMENT_SPEED_MODIFIER.get(mob), true));
-                mob.goalSelector.availableGoals.removeIf(wrappedGoal -> wrappedGoal.getGoal() instanceof PanicGoal);
+                GoalHelper.removeGoal(mob.goalSelector, PanicGoal.class);
             }
         });
         HOSTILE = EAIData.ofBool(this.createDataKey("hostile"), (mob, hostile) -> {
-            mob.targetSelector.getAvailableGoals().removeIf(goal -> goal.getGoal() instanceof AnimalNearestAttackableTargetGoal);
+            GoalHelper.removeGoal(mob.targetSelector, AnimalNearestAttackableTargetGoal.class);
             mob.getAttribute(Attributes.FOLLOW_RANGE).removeModifier(UUID.fromString("62e016b0-90d0-4e72-9d40-fffac566df20"));
             mob.getAttribute(EAAttributes.XRAY_FOLLOW_RANGE.get()).removeModifier(UUID.fromString("62e016b0-90d0-4e72-9d40-fffac566df20"));
             if (hostile) {
                 NEUTRAL.apply(mob, true);
-                mob.targetSelector.addGoal(2, new AnimalNearestAttackableTargetGoal<>(mob, Player.class, false, false, TargetingConditions.forCombat()));
-                MCUtils.applyModifier(mob, Attributes.FOLLOW_RANGE, UUID.fromString("62e016b0-90d0-4e72-9d40-fffac566df20"), "Reduced follow range for hostile Animals", -0.8d, AttributeModifier.Operation.MULTIPLY_BASE, true);
-                MCUtils.applyModifier(mob, EAAttributes.XRAY_FOLLOW_RANGE.get(), UUID.fromString("62e016b0-90d0-4e72-9d40-fffac566df20"), "Reduced follow range for hostile Animals", -0.8d, AttributeModifier.Operation.MULTIPLY_BASE, true);
+                MCUtils.applyModifier(mob, Attributes.FOLLOW_RANGE, UUID.fromString("62e016b0-90d0-4e72-9d40-fffac566df20"), "Reduced follow range for hostile Animals", -0.75d, AttributeModifier.Operation.MULTIPLY_BASE, true);
+                MCUtils.applyModifier(mob, EAAttributes.XRAY_FOLLOW_RANGE.get(), UUID.fromString("62e016b0-90d0-4e72-9d40-fffac566df20"), "Reduced follow range for hostile Animals", -0.75d, AttributeModifier.Operation.MULTIPLY_BASE, true);
+                mob.targetSelector.addGoal(2, new AnimalNearestAttackableTargetGoal<>(mob, Player.class, false, false));
                 PLAYER_SCARED.apply(mob, false);
             }
         });
         PLAYER_SCARED = EAIData.ofBool(this.createDataKey("player_scared"), (mob, scared) -> {
             if (!(mob instanceof PathfinderMob pathfinderMob))
                 return;
-            mob.targetSelector.getAvailableGoals().removeIf(goal -> goal.getGoal() instanceof AnimalAvoidPlayersGoal);
-            if (scared) {
+            GoalHelper.removeGoal(mob.goalSelector, AnimalAvoidPlayersGoal.class);
+            if (scared)
                 pathfinderMob.goalSelector.addGoal(1, new AnimalAvoidPlayersGoal(pathfinderMob, Player.class, FLEE_DISTANCE_FAR, FLEE_DISTANCE_NEAR, FLEE_SPEED_FAR, FLEE_SPEED_NEAR));
-            }
         });
-        ATTACK_MOVEMENT_SPEED_MODIFIER = EAIData.ofDouble(this.createDataKey("attack_movement_speed_mod"));
+        ATTACK_MOVEMENT_SPEED_MODIFIER = EAIData.ofDouble(this.createDataKey("attack_movement_speed_mod"), (mob, value) -> {
+            GoalHelper.getGoal(mob.goalSelector, AnimalMeleeAttackGoal.class).ifPresent(animalMeleeAttackGoal -> ((MeleeAttackGoalAccessor) animalMeleeAttackGoal).setSpeedModifier(value));
+        });
         FLEE_DISTANCE_FAR = EAIData.ofDouble(this.createDataKey("flee_distance_far"));
         FLEE_DISTANCE_NEAR = EAIData.ofDouble(this.createDataKey("flee_distance_near"));
         FLEE_SPEED_FAR = EAIData.ofDouble(this.createDataKey("flee_speed_far"));
@@ -148,9 +149,9 @@ public class AnimalScaredAttack extends Feature {
                 kbAttribute.addPermanentModifier(new AttributeModifier("Animal knockback", actualKnockback, AttributeModifier.Operation.ADDITION));
         }
 
+        ATTACK_MOVEMENT_SPEED_MODIFIER.applyIfAbsent(animal, speedModifier);
         NEUTRAL.applyIfAbsent(animal, animal.getType().is(CAN_BE_NEUTRAL) && animal.getRandom().nextDouble() < neutralChance);
         HOSTILE.applyIfAbsent(animal, animal.getType().is(CAN_BE_HOSTILE) && animal.getRandom().nextDouble() < hostileChance);
-        ATTACK_MOVEMENT_SPEED_MODIFIER.applyIfAbsent(animal, speedModifier);
         PLAYER_SCARED.applyIfAbsent(animal, !HOSTILE.get(animal) && animal.getType().is(SCARED_BY_PLAYERS) && animal.getRandom().nextDouble() < playersScaredChance);
         FLEE_DISTANCE_FAR.applyIfAbsent(animal, fleeDistanceFar);
         FLEE_DISTANCE_NEAR.applyIfAbsent(animal, fleeDistanceNear);
@@ -173,8 +174,8 @@ public class AnimalScaredAttack extends Feature {
 
     public static class AnimalNearestAttackableTargetGoal<T extends LivingEntity> extends EANearestAttackableTarget<T> {
 
-        public AnimalNearestAttackableTargetGoal(Mob goalOwnerIn, Class<T> targetClassIn, boolean mustSee, boolean mustReach, TargetingConditions targetingConditions) {
-            super(goalOwnerIn, targetClassIn, mustSee, mustReach, targetingConditions);
+        public AnimalNearestAttackableTargetGoal(Mob goalOwnerIn, Class<T> targetClassIn, boolean mustSee, boolean mustReach) {
+            super(goalOwnerIn, targetClassIn, mustSee, mustReach);
         }
 
         @Override
