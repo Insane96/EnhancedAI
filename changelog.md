@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.6.7
+* Fixed a huge bug that made animals fleeing very performance heavy
+
 ## 2.6.6
 * Bosses can no longer be teleported by the Over Here feature
   * Added a new Entity Type Tag `enhancedai:get_over_here_teleport_blacklist`
