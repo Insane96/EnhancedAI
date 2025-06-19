@@ -3,7 +3,7 @@ package insane96mcp.enhancedai;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
-import insane96mcp.enhancedai.data.mpr.EAIData;
+import insane96mcp.enhancedai.data.EAIData;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;

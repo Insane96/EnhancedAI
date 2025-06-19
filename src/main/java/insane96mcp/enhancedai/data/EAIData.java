@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.data.mpr;
+package insane96mcp.enhancedai.data;
 
 import insane96mcp.insanelib.util.ModNBTData;
 import net.minecraft.resources.ResourceLocation;
@@ -26,6 +26,13 @@ public final class EAIData<T> {
     public void apply(Mob mob, T value) {
         ModNBTData.put(mob, this.id, value);
         consumer.accept(mob, value);
+    }
+
+    public void applyIfAbsent(Mob mob, T value) {
+        if (!ModNBTData.contains(mob, this.id))
+            apply(mob, value);
+        else
+            consumer.accept(mob, ModNBTData.get(mob, this.id, this.type));
     }
 
     public ResourceLocation id() {

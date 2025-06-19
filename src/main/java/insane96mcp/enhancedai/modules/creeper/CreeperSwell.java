@@ -1,7 +1,7 @@
 package insane96mcp.enhancedai.modules.creeper;
 
 import insane96mcp.enhancedai.EnhancedAI;
-import insane96mcp.enhancedai.data.mpr.EAIData;
+import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.setup.EASounds;
 import insane96mcp.enhancedai.utils.GoalHelper;
@@ -85,7 +85,7 @@ public class CreeperSwell extends Feature {
 	@Config(description = "Disables the creeper feature that makes them start swelling when falling.")
 	public static Boolean disableFallingSwelling = true;
 
-	@Config(description = "If true creepers will ignite if damaged by an explosion.")
+	@Config(description = "If true, creepers will ignite if damaged by an explosion.")
 	public static Boolean tntLike = false;
 	//Angry
 	@Config(min = 0d, max = 1d, description = "Chance for a creeper to spawn angry")
@@ -112,14 +112,14 @@ public class CreeperSwell extends Feature {
 	public CreeperSwell(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super(module, enabledByDefault, canBeDisabled);
 		WALKING_FUSE = EAIData.ofBool(this.createDataKey("walking_fuse"), (mob, walkingFuse) -> {
-			GoalHelper.getGoal(mob, EACreeperSwellGoal.class).ifPresent(eaCreeperSwellGoal -> eaCreeperSwellGoal.setWalkingFuse(walkingFuse));
+			GoalHelper.getGoal(mob.goalSelector, EACreeperSwellGoal.class).ifPresent(eaCreeperSwellGoal -> eaCreeperSwellGoal.setWalkingFuse(walkingFuse));
 		});
 		WALKING_FUSE_SPEED_MODIFIER = EAIData.ofDouble(this.createDataKey("walking_fuse_speed_modifier"));
 		IGNORE_WALLS = EAIData.ofBool(this.createDataKey("ignore_walls"));
 		BREACH = EAIData.ofBool(this.createDataKey("breach"));
 		BREACH_HORIZONTAL_RANGE = EAIData.ofDouble(this.createDataKey("breach_horizontal_range"));
 		BETA = EAIData.ofBool(this.createDataKey("beta"), (mob, beta) -> {
-			GoalHelper.getGoal(mob, EACreeperSwellGoal.class).ifPresent(eaCreeperSwellGoal -> eaCreeperSwellGoal.setBeta(beta));
+			GoalHelper.getGoal(mob.goalSelector, EACreeperSwellGoal.class).ifPresent(eaCreeperSwellGoal -> eaCreeperSwellGoal.setBeta(beta));
 		});
 		BETA_LEFT_STRAFE = EAIData.ofBool(this.createDataKey("beta_left_strafe"));
 		DISABLE_FALLING_SWELLING = EAIData.ofBool(this.createDataKey("disable_falling_swelling"));
@@ -216,19 +216,19 @@ public class CreeperSwell extends Feature {
 
 		EACreeperSwellGoal swellGoal = new EACreeperSwellGoal(creeper);
 		creeper.goalSelector.addGoal(2, swellGoal);
-		WALKING_FUSE.apply(creeper, creeper.getRandom().nextDouble() < walkingFuse$chance);
-		WALKING_FUSE_SPEED_MODIFIER.apply(creeper, walkingFuse$speedModifier);
-		IGNORE_WALLS.apply(creeper, creeper.getRandom().nextDouble() < ignoreWallsChance);
-		BREACH.apply(creeper, creeper.getRandom().nextDouble() < breach$chance);
-		BREACH_HORIZONTAL_RANGE.apply(creeper, breach$horizontalRange.doubleValue());
-		BETA.apply(creeper, creeper.getRandom().nextDouble() < beta$chance);
-		DISABLE_FALLING_SWELLING.apply(creeper, disableFallingSwelling);
-		TNT_LIKE.apply(creeper, tntLike);
-		BLOW_UP_ON_DEATH.apply(creeper, blowUpOnDeath == BlowUpOnDeath.ALL || (blowUpOnDeath == BlowUpOnDeath.CHARGED && creeper.isPowered()) || (ANGRY.get(creeper) && angry$explodeOnDeath));
-		ANGRY.apply(creeper, creeper.getRandom().nextDouble() < angry$chance);
-		LAUNCH.apply(creeper, creeper.getRandom().nextDouble() < launch$chance && creeper.getType().is(CAN_CREEPER_LAUNCH));
-		LAUNCH_INACCURACY.apply(creeper, launch$inaccuracy.getByDifficulty(creeper.level()));
-		LAUNCH_PARTICLES.apply(creeper, launch$particles);
+		WALKING_FUSE.applyIfAbsent(creeper, creeper.getRandom().nextDouble() < walkingFuse$chance);
+		WALKING_FUSE_SPEED_MODIFIER.applyIfAbsent(creeper, walkingFuse$speedModifier);
+		IGNORE_WALLS.applyIfAbsent(creeper, creeper.getRandom().nextDouble() < ignoreWallsChance);
+		BREACH.applyIfAbsent(creeper, creeper.getRandom().nextDouble() < breach$chance);
+		BREACH_HORIZONTAL_RANGE.applyIfAbsent(creeper, breach$horizontalRange.doubleValue());
+		BETA.applyIfAbsent(creeper, creeper.getRandom().nextDouble() < beta$chance);
+		DISABLE_FALLING_SWELLING.applyIfAbsent(creeper, disableFallingSwelling);
+		TNT_LIKE.applyIfAbsent(creeper, tntLike);
+		BLOW_UP_ON_DEATH.applyIfAbsent(creeper, blowUpOnDeath == BlowUpOnDeath.ALL || (blowUpOnDeath == BlowUpOnDeath.CHARGED && creeper.isPowered()) || (ANGRY.get(creeper) && angry$explodeOnDeath));
+		ANGRY.applyIfAbsent(creeper, creeper.getRandom().nextDouble() < angry$chance);
+		LAUNCH.applyIfAbsent(creeper, creeper.getRandom().nextDouble() < launch$chance && creeper.getType().is(CAN_CREEPER_LAUNCH));
+		LAUNCH_INACCURACY.applyIfAbsent(creeper, launch$inaccuracy.getByDifficulty(creeper.level()));
+		LAUNCH_PARTICLES.applyIfAbsent(creeper, launch$particles);
 	}
 
 	@SubscribeEvent

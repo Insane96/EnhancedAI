@@ -25,7 +25,8 @@
         "Warden$VibrationUserMixin",
         "WardenMixin",
         "WitchMixin",
-        "WitherSkeletonMixin"
+        "WitherSkeletonMixin",
+        "accessors.PanicGoalAccessor"
     ],
     "minVersion": "0.8",
     "client": [

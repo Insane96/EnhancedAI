@@ -1,7 +1,7 @@
 package insane96mcp.enhancedai.modules.mobs;
 
 import insane96mcp.enhancedai.EnhancedAI;
-import insane96mcp.enhancedai.ai.EAAvoidEntityGoal;
+import insane96mcp.enhancedai.ai.EAAvoidEntityGoalLegacy;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.modules.mobs.targeting.EANearestAttackableTarget;
 import insane96mcp.insanelib.base.Feature;
@@ -44,7 +44,7 @@ public class WardenInteractions extends Feature {
 			entity.targetSelector.addGoal(2, new EANearestAttackableTarget<>(entity, Warden.class, false, false, TargetingConditions.forCombat()));
 		}
 		else if (flee) {
-			EAAvoidEntityGoal<Warden> avoidEntityGoal = new EAAvoidEntityGoal<>(entity, Warden.class, (float) 12, (float) 7, runSpeedNear, runSpeedFar);
+			EAAvoidEntityGoalLegacy<Warden> avoidEntityGoal = new EAAvoidEntityGoalLegacy<>(entity, Warden.class, (float) 12, (float) 7, runSpeedNear, runSpeedFar);
 			entity.goalSelector.addGoal(1, avoidEntityGoal);
 		}
 	}

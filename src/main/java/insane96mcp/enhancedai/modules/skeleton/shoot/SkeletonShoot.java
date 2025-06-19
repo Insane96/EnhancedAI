@@ -1,7 +1,7 @@
 package insane96mcp.enhancedai.modules.skeleton.shoot;
 
 import insane96mcp.enhancedai.EnhancedAI;
-import insane96mcp.enhancedai.ai.EAAvoidEntityGoal;
+import insane96mcp.enhancedai.ai.EAAvoidEntityGoalLegacy;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
@@ -73,7 +73,7 @@ public class SkeletonShoot extends Feature {
 		}
 		List<Goal> avoidEntityGoals = skeleton.goalSelector.availableGoals.stream()
 				.map(WrappedGoal::getGoal)
-				.filter(g -> g instanceof EAAvoidEntityGoal<?>)
+				.filter(g -> g instanceof EAAvoidEntityGoalLegacy<?>)
 				.toList();
 
 		avoidEntityGoals.forEach(skeleton.goalSelector::removeGoal);
