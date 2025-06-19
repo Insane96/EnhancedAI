@@ -7,7 +7,8 @@
 * Mobs now can rarely attack each-other again
 * Increased shulker bullets levitation duration and amplifier
 * Fixed Ravager feature not working
-* Fixed Iron Golem's "fire tick faster" not working as intended 
+* Fixed Iron Golem's "fire tick faster" not working as intended
+* Fixed hostile Animals seeing you from any range
 
 ## 2.6.6
 * Bosses can no longer be teleported by the Over Here feature
