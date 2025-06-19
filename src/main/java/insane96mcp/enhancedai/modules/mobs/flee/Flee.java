@@ -1,7 +1,7 @@
 package insane96mcp.enhancedai.modules.mobs.flee;
 
 import insane96mcp.enhancedai.EnhancedAI;
-import insane96mcp.enhancedai.ai.EAAvoidEntityGoal;
+import insane96mcp.enhancedai.ai.EAAvoidEntityGoalLegacy;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.JsonFeature;
 import insane96mcp.insanelib.base.LoadFeature;
@@ -42,7 +42,7 @@ public class Flee extends JsonFeature {
 			if (!cfc.entity.matchesEntity(mob) || mob.getRandom().nextFloat() > cfc.chance)
 				continue;
 
-			EAAvoidEntityGoal<LivingEntity> avoidEntityGoal = new EAAvoidEntityGoal<>(mob, LivingEntity.class, cfc.fleeFrom, (float) cfc.avoidDistance, (float) cfc.avoidDistanceNear, cfc.speedMultiplier, cfc.speedMultiplierNear);
+			EAAvoidEntityGoalLegacy<LivingEntity> avoidEntityGoal = new EAAvoidEntityGoalLegacy<>(mob, LivingEntity.class, cfc.fleeFrom, (float) cfc.avoidDistance, (float) cfc.avoidDistanceNear, cfc.speedMultiplier, cfc.speedMultiplierNear);
 
 			mob.targetSelector.addGoal(cfc.priority, avoidEntityGoal);
 		}
