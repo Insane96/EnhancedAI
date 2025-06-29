@@ -45,8 +45,8 @@ public class AnimalScaredAttack extends Feature {
     public static EAIData<Boolean> HOSTILE;
     public static EAIData<Boolean> PLAYER_SCARED;
     public static EAIData<Double> ATTACK_MOVEMENT_SPEED_MODIFIER;
-    public static EAIData<Double> FLEE_DISTANCE_FAR;
-    public static EAIData<Double> FLEE_DISTANCE_NEAR;
+    public static EAIData<Integer> FLEE_DISTANCE_FAR;
+    public static EAIData<Integer> FLEE_DISTANCE_NEAR;
     public static EAIData<Double> FLEE_SPEED_FAR;
     public static EAIData<Double> FLEE_SPEED_NEAR;
 
@@ -56,18 +56,18 @@ public class AnimalScaredAttack extends Feature {
     public static Double neutralChance = 0.35d;
     @Config(min = 0d, max = 1d, description = "Animals have this percentage chance to be hostile. Hostile animals are also neutral.")
     public static Double hostileChance = 0.10d;
-    @Config(min = 0d, max = 1d, description = "Animals have this percentage chance to be scared by players and run away. Fight back chance has priority over this")
-    public static Double playersScaredChance = 0.25d;
-    @Config(min = 0d, max = 4d, description = "Speed multiplier when the animal avoids the player and it's within 8 blocks from him.")
-    public static Double fleeSpeedNear = 1.1d;
-    @Config(min = 0d, max = 4d, description = "Speed multiplier when the animal avoids the player and it's farther than 16 blocks from him.")
-    public static Double fleeSpeedFar = 1d;
-    @Config(min = 0d, max = 32d, description = "Distance from a player that counts as near and will make the entity run away faster.")
-    public static Double fleeDistanceNear = 7d;
-    @Config(min = 0d, max = 32d, description = "Distance from a player that will make the entity run away.")
-    public static Double fleeDistanceFar = 12d;
     @Config(min = 0d, max = 4d, description = "Movement speed multiplier when aggroed.")
     public static Double speedModifier = 1.1d;
+    @Config(min = 0d, max = 1d, description = "Animals have this percentage chance to be scared by players and run away. Fight back chance has priority over this")
+    public static Double playersScaredChance = 0.25d;
+    @Config(min = 0d, max = 32d, description = "Distance from a player that will make the entity run away. Higher values might impact performance")
+    public static Integer fleeDistanceFar = 12;
+    @Config(min = 0d, max = 32d, description = "Distance from a player that counts as near and will make the entity run away faster. Higher values might impact performance")
+    public static Integer fleeDistanceNear = 7;
+    @Config(min = 0d, max = 4d, description = "Speed multiplier when the animal avoids the player when it's within 'Flee Distance Far' blocks from them.")
+    public static Double fleeSpeedFar = 1.1d;
+    @Config(min = 0d, max = 4d, description = "Speed multiplier when the animal avoids the player and it's within 'Flee Distance Near' blocks from them.")
+    public static Double fleeSpeedNear = 1.2d;
     @Config(min = 0d, max = 128d, description = "Animals' knockback attribute will be set to this value multiplied by their bounding box size (bigger mobs have higher knockback). 0 disables this and lets you customize knockback per mob with attribute modifiers.")
     public static Double knockback = 1.4d;
     @Config(description = "Animals' knockback attribute will be increased/decreased based on the side of the mob.")
@@ -112,8 +112,8 @@ public class AnimalScaredAttack extends Feature {
         ATTACK_MOVEMENT_SPEED_MODIFIER = EAIData.ofDouble(this.createDataKey("attack_movement_speed_mod"), (mob, value) -> {
             GoalHelper.getGoal(mob.goalSelector, AnimalMeleeAttackGoal.class).ifPresent(animalMeleeAttackGoal -> ((MeleeAttackGoalAccessor) animalMeleeAttackGoal).setSpeedModifier(value));
         });
-        FLEE_DISTANCE_FAR = EAIData.ofDouble(this.createDataKey("flee_distance_far"));
-        FLEE_DISTANCE_NEAR = EAIData.ofDouble(this.createDataKey("flee_distance_near"));
+        FLEE_DISTANCE_FAR = EAIData.ofInt(this.createDataKey("flee_distance_far"));
+        FLEE_DISTANCE_NEAR = EAIData.ofInt(this.createDataKey("flee_distance_near"));
         FLEE_SPEED_FAR = EAIData.ofDouble(this.createDataKey("flee_speed_far"));
         FLEE_SPEED_NEAR = EAIData.ofDouble(this.createDataKey("flee_speed_near"));
         PANIC_SPEED_MODIFIER = this.createDataKey("panic_speed_mod");
@@ -185,7 +185,7 @@ public class AnimalScaredAttack extends Feature {
     }
 
     public static class AnimalAvoidPlayersGoal extends EAAvoidEntityGoal<Player> {
-        public AnimalAvoidPlayersGoal(PathfinderMob entity, Class<Player> classToAvoidIn, EAIData<Double> avoidDistance, EAIData<Double> avoidDistanceNear, EAIData<Double> farSpeed, EAIData<Double> nearSpeed) {
+        public AnimalAvoidPlayersGoal(PathfinderMob entity, Class<Player> classToAvoidIn, EAIData<Integer> avoidDistance, EAIData<Integer> avoidDistanceNear, EAIData<Double> farSpeed, EAIData<Double> nearSpeed) {
             super(entity, classToAvoidIn, avoidDistance, avoidDistanceNear, farSpeed, nearSpeed);
         }
 

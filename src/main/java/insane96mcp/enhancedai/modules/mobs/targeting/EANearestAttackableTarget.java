@@ -27,24 +27,16 @@ public class EANearestAttackableTarget<T extends LivingEntity> extends ILNearest
         this.targetEntitySelectorXRay = targetingConditions.copy().ignoreLineOfSight();
     }
 
-    public EANearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, IdTagMatcher idTagMatcher, boolean mustSee, boolean mustReach, int forgetTicks) {
+    public EANearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, IdTagMatcher idTagMatcher, boolean mustSee, boolean mustReach) {
         this(goalOwnerIn, targetClassIn, mustSee, mustReach);
         this.targetEntitySelector.selector(idTagMatcher::matchesEntity);
         this.targetEntitySelectorXRay.selector(idTagMatcher::matchesEntity);
-        this.unseenMemoryTicks = forgetTicks;
     }
 
     public EANearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, IdTagMatcher idTagMatcher, boolean mustSee, boolean mustReach, TargetingConditions targetingConditions) {
         this(goalOwnerIn, targetClassIn, mustSee, mustReach, targetingConditions);
         this.targetEntitySelector.selector(idTagMatcher::matchesEntity);
         this.targetEntitySelectorXRay.selector(idTagMatcher::matchesEntity);
-    }
-
-    public EANearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, IdTagMatcher idTagMatcher, boolean mustSee, boolean mustReach, TargetingConditions targetingConditions, int forgetTicks) {
-        this(goalOwnerIn, targetClassIn, mustSee, mustReach, targetingConditions);
-        this.targetEntitySelector.selector(idTagMatcher::matchesEntity);
-        this.targetEntitySelectorXRay.selector(idTagMatcher::matchesEntity);
-        this.unseenMemoryTicks = forgetTicks;
     }
 
     @Override
