@@ -41,6 +41,11 @@ public class FisherMobs extends Feature {
 	@Label(name = "Cooldown", description = "How much will a mob wait before casting the bobber again. The cooldown is doubled if successfully reels in someone.")
 	public static Difficulty cooldown = new Difficulty(80, 80, 60);
 
+	@Config(description = "The max distance mobs will use the fishing rod. Above this distance they will try to get closer.")
+	public static Integer maxDistance = 24;
+	@Config(description = "The min distance mobs will use the fishing rod. Below this distance they will just get closer and attack melee.")
+	public static Integer minDistance = 4;
+
 	public FisherMobs(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super(module, enabledByDefault, canBeDisabled);
 	}

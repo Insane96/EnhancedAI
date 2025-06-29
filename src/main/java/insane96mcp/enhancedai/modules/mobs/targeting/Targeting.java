@@ -52,6 +52,7 @@ public class Targeting extends JsonFeature {
 
 	public static final String SPRINT = EnhancedAI.RESOURCE_PREFIX + "sprint";
 	public static final String IS_NEUTRAL = EnhancedAI.RESOURCE_PREFIX + "is_neutral";
+	public static final String CAN_FORGET_TARGET = EnhancedAI.RESOURCE_PREFIX + "can_forget_target";
     public static final String FOLLOW_RANGES_PROCESSED = EnhancedAI.RESOURCE_PREFIX + "follow_ranges_processed";
 
 	public static final List<CustomHostileConfig> CUSTOM_HOSTILE_DEFAULT_LIST = List.of(
@@ -73,6 +74,10 @@ public class Targeting extends JsonFeature {
 	@Config
 	@Label(name = "Instant Target", description = "Mobs will no longer take random time to target a player.")
 	public static Boolean instaTarget = false;
+	@Config(description = "Chance for a mob to be able to forget about it's target. If the mob can forget the target it will forget about it after 'Unseen forgot ticks' have passed.")
+	public static Double forgetTargetChance = 0.3d;
+	@Config(description = "If the mob can forget the target it will forget about it after this amount of ticks have passed while not seeing the target.")
+	public static Integer unseenForgotTicks = 600;
 	@Config
 	@Label(name = "Better Path Finding", description = "Mobs will be able to find better paths to the target. Note that this might hit performance a bit.")
 	public static Boolean betterPathfinding = true;
@@ -181,15 +186,18 @@ public class Targeting extends JsonFeature {
 			goalsToRemove.add(prioritizedGoal.getGoal());
 
 			boolean isNeutral = NBTUtils.getBooleanOrPutDefault(mob.getPersistentData(), IS_NEUTRAL, mob.getRandom().nextDouble() < neutralChances.getByDifficulty(mob.level()));
+			boolean canForgetUnseen = NBTUtils.getBooleanOrPutDefault(mob.getPersistentData(), CAN_FORGET_TARGET, mob.getRandom().nextDouble() < forgetTargetChance);
+			int unseenTargetTicks = NBTUtils.getIntOrPutDefault(mob.getPersistentData(), CAN_FORGET_TARGET, unseenForgotTicks);
+
 			if (isNeutral)
 				continue;
 
 			EANearestAttackableTarget<? extends LivingEntity> newTargetGoal;
 
 			if (mob instanceof Spider)
-				newTargetGoal = new EASpiderTargetGoal<>((Spider) mob, goal.targetType, true, false, goal.targetConditions);
+				newTargetGoal = new EASpiderTargetGoal<>((Spider) mob, goal.targetType, canForgetUnseen, false, goal.targetConditions, unseenTargetTicks);
 			else
-				newTargetGoal = new EANearestAttackableTarget<>(mob, goal.targetType, false, false, goal.targetConditions);
+				newTargetGoal = new EANearestAttackableTarget<>(mob, goal.targetType, canForgetUnseen, false, goal.targetConditions, unseenTargetTicks);
 
 			if (instaTarget)
 				newTargetGoal.setInstaTarget();

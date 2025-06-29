@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.6.8
+* Monsters can now forget their target
+* Fishing min and max distance can now be changed
+
 ## 2.6.7
 * Fixed a huge bug that made animals fleeing very performance heavy
 

@@ -22,10 +22,24 @@ public class EANearestAttackableTarget<T extends LivingEntity> extends ILNearest
         this.targetEntitySelectorXRay = targetingConditions.copy().ignoreLineOfSight();
     }
 
+    public EANearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, boolean mustSee, boolean mustReach, TargetingConditions targetingConditions, int forgetTicks) {
+        super(goalOwnerIn, targetClassIn, mustSee, mustReach, null);
+        this.targetEntitySelector = targetingConditions;
+        this.targetEntitySelectorXRay = targetingConditions.copy().ignoreLineOfSight();
+        this.unseenMemoryTicks = forgetTicks;
+    }
+
     public EANearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, IdTagMatcher idTagMatcher, boolean mustSee, boolean mustReach, TargetingConditions targetingConditions) {
         this(goalOwnerIn, targetClassIn, mustSee, mustReach, targetingConditions);
         this.targetEntitySelector.selector(idTagMatcher::matchesEntity);
         this.targetEntitySelectorXRay.selector(idTagMatcher::matchesEntity);
+    }
+
+    public EANearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, IdTagMatcher idTagMatcher, boolean mustSee, boolean mustReach, TargetingConditions targetingConditions, int forgetTicks) {
+        this(goalOwnerIn, targetClassIn, mustSee, mustReach, targetingConditions);
+        this.targetEntitySelector.selector(idTagMatcher::matchesEntity);
+        this.targetEntitySelectorXRay.selector(idTagMatcher::matchesEntity);
+        this.unseenMemoryTicks = forgetTicks;
     }
 
     @Override
