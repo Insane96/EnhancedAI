@@ -41,21 +41,21 @@ public class FishingTargetGoal extends Goal {
 			return false;
 
 		--this.cooldown;
-		return this.fisher.distanceToSqr(target) > FisherMobs.minDistance * FisherMobs.minDistance
+		return this.fisher.distanceToSqr(target) > 16d //4 blocks
                 && this.fisher.getSensing().hasLineOfSight(target);
     }
 
 	public boolean canContinueToUse() {
 		return this.fisher.getTarget() != null
 				&& this.fisher.getTarget().isAlive()
-				&& this.fisher.distanceToSqr(target) > FisherMobs.minDistance * FisherMobs.minDistance
+				&& this.fisher.distanceToSqr(target) > 16d //4 blocks
 				&& this.fisher.getSensing().hasLineOfSight(target);
 	}
 
 	public void start() {
 		this.target = this.fisher.getTarget();
 		double distance = this.fisher.distanceTo(this.target);
-        if (distance <= FisherMobs.maxDistance * FisherMobs.maxDistance)
+        if (distance <= 576)
             this.fisher.getNavigation().stop();
     }
 
@@ -68,9 +68,9 @@ public class FishingTargetGoal extends Goal {
 		double dirX = this.target.getX() - this.fisher.getX();
 		double dirZ = this.target.getZ() - this.fisher.getZ();
 		double distanceXZ = Math.sqrt(dirX * dirX + dirZ * dirZ);
-		if (distance > FisherMobs.maxDistance * FisherMobs.maxDistance) {
+		if (distance > 24) {
 			if (this.fisher.getNavigation().isDone()) {
-				Path path = this.fisher.getNavigation().createPath(this.target, FisherMobs.maxDistance);
+				Path path = this.fisher.getNavigation().createPath(this.target, 24);
 				if (path != null)
 					this.fisher.getNavigation().moveTo(path, 1);
 			}
