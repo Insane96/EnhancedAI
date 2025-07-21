@@ -1,8 +1,9 @@
 # Changelog
 
-## Upcoming
+## 2.6.9
 * Added a new item tag for what items count as a fishing rod for Fisher Mobs
     * `enhancedai:fisher_rods`
+    * Already contains Tide's fishing rods
 
 ## 2.6.8
 * Monsters can now forget their target
