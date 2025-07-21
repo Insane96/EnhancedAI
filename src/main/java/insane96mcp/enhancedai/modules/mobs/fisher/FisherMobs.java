@@ -12,6 +12,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
@@ -20,6 +21,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 @LoadFeature(module = Modules.Ids.MOBS, description = "Let mobs use Fishing Rods, reeling players in. Either put a Fishing Rod in main or off hand and when near enough from the target they will use it. Only mobs in enhancedai:can_be_fisher entity type tag are affected by this feature.")
 public class FisherMobs extends Feature {
 	public static final TagKey<EntityType<?>> CAN_BE_FISHER = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("can_be_fisher"));
+    public static final TagKey<Item> FISHER_RODS = TagKey.create(Registries.ITEM, EnhancedAI.location("fisher_rods"));
 	public static final String HAS_FISHING_ROD_BEEN_GIVEN = EnhancedAI.RESOURCE_PREFIX + "has_fishing_rod_been_given";
 
 	@Config(min = 0d, max = 1d, description = "Chance for a mob in the entity type tag enhancedai:can_be_fisher to spawn with a Fishing Rod in the offhand.\nI recommend Mobs Properties Randomness to have more control over mobs equipment.")
