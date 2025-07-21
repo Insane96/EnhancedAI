@@ -1,5 +1,9 @@
 # Changelog
 
+## Upcoming
+* Added a new item tag for what items count as a fishing rod for Fisher Mobs
+    * `enhancedai:fisher_rods`
+
 ## 2.6.8
 * Monsters can now forget their target
 * Fishing min and max distance can now be changed

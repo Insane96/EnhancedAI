@@ -5,7 +5,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.pathfinder.Path;
 
 import java.util.EnumSet;
@@ -34,7 +33,7 @@ public class FishingTargetGoal extends Goal {
 		if (target == null)
 			return false;
 
-		if (this.fisher.getMainHandItem().getItem() != Items.FISHING_ROD && this.fisher.getOffhandItem().getItem() != Items.FISHING_ROD)
+		if (!this.fisher.getMainHandItem().is(FisherMobs.FISHER_RODS) && !this.fisher.getOffhandItem().is(FisherMobs.FISHER_RODS))
 			return false;
 
 		if (this.fisher.isUnderWater())

@@ -14,6 +14,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
@@ -23,6 +24,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 @LoadFeature(module = Modules.Ids.MOBS)
 public class FisherMobs extends Feature {
 	public static final TagKey<EntityType<?>> CAN_BE_FISHER = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "can_be_fisher"));
+	public static final TagKey<Item> FISHER_RODS = TagKey.create(Registries.ITEM, new ResourceLocation(EnhancedAI.MOD_ID, "fisher_rods"));
 	public static final String HAS_FISHING_ROD_BEEN_GIVEN = EnhancedAI.RESOURCE_PREFIX + "has_fishing_rod_been_given";
 
 	@Config(min = 0d, max = 1d)
