@@ -32,7 +32,7 @@ public class BreakVehicleGoal extends Goal {
 	}
 
 	private boolean hasValidVehicle() {
-		return this.mob.getVehicle() != null && this.mob.getVehicle().getType().is(AntiCheese.ANTI_CHEESE_VEICHLES);
+		return this.mob.getVehicle() != null && this.mob.getVehicle().getType().is(AntiCheese.ANTI_CHEESE_VEHICLES);
 	}
 
 	public void start() {

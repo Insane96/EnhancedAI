@@ -18,7 +18,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 @LoadFeature(module = Modules.Ids.MOBS, name = "Anti-Cheese", description = "Prevent players from abusing some game mechanics to stop mobs. Only mobs in the entity type tag enhancedai:can_use_anti_cheese will be affected by this feature. Only veichles in `enhancedai:anti_cheese_veichles` will be affected by this feature.")
 public class AntiCheese extends Feature {
     public static final TagKey<EntityType<?>> CAN_USE_ANTI_CHEESE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("can_use_anti_cheese"));
-    public static final TagKey<EntityType<?>> ANTI_CHEESE_VEICHLES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("anti_cheese_vehicles"));
+    public static final TagKey<EntityType<?>> ANTI_CHEESE_VEHICLES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("anti_cheese_vehicles"));
 
     @Config(description = "If true, 'Enemies' will no longer be able to be put in vehicles.")
     public static Boolean preventRidingVehicles = false;
@@ -34,7 +34,7 @@ public class AntiCheese extends Feature {
     public void onMount(EntityMountEvent event) {
         if (!this.isEnabled()
                 || !(event.getEntityMounting() instanceof Enemy)
-                || !(event.getEntityBeingMounted().getType().is(ANTI_CHEESE_VEICHLES))
+                || !(event.getEntityBeingMounted().getType().is(ANTI_CHEESE_VEHICLES))
                 || !event.getEntityMounting().getType().is(CAN_USE_ANTI_CHEESE)
                 || !preventRidingVehicles)
             return;
