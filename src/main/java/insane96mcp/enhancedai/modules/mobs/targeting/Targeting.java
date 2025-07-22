@@ -75,9 +75,9 @@ public class Targeting extends JsonFeature {
 	@Label(name = "Instant Target", description = "Mobs will no longer take random time to target a player.")
 	public static Boolean instaTarget = false;
 	@Config(description = "Chance for a mob to be able to forget about it's target. If the mob can forget the target it will forget about it after 'Unseen forgot ticks' have passed.")
-	public static Double forgetTargetChance = 0.3d;
+	public static Double forgetTargetChance = 0d;
 	@Config(description = "If the mob can forget the target it will forget about it after this amount of ticks have passed while not seeing the target.")
-	public static Integer unseenForgotTicks = 600;
+	public static Integer unseenForgotTicks = 300;
 	@Config
 	@Label(name = "Better Path Finding", description = "Mobs will be able to find better paths to the target. Note that this might hit performance a bit.")
 	public static Boolean betterPathfinding = true;
