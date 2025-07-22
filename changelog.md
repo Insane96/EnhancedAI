@@ -1,11 +1,11 @@
 # Changelog
 
-* Boats
 * Try fix drowneds having a hard time leaving water
 
 ## Upcoming
 * Drowneds can now attack again during rain or if wearing a helmet
   * Mojang says works as intended, but it's stupid they just stand still doing nothing
+* Mobs can now break many more modded vehicles (Quark and Abnormals veichles)
 * Forget Target Chance is now disabled by default
     * Breaks xray follow range
 * Hopefully fixed mobs standing still when hurt by target instead of approaching them again

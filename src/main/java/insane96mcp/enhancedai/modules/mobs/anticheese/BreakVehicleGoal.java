@@ -1,13 +1,8 @@
 package insane96mcp.enhancedai.modules.mobs.anticheese;
 
-import insane96mcp.enhancedai.EnhancedAI;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Creeper;
@@ -15,9 +10,8 @@ import net.minecraft.world.entity.monster.Creeper;
 import java.util.EnumSet;
 
 public class BreakVehicleGoal extends Goal {
-	public static final TagKey<EntityType<?>> VEHICLES = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "vehicles"));
 	protected final Mob mob;
-	protected Entity veichle;
+	protected Entity vehicle;
 	int attackCooldown;
 
 	public BreakVehicleGoal(Mob mob) {
@@ -27,7 +21,7 @@ public class BreakVehicleGoal extends Goal {
 
 	public boolean canUse() {
 		if (hasValidVehicle()) {
-			this.veichle = this.mob.getVehicle();
+			this.vehicle = this.mob.getVehicle();
 			return true;
 		}
 		return false;
@@ -38,7 +32,7 @@ public class BreakVehicleGoal extends Goal {
 	}
 
 	private boolean hasValidVehicle() {
-		return this.mob.getVehicle() != null && this.mob.getVehicle().getType().is(VEHICLES);
+		return this.mob.getVehicle() != null && this.mob.getVehicle().getType().is(AntiCheese.ANTI_CHEESE_VEICHLES);
 	}
 
 	public void start() {
@@ -46,7 +40,7 @@ public class BreakVehicleGoal extends Goal {
 	}
 
 	public void stop() {
-		this.veichle = null;
+		this.vehicle = null;
 	}
 
 	public void tick() {
@@ -57,10 +51,10 @@ public class BreakVehicleGoal extends Goal {
 			creeper.ignite();
 		}
 		else {
-			this.veichle.playSound(SoundEvents.PLAYER_ATTACK_WEAK);
+			this.vehicle.playSound(SoundEvents.PLAYER_ATTACK_WEAK);
 			this.mob.playAmbientSound();
 			this.mob.swing(InteractionHand.MAIN_HAND);
-			this.mob.doHurtTarget(this.veichle);
+			this.mob.doHurtTarget(this.vehicle);
 		}
 		this.attackCooldown = reducedTickDelay(15);
 	}
