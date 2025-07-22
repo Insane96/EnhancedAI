@@ -1,10 +1,10 @@
 # Changelog
 
-* Try fix drowned having a hard time leaving water
-
 ## Upcoming
 * Drowned can now attack again during rain or if wearing a helmet
   * Mojang says works as intended, but it's stupid they just stand still doing nothing
+* Drowned now have a much easier time getting out of water
+  * They basically jump out of the water
 * Mobs can now break many more modded vehicles (Quark and Abnormals veichles)
 * Forget Target Chance is now disabled by default
     * Breaks xray follow range
