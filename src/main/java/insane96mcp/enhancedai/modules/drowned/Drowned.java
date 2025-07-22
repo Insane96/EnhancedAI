@@ -9,7 +9,6 @@ import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
@@ -28,9 +27,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.UUID;
 
-@LoadFeature(module = Modules.Ids.DROWNED, description = "Makes drowned swim speed based off swim speed attribute instead of movement speed. Only drowneds in the enhancedai:change_drowned_swimming entity type tag are affected by this feature.")
+@LoadFeature(module = Modules.Ids.DROWNED, description = "Makes drowned swim speed based off swim speed attribute instead of movement speed. Only drowned in the enhancedai:change_drowned_swimming entity type tag are affected by this feature.")
 public class Drowned extends Feature {
-	public static final TagKey<EntityType<?>> CHANGE_DROWNED_SWIMMING = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "change_drowned_swimming"));
+	public static final TagKey<EntityType<?>> CHANGE_DROWNED_SWIMMING = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("change_drowned_swimming"));
 
 	final UUID UUID_SWIM_SPEED_MULTIPLIER = UUID.fromString("ba2adf05-2438-4d1f-8165-89173f0a1eae");
 
@@ -134,7 +133,7 @@ public class Drowned extends Feature {
 		}
 
 		public void tick() {
-			if (this.drowned.getY() < (double)(this.seaLevel + 1) && (this.drowned.getNavigation().isDone() || this.closeToNextPos())) {
+			if (this.drowned.getY() < (double)(this.seaLevel - 2) && (this.drowned.getNavigation().isDone() || this.closeToNextPos())) {
 				Vec3 vec3 = DefaultRandomPos.getPosTowards(this.drowned, 4, 8, new Vec3(this.drowned.getX(), (this.seaLevel + 1), this.drowned.getZ()), ((float)Math.PI / 2F));
 				if (vec3 == null) {
 					this.stuck = true;
@@ -142,6 +141,19 @@ public class Drowned extends Feature {
 				}
 
 				this.drowned.getNavigation().moveTo(vec3.x, vec3.y, vec3.z, this.speedModifier);
+			}
+			else if (this.drowned.getY() >= (double)(this.seaLevel - 2)) {
+				LivingEntity target = this.drowned.getTarget();
+				if (target != null) {
+					double d0 = target.getX() - this.drowned.getX();
+					double d1 = target.getY() - this.drowned.getY();
+					double d2 = target.getZ() - this.drowned.getZ();
+					double d3 = Math.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
+					this.drowned.setDeltaMovement(this.drowned.getDeltaMovement().add((this.speedModifier * 0.25D) * d0 / d3, (this.speedModifier * 0.25D) * d1 / d3, (this.speedModifier * 0.25D) * d2 / d3));
+					this.drowned.getNavigation().stop();
+					this.stop();
+				}
+				//this.drowned.setDeltaMovement(this.drowned.getDeltaMovement().add(0.0D, 1d, 0.0D));
 			}
 
 		}
