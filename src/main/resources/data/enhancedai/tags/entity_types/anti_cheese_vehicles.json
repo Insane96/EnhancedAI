@@ -1,0 +1,31 @@
+{
+    "values": [
+        "minecraft:boat",
+        "minecraft:chest_boat",
+        "minecraft:minecart",
+        {
+            "required": "false",
+            "id": "boatload:furnace_boat"
+        },
+        {
+            "required": "false",
+            "id": "boatload:large_boat"
+        },
+        {
+            "required": "false",
+            "id": "blueprint:boat"
+        },
+        {
+            "required": "false",
+            "id": "blueprint:chest_boat"
+        },
+        {
+            "required": "false",
+            "id": "quark:quark_boat"
+        },
+        {
+            "required": "false",
+            "id": "quark:quark_chest_boat"
+        }
+    ]
+}
