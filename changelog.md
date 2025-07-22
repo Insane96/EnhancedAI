@@ -1,8 +1,8 @@
 # Changelog
 
-## Upcoming
-* Drowned can now attack again during rain or if wearing a helmet
-  * Mojang says works as intended, but it's stupid they just stand still doing nothing
+## 2.6.10
+* Drowned can now attack again in daytime if can't reach water
+  * Mojang says works as intended, but it's stupid they just stand still doing nothing, and probably die
 * Drowned now have a much easier time getting out of water
   * They basically jump out of the water
 * Mobs can now break many more modded vehicles (Quark and Abnormals veichles)
