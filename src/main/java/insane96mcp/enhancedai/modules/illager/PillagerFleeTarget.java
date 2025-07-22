@@ -12,7 +12,6 @@ import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Pillager;
@@ -23,7 +22,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 @Label(name = "Pillager Flee", description = "Pillagers try to stay away from the target. Use the enhancedai:pillager_flee entity type tag to add/remove skeletons that are affected by this feature")
 @LoadFeature(module = Modules.Ids.ILLAGER)
 public class PillagerFleeTarget extends Feature {
-    public static final TagKey<EntityType<?>> PILLAGER_FLEE = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "pillager_flee"));
+    public static final TagKey<EntityType<?>> PILLAGER_FLEE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("pillager_flee"));
     @Config(min = 0d, max = 1d)
     @Label(name = "Avoid Player chance", description = "Chance for a Skeleton to spawn with the ability to avoid the player")
     public static Double avoidPlayerChance = 0.5d;

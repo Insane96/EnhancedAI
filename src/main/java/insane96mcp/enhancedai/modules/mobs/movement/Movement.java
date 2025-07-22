@@ -22,7 +22,7 @@ import java.util.UUID;
 @LoadFeature(module = Modules.Ids.MOBS, description = "Makes mobs be able to move in more ways, like climbing or swim. Only mobs in the enhancedai:allow_climbing entity type tag are allowed to climb.")
 public class Movement extends Feature {
     public static final TagKey<EntityType<?>> ALLOW_CLIMBING = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("allow_climbing"));
-    //public static final TagKey<EntityType<?>> ALLOW_TARGETING_LADDERS = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "allow_climbing"));
+    //public static final TagKey<EntityType<?>> ALLOW_TARGETING_LADDERS = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("allow_climbing"));
 
     final UUID UUID_SWIM_SPEED_MULTIPLIER = UUID.fromString("6d2cb27e-e5e3-41b9-8108-f74131a90cce");
     final UUID UUID_MOV_SPEED_MULTIPLIER = UUID.fromString("8230810c-c178-4c01-b066-95e831b6defe");
