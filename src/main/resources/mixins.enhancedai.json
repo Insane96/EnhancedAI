@@ -12,6 +12,7 @@
     "mixins": [
         "AbstractSkeletonMixin",
         "CreeperMixin",
+        "DrownedMixin",
         "MeleeAttackGoalMixin",
         "MobCategoryMixin",
         "MobMixin",

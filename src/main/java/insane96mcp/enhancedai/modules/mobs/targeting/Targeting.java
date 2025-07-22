@@ -173,9 +173,9 @@ public class Targeting extends JsonFeature {
 			EANearestAttackableTarget<? extends LivingEntity> newTargetGoal;
 
 			if (mob instanceof Spider)
-				newTargetGoal = new EASpiderTargetGoal<>((Spider) mob, goal.targetType, true, false, goal.targetConditions);
+				newTargetGoal = new EASpiderTargetGoal<>((Spider) mob, goal.targetType, true, true, goal.targetConditions);
 			else
-				newTargetGoal = new EANearestAttackableTarget<>(mob, goal.targetType, false, false, goal.targetConditions);
+				newTargetGoal = new EANearestAttackableTarget<>(mob, goal.targetType, false, true, goal.targetConditions);
 
 			if (instantTarget)
 				newTargetGoal.setInstaTarget();
