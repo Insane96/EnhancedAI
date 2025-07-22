@@ -1,5 +1,10 @@
 # Changelog
 
+## Upcoming
+* Forget Target Chance is now disabled by default
+    * Breaks xray follow range
+* Hopefully fixed mobs standing still when hurt by target instead of approaching them again
+
 ## 2.6.9
 * Added a new item tag for what items count as a fishing rod for Fisher Mobs
     * `enhancedai:fisher_rods`

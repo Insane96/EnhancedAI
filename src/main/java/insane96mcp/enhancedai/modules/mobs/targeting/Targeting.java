@@ -186,18 +186,19 @@ public class Targeting extends JsonFeature {
 			goalsToRemove.add(prioritizedGoal.getGoal());
 
 			boolean isNeutral = NBTUtils.getBooleanOrPutDefault(mob.getPersistentData(), IS_NEUTRAL, mob.getRandom().nextDouble() < neutralChances.getByDifficulty(mob.level()));
-			boolean canForgetUnseen = NBTUtils.getBooleanOrPutDefault(mob.getPersistentData(), CAN_FORGET_TARGET, mob.getRandom().nextDouble() < forgetTargetChance);
-			int unseenTargetTicks = NBTUtils.getIntOrPutDefault(mob.getPersistentData(), CAN_FORGET_TARGET, unseenForgotTicks);
 
 			if (isNeutral)
 				continue;
 
+			boolean canForgetUnseen = NBTUtils.getBooleanOrPutDefault(mob.getPersistentData(), CAN_FORGET_TARGET, mob.getRandom().nextDouble() < forgetTargetChance);
+			int unseenTargetTicks = NBTUtils.getIntOrPutDefault(mob.getPersistentData(), CAN_FORGET_TARGET, unseenForgotTicks);
+
 			EANearestAttackableTarget<? extends LivingEntity> newTargetGoal;
 
 			if (mob instanceof Spider)
-				newTargetGoal = new EASpiderTargetGoal<>((Spider) mob, goal.targetType, canForgetUnseen, false, goal.targetConditions, unseenTargetTicks);
+				newTargetGoal = new EASpiderTargetGoal<>((Spider) mob, goal.targetType, canForgetUnseen, true, goal.targetConditions, unseenTargetTicks);
 			else
-				newTargetGoal = new EANearestAttackableTarget<>(mob, goal.targetType, canForgetUnseen, false, goal.targetConditions, unseenTargetTicks);
+				newTargetGoal = new EANearestAttackableTarget<>(mob, goal.targetType, canForgetUnseen, true, goal.targetConditions, unseenTargetTicks);
 
 			if (instaTarget)
 				newTargetGoal.setInstaTarget();
