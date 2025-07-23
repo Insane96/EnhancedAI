@@ -58,7 +58,7 @@ public class Drowned extends Feature {
 		//drowned.waterNavigation.getNodeEvaluator().setCanFloat(true);
 		((SwimNodeEvaluator) drowned.waterNavigation.getNodeEvaluator()).allowBreaching = true;
 		drowned.goalSelector.removeAllGoals(goal -> goal instanceof net.minecraft.world.entity.monster.Drowned.DrownedSwimUpGoal);
-		drowned.goalSelector.addGoal(6, new DrownedSwimUpGoal(drowned, 1.0D, drowned.level().getSeaLevel()));;
+		drowned.goalSelector.addGoal(6, new DrownedSwimUpGoal(drowned, 1.0D, drowned.level().getSeaLevel()));
 
 		if (swimSpeedMultiplier > 0d) {
 			MCUtils.applyModifier(drowned, ForgeMod.SWIM_SPEED.get(), UUID_SWIM_SPEED_MULTIPLIER, "Enhanced AI Drowned Swim Speed Multiplier", swimSpeedMultiplier - 1, AttributeModifier.Operation.MULTIPLY_TOTAL);
@@ -118,6 +118,8 @@ public class Drowned extends Feature {
 		private final int seaLevel;
 		private boolean stuck;
 
+		private int leapTick = 0;
+
 		public DrownedSwimUpGoal(net.minecraft.world.entity.monster.Drowned pDrowned, double pSpeedModifier, int pSeaLevel) {
 			this.drowned = pDrowned;
 			this.speedModifier = pSpeedModifier;
@@ -125,7 +127,7 @@ public class Drowned extends Feature {
 		}
 
 		public boolean canUse() {
-			return !this.drowned.level().isDay() && this.drowned.isInWater() && this.drowned.getY() < (double)(this.seaLevel);
+			return this.drowned.isInWater() && this.drowned.getY() < (double)(this.seaLevel);
 		}
 
 		public boolean canContinueToUse() {
@@ -133,7 +135,7 @@ public class Drowned extends Feature {
 		}
 
 		public void tick() {
-			if (this.drowned.getY() < (double)(this.seaLevel - 2) && (this.drowned.getNavigation().isDone() || this.closeToNextPos())) {
+			if (this.drowned.getY() < (double)(this.seaLevel - 1) && (this.drowned.getNavigation().isDone() || this.closeToNextPos())) {
 				Vec3 vec3 = DefaultRandomPos.getPosTowards(this.drowned, 4, 8, new Vec3(this.drowned.getX(), (this.seaLevel + 1), this.drowned.getZ()), ((float)Math.PI / 2F));
 				if (vec3 == null) {
 					this.stuck = true;
@@ -142,17 +144,18 @@ public class Drowned extends Feature {
 
 				this.drowned.getNavigation().moveTo(vec3.x, vec3.y, vec3.z, this.speedModifier);
 			}
-			else if (this.drowned.getY() >= (double)(this.seaLevel - 2)) {
+			if (--leapTick <= 0 && this.drowned.getY() >= (double)(this.seaLevel - 1)) {
 				LivingEntity target = this.drowned.getTarget();
-				if (target != null) {
+				if (target != null && !target.isInWater() && target.onGround()) {
 					double d0 = target.getX() - this.drowned.getX();
 					double d1 = target.getY() - this.drowned.getY();
 					double d2 = target.getZ() - this.drowned.getZ();
 					double d3 = Math.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
-					this.drowned.setDeltaMovement(this.drowned.getDeltaMovement().add((this.speedModifier * 0.25D) * d0 / d3, (this.speedModifier * 0.25D) * d1 / d3, (this.speedModifier * 0.25D) * d2 / d3));
+					this.drowned.setDeltaMovement(this.drowned.getDeltaMovement().add(d0 / d3, d1 / d3, d2 / d3));
 					this.drowned.getNavigation().stop();
 					this.stop();
 				}
+				leapTick = 10;
 				//this.drowned.setDeltaMovement(this.drowned.getDeltaMovement().add(0.0D, 1d, 0.0D));
 			}
 

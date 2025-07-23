@@ -11,6 +11,9 @@
 * Fixed Iron Golem's "fire tick faster" not working as intended
 * Fixed hostile Animals seeing you from any range
 
+## 2.6.11
+* Fixed drowned swimming like crazy
+
 ## 2.6.10
 * Drowned can now attack again in daytime if can't reach water
     * Mojang says works as intended, but it's stupid they just stand still doing nothing, and probably die
