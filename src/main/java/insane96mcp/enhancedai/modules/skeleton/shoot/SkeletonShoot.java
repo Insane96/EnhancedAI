@@ -5,7 +5,6 @@ import insane96mcp.enhancedai.ai.EAAvoidEntityGoalLegacy;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
-import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
@@ -20,8 +19,7 @@ import net.minecraft.world.entity.monster.AbstractSkeleton;
 
 import java.util.List;
 
-@Label(name = "Skeleton Shoot", description = "Skeletons are more precise when shooting and strafing is removed, can hit a target from up to 64 blocks and try to stay away from the target. Use the enhancedai:better_skeleton_shoot entity type tag to add more skeletons that are affected by this feature")
-@LoadFeature(module = Modules.Ids.SKELETON)
+@LoadFeature(module = Modules.Ids.SKELETON, description = "Skeletons are more precise when shooting and strafing is removed, can hit a target from up to 64 blocks and try to stay away from the target. Use the enhancedai:better_skeleton_shoot entity type tag to add more skeletons that are affected by this feature")
 public class SkeletonShoot extends Feature {
 
 	public static final TagKey<EntityType<?>> BETTER_SKELETON_SHOOT = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("better_skeleton_shoot"));

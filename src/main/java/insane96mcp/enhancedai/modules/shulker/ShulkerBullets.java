@@ -15,7 +15,7 @@ public class ShulkerBullets extends Feature {
     @Config(min = 1, max = 600)
     public static Difficulty levitationDuration = new Difficulty(100, 100, 160);
     @Config(min = 0, max = 127, description = "Note that 0 = I, 1 = II, and so on")
-    public static Difficulty levitationAmplifier = new Difficulty(5,5, 5);
+    public static Difficulty levitationAmplifier = new Difficulty(5, 5, 5);
 
     public ShulkerBullets(Module module, boolean enabledByDefault, boolean canBeDisabled) {
         super(module, enabledByDefault, canBeDisabled);

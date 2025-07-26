@@ -6,7 +6,6 @@ import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.setup.EATags;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
-import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
@@ -19,27 +18,20 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@Label(name = "Pillager Flee", description = "Pillagers try to stay away from the target. Use the enhancedai:pillager_flee entity type tag to add/remove skeletons that are affected by this feature")
-@LoadFeature(module = Modules.Ids.ILLAGER)
+@LoadFeature(module = Modules.Ids.ILLAGER, description = "Pillagers try to stay away from the target. Use the enhancedai:pillager_flee entity type tag to add/remove skeletons that are affected by this feature")
 public class PillagerFleeTarget extends Feature {
     public static final TagKey<EntityType<?>> PILLAGER_FLEE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("pillager_flee"));
-    @Config(min = 0d, max = 1d)
-    @Label(name = "Avoid Player chance", description = "Chance for a Skeleton to spawn with the ability to avoid the player")
+    @Config(min = 0d, max = 1d, description = "Chance for a Skeleton to spawn with the ability to avoid the player")
     public static Double avoidPlayerChance = 0.5d;
-    @Config(min = 0d, max = 1d)
-    @Label(name = "Attack When Avoiding Chance", description = "Chance for a Skeleton to be able to shoot while running from a player")
+    @Config(min = 0d, max = 1d, description = "Chance for a Skeleton to be able to shoot while running from a player")
     public static Double attackWhenAvoidingChance = 0.5d;
-    @Config(min = 0d, max = 32d)
-    @Label(name = "Flee Distance Near", description = "Distance from a player that counts as near and will make the skeleton run away faster.")
+    @Config(min = 0d, max = 32d, description = "Distance from a player that counts as near and will make the skeleton run away faster.")
     public static Double fleeDistanceNear = 7d;
-    @Config(min = 0d, max = 32d)
-    @Label(name = "Flee Distance Far", description = "Distance from a player that will make the skeleton run away.")
+    @Config(min = 0d, max = 32d, description = "Distance from a player that will make the skeleton run away.")
     public static Double fleeDistanceFar = 12d;
-    @Config(min = 0d, max = 4d)
-    @Label(name = "Flee speed Multiplier Near", description = "Speed multiplier when the pillager avoids the player and it's within 'Flee Distance Near' blocks from him.")
+    @Config(min = 0d, max = 4d, description = "Speed multiplier when the pillager avoids the player and it's within 'Flee Distance Near' blocks from him.")
     public static Double fleeSpeedNear = 1.1d;
-    @Config(min = 0d, max = 4d)
-    @Label(name = "Flee speed Multiplier Far", description = "Speed multiplier when the pillager avoids the player and it's farther than 'Flee Distance Far' blocks from him.")
+    @Config(min = 0d, max = 4d, description = "Speed multiplier when the pillager avoids the player and it's farther than 'Flee Distance Far' blocks from him.")
     public static Double fleeSpeedFar = 1d;
 
     public PillagerFleeTarget(Module module, boolean enabledByDefault, boolean canBeDisabled) {

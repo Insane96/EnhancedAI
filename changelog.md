@@ -1,15 +1,17 @@
 # Changelog
 
 ## Upcoming
-**Config options might have changed, please backup your config file**
+* You will be able to change AI at runtime without having to reload the world
+
+## 2.7.0
+**Config options might have been renamed, thus reset. Backup your config file.**
 
 * Snow Golems' snowballs damage and freeze are now configurable
 * Mobs now can rarely attack each-other again
 * Increased shulker bullets levitation duration and amplifier
 * Endermen can now switch target
-* Fixed Ravager feature not working
 * Fixed Iron Golem's "fire tick faster" not working as intended
-* Fixed hostile Animals seeing you from any range
+* Fixed Ravager feature not working
 
 ## 2.6.13
 * Drowned leaps now have a fixed force instead of being based on the target's distance
