@@ -60,7 +60,7 @@ public class ThrowingWeb extends Feature {
 	@Config(description = "Should multiple hits on a target with slowness increase the level of Slowness? (This works with any type of slowness)")
 	public static Boolean slowness$stackAmplifier = false;
 	@Config(min = 0, max = 128, description = "How many max levels of slowness can be applied to the target if Staking amplifier is enabled?")
-	public static Integer maxSlowness = 2;
+	public static Integer slowness$maxSlowness = 2;
 
 	public ThrowingWeb(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super(module, enabledByDefault, canBeDisabled);
@@ -93,7 +93,7 @@ public class ThrowingWeb extends Feature {
 		MobEffectInstance slowness = entity.getEffect(MobEffects.MOVEMENT_SLOWDOWN);
 
 		if (slowness$stackAmplifier && slowness != null)
-			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, slowness$duration, Math.min(slowness.getAmplifier() + slowness$amplifier + 1, maxSlowness - 1), false, false, true));
+			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, slowness$duration, Math.min(slowness.getAmplifier() + slowness$amplifier + 1, slowness$maxSlowness - 1), false, false, true));
 		else
 			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, slowness$duration, slowness$amplifier, false, false, true));
 	}
