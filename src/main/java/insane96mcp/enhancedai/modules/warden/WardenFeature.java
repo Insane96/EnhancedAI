@@ -2,7 +2,6 @@ package insane96mcp.enhancedai.modules.warden;
 
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.Feature;
-import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
@@ -15,24 +14,19 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.UUID;
 
-@Label(name = "Warden Attacking")
 @LoadFeature(module = Modules.Ids.WARDEN)
 public class WardenFeature extends Feature {
 
-    @Config
-    @Label(name = "Sonic Boom range multiplier", description = "Multiplies max distance from target where warden can use the sonic boom. Vanilla is 15 horizontal and 20 vertical.")
+    @Config(description = "Multiplies max distance from target where warden can use the sonic boom. Vanilla is 15 horizontal and 20 vertical.")
     public static Double sonicBoomRangeMultiplier = 3d;
 
-    @Config
-    @Label(name = "Darkness range multiplier", description = "Multiplies the distance at which the darkness effect is applied.")
+    @Config(description = "Multiplies the distance at which the darkness effect is applied.")
     public static Double darknessRangeMultiplier = 2d;
 
-    @Config
-    @Label(description = "Multiplies the distance at which vibrations reach wardens.")
+    @Config(description = "Multiplies the distance at which vibrations reach wardens.")
     public static Double listenRangeMultiplier = 2d;
 
-    @Config
-    @Label(description = "If enabled, will make warden have higher step height making it not need to jump.")
+    @Config(description = "If enabled, will make warden have higher step height making it not need to jump.")
     public static Boolean stepUp = true;
 
     public WardenFeature(Module module, boolean enabledByDefault, boolean canBeDisabled) {

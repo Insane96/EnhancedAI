@@ -4,7 +4,6 @@ import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.ai.EAAvoidEntityGoal;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.JsonFeature;
-import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,8 +14,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-@Label(name = "Flee", description = "Custom Json config to set mobs from running from other mobs")
-@LoadFeature(module = Modules.Ids.MOBS, canBeDisabled = false)
+@LoadFeature(module = Modules.Ids.MOBS, canBeDisabled = false, description = "Custom Json config to set mobs from running from other mobs")
 public class Flee extends JsonFeature {
 	public static final List<CustomFleeConfig> CUSTOM_FLEE_DEFAULT = List.of();
 

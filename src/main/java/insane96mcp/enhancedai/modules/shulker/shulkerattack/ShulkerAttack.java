@@ -4,7 +4,6 @@ import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
-import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
@@ -19,16 +18,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
 
-@Label(name = "Shulker Attack")
 @LoadFeature(module = Modules.Ids.SHULKER)
 public class ShulkerAttack extends Feature {
     public static final String BASE_ATTACK_SPEED = EnhancedAI.RESOURCE_PREFIX + "base_attack_speed";
     public static final String ATTACK_SPEED_BONUS_HALF_SECONDS = EnhancedAI.RESOURCE_PREFIX + "attack_speed_bonus_half_seconds";
-    @Config(min = 1, max = 40)
-    @Label(name = "Base Attack Speed", description = "Ticks before the first bullet is fired")
+    @Config(min = 1, max = 40, description = "Ticks before the first bullet is fired")
     public static MinMax baseAttackSpeed = new MinMax(20, 40);
-    @Config(min = 1, max = 40)
-    @Label(name = "Attack speed bonus half seconds", description = "Ticks to fire is calculcated as base_attack_speed + (0~attack_speed_bonus_half_seconds * 10)")
+    @Config(min = 1, max = 40, description = "Ticks to fire is calculated as base_attack_speed + (0~attack_speed_bonus_half_seconds * 10)")
     public static MinMax attackSpeedBonusHalfSeconds = new MinMax(10, 20);
 
     public ShulkerAttack(Module module, boolean enabledByDefault, boolean canBeDisabled) {

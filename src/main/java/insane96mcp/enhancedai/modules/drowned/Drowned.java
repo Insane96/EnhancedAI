@@ -3,14 +3,12 @@ package insane96mcp.enhancedai.modules.drowned;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.Feature;
-import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
@@ -29,15 +27,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.UUID;
 
-@Label(name = "Drowned", description = "Makes drowned swim speed based off swim speed attribute instead of movement speed. Only drowned in the enhancedai:change_drowned_swimming entity type tag are affected by this feature.")
-@LoadFeature(module = Modules.Ids.DROWNED)
+@LoadFeature(module = Modules.Ids.DROWNED, description = "Makes drowned swim speed based off swim speed attribute instead of movement speed. Only drowned in the enhancedai:change_drowned_swimming entity type tag are affected by this feature.")
 public class Drowned extends Feature {
-	public static final TagKey<EntityType<?>> CHANGE_DROWNED_SWIMMING = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "change_drowned_swimming"));
+	public static final TagKey<EntityType<?>> CHANGE_DROWNED_SWIMMING = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("change_drowned_swimming"));
 
 	final UUID UUID_SWIM_SPEED_MULTIPLIER = UUID.fromString("ba2adf05-2438-4d1f-8165-89173f0a1eae");
 
-	@Config(min = 0d, max = 4d)
-	@Label(name = "Swim Speed Multiplier", description = "Multiplier for the swim speed of Drowned. Note that the swim speed is also affected by the Movement Feature. Set to 0 to disable the multiplier.")
+	@Config(min = 0d, max = 4d, description = "Multiplier for the swim speed of Drowned. Note that the swim speed is also affected by the Movement Feature. Set to 0 to disable the multiplier.")
 	public static Double swimSpeedMultiplier = 0.3d;
 
 	@Config(description = "Fixes a vanilla bug that makes drowned just stand still during daytime if can't reach water.")

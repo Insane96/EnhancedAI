@@ -3,7 +3,6 @@ package insane96mcp.enhancedai.modules.skeleton;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.Feature;
-import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
@@ -14,17 +13,14 @@ import net.minecraft.world.item.Items;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@Label(name = "Wither Skeletons", description = "Wither skeletons can spawn with a bow and shoot Wither arrows.")
-@LoadFeature(module = Modules.Ids.SKELETON)
+@LoadFeature(module = Modules.Ids.SKELETON, description = "Wither skeletons can spawn with a bow and shoot Wither arrows.")
 public class WitherSkeletons extends Feature {
 
 	private static final String ON_SPAWN_PROCESSED = EnhancedAI.RESOURCE_PREFIX + "wither_skeletons_on_spawn_processed";
 
-	@Config(min = 0d, max = 1d)
-	@Label(name = "Ranged chance", description = "Chance for Wither Skeletons to spawn with a bow")
+	@Config(min = 0d, max = 1d, description = "Chance for Wither Skeletons to spawn with a bow")
 	public static Double rangedChance = 0.2d;
-	@Config
-	@Label(name = "Wither instead of Fire", description = "Wither skeletons shoot Withered arrows instead of arrows on fire")
+	@Config(description = "Wither skeletons shoot Withered arrows instead of arrows on fire")
 	public static Boolean witherInsteadOfFire = true;
 
 	public WitherSkeletons(Module module, boolean enabledByDefault, boolean canBeDisabled) {

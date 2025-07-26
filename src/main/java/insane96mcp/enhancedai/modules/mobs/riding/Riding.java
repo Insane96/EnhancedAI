@@ -4,13 +4,11 @@ import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
-import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.Difficulty;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
@@ -19,19 +17,16 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@Label(name = "Riding", description = "Makes mobs ride other mobs")
-@LoadFeature(module = Modules.Ids.MOBS)
+@LoadFeature(module = Modules.Ids.MOBS, description = "Makes mobs ride other mobs")
 public class Riding extends Feature {
-    public static final TagKey<EntityType<?>> CAN_BE_MOUNTED = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "can_be_mounted"));
-    public static final TagKey<EntityType<?>> CAN_MOUNT = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "can_mount"));
+    public static final TagKey<EntityType<?>> CAN_BE_MOUNTED = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("can_be_mounted"));
+    public static final TagKey<EntityType<?>> CAN_MOUNT = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("can_mount"));
     public static final String CAN_SEARCH_MOUNT = EnhancedAI.RESOURCE_PREFIX + "can_search_mount";
     public static final String SUFFOCATION_WHILE_RIDING = EnhancedAI.RESOURCE_PREFIX + "suffocation_while_riding";
-    @Config(min = 0d, max = 1d)
-    @Label(name = "Chance to have Riding AI", description = "Chance for a mob to have an AI to go and ride mobs. Use enhancedai:can_be_mounted and enhancedai:can_mount entity type tags")
-    public static Difficulty ridingAiChance = new Difficulty(0.03d, 0.06d, 0.1d);
+    @Config(min = 0d, max = 1d, description = "Chance for a mob to have an AI to go and ride mobs. Use enhancedai:can_be_mounted and enhancedai:can_mount entity type tags")
+    public static Difficulty chance = new Difficulty(0.03d, 0.06d, 0.1d);
 
-    @Config
-    @Label(name = "Stop mounting if too much suffocation", description = "If true, riding mobs will dismount if take too much suffocation damage.")
+    @Config(description = "If true, riding mobs will dismount if take too much suffocation damage.")
     public static Boolean stopMountingIfSuffocating = true;
 
     public Riding(Module module, boolean enabledByDefault, boolean canBeDisabled) {
@@ -46,7 +41,7 @@ public class Riding extends Feature {
                 || !mob.getType().is(CAN_MOUNT))
             return;
 
-        boolean canSearchMount = NBTUtils.getBooleanOrPutDefault(mob.getPersistentData(), CAN_SEARCH_MOUNT, mob.getRandom().nextDouble() < ridingAiChance.getByDifficulty(mob.level()));
+        boolean canSearchMount = NBTUtils.getBooleanOrPutDefault(mob.getPersistentData(), CAN_SEARCH_MOUNT, mob.getRandom().nextDouble() < chance.getByDifficulty(mob.level()));
         if (!canSearchMount)
             return;
 

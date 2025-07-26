@@ -3,13 +3,11 @@ package insane96mcp.enhancedai.modules.mobs.movement;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.Feature;
-import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -21,27 +19,23 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.UUID;
 
-@Label(name = "Movement", description = "Makes mobs be able to move in more ways, like climbing or swim. Only mobs in the enhancedai:allow_climbing entity type tag are allowed to climb.")
-@LoadFeature(module = Modules.Ids.MOBS)
+@LoadFeature(module = Modules.Ids.MOBS, description = "Makes mobs be able to move in more ways, like climbing or swim. Only mobs in the enhancedai:allow_climbing entity type tag are allowed to climb.")
 public class Movement extends Feature {
-    public static final TagKey<EntityType<?>> ALLOW_CLIMBING = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "allow_climbing"));
-    //public static final TagKey<EntityType<?>> ALLOW_TARGETING_LADDERS = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "allow_climbing"));
+    public static final TagKey<EntityType<?>> ALLOW_CLIMBING = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("allow_climbing"));
+    //public static final TagKey<EntityType<?>> ALLOW_TARGETING_LADDERS = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("allow_climbing"));
 
     final UUID UUID_SWIM_SPEED_MULTIPLIER = UUID.fromString("6d2cb27e-e5e3-41b9-8108-f74131a90cce");
     final UUID UUID_MOV_SPEED_MULTIPLIER = UUID.fromString("8230810c-c178-4c01-b066-95e831b6defe");
 
-    @Config
-    @Label(name = "Allow Climbing", description = "If true, mobs will be able to climb (up and down)")
+    @Config(description = "If true, mobs will be able to climb (up and down)")
     public static Boolean allowClimbing = true;
     /*@Config
     @Label(name = "Target Ladders", description = "If true, mobs try to find climbable blocks to reach the target")
     public static Boolean targetLadders = false;*/
-    @Config(min = 0d, max = 8d)
-    @Label(name = "Bonus movement speed", description = "Use Mobs Properties Randomness to have more control over this and more.")
+    @Config(min = 0d, max = 8d, description = "Use Mobs Properties Randomness to have more control over this.")
     public static Double bonusMovementSpeed = 0.15d;
 
-    @Config(min = 0d, max = 4d)
-    @Label(name = "Swim Speed Addition Multiplier", description = "How faster mobs can swim. Setting to 0 will leave the swim speed as vanilla. I recommend using mods like Mobs Properties Randomness to have more control over the attribute.")
+    @Config(min = 0d, max = 4d, description = "How faster mobs can swim. Setting to 0 will leave the swim speed as vanilla. I recommend using mods like Mobs Properties Randomness to have more control over the attribute.")
     public static Double swimSpeedAdditionMultiplier = 2.5d;
 
     public Movement(Module module, boolean enabledByDefault, boolean canBeDisabled) {

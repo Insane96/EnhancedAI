@@ -3,11 +3,9 @@ package insane96mcp.enhancedai.modules.mobs;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.Feature;
-import insane96mcp.insanelib.base.Label;
-import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.LoadFeature;
+import insane96mcp.insanelib.base.Module;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -20,10 +18,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-@Label(name = "Open Doors", description = "Use enhancedai:can_open_doors to add more mobs that can open doors.")
-@LoadFeature(module = Modules.Ids.MOBS)
+@LoadFeature(module = Modules.Ids.MOBS, description = "Use `enhancedai:can_open_doors` to add more mobs that can open doors.")
 public class OpenDoors extends Feature {
-    public static final TagKey<EntityType<?>> CAN_OPEN_DOORS = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "can_open_doors"));
+    public static final TagKey<EntityType<?>> CAN_OPEN_DOORS = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("can_open_doors"));
 
     public OpenDoors(Module module, boolean enabledByDefault, boolean canBeDisabled) {
         super(module, enabledByDefault, canBeDisabled);

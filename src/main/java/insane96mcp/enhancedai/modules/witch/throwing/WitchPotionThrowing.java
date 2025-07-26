@@ -5,14 +5,12 @@ import insane96mcp.enhancedai.data.PotionOrMobEffect;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
-import insane96mcp.insanelib.base.Label;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.MinMax;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -28,10 +26,9 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-@Label(name = "Witch Potion Throwing", description = "Witches throw potions farther, faster and more potion types. Also no longer chase player if they can't see him. Use the enhancedai:better_potion_throwing entity type tag to add more witches that are affected by this feature.")
-@LoadFeature(module = Modules.Ids.WITCH)
+@LoadFeature(module = Modules.Ids.WITCH, description = "Witches throw potions farther, faster and more potion types. Also no longer chase player if they can't see him. Use the enhancedai:better_potion_throwing entity type tag to add more witches that are affected by this feature.")
 public class WitchPotionThrowing extends Feature {
-    public static final TagKey<EntityType<?>> BETTER_POTION_THROWING = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "better_potion_throwing"));
+    public static final TagKey<EntityType<?>> BETTER_POTION_THROWING = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("better_potion_throwing"));
     public static final String APPRENTICE = EnhancedAI.RESOURCE_PREFIX + "apprentice";
     public static final String ATTACK_SPEED = EnhancedAI.RESOURCE_PREFIX + "attack_speed";
     public static final String ATTACK_RANGE = EnhancedAI.RESOURCE_PREFIX + "attack_range";
@@ -46,26 +43,19 @@ public class WitchPotionThrowing extends Feature {
     public static ArrayList<PotionOrMobEffect> badPotionsList;
     public static ArrayList<PotionOrMobEffect> goodPotionsList;
 
-    @Config(min = 0d, max = 1d)
-    @Label(name = "Lingering Chance", description = "Chance for the potions thrown by the Witch to be lingering.")
+    @Config(min = 0d, max = 1d, description = "Chance for the potions thrown by the Witch to be lingering.")
     public static Double lingeringChance = 0.15d;
-    @Config(min = 0d, max = 1d)
-    @Label(name = "Another Throw Chance", description = "Chance for the Witch to throw another random potion right after she threw one.")
+    @Config(min = 0d, max = 1d, description = "Chance for the Witch to throw another random potion right after she threw one.")
     public static Double anotherThrowChance = 0.20d;
-    @Config(min = 1)
-    @Label(name = "Throw Speed", description = "Speed at which Witches throw potions (in ticks).")
+    @Config(min = 1, description = "Speed at which Witches throw potions (in ticks).")
     public static MinMax throwSpeed = new MinMax(70, 90);
-    @Config(min = 8, max = 64)
-    @Label(name = "Throw Range", description = "Range at which Witches throw potions.")
+    @Config(min = 8, max = 64, description = "Range at which Witches throw potions.")
     public static MinMax throwRange = new MinMax(16, 24);
-    @Config(min = 0d, max = 1d)
-    @Label(name = "Apprentice Witch.Chance", description = "Chance for a Witch to be an apprentice. Apprentice Witches throw random potions instead of in order, and have a chance to throw a wrong (good) potion.")
+    @Config(min = 0d, max = 1d, description = "Chance for a Witch to be an apprentice. Apprentice Witches throw random potions instead of in order, and have a chance to throw a wrong (good) potion.")
     public static Double apprenticeWitchChance = 0.6d;
-    @Config
-    @Label(name = "Use Slow Falling", description = "If true, witches will throw a potion of slow falling at their feet when they're falling for more than 8 blocks.")
+    @Config(description = "If true, witches will throw a potion of slow falling at their feet when they're falling for more than 8 blocks.")
     public static Boolean useSlowFalling = true;
-    @Config(min = 0d, max = 1d)
-    @Label(name = "Health Threshold Invisibility", description = "When below this health percentage Witches will throw Invisibility potions at their feet.")
+    @Config(min = 0d, max = 1d, description = "When below this health percentage Witches will throw Invisibility potions at their feet.")
     public static Double healthThresholdInvisibility = 0.40d;
 
     public WitchPotionThrowing(Module module, boolean enabledByDefault, boolean canBeDisabled) {

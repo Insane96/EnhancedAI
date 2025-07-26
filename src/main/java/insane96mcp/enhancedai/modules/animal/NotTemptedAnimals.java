@@ -10,7 +10,6 @@ import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.TemptGoal;
@@ -24,7 +23,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 @LoadFeature(module = Modules.Ids.ANIMAL)
 public class NotTemptedAnimals extends Feature {
     //TODO Some animals should attack the player with the food in the hand
-    public static final TagKey<EntityType<?>> CAN_IGNORE_FOOD_TEMPTATION = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(EnhancedAI.MOD_ID, "can_ignore_food_temptation"));
+    public static final TagKey<EntityType<?>> CAN_IGNORE_FOOD_TEMPTATION = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("can_ignore_food_temptation"));
     public static final String NOT_TEMPTED = EnhancedAI.RESOURCE_PREFIX + "not_tempted";
 
     @Config(min = 0d, max = 1d)

@@ -22,7 +22,7 @@ import org.joml.Matrix4f;
 
 @OnlyIn(Dist.CLIENT)
 public class FishingHookRenderer extends EntityRenderer<FishingHook> {
-    private static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation("textures/entity/fishing_hook.png");
+    private static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.parse("textures/entity/fishing_hook.png");
     private static final RenderType RENDER_TYPE = RenderType.entityCutout(TEXTURE_LOCATION);
     private static final double VIEW_BOBBING_SCALE = 960.0D;
 
