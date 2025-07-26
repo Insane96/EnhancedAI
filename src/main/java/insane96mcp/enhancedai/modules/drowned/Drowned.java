@@ -154,11 +154,18 @@ public class Drowned extends Feature {
 			if (--leapTick <= 0 && this.drowned.getY() >= (double)(this.seaLevel - 1)) {
 				LivingEntity target = this.drowned.getTarget();
 				if (target != null && !target.isInWater() && target.onGround()) {
-					double d0 = target.getX() - this.drowned.getX();
-					double d1 = target.getY() - this.drowned.getY();
-					double d2 = target.getZ() - this.drowned.getZ();
-					double d3 = Math.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
-					this.drowned.setDeltaMovement(this.drowned.getDeltaMovement().add(d0 / d3, d1 / d3, d2 / d3));
+					Vec3 dir = new Vec3(
+							target.getX() - this.drowned.getX(),
+							target.getY() - this.drowned.getY(),
+							target.getZ() - this.drowned.getZ()
+					).normalize();
+
+					this.drowned.setDeltaMovement(new Vec3(
+							dir.x * 0.5,
+							0.5,
+							dir.z * 0.5
+					));
+
 					this.drowned.getNavigation().stop();
 					this.stop();
 				}

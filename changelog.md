@@ -1,7 +1,10 @@
 # Changelog
 
+## Upcoming
+* Drowned leaps now have a fixed force instead of being based on the target's distance
+
 ## 2.6.12
-* Fixed nearest attackable target not using the correct follow range
+* Fixed nearest attackable target not using the correct follow range if changed after the goal has been applied
 
 ## 2.6.11
 * Fixed drowned swimming like crazy
