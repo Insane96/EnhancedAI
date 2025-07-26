@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 2.6.13
 * Drowned leaps now have a fixed force instead of being based on the target's distance
 
 ## 2.6.12
