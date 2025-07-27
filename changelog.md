@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Villagers no longer use target changes
+
 ## 2.7.0
 **Config options might have been renamed, thus reset. Backup your config file.**
 
