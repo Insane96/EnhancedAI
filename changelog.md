@@ -3,6 +3,9 @@
 ## Upcoming
 * You will be able to change AI at runtime without having to reload the world
 
+## Upcoming
+* Villagers no longer use target changes
+
 ## 2.7.0
 **Config options might have been renamed, thus reset. Backup your config file.**
 

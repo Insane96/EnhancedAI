@@ -21,7 +21,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 @LoadFeature(module = Modules.Ids.VILLAGER, description = "Make villagers fight back. Use the enhancedai:villagers_can_attack entity type tag to add more villagers. Attack damage can't be changed via config due to limitation so use mods like Mobs Properties Randomness to change the damage. Base damage is 4.")
 public class VillagerAttacking extends Feature {
     public static final TagKey<EntityType<?>> VILLAGERS_CAN_ATTACK = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("villagers_can_attack"));
-    @Config(description = "If false villagers will not attack back monsters")
+    @Config(description = "If true, villagers will attack back monsters")
     public static Boolean villagersFightBackEnemies = false;
     @Config(description = "Villagers will only attack players that have below this reputation (like Iron Golems by default). https://minecraft.wiki/w/Villager#Gossiping")
     public static Integer minReputationFightBack = -100;
