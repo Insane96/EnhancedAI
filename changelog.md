@@ -5,6 +5,8 @@
 
 ## Upcoming
 * Villagers no longer use target changes
+* Cats no longer use animal changes
+  * You weren't able to tame them due to always fleeing
 
 ## 2.7.0
 **Config options might have been renamed, thus reset. Backup your config file.**
