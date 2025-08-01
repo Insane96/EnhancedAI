@@ -22,15 +22,22 @@ public class GoalHelper {
                 .map(goalClass::cast);
     }
 
-    /**
-     * Wrapper for GoalSelector#removeIf stopping the goal before removal
-     */
-    public static boolean removeGoal(GoalSelector goalSelector, Class<? extends Goal> goalClass) {
-        for (WrappedGoal wrappedGoal : goalSelector.availableGoals) {
-            if (goalClass.isAssignableFrom(wrappedGoal.getGoal().getClass()))
-                wrappedGoal.stop();
-        }
-        return goalSelector.availableGoals.removeIf(wrappedGoal -> goalClass.isAssignableFrom(wrappedGoal.getGoal().getClass()));
+    public static <T extends Goal> Optional<T> removeGoal(GoalSelector goalSelector, Class<T> goalClass) {
+        Optional<WrappedGoal> wrappedGoalToRemove = findFirstMatchingGoal(goalSelector, goalClass);
+
+        wrappedGoalToRemove.ifPresent(wrappedGoal -> {
+            wrappedGoal.stop();
+            goalSelector.removeGoal(wrappedGoal.getGoal());
+        });
+
+        return wrappedGoalToRemove.map(wrapped -> goalClass.cast(wrapped.getGoal()));
+    }
+
+    private static <T extends Goal> Optional<WrappedGoal> findFirstMatchingGoal(GoalSelector goalSelector, Class<T> goalClass) {
+        return goalSelector.availableGoals
+                .stream()
+                .filter(wrappedGoal -> goalClass.isAssignableFrom(wrappedGoal.getGoal().getClass()))
+                .findFirst();
     }
 
     /**

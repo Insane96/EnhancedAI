@@ -3,12 +3,13 @@ package insane96mcp.enhancedai.modules.animal;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.setup.NBTUtils;
+import insane96mcp.enhancedai.utils.GoalHelper;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.TemptGoal;
@@ -22,13 +23,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 public class NotTemptedAnimals extends Feature {
     //TODO Some animals should attack the player with the food in the hand
     public static final TagKey<EntityType<?>> CAN_IGNORE_FOOD_TEMPTATION = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("can_ignore_food_temptation"));
-    public static final String NOT_TEMPTED = EnhancedAI.RESOURCE_PREFIX + "not_tempted";
+    public static final ResourceLocation NOT_TEMPTED = EnhancedAI.location("not_tempted");
 
     @Config(min = 0d, max = 1d, description = "Animals have this percentage chance to not be temped by food.")
     public static Double notTemptedChance = 0.5d;
 
-    public NotTemptedAnimals(Module module, boolean enabledByDefault, boolean canBeDisabled) {
-        super(module, enabledByDefault, canBeDisabled);
+    public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
+        super.init(module, enabledByDefault, canBeDisabled);
     }
 
     //Lowest priority so other mods can set persistent data
@@ -39,12 +40,9 @@ public class NotTemptedAnimals extends Feature {
                 || !(event.getEntity() instanceof Animal animal))
             return;
 
-        CompoundTag persistentData = animal.getPersistentData();
+        boolean notTempted = NBTUtils.getBooleanOrPutDefault(animal, NOT_TEMPTED, animal.getType().is(CAN_IGNORE_FOOD_TEMPTATION) && animal.getRandom().nextDouble() < notTemptedChance);
 
-        boolean notTempted = NBTUtils.getBooleanOrPutDefaultLegacy(persistentData, NOT_TEMPTED, animal.getType().is(CAN_IGNORE_FOOD_TEMPTATION) && animal.getRandom().nextDouble() < notTemptedChance);
-
-        if (notTempted) {
-            animal.goalSelector.getAvailableGoals().removeIf(wrappedGoal -> wrappedGoal.getGoal() instanceof TemptGoal);
-        }
+        if (notTempted)
+            GoalHelper.removeGoal(animal.goalSelector, TemptGoal.class);
     }
 }

@@ -6,7 +6,8 @@ You are able to change AI at runtime without having to reload the world
 * Added enhancedai command to set the AI parameters
   * `/enhancedai set <target> <data> <value>`  
     E.g. `/enhancedai set @e[type=creeper] enhancedai:creeper_swell/tnt_like true` will enable tnt like for all the creepers currently loaded  
-    A MobsPropertiesRandomness property will come to make use of the data parameter instead of NBT
+    A MobsPropertiesRandomness property will come to make use of the data parameter instead of NBT  
+    Due how the system works, the goals already present in the mob can't be changed with this system without a huge amount of work. E.g. For the "Animals not temped" feature they already have the Tempt AI, so it's impossible to add it back if it's removed.
 
 ## 2.7.1
 * Villagers no longer use target changes
@@ -34,7 +35,7 @@ You are able to change AI at runtime without having to reload the world
 
 ## 2.6.10
 * Drowned can now attack again in daytime if can't reach water
-    * Mojang says works as intended, but it's stupid they just stand still doing nothing, and probably die
+    * Mojang says it works as intended, but it's stupid they just stand still doing nothing and probably die
 * Drowned now have a much easier time getting out of water
     * They basically jump out of the water
 * Mobs can now break many more modded vehicles (Quark and Abnormals veichles)
