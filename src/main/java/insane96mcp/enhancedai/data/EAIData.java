@@ -14,33 +14,33 @@ public final class EAIData<T> {
     public static final List<EAIData<?>> DATA = new ArrayList<>();
 
     private final ResourceLocation id;
-    private final BiConsumer<Mob, T> consumer;
+    private final BiConsumer<Mob, T> onChange;
     private final Class<T> type;
 
-    private EAIData(ResourceLocation id, BiConsumer<Mob, T> consumer, Class<T> type) {
+    private EAIData(ResourceLocation id, BiConsumer<Mob, T> onChange, Class<T> type) {
         this.id = id;
-        this.consumer = consumer;
+        this.onChange = onChange;
         this.type = type;
     }
 
     public void apply(Mob mob, T value) {
         ModNBTData.put(mob, this.id, value);
-        consumer.accept(mob, value);
+        onChange.accept(mob, value);
     }
 
     public void applyIfAbsent(Mob mob, T value) {
         if (!ModNBTData.contains(mob, this.id))
             apply(mob, value);
         else
-            consumer.accept(mob, ModNBTData.get(mob, this.id, this.type));
+            onChange.accept(mob, ModNBTData.get(mob, this.id, this.type));
     }
 
     public ResourceLocation id() {
         return id;
     }
 
-    public BiConsumer<Mob, T> consumer() {
-        return consumer;
+    public BiConsumer<Mob, T> onChange() {
+        return onChange;
     }
 
     public Class<T> type() {
@@ -63,26 +63,26 @@ public final class EAIData<T> {
         return ofString(id, (mob, value) -> {});
     }
 
-    public static EAIData<Boolean> ofBool(ResourceLocation id, BiConsumer<Mob, Boolean> consumer) {
-        var data = new EAIData<>(id, consumer, Boolean.class);
+    public static EAIData<Boolean> ofBool(ResourceLocation id, BiConsumer<Mob, Boolean> onChange) {
+        var data = new EAIData<>(id, onChange, Boolean.class);
         DATA.add(data);
         return data;
     }
 
-    public static EAIData<Integer> ofInt(ResourceLocation id, BiConsumer<Mob, Integer> consumer) {
-        var data = new EAIData<>(id, consumer, Integer.class);
+    public static EAIData<Integer> ofInt(ResourceLocation id, BiConsumer<Mob, Integer> onChange) {
+        var data = new EAIData<>(id, onChange, Integer.class);
         DATA.add(data);
         return data;
     }
 
-    public static EAIData<Double> ofDouble(ResourceLocation id, BiConsumer<Mob, Double> consumer) {
-        var data = new EAIData<>(id, consumer, Double.class);
+    public static EAIData<Double> ofDouble(ResourceLocation id, BiConsumer<Mob, Double> onChange) {
+        var data = new EAIData<>(id, onChange, Double.class);
         DATA.add(data);
         return data;
     }
 
-    public static EAIData<String> ofString(ResourceLocation id, BiConsumer<Mob, String> consumer) {
-        var data = new EAIData<>(id, consumer, String.class);
+    public static EAIData<String> ofString(ResourceLocation id, BiConsumer<Mob, String> onChange) {
+        var data = new EAIData<>(id, onChange, String.class);
         DATA.add(data);
         return data;
     }
@@ -97,19 +97,19 @@ public final class EAIData<T> {
         if (obj == null || obj.getClass() != this.getClass()) return false;
         var that = (EAIData) obj;
         return Objects.equals(this.id, that.id) &&
-                Objects.equals(this.consumer, that.consumer);
+                Objects.equals(this.onChange, that.onChange);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, consumer);
+        return Objects.hash(id, onChange);
     }
 
     @Override
     public String toString() {
         return "EAIData[" +
                 "id=" + id + ", " +
-                "consumer=" + consumer + ']';
+                "consumer=" + onChange + ']';
     }
 
     public T parse(String input) {

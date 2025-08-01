@@ -12,6 +12,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -40,7 +41,7 @@ public class WardenInteractions extends Feature {
 				|| entity.getType().is(IGNORE_WARDEN_INTERACTION))
 			return;
 		if (target) {
-			entity.targetSelector.addGoal(2, new EANearestAttackableTarget<>(entity, Warden.class, false, false));
+			entity.targetSelector.addGoal(2, new EANearestAttackableTarget<>(entity, Warden.class, false, false, TargetingConditions.forCombat()));
 		}
 		else if (flee) {
 			EAAvoidEntityGoalLegacy<Warden> avoidEntityGoal = new EAAvoidEntityGoalLegacy<>(entity, Warden.class, (float) 12, (float) 7, runSpeedNear, runSpeedFar);

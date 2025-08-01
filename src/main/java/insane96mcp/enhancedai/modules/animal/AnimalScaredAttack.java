@@ -25,6 +25,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.PanicGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
@@ -75,8 +76,8 @@ public class AnimalScaredAttack extends Feature {
 
     private static final double BASE_ATTACK_DAMAGE = 3d;
 
-    public AnimalScaredAttack(Module module, boolean enabledByDefault, boolean canBeDisabled) {
-        super(module, enabledByDefault, canBeDisabled);
+    public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
+        super.init(module, enabledByDefault, canBeDisabled);
         NEUTRAL = EAIData.ofBool(this.createDataKey("neutral"), (mob, neutral) -> {
             if (!(mob instanceof PathfinderMob pathfinderMob))
                 return;
@@ -175,7 +176,7 @@ public class AnimalScaredAttack extends Feature {
     public static class AnimalNearestAttackableTargetGoal<T extends LivingEntity> extends EANearestAttackableTarget<T> {
 
         public AnimalNearestAttackableTargetGoal(Mob goalOwnerIn, Class<T> targetClassIn, boolean mustSee, boolean mustReach) {
-            super(goalOwnerIn, targetClassIn, mustSee, mustReach);
+            super(goalOwnerIn, targetClassIn, mustSee, mustReach, TargetingConditions.forCombat());
         }
 
         @Override
