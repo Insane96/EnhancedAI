@@ -93,6 +93,7 @@ public class AnimalScaredAttack extends Feature {
                 MCUtils.applyModifier(mob, EAAttributes.XRAY_FOLLOW_RANGE.get(), UUID.fromString("62e016b0-90d0-4e72-9d40-fffac566df20"), "Reduced follow range for hostile Animals", -0.75d, AttributeModifier.Operation.MULTIPLY_BASE, true);
                 mob.targetSelector.addGoal(2, new AnimalNearestAttackableTargetGoal<>(mob, Player.class, false, false));
                 PLAYER_SCARED.apply(mob, false);
+                ATTACK_MOVEMENT_SPEED_MODIFIER.changed(mob);
             }
         });
         PLAYER_SCARED = EAIData.ofBool(this.createDataKey("player_scared"), (mob, scared) -> {

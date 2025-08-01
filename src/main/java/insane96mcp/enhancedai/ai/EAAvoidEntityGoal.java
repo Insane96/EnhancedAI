@@ -20,7 +20,7 @@ public class EAAvoidEntityGoal<T extends LivingEntity> extends Goal {
 	private final EAIData<Double> farSpeed;
 	private final EAIData<Double> nearSpeed;
 	protected T avoidTarget;
-	protected final EAIData<Integer> avoidDistance;
+	protected final EAIData<Integer> avoidDistanceFar;
 	protected final EAIData<Integer> avoidDistanceNear;
 	protected Path path;
 	/** Class of entity this behavior seeks to avoid */
@@ -29,35 +29,35 @@ public class EAAvoidEntityGoal<T extends LivingEntity> extends Goal {
 	protected final Predicate<LivingEntity> predicateOnAvoidEntity;
 	private final TargetingConditions builtTargetSelector;
 
-	public EAAvoidEntityGoal(PathfinderMob entityIn, Class<T> classToAvoidIn, EAIData<Integer> avoidDistance, EAIData<Integer> avoidDistanceNear, EAIData<Double> farSpeed, EAIData<Double> nearSpeed) {
-		this(entityIn, classToAvoidIn, (livingEntity) -> true, avoidDistance, avoidDistanceNear, farSpeed, nearSpeed, EntitySelector.NO_CREATIVE_OR_SPECTATOR::test);
+	public EAAvoidEntityGoal(PathfinderMob entityIn, Class<T> classToAvoidIn, EAIData<Integer> avoidDistanceFar, EAIData<Integer> avoidDistanceNear, EAIData<Double> farSpeed, EAIData<Double> nearSpeed) {
+		this(entityIn, classToAvoidIn, (livingEntity) -> true, avoidDistanceFar, avoidDistanceNear, farSpeed, nearSpeed, EntitySelector.NO_CREATIVE_OR_SPECTATOR::test);
 	}
 
-	public EAAvoidEntityGoal(PathfinderMob entityIn, Class<T> classToAvoidIn, IdTagMatcher idTagMatcher, EAIData<Integer> avoidDistance, EAIData<Integer> avoidDistanceNear, EAIData<Double> farSpeed, EAIData<Double> nearSpeed) {
-		this(entityIn, classToAvoidIn, idTagMatcher, (livingEntity) -> true, avoidDistance, avoidDistanceNear, farSpeed, nearSpeed, EntitySelector.NO_CREATIVE_OR_SPECTATOR::test);
+	public EAAvoidEntityGoal(PathfinderMob entityIn, Class<T> classToAvoidIn, IdTagMatcher idTagMatcher, EAIData<Integer> avoidDistanceFar, EAIData<Integer> avoidDistanceNear, EAIData<Double> farSpeed, EAIData<Double> nearSpeed) {
+		this(entityIn, classToAvoidIn, idTagMatcher, (livingEntity) -> true, avoidDistanceFar, avoidDistanceNear, nearSpeed, farSpeed, EntitySelector.NO_CREATIVE_OR_SPECTATOR::test);
 	}
 
-	public EAAvoidEntityGoal(PathfinderMob entityIn, Class<T> avoidClass, Predicate<LivingEntity> targetPredicate, EAIData<Integer> avoidDistance, EAIData<Integer> avoidDistanceNear, EAIData<Double> farSpeedIn, EAIData<Double> nearSpeedIn, Predicate<LivingEntity> entityPredicate) {
-		this(entityIn, avoidClass, null, targetPredicate, avoidDistance, avoidDistanceNear, nearSpeedIn, farSpeedIn, entityPredicate);
+	public EAAvoidEntityGoal(PathfinderMob entityIn, Class<T> avoidClass, Predicate<LivingEntity> targetPredicate, EAIData<Integer> avoidDistanceFar, EAIData<Integer> avoidDistanceNear, EAIData<Double> farSpeedIn, EAIData<Double> nearSpeedIn, Predicate<LivingEntity> entityPredicate) {
+		this(entityIn, avoidClass, null, targetPredicate, avoidDistanceFar, avoidDistanceNear, farSpeedIn, nearSpeedIn, entityPredicate);
 	}
 
-	public EAAvoidEntityGoal(PathfinderMob entityIn, Class<T> avoidClass, @Nullable IdTagMatcher idTagMatcher, Predicate<LivingEntity> targetPredicate, EAIData<Integer> avoidDistance, EAIData<Integer> avoidDistanceNear, EAIData<Double> nearSpeedIn, EAIData<Double> farSpeedIn, Predicate<LivingEntity> predicate) {
+	public EAAvoidEntityGoal(PathfinderMob entityIn, Class<T> avoidClass, @Nullable IdTagMatcher idTagMatcher, Predicate<LivingEntity> targetPredicate, EAIData<Integer> avoidDistanceFar, EAIData<Integer> avoidDistanceNear, EAIData<Double> farSpeedIn, EAIData<Double> nearSpeedIn, Predicate<LivingEntity> predicate) {
 		this.goalOwner = entityIn;
 		this.classToAvoid = avoidClass;
 		this.avoidTargetSelector = targetPredicate;
-		this.avoidDistance = avoidDistance;
+		this.avoidDistanceFar = avoidDistanceFar;
 		this.avoidDistanceNear = avoidDistanceNear;
-		this.nearSpeed = nearSpeedIn;
 		this.farSpeed = farSpeedIn;
+		this.nearSpeed = nearSpeedIn;
 		this.predicateOnAvoidEntity = predicate;
 		predicate = predicate.and(targetPredicate);
 		if (idTagMatcher != null)
 			predicate = predicate.and(idTagMatcher::matchesEntity);
-		this.builtTargetSelector = TargetingConditions.forCombat().range(this.avoidDistance.get(this.goalOwner)).selector(predicate);
+		this.builtTargetSelector = TargetingConditions.forCombat().range(this.avoidDistanceFar.get(this.goalOwner)).selector(predicate);
 	}
 
 	public boolean canUse() {
-		this.avoidTarget = this.goalOwner.level().getNearestEntity(this.classToAvoid, this.builtTargetSelector, this.goalOwner, this.goalOwner.getX(), this.goalOwner.getY(), this.goalOwner.getZ(), this.goalOwner.getBoundingBox().inflate(this.avoidDistance.get(this.goalOwner)));
+		this.avoidTarget = this.goalOwner.level().getNearestEntity(this.classToAvoid, this.builtTargetSelector, this.goalOwner, this.goalOwner.getX(), this.goalOwner.getY(), this.goalOwner.getZ(), this.goalOwner.getBoundingBox().inflate(this.avoidDistanceFar.get(this.goalOwner)));
 		if (this.avoidTarget == null) {
 			return false;
 		} else {

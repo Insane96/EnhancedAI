@@ -28,6 +28,15 @@ public final class EAIData<T> {
         onChange.accept(mob, value);
     }
 
+    /**
+     * If this data is present, onChange is run
+     */
+    public void changed(Mob mob) {
+        if (!ModNBTData.contains(mob, this.id))
+            return;
+        this.onChange.accept(mob, this.get(mob));
+    }
+
     public void applyIfAbsent(Mob mob, T value) {
         if (!ModNBTData.contains(mob, this.id))
             apply(mob, value);

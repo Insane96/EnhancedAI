@@ -1,7 +1,12 @@
 # Changelog
 
 ## Upcoming
-* You will be able to change AI at runtime without having to reload the world
+You are able to change AI at runtime without having to reload the world
+
+* Added enhancedai command to set the AI parameters
+  * `/enhancedai set <target> <data> <value>`  
+    E.g. `/enhancedai set @e[type=creeper] enhancedai:creeper_swell/tnt_like true` will enable tnt like for all the creepers currently loaded  
+    A MobsPropertiesRandomness property will come to make use of the data parameter instead of NBT
 
 ## 2.7.1
 * Villagers no longer use target changes
