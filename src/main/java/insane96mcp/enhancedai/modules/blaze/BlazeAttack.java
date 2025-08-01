@@ -43,8 +43,8 @@ public class BlazeAttack extends Feature {
     @Config(min = -1, max = 32, description = "The higher the more spread up shots will be. Setting both to -1 will use the vanilla behaviour (farther = more inaccuracy)")
     public static MinMax inaccuracy = new MinMax(2, 14);
 
-    public BlazeAttack(Module module, boolean enabledByDefault, boolean canBeDisabled) {
-        super(module, enabledByDefault, canBeDisabled);
+    public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
+        super.init(module, enabledByDefault, canBeDisabled);
     }
 
     //Lowest priority so other mods can set persistent data

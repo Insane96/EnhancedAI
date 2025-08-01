@@ -109,8 +109,8 @@ public class CreeperSwell extends Feature {
 	@Config(description = "If Insane's Survival Overhaul is installed and Explosion Overhaul feature is enabled, Angry creeper will deal more knockback and break more blocks, breaching creepers will break more blocks")
 	public static Boolean insaneSurvivalOverhaulIntegration = true;
 
-	public CreeperSwell(Module module, boolean enabledByDefault, boolean canBeDisabled) {
-		super(module, enabledByDefault, canBeDisabled);
+	public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
+		super.init(module, enabledByDefault, canBeDisabled);
 		WALKING_FUSE = EAIData.ofBool(this.createDataKey("walking_fuse"), (mob, walkingFuse) -> {
 			GoalHelper.getGoal(mob.goalSelector, EACreeperSwellGoal.class).ifPresent(eaCreeperSwellGoal -> eaCreeperSwellGoal.setWalkingFuse(walkingFuse));
 		});
