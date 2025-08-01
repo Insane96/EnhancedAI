@@ -25,10 +25,6 @@ public class EASilverfishMergeWithStoneGoal extends RandomStrollGoal {
 		this.initialCooldown = reducedTickDelay(30);
 	}
 
-	/**
-	 * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
-	 * method as well.
-	 */
 	public boolean canUse() {
 		if (this.mob.getTarget() != null
 				|| !this.mob.getNavigation().isDone())
@@ -37,7 +33,7 @@ public class EASilverfishMergeWithStoneGoal extends RandomStrollGoal {
 		if (--this.initialCooldown > 0)
 			return false;
 		RandomSource randomsource = this.mob.getRandom();
-		if (net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.mob.level(), this.mob) && randomsource.nextInt(reducedTickDelay(SilverfishFeature.chanceToMergeWithStone)) == 0) {
+		if (net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.mob.level(), this.mob) && randomsource.nextInt(reducedTickDelay(SilverfishFeature.CHANCE_TO_MERGE_WITH_STONE.get(this.mob))) == 0) {
 			this.selectedDirection = Direction.getRandom(randomsource);
 			BlockPos blockpos = BlockPos.containing(this.mob.getX(), this.mob.getY() + 0.5D, this.mob.getZ()).relative(this.selectedDirection);
 			BlockState blockstate = this.mob.level().getBlockState(blockpos);
@@ -51,22 +47,17 @@ public class EASilverfishMergeWithStoneGoal extends RandomStrollGoal {
 		return super.canUse();
 	}
 
-	/**
-	 * Returns whether an in-progress EntityAIBase should continue executing
-	 */
 	public boolean canContinueToUse() {
 		return !this.doMerge && super.canContinueToUse();
 	}
 
-	/**
-	 * Execute a one shot task or start executing a continuous task
-	 */
 	public void start() {
 		if (!this.doMerge) {
 			super.start();
 		} else {
 			LevelAccessor levelaccessor = this.mob.level();
-			BlockPos blockpos = BlockPos.containing(this.mob.getX(), this.mob.getY() + 0.5D, this.mob.getZ()).relative(this.selectedDirection);
+            //noinspection DataFlowIssue - Can't be null as will only start if canUse
+            BlockPos blockpos = BlockPos.containing(this.mob.getX(), this.mob.getY() + 0.5D, this.mob.getZ()).relative(this.selectedDirection);
 			BlockState blockstate = levelaccessor.getBlockState(blockpos);
 			if (InfestedBlock.isCompatibleHostBlock(blockstate)) {
 				levelaccessor.setBlock(blockpos, InfestedBlock.infestedStateByHost(blockstate), 3);

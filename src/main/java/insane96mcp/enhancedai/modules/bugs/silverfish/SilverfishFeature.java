@@ -1,5 +1,6 @@
 package insane96mcp.enhancedai.modules.bugs.silverfish;
 
+import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
@@ -23,8 +24,19 @@ public class SilverfishFeature extends Feature {
 	@Config(min = 1, max = 32, description = "XZ range on which a hurt silverfish checks for infested stone to break. Vanilla is 10.")
 	public static Integer horizontalWakeUpRange = 10;
 
-	public SilverfishFeature(Module module, boolean enabledByDefault, boolean canBeDisabled) {
-		super(module, enabledByDefault, canBeDisabled);
+	public static EAIData<Integer> CHANCE_TO_MERGE_WITH_STONE;
+	public static EAIData<Integer> TICKS_AFTER_HURT_TO_WAKE_UP_FRIENDS;
+	public static EAIData<Integer> CHANCE_TO_STOP_WAKING_UP_FRIENDS;
+	public static EAIData<Integer> VERTICAL_WAKE_UP_RANGE;
+	public static EAIData<Integer> HORIZONTAL_WAKE_UP_RANGE;
+
+	public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
+		super.init(module, enabledByDefault, canBeDisabled);
+		CHANCE_TO_MERGE_WITH_STONE = EAIData.ofInt(this.createDataKey("chance_to_merge_with_stone"));
+		TICKS_AFTER_HURT_TO_WAKE_UP_FRIENDS = EAIData.ofInt(this.createDataKey("ticks_after_hurt_to_wake_up_friends"));
+		CHANCE_TO_STOP_WAKING_UP_FRIENDS = EAIData.ofInt(this.createDataKey("chance_to_stop_waking_up_friends"));
+		VERTICAL_WAKE_UP_RANGE = EAIData.ofInt(this.createDataKey("vertical_wake_up_range"));
+		HORIZONTAL_WAKE_UP_RANGE = EAIData.ofInt(this.createDataKey("horizontal_wake_up_range"));
 	}
 
 	@SubscribeEvent
@@ -39,5 +51,11 @@ public class SilverfishFeature extends Feature {
 		silverfish.goalSelector.removeAllGoals(goal -> goal instanceof Silverfish.SilverfishWakeUpFriendsGoal);
 		silverfish.friendsGoal = new EASilverfishWakeUpFriendsGoal(silverfish);
 		silverfish.goalSelector.addGoal(3, silverfish.friendsGoal);
+
+		CHANCE_TO_MERGE_WITH_STONE.applyIfAbsent(silverfish, chanceToMergeWithStone);
+		TICKS_AFTER_HURT_TO_WAKE_UP_FRIENDS.applyIfAbsent(silverfish, ticksAfterHurtToWakeUpFriends);
+		CHANCE_TO_STOP_WAKING_UP_FRIENDS.applyIfAbsent(silverfish, chanceToStopWakingUpFriends);
+		VERTICAL_WAKE_UP_RANGE.applyIfAbsent(silverfish, verticalWakeUpRange);
+		HORIZONTAL_WAKE_UP_RANGE.applyIfAbsent(silverfish, horizontalWakeUpRange);
 	}
 }

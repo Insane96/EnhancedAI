@@ -20,7 +20,7 @@ public class EASilverfishWakeUpFriendsGoal extends Silverfish.SilverfishWakeUpFr
 	@Override
 	public void notifyHurt() {
 		if (this.lookForFriends == 0)
-			this.lookForFriends = this.adjustedTickDelay(SilverfishFeature.ticksAfterHurtToWakeUpFriends);
+			this.lookForFriends = this.adjustedTickDelay(SilverfishFeature.TICKS_AFTER_HURT_TO_WAKE_UP_FRIENDS.get(this.silverfish));
 	}
 
 	@Override
@@ -35,9 +35,11 @@ public class EASilverfishWakeUpFriendsGoal extends Silverfish.SilverfishWakeUpFr
 		Level level = this.silverfish.level();
 		RandomSource rng = this.silverfish.getRandom();
 		BlockPos blockPos = this.silverfish.blockPosition();
-		for (int i = 0; i <= SilverfishFeature.verticalWakeUpRange && i >= -SilverfishFeature.verticalWakeUpRange; i = (i <= 0 ? 1 : 0) - i) {
-			for (int j = 0; j <= SilverfishFeature.horizontalWakeUpRange && j >= -SilverfishFeature.horizontalWakeUpRange; j = (j <= 0 ? 1 : 0) - j) {
-				for (int k = 0; k <= SilverfishFeature.horizontalWakeUpRange && k >= -SilverfishFeature.horizontalWakeUpRange; k = (k <= 0 ? 1 : 0) - k) {
+		int verticalRange = SilverfishFeature.VERTICAL_WAKE_UP_RANGE.get(this.silverfish);
+		int horizontalRange = SilverfishFeature.HORIZONTAL_WAKE_UP_RANGE.get(this.silverfish);
+		for (int i = 0; i <= verticalRange && i >= -verticalRange; i = (i <= 0 ? 1 : 0) - i) {
+			for (int j = 0; j <= horizontalRange && j >= -horizontalRange; j = (j <= 0 ? 1 : 0) - j) {
+				for (int k = 0; k <= horizontalRange && k >= -horizontalRange; k = (k <= 0 ? 1 : 0) - k) {
 					BlockPos offsetBlockPos = blockPos.offset(j, i, k);
 					BlockState offsetBlockState = level.getBlockState(offsetBlockPos);
 					Block offsetBlock = offsetBlockState.getBlock();
@@ -47,7 +49,7 @@ public class EASilverfishWakeUpFriendsGoal extends Silverfish.SilverfishWakeUpFr
 						level.destroyBlock(offsetBlockPos, true, this.silverfish);
 					else
 						level.setBlock(offsetBlockPos, ((InfestedBlock) offsetBlock).hostStateByInfested(level.getBlockState(offsetBlockPos)), 3);
-					if (rng.nextInt(SilverfishFeature.chanceToStopWakingUpFriends) == 0)
+					if (rng.nextInt(SilverfishFeature.CHANCE_TO_STOP_WAKING_UP_FRIENDS.get(this.silverfish)) == 0)
 						return;
 				}
 			}
