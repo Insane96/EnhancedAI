@@ -4,7 +4,6 @@ import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.ai.EAAvoidEntityGoal;
 import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.mixin.accessors.MeleeAttackGoalAccessor;
-import insane96mcp.enhancedai.mixin.accessors.PanicGoalAccessor;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.modules.mobs.targeting.EANearestAttackableTarget;
 import insane96mcp.enhancedai.setup.EAAttributes;
@@ -14,7 +13,6 @@ import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.util.MCUtils;
-import insane96mcp.insanelib.util.ModNBTData;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -23,7 +21,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.world.entity.ai.goal.PanicGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.Animal;
@@ -50,8 +47,6 @@ public class AnimalScaredAttack extends Feature {
     public static EAIData<Integer> FLEE_DISTANCE_NEAR;
     public static EAIData<Double> FLEE_SPEED_FAR;
     public static EAIData<Double> FLEE_SPEED_NEAR;
-
-    public static ResourceLocation PANIC_SPEED_MODIFIER;
 
     @Config(min = 0d, max = 1d, description = "Animals have this percentage chance to be able to fight back instead of fleeing. Animals have a slightly bigger range to attack. Attack damage can't be changed via config due to limitations so use mods like Mobs Properties Randomness to change the damage. Base damage is 3")
     public static Double neutralChance = 0.35d;
@@ -83,12 +78,9 @@ public class AnimalScaredAttack extends Feature {
                 return;
             GoalHelper.removeGoal(mob.targetSelector, HurtByTargetGoal.class);
             GoalHelper.removeGoal(mob.goalSelector, AnimalMeleeAttackGoal.class);
-            if (!GoalHelper.hasGoal(mob.goalSelector, PanicGoal.class))
-                mob.goalSelector.addGoal(0, new PanicGoal(pathfinderMob, ModNBTData.get(mob, PANIC_SPEED_MODIFIER, Double.class)));
             if (neutral) {
                 mob.targetSelector.addGoal(1, (new HurtByTargetGoal(pathfinderMob)).setAlertOthers());
                 mob.goalSelector.addGoal(1, new AnimalMeleeAttackGoal(pathfinderMob, ATTACK_MOVEMENT_SPEED_MODIFIER.get(mob), true));
-                GoalHelper.removeGoal(mob.goalSelector, PanicGoal.class);
             }
         });
         HOSTILE = EAIData.ofBool(this.createDataKey("hostile"), (mob, hostile) -> {
@@ -117,7 +109,6 @@ public class AnimalScaredAttack extends Feature {
         FLEE_DISTANCE_NEAR = EAIData.ofInt(this.createDataKey("flee_distance_near"));
         FLEE_SPEED_FAR = EAIData.ofDouble(this.createDataKey("flee_speed_far"));
         FLEE_SPEED_NEAR = EAIData.ofDouble(this.createDataKey("flee_speed_near"));
-        PANIC_SPEED_MODIFIER = this.createDataKey("panic_speed_mod");
     }
 
     public static void attribute(EntityAttributeModificationEvent event) {
@@ -136,9 +127,6 @@ public class AnimalScaredAttack extends Feature {
                 || event.getEntity() instanceof Enemy
                 || !(event.getEntity() instanceof Animal animal))
             return;
-
-        GoalHelper.getGoal(animal.goalSelector, PanicGoal.class)
-                .ifPresent(goal -> ModNBTData.put(animal, PANIC_SPEED_MODIFIER, ((PanicGoalAccessor)goal).getSpeedModifier()));
 
         if (knockback > 0d) {
             double baseSize = 1.053d; // Sheep square meters size
