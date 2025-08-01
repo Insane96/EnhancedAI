@@ -23,13 +23,14 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 public class NotTemptedAnimals extends Feature {
     //TODO Some animals should attack the player with the food in the hand
     public static final TagKey<EntityType<?>> CAN_IGNORE_FOOD_TEMPTATION = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("can_ignore_food_temptation"));
-    public static final ResourceLocation NOT_TEMPTED = EnhancedAI.location("not_tempted");
+    public static ResourceLocation NOT_TEMPTED;
 
     @Config(min = 0d, max = 1d, description = "Animals have this percentage chance to not be temped by food.")
     public static Double notTemptedChance = 0.5d;
 
     public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
         super.init(module, enabledByDefault, canBeDisabled);
+        NOT_TEMPTED = this.createDataKey("not_tempted");
     }
 
     //Lowest priority so other mods can set persistent data
