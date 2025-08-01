@@ -1,17 +1,18 @@
 package insane96mcp.enhancedai.modules.blaze;
 
 import insane96mcp.enhancedai.EnhancedAI;
+import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.enhancedai.setup.NBTUtils;
+import insane96mcp.enhancedai.utils.GoalHelper;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.MinMax;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Blaze;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
@@ -19,17 +20,12 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 @LoadFeature(module = Modules.Ids.BLAZE, description = "Make blazes fire faster/more fireballs. Only mobs in enhancedai:change_blaze_attack entity type tag are affected by this feature.")
 public class BlazeAttack extends Feature {
     public static final TagKey<EntityType<?>> CHANGE_BLAZE_ATTACK = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("change_blaze_attack"));
 
-    public static final String TIME_BETWEEN_FIREBALLS = EnhancedAI.RESOURCE_PREFIX + "time_between_fireballs";
-    public static final String FIREBALLS_SHOT = EnhancedAI.RESOURCE_PREFIX + "fireballs_shot";
-    public static final String RECHARGE_TIME = EnhancedAI.RESOURCE_PREFIX + "recharge_time";
-    public static final String CHARGE_TIME = EnhancedAI.RESOURCE_PREFIX + "charge_time";
-    public static final String FIREBALLS_PER_SHOT = EnhancedAI.RESOURCE_PREFIX + "fireballs_per_shot";
-    public static final String INACCURACY = EnhancedAI.RESOURCE_PREFIX + "inaccuracy";
     @Config(min = 1, max = 300, description = "How many ticks pass between shooting fireballs. Vanilla is 6")
     public static MinMax timeBetweenFireballs = new MinMax(4, 10);
     @Config(min = 1, max = 64, description = "How many fireballs blazes shoots. Vanilla is 3")
@@ -41,10 +37,27 @@ public class BlazeAttack extends Feature {
     @Config(min = 1, max = 8, description = "How many fireballs are shot per shot. Vanilla is 1")
     public static MinMax fireballsPerShot = new MinMax(1, 2);
     @Config(min = -1, max = 32, description = "The higher the more spread up shots will be. Setting both to -1 will use the vanilla behaviour (farther = more inaccuracy)")
-    public static MinMax inaccuracy = new MinMax(2, 14);
+    public static MinMax inaccuracy = new MinMax(1, 3);
+
+    public static EAIData<Integer> TIME_BETWEEN_FIREBALLS;
+    public static EAIData<Integer> FIREBALLS_SHOT;
+    public static EAIData<Integer> RECHARGE_TIME;
+    public static EAIData<Integer> CHARGE_TIME;
+    public static EAIData<Integer> FIREBALLS_PER_SHOT;
+    public static EAIData<Integer> INACCURACY;
 
     public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
         super.init(module, enabledByDefault, canBeDisabled);
+        TIME_BETWEEN_FIREBALLS = EAIData.ofInt(this.createDataKey("time_between_fireballs"));
+        FIREBALLS_SHOT = EAIData.ofInt(this.createDataKey("fireballs_shot"));
+        RECHARGE_TIME = EAIData.ofInt(this.createDataKey("recharge_time"));
+        CHARGE_TIME = EAIData.ofInt(this.createDataKey("charge_time"));
+        FIREBALLS_PER_SHOT = EAIData.ofInt(this.createDataKey("fireballs_per_shot"));
+        INACCURACY = EAIData.ofInt(this.createDataKey("inaccuracy"));
+    }
+
+    private static Optional<EABlazeAttackGoal> getGoal(Mob mob) {
+        return GoalHelper.getGoal(mob.goalSelector, EABlazeAttackGoal.class);
     }
 
     //Lowest priority so other mods can set persistent data
@@ -55,15 +68,6 @@ public class BlazeAttack extends Feature {
                 || !blaze.getType().is(CHANGE_BLAZE_ATTACK))
             return;
 
-        CompoundTag persistentData = blaze.getPersistentData();
-
-        int timeBetweenFireballs1 = NBTUtils.getIntOrPutDefaultLegacy(persistentData, TIME_BETWEEN_FIREBALLS, timeBetweenFireballs.getIntRandBetween(blaze.getRandom()));
-        int fireballsShot1 = NBTUtils.getIntOrPutDefaultLegacy(persistentData, FIREBALLS_SHOT, fireballsShot.getIntRandBetween(blaze.getRandom()));
-        int rechargeTime1 = NBTUtils.getIntOrPutDefaultLegacy(persistentData, RECHARGE_TIME, rechargeTime.getIntRandBetween(blaze.getRandom()));
-        int chargeTime1 = NBTUtils.getIntOrPutDefaultLegacy(persistentData, CHARGE_TIME, chargeTime.getIntRandBetween(blaze.getRandom()));
-        int fireballsPerShot1 = NBTUtils.getIntOrPutDefaultLegacy(persistentData, FIREBALLS_PER_SHOT, fireballsPerShot.getIntRandBetween(blaze.getRandom()));
-        int inaccuracy1 = NBTUtils.getIntOrPutDefaultLegacy(persistentData, INACCURACY, inaccuracy.getIntRandBetween(blaze.getRandom()));
-
         ArrayList<Goal> goalsToRemove = new ArrayList<>();
         blaze.goalSelector.availableGoals.forEach(prioritizedGoal -> {
             if (prioritizedGoal.getGoal() instanceof Blaze.BlazeAttackGoal)
@@ -72,12 +76,12 @@ public class BlazeAttack extends Feature {
 
         goalsToRemove.forEach(blaze.goalSelector::removeGoal);
 
-        blaze.goalSelector.addGoal(4, new EABlazeAttackGoal(blaze)
-                .setTimeBetweenFireballs(timeBetweenFireballs1)
-                .setFireballShot(fireballsShot1)
-                .setRechargeTime(rechargeTime1)
-                .setChargeTime(chargeTime1)
-                .setFireballsPerShot(fireballsPerShot1)
-                .setInaccuracy(inaccuracy1));
+        blaze.goalSelector.addGoal(4, new EABlazeAttackGoal(blaze));
+        TIME_BETWEEN_FIREBALLS.applyIfAbsent(blaze, timeBetweenFireballs.getIntRandBetween(blaze.getRandom()));
+        FIREBALLS_SHOT.applyIfAbsent(blaze, fireballsShot.getIntRandBetween(blaze.getRandom()));
+        RECHARGE_TIME.applyIfAbsent(blaze, rechargeTime.getIntRandBetween(blaze.getRandom()));
+        CHARGE_TIME.applyIfAbsent(blaze, chargeTime.getIntRandBetween(blaze.getRandom()));
+        FIREBALLS_PER_SHOT.applyIfAbsent(blaze, fireballsPerShot.getIntRandBetween(blaze.getRandom()));
+        INACCURACY.applyIfAbsent(blaze, inaccuracy.getIntRandBetween(blaze.getRandom()));
     }
 }

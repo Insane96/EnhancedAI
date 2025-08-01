@@ -14,46 +14,9 @@ public class EABlazeAttackGoal extends Goal {
     private int attackTime;
     private int lastSeen;
 
-    private int fireballShot = 3;
-    private int timeBetweenFireballs = 6;
-    private int rechargeTime = 100;
-    private int chargeTime = 60;
-    private int fireballsPerShot = 1;
-    private int inaccuracy = -1;
-
     public EABlazeAttackGoal(Blaze blaze) {
         this.blaze = blaze;
         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
-    }
-
-    public EABlazeAttackGoal setFireballShot(int fireballShot) {
-        this.fireballShot = fireballShot;
-        return this;
-    }
-
-    public EABlazeAttackGoal setTimeBetweenFireballs(int timeBetweenFireballs) {
-        this.timeBetweenFireballs = timeBetweenFireballs;
-        return this;
-    }
-
-    public EABlazeAttackGoal setRechargeTime(int rechargeTime) {
-        this.rechargeTime = rechargeTime;
-        return this;
-    }
-
-    public EABlazeAttackGoal setChargeTime(int chargeTime) {
-        this.chargeTime = chargeTime;
-        return this;
-    }
-
-    public EABlazeAttackGoal setFireballsPerShot(int fireballsPerShot) {
-        this.fireballsPerShot = fireballsPerShot;
-        return this;
-    }
-
-    public EABlazeAttackGoal setInaccuracy(int inaccuracy) {
-        this.inaccuracy = inaccuracy;
-        return this;
     }
 
     public boolean canUse() {
@@ -108,29 +71,26 @@ public class EABlazeAttackGoal extends Goal {
             if (this.attackTime <= 0) {
                 ++this.attackStep;
                 if (this.attackStep == 1) {
-                    this.attackTime = this.chargeTime;
+                    this.attackTime = BlazeAttack.CHARGE_TIME.get(this.blaze);
                     this.blaze.setCharged(true);
                 }
-                else if (this.attackStep <= this.fireballShot + 1) {
-                    this.attackTime = this.timeBetweenFireballs;
+                else if (this.attackStep <= BlazeAttack.FIREBALLS_SHOT.get(this.blaze) + 1) {
+                    this.attackTime = BlazeAttack.TIME_BETWEEN_FIREBALLS.get(this.blaze);
                 }
                 else {
-                    this.attackTime = this.rechargeTime;
+                    this.attackTime = BlazeAttack.RECHARGE_TIME.get(this.blaze);
                     this.attackStep = 0;
                     this.blaze.setCharged(false);
                 }
 
                 if (this.attackStep > 1) {
-                    double inaccuracy;
-                    if (this.inaccuracy == -1)
+                    double inaccuracy = BlazeAttack.INACCURACY.get(this.blaze);
+                    if (inaccuracy == -1)
                         inaccuracy = Math.sqrt(Math.sqrt(distanceSqrToTarget)) * 0.5D;
-                    else
-                        inaccuracy = 0.3d * this.inaccuracy;
-                    if (!this.blaze.isSilent()) {
+                    if (!this.blaze.isSilent())
                         this.blaze.level().levelEvent(null, 1018, this.blaze.blockPosition(), 0);
-                    }
 
-                    for (int i = 0; i < this.fireballsPerShot; i++) {
+                    for (int i = 0; i < BlazeAttack.FIREBALLS_PER_SHOT.get(this.blaze); i++) {
                         SmallFireball smallfireball = new SmallFireball(this.blaze.level(), this.blaze, xDir + this.blaze.getRandom().nextGaussian() * inaccuracy, yDir, zDir + this.blaze.getRandom().nextGaussian() * inaccuracy);
                         smallfireball.setPos(smallfireball.getX(), this.blaze.getY(0.5D) + 0.5D, smallfireball.getZ());
                         this.blaze.level().addFreshEntity(smallfireball);
