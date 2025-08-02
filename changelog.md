@@ -5,7 +5,7 @@ You are able to change AI at runtime without having to reload the world
 
 * Added enhancedai command to set the AI parameters
   * `/enhancedai set <target> <data> <value>`  
-    E.g. `/enhancedai set @e[type=creeper] enhancedai:creeper_swell/tnt_like true` will enable tnt like for all the creepers currently loaded  
+    E.g. `/enhancedai set @e[type=creeper] enhancedai:creeper_swell/tnt_like true` will enable tnt like for all the creepers currently loaded. You can also get the value with `get` on an entity  
     A MobsPropertiesRandomness property will come to make use of the data parameter instead of NBT  
     Due how the system works, the goals already present in the mob can't be changed with this system without a huge amount of work. E.g. For the "Animals not temped" feature they already have the Tempt AI, so it's impossible to add it back if it's removed.
 * Added a new Anti-Cheese feature (from the old "Endermen Get Over Here" feature, which is now gone)
