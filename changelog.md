@@ -8,6 +8,8 @@ You are able to change AI at runtime without having to reload the world
     E.g. `/enhancedai set @e[type=creeper] enhancedai:creeper_swell/tnt_like true` will enable tnt like for all the creepers currently loaded  
     A MobsPropertiesRandomness property will come to make use of the data parameter instead of NBT  
     Due how the system works, the goals already present in the mob can't be changed with this system without a huge amount of work. E.g. For the "Animals not temped" feature they already have the Tempt AI, so it's impossible to add it back if it's removed.
+* Added sun-resistant Drowned
+  * Drowned have 30 seconds where they not burn in sunlight. During this time, they will not seek water
 
 ## 2.7.1
 * Villagers no longer use target changes

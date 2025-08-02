@@ -7,8 +7,12 @@ import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.util.MCUtils;
+import insane96mcp.insanelib.util.ModNBTData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
@@ -23,6 +27,7 @@ import net.minecraft.world.level.pathfinder.SwimNodeEvaluator;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.UUID;
@@ -38,9 +43,19 @@ public class Drowned extends Feature {
 
 	@Config(description = "Fixes a vanilla bug that makes drowned just stand still during daytime if can't reach water.")
 	public static Boolean allowAttackDuringDay = true;
+	@Config(description = "If true, drowned will be sun resistant for a while until the water in their body evaporates. During this time, they will not seek water")
+	public static Boolean sunResistant = true;
 
-	public Drowned(Module module, boolean enabledByDefault, boolean canBeDisabled) {
-		super(module, enabledByDefault, canBeDisabled);
+	public static ResourceLocation FIRE_RESISTANCE_TIME;
+
+	@Override
+	public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
+		super.init(module, enabledByDefault, canBeDisabled);
+		FIRE_RESISTANCE_TIME = this.createDataKey("fire_resistance_time");
+	}
+
+	public static boolean sunResistant() {
+		return Feature.isEnabled(Drowned.class) && sunResistant;
 	}
 
 	public static boolean allowAttackDuringDay() {
@@ -63,6 +78,28 @@ public class Drowned extends Feature {
 		if (swimSpeedMultiplier > 0d) {
 			MCUtils.applyModifier(drowned, ForgeMod.SWIM_SPEED.get(), UUID_SWIM_SPEED_MULTIPLIER, "Enhanced AI Drowned Swim Speed Multiplier", swimSpeedMultiplier - 1, AttributeModifier.Operation.MULTIPLY_TOTAL);
 		}
+	}
+
+	@SubscribeEvent
+	public void onTick(LivingEvent.LivingTickEvent event) {
+		if (!this.isEnabled()
+				|| !(event.getEntity() instanceof net.minecraft.world.entity.monster.Drowned drowned)
+				|| !sunResistant
+				|| drowned.level().isClientSide)
+			return;
+
+		int fireResistanceTime = ModNBTData.get(drowned, FIRE_RESISTANCE_TIME, Integer.class);
+		if (drowned.isInWater() && fireResistanceTime > 0) {
+			fireResistanceTime -= 4;
+		}
+		else if (fireResistanceTime <= 600 && !drowned.isInFluidType() && drowned.level().isDay() && drowned.level().canSeeSky(drowned.blockPosition())) {
+			if (++fireResistanceTime < 600)
+				drowned.clearFire();
+			else if (fireResistanceTime == 600)
+				drowned.playSound(SoundEvents.GENERIC_EXTINGUISH_FIRE);
+		}
+		drowned.setCustomName(Component.literal(fireResistanceTime + ""));
+		ModNBTData.put(drowned, FIRE_RESISTANCE_TIME, fireResistanceTime);
 	}
 
 	//Same as MoveControl but uses forge:swim_speed instead of minecraft:generic.movement_speed
