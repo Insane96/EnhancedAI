@@ -14,7 +14,6 @@ import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -35,9 +34,9 @@ import java.util.UUID;
 
 @LoadFeature(module = Modules.Ids.ANIMAL, description = "Make animals fight back or be scared by players. Use the entity type tag enhancedai:can_be_neutral, enhancedai:can_be_hostile, and enhancedai:can_be_scared_by_players to add/remove animals.")
 public class AnimalScaredAttack extends Feature {
-    public static final TagKey<EntityType<?>> CAN_BE_NEUTRAL = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(EnhancedAI.MOD_ID, "can_be_neutral"));
-    public static final TagKey<EntityType<?>> CAN_BE_HOSTILE = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(EnhancedAI.MOD_ID, "can_be_hostile"));
-    public static final TagKey<EntityType<?>> SCARED_BY_PLAYERS = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(EnhancedAI.MOD_ID, "can_be_scared_by_players"));
+    public static final TagKey<EntityType<?>> CAN_BE_NEUTRAL = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("can_be_neutral"));
+    public static final TagKey<EntityType<?>> CAN_BE_HOSTILE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("can_be_hostile"));
+    public static final TagKey<EntityType<?>> SCARED_BY_PLAYERS = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("can_be_scared_by_players"));
 
     public static EAIData<Boolean> NEUTRAL;
     public static EAIData<Boolean> HOSTILE;
