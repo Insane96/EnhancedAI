@@ -1,15 +1,14 @@
 package insane96mcp.enhancedai.modules.ghast;
 
 import insane96mcp.enhancedai.EnhancedAI;
+import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.MinMax;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -20,12 +19,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
 
-@LoadFeature(module = Modules.Ids.GHAST, description = "Various changes to ghast shooting. Only ghasts in enhancedai:change_ghast_shooting entity type tag are affected by this feature.")
-public class GhastShoot extends Feature {
-    public static final TagKey<EntityType<?>> CHANGE_GHAST_SHOOT = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("change_ghast_shoot"));
-    public static final String ATTACK_COOLDOWN = EnhancedAI.RESOURCE_PREFIX + "attack_cooldown";
-    public static final String FIREBALLS_SHOT = EnhancedAI.RESOURCE_PREFIX + "fireballs_shot";
-    public static final String SHOOT_WHEN_NOT_SEEN = EnhancedAI.RESOURCE_PREFIX + "shoot_when_not_seen";
+@LoadFeature(module = Modules.Ids.GHAST, description = "Various changes to ghast shooting. Only ghast in enhancedai:ghast/change_shooting entity type tag are affected by this feature.")
+public class GhastFeature extends Feature {
+    public static final TagKey<EntityType<?>> CHANGE_GHAST_SHOOT = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("ghast/change_shoot"));
 
     @Config(min = 1, max = 300, description = "How many ticks pass between shooting fireballs. Vanilla is 40")
     public static MinMax attackCooldown = new MinMax(40, 50);
@@ -34,8 +30,15 @@ public class GhastShoot extends Feature {
     @Config(min = 0d, max = 1d, description = "Chance for a Ghast to try and shoot the target even if can't see it. If enabled and the Ghast can't see the target, he will shoot 4 times as fast to breach.")
     public static Double shootWhenNotSeenChance = 0.3d;
 
-    public GhastShoot(Module module, boolean enabledByDefault, boolean canBeDisabled) {
-        super(module, enabledByDefault, canBeDisabled);
+    public static EAIData<Integer> ATTACK_COOLDOWN;
+    public static EAIData<Integer> FIREBALLS_SHOT;
+    public static EAIData<Boolean> SHOOT_WHEN_NOT_SEEN;
+
+    public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
+        super.init(module, enabledByDefault, canBeDisabled);
+        ATTACK_COOLDOWN = EAIData.ofInt(this.createDataKey("attack_cooldown"));
+        FIREBALLS_SHOT = EAIData.ofInt(this.createDataKey("fireballs_shot"));
+        SHOOT_WHEN_NOT_SEEN = EAIData.ofBool(this.createDataKey("shoot_when_not_seen"));
     }
 
     //Lowest priority so other mods can set persistent data
@@ -46,12 +49,6 @@ public class GhastShoot extends Feature {
                 || !ghast.getType().is(CHANGE_GHAST_SHOOT))
             return;
 
-        CompoundTag persistentData = ghast.getPersistentData();
-
-        int attackCooldown1 = NBTUtils.getIntOrPutDefaultLegacy(persistentData, ATTACK_COOLDOWN, attackCooldown.getIntRandBetween(ghast.getRandom()));
-        int fireballsShot1 = NBTUtils.getIntOrPutDefaultLegacy(persistentData, FIREBALLS_SHOT, fireballsShot.getIntRandBetween(ghast.getRandom()));
-        boolean shootWhenNotSeen = NBTUtils.getBooleanOrPutDefaultLegacy(persistentData, SHOOT_WHEN_NOT_SEEN, ghast.getRandom().nextDouble() < shootWhenNotSeenChance);
-
         ArrayList<Goal> goalsToRemove = new ArrayList<>();
         ghast.goalSelector.availableGoals.forEach(prioritizedGoal -> {
             if (prioritizedGoal.getGoal() instanceof Ghast.GhastShootFireballGoal)
@@ -60,9 +57,9 @@ public class GhastShoot extends Feature {
 
         goalsToRemove.forEach(ghast.goalSelector::removeGoal);
 
-        ghast.goalSelector.addGoal(4, new GhastShootFireballGoal(ghast)
-                .setAttackCooldown(attackCooldown1)
-                .setFireballsToShot(fireballsShot1)
-                .setIgnoreLineOfSight(shootWhenNotSeen));
+        ghast.goalSelector.addGoal(4, new GhastShootFireballGoal(ghast));
+        ATTACK_COOLDOWN.applyIfAbsent(ghast, attackCooldown.getIntRandBetween(ghast.getRandom()));
+        FIREBALLS_SHOT.applyIfAbsent(ghast, fireballsShot.getIntRandBetween(ghast.getRandom()));
+        SHOOT_WHEN_NOT_SEEN.applyIfAbsent(ghast, ghast.getRandom().nextDouble() < shootWhenNotSeenChance);
     }
 }

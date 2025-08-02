@@ -12,10 +12,6 @@ public class GhastShootFireballGoal extends Goal {
     private final Ghast ghast;
     public int chargeTime;
 
-    private int attackCooldown;
-    private int fireballsToShot;
-    private boolean ignoreLineOfSight;
-
     private int cooldownBetweenFireballs = 4;
     private int fireballsShot = 0;
 
@@ -44,8 +40,10 @@ public class GhastShootFireballGoal extends Goal {
         if (target == null)
             return;
 
+        boolean ignoreLineOfSight = GhastFeature.SHOOT_WHEN_NOT_SEEN.get(this.ghast);
+        int fireballsToShot = GhastFeature.FIREBALLS_SHOT.get(this.ghast);
         // 64d
-        if (target.distanceToSqr(this.ghast) < 4096d && (this.ghast.hasLineOfSight(target) || this.ignoreLineOfSight)) {
+        if (target.distanceToSqr(this.ghast) < 4096d && (this.ghast.hasLineOfSight(target) || ignoreLineOfSight)) {
             Level level = this.ghast.level();
             ++this.chargeTime;
             if (this.chargeTime == 0 && !this.ghast.isSilent()) {
@@ -62,16 +60,16 @@ public class GhastShootFireballGoal extends Goal {
                         level.levelEvent(null, 1016, this.ghast.blockPosition(), 0);
                     }
 
-                    double randomVariation = 0.5d * (this.fireballsToShot - 1);
+                    double randomVariation = 0.5d * (fireballsToShot - 1);
                     LargeFireball largefireball = new LargeFireball(level, this.ghast, dirX + Mth.nextDouble(ghast.getRandom(), -randomVariation, randomVariation), dirY, dirZ + Mth.nextDouble(ghast.getRandom(), -randomVariation, randomVariation), this.ghast.getExplosionPower());
                     largefireball.setPos(this.ghast.getX() + vec3.x * 3d, this.ghast.getY(0.5d) - 0.3d, largefireball.getZ() + vec3.z * 3d);
                     level.addFreshEntity(largefireball);
                     this.fireballsShot++;
-                    this.cooldownBetweenFireballs = 4;
+                    this.cooldownBetweenFireballs = 5;
                 }
-                if (this.fireballsShot == this.fireballsToShot) {
-                    this.chargeTime = -this.attackCooldown;
-                    if (this.ignoreLineOfSight && !this.ghast.hasLineOfSight(target))
+                if (this.fireballsShot == fireballsToShot) {
+                    this.chargeTime = -GhastFeature.ATTACK_COOLDOWN.get(this.ghast);
+                    if (ignoreLineOfSight && !this.ghast.hasLineOfSight(target))
                         this.chargeTime /= 4;
                     this.fireballsShot = 0;
                 }
@@ -81,20 +79,5 @@ public class GhastShootFireballGoal extends Goal {
         }
 
         this.ghast.setCharging(this.chargeTime > 0);
-    }
-
-    public GhastShootFireballGoal setAttackCooldown(int attackCooldown) {
-        this.attackCooldown = attackCooldown;
-        return this;
-    }
-
-    public GhastShootFireballGoal setFireballsToShot(int fireballsToShot) {
-        this.fireballsToShot = fireballsToShot;
-        return this;
-    }
-
-    public GhastShootFireballGoal setIgnoreLineOfSight(boolean ignoreLineOfSight) {
-        this.ignoreLineOfSight = ignoreLineOfSight;
-        return this;
     }
 }
