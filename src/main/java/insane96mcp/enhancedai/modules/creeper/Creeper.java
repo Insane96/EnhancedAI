@@ -26,7 +26,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.SwellGoal;
-import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
@@ -40,10 +39,10 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
-@LoadFeature(module = Modules.Ids.CREEPER, description = "Various changes to Creepers exploding. Ignoring Walls, Walking Fuse and smarter exploding based off explosion size. Only creepers in the enhancedai:change_creeper_swell entity type tag are affected by this feature.")
-public class CreeperSwell extends Feature {
-	public static final TagKey<EntityType<?>> CHANGE_CREEPER_SWELL = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("change_creeper_swell"));
-	public static final TagKey<EntityType<?>> CAN_CREEPER_LAUNCH = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("can_creeper_launch"));
+@LoadFeature(module = Modules.Ids.CREEPER, description = "Various changes to Creepers exploding. Ignoring Walls, Walking Fuse and smarter exploding based off explosion size. Only creepers in the enhancedai:creeper/change_swell entity type tag are affected by this feature.")
+public class Creeper extends Feature {
+	public static final TagKey<EntityType<?>> CHANGE_CREEPER_SWELL = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("creeper/change_swell"));
+	public static final TagKey<EntityType<?>> CAN_CREEPER_LAUNCH = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("creeper/can_launch"));
 
 	public static EAIData<Boolean> WALKING_FUSE;
 	public static EAIData<Double> WALKING_FUSE_SPEED_MODIFIER;
@@ -68,7 +67,7 @@ public class CreeperSwell extends Feature {
 	public static Double walkingFuse$speedModifier = -0.5d;
 	@Config(min = 0d, max = 1d, description = "Percentage chance for a Creeper to ignore walls while targeting a player. This means that a creeper will be able to explode if it's in the correct range from a player even if there's a wall between.")
 	public static Double ignoreWallsChance = 0.65d;
-	@Config(min = 0d, max = 1d, description = "Launching creepers will try ignite and throw themselves at the player.")
+	@Config(min = 0d, max = 1d, description = "Launching creepers will try ignite and throw themselves at the player. Only creepers in the enhancedai:creeper/can_launch")
 	public static Double launch$chance = 0.05d;
 	@Config(description = "If true, Launching Creepers emit particles")
 	public static Boolean launch$particles = true;
@@ -127,7 +126,7 @@ public class CreeperSwell extends Feature {
 		BLOW_UP_ON_DEATH = EAIData.ofBool(this.createDataKey("blow_up_on_death"));
 		FORCE_EXPLODE = EAIData.ofBool(this.createDataKey("force_explode"));
 		ANGRY = EAIData.ofBool(this.createDataKey("angry"), (mob, angry) -> {
-			if (!(mob instanceof Creeper creeper))
+			if (!(mob instanceof net.minecraft.world.entity.monster.Creeper creeper))
 				return;
 			CompoundTag compoundNBT = new CompoundTag();
 			creeper.addAdditionalSaveData(compoundNBT);
@@ -165,7 +164,7 @@ public class CreeperSwell extends Feature {
 			MessageCreeperDataSync.syncCreeperToPlayers(creeper);
 		});
 		LAUNCH = EAIData.ofBool(this.createDataKey("launch"), (mob, launch) -> {
-			if (!(mob instanceof Creeper creeper))
+			if (!(mob instanceof net.minecraft.world.entity.monster.Creeper creeper))
 				return;
 			CompoundTag compoundNBT = new CompoundTag();
 			creeper.addAdditionalSaveData(compoundNBT);
@@ -207,7 +206,7 @@ public class CreeperSwell extends Feature {
 	public void eventEntityJoinWorld(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
 				|| event.getLevel().isClientSide
-				|| !(event.getEntity() instanceof Creeper creeper)
+				|| !(event.getEntity() instanceof net.minecraft.world.entity.monster.Creeper creeper)
 				|| !creeper.getType().is(CHANGE_CREEPER_SWELL))
 			return;
 
@@ -235,7 +234,7 @@ public class CreeperSwell extends Feature {
 	public void livingDamageEvent(LivingDamageEvent event) {
 		if (!this.isEnabled()
 				|| !event.getSource().is(DamageTypeTags.IS_EXPLOSION)
-				|| !(event.getEntity() instanceof Creeper creeper)
+				|| !(event.getEntity() instanceof net.minecraft.world.entity.monster.Creeper creeper)
 				|| !TNT_LIKE.get(creeper))
 			return;
 
@@ -245,7 +244,7 @@ public class CreeperSwell extends Feature {
 	@SubscribeEvent
 	public void onCreeperRemoved(EntityLeaveLevelEvent event) {
 		if (!this.isEnabled()
-				|| !(event.getEntity() instanceof Creeper creeper)
+				|| !(event.getEntity() instanceof net.minecraft.world.entity.monster.Creeper creeper)
 				|| !creeper.isDeadOrDying()
 				|| creeper.level().isClientSide
 				|| !BLOW_UP_ON_DEATH.get(creeper))
@@ -258,7 +257,7 @@ public class CreeperSwell extends Feature {
 	@SubscribeEvent
 	public void onCreeperTick(LivingEvent.LivingTickEvent event) {
 		if (!this.isEnabled()
-				|| !(event.getEntity() instanceof Creeper creeper)
+				|| !(event.getEntity() instanceof net.minecraft.world.entity.monster.Creeper creeper)
 				|| creeper.level().isClientSide)
 			return;
 
@@ -266,7 +265,7 @@ public class CreeperSwell extends Feature {
 		onCenaCreeperTick(creeper);
 	}
 
-	public void onLaunchCreeperTick(Creeper creeper) {
+	public void onLaunchCreeperTick(net.minecraft.world.entity.monster.Creeper creeper) {
 		if (creeper.tickCount % 20 != 0
 				|| !LAUNCH_PARTICLES.get(creeper)
 				|| !LAUNCH.get(creeper))
@@ -275,7 +274,7 @@ public class CreeperSwell extends Feature {
 		serverLevel.players().forEach(player -> serverLevel.sendParticles(player, ParticleTypes.CLOUD, true, creeper.getX(), creeper.getY() + 0.25d, creeper.getZ(), 8, 0.05, 0.05, 0.05, 0.025));
 	}
 
-	public void onCenaCreeperTick(Creeper creeper) {
+	public void onCenaCreeperTick(net.minecraft.world.entity.monster.Creeper creeper) {
 		if (creeper.tickCount % 40 != 5
 				|| !angry$particles)
 			return;
@@ -310,7 +309,7 @@ public class CreeperSwell extends Feature {
 		}
 
 		public static FuseExplodeSounds get(LivingEntity living) {
-			String sound = CreeperSwell.EXPLOSION_SOUND.get(living);
+			String sound = Creeper.EXPLOSION_SOUND.get(living);
 			if (sound.isEmpty())
 				return NONE;
 			for (FuseExplodeSounds fuseExplodeSounds : values()) {

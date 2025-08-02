@@ -3,18 +3,17 @@ package insane96mcp.enhancedai.modules.blaze;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.projectile.SmallFireball;
 
 import java.util.EnumSet;
 
 public class EABlazeAttackGoal extends Goal {
-    private final Blaze blaze;
+    private final net.minecraft.world.entity.monster.Blaze blaze;
     private int attackStep;
     private int attackTime;
     private int lastSeen;
 
-    public EABlazeAttackGoal(Blaze blaze) {
+    public EABlazeAttackGoal(net.minecraft.world.entity.monster.Blaze blaze) {
         this.blaze = blaze;
         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
     }
@@ -71,26 +70,26 @@ public class EABlazeAttackGoal extends Goal {
             if (this.attackTime <= 0) {
                 ++this.attackStep;
                 if (this.attackStep == 1) {
-                    this.attackTime = BlazeAttack.CHARGE_TIME.get(this.blaze);
+                    this.attackTime = Blaze.CHARGE_TIME.get(this.blaze);
                     this.blaze.setCharged(true);
                 }
-                else if (this.attackStep <= BlazeAttack.FIREBALLS_SHOT.get(this.blaze) + 1) {
-                    this.attackTime = BlazeAttack.TIME_BETWEEN_FIREBALLS.get(this.blaze);
+                else if (this.attackStep <= Blaze.FIREBALLS_SHOT.get(this.blaze) + 1) {
+                    this.attackTime = Blaze.TIME_BETWEEN_FIREBALLS.get(this.blaze);
                 }
                 else {
-                    this.attackTime = BlazeAttack.RECHARGE_TIME.get(this.blaze);
+                    this.attackTime = Blaze.RECHARGE_TIME.get(this.blaze);
                     this.attackStep = 0;
                     this.blaze.setCharged(false);
                 }
 
                 if (this.attackStep > 1) {
-                    double inaccuracy = BlazeAttack.INACCURACY.get(this.blaze);
+                    double inaccuracy = Blaze.INACCURACY.get(this.blaze);
                     if (inaccuracy == -1)
                         inaccuracy = Math.sqrt(Math.sqrt(distanceSqrToTarget)) * 0.5D;
                     if (!this.blaze.isSilent())
                         this.blaze.level().levelEvent(null, 1018, this.blaze.blockPosition(), 0);
 
-                    for (int i = 0; i < BlazeAttack.FIREBALLS_PER_SHOT.get(this.blaze); i++) {
+                    for (int i = 0; i < Blaze.FIREBALLS_PER_SHOT.get(this.blaze); i++) {
                         SmallFireball smallfireball = new SmallFireball(this.blaze.level(), this.blaze, xDir + this.blaze.getRandom().nextGaussian() * inaccuracy, yDir, zDir + this.blaze.getRandom().nextGaussian() * inaccuracy);
                         smallfireball.setPos(smallfireball.getX(), this.blaze.getY(0.5D) + 0.5D, smallfireball.getZ());
                         this.blaze.level().addFreshEntity(smallfireball);

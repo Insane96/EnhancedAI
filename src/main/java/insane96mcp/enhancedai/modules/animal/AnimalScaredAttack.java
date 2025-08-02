@@ -32,11 +32,11 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.UUID;
 
-@LoadFeature(module = Modules.Ids.ANIMAL, description = "Make animals fight back or be scared by players. Use the entity type tag enhancedai:can_be_neutral, enhancedai:can_be_hostile, and enhancedai:can_be_scared_by_players to add/remove animals.")
+@LoadFeature(module = Modules.Ids.ANIMAL, description = "Make animals fight back or be scared by players. Use the entity type tag enhancedai:animal_scared_attack/can_be_neutral, enhancedai:animal_scared_attack/can_be_hostile, and enhancedai:animal_scared_attack/can_be_scared_by_players to add/remove animals.")
 public class AnimalScaredAttack extends Feature {
-    public static final TagKey<EntityType<?>> CAN_BE_NEUTRAL = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("can_be_neutral"));
-    public static final TagKey<EntityType<?>> CAN_BE_HOSTILE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("can_be_hostile"));
-    public static final TagKey<EntityType<?>> SCARED_BY_PLAYERS = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("can_be_scared_by_players"));
+    public static final TagKey<EntityType<?>> CAN_BE_NEUTRAL = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("animal_scared_attack/can_be_neutral"));
+    public static final TagKey<EntityType<?>> CAN_BE_HOSTILE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("animal_scared_attack/can_be_hostile"));
+    public static final TagKey<EntityType<?>> SCARED_BY_PLAYERS = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("animal_scared_attack/can_be_scared_by_players"));
 
     public static EAIData<Boolean> NEUTRAL;
     public static EAIData<Boolean> HOSTILE;

@@ -3,7 +3,6 @@ package insane96mcp.enhancedai.modules.blaze;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.enhancedai.utils.GoalHelper;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
@@ -12,19 +11,16 @@ import insane96mcp.insanelib.base.config.MinMax;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.monster.Blaze;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
-@LoadFeature(module = Modules.Ids.BLAZE, description = "Make blazes fire faster/more fireballs. Only mobs in enhancedai:change_blaze_attack entity type tag are affected by this feature.")
-public class BlazeAttack extends Feature {
-    public static final TagKey<EntityType<?>> CHANGE_BLAZE_ATTACK = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("change_blaze_attack"));
+@LoadFeature(module = Modules.Ids.BLAZE, description = "Make blazes fire faster/more fireballs. Only mobs in enhancedai:blaze/change_attack entity type tag are affected by this feature.")
+public class Blaze extends Feature {
+    public static final TagKey<EntityType<?>> CHANGE_BLAZE_ATTACK = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("blaze/change_attack"));
 
     @Config(min = 1, max = 300, description = "How many ticks pass between shooting fireballs. Vanilla is 6")
     public static MinMax timeBetweenFireballs = new MinMax(4, 10);
@@ -56,21 +52,17 @@ public class BlazeAttack extends Feature {
         INACCURACY = EAIData.ofInt(this.createDataKey("inaccuracy"));
     }
 
-    private static Optional<EABlazeAttackGoal> getGoal(Mob mob) {
-        return GoalHelper.getGoal(mob.goalSelector, EABlazeAttackGoal.class);
-    }
-
     //Lowest priority so other mods can set persistent data
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onSpawn(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
-                || !(event.getEntity() instanceof Blaze blaze)
+                || !(event.getEntity() instanceof net.minecraft.world.entity.monster.Blaze blaze)
                 || !blaze.getType().is(CHANGE_BLAZE_ATTACK))
             return;
 
         ArrayList<Goal> goalsToRemove = new ArrayList<>();
         blaze.goalSelector.availableGoals.forEach(prioritizedGoal -> {
-            if (prioritizedGoal.getGoal() instanceof Blaze.BlazeAttackGoal)
+            if (prioritizedGoal.getGoal() instanceof net.minecraft.world.entity.monster.Blaze.BlazeAttackGoal)
                 goalsToRemove.add(prioritizedGoal.getGoal());
         });
 

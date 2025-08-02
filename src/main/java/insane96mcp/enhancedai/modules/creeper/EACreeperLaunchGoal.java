@@ -7,14 +7,13 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 
 public class EACreeperLaunchGoal extends Goal {
 
-	protected final Creeper launchingCreeper;
+	protected final net.minecraft.world.entity.monster.Creeper launchingCreeper;
 	private LivingEntity creeperAttackTarget;
 
 	private int ticksBeforeLaunching;
@@ -29,7 +28,7 @@ public class EACreeperLaunchGoal extends Goal {
 	private float activationDistanceSqr;
 	private float minActivationDistanceSqr;
 
-	public EACreeperLaunchGoal(Creeper creeper) {
+	public EACreeperLaunchGoal(net.minecraft.world.entity.monster.Creeper creeper) {
 		this.launchingCreeper = creeper;
 		this.setFlags(EnumSet.of(Flag.MOVE));
 	}
@@ -51,7 +50,7 @@ public class EACreeperLaunchGoal extends Goal {
 		if (--cooldown > 0)
 			return false;
 
-		if (!this.launchingCreeper.getSensing().hasLineOfSight(target) && !CreeperSwell.BREACH.get(this.launchingCreeper))
+		if (!this.launchingCreeper.getSensing().hasLineOfSight(target) && !Creeper.BREACH.get(this.launchingCreeper))
 			return false;
 
 		if (this.launchingCreeper.level().getBlockState(this.launchingCreeper.blockPosition().above(3)).blocksMotion())
@@ -126,7 +125,7 @@ public class EACreeperLaunchGoal extends Goal {
 		double distanceZ = this.creeperAttackTarget.getZ() - this.launchingCreeper.getZ();
 		double distanceXZ = Math.sqrt(distanceX * distanceX + distanceZ * distanceZ);
 
-		float inaccuracy = CreeperSwell.LAUNCH_INACCURACY.get(this.launchingCreeper).floatValue();
+		float inaccuracy = Creeper.LAUNCH_INACCURACY.get(this.launchingCreeper).floatValue();
 		distanceX += Mth.randomBetween(this.launchingCreeper.getRandom(), -inaccuracy, inaccuracy);
 		distanceZ += Mth.randomBetween(this.launchingCreeper.getRandom(), -inaccuracy, inaccuracy);
 		//TODO better Y speed, right now when creeper Y distance is below 7 you always get 7 which isn't good when the creeper's Y distance is 0, and when the Y Distance is higher than about 25 the creeper will go to space
@@ -138,7 +137,7 @@ public class EACreeperLaunchGoal extends Goal {
 	public void stop() {
 		this.creeperAttackTarget = null;
 		this.hasLaunched = false;
-		this.launchingCreeper.getEntityData().set(Creeper.DATA_IS_IGNITED, false);
+		this.launchingCreeper.getEntityData().set(net.minecraft.world.entity.monster.Creeper.DATA_IS_IGNITED, false);
 	}
 
 	public boolean requiresUpdateEveryTick() {

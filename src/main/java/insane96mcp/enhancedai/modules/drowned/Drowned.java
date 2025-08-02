@@ -32,9 +32,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.UUID;
 
-@LoadFeature(module = Modules.Ids.DROWNED, description = "Makes drowned swim speed based off swim speed attribute instead of movement speed. Only drowned in the enhancedai:change_drowned_swimming entity type tag are affected by this feature.")
+@LoadFeature(module = Modules.Ids.DROWNED, description = "Makes drowned swim speed based off swim speed attribute instead of movement speed. Only drowned in the enhancedai:drowned/change_swimming entity type tag are affected by this feature.")
 public class Drowned extends Feature {
-	public static final TagKey<EntityType<?>> CHANGE_DROWNED_SWIMMING = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("change_drowned_swimming"));
+	public static final TagKey<EntityType<?>> CHANGE_DROWNED_SWIMMING = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("drowned/change_swimming"));
 
 	final UUID UUID_SWIM_SPEED_MULTIPLIER = UUID.fromString("ba2adf05-2438-4d1f-8165-89173f0a1eae");
 
