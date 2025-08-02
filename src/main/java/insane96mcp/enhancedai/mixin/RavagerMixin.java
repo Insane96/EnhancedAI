@@ -19,6 +19,6 @@ public class RavagerMixin {
 	@Expression("block instanceof LeavesBlock")
 	@WrapOperation(method = "aiStep", at = @At("MIXINEXTRAS:EXPRESSION"))
 	public boolean aiStep_onInstanceOf(Object object, Operation<Boolean> original) {
-		return object != null && ((Block)object).builtInRegistryHolder().is(RavagerFeature.BREAKABLE_BY_RAVAGER);
+		return object != null && ((Block)object).builtInRegistryHolder().is(RavagerFeature.BREAKABLE);
 	}
 }
