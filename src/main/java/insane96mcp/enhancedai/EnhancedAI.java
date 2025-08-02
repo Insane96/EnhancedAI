@@ -1,6 +1,7 @@
 package insane96mcp.enhancedai;
 
 import com.mojang.brigadier.CommandDispatcher;
+import insane96mcp.enhancedai.command.EAICommand;
 import insane96mcp.enhancedai.data.mpr.EAIChangeDataProperty;
 import insane96mcp.enhancedai.modules.animal.AnimalScaredAttack;
 import insane96mcp.enhancedai.modules.mobs.MeleeAttacking;

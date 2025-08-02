@@ -100,6 +100,10 @@ public final class EAIData<T> {
         return ModNBTData.get(entity, this.id, this.type);
     }
 
+    public boolean has(Entity entity) {
+        return ModNBTData.contains(entity, this.id);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
