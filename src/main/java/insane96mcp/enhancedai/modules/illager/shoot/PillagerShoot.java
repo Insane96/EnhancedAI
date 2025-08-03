@@ -11,13 +11,24 @@ import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.Difficulty;
 import insane96mcp.insanelib.base.config.MinMax;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.RangedCrossbowAttackGoal;
 import net.minecraft.world.entity.monster.Pillager;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+
+import javax.annotation.Nullable;
 
 @LoadFeature(module = Modules.Ids.ILLAGER, description = "Use the enhancedai:pillager_shoot/better_shooting entity type tag to add more skeletons that are affected by this feature")
 public class PillagerShoot extends Feature {
@@ -56,6 +67,40 @@ public class PillagerShoot extends Feature {
 		SHOOTING_RANGE.applyIfAbsent(pillager, shootingRange.getIntRandBetween(pillager.getRandom()));
 		SHOOTING_COOLDOWN.applyIfAbsent(pillager, shootingCooldown.getIntRandBetween(pillager.getRandom()));
 		INACCURACY.applyIfAbsent(pillager, inaccuracy.getByDifficulty(pillager.level()));
+	}
+
+	@SubscribeEvent
+	public void onPillagerHitAlly(LivingHurtEvent event) {
+		if (!this.isEnabled()
+				|| !(event.getEntity() instanceof Pillager hitPillager)
+				|| !(event.getSource().getEntity() instanceof Pillager shooter)
+				|| !(event.getSource().getDirectEntity() instanceof AbstractArrow))
+			return;
+
+		tryReposition(shooter, hitPillager,3);
+	}
+
+	public static void tryReposition(Pillager pillager, @Nullable Entity ally, int baseDistance) {
+		double distance = baseDistance;
+		if (ally != null && pillager.getTarget() != null)
+			distance += Mth.clamp(10 - ally.distanceTo(pillager.getTarget()), 0, 10);
+		Vec3 viewVector = pillager.getViewVector(1.0F);
+		Vec3 sideVector = viewVector.cross(new Vec3(0, 1, 0)).normalize().scale(distance);
+		Vec3 position = pillager.position();
+
+		Vec3 targetPos = position.add(sideVector.scale(pillager.getRandom().nextBoolean() ? 1 : -1));
+		pillager.getNavigation().moveTo(targetPos.x, targetPos.y, targetPos.z, 1f);
+	}
+
+	@Nullable
+	public static Entity mightHitAnAlly(Pillager pillager, double distance) {
+		double distanceNotSqr = Math.sqrt(distance);
+		Vec3 from = pillager.getEyePosition(0.5f);
+		Vec3 viewVec = pillager.getViewVector(0.5f);
+		Vec3 to = from.add(viewVec.x * distanceNotSqr, viewVec.y * distanceNotSqr, viewVec.z * distanceNotSqr);
+		AABB aabb = pillager.getBoundingBox().expandTowards(viewVec.scale(distanceNotSqr)).inflate(1.0D, 1.0D, 1.0D);
+		EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(pillager, from, to, aabb, entity -> entity.getType().is(EntityTypeTags.RAIDERS), distance);
+		return entityHitResult == null ? null : entityHitResult.getEntity();
 	}
 
 }

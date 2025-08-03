@@ -1,11 +1,13 @@
 package insane96mcp.enhancedai.modules.illager.shoot;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.CrossbowAttackMob;
@@ -101,7 +103,7 @@ public class EAPillagerAttackGoal extends Goal {
         }
         else if (this.crossbowState == CrossbowState.CHARGED){
             this.updatePathDelay = 0;
-            this.mob.getNavigation().stop();
+            //this.mob.getNavigation().stop();
         }
 
         this.mob.getLookControl().setLookAt(livingentity, 30.0F, 30.0F);
@@ -109,6 +111,10 @@ public class EAPillagerAttackGoal extends Goal {
             this.mob.startUsingItem(ProjectileUtil.getWeaponHoldingHand(this.mob, (item) -> item instanceof CrossbowItem));
             this.crossbowState = CrossbowState.CHARGING;
             this.mob.setChargingCrossbow(true);
+            if (!this.mob.isPassenger()) {
+                Entity entity = PillagerShoot.mightHitAnAlly(this.mob, distance);
+                PillagerShoot.tryReposition(this.mob, entity, 2);
+            }
         }
         else if (this.crossbowState == CrossbowState.CHARGING) {
             if (!this.mob.isUsingItem())
@@ -125,8 +131,16 @@ public class EAPillagerAttackGoal extends Goal {
         }
         else if (this.crossbowState == CrossbowState.CHARGED) {
             --this.attackDelay;
-            if (this.attackDelay == 0) {
-                this.crossbowState = CrossbowState.READY_TO_ATTACK;
+            this.mob.setCustomNameVisible(true);
+            this.mob.setCustomName(Component.literal(this.attackDelay + ""));
+            if (--this.attackDelay <= 0) {
+                Entity entity = PillagerShoot.mightHitAnAlly(this.mob, distance);
+                if (entity != null) {
+                    this.attackDelay = 20;
+                    PillagerShoot.tryReposition(this.mob, entity, 2);
+                }
+                else
+                    this.crossbowState = CrossbowState.READY_TO_ATTACK;
             }
         }
         else if (this.crossbowState == CrossbowState.READY_TO_ATTACK && hasLineOfSight) {
@@ -153,8 +167,6 @@ public class EAPillagerAttackGoal extends Goal {
     }
 
     public static void performShooting(Level pLevel, LivingEntity pShooter, InteractionHand pUsedHand, ItemStack crossbowStack, float inaccuracy) {
-        if (pShooter instanceof Player player && net.minecraftforge.event.ForgeEventFactory.onArrowLoose(crossbowStack, pShooter.level(), player, 1, true) < 0)
-            return;
         List<ItemStack> list = CrossbowItem.getChargedProjectiles(crossbowStack);
         float[] afloat = getShotPitches(pShooter.getRandom());
 
