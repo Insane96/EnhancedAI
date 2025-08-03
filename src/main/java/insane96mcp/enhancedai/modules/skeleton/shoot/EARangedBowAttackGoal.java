@@ -1,6 +1,7 @@
 package insane96mcp.enhancedai.modules.skeleton.shoot;
 
 import insane96mcp.enhancedai.ai.EARangedAttackGoal;
+import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.setup.Reflection;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,8 +16,8 @@ public class EARangedBowAttackGoal extends EARangedAttackGoal<AbstractSkeleton> 
 
 	protected int bowChargeTicks;
 
-	public EARangedBowAttackGoal(AbstractSkeleton mob, double moveSpeedAmpIn, float maxAttackDistanceIn, boolean canStrafe) {
-		super(mob, moveSpeedAmpIn, maxAttackDistanceIn, canStrafe);
+	public EARangedBowAttackGoal(AbstractSkeleton mob, double moveSpeedAmpIn, EAIData<Integer> attackCooldown, EAIData<Double> inaccuracy, EAIData<Integer> attackDistance, EAIData<Boolean> canStrafe) {
+		super(mob, moveSpeedAmpIn, attackCooldown, inaccuracy, attackDistance, canStrafe);
 	}
 
 	public EARangedBowAttackGoal setBowChargeTicks(int bowChargeTicks) {
@@ -52,10 +53,12 @@ public class EARangedBowAttackGoal extends EARangedAttackGoal<AbstractSkeleton> 
 			this.mob.getLookControl().setLookAt(target, 30.0F, 30.0F);
 		}
 		else if (this.strafingTime > -1 && this.canStrafe()) {
-			if (distanceFromTarget > (double)(this.maxAttackDistance * 0.9F)) {
+			double maxAttackDistanceSqr = this.maxAttackDistance.get(this.mob);
+			maxAttackDistanceSqr *= maxAttackDistanceSqr;
+			if (distanceFromTarget > maxAttackDistanceSqr * 0.9F) {
 				this.strafingBackwards = false;
 			}
-			else if (distanceFromTarget < (double)(this.maxAttackDistance * 0.8F)) {
+			else if (distanceFromTarget < maxAttackDistanceSqr * 0.8F) {
 				this.strafingBackwards = true;
 			}
 
@@ -71,17 +74,13 @@ public class EARangedBowAttackGoal extends EARangedAttackGoal<AbstractSkeleton> 
 				if (ticksUsingItem >= getBowChargeTicks(target)) {
 					this.mob.stopUsingItem();
 					attackEntityWithRangedAttack(this.mob, target, ticksUsingItem);
-					this.attackTime = getAttackCooldown(target);
+					this.attackTime = this.attackCooldown.get(this.mob);
 				}
 			}
 		}
 		else if (--this.attackTime <= 0 && this.seeTime >= -60) {
 			this.mob.startUsingItem(ProjectileUtil.getWeaponHoldingHand(this.mob, item -> item == Items.BOW));
 		}
-	}
-
-	private int getAttackCooldown(LivingEntity target) {
-		return this.attackCooldown;
 	}
 
 	private int getBowChargeTicks(LivingEntity target) {
@@ -111,7 +110,7 @@ public class EARangedBowAttackGoal extends EARangedAttackGoal<AbstractSkeleton> 
 		if (distanceXZ != 0f)
 			yPos += (distanceY / distanceXZ);
 		double dirY = yPos - abstractarrowentity.getY();
-		abstractarrowentity.shoot(dirX, dirY + distanceXZ * 0.17d, dirZ, f * 1.1f + ((float)distance / 32f) + (float)Math.max(distanceY / 48d, 0f), this.inaccuracy);
+		abstractarrowentity.shoot(dirX, dirY + distanceXZ * 0.17d, dirZ, f * 1.1f + ((float)distance / 32f) + (float)Math.max(distanceY / 48d, 0f), this.inaccuracy.get(this.mob).floatValue());
 		entity.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (entity.getRandom().nextFloat() * 0.4F + 0.8F));
 		entity.level().addFreshEntity(abstractarrowentity);
 	}

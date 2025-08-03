@@ -50,4 +50,8 @@ public class GoalHelper {
     public static <T extends Goal> boolean hasGoal(GoalSelector goalSelector, Class<T> goalClass) {
         return getGoal(goalSelector, goalClass).isPresent();
     }
+
+    public static <T extends Goal> boolean isRunning(GoalSelector goalSelector, Class<T> goalClass) {
+        return goalSelector.getRunningGoals().anyMatch(goal -> goalClass.isAssignableFrom(goal.getClass()));
+    }
 }

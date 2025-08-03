@@ -13,6 +13,7 @@ You are able to change AI at runtime without having to reload the world
   * Item disruption has been disabled by default
 * Added sun-resistant Drowned
   * Drowned have 30 seconds where they don't burn in sunlight. During this time, they will not seek water
+* Snow golems can now strafe when attacking (disabled by default)
 
 ## 2.7.1
 * Villagers no longer use target changes

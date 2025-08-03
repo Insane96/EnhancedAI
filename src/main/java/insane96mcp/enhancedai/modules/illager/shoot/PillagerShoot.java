@@ -24,12 +24,12 @@ public class PillagerShoot extends Feature {
 
 	public static final TagKey<EntityType<?>> BETTER_PILLAGER_SHOOT = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("pillager_shoot/better_shooting"));
 
-	@Config(min = 1, max = 64, description = "The range from where a pillager will shoot a player")
+	@Config(min = 1, max = 64, description = "The range from where a pillager will shoot a target")
 	public static MinMax shootingRange = new MinMax(24, 32);
 	@Config(min = 0, description = "The ticks cooldown before shooting. Vanilla is random between 20 and 40")
 	public static MinMax shootingCooldown = new MinMax(20, 40);
 	@Config(min = 0d, max = 30d, description = "How much inaccuracy does the arrow fired by pillagers have. Vanilla pillagers have 10/6/2 inaccuracy in easy/normal/hard difficulty.")
-	public static Difficulty arrowInaccuracy = new Difficulty(5, 3, 1);
+	public static Difficulty inaccuracy = new Difficulty(5, 3, 1);
 
 	public static EAIData<Integer> SHOOTING_RANGE;
 	public static EAIData<Integer> SHOOTING_COOLDOWN;
@@ -55,7 +55,7 @@ public class PillagerShoot extends Feature {
 		pillager.goalSelector.addGoal(3, new EAPillagerAttackGoal(pillager, 1d));
 		SHOOTING_RANGE.applyIfAbsent(pillager, shootingRange.getIntRandBetween(pillager.getRandom()));
 		SHOOTING_COOLDOWN.applyIfAbsent(pillager, shootingCooldown.getIntRandBetween(pillager.getRandom()));
-		INACCURACY.applyIfAbsent(pillager, arrowInaccuracy.getByDifficulty(pillager.level()));
+		INACCURACY.applyIfAbsent(pillager, inaccuracy.getByDifficulty(pillager.level()));
 	}
 
 }

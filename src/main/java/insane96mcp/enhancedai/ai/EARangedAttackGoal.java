@@ -1,5 +1,7 @@
 package insane96mcp.enhancedai.ai;
 
+import insane96mcp.enhancedai.data.EAIData;
+import insane96mcp.enhancedai.utils.GoalHelper;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -8,33 +10,25 @@ import java.util.EnumSet;
 
 public abstract class EARangedAttackGoal<T extends Mob> extends Goal {
 	protected final T mob;
-	protected final double moveSpeedAmp;
-	protected int attackCooldown;
-	protected float inaccuracy;
-	protected final float maxAttackDistance;
+	protected final double movementSpeedMult;
+	protected EAIData<Integer> attackCooldown;
+	protected EAIData<Double> inaccuracy;
+	protected final EAIData<Integer> maxAttackDistance;
 	protected int attackTime = -1;
 	protected int seeTime;
-	protected final boolean canStrafe;
+	protected final EAIData<Boolean> canStrafe;
 	protected boolean strafingClockwise;
 	protected boolean strafingBackwards;
 	protected int strafingTime = -1;
 
-	public EARangedAttackGoal(T mob, double moveSpeedAmpIn, float maxAttackDistanceIn, boolean canStrafe) {
+	public EARangedAttackGoal(T mob, double movementSpeedMult, EAIData<Integer> attackCooldown, EAIData<Double> inaccuracy, EAIData<Integer> attackDistance, EAIData<Boolean> canStrafe) {
 		this.mob = mob;
-		this.moveSpeedAmp = moveSpeedAmpIn;
-		this.maxAttackDistance = maxAttackDistanceIn * maxAttackDistanceIn;
+		this.movementSpeedMult = movementSpeedMult;
+		this.attackCooldown = attackCooldown;
+		this.inaccuracy = inaccuracy;
+		this.maxAttackDistance = attackDistance;
 		this.canStrafe = canStrafe;
 		this.setFlags(EnumSet.of(Flag.LOOK));
-	}
-
-	public EARangedAttackGoal<T> setAttackCooldown(int attackCooldownIn) {
-		this.attackCooldown = attackCooldownIn;
-		return this;
-	}
-
-	public EARangedAttackGoal<T> setInaccuracy(float inaccuracy) {
-		this.inaccuracy = inaccuracy;
-		return this;
 	}
 
 	/**
@@ -92,11 +86,12 @@ public abstract class EARangedAttackGoal<T extends Mob> extends Goal {
 		else {
 			--this.seeTime;
 		}
-		if (distanceFromTarget > (double)this.maxAttackDistance)
-			this.mob.getNavigation().moveTo(target, this.moveSpeedAmp);
+		double maxAttackDistanceSqr = this.maxAttackDistance.get(this.mob);
+		maxAttackDistanceSqr *= maxAttackDistanceSqr;
+		if (distanceFromTarget > maxAttackDistanceSqr)
+			this.mob.getNavigation().moveTo(target, this.movementSpeedMult);
 		else {
-
-			if (distanceFromTarget >= 49d && distanceFromTarget <= (double)this.maxAttackDistance && this.seeTime >= 20 && this.canStrafe()) {
+			if (distanceFromTarget >= 49d && distanceFromTarget <= maxAttackDistanceSqr && this.seeTime >= 20 && this.canStrafe()) {
 				++this.strafingTime;
 			}
 			else {
@@ -121,7 +116,7 @@ public abstract class EARangedAttackGoal<T extends Mob> extends Goal {
 	}
 
 	protected boolean canStrafe() {
-		return this.canStrafe && this.mob.goalSelector.getRunningGoals().noneMatch(p -> p.getGoal() instanceof EAAvoidEntityGoalLegacy);
+		return this.canStrafe.get(this.mob) && !GoalHelper.isRunning(this.mob.goalSelector, EAAvoidEntityGoal.class);
 	}
 
 	protected abstract void attackTick(LivingEntity target, double distanceFromTarget, boolean canSeeTarget);

@@ -82,11 +82,11 @@ public class SkeletonShoot extends Feature {
 				inaccuracy *= 2.5d;
 			}
 
-			EARangedBowAttackGoal rangedBowAttackGoal = (EARangedBowAttackGoal) new EARangedBowAttackGoal(skeleton, 1.0d, shootingRange1, strafe)
-					.setBowChargeTicks(bowChargeTicks1)
-					.setAttackCooldown(shootingCooldown1)
-					.setInaccuracy((float) inaccuracy);
-			skeleton.goalSelector.addGoal(2, rangedBowAttackGoal);
+			//EARangedBowAttackGoal rangedBowAttackGoal = (EARangedBowAttackGoal) new EARangedBowAttackGoal(skeleton, 1.0d, shootingRange1, strafe)
+			//		.setBowChargeTicks(bowChargeTicks1)
+			//		.setAttackCooldown(shootingCooldown1)
+			//		.setInaccuracy((float) inaccuracy);
+			//skeleton.goalSelector.addGoal(2, rangedBowAttackGoal);
 		}
 	}
 }
