@@ -1,34 +1,32 @@
 package insane96mcp.enhancedai.modules.shulker.shulkerattack;
 
-import insane96mcp.enhancedai.EnhancedAI;
+import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.enhancedai.setup.NBTUtils;
+import insane96mcp.enhancedai.utils.GoalHelper;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.MinMax;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.monster.Shulker;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import java.util.ArrayList;
-
 @LoadFeature(module = Modules.Ids.SHULKER)
 public class ShulkerAttack extends Feature {
-    public static final String BASE_ATTACK_SPEED = EnhancedAI.RESOURCE_PREFIX + "base_attack_speed";
-    public static final String ATTACK_SPEED_BONUS_HALF_SECONDS = EnhancedAI.RESOURCE_PREFIX + "attack_speed_bonus_half_seconds";
-    @Config(min = 1, max = 40, description = "Ticks before the first bullet is fired")
+    @Config(min = 0, description = "Ticks before the first bullet is fired")
     public static MinMax baseAttackSpeed = new MinMax(20, 40);
-    @Config(min = 1, max = 40, description = "Ticks to fire is calculated as base_attack_speed + (0~attack_speed_bonus_half_seconds * 10)")
-    public static MinMax attackSpeedBonusHalfSeconds = new MinMax(10, 20);
+    @Config(min = 1, description = "Ticks to fire is calculated as base_attack_speed + (0~extra_attack_speed)")
+    public static MinMax extraAttackSpeed = new MinMax(100, 200);
 
-    public ShulkerAttack(Module module, boolean enabledByDefault, boolean canBeDisabled) {
-        super(module, enabledByDefault, canBeDisabled);
+    public static EAIData<Integer> BASE_ATTACK_SPEED;
+    public static EAIData<Integer> EXTRA_ATTACK_SPEED;
+
+    public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
+        super.init(module, enabledByDefault, canBeDisabled);
+        BASE_ATTACK_SPEED = EAIData.ofInt(this.createDataKey("base_attack_speed"));
+        EXTRA_ATTACK_SPEED = EAIData.ofInt(this.createDataKey("extra_attack_speed"));
     }
 
     //Lowest priority so other mods can set persistent data
@@ -38,27 +36,11 @@ public class ShulkerAttack extends Feature {
                 || event.getLevel().isClientSide
                 || !(event.getEntity() instanceof Shulker shulker)) return;
 
-        boolean hasAttackGoal = false;
-        //Remove Shulker Swell Goal
-        ArrayList<Goal> goalsToRemove = new ArrayList<>();
-        for (WrappedGoal prioritizedGoal : shulker.goalSelector.availableGoals) {
-            if (prioritizedGoal.getGoal() instanceof Shulker.ShulkerAttackGoal) {
-                goalsToRemove.add(prioritizedGoal.getGoal());
-                hasAttackGoal = true;
-            }
-        }
+        GoalHelper.removeGoal(shulker.goalSelector, Shulker.ShulkerAttackGoal.class);
 
-        if (!hasAttackGoal)
-            return;
-
-        goalsToRemove.forEach(shulker.goalSelector::removeGoal);
-
-        CompoundTag persistentData = shulker.getPersistentData();
-
-        int baseAttackSpeed1 = NBTUtils.getIntOrPutDefaultLegacy(persistentData, BASE_ATTACK_SPEED, baseAttackSpeed.getIntRandBetween(shulker.getRandom()));
-        int attackSpeedBonusHalfSeconds1 = NBTUtils.getIntOrPutDefaultLegacy(persistentData, ATTACK_SPEED_BONUS_HALF_SECONDS, attackSpeedBonusHalfSeconds.getIntRandBetween(shulker.getRandom()));
-
-        EAShulkerAttackGoal attackGoal = new EAShulkerAttackGoal(shulker, baseAttackSpeed1, attackSpeedBonusHalfSeconds1);
+        EAShulkerAttackGoal attackGoal = new EAShulkerAttackGoal(shulker);
         shulker.goalSelector.addGoal(2, attackGoal);
+        BASE_ATTACK_SPEED.applyIfAbsent(shulker, baseAttackSpeed.getIntRandBetween(shulker.getRandom()));
+        EXTRA_ATTACK_SPEED.applyIfAbsent(shulker, extraAttackSpeed.getIntRandBetween(shulker.getRandom()));
     }
 }

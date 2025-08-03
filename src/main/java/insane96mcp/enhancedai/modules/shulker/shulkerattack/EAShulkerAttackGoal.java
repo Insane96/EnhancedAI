@@ -12,14 +12,10 @@ import java.util.EnumSet;
 public class EAShulkerAttackGoal extends Goal {
     private int attackTime;
     private final Shulker shulker;
-    private final int baseAttackSpeed;
-    private final int bonusHalfSeconds;
 
-    public EAShulkerAttackGoal(Shulker shulker, int baseAttackSpeed, int bonusHalfSeconds) {
+    public EAShulkerAttackGoal(Shulker shulker) {
         this.shulker = shulker;
         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
-        this.baseAttackSpeed = baseAttackSpeed;
-        this.bonusHalfSeconds = bonusHalfSeconds;
     }
 
     /**
@@ -40,7 +36,7 @@ public class EAShulkerAttackGoal extends Goal {
      * Execute a one shot task or start executing a continuous task
      */
     public void start() {
-        this.attackTime = this.baseAttackSpeed;
+        this.attackTime = ShulkerAttack.BASE_ATTACK_SPEED.get(this.shulker);
         this.shulker.setRawPeekAmount(this.shulker.getHealth() / this.shulker.getMaxHealth() > 0.4f ? 100 : 35);
     }
 
@@ -73,7 +69,10 @@ public class EAShulkerAttackGoal extends Goal {
             this.shulker.setRawPeekAmount(35);
         if (d0 < 400.0D) {
             if (this.attackTime <= 0) {
-                this.attackTime = this.baseAttackSpeed + this.shulker.getRandom().nextInt(this.bonusHalfSeconds) * 20 / 2;
+                this.attackTime = ShulkerAttack.BASE_ATTACK_SPEED.get(this.shulker);
+                int extraAttackTime = ShulkerAttack.EXTRA_ATTACK_SPEED.get(this.shulker);
+                if (extraAttackTime > 0)
+                    this.attackTime += this.shulker.getRandom().nextInt(ShulkerAttack.EXTRA_ATTACK_SPEED.get(this.shulker));
                 this.shulker.level().addFreshEntity(new ShulkerBullet(this.shulker.level(), this.shulker, livingentity, this.shulker.getAttachFace().getAxis()));
                 this.shulker.playSound(SoundEvents.SHULKER_SHOOT, 2.0F, (this.shulker.getRandom().nextFloat() - this.shulker.getRandom().nextFloat()) * 0.2F + 1.0F);
             }
