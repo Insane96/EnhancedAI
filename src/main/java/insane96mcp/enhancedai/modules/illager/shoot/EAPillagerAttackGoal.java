@@ -30,21 +30,14 @@ public class EAPillagerAttackGoal extends Goal {
     private final Pillager mob;
     private CrossbowState crossbowState;
     private final double speedModifier;
-    private final float attackRadiusSqr;
     private int seeTime;
     private int attackDelay;
     private int updatePathDelay;
 
-    private int attackCooldown;
-    private float inaccuracy;
-
-    public EAPillagerAttackGoal(Pillager pMob, double pSpeedModifier, float pAttackRadius, int attackCooldown, float inaccuracy) {
+    public EAPillagerAttackGoal(Pillager pMob, double pSpeedModifier) {
         this.crossbowState = CrossbowState.UNCHARGED;
         this.mob = pMob;
         this.speedModifier = pSpeedModifier;
-        this.attackRadiusSqr = pAttackRadius * pAttackRadius;
-        this.attackCooldown = attackCooldown;
-        this.inaccuracy = inaccuracy;
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
 
@@ -97,7 +90,8 @@ public class EAPillagerAttackGoal extends Goal {
             --this.seeTime;
 
         double distance = this.mob.distanceToSqr(livingentity);
-        boolean isOutOfRangeOrCantSee = (distance > (double) this.attackRadiusSqr || this.seeTime < 5) && this.attackDelay == 0;
+        double attackRadius = PillagerShoot.SHOOTING_RANGE.get(this.mob);
+        boolean isOutOfRangeOrCantSee = (distance > attackRadius * attackRadius || this.seeTime < 5) && this.attackDelay == 0;
         if (isOutOfRangeOrCantSee) {
             --this.updatePathDelay;
             if (this.updatePathDelay <= 0) {
@@ -125,7 +119,7 @@ public class EAPillagerAttackGoal extends Goal {
             if (useTicks >= CrossbowItem.getChargeDuration(crossbow)) {
                 this.mob.releaseUsingItem();
                 this.crossbowState = CrossbowState.CHARGED;
-                this.attackDelay = this.attackCooldown;
+                this.attackDelay = PillagerShoot.SHOOTING_COOLDOWN.get(this.mob);
                 this.mob.setChargingCrossbow(false);
             }
         }
@@ -152,7 +146,7 @@ public class EAPillagerAttackGoal extends Goal {
         InteractionHand interactionhand = ProjectileUtil.getWeaponHoldingHand(this.mob, item -> item instanceof CrossbowItem);
         ItemStack itemstack = this.mob.getItemInHand(interactionhand);
         if (this.mob.isHolding(is -> is.getItem() instanceof CrossbowItem)) {
-            performShooting(this.mob.level(), this.mob, interactionhand, itemstack, this.inaccuracy);
+            performShooting(this.mob.level(), this.mob, interactionhand, itemstack, PillagerShoot.INACCURACY.get(this.mob).floatValue());
         }
 
         this.mob.onCrossbowAttackPerformed();
@@ -228,7 +222,7 @@ public class EAPillagerAttackGoal extends Goal {
         if (distanceXZ != 0f)
             yPos += distanceY / distanceXZ;
         float dirY = (float) (yPos - projectile.getY());
-        Vector3f shootRotation = ((CrossbowAttackMob) livingEntity).getProjectileShotVector(livingEntity, new Vec3(dirX, dirY + distanceXZ * 0.19f, dirZ), angle);
+        Vector3f shootRotation = ((CrossbowAttackMob) livingEntity).getProjectileShotVector(livingEntity, new Vec3(dirX, dirY + distanceXZ * 0.2f, dirZ), angle);
         projectile.shoot(shootRotation.x(), shootRotation.y(), shootRotation.z(), 1.1f + ((float) distance / 32f) + (float) Math.max(distanceY / 48d, 0f), inaccuracy);
     }
 

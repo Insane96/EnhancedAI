@@ -1,8 +1,9 @@
 package insane96mcp.enhancedai.modules.illager.shoot;
 
 import insane96mcp.enhancedai.EnhancedAI;
+import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.enhancedai.setup.NBTUtils;
+import insane96mcp.enhancedai.utils.GoalHelper;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
@@ -10,7 +11,6 @@ import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.Difficulty;
 import insane96mcp.insanelib.base.config.MinMax;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.RangedCrossbowAttackGoal;
@@ -19,14 +19,10 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@LoadFeature(module = Modules.Ids.ILLAGER, description = "Use the enhancedai:better_pillager_shoot entity type tag to add more skeletons that are affected by this feature")
+@LoadFeature(module = Modules.Ids.ILLAGER, description = "Use the enhancedai:pillager_shoot/better_shooting entity type tag to add more skeletons that are affected by this feature")
 public class PillagerShoot extends Feature {
 
-	public static final TagKey<EntityType<?>> BETTER_PILLAGER_SHOOT = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("better_pillager_shoot"));
-
-	public static final String SHOOTING_RANGE = EnhancedAI.RESOURCE_PREFIX + "shooting_range";
-	public static final String SHOOTING_COOLDOWN = EnhancedAI.RESOURCE_PREFIX + "shooting_cooldown";
-	public static final String INACCURACY = EnhancedAI.RESOURCE_PREFIX + "inaccuracy";
+	public static final TagKey<EntityType<?>> BETTER_PILLAGER_SHOOT = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("pillager_shoot/better_shooting"));
 
 	@Config(min = 1, max = 64, description = "The range from where a pillager will shoot a player")
 	public static MinMax shootingRange = new MinMax(24, 32);
@@ -35,8 +31,15 @@ public class PillagerShoot extends Feature {
 	@Config(min = 0d, max = 30d, description = "How much inaccuracy does the arrow fired by pillagers have. Vanilla pillagers have 10/6/2 inaccuracy in easy/normal/hard difficulty.")
 	public static Difficulty arrowInaccuracy = new Difficulty(5, 3, 1);
 
-	public PillagerShoot(Module module, boolean enabledByDefault, boolean canBeDisabled) {
-		super(module, enabledByDefault, canBeDisabled);
+	public static EAIData<Integer> SHOOTING_RANGE;
+	public static EAIData<Integer> SHOOTING_COOLDOWN;
+	public static EAIData<Double> INACCURACY;
+
+	public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
+		super.init(module, enabledByDefault, canBeDisabled);
+		SHOOTING_RANGE = EAIData.ofInt(this.createDataKey("shooting_range"));
+		SHOOTING_COOLDOWN = EAIData.ofInt(this.createDataKey("shooting_cooldown"));
+		INACCURACY = EAIData.ofDouble(this.createDataKey("inaccuracy"));
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
@@ -46,25 +49,13 @@ public class PillagerShoot extends Feature {
 				|| !event.getEntity().getType().is(BETTER_PILLAGER_SHOOT))
 			return;
 
-		CompoundTag persistentData = pillager.getPersistentData();
-
-		int shootingRange1 = NBTUtils.getIntOrPutDefaultLegacy(persistentData, SHOOTING_RANGE, shootingRange.getIntRandBetween(pillager.getRandom()));
-		double inaccuracy = NBTUtils.getDoubleOrPutDefaultLegacy(persistentData, INACCURACY, arrowInaccuracy.getByDifficulty(pillager.level()));
-		int shootingCooldown1 = NBTUtils.getIntOrPutDefaultLegacy(persistentData, SHOOTING_COOLDOWN, shootingCooldown.getIntRandBetween(pillager.getRandom()));
-
 		//Remove Crossbow Goal
-		pillager.goalSelector.removeAllGoals(goal -> goal instanceof RangedCrossbowAttackGoal<?>);
+		GoalHelper.removeGoal(pillager.goalSelector, RangedCrossbowAttackGoal.class);
 
-		/*if (pillager.level().getDifficulty().equals(Difficulty.HARD))
-			shootingCooldown1 /= 2;
-
-		EARangedBowAttackGoal rangedBowAttackGoal = (EARangedBowAttackGoal) new EARangedBowAttackGoal(skeleton, 1.0d, shootingRange1, strafe)
-				.setBowChargeTicks(bowChargeTicks1)
-				.setAttackCooldown(shootingCooldown1)
-				.setInaccuracy((float) inaccuracy);
-		skeleton.goalSelector.addGoal(2, rangedBowAttackGoal);*/
-		EAPillagerAttackGoal attackGoal = new EAPillagerAttackGoal(pillager, 1d, shootingRange1, shootingCooldown1, (float) inaccuracy);
-		pillager.goalSelector.addGoal(3, attackGoal);
+		pillager.goalSelector.addGoal(3, new EAPillagerAttackGoal(pillager, 1d));
+		SHOOTING_RANGE.applyIfAbsent(pillager, shootingRange.getIntRandBetween(pillager.getRandom()));
+		SHOOTING_COOLDOWN.applyIfAbsent(pillager, shootingCooldown.getIntRandBetween(pillager.getRandom()));
+		INACCURACY.applyIfAbsent(pillager, arrowInaccuracy.getByDifficulty(pillager.level()));
 	}
 
 }
