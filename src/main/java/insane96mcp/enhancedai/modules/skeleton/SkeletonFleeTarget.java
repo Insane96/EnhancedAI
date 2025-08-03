@@ -2,7 +2,6 @@ package insane96mcp.enhancedai.modules.skeleton;
 
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.ai.EAAvoidEntityGoalLegacy;
-import insane96mcp.enhancedai.ai.EAAvoidTargetGoal;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.setup.EATags;
 import insane96mcp.enhancedai.setup.NBTUtils;
@@ -69,9 +68,9 @@ public class SkeletonFleeTarget extends Feature {
 
         avoidEntityGoals.forEach(skeleton.goalSelector::removeGoal);
         if (hasAIArrowAttack) {
-            EAAvoidTargetGoal avoidTargetGoal = new EAAvoidTargetGoal(skeleton, (float) fleeDistanceFar1, (float) fleeDistanceNear1, fleeSpeedNear1, fleeSpeedFar1);
-            avoidTargetGoal.setAttackWhenRunning(attackWhenAvoiding);
-            skeleton.goalSelector.addGoal(1, avoidTargetGoal);
+            //EAAvoidTargetGoal avoidTargetGoal = new EAAvoidTargetGoal(skeleton, (float) fleeDistanceFar1, (float) fleeDistanceNear1, fleeSpeedFar1, fleeSpeedNear1);
+            //avoidTargetGoal.setAttackWhenRunning(attackWhenAvoiding);
+            //skeleton.goalSelector.addGoal(1, avoidTargetGoal);
         }
     }
 }

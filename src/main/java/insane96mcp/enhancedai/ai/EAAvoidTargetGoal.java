@@ -1,5 +1,6 @@
 package insane96mcp.enhancedai.ai;
 
+import insane96mcp.enhancedai.data.EAIData;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
@@ -14,33 +15,34 @@ import java.util.function.Predicate;
 
 public class EAAvoidTargetGoal extends Goal {
 	protected final PathfinderMob goalOwner;
-	private final double farSpeed;
-	private final double nearSpeed;
-	protected final float avoidDistance;
-	protected final float avoidDistanceNear;
+	protected final EAIData<Integer> avoidDistanceFar;
+	protected final EAIData<Integer> avoidDistanceNear;
+	private final EAIData<Double> farSpeed;
+	private final EAIData<Double> nearSpeed;
 	protected Path path;
 	private final TargetingConditions builtTargetSelector;
 
 	private LivingEntity avoidTarget;
 
-	public EAAvoidTargetGoal(PathfinderMob entityIn, float avoidDistance, float avoidDistanceNear, double nearSpeed, double farSpeed) {
-		this(entityIn, (livingEntity) -> true, avoidDistance, avoidDistanceNear, nearSpeed, farSpeed, EntitySelector.NO_CREATIVE_OR_SPECTATOR::test);
+	public EAAvoidTargetGoal(PathfinderMob entityIn, EAIData<Integer> avoidDistanceFar, EAIData<Integer> avoidDistanceNear, EAIData<Double> farSpeed, EAIData<Double> nearSpeed) {
+		this(entityIn, avoidDistanceFar, avoidDistanceNear, farSpeed, nearSpeed, EntitySelector.NO_CREATIVE_OR_SPECTATOR::test);
 	}
 
-	public EAAvoidTargetGoal(PathfinderMob entityIn, Predicate<LivingEntity> targetPredicate, float avoidDistance, float avoidDistanceNear, double nearSpeedIn, double farSpeedIn, Predicate<LivingEntity> p_i48859_9_) {
+	public EAAvoidTargetGoal(PathfinderMob entityIn, EAIData<Integer> avoidDistanceFar, EAIData<Integer> avoidDistanceNear, EAIData<Double> farSpeed, EAIData<Double> nearSpeed, Predicate<LivingEntity> entityPredicate) {
 		this.goalOwner = entityIn;
-		this.avoidDistance = avoidDistance * avoidDistance;
-		this.avoidDistanceNear = avoidDistanceNear * avoidDistanceNear;
-		this.nearSpeed = nearSpeedIn;
-		this.farSpeed = farSpeedIn;
-		this.builtTargetSelector = TargetingConditions.forCombat().range(avoidDistance).selector(p_i48859_9_.and(targetPredicate));
+		this.avoidDistanceFar = avoidDistanceFar;
+		this.avoidDistanceNear = avoidDistanceNear;
+		this.nearSpeed = nearSpeed;
+		this.farSpeed = farSpeed;
+		this.builtTargetSelector = TargetingConditions.forCombat().selector(entityPredicate);
 	}
 
 	public boolean canUse() {
 		this.avoidTarget = this.goalOwner.getTarget();
-        if (this.avoidTarget == null
-				|| this.goalOwner.distanceToSqr(this.avoidTarget) > this.avoidDistance
-				|| !this.builtTargetSelector.test(this.goalOwner, this.avoidTarget))
+		int avoidDistanceFar = this.avoidDistanceFar.get(this.goalOwner);
+		if (this.avoidTarget == null
+				|| this.goalOwner.distanceToSqr(this.avoidTarget) > avoidDistanceFar * avoidDistanceFar
+				|| !this.builtTargetSelector.range(avoidDistanceFar).test(this.goalOwner, this.avoidTarget))
             return false;
 
         Vec3 posAway = DefaultRandomPos.getPosAway(this.goalOwner, 16, 7, this.avoidTarget.position());
@@ -57,7 +59,7 @@ public class EAAvoidTargetGoal extends Goal {
 	}
 
 	public void start() {
-		this.goalOwner.getNavigation().moveTo(this.path, this.farSpeed);
+		this.goalOwner.getNavigation().moveTo(this.path, this.farSpeed.get(this.goalOwner));
 	}
 
 	public void stop() {
@@ -65,10 +67,11 @@ public class EAAvoidTargetGoal extends Goal {
 	}
 
 	public void tick() {
-		if (this.goalOwner.distanceToSqr(this.avoidTarget) < this.avoidDistanceNear) {
-			this.goalOwner.getNavigation().setSpeedModifier(this.nearSpeed);
+		int nearDistance = this.avoidDistanceNear.get(this.goalOwner);
+		if (this.goalOwner.distanceToSqr(this.avoidTarget) < nearDistance * nearDistance) {
+			this.goalOwner.getNavigation().setSpeedModifier(this.nearSpeed.get(this.goalOwner));
 		} else {
-			this.goalOwner.getNavigation().setSpeedModifier(this.farSpeed);
+			this.goalOwner.getNavigation().setSpeedModifier(this.farSpeed.get(this.goalOwner));
 		}
 
 	}

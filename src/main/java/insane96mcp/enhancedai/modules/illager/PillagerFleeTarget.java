@@ -2,40 +2,62 @@ package insane96mcp.enhancedai.modules.illager;
 
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.ai.EAAvoidTargetGoal;
+import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.enhancedai.setup.EATags;
-import insane96mcp.enhancedai.setup.NBTUtils;
+import insane96mcp.enhancedai.utils.GoalHelper;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.monster.Pillager;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@LoadFeature(module = Modules.Ids.ILLAGER, description = "Pillagers try to stay away from the target. Use the enhancedai:pillager_flee entity type tag to add/remove skeletons that are affected by this feature")
+@LoadFeature(module = Modules.Ids.ILLAGER, description = "Pillagers try to stay away from the target. Use the enhancedai:pillager_flee/can_flee entity type tag to add/remove skeletons that are affected by this feature")
 public class PillagerFleeTarget extends Feature {
-    public static final TagKey<EntityType<?>> PILLAGER_FLEE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("pillager_flee"));
-    @Config(min = 0d, max = 1d, description = "Chance for a Skeleton to spawn with the ability to avoid the player")
-    public static Double avoidPlayerChance = 0.5d;
-    @Config(min = 0d, max = 1d, description = "Chance for a Skeleton to be able to shoot while running from a player")
+    public static final TagKey<EntityType<?>> PILLAGER_FLEE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("pillager_flee_target/can_flee"));
+    @Config(min = 0d, max = 1d, description = "Chance for a Pillager to spawn with the ability to avoid the target")
+    public static Double avoidTargetChance = 0.5d;
+    @Config(min = 0d, max = 1d, description = "Chance for a Pillager to be able to shoot while running from a target")
     public static Double attackWhenAvoidingChance = 0.5d;
-    @Config(min = 0d, max = 32d, description = "Distance from a player that counts as near and will make the skeleton run away faster.")
-    public static Double fleeDistanceNear = 7d;
-    @Config(min = 0d, max = 32d, description = "Distance from a player that will make the skeleton run away.")
-    public static Double fleeDistanceFar = 12d;
-    @Config(min = 0d, max = 4d, description = "Speed multiplier when the pillager avoids the player and it's within 'Flee Distance Near' blocks from him.")
-    public static Double fleeSpeedNear = 1.1d;
-    @Config(min = 0d, max = 4d, description = "Speed multiplier when the pillager avoids the player and it's farther than 'Flee Distance Far' blocks from him.")
+    @Config(min = 0d, max = 32d, description = "Distance from a target that will make the Pillager run away.")
+    public static Integer fleeDistanceFar = 12;
+    @Config(min = 0d, max = 32d, description = "Distance from a target that counts as near and will make the Pillager run away faster.")
+    public static Integer fleeDistanceNear = 7;
+    @Config(min = 0d, max = 4d, description = "Speed multiplier when the Pillager avoids the target and it's farther than 'Flee Distance Far' blocks from him.")
     public static Double fleeSpeedFar = 1d;
+    @Config(min = 0d, max = 4d, description = "Speed multiplier when the Pillager avoids the target and it's within 'Flee Distance Near' blocks from him.")
+    public static Double fleeSpeedNear = 1.1d;
 
-    public PillagerFleeTarget(Module module, boolean enabledByDefault, boolean canBeDisabled) {
-        super(module, enabledByDefault, canBeDisabled);
+    public static EAIData<Boolean> AVOID_TARGET;
+    public static EAIData<Boolean> ATTACK_WHEN_AVOIDING;
+    public static EAIData<Integer> FLEE_DISTANCE_FAR;
+    public static EAIData<Integer> FLEE_DISTANCE_NEAR;
+    public static EAIData<Double> FLEE_SPEED_FAR;
+    public static EAIData<Double> FLEE_SPEED_NEAR;
+
+    public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
+        super.init(module, enabledByDefault, canBeDisabled);
+        AVOID_TARGET = EAIData.ofBool(this.createDataKey("avoid_target"), (mob, avoidTarget) -> {
+            if (!(mob instanceof PathfinderMob pathfinderMob))
+                return;
+            GoalHelper.removeGoal(mob.goalSelector, EAAvoidTargetGoal.class);
+            if (avoidTarget)
+                mob.goalSelector.addGoal(1, new EAAvoidTargetGoal(pathfinderMob, FLEE_DISTANCE_FAR, FLEE_DISTANCE_NEAR, FLEE_SPEED_FAR, FLEE_SPEED_NEAR));
+            ATTACK_WHEN_AVOIDING.changed(mob);
+        });
+        ATTACK_WHEN_AVOIDING = EAIData.ofBool(this.createDataKey("attack_when_avoiding"), (mob, attackWhenAvoiding) -> {
+            GoalHelper.getGoal(mob.goalSelector, EAAvoidTargetGoal.class).ifPresent(goal -> goal.setAttackWhenRunning(attackWhenAvoiding));
+        });
+        FLEE_DISTANCE_FAR = EAIData.ofInt(this.createDataKey("flee_distance_far"));
+        FLEE_DISTANCE_NEAR = EAIData.ofInt(this.createDataKey("flee_distance_near"));
+        FLEE_SPEED_FAR = EAIData.ofDouble(this.createDataKey("flee_speed_far"));
+        FLEE_SPEED_NEAR = EAIData.ofDouble(this.createDataKey("flee_speed_near"));
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
@@ -45,20 +67,11 @@ public class PillagerFleeTarget extends Feature {
                 || !pillager.getType().is(PILLAGER_FLEE))
             return;
 
-        CompoundTag persistentData = pillager.getPersistentData();
-
-        boolean avoidTarget = NBTUtils.getBooleanOrPutDefaultLegacy(persistentData, EATags.Flee.AVOID_TARGET, pillager.getRandom().nextDouble() < avoidPlayerChance);
-        boolean attackWhenAvoiding = NBTUtils.getBooleanOrPutDefaultLegacy(persistentData, EATags.Flee.ATTACK_WHEN_AVOIDING, pillager.getRandom().nextDouble() < attackWhenAvoidingChance);
-        double fleeDistanceFar1 = NBTUtils.getDoubleOrPutDefaultLegacy(persistentData, EATags.Flee.FLEE_DISTANCE_FAR, fleeDistanceFar);
-        double fleeDistanceNear1 = NBTUtils.getDoubleOrPutDefaultLegacy(persistentData, EATags.Flee.FLEE_DISTANCE_NEAR, fleeDistanceNear);
-        double fleeSpeedFar1 = NBTUtils.getDoubleOrPutDefaultLegacy(persistentData, EATags.Flee.FLEE_SPEED_FAR, fleeSpeedFar);
-        double fleeSpeedNear1 = NBTUtils.getDoubleOrPutDefaultLegacy(persistentData, EATags.Flee.FLEE_SPEED_NEAR, fleeSpeedNear);
-
-        if (!avoidTarget)
-            return;
-
-        EAAvoidTargetGoal avoidTargetGoal = new EAAvoidTargetGoal(pillager, (float) fleeDistanceFar1, (float) fleeDistanceNear1, fleeSpeedNear1, fleeSpeedFar1);
-        avoidTargetGoal.setAttackWhenRunning(attackWhenAvoiding);
-        pillager.goalSelector.addGoal(1, avoidTargetGoal);
+        AVOID_TARGET.applyIfAbsent(pillager, pillager.getRandom().nextDouble() < avoidTargetChance);
+        ATTACK_WHEN_AVOIDING.applyIfAbsent(pillager, pillager.getRandom().nextDouble() < attackWhenAvoidingChance);
+        FLEE_DISTANCE_FAR.applyIfAbsent(pillager, fleeDistanceFar);
+        FLEE_DISTANCE_NEAR.applyIfAbsent(pillager, fleeDistanceNear);
+        FLEE_SPEED_FAR.applyIfAbsent(pillager, fleeSpeedFar);
+        FLEE_SPEED_NEAR.applyIfAbsent(pillager, fleeSpeedNear);
     }
 }

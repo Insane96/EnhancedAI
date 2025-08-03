@@ -1,7 +1,6 @@
 package insane96mcp.enhancedai.modules.witch;
 
 import insane96mcp.enhancedai.EnhancedAI;
-import insane96mcp.enhancedai.ai.EAAvoidTargetGoal;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.setup.EATags;
 import insane96mcp.enhancedai.setup.NBTUtils;
@@ -59,8 +58,8 @@ public class WitchFleeTarget extends Feature {
         if (!avoidTarget)
             return;
 
-        EAAvoidTargetGoal avoidTargetGoal = new EAAvoidTargetGoal(witch, (float) fleeDistanceFar1, (float) fleeDistanceNear1, fleeSpeedNear1, fleeSpeedFar1);
-        avoidTargetGoal.setAttackWhenRunning(attackWhenAvoiding);
-        witch.goalSelector.addGoal(1, avoidTargetGoal);
+        //EAAvoidTargetGoal avoidTargetGoal = new EAAvoidTargetGoal(witch, (float) fleeDistanceFar1, (float) fleeDistanceNear1, fleeSpeedFar1, fleeSpeedNear1);
+        //avoidTargetGoal.setAttackWhenRunning(attackWhenAvoiding);
+        //witch.goalSelector.addGoal(1, avoidTargetGoal);
     }
 }
