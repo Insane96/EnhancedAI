@@ -18,6 +18,6 @@ public abstract class ShulkerBulletMixin extends Projectile {
 
 	@ModifyArg(method = "onHitEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;addEffect(Lnet/minecraft/world/effect/MobEffectInstance;Lnet/minecraft/world/entity/Entity;)Z"), index = 0)
 	private MobEffectInstance onHitEntity(MobEffectInstance mobEffectInstance) {
-		return ShulkerBullets.getLevitationInstance(this.level(), mobEffectInstance);
+		return ShulkerBullets.getLevitationInstance(this.level(), mobEffectInstance, this.getOwner());
 	}
 }

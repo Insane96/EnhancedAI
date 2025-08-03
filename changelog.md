@@ -14,6 +14,7 @@ You are able to change AI at runtime without having to reload the world
 * Added sun-resistant Drowned
   * Drowned have 30 seconds where they don't burn in sunlight. During this time, they will not seek water
 * Pillagers now try to reposition to not hit allies (or when they hit an ally)
+* Shulker bullets now take duration and amplifier from owners so each shulker can have it's own
 * Snow golems can now strafe when attacking (disabled by default)
 
 ## 2.7.1

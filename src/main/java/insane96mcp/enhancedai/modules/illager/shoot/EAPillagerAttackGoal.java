@@ -1,6 +1,5 @@
 package insane96mcp.enhancedai.modules.illager.shoot;
 
-import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -131,8 +130,8 @@ public class EAPillagerAttackGoal extends Goal {
         }
         else if (this.crossbowState == CrossbowState.CHARGED) {
             --this.attackDelay;
-            this.mob.setCustomNameVisible(true);
-            this.mob.setCustomName(Component.literal(this.attackDelay + ""));
+            //this.mob.setCustomNameVisible(true);
+            //this.mob.setCustomName(Component.literal(this.attackDelay + ""));
             if (--this.attackDelay <= 0) {
                 Entity entity = PillagerShoot.mightHitAnAlly(this.mob, distance);
                 if (entity != null) {
