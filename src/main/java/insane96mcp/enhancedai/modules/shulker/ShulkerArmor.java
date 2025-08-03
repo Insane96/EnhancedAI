@@ -4,7 +4,6 @@ import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
-import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
@@ -29,10 +28,6 @@ public class ShulkerArmor extends Feature {
     public static AttributeModifier CLOSED_MODIFIER;
     public static AttributeModifier PEEK_MODIFIER;
     public static AttributeModifier OPEN_MODIFIER;
-
-    public ShulkerArmor(Module module, boolean enabledByDefault, boolean canBeDisabled) {
-        super(module, enabledByDefault, canBeDisabled);
-    }
 
     @Override
     public void readConfig(ModConfigEvent event) {
