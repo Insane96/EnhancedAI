@@ -14,15 +14,11 @@ import net.minecraft.world.item.Items;
 
 public class EARangedBowAttackGoal extends EARangedAttackGoal<AbstractSkeleton> {
 
-	protected int bowChargeTicks;
+	protected EAIData<Integer> bowChargeTicks;
 
-	public EARangedBowAttackGoal(AbstractSkeleton mob, double moveSpeedAmpIn, EAIData<Integer> attackCooldown, EAIData<Double> inaccuracy, EAIData<Integer> attackDistance, EAIData<Boolean> canStrafe) {
+	public EARangedBowAttackGoal(AbstractSkeleton mob, double moveSpeedAmpIn, EAIData<Integer> attackCooldown, EAIData<Double> inaccuracy, EAIData<Integer> attackDistance, EAIData<Boolean> canStrafe, EAIData<Integer> bowChargeTicks) {
 		super(mob, moveSpeedAmpIn, attackCooldown, inaccuracy, attackDistance, canStrafe);
-	}
-
-	public EARangedBowAttackGoal setBowChargeTicks(int bowChargeTicks) {
 		this.bowChargeTicks = bowChargeTicks;
-		return this;
 	}
 
 	/**
@@ -86,10 +82,10 @@ public class EARangedBowAttackGoal extends EARangedAttackGoal<AbstractSkeleton> 
 	private int getBowChargeTicks(LivingEntity target) {
 		double distanceFromTarget = this.mob.distanceToSqr(target);
 		if (distanceFromTarget < 12d * 12d)
-			return this.bowChargeTicks;
+			return this.bowChargeTicks.get(this.mob);
 
 		distanceFromTarget -= 12d * 12d;
-		return (int) (this.bowChargeTicks + (Math.sqrt(distanceFromTarget)));
+		return (int) (this.bowChargeTicks.get(this.mob) + (Math.sqrt(distanceFromTarget)));
 	}
 
 	protected void attackEntityWithRangedAttack(AbstractSkeleton entity, LivingEntity target, int chargeTicks) {

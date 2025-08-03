@@ -51,6 +51,14 @@ public class GoalHelper {
         return getGoal(goalSelector, goalClass).isPresent();
     }
 
+    public static <T extends Goal> boolean hasGoal(GoalSelector goalSelector, Goal goal) {
+        for (WrappedGoal wrappedGoal : goalSelector.availableGoals) {
+            if (wrappedGoal.getGoal() == goal)
+                return true;
+        }
+        return false;
+    }
+
     public static <T extends Goal> boolean isRunning(GoalSelector goalSelector, Class<T> goalClass) {
         return goalSelector.getRunningGoals().anyMatch(goal -> goalClass.isAssignableFrom(goal.getClass()));
     }

@@ -1,35 +1,24 @@
 package insane96mcp.enhancedai.modules.skeleton.shoot;
 
 import insane96mcp.enhancedai.EnhancedAI;
-import insane96mcp.enhancedai.ai.EAAvoidEntityGoalLegacy;
+import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.enhancedai.setup.NBTUtils;
+import insane96mcp.enhancedai.utils.GoalHelper;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
+import insane96mcp.insanelib.base.config.Difficulty;
 import insane96mcp.insanelib.base.config.MinMax;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
-
-import java.util.List;
 
 @LoadFeature(module = Modules.Ids.SKELETON, description = "Skeletons are more precise when shooting and strafing is removed, can hit a target from up to 64 blocks and try to stay away from the target. Use the enhancedai:better_skeleton_shoot entity type tag to add more skeletons that are affected by this feature")
 public class SkeletonShoot extends Feature {
 
-	public static final TagKey<EntityType<?>> BETTER_SKELETON_SHOOT = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("better_skeleton_shoot"));
-
-	public static final String STRAFE = EnhancedAI.RESOURCE_PREFIX + "strafe";
-	public static final String SHOOTING_RANGE = EnhancedAI.RESOURCE_PREFIX + "shooting_range";
-	public static final String SHOOTING_COOLDOWN = EnhancedAI.RESOURCE_PREFIX + "shooting_cooldown";
-	public static final String BOW_CHARGE_TICKS = EnhancedAI.RESOURCE_PREFIX + "bow_charge_ticks";
-	public static final String INACCURACY = EnhancedAI.RESOURCE_PREFIX + "inaccuracy";
-	private static final String SPAMMER = EnhancedAI.RESOURCE_PREFIX + "spammer";
+	public static final TagKey<EntityType<?>> BETTER_SKELETON_SHOOT = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("skeleton_shoot/better_shooting"));
 
 	@Config(min = 1, max = 64, description = "The range from where a skeleton will shoot a player")
 	public static MinMax shootingRange = new MinMax(24, 32);
@@ -40,53 +29,38 @@ public class SkeletonShoot extends Feature {
 	@Config(min = 0d, max = 1d, description = "Chance for a Skeleton to spawn with the ability to strafe (like vanilla)")
 	public static Double strafeChance = 0.333d;
 	@Config(min = 0d, max = 30d, description = "How much inaccuracy does the arrow fired by skeletons have. Vanilla skeletons have 10/6/2 inaccuracy in easy/normal/hard difficulty.")
-	public static insane96mcp.insanelib.base.config.Difficulty arrowInaccuracy = new insane96mcp.insanelib.base.config.Difficulty(6, 5, 3);
-	@Config(min = 0d, max = 1d, description = "Chance for a Skeleton to spawn as a spammer, which spams arrows instead of fully charging the bow")
-	public static Double spammerChance = 0.07d;
+	public static Difficulty inaccuracy = new Difficulty(6, 5, 3);
 
-	public SkeletonShoot(Module module, boolean enabledByDefault, boolean canBeDisabled) {
-		super(module, enabledByDefault, canBeDisabled);
+	public static EAIData<Boolean> STRAFE;
+	public static EAIData<Integer> SHOOTING_RANGE;
+	public static EAIData<Integer> SHOOTING_COOLDOWN;
+	public static EAIData<Integer> BOW_CHARGE_TICKS;
+	public static EAIData<Double> INACCURACY;
+
+	public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
+		super.init(module, enabledByDefault, canBeDisabled);
+		SHOOTING_COOLDOWN = EAIData.ofInt(this.createDataKey("shooting_cooldown"));
+		STRAFE = EAIData.ofBool(this.createDataKey("strafe"));
+		INACCURACY = EAIData.ofDouble(this.createDataKey("inaccuracy"));
+		SHOOTING_RANGE = EAIData.ofInt(this.createDataKey("shooting_range"));
+		BOW_CHARGE_TICKS = EAIData.ofInt(this.createDataKey("bow_charge_ticks"));
 	}
 
 	public static void onReassessWeaponGoal(AbstractSkeleton skeleton) {
 		if (!isEnabled(SkeletonShoot.class)
+				|| skeleton.level().isClientSide
 				|| !skeleton.getType().is(BETTER_SKELETON_SHOOT))
 			return;
 
-		CompoundTag persistentData = skeleton.getPersistentData();
-
-		boolean strafe = NBTUtils.getBooleanOrPutDefaultLegacy(persistentData, STRAFE, skeleton.getRandom().nextDouble() < strafeChance);
-		int shootingRange1 = NBTUtils.getIntOrPutDefaultLegacy(persistentData, SHOOTING_RANGE, shootingRange.getIntRandBetween(skeleton.getRandom()));
-		double inaccuracy = NBTUtils.getDoubleOrPutDefaultLegacy(persistentData, INACCURACY, arrowInaccuracy.getByDifficulty(skeleton.level()));
-		boolean spammer = NBTUtils.getBooleanOrPutDefaultLegacy(persistentData, SPAMMER, skeleton.getRandom().nextDouble() < spammerChance);
-		int shootingCooldown1 = NBTUtils.getIntOrPutDefaultLegacy(persistentData, SHOOTING_COOLDOWN, shootingCooldown.getIntRandBetween(skeleton.getRandom()));
-		int bowChargeTicks1 = NBTUtils.getIntOrPutDefaultLegacy(persistentData, BOW_CHARGE_TICKS, bowChargeTicks.getIntRandBetween(skeleton.getRandom()));
-
-		boolean hasAIArrowAttack = false;
-		for (WrappedGoal prioritizedGoal : skeleton.goalSelector.availableGoals) {
-            if (prioritizedGoal.getGoal().equals(skeleton.bowGoal)) {
-                hasAIArrowAttack = true;
-                break;
-            }
+		if (GoalHelper.hasGoal(skeleton.goalSelector, skeleton.bowGoal)) {
+			skeleton.goalSelector.removeGoal(skeleton.bowGoal);
+			EARangedBowAttackGoal rangedBowAttackGoal = new EARangedBowAttackGoal(skeleton, 1.0d, SHOOTING_COOLDOWN, INACCURACY, SHOOTING_RANGE, STRAFE, BOW_CHARGE_TICKS);
+			skeleton.goalSelector.addGoal(2, rangedBowAttackGoal);
 		}
-		List<Goal> avoidEntityGoals = skeleton.goalSelector.availableGoals.stream()
-				.map(WrappedGoal::getGoal)
-				.filter(g -> g instanceof EAAvoidEntityGoalLegacy<?>)
-				.toList();
-
-		avoidEntityGoals.forEach(skeleton.goalSelector::removeGoal);
-		if (hasAIArrowAttack) {
-			if (spammer) {
-				shootingCooldown1 = 30;
-				bowChargeTicks1 = 1;
-				inaccuracy *= 2.5d;
-			}
-
-			//EARangedBowAttackGoal rangedBowAttackGoal = (EARangedBowAttackGoal) new EARangedBowAttackGoal(skeleton, 1.0d, shootingRange1, strafe)
-			//		.setBowChargeTicks(bowChargeTicks1)
-			//		.setAttackCooldown(shootingCooldown1)
-			//		.setInaccuracy((float) inaccuracy);
-			//skeleton.goalSelector.addGoal(2, rangedBowAttackGoal);
-		}
+		SHOOTING_COOLDOWN.applyIfAbsent(skeleton, shootingCooldown.getIntRandBetween(skeleton.getRandom()));
+		INACCURACY.applyIfAbsent(skeleton, inaccuracy.getByDifficulty(skeleton.level()));
+		SHOOTING_RANGE.applyIfAbsent(skeleton, shootingRange.getIntRandBetween(skeleton.getRandom()));
+		STRAFE.applyIfAbsent(skeleton, skeleton.getRandom().nextDouble() < strafeChance);
+		BOW_CHARGE_TICKS.applyIfAbsent(skeleton, bowChargeTicks.getIntRandBetween(skeleton.getRandom()));
 	}
 }
