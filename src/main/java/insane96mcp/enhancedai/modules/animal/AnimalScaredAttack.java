@@ -65,7 +65,7 @@ public class AnimalScaredAttack extends Feature {
     public static Double fleeSpeedNear = 1.2d;
     @Config(min = 0d, max = 128d, description = "Animals' knockback attribute will be set to this value multiplied by their bounding box size (bigger mobs have higher knockback). 0 disables this and lets you customize knockback per mob with attribute modifiers.")
     public static Double knockback = 1.4d;
-    @Config(description = "Animals' knockback attribute will be increased/decreased based on the side of the mob.")
+    @Config(description = "Animals' knockback attribute will be increased/decreased based on the size of the mob.")
     public static Boolean knockbackSizeBased = true;
 
     private static final double BASE_ATTACK_DAMAGE = 3d;
