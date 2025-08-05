@@ -10,14 +10,15 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 
-@LoadFeature(module = Modules.Ids.SLIME, description = "Use `enhancedai:affect_slime_spawn_size` and `enhancedai:affect_slime_jump_rate` entity type tag to add more slimes affected by this feature.")
+@LoadFeature(module = Modules.Ids.SLIME, description = "Use `enhancedai:slimes/spawn_size` and `enhancedai:slimes/jump_rate` entity type tag to add more slimes affected by this feature.")
 public class Slimes extends Feature {
 
-    public static final TagKey<EntityType<?>> AFFECT_SLIME_SPAWN_SIZE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("affect_slime_spawn_size"));
-    public static final TagKey<EntityType<?>> AFFECT_SLIME_JUMP_RATE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("affect_slime_jump_rate"));
+    public static final TagKey<EntityType<?>> AFFECT_SLIME_SPAWN_SIZE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("slimes/spawn_size"));
+    public static final TagKey<EntityType<?>> AFFECT_SLIME_JUMP_RATE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("slimes/jump_rate"));
     @Config(min = 0, max = 16, description = "Changes the max size a Slime/Magma cube can spawn as. Vanilla is max 4 with 3 excluded. Set to 0 to disable.")
     public static Integer maxSpawnSize = 5;
 
+    //TODO configurable per slime
     @Config(min = 0d, max = 5d)
     public static Double jumpDelayMultiplier = 0.5d;
 
