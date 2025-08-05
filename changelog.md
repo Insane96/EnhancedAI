@@ -1,7 +1,9 @@
 # Changelog
 
 ## Upcoming
-You are able to change AI at runtime without having to reload the world
+You are able to change AI at runtime without having to reload the world.  
+AI parameters are defined as a resource location (`<namespace>:<id>`), by default the namespace is obviously `enhancedai`.  
+Check the command for more infos.
 
 * Added enhancedai command to set the AI parameters
   * `/enhancedai set <target> <data> <value>`  
