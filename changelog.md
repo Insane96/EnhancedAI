@@ -16,6 +16,7 @@ You are able to change AI at runtime without having to reload the world
 * Pillagers now try to reposition to not hit allies (or when they hit an ally)
 * Shulker bullets now take duration and amplifier from owners so each shulker can have its own
 * Snow golems can now strafe when attacking (disabled by default)
+* Fixed temporary cobwebs breaking any block in the cobweb's position
 
 ## 2.7.1
 * Villagers no longer use target changes

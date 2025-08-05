@@ -1,6 +1,7 @@
 package insane96mcp.enhancedai.modules.spider.webber;
 
 import insane96mcp.enhancedai.setup.EAEntities;
+import insane96mcp.enhancedai.utils.GoalHelper;
 import insane96mcp.insanelib.world.scheduled.ScheduledTasks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -58,11 +59,7 @@ public class ThrownWebEntity extends ThrowableItemProjectile {
 
 		if (ThrowingWeb.applySpeed && this.getOwner() instanceof Mob mob && mob.getTarget() == result.getEntity()) {
 			mob.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 100, 1));
-			mob.goalSelector.availableGoals.forEach(prioritizedGoal -> {
-				if (!(prioritizedGoal.getGoal() instanceof WebThrowGoal webThrowGoal))
-					return;
-				webThrowGoal.onHit();
-			});
+            GoalHelper.getGoal(mob.goalSelector, WebThrowGoal.class).ifPresent(WebThrowGoal::onHit);
 		}
 		ThrowingWeb.applyEffects((LivingEntity) this.getOwner(), entity);
 		ThrowingWeb.applyWeb(entity);
