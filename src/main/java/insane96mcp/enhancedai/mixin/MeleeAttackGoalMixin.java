@@ -23,7 +23,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(MeleeAttackGoal.class)
 public abstract class MeleeAttackGoalMixin extends Goal {
@@ -58,11 +57,15 @@ public abstract class MeleeAttackGoalMixin extends Goal {
 
 	@ModifyExpressionValue(method = "canUse", at = @At(value = "CONSTANT", args = "longValue=20"))
 	public long onLastCanUseCheck(long constant) {
+        if (!Feature.isEnabled(MeleeAttacking.class))
+            return constant;
 		return 0L;
 	}
 
 	@ModifyReturnValue(method = "canUse", at = @At(value = "RETURN", ordinal = 6))
 	public boolean onCanUse(boolean original, @Local LivingEntity livingEntity) {
+        if (!Feature.isEnabled(MeleeAttacking.class))
+            return original;
 		return MeleeAttacking.isWithinMeleeAttackRange(this.mob, livingEntity);
 	}
 
@@ -98,20 +101,19 @@ public abstract class MeleeAttackGoalMixin extends Goal {
 		return value;
 	}
 
-	@Inject(at = @At(value = "RETURN"), method = "getAttackInterval", cancellable = true)
-	public void onGetAttackCooldown(CallbackInfoReturnable<Integer> cir) {
+	@ModifyReturnValue(method = "getAttackInterval", at = @At(value = "RETURN"))
+	public int onGetAttackCooldown(int original) {
 		if (!MeleeAttacking.shouldUseAttackSpeedAttribute())
-			return;
-		cir.setReturnValue(this.enhancedAI$getTicksUntilNextAttack());
-	}
+            return original;
+        return this.enhancedAI$getTicksUntilNextAttack();
+    }
 
-	@Inject(at = @At(value = "HEAD"), method = "resetAttackCooldown", cancellable = true)
-	public void onResetAttackCooldown(CallbackInfo ci) {
+	@ModifyExpressionValue(method = "resetAttackCooldown", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/goal/MeleeAttackGoal;adjustedTickDelay(I)I"))
+	public int onResetAttackCooldown(int original) {
 		if (!MeleeAttacking.shouldUseAttackSpeedAttribute())
-			return;
-		this.ticksUntilNextAttack = this.enhancedAI$getTicksUntilNextAttack();
-		ci.cancel();
-	}
+            return original;
+        return this.enhancedAI$getTicksUntilNextAttack();
+    }
 
 	@Unique
 	private int enhancedAI$getTicksUntilNextAttack() {
