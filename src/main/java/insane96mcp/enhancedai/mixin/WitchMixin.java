@@ -34,6 +34,7 @@ import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -56,7 +57,8 @@ public abstract class WitchMixin extends Raider {
 	@Shadow
 	private int usingTime;
 
-	private int invisibilityCooldown = 20;
+	@Unique
+    private int enhancedAI$invisibilityCooldown = 20;
 
 	protected WitchMixin(EntityType<? extends Raider> p_37839_, Level p_37840_) {
 		super(p_37839_, p_37840_);
@@ -166,7 +168,7 @@ public abstract class WitchMixin extends Raider {
 					}
 				}
 
-				if (!this.hasEffect(MobEffects.INVISIBILITY) && this.onGround() && --this.invisibilityCooldown <= 0 && this.getHealth() < this.getMaxHealth() * WitchPotionThrowing.healthThresholdInvisibility) {
+				if (!this.hasEffect(MobEffects.INVISIBILITY) && this.onGround() && --this.enhancedAI$invisibilityCooldown <= 0 && this.getHealth() < this.getMaxHealth() * WitchPotionThrowing.healthThresholdInvisibility) {
 					ThrownPotion thrownPotion = new ThrownPotion(this.level(), this);
 					thrownPotion.setItem(MCUtils.setCustomEffects(new ItemStack(Items.SPLASH_POTION), List.of(new MobEffectInstance(MobEffects.INVISIBILITY, 200))));
 					thrownPotion.shoot(0, -1d, 0, 0.1f, 2f);
@@ -181,7 +183,7 @@ public abstract class WitchMixin extends Raider {
 						}
 					}
 
-					this.invisibilityCooldown = 20;
+					this.enhancedAI$invisibilityCooldown = 20;
 				}
 			}
 		}
