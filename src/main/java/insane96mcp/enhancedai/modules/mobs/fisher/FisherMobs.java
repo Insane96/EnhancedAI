@@ -36,8 +36,8 @@ public class FisherMobs extends Feature {
 	@Config(description = "How much will a mob wait before casting the bobber again. The cooldown is doubled if successfully reels in someone.")
 	public static Difficulty cooldown = new Difficulty(80, 80, 60);
 
-	public FisherMobs(Module module, boolean enabledByDefault, boolean canBeDisabled) {
-		super(module, enabledByDefault, canBeDisabled);
+	public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
+		super.init(module, enabledByDefault, canBeDisabled);
 	}
 
 	@SubscribeEvent
