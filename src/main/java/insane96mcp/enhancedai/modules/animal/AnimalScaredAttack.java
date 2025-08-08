@@ -37,6 +37,7 @@ public class AnimalScaredAttack extends Feature {
     public static final TagKey<EntityType<?>> CAN_BE_NEUTRAL = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("animal_scared_attack/can_be_neutral"));
     public static final TagKey<EntityType<?>> CAN_BE_HOSTILE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("animal_scared_attack/can_be_hostile"));
     public static final TagKey<EntityType<?>> SCARED_BY_PLAYERS = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("animal_scared_attack/can_be_scared_by_players"));
+    public static final UUID FOLLOW_RANGE_REDUCTION_UUID = UUID.fromString("62e016b0-90d0-4e72-9d40-fffac566df20");
 
     public static EAIData<Boolean> NEUTRAL;
     public static EAIData<Boolean> HOSTILE;
@@ -84,12 +85,12 @@ public class AnimalScaredAttack extends Feature {
         });
         HOSTILE = EAIData.ofBool(this.createDataKey("hostile"), (mob, hostile) -> {
             GoalHelper.removeGoal(mob.targetSelector, AnimalNearestAttackableTargetGoal.class);
-            mob.getAttribute(Attributes.FOLLOW_RANGE).removeModifier(UUID.fromString("62e016b0-90d0-4e72-9d40-fffac566df20"));
-            mob.getAttribute(EAAttributes.XRAY_FOLLOW_RANGE.get()).removeModifier(UUID.fromString("62e016b0-90d0-4e72-9d40-fffac566df20"));
+            mob.getAttribute(Attributes.FOLLOW_RANGE).removeModifier(FOLLOW_RANGE_REDUCTION_UUID);
+            mob.getAttribute(EAAttributes.XRAY_FOLLOW_RANGE.get()).removeModifier(FOLLOW_RANGE_REDUCTION_UUID);
             if (hostile) {
                 NEUTRAL.apply(mob, true);
-                MCUtils.applyModifier(mob, Attributes.FOLLOW_RANGE, UUID.fromString("62e016b0-90d0-4e72-9d40-fffac566df20"), "Reduced follow range for hostile Animals", -0.75d, AttributeModifier.Operation.MULTIPLY_BASE, true);
-                MCUtils.applyModifier(mob, EAAttributes.XRAY_FOLLOW_RANGE.get(), UUID.fromString("62e016b0-90d0-4e72-9d40-fffac566df20"), "Reduced follow range for hostile Animals", -0.75d, AttributeModifier.Operation.MULTIPLY_BASE, true);
+                MCUtils.applyModifier(mob, Attributes.FOLLOW_RANGE, FOLLOW_RANGE_REDUCTION_UUID, "Reduced follow range for hostile Animals", -0.75d, AttributeModifier.Operation.MULTIPLY_BASE, true);
+                MCUtils.applyModifier(mob, EAAttributes.XRAY_FOLLOW_RANGE.get(), FOLLOW_RANGE_REDUCTION_UUID, "Reduced follow range for hostile Animals", -0.75d, AttributeModifier.Operation.MULTIPLY_BASE, true);
                 mob.targetSelector.addGoal(2, new AnimalNearestAttackableTargetGoal<>(mob, Player.class, false, false));
                 PLAYER_SCARED.apply(mob, false);
                 ATTACK_MOVEMENT_SPEED_MODIFIER.changed(mob);
