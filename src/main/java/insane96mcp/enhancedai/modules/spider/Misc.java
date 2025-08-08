@@ -3,7 +3,6 @@ package insane96mcp.enhancedai.modules.spider;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
-import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.entity.monster.Spider;
@@ -14,10 +13,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 public class Misc extends Feature {
 	@Config(min = 0d, max = 1d, description = "Percentage reduction of the fall damage taken by spiders.")
 	public static Double fallDamageReduction = 0.9d;
-
-	public Misc(Module module, boolean enabledByDefault, boolean canBeDisabled) {
-		super(module, enabledByDefault, canBeDisabled);
-	}
 
 	@SubscribeEvent
 	public void onSpawn(LivingDamageEvent event) {
