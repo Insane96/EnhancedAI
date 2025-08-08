@@ -129,12 +129,18 @@ public final class EAIData<T> {
         if (type == String.class)
             return type.cast(input);
         if (type == Boolean.class)
-            return type.cast(Boolean.parseBoolean(input));
+            return type.cast(parseBoolean(input));
         if (type == Integer.class)
             return type.cast(Integer.parseInt(input));
         if (type == Double.class)
             return type.cast(Double.parseDouble(input));
         else
             throw new IllegalStateException("Unsupported type: " + type);
+    }
+
+    private boolean parseBoolean(String input) {
+        if (!input.equalsIgnoreCase("true") && !input.equalsIgnoreCase("false"))
+            throw new IllegalArgumentException("Invalid boolean value: " + input);
+        return Boolean.parseBoolean(input);
     }
 }
