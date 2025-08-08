@@ -75,12 +75,12 @@ public abstract class WitchMixin extends Raider {
 
 	@Inject(at = @At("HEAD"), method = "aiStep", cancellable = true)
 	private void aiStep(CallbackInfo ci) {
-		if (Modules.witch.isEnabled())
-			ci.cancel();
-		else
-			return;
+        if (!Modules.witch.isEnabled())
+            return;
 
-		if (this.level().isClientSide
+        ci.cancel();
+
+        if (this.level().isClientSide
 				|| !this.isAlive()
 				|| this.getPersistentData().getBoolean(DarkArtWitch.PERFORMING_DARK_ARTS)) {
 			super.aiStep();
