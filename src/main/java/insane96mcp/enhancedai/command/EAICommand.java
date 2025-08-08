@@ -54,7 +54,7 @@ public class EAICommand {
                                                         if (e instanceof Mob mob)
                                                             apply(data, mob, parsed);
                                                     }
-
+                                                    ctx.getSource().sendSuccess(() -> Component.literal("Changed %s to %s".formatted(data.id(), parsed)), true);
                                                     return 1;
                                                 })
                 ))))
