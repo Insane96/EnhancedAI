@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.spider.webber;
+package insane96mcp.enhancedai.modules.mobs.webber;
 
 import insane96mcp.insanelib.world.scheduled.ScheduledTickTask;
 import net.minecraft.core.BlockPos;

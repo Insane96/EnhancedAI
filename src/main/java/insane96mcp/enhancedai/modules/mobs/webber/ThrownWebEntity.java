@@ -1,9 +1,7 @@
-package insane96mcp.enhancedai.modules.spider.webber;
+package insane96mcp.enhancedai.modules.mobs.webber;
 
 import insane96mcp.enhancedai.setup.EAEntities;
 import insane96mcp.enhancedai.utils.GoalHelper;
-import insane96mcp.insanelib.world.scheduled.ScheduledTasks;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
@@ -18,7 +16,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -57,26 +54,24 @@ public class ThrownWebEntity extends ThrowableItemProjectile {
 		if (!(result.getEntity() instanceof LivingEntity entity) || this.level().isClientSide)
 			return;
 
-		if (ThrowingWeb.applySpeed && this.getOwner() instanceof Mob mob && mob.getTarget() == result.getEntity()) {
-			mob.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 100, 1));
-            GoalHelper.getGoal(mob.goalSelector, WebThrowGoal.class).ifPresent(WebThrowGoal::onHit);
+		if (this.getOwner() != null) {
+			if (ThrowingWeb.APPLY_SPEED.get(this.getOwner()) && this.getOwner() instanceof Mob mob && mob.getTarget() == result.getEntity()) {
+				mob.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 100, 1));
+				GoalHelper.getGoal(mob.goalSelector, WebThrowGoal.class).ifPresent(WebThrowGoal::onHit);
+			}
+			ThrowingWeb.applyEffects(this.getOwner(), entity);
+			if (ThrowingWeb.PLACE_WEB_ON_ENTITY_HIT.get(this.getOwner()))
+				ThrowingWeb.applyWeb(this.getOwner(), entity.blockPosition());
 		}
-		ThrowingWeb.applyEffects((LivingEntity) this.getOwner(), entity);
-		ThrowingWeb.applyWeb(entity);
 	}
 
 	protected void onHitBlock(BlockHitResult result) {
 		BlockState blockstate = this.level().getBlockState(result.getBlockPos());
 		blockstate.onProjectileHit(this.level(), blockstate, result, this);
-		BlockPos spawnCobwebAt = result.getBlockPos().offset(result.getDirection().getNormal());
-		if (FallingBlock.isFree(this.level().getBlockState(spawnCobwebAt)) /*&& this.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)*/) {
-			this.level().setBlock(spawnCobwebAt, Blocks.COBWEB.defaultBlockState(), 3);
-			ScheduledTasks.schedule(new TemporaryCobwebTask(ThrowingWeb.destroyWebAfter, this.level(), spawnCobwebAt));
-			for(int i = 0; i < 32; ++i) {
-				this.level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.COBWEB.defaultBlockState()), spawnCobwebAt.getX() + this.random.nextDouble(), spawnCobwebAt.getY() + this.random.nextDouble(), spawnCobwebAt.getZ() + this.random.nextDouble(), 0d, 0D, 0d);
-			}
-			this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.SLIME_SQUISH, SoundSource.HOSTILE, 1.0f, 0.5f);
-		}
+		if (this.getOwner() == null)
+			return;
+		if (ThrowingWeb.PLACE_WEB_ON_BLOCK_HIT.get(this.getOwner()))
+			ThrowingWeb.applyWeb(this.getOwner(), result.getBlockPos().offset(result.getDirection().getNormal()));
 	}
 
 	protected void onHit(@NotNull HitResult result) {
