@@ -1,12 +1,12 @@
 package insane96mcp.enhancedai.modules.villager;
 
+import insane96mcp.enhancedai.ai.EAHurtByTargetGoal;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 
-public class EAVillagerHurtByTargetGoal extends HurtByTargetGoal {
+public class EAVillagerHurtByTargetGoal extends EAHurtByTargetGoal {
 
     Villager villager;
 
@@ -17,13 +17,13 @@ public class EAVillagerHurtByTargetGoal extends HurtByTargetGoal {
 
     @Override
     public boolean canUse() {
+		if (!super.canUse())
+			return false;
         LivingEntity hurtVillager = this.mob.getLastHurtByMob();
-        if (hurtVillager instanceof Player player) {
-            return villager.getPlayerReputation(player) <= VillagerAttacking.minReputationFightBack && super.canUse();
-        }
-        else if (hurtVillager instanceof Enemy) {
-            return VillagerAttacking.villagersFightBackEnemies && super.canUse();
-        }
-        return super.canUse();
+        if (hurtVillager instanceof Player player)
+            return villager.getPlayerReputation(player) <= VillagerAttacking.ATTACK_BELOW_REPUTATION.get(this.villager);
+        else if (hurtVillager instanceof Enemy)
+            return VillagerAttacking.FIGHTS_BACK_ENEMIES.get(this.villager);
+        return true;
     }
 }
