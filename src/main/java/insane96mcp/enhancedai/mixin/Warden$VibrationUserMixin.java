@@ -10,6 +10,6 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class Warden$VibrationUserMixin {
 	@ModifyReturnValue(method = "getListenerRadius", at = @At("RETURN"))
     public int enhancedai$wardenListenRadius(int original) {
-        return WardenFeature.increaseListenRange(original);
+        return WardenFeature.changeListenRange(original);
     }
 }

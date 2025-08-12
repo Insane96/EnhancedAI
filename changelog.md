@@ -1,15 +1,15 @@
 # Changelog
 
 ## Upcoming
-You are able to change AI at runtime without having to reload the world.  
-AI parameters are defined as a resource location (`<namespace>:<id>`), by default the namespace is obviously `enhancedai`.  
+You are able to change AI at runtime without having to reload the world thanks to the new tech: AI Data.  
+AI Data are defined as a resource location (`<namespace>:<id>`), by default the namespace is obviously `enhancedai`.  
+Due how the system works, the goals already present in the mob can't be changed with this system without a huge amount of work. E.g. For the "Animals not temped" feature they already have the Tempt AI, so it's impossible to add it back if it's removed.
 Check the command for more infos.
 
-* Added enhancedai command to set the AI parameters
+* Added enhancedai command to set the AI Data
   * `/enhancedai set <target> <data> <value>`  
     E.g. `/enhancedai set @e[type=creeper] enhancedai:creeper_swell/tnt_like true` will enable tnt like for all the creepers currently loaded. You can also get the value with `get` on an entity  
-    A MobsPropertiesRandomness property will come to make use of the data parameter instead of NBT  
-    Due how the system works, the goals already present in the mob can't be changed with this system without a huge amount of work. E.g. For the "Animals not temped" feature they already have the Tempt AI, so it's impossible to add it back if it's removed.
+    A MobsPropertiesRandomness property will come to make use of the AI Data id instead of NBT
 * Added a new Anti-Cheese feature (from the old "Endermen Get Over Here" feature, which is now gone)
   * Endermen (configurable) will now teleport the target close to them if they can't reach or see them for a few seconds
   * Item disruption has been disabled by default
@@ -19,6 +19,8 @@ Check the command for more infos.
 * Web throwing feature is no longer limited to spiders
 * Shulker bullets now take duration and amplifier from owners so each shulker can have its own
 * Snow golems can now strafe when attacking (disabled by default)
+* Fixed warden sonic boom range being disabled
+  * Now configurable as fixed value instead of multiplier, obviously compatible with AI data
 * Fixed temporary cobwebs breaking any block in the cobweb's position
 * Fixed disabling "Melee Attacking" feature making melee attacks have no cooldown
 * Fixed fisher mobs canceling the fishing rod cast if they can't see the target

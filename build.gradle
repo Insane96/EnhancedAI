@@ -83,7 +83,7 @@ dependencies {
     implementation fg.deobf("blank:insanelib:${insanelib_version}")
     implementation fg.deobf("blank:mobspropertiesrandomness:${mpr_version}")
 
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    annotationProcessor 'org.spongepowered:mixin:0.8.7:processor'
 
     runtimeOnly fg.deobf("curse.maven:spark-361579:4738952")
 
