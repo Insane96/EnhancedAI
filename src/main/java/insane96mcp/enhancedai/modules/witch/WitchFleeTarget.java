@@ -18,9 +18,9 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@LoadFeature(module = Modules.Ids.WITCH, description = "Witches flee from the target.")
+@LoadFeature(module = Modules.Ids.WITCH, description = "Witches flee from the target. Use the enhancedai:witch_flee_target/can_flee entity type tag to add/remove witches that are affected by this feature")
 public class WitchFleeTarget extends Feature {
-    public static final TagKey<EntityType<?>> WITCH_FLEE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("witch_flee"));
+    public static final TagKey<EntityType<?>> WITCH_FLEE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("witch_flee_target/can_flee"));
     @Config(min = 0d, max = 1d, description = "Chance for a Witch to spawn with the ability to avoid the target")
     public static Double avoidTargetChance = 1d;
     @Config(min = 0d, max = 1d, description = "Chance for a Witch to be able to throw potions while running from a target")

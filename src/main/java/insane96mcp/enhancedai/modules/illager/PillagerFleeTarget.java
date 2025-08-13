@@ -18,7 +18,7 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@LoadFeature(module = Modules.Ids.ILLAGER, description = "Pillagers try to stay away from the target. Use the enhancedai:pillager_flee/can_flee entity type tag to add/remove skeletons that are affected by this feature")
+@LoadFeature(module = Modules.Ids.ILLAGER, description = "Pillagers try to stay away from the target. Use the enhancedai:pillager_flee_target/can_flee entity type tag to add/remove pillagers that are affected by this feature")
 public class PillagerFleeTarget extends Feature {
     public static final TagKey<EntityType<?>> PILLAGER_FLEE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("pillager_flee_target/can_flee"));
     @Config(min = 0d, max = 1d, description = "Chance for a Pillager to spawn with the ability to avoid the target")
