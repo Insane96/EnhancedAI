@@ -25,9 +25,9 @@ public class PillagerFleeTarget extends Feature {
     public static Double avoidTargetChance = 0.5d;
     @Config(min = 0d, max = 1d, description = "Chance for a Pillager to be able to shoot while running from a target")
     public static Double attackWhenAvoidingChance = 0.5d;
-    @Config(min = 0d, max = 32d, description = "Distance from a target that will make the Pillager run away.")
+    @Config(min = 0d, description = "Distance from the target that will make the Pillager run away.")
     public static Integer fleeDistanceFar = 12;
-    @Config(min = 0d, max = 32d, description = "Distance from a target that counts as near and will make the Pillager run away faster.")
+    @Config(min = 0d, description = "Distance from the target that counts as near and will make the Pillager run away faster.")
     public static Integer fleeDistanceNear = 7;
     @Config(min = 0d, max = 4d, description = "Speed multiplier when the Pillager avoids the target and it's farther than 'Flee Distance Far' blocks from him.")
     public static Double fleeSpeedFar = 1d;
@@ -51,9 +51,7 @@ public class PillagerFleeTarget extends Feature {
                 mob.goalSelector.addGoal(1, new EAAvoidTargetGoal(pathfinderMob, FLEE_DISTANCE_FAR, FLEE_DISTANCE_NEAR, FLEE_SPEED_FAR, FLEE_SPEED_NEAR));
             ATTACK_WHEN_AVOIDING.changed(mob);
         });
-        ATTACK_WHEN_AVOIDING = EAIData.ofBool(this.createDataKey("attack_when_avoiding"), (mob, attackWhenAvoiding) -> {
-            GoalHelper.getGoal(mob.goalSelector, EAAvoidTargetGoal.class).ifPresent(goal -> goal.setAttackWhenRunning(attackWhenAvoiding));
-        });
+        ATTACK_WHEN_AVOIDING = EAIData.ofBool(this.createDataKey("attack_when_avoiding"), (mob, attackWhenAvoiding) -> GoalHelper.getGoal(mob.goalSelector, EAAvoidTargetGoal.class).ifPresent(goal -> goal.setAttackWhenRunning(attackWhenAvoiding)));
         FLEE_DISTANCE_FAR = EAIData.ofInt(this.createDataKey("flee_distance_far"));
         FLEE_DISTANCE_NEAR = EAIData.ofInt(this.createDataKey("flee_distance_near"));
         FLEE_SPEED_FAR = EAIData.ofDouble(this.createDataKey("flee_speed_far"));
