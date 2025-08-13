@@ -112,7 +112,8 @@ public class EAPillagerAttackGoal extends Goal {
             this.mob.setChargingCrossbow(true);
             if (!this.mob.isPassenger()) {
                 Entity entity = PillagerShoot.mightHitAnAlly(this.mob, distance);
-                PillagerShoot.tryReposition(this.mob, entity, 2);
+				if (entity != null)
+                	PillagerShoot.tryReposition(this.mob, entity, 2);
             }
         }
         else if (this.crossbowState == CrossbowState.CHARGING) {
@@ -129,9 +130,6 @@ public class EAPillagerAttackGoal extends Goal {
             }
         }
         else if (this.crossbowState == CrossbowState.CHARGED) {
-            --this.attackDelay;
-            //this.mob.setCustomNameVisible(true);
-            //this.mob.setCustomName(Component.literal(this.attackDelay + ""));
             if (--this.attackDelay <= 0) {
                 Entity entity = PillagerShoot.mightHitAnAlly(this.mob, distance);
                 if (entity != null) {
