@@ -1,7 +1,6 @@
 package insane96mcp.enhancedai.ai;
 
 import insane96mcp.enhancedai.data.EAIData;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
@@ -39,8 +38,8 @@ public class EAAvoidTargetGoal extends Goal {
 	}
 
 	public boolean canUse() {
-		this.goalOwner.setCustomNameVisible(true);
-		this.goalOwner.setCustomName(Component.literal(this.goalOwner.tickCount + ""));
+		//this.goalOwner.setCustomNameVisible(true);
+		//this.goalOwner.setCustomName(Component.literal(this.goalOwner.tickCount + ""));
 		this.avoidTarget = this.goalOwner.getTarget();
 		int avoidDistanceFar = this.avoidDistanceFar.get(this.goalOwner);
 		if (this.avoidTarget == null
