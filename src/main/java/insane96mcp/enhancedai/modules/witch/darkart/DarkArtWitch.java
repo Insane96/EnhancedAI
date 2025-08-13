@@ -1,13 +1,13 @@
 package insane96mcp.enhancedai.modules.witch.darkart;
 
-import insane96mcp.enhancedai.EnhancedAI;
+import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.enhancedai.setup.NBTUtils;
+import insane96mcp.enhancedai.utils.GoalHelper;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.monster.Witch;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -16,13 +16,22 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 @LoadFeature(module = Modules.Ids.WITCH, description = "Witches summon Villagers and cast a lightning upon them.")
 public class DarkArtWitch extends Feature {
-    public static final String DARK_ARTS = EnhancedAI.RESOURCE_PREFIX + "dark_arts";
-    public static final String PERFORMING_DARK_ARTS = EnhancedAI.RESOURCE_PREFIX + "performing_dark_arts";
     @Config(min = 0d, max = 1d, description = "Chance for a witch to get the Dark Art AI (as soon as they have a target and are less than 10 blocks away from the target will summon a Villager and cast a lightning bolt on them")
     public static Double chance = 0.333d;
+	@Config(min = 0d, description = "At which distance from the villager will the witch will cancel the summoning")
+	public static Integer cancelDistance = 16;
 
-    public DarkArtWitch(Module module, boolean enabledByDefault, boolean canBeDisabled) {
-        super(module, enabledByDefault, canBeDisabled);
+	public static ResourceLocation PERFORMING_DARK_ARTS;
+	public static EAIData<Boolean> DARK_ARTS;
+
+    public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
+        super.init(module, enabledByDefault, canBeDisabled);
+		PERFORMING_DARK_ARTS = this.createDataKey("performing_dark_arts");
+		DARK_ARTS = EAIData.ofBool(this.createDataKey("dark_arts"), (witch, darkArt) -> {
+			GoalHelper.removeGoal(witch.goalSelector, DarkArtWitchGoal.class);
+			if (darkArt)
+				witch.goalSelector.addGoal(1, new DarkArtWitchGoal(witch));
+		});
     }
 
     //Lowest priority so other mods can set persistent data
@@ -33,14 +42,7 @@ public class DarkArtWitch extends Feature {
                 || !(event.getEntity() instanceof Witch witch))
             return;
 
-        CompoundTag persistentData = witch.getPersistentData();
-        boolean darkArt = NBTUtils.getBooleanOrPutDefaultLegacy(persistentData, DARK_ARTS, witch.getRandom().nextDouble() < chance);
-
-        if (!darkArt)
-            return;
-
-        DarkArtWitchGoal darkArtWitchGoal = new DarkArtWitchGoal(witch);
-        witch.goalSelector.addGoal(1, darkArtWitchGoal);
+		DARK_ARTS.applyIfAbsent(witch, witch.getRandom().nextDouble() < chance);
     }
 
     @SubscribeEvent
@@ -50,13 +52,7 @@ public class DarkArtWitch extends Feature {
                 || !(event.getEntity() instanceof Witch witch))
             return;
 
-
-        witch.goalSelector.availableGoals.forEach(prioritizedGoal -> {
-            if (prioritizedGoal.getGoal() instanceof DarkArtWitchGoal goal) {
-                if (goal.isRunning()) {
-                    goal.forceStop();
-                }
-            }
-        });
+		GoalHelper.getGoal(witch.goalSelector, DarkArtWitchGoal.class)
+				.ifPresent(DarkArtWitchGoal::forceStop);
     }
 }

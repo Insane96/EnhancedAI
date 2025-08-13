@@ -6,6 +6,7 @@ import insane96mcp.enhancedai.modules.witch.ThirstyWitches;
 import insane96mcp.enhancedai.modules.witch.darkart.DarkArtWitch;
 import insane96mcp.enhancedai.modules.witch.throwing.WitchPotionThrowing;
 import insane96mcp.insanelib.util.MCUtils;
+import insane96mcp.insanelib.util.ModNBTData;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.FluidTags;
@@ -82,7 +83,8 @@ public abstract class WitchMixin extends Raider {
 
         if (this.level().isClientSide
 				|| !this.isAlive()
-				|| this.getPersistentData().getBoolean(DarkArtWitch.PERFORMING_DARK_ARTS)) {
+				// TODO Move to a ModifyExpressionValue this.isAlive()
+				|| ModNBTData.get(this, DarkArtWitch.PERFORMING_DARK_ARTS, Boolean.class)) {
 			super.aiStep();
 			return;
 		}
