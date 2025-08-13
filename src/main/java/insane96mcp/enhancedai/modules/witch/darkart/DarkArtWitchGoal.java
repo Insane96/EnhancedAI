@@ -39,7 +39,7 @@ public class DarkArtWitchGoal extends Goal {
     public boolean canUse() {
         return this.mob.getTarget() != null
                 && !(this.mob.getTarget() instanceof Raider)
-                && this.mob.getTarget().distanceToSqr(this.mob) < 100d
+                && this.mob.getTarget().distanceToSqr(this.mob) < DarkArt.triggerDistance * DarkArt.triggerDistance
                 && this.mob.getSensing().hasLineOfSight(this.mob.getTarget())
                 && this.phase == Phase.EQUIP_EGG;
     }

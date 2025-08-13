@@ -23,6 +23,8 @@ public class DarkArt extends Feature {
 	public static final TagKey<EntityType<?>> CAN_PERFORM = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("dark_art/can_perform"));
     @Config(min = 0d, max = 1d, description = "Chance for a witch to get the Dark Art AI (as soon as they have a target and are less than 10 blocks away from the target will summon a Villager and cast a lightning bolt on them")
     public static Double chance = 0.333d;
+	@Config(min = 0d, description = "At which distance from the witch will she start performing the Dark Art")
+	public static Integer triggerDistance = 10;
 	@Config(min = 0d, description = "At which distance from the villager will the witch will cancel the summoning")
 	public static Integer cancelDistance = 16;
 	@Config(min = 0d)
