@@ -94,6 +94,7 @@ public class DarkArtWitchGoal extends Goal {
 
                 if (goal.phaseTick < EQUIP_EGG_TICK) {
                     goal.mob.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.VILLAGER_SPAWN_EGG));
+					goal.mob.setDropChance(EquipmentSlot.MAINHAND, -2f);
                     goal.mob.getLookControl().setLookAt(goal.target, 180, 180);
                 }
                 else {
@@ -151,6 +152,7 @@ public class DarkArtWitchGoal extends Goal {
                 if (goal.phaseTick == IMPRISON_VILLAGER_TICK) {
                     goal.villager.playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 2f, 0.5f);
                     goal.mob.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+					goal.mob.setDropChance(EquipmentSlot.MAINHAND, 0.085f);
                     goal.phase = LEVITATE;
                 }
             }
