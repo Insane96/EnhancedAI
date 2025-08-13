@@ -25,6 +25,7 @@ Check the command for more infos.
 * Fixed temporary cobwebs breaking any block in the cobweb's position
 * Fixed disabling "Melee Attacking" feature making melee attacks have no cooldown
 * Fixed fisher mobs canceling the fishing rod cast if they can't see the target
+* Fixed dark art witches dropping the equipped spawn egg
 
 ## 2.7.1
 * Villagers no longer use target changes
