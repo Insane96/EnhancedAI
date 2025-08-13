@@ -46,13 +46,13 @@ public class DarkArtWitchGoal extends Goal {
 
     @Override
     public boolean canContinueToUse() {
-        return this.mob.getTarget() != null && this.phase != Phase.END && (this.summonSpot == null || this.mob.distanceToSqr(this.summonSpot) <= DarkArtWitch.cancelDistance * DarkArtWitch.cancelDistance);
+        return this.mob.getTarget() != null && this.phase != Phase.END && (this.summonSpot == null || this.mob.distanceToSqr(this.summonSpot) <= DarkArt.cancelDistance * DarkArt.cancelDistance);
     }
 
     @Override
     public void start() {
         this.target = this.mob.getTarget();
-		ModNBTData.put(this.mob, DarkArtWitch.PERFORMING_DARK_ARTS, true);
+		ModNBTData.put(this.mob, DarkArt.PERFORMING_DARK_ARTS, true);
         this.mob.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 100, 2));
         this.mob.setGlowingTag(true);
         this.mob.setDeltaMovement(0d, this.mob.getDeltaMovement().y, 0d);
@@ -60,7 +60,7 @@ public class DarkArtWitchGoal extends Goal {
 
     @Override
     public void stop() {
-		ModNBTData.put(this.mob, DarkArtWitch.PERFORMING_DARK_ARTS, false);
+		ModNBTData.put(this.mob, DarkArt.PERFORMING_DARK_ARTS, false);
         this.mob.removeEffect(MobEffects.DAMAGE_RESISTANCE);
         this.mob.removeEffect(MobEffects.LEVITATION);
         this.mob.setGlowingTag(false);
@@ -205,7 +205,8 @@ public class DarkArtWitchGoal extends Goal {
 			witch.moveTo(this.villager.getX(), this.villager.getY(), this.villager.getZ(), this.villager.getYRot(), this.villager.getXRot());
 			witch.finalizeSpawn(serverLevel, this.mob.level().getCurrentDifficultyAt(witch.blockPosition()), MobSpawnType.CONVERSION, null, null);
 			serverLevel.addFreshEntityWithPassengers(witch);
-			DarkArtWitch.DARK_ARTS.apply(witch, false);
+			if (!DarkArt.summonedWitchesCanBeDarkArt)
+				DarkArt.DARK_ARTS.apply(witch, false);
 		}
         this.villager.discard();
     }

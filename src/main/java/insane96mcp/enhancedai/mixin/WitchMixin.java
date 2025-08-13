@@ -1,9 +1,10 @@
 package insane96mcp.enhancedai.mixin;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import insane96mcp.enhancedai.data.PotionOrMobEffect;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.modules.witch.ThirstyWitches;
-import insane96mcp.enhancedai.modules.witch.darkart.DarkArtWitch;
+import insane96mcp.enhancedai.modules.witch.darkart.DarkArt;
 import insane96mcp.enhancedai.modules.witch.throwing.WitchPotionThrowing;
 import insane96mcp.insanelib.util.MCUtils;
 import insane96mcp.insanelib.util.ModNBTData;
@@ -74,6 +75,11 @@ public abstract class WitchMixin extends Raider {
 		return SPEED_MODIFIER_DRINKING;
 	}
 
+	@ModifyExpressionValue(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/monster/Witch;isAlive()Z"))
+	public boolean onIsAlive(boolean alive) {
+		return alive && !ModNBTData.get(this, DarkArt.PERFORMING_DARK_ARTS, Boolean.class);
+	}
+
 	@Inject(at = @At("HEAD"), method = "aiStep", cancellable = true)
 	private void aiStep(CallbackInfo ci) {
         if (!Modules.witch.isEnabled())
@@ -82,9 +88,7 @@ public abstract class WitchMixin extends Raider {
         ci.cancel();
 
         if (this.level().isClientSide
-				|| !this.isAlive()
-				// TODO Move to a ModifyExpressionValue this.isAlive()
-				|| ModNBTData.get(this, DarkArtWitch.PERFORMING_DARK_ARTS, Boolean.class)) {
+				|| !this.isAlive()) {
 			super.aiStep();
 			return;
 		}
