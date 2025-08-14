@@ -10,14 +10,14 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 
-public final class EAIData<T> {
+public class EAIData<T> {
     public static final List<EAIData<?>> DATA = new ArrayList<>();
 
     private final ResourceLocation id;
     private final BiConsumer<Mob, T> onChange;
     private final Class<T> type;
 
-    private EAIData(ResourceLocation id, BiConsumer<Mob, T> onChange, Class<T> type) {
+    protected EAIData(ResourceLocation id, BiConsumer<Mob, T> onChange, Class<T> type) {
         this.id = id;
         this.onChange = onChange;
         this.type = type;
@@ -96,6 +96,16 @@ public final class EAIData<T> {
         return data;
     }
 
+	public static EAIData<List<String>> ofStringList(ResourceLocation id) {
+		return ofStringList(id, (mob, value) -> {});
+	}
+
+	public static EAIData<List<String>> ofStringList(ResourceLocation id, BiConsumer<Mob, List<String>> onChange) {
+		var data = new EAIData<>(id, onChange, (Class<List<String>>) (Class<?>) List.class);
+		DATA.add(data);
+		return data;
+	}
+
     public T get(Entity entity) {
         return ModNBTData.get(entity, this.id, this.type);
     }
@@ -134,7 +144,14 @@ public final class EAIData<T> {
             return type.cast(Integer.parseInt(input));
         if (type == Double.class)
             return type.cast(Double.parseDouble(input));
-        else
+		if (type == List.class) {
+			List<String> list = new ArrayList<>();
+			for (String s : input.split(","))
+				list.add(s.trim());
+			return type.cast(list);
+		}
+
+		else
             throw new IllegalStateException("Unsupported type: " + type);
     }
 
