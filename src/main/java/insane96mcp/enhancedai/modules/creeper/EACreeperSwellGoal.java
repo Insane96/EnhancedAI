@@ -134,7 +134,7 @@ public class EACreeperSwellGoal extends Goal {
 				continue;
 			creatureEntity.goalSelector.availableGoals.forEach(prioritizedGoal -> {
 				if (prioritizedGoal.getGoal() instanceof AvoidExplosionGoal avoidExplosionGoal) {
-					avoidExplosionGoal.run(this.swellingCreeper, explosionSize);
+					avoidExplosionGoal.runFrom(this.swellingCreeper, explosionSize);
 				}
 			});
 		}

@@ -1,7 +1,9 @@
 package insane96mcp.enhancedai.modules.mobs.avoidexplosion;
 
 import insane96mcp.enhancedai.EnhancedAI;
+import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.utils.GoalHelper;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
@@ -10,56 +12,66 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.List;
 
-@LoadFeature(module = Modules.Ids.MOBS, description = "Mobs will run away from exploding creepers / TNT. Use the entity type tag enhancedai:can_run_from_explosion to whitelist them")
+@LoadFeature(module = Modules.Ids.MOBS, description = "Mobs will run away from exploding creepers / TNT. Use the entity type tag enhancedai:avoid_explosions/can_run to whitelist them")
 public class AvoidExplosions extends Feature {
-	public static final TagKey<EntityType<?>> CAN_RUN_FROM_EXPLOSION = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("can_run_from_explosion"));
+	public static final TagKey<EntityType<?>> CAN_RUN_FROM_EXPLOSION = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("avoid_explosions/can_run"));
 	@Config(min = 0d, max = 10d, description = "Speed multiplier when the mob runs from explosions and it's within 7 blocks from him.")
-	public static Double runSpeedNear = 1.25d;
+	public static Double runSpeedNear = 1.1d;
 	@Config(min = 0d, max = 10d, description = "Speed multiplier when the mob runs from explosions and it's farther than 7 blocks from him.")
-	public static Double runSpeedFar = 1.1d;
+	public static Double runSpeedFar = 1.0d;
 	@Config(min = 0d, max = 10d, description = "Entities also flee from TnTs")
 	public static Boolean fleeTnt = false;
 
-	public AvoidExplosions(Module module, boolean enabledByDefault, boolean canBeDisabled) {
-		super(module, enabledByDefault, canBeDisabled);
+	public static EAIData<Boolean> CAN_RUN_FROM_EXPLOSIONS;
+	public static EAIData<Boolean> CAN_RUN_FROM_TNT;
+	public static EAIData<Double> FLEE_SPEED_FAR;
+	public static EAIData<Double> FLEE_SPEED_NEAR;
+	//TODO Add a way to make mobs run from anything
+
+	public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
+		super.init(module, enabledByDefault, canBeDisabled);
+		CAN_RUN_FROM_EXPLOSIONS = EAIData.ofBool(this.createDataKey("can_run_from_explosions"), (mob, canRun) -> {
+			if (!(mob instanceof PathfinderMob pathfinderMob))
+				return;
+			GoalHelper.removeGoal(mob.goalSelector, AvoidExplosionGoal.class);
+			if (canRun)
+				mob.goalSelector.addGoal(1, new AvoidExplosionGoal(pathfinderMob, FLEE_SPEED_FAR, FLEE_SPEED_NEAR));
+		});
+		CAN_RUN_FROM_TNT = EAIData.ofBool(this.createDataKey("can_run_from_tnt"));
+		FLEE_SPEED_FAR = EAIData.ofDouble(this.createDataKey("flee_speed_far"));
+		FLEE_SPEED_NEAR = EAIData.ofDouble(this.createDataKey("flee_speed_near"));
 	}
 
 	@SubscribeEvent
 	public void onMobSpawn(EntityJoinLevelEvent event) {
-		if (!this.isEnabled()
-				|| !event.getEntity().getType().is(CAN_RUN_FROM_EXPLOSION))
+		if (!this.isEnabled())
 			return;
 
-		addAvoidAI(event);
 		alertTNT(event);
-	}
-
-	private void addAvoidAI(EntityJoinLevelEvent event) {
-		if (!(event.getEntity() instanceof PathfinderMob creatureEntity))
-			return;
-
-		creatureEntity.goalSelector.addGoal(1, new AvoidExplosionGoal(creatureEntity, runSpeedNear, runSpeedFar));
+		if (event.getEntity().getType().is(CAN_RUN_FROM_EXPLOSION) && event.getEntity() instanceof PathfinderMob mob) {
+			CAN_RUN_FROM_EXPLOSIONS.applyIfAbsent(mob, true);
+			FLEE_SPEED_FAR.applyIfAbsent(mob, runSpeedFar);
+			FLEE_SPEED_NEAR.applyIfAbsent(mob, runSpeedNear);
+			CAN_RUN_FROM_TNT.applyIfAbsent(mob, fleeTnt);
+		}
 	}
 
 	private void alertTNT(EntityJoinLevelEvent event) {
-		if (!fleeTnt)
-			return;
-		if (!(event.getEntity() instanceof PrimedTnt tnt))
+		if (event.getEntity().getType() != EntityType.TNT)
 			return;
 
-		List<PathfinderMob> creaturesNearby = tnt.level().getEntitiesOfClass(PathfinderMob.class, tnt.getBoundingBox().inflate(8d));
-		for (PathfinderMob creatureEntity : creaturesNearby) {
-			creatureEntity.goalSelector.availableGoals.forEach(prioritizedGoal -> {
-				if (prioritizedGoal.getGoal() instanceof AvoidExplosionGoal avoidExplosionGoal) {
-					avoidExplosionGoal.run(tnt, 8d);
-				}
-			});
+		List<PathfinderMob> pathfinderMobs = event.getEntity().level().getEntitiesOfClass(PathfinderMob.class, event.getEntity().getBoundingBox().inflate(8d));
+		for (PathfinderMob pathfinderMob : pathfinderMobs) {
+			if (!CAN_RUN_FROM_TNT.get(pathfinderMob)
+					|| !pathfinderMob.getType().is(CAN_RUN_FROM_EXPLOSION))
+				continue;
+			GoalHelper.getGoal(pathfinderMob.goalSelector, AvoidExplosionGoal.class)
+					.ifPresent(goal -> goal.runFrom(event.getEntity(), 8d));
 		}
 	}
 }
