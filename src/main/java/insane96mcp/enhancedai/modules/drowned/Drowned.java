@@ -1,6 +1,7 @@
 package insane96mcp.enhancedai.modules.drowned;
 
 import insane96mcp.enhancedai.EnhancedAI;
+import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
@@ -42,19 +43,17 @@ public class Drowned extends Feature {
 
 	@Config(description = "Fixes a vanilla bug that makes drowned just stand still during daytime if can't reach water.")
 	public static Boolean allowAttackDuringDay = true;
-	@Config(description = "If true, drowned will be sun resistant for a while until the water in their body evaporates. During this time, they will not seek water")
-	public static Boolean sunResistant = true;
+	@Config(min = 0, description = "If > 0, drowned will be fire resistant for a while until the water in their body evaporates. During this time, they will not seek water")
+	public static Integer sunResistant = 600;
 
-	public static ResourceLocation FIRE_RESISTANCE_TIME;
+	public static ResourceLocation SUN_RESISTANCE_TIME;
+	public static EAIData<Integer> SUN_RESISTANT_TICKS;
 
 	@Override
 	public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super.init(module, enabledByDefault, canBeDisabled);
-		FIRE_RESISTANCE_TIME = this.createDataKey("fire_resistance_time");
-	}
-
-	public static boolean sunResistant() {
-		return Feature.isEnabled(Drowned.class) && sunResistant;
+		SUN_RESISTANCE_TIME = this.createDataKey("sun_resistance_time");
+		SUN_RESISTANT_TICKS = EAIData.ofInt(this.createDataKey("sun_resistant_ticks"));
 	}
 
 	public static boolean allowAttackDuringDay() {
@@ -77,31 +76,35 @@ public class Drowned extends Feature {
 		if (swimSpeedMultiplier > 0d) {
 			MCUtils.applyModifier(drowned, ForgeMod.SWIM_SPEED.get(), UUID_SWIM_SPEED_MULTIPLIER, "Enhanced AI Drowned Swim Speed Multiplier", swimSpeedMultiplier - 1, AttributeModifier.Operation.MULTIPLY_TOTAL);
 		}
+		if (sunResistant > 0)
+			SUN_RESISTANT_TICKS.applyIfAbsent(drowned, sunResistant);
 	}
 
 	@SubscribeEvent
 	public void onTick(LivingEvent.LivingTickEvent event) {
 		if (!this.isEnabled()
 				|| !(event.getEntity() instanceof net.minecraft.world.entity.monster.Drowned drowned)
-				|| !sunResistant
 				|| drowned.level().isClientSide)
 			return;
 
-		int fireResistanceTime = ModNBTData.get(drowned, FIRE_RESISTANCE_TIME, Integer.class);
-		if (drowned.isInWater() && fireResistanceTime > 0) {
-			fireResistanceTime -= 4;
+		int sunResistantTicks = SUN_RESISTANT_TICKS.get(drowned);
+		if (sunResistantTicks <= 0)
+			return;
+
+		int sunResistantTime = ModNBTData.get(drowned, SUN_RESISTANCE_TIME, Integer.class);
+		if (drowned.isInWater() && sunResistantTime > 0) {
+			sunResistantTime -= 4;
 		}
-		else if (fireResistanceTime <= 600 && !drowned.isInFluidType() && drowned.level().isDay() && drowned.level().canSeeSky(drowned.blockPosition())) {
-			if (++fireResistanceTime < 600)
+		else if (sunResistantTime <= sunResistantTicks && !drowned.isInFluidType() && drowned.level().isDay() && drowned.level().canSeeSky(drowned.blockPosition())) {
+			if (++sunResistantTime < sunResistantTicks)
 				drowned.clearFire();
-			else if (fireResistanceTime == 600)
+			else if (sunResistantTime == sunResistantTicks)
 				drowned.playSound(SoundEvents.GENERIC_EXTINGUISH_FIRE);
 		}
-		//drowned.setCustomName(Component.literal(fireResistanceTime + ""));
-		ModNBTData.put(drowned, FIRE_RESISTANCE_TIME, fireResistanceTime);
+		ModNBTData.put(drowned, SUN_RESISTANCE_TIME, sunResistantTime);
 	}
 
-	//Same as MoveControl but uses forge:swim_speed instead of minecraft:generic.movement_speed
+	///Same as MoveControl but uses forge:swim_speed instead of minecraft:generic.movement_speed
 	static class EAIDrownedMoveControl extends MoveControl {
 		private final net.minecraft.world.entity.monster.Drowned drowned;
 
