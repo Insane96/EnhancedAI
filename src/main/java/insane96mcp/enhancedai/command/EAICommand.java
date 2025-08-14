@@ -12,11 +12,17 @@ import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.commands.synchronization.SuggestionProviders;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.WrappedGoal;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 
 public class EAICommand {
@@ -30,7 +36,7 @@ public class EAICommand {
         pDispatcher.register(Commands.literal("enhancedai").requires((p_138819_)
                 -> p_138819_.hasPermission(2))
                 .then(Commands.literal("set")
-                        .then(Commands.argument("targets", EntityArgument.entity())
+                        .then(Commands.argument("target", EntityArgument.entity())
                                 .then(Commands.argument("data", ResourceLocationArgument.id()).suggests(DATA)
                                         .then(Commands.argument("value", StringArgumentType.word())
                                                 .executes((ctx) -> {
@@ -50,16 +56,15 @@ public class EAICommand {
                                                         return 0;
                                                     }
 
-                                                    for (Entity e : EntityArgument.getEntities(ctx, "targets")) {
-                                                        if (e instanceof Mob mob)
-                                                            apply(data, mob, parsed);
-                                                    }
+													Entity entity = EntityArgument.getEntity(ctx, "target");
+													if (entity instanceof Mob mob)
+														apply(data, mob, parsed);
                                                     ctx.getSource().sendSuccess(() -> Component.literal("Changed %s to %s".formatted(data.id(), parsed)), true);
                                                     return 1;
                                                 })
                 ))))
                 .then(Commands.literal("get")
-                        .then(Commands.argument("targets", EntityArgument.entity())
+                        .then(Commands.argument("target", EntityArgument.entity())
                                 .then(Commands.argument("data", ResourceLocationArgument.id()).suggests(DATA)
                                         .executes((ctx) -> {
                                             ResourceLocation id = ResourceLocationArgument.getId(ctx, "data");
@@ -69,7 +74,7 @@ public class EAICommand {
 
                                             EAIData<?> data = optData.get();
 
-                                            Entity entity = EntityArgument.getEntity(ctx, "targets");
+                                            Entity entity = EntityArgument.getEntity(ctx, "target");
                                             if (!data.has(entity)) {
                                                 ctx.getSource().sendFailure(Component.literal("Entity does not have data " + data.id()));
                                                 return 0;
@@ -77,7 +82,32 @@ public class EAICommand {
                                             Object value = data.get(entity);
                                             ctx.getSource().sendSuccess(() -> Component.literal(value + ""), true);
                                             return 1;
-                                        })))));
+                                        })
+								)
+						)
+				)
+				.then(Commands.literal("list_goals")
+						.then(Commands.argument("target", EntityArgument.entity())
+							.executes((ctx) -> {
+								Entity entity = EntityArgument.getEntity(ctx, "target");
+								if (!(entity instanceof Mob mob)) return 0;
+								MutableComponent component = Component.literal("Goals for " + entity.getName().getString());
+								component.append(CommonComponents.NEW_LINE).append(Component.literal("Goal Selector: "));
+								List<WrappedGoal> availableGoals = new ArrayList<>(mob.goalSelector.availableGoals);
+								availableGoals.sort(Comparator.comparingInt(WrappedGoal::getPriority));
+								for (WrappedGoal goal : availableGoals) {
+									component.append(CommonComponents.NEW_LINE).append(CommonComponents.SPACE).append(Component.literal("(" + goal.getPriority() + ") " + goal.getGoal().getClass().getSimpleName()));
+								}
+								component.append(CommonComponents.NEW_LINE).append(CommonComponents.NEW_LINE).append(Component.literal("Target Selector: "));
+								List<WrappedGoal> targetGoals = new ArrayList<>(mob.targetSelector.availableGoals);
+								targetGoals.sort(Comparator.comparingInt(WrappedGoal::getPriority));
+								for (WrappedGoal goal : targetGoals) {
+									component.append(CommonComponents.NEW_LINE).append(CommonComponents.SPACE).append(Component.literal("(" + goal.getPriority() + ") " + goal.getGoal().getClass().getSimpleName()));
+								}
+
+								ctx.getSource().sendSuccess(() -> component, true);
+								return 1;
+							}))));
     }
 
     @SuppressWarnings("unchecked")
