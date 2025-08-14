@@ -20,6 +20,7 @@ Check the command for more infos.
 * Web throwing feature is no longer limited to spiders
 * Shulker bullets now take duration and amplifier from owners so each shulker can have its own
 * Snow golems can now strafe when attacking (disabled by default)
+* Break anger now accepts a new field `requires_line_of_sight` to determine if the mob requires line of sight to get angry
 * Fixed warden sonic boom range being disabled
   * Now configurable as fixed value instead of multiplier, obviously compatible with AI data
 * Fixed temporary cobwebs breaking any block in the cobweb's position

@@ -13,11 +13,13 @@ public class BreakAngerConfig {
     public IdTagMatcher block;
     public IdTagMatcher entity;
     public double range;
+    public boolean requiresLineOfSight;
 
-    public BreakAngerConfig(IdTagMatcher block, IdTagMatcher entity, double range) {
+    public BreakAngerConfig(IdTagMatcher block, IdTagMatcher entity, double range, boolean requiresLineOfSight) {
         this.block = block;
         this.entity = entity;
         this.range = range;
+        this.requiresLineOfSight = requiresLineOfSight;
     }
 
     public static final java.lang.reflect.Type LIST_TYPE = new TypeToken<ArrayList<BreakAngerConfig>>(){}.getType();
@@ -29,8 +31,9 @@ public class BreakAngerConfig {
             IdTagMatcher block = context.deserialize(jObject.get("block"), IdTagMatcher.class);
             IdTagMatcher entity = context.deserialize(jObject.get("entity"), IdTagMatcher.class);
             double range = GsonHelper.getAsDouble(jObject, "range");
+            boolean requiresLineOfSight = GsonHelper.getAsBoolean(jObject, "requires_line_of_sight", false);
 
-            return new BreakAngerConfig(block, entity, range);
+            return new BreakAngerConfig(block, entity, range, requiresLineOfSight);
         }
 
         @Override
@@ -39,6 +42,7 @@ public class BreakAngerConfig {
             jObject.add("block", context.serialize(src.block));
             jObject.add("entity", context.serialize(src.entity));
             jObject.addProperty("range", src.range);
+            jObject.addProperty("requires_line_of_sight", src.requiresLineOfSight);
             return jObject;
         }
     }

@@ -18,7 +18,7 @@ import java.util.List;
 public class BreakAnger extends JsonFeature {
 
 	public static final List<BreakAngerConfig> ANGERING_LIST_DEFAULT = List.of(
-		new BreakAngerConfig(IdTagMatcher.newTag("forge:ores/quartz"), IdTagMatcher.newId("minecraft:zombified_piglin"), 32d)
+		new BreakAngerConfig(IdTagMatcher.newTag("forge:ores/quartz"), IdTagMatcher.newId("minecraft:zombified_piglin"), 32d, false)
 	);
 
 	public static final List<BreakAngerConfig> angeringList = new ArrayList<>();
@@ -40,10 +40,13 @@ public class BreakAnger extends JsonFeature {
 			return;
 
 		for (BreakAngerConfig breakAngerConfig : angeringList) {
-			if (breakAngerConfig.block.matchesBlock(event.getState())) {
-				player.level().getEntitiesOfClass(Mob.class, player.getBoundingBox().inflate(breakAngerConfig.range), mob -> breakAngerConfig.entity.matchesEntity(mob))
-						.forEach(mob -> mob.setTarget(player));
-			}
+			List<Mob> entities = player.level().getEntitiesOfClass(Mob.class, player.getBoundingBox().inflate(breakAngerConfig.range));
+			if (!breakAngerConfig.block.matchesBlock(event.getState()))
+				continue;
+			entities.stream()
+					.filter(mob -> breakAngerConfig.entity.matchesEntity(mob))
+					.filter(mob -> !breakAngerConfig.requiresLineOfSight || mob.hasLineOfSight(player))
+					.forEach(mob -> mob.setTarget(player));
 		}
 	}
 }
