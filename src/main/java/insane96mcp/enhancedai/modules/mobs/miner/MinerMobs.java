@@ -23,11 +23,10 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@LoadFeature(module = Modules.Ids.MOBS, description = "Mobs can mine blocks to reach the target. Uses offhand item to mine. Only mobs in the entity type tag enhancedai:can_be_miner can spawn with the ability to mine and blocks in the tag enhancedai:miner_block_blacklist cannot be mined.")
+@LoadFeature(module = Modules.Ids.MOBS, description = "Mobs can mine blocks to reach the target. Uses offhand item to mine. Only mobs in the entity type tag enhancedai:miner_mobs/can_mine can spawn with the ability to mine and blocks in the tag enhancedai:miner_mobs/blacklist cannot be mined.")
 public class MinerMobs extends Feature {
-	public static final TagKey<EntityType<?>> CAN_BE_MINER = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("can_be_miner"));
-	public static final TagKey<Block> BLOCK_BLACKLIST = TagKey.create(Registries.BLOCK, EnhancedAI.location("miner_block_blacklist"));
-	public static final String MINER = EnhancedAI.RESOURCE_PREFIX + "miner";
+	public static final TagKey<EntityType<?>> CAN_BE_MINER = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("miner_mobs/can_mine"));
+	public static final TagKey<Block> BLOCK_BLACKLIST = TagKey.create(Registries.BLOCK, EnhancedAI.location("miner_mobs/blacklist"));
 	public static final String TIME_TO_BREAK_MULTIPLIER = EnhancedAI.RESOURCE_PREFIX + "time_to_break_multiplier";
 	public static final String TOOL_ONLY = EnhancedAI.RESOURCE_PREFIX + "tool_only";
 	public static final String PROPER_TOOL_ONLY = EnhancedAI.RESOURCE_PREFIX + "proper_tool_only";
