@@ -1,9 +1,9 @@
 package insane96mcp.enhancedai.modules.mobs.targeting;
 
 import insane96mcp.enhancedai.EnhancedAI;
-import insane96mcp.enhancedai.ai.EAHurtByTargetGoal;
+import insane96mcp.enhancedai.ai.EAIHurtByTargetGoal;
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.enhancedai.setup.EAAttributes;
+import insane96mcp.enhancedai.setup.EAIAttributes;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.JsonFeature;
 import insane96mcp.insanelib.base.LoadFeature;
@@ -95,10 +95,10 @@ public class Targeting extends JsonFeature {
 
 	public static void xrayRangeAttribute(EntityAttributeModificationEvent event) {
 		for (EntityType<? extends LivingEntity> entityType : event.getTypes()) {
-			if (event.has(entityType, EAAttributes.XRAY_FOLLOW_RANGE.get()))
+			if (event.has(entityType, EAIAttributes.XRAY_FOLLOW_RANGE.get()))
 				continue;
 
-			event.add(entityType, EAAttributes.XRAY_FOLLOW_RANGE.get(), 0d);
+			event.add(entityType, EAIAttributes.XRAY_FOLLOW_RANGE.get(), 0d);
 		}
 	}
 
@@ -137,7 +137,7 @@ public class Targeting extends JsonFeature {
 			//Prevent infighting
 			if (betterHurtByTarget$preventInfighting > 0 && mob.getRandom().nextFloat() < betterHurtByTarget$preventInfighting && mob instanceof Enemy)
 				toIgnoreDamage.add(Enemy.class);
-			EAHurtByTargetGoal newGoal = new EAHurtByTargetGoal(pathfinderMob, toIgnoreDamage.toArray(Class[]::new));
+			EAIHurtByTargetGoal newGoal = new EAIHurtByTargetGoal(pathfinderMob, toIgnoreDamage.toArray(Class[]::new));
 			if (goal.toIgnoreAlert != null)
 				newGoal.setAlertOthers(goal.toIgnoreAlert);
 			toAdd.add(new WrappedGoal(prioritizedGoal.getPriority(), newGoal));
@@ -151,7 +151,7 @@ public class Targeting extends JsonFeature {
 			//Prevent infighting
 			if (betterHurtByTarget$preventInfighting > 0 && mob.getRandom().nextFloat() < betterHurtByTarget$preventInfighting)
 				toIgnoreDamage.add(Enemy.class);
-			EAHurtByTargetGoal newGoal = new EAHurtByTargetGoal(pathfinderMob, toIgnoreDamage.toArray(Class[]::new));
+			EAIHurtByTargetGoal newGoal = new EAIHurtByTargetGoal(pathfinderMob, toIgnoreDamage.toArray(Class[]::new));
 			pathfinderMob.targetSelector.addGoal(1, newGoal);
 		}
 	}
@@ -175,12 +175,12 @@ public class Targeting extends JsonFeature {
 			if (isNeutral)
 				continue;
 
-			EANearestAttackableTarget<? extends LivingEntity> newTargetGoal;
+			EAINearestAttackableTarget<? extends LivingEntity> newTargetGoal;
 
 			if (mob instanceof Spider)
-				newTargetGoal = new EASpiderTargetGoal<>((Spider) mob, goal.targetType, true, true, goal.targetConditions);
+				newTargetGoal = new EAISpiderTargetGoal<>((Spider) mob, goal.targetType, true, true, goal.targetConditions);
 			else
-				newTargetGoal = new EANearestAttackableTarget<>(mob, goal.targetType, false, true, goal.targetConditions);
+				newTargetGoal = new EAINearestAttackableTarget<>(mob, goal.targetType, false, true, goal.targetConditions);
 
 			if (instantTarget)
 				newTargetGoal.setInstaTarget();
@@ -202,7 +202,7 @@ public class Targeting extends JsonFeature {
 			if (!chc.attacker.matchesEntity(mob) || mob.getRandom().nextFloat() > chc.chance)
 				continue;
 
-			EANearestAttackableTarget<LivingEntity> targetGoal = new EANearestAttackableTarget<>(mob, LivingEntity.class, chc.victim, chc.mustSee, false, TargetingConditions.forCombat());
+			EAINearestAttackableTarget<LivingEntity> targetGoal = new EAINearestAttackableTarget<>(mob, LivingEntity.class, chc.victim, chc.mustSee, false, TargetingConditions.forCombat());
 
 			if (instantTarget)
 				targetGoal.setInstaTarget();
@@ -219,8 +219,8 @@ public class Targeting extends JsonFeature {
 			}
 
 			//noinspection ConstantConditions
-			if (mob.getType().is(APPLY_XRAY) && xrayRangeOverride.min != 0d && mob.getAttribute(EAAttributes.XRAY_FOLLOW_RANGE.get()) != null && mob.getAttribute(EAAttributes.XRAY_FOLLOW_RANGE.get()).getBaseValue() < xrayRangeOverride.min) {
-				MCUtils.setAttributeValue(mob, EAAttributes.XRAY_FOLLOW_RANGE.get(), xrayRangeOverride.getIntRandBetween(mob.getRandom()));
+			if (mob.getType().is(APPLY_XRAY) && xrayRangeOverride.min != 0d && mob.getAttribute(EAIAttributes.XRAY_FOLLOW_RANGE.get()) != null && mob.getAttribute(EAIAttributes.XRAY_FOLLOW_RANGE.get()).getBaseValue() < xrayRangeOverride.min) {
+				MCUtils.setAttributeValue(mob, EAIAttributes.XRAY_FOLLOW_RANGE.get(), xrayRangeOverride.getIntRandBetween(mob.getRandom()));
 			}
 			persistentData.putBoolean(FOLLOW_RANGES_PROCESSED, true);
 		}

@@ -9,11 +9,11 @@ import net.minecraft.world.entity.projectile.ShulkerBullet;
 
 import java.util.EnumSet;
 
-public class EAShulkerAttackGoal extends Goal {
+public class EAIShulkerAttackGoal extends Goal {
     private int attackTime;
     private final Shulker shulker;
 
-    public EAShulkerAttackGoal(Shulker shulker) {
+    public EAIShulkerAttackGoal(Shulker shulker) {
         this.shulker = shulker;
         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
     }

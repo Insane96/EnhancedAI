@@ -11,7 +11,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 
-public class EACreeperLaunchGoal extends Goal {
+public class EAICreeperLaunchGoal extends Goal {
 
 	protected final net.minecraft.world.entity.monster.Creeper launchingCreeper;
 	private LivingEntity creeperAttackTarget;
@@ -28,7 +28,7 @@ public class EACreeperLaunchGoal extends Goal {
 	private float activationDistanceSqr;
 	private float minActivationDistanceSqr;
 
-	public EACreeperLaunchGoal(net.minecraft.world.entity.monster.Creeper creeper) {
+	public EAICreeperLaunchGoal(net.minecraft.world.entity.monster.Creeper creeper) {
 		this.launchingCreeper = creeper;
 		this.setFlags(EnumSet.of(Flag.MOVE));
 	}
@@ -85,13 +85,13 @@ public class EACreeperLaunchGoal extends Goal {
 	public boolean canContinueToUse() {
 		if (this.launchingCreeper.swell >= fuse - 2 && this.launchingCreeper.distanceToSqr(this.creeperAttackTarget) > (explosionSizeSqr * 2d * 2d)) {
 			this.fails++;
-			if (EACreeperSwellGoal.canCreeperBreach(this.launchingCreeper, this.creeperAttackTarget) || !this.launchingCreeper.getSensing().hasLineOfSight(this.creeperAttackTarget))
+			if (EAICreeperSwellGoal.canCreeperBreach(this.launchingCreeper, this.creeperAttackTarget) || !this.launchingCreeper.getSensing().hasLineOfSight(this.creeperAttackTarget))
 				this.cooldown = 60 + (this.fails * 60);
 			else
 				this.cooldown = CreeperUtils.getFuse(this.launchingCreeper);
 			return false;
 		}
-		else if ((this.launchingCreeper.verticalCollision || this.launchingCreeper.horizontalCollision) && this.hasLaunched && EACreeperSwellGoal.canCreeperBreach(this.launchingCreeper, this.creeperAttackTarget)) {
+		else if ((this.launchingCreeper.verticalCollision || this.launchingCreeper.horizontalCollision) && this.hasLaunched && EAICreeperSwellGoal.canCreeperBreach(this.launchingCreeper, this.creeperAttackTarget)) {
 			this.launchingCreeper.explodeCreeper();
 			return false;
 		}

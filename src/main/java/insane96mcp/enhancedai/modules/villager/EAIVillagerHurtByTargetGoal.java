@@ -1,16 +1,16 @@
 package insane96mcp.enhancedai.modules.villager;
 
-import insane96mcp.enhancedai.ai.EAHurtByTargetGoal;
+import insane96mcp.enhancedai.ai.EAIHurtByTargetGoal;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 
-public class EAVillagerHurtByTargetGoal extends EAHurtByTargetGoal {
+public class EAIVillagerHurtByTargetGoal extends EAIHurtByTargetGoal {
 
     Villager villager;
 
-    public EAVillagerHurtByTargetGoal(Villager villager, Class<?>... toIgnoreDamage) {
+    public EAIVillagerHurtByTargetGoal(Villager villager, Class<?>... toIgnoreDamage) {
         super(villager, toIgnoreDamage);
         this.villager = villager;
     }

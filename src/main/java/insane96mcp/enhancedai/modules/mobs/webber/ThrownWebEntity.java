@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.modules.mobs.webber;
 
-import insane96mcp.enhancedai.setup.EAEntities;
+import insane96mcp.enhancedai.setup.EAIEntities;
 import insane96mcp.enhancedai.utils.GoalHelper;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -31,7 +31,7 @@ public class ThrownWebEntity extends ThrowableItemProjectile {
 	}
 
 	public ThrownWebEntity(Level worldIn, LivingEntity throwerIn) {
-		super(EAEntities.THROWN_WEB.get(), throwerIn, worldIn);
+		super(EAIEntities.THROWN_WEB.get(), throwerIn, worldIn);
 	}
 
 	@Override

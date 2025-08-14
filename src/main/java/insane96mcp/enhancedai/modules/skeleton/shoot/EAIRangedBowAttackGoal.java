@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.modules.skeleton.shoot;
 
-import insane96mcp.enhancedai.ai.EARangedAttackGoal;
+import insane96mcp.enhancedai.ai.EAIRangedAttackGoal;
 import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.setup.Reflection;
 import net.minecraft.sounds.SoundEvents;
@@ -12,11 +12,11 @@ import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-public class EARangedBowAttackGoal extends EARangedAttackGoal<AbstractSkeleton> {
+public class EAIRangedBowAttackGoal extends EAIRangedAttackGoal<AbstractSkeleton> {
 
 	protected EAIData<Integer> bowChargeTicks;
 
-	public EARangedBowAttackGoal(AbstractSkeleton mob, double moveSpeedAmpIn, EAIData<Integer> attackCooldown, EAIData<Double> inaccuracy, EAIData<Integer> attackDistance, EAIData<Boolean> canStrafe, EAIData<Integer> bowChargeTicks) {
+	public EAIRangedBowAttackGoal(AbstractSkeleton mob, double moveSpeedAmpIn, EAIData<Integer> attackCooldown, EAIData<Double> inaccuracy, EAIData<Integer> attackDistance, EAIData<Boolean> canStrafe, EAIData<Integer> bowChargeTicks) {
 		super(mob, moveSpeedAmpIn, attackCooldown, inaccuracy, attackDistance, canStrafe);
 		this.bowChargeTicks = bowChargeTicks;
 	}

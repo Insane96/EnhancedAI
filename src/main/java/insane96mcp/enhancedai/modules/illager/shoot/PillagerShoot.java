@@ -63,7 +63,7 @@ public class PillagerShoot extends Feature {
 		//Remove Crossbow Goal
 		GoalHelper.removeGoal(pillager.goalSelector, RangedCrossbowAttackGoal.class);
 
-		pillager.goalSelector.addGoal(3, new EAPillagerAttackGoal(pillager, 1d));
+		pillager.goalSelector.addGoal(3, new EAIPillagerAttackGoal(pillager, 1d));
 		SHOOTING_RANGE.applyIfAbsent(pillager, shootingRange.getIntRandBetween(pillager.getRandom()));
 		SHOOTING_COOLDOWN.applyIfAbsent(pillager, shootingCooldown.getIntRandBetween(pillager.getRandom()));
 		INACCURACY.applyIfAbsent(pillager, inaccuracy.getByDifficulty(pillager.level()));

@@ -1,7 +1,7 @@
 package insane96mcp.enhancedai.modules.mobs;
 
 import insane96mcp.enhancedai.EnhancedAI;
-import insane96mcp.enhancedai.ai.EAAvoidTargetGoal;
+import insane96mcp.enhancedai.ai.EAIAvoidTargetGoal;
 import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.utils.GoalHelper;
@@ -46,12 +46,12 @@ public class FleeTarget extends Feature {
 		AVOID_TARGET = EAIData.ofBool(this.createDataKey("avoid_target"), (mob, avoidTarget) -> {
 			if (!(mob instanceof PathfinderMob pathfinderMob))
 				return;
-			GoalHelper.removeGoal(mob.goalSelector, EAAvoidTargetGoal.class);
+			GoalHelper.removeGoal(mob.goalSelector, EAIAvoidTargetGoal.class);
 			if (avoidTarget)
-				mob.goalSelector.addGoal(1, new EAAvoidTargetGoal(pathfinderMob, FLEE_DISTANCE_FAR, FLEE_DISTANCE_NEAR, FLEE_SPEED_FAR, FLEE_SPEED_NEAR));
+				mob.goalSelector.addGoal(1, new EAIAvoidTargetGoal(pathfinderMob, FLEE_DISTANCE_FAR, FLEE_DISTANCE_NEAR, FLEE_SPEED_FAR, FLEE_SPEED_NEAR));
 			ATTACK_WHEN_AVOIDING.changed(mob);
 		});
-		ATTACK_WHEN_AVOIDING = EAIData.ofBool(this.createDataKey("attack_when_avoiding"), (mob, attackWhenAvoiding) -> GoalHelper.getGoal(mob.goalSelector, EAAvoidTargetGoal.class).ifPresent(goal -> goal.setAttackWhenRunning(attackWhenAvoiding)));
+		ATTACK_WHEN_AVOIDING = EAIData.ofBool(this.createDataKey("attack_when_avoiding"), (mob, attackWhenAvoiding) -> GoalHelper.getGoal(mob.goalSelector, EAIAvoidTargetGoal.class).ifPresent(goal -> goal.setAttackWhenRunning(attackWhenAvoiding)));
 		FLEE_DISTANCE_FAR = EAIData.ofInt(this.createDataKey("flee_distance_far"));
 		FLEE_DISTANCE_NEAR = EAIData.ofInt(this.createDataKey("flee_distance_near"));
 		FLEE_SPEED_FAR = EAIData.ofDouble(this.createDataKey("flee_speed_far"));

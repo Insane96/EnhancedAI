@@ -38,7 +38,7 @@ public class ShulkerAttack extends Feature {
 
         GoalHelper.removeGoal(shulker.goalSelector, Shulker.ShulkerAttackGoal.class);
 
-        EAShulkerAttackGoal attackGoal = new EAShulkerAttackGoal(shulker);
+        EAIShulkerAttackGoal attackGoal = new EAIShulkerAttackGoal(shulker);
         shulker.goalSelector.addGoal(2, attackGoal);
         BASE_ATTACK_SPEED.applyIfAbsent(shulker, baseAttackSpeed.getIntRandBetween(shulker.getRandom()));
         EXTRA_ATTACK_SPEED.applyIfAbsent(shulker, extraAttackSpeed.getIntRandBetween(shulker.getRandom()));

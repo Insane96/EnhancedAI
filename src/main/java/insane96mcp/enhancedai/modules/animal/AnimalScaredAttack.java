@@ -1,12 +1,12 @@
 package insane96mcp.enhancedai.modules.animal;
 
 import insane96mcp.enhancedai.EnhancedAI;
-import insane96mcp.enhancedai.ai.EAAvoidEntityGoal;
+import insane96mcp.enhancedai.ai.EAIAvoidEntityGoal;
 import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.mixin.accessors.MeleeAttackGoalAccessor;
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.enhancedai.modules.mobs.targeting.EANearestAttackableTarget;
-import insane96mcp.enhancedai.setup.EAAttributes;
+import insane96mcp.enhancedai.modules.mobs.targeting.EAINearestAttackableTarget;
+import insane96mcp.enhancedai.setup.EAIAttributes;
 import insane96mcp.enhancedai.utils.GoalHelper;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
@@ -86,11 +86,11 @@ public class AnimalScaredAttack extends Feature {
         HOSTILE = EAIData.ofBool(this.createDataKey("hostile"), (mob, hostile) -> {
             GoalHelper.removeGoal(mob.targetSelector, AnimalNearestAttackableTargetGoal.class);
             mob.getAttribute(Attributes.FOLLOW_RANGE).removeModifier(FOLLOW_RANGE_REDUCTION_UUID);
-            mob.getAttribute(EAAttributes.XRAY_FOLLOW_RANGE.get()).removeModifier(FOLLOW_RANGE_REDUCTION_UUID);
+            mob.getAttribute(EAIAttributes.XRAY_FOLLOW_RANGE.get()).removeModifier(FOLLOW_RANGE_REDUCTION_UUID);
             if (hostile) {
                 NEUTRAL.apply(mob, true);
                 MCUtils.applyModifier(mob, Attributes.FOLLOW_RANGE, FOLLOW_RANGE_REDUCTION_UUID, "Reduced follow range for hostile Animals", -0.75d, AttributeModifier.Operation.MULTIPLY_BASE, true);
-                MCUtils.applyModifier(mob, EAAttributes.XRAY_FOLLOW_RANGE.get(), FOLLOW_RANGE_REDUCTION_UUID, "Reduced follow range for hostile Animals", -0.75d, AttributeModifier.Operation.MULTIPLY_BASE, true);
+                MCUtils.applyModifier(mob, EAIAttributes.XRAY_FOLLOW_RANGE.get(), FOLLOW_RANGE_REDUCTION_UUID, "Reduced follow range for hostile Animals", -0.75d, AttributeModifier.Operation.MULTIPLY_BASE, true);
                 mob.targetSelector.addGoal(2, new AnimalNearestAttackableTargetGoal<>(mob, Player.class, false, false));
                 PLAYER_SCARED.apply(mob, false);
                 ATTACK_MOVEMENT_SPEED_MODIFIER.changed(mob);
@@ -162,7 +162,7 @@ public class AnimalScaredAttack extends Feature {
         }
     }
 
-    public static class AnimalNearestAttackableTargetGoal<T extends LivingEntity> extends EANearestAttackableTarget<T> {
+    public static class AnimalNearestAttackableTargetGoal<T extends LivingEntity> extends EAINearestAttackableTarget<T> {
 
         public AnimalNearestAttackableTargetGoal(Mob goalOwnerIn, Class<T> targetClassIn, boolean mustSee, boolean mustReach) {
             super(goalOwnerIn, targetClassIn, mustSee, mustReach, TargetingConditions.forCombat());
@@ -174,7 +174,7 @@ public class AnimalScaredAttack extends Feature {
         }
     }
 
-    public static class AnimalAvoidPlayersGoal extends EAAvoidEntityGoal<Player> {
+    public static class AnimalAvoidPlayersGoal extends EAIAvoidEntityGoal<Player> {
         public AnimalAvoidPlayersGoal(PathfinderMob entity, Class<Player> classToAvoidIn, EAIData<Integer> avoidDistance, EAIData<Integer> avoidDistanceNear, EAIData<Double> farSpeed, EAIData<Double> nearSpeed) {
             super(entity, classToAvoidIn, avoidDistance, avoidDistanceNear, farSpeed, nearSpeed);
         }

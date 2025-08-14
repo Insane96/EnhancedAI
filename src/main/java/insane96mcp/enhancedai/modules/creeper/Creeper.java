@@ -3,7 +3,7 @@ package insane96mcp.enhancedai.modules.creeper;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.enhancedai.setup.EASounds;
+import insane96mcp.enhancedai.setup.EAISounds;
 import insane96mcp.enhancedai.utils.GoalHelper;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
@@ -111,14 +111,14 @@ public class Creeper extends Feature {
 	public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super.init(module, enabledByDefault, canBeDisabled);
 		WALKING_FUSE = EAIData.ofBool(this.createDataKey("walking_fuse"), (mob, walkingFuse) -> {
-			GoalHelper.getGoal(mob.goalSelector, EACreeperSwellGoal.class).ifPresent(eaCreeperSwellGoal -> eaCreeperSwellGoal.setWalkingFuse(walkingFuse));
+			GoalHelper.getGoal(mob.goalSelector, EAICreeperSwellGoal.class).ifPresent(eaCreeperSwellGoal -> eaCreeperSwellGoal.setWalkingFuse(walkingFuse));
 		});
 		WALKING_FUSE_SPEED_MODIFIER = EAIData.ofDouble(this.createDataKey("walking_fuse_speed_modifier"));
 		IGNORE_WALLS = EAIData.ofBool(this.createDataKey("ignore_walls"));
 		BREACH = EAIData.ofBool(this.createDataKey("breach"));
 		BREACH_HORIZONTAL_RANGE = EAIData.ofDouble(this.createDataKey("breach_horizontal_range"));
 		BETA = EAIData.ofBool(this.createDataKey("beta"), (mob, beta) -> {
-			GoalHelper.getGoal(mob.goalSelector, EACreeperSwellGoal.class).ifPresent(eaCreeperSwellGoal -> eaCreeperSwellGoal.setBeta(beta));
+			GoalHelper.getGoal(mob.goalSelector, EAICreeperSwellGoal.class).ifPresent(eaCreeperSwellGoal -> eaCreeperSwellGoal.setBeta(beta));
 		});
 		BETA_LEFT_STRAFE = EAIData.ofBool(this.createDataKey("beta_left_strafe"));
 		DISABLE_FALLING_SWELLING = EAIData.ofBool(this.createDataKey("disable_falling_swelling"));
@@ -169,12 +169,12 @@ public class Creeper extends Feature {
 			CompoundTag compoundNBT = new CompoundTag();
 			creeper.addAdditionalSaveData(compoundNBT);
 			if (launch) {
-				mob.goalSelector.addGoal(1, new EACreeperLaunchGoal(creeper));
+				mob.goalSelector.addGoal(1, new EAICreeperLaunchGoal(creeper));
 				if (launch$explosionRadius > 0)
 					compoundNBT.putByte("ExplosionRadius", launch$explosionRadius.byteValue());
 			}
 			else {
-				if (mob.goalSelector.availableGoals.removeIf(wrappedGoal -> wrappedGoal.getGoal() instanceof EACreeperLaunchGoal) && launch$explosionRadius > 0)
+				if (mob.goalSelector.availableGoals.removeIf(wrappedGoal -> wrappedGoal.getGoal() instanceof EAICreeperLaunchGoal) && launch$explosionRadius > 0)
 					compoundNBT.putByte("ExplosionRadius", (byte) 3);
 			}
 			creeper.readAdditionalSaveData(compoundNBT);
@@ -213,7 +213,7 @@ public class Creeper extends Feature {
 		if (!creeper.goalSelector.availableGoals.removeIf(wrappedGoal -> wrappedGoal.getGoal() instanceof SwellGoal))
 			return;
 
-		EACreeperSwellGoal swellGoal = new EACreeperSwellGoal(creeper);
+		EAICreeperSwellGoal swellGoal = new EAICreeperSwellGoal(creeper);
 		creeper.goalSelector.addGoal(2, swellGoal);
 		WALKING_FUSE.applyIfAbsent(creeper, creeper.getRandom().nextDouble() < walkingFuse$chance);
 		WALKING_FUSE_SPEED_MODIFIER.applyIfAbsent(creeper, walkingFuse$speedModifier);
@@ -292,9 +292,9 @@ public class Creeper extends Feature {
 
 	public enum FuseExplodeSounds {
 		NONE("none", null, null),
-		CENA("cena", EASounds.CREEPER_CENA_FUSE, EASounds.CREEPER_CENA_EXPLODE),
-		WTF_BOOM("wtf_boom", EASounds.WTF_BOOM_FUSE, EASounds.WTF_BOOM_EXPLODE),
-		OLD("old", () -> SoundEvents.CREEPER_PRIMED, EASounds.OLD_EXPLODE);
+		CENA("cena", EAISounds.CREEPER_CENA_FUSE, EAISounds.CREEPER_CENA_EXPLODE),
+		WTF_BOOM("wtf_boom", EAISounds.WTF_BOOM_FUSE, EAISounds.WTF_BOOM_EXPLODE),
+		OLD("old", () -> SoundEvents.CREEPER_PRIMED, EAISounds.OLD_EXPLODE);
 
 		public final String name;
 		@Nullable

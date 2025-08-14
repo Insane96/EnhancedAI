@@ -13,13 +13,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-public class EASilverfishMergeWithStoneGoal extends RandomStrollGoal {
+public class EAISilverfishMergeWithStoneGoal extends RandomStrollGoal {
 	@Nullable
 	private Direction selectedDirection;
 	private boolean doMerge;
 	private int initialCooldown;
 
-	public EASilverfishMergeWithStoneGoal(Silverfish pSilverfish) {
+	public EAISilverfishMergeWithStoneGoal(Silverfish pSilverfish) {
 		super(pSilverfish, 1.0D, 10);
 		this.setFlags(EnumSet.of(Goal.Flag.MOVE));
 		this.initialCooldown = reducedTickDelay(30);

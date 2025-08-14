@@ -7,13 +7,13 @@ import net.minecraft.world.entity.projectile.SmallFireball;
 
 import java.util.EnumSet;
 
-public class EABlazeAttackGoal extends Goal {
+public class EAIBlazeAttackGoal extends Goal {
     private final net.minecraft.world.entity.monster.Blaze blaze;
     private int attackStep;
     private int attackTime;
     private int lastSeen;
 
-    public EABlazeAttackGoal(net.minecraft.world.entity.monster.Blaze blaze) {
+    public EAIBlazeAttackGoal(net.minecraft.world.entity.monster.Blaze blaze) {
         this.blaze = blaze;
         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
     }

@@ -100,7 +100,7 @@ public class SnowGolems extends Feature {
             return;
 
         snowGolem.goalSelector.availableGoals.removeIf(wrappedGoal -> wrappedGoal.getGoal() instanceof RangedAttackGoal);
-        snowGolem.goalSelector.addGoal(1, new EARangedSnowGolemAttackGoal(snowGolem, 1f, SHOOTING_COOLDOWN, INACCURACY, SHOOTING_RANGE, STRAFE));
+        snowGolem.goalSelector.addGoal(1, new EAIRangedSnowGolemAttackGoal(snowGolem, 1f, SHOOTING_COOLDOWN, INACCURACY, SHOOTING_RANGE, STRAFE));
         SHOOTING_RANGE.applyIfAbsent(snowGolem, shootingRange.getIntRandBetween(snowGolem.getRandom()));
         INACCURACY.applyIfAbsent(snowGolem, inaccuracy.getRandBetween(snowGolem.getRandom()));
         SHOOTING_COOLDOWN.applyIfAbsent(snowGolem, shootingCooldown.getIntRandBetween(snowGolem.getRandom()));

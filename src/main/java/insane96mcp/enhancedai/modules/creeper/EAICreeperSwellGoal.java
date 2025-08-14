@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-public class EACreeperSwellGoal extends Goal {
+public class EAICreeperSwellGoal extends Goal {
 
 	private static final UUID WALKING_FUSE_SPEED_MODIFIER_UUID = UUID.fromString("ab376fec-5a15-4d3e-8fa2-0be4b6bc1849");
 
@@ -41,7 +41,7 @@ public class EACreeperSwellGoal extends Goal {
 	private Vec3 lastPosition = null;
 	private int lastPositionTickstamp = 0;
 
-	public EACreeperSwellGoal(net.minecraft.world.entity.monster.Creeper creeper) {
+	public EAICreeperSwellGoal(net.minecraft.world.entity.monster.Creeper creeper) {
 		this.swellingCreeper = creeper;
 	}
 
@@ -179,8 +179,8 @@ public class EACreeperSwellGoal extends Goal {
 		Set<WrappedGoal> availableGoals = creeper.goalSelector.getAvailableGoals();
 
 		return availableGoals.stream()
-				.filter(wrappedGoal -> wrappedGoal.getGoal() instanceof EACreeperSwellGoal)
-				.anyMatch(eaCreeperSwellGoal -> ((EACreeperSwellGoal) eaCreeperSwellGoal.getGoal()).canBreach(target));
+				.filter(wrappedGoal -> wrappedGoal.getGoal() instanceof EAICreeperSwellGoal)
+				.anyMatch(eaCreeperSwellGoal -> ((EAICreeperSwellGoal) eaCreeperSwellGoal.getGoal()).canBreach(target));
 	}
 
 	/**

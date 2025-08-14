@@ -8,11 +8,11 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.InfestedBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class EASilverfishWakeUpFriendsGoal extends Silverfish.SilverfishWakeUpFriendsGoal {
+public class EAISilverfishWakeUpFriendsGoal extends Silverfish.SilverfishWakeUpFriendsGoal {
 	private int lookForFriends;
 	private final Silverfish silverfish;
 
-	public EASilverfishWakeUpFriendsGoal(Silverfish pSilverfish) {
+	public EAISilverfishWakeUpFriendsGoal(Silverfish pSilverfish) {
 		super(pSilverfish);
 		this.silverfish = pSilverfish;
 	}

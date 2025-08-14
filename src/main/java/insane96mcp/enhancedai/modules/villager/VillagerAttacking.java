@@ -54,7 +54,7 @@ public class VillagerAttacking extends Feature {
                 || !villager.getType().is(VILLAGERS_CAN_ATTACK))
             return;
 
-        villager.targetSelector.addGoal(1, (new EAVillagerHurtByTargetGoal(villager)).setAlertOthers());
+        villager.targetSelector.addGoal(1, (new EAIVillagerHurtByTargetGoal(villager)).setAlertOthers());
         villager.goalSelector.addGoal(1, new MeleeAttackGoal(villager, 1f, false));
 
 		FIGHTS_BACK_ENEMIES.applyIfAbsent(villager, villagersFightBackEnemies);

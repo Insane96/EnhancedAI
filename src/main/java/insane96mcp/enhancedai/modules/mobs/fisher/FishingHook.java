@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.modules.mobs.fisher;
 
-import insane96mcp.enhancedai.setup.EAEntities;
+import insane96mcp.enhancedai.setup.EAIEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
@@ -38,7 +38,7 @@ public class FishingHook extends Projectile {
     }
 
     public FishingHook(Entity p_37106_, Level p_37107_) {
-        this(EAEntities.FISHING_HOOK.get(), p_37107_);
+        this(EAIEntities.FISHING_HOOK.get(), p_37107_);
         this.setOwner(p_37106_);
     }
 

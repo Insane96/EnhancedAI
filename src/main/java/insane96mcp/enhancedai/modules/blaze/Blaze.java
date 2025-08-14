@@ -68,7 +68,7 @@ public class Blaze extends Feature {
 
         goalsToRemove.forEach(blaze.goalSelector::removeGoal);
 
-        blaze.goalSelector.addGoal(4, new EABlazeAttackGoal(blaze));
+        blaze.goalSelector.addGoal(4, new EAIBlazeAttackGoal(blaze));
         TIME_BETWEEN_FIREBALLS.applyIfAbsent(blaze, timeBetweenFireballs.getIntRandBetween(blaze.getRandom()));
         FIREBALLS_SHOT.applyIfAbsent(blaze, fireballsShot.getIntRandBetween(blaze.getRandom()));
         RECHARGE_TIME.applyIfAbsent(blaze, rechargeTime.getIntRandBetween(blaze.getRandom()));

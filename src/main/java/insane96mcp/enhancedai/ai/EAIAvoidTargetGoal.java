@@ -13,7 +13,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.EnumSet;
 import java.util.function.Predicate;
 
-public class EAAvoidTargetGoal extends Goal {
+public class EAIAvoidTargetGoal extends Goal {
 	protected final PathfinderMob goalOwner;
 	protected final EAIData<Integer> avoidDistanceFar;
 	protected final EAIData<Integer> avoidDistanceNear;
@@ -24,11 +24,11 @@ public class EAAvoidTargetGoal extends Goal {
 
 	private LivingEntity avoidTarget;
 
-	public EAAvoidTargetGoal(PathfinderMob entityIn, EAIData<Integer> avoidDistanceFar, EAIData<Integer> avoidDistanceNear, EAIData<Double> farSpeed, EAIData<Double> nearSpeed) {
+	public EAIAvoidTargetGoal(PathfinderMob entityIn, EAIData<Integer> avoidDistanceFar, EAIData<Integer> avoidDistanceNear, EAIData<Double> farSpeed, EAIData<Double> nearSpeed) {
 		this(entityIn, avoidDistanceFar, avoidDistanceNear, farSpeed, nearSpeed, EntitySelector.NO_CREATIVE_OR_SPECTATOR::test);
 	}
 
-	public EAAvoidTargetGoal(PathfinderMob entityIn, EAIData<Integer> avoidDistanceFar, EAIData<Integer> avoidDistanceNear, EAIData<Double> farSpeed, EAIData<Double> nearSpeed, Predicate<LivingEntity> entityPredicate) {
+	public EAIAvoidTargetGoal(PathfinderMob entityIn, EAIData<Integer> avoidDistanceFar, EAIData<Integer> avoidDistanceNear, EAIData<Double> farSpeed, EAIData<Double> nearSpeed, Predicate<LivingEntity> entityPredicate) {
 		this.goalOwner = entityIn;
 		this.avoidDistanceFar = avoidDistanceFar;
 		this.avoidDistanceNear = avoidDistanceNear;

@@ -1,15 +1,15 @@
 package insane96mcp.enhancedai.modules.pets.snowgolem;
 
-import insane96mcp.enhancedai.ai.EARangedAttackGoal;
+import insane96mcp.enhancedai.ai.EAIRangedAttackGoal;
 import insane96mcp.enhancedai.data.EAIData;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.entity.projectile.Snowball;
 
-public class EARangedSnowGolemAttackGoal extends EARangedAttackGoal<SnowGolem> {
+public class EAIRangedSnowGolemAttackGoal extends EAIRangedAttackGoal<SnowGolem> {
 
-    public EARangedSnowGolemAttackGoal(SnowGolem mob, double movementSpeedMult, EAIData<Integer> attackCooldown, EAIData<Double> inaccuracy, EAIData<Integer> attackDistance, EAIData<Boolean> canStrafe) {
+    public EAIRangedSnowGolemAttackGoal(SnowGolem mob, double movementSpeedMult, EAIData<Integer> attackCooldown, EAIData<Double> inaccuracy, EAIData<Integer> attackDistance, EAIData<Boolean> canStrafe) {
         super(mob, movementSpeedMult, attackCooldown, inaccuracy, attackDistance, canStrafe);
     }
 

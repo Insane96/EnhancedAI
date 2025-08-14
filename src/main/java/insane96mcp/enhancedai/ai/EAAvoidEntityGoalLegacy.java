@@ -14,7 +14,7 @@ import java.util.EnumSet;
 import java.util.function.Predicate;
 
 /**
- * Use {@link EAAvoidEntityGoal}
+ * Use {@link EAIAvoidEntityGoal}
  */
 @Deprecated
 public class EAAvoidEntityGoalLegacy<T extends LivingEntity> extends Goal {

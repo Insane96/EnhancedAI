@@ -9,7 +9,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-public class EAEntities {
+public class EAIEntities {
 	public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, EnhancedAI.MOD_ID);
 
 	public static final RegistryObject<EntityType<ThrownWebEntity>> THROWN_WEB = ENTITIES.register("thrown_web", () -> EntityType.Builder.<ThrownWebEntity>of(ThrownWebEntity::new, MobCategory.MISC)

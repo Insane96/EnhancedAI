@@ -8,7 +8,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 
 import java.util.EnumSet;
 
-public abstract class EARangedAttackGoal<T extends Mob> extends Goal {
+public abstract class EAIRangedAttackGoal<T extends Mob> extends Goal {
 	protected final T mob;
 	protected final double movementSpeedMult;
 	protected EAIData<Integer> attackCooldown;
@@ -21,7 +21,7 @@ public abstract class EARangedAttackGoal<T extends Mob> extends Goal {
 	protected boolean strafingBackwards;
 	protected int strafingTime = -1;
 
-	public EARangedAttackGoal(T mob, double movementSpeedMult, EAIData<Integer> attackCooldown, EAIData<Double> inaccuracy, EAIData<Integer> attackDistance, EAIData<Boolean> canStrafe) {
+	public EAIRangedAttackGoal(T mob, double movementSpeedMult, EAIData<Integer> attackCooldown, EAIData<Double> inaccuracy, EAIData<Integer> attackDistance, EAIData<Boolean> canStrafe) {
 		this.mob = mob;
 		this.movementSpeedMult = movementSpeedMult;
 		this.attackCooldown = attackCooldown;
@@ -116,7 +116,7 @@ public abstract class EARangedAttackGoal<T extends Mob> extends Goal {
 	}
 
 	protected boolean canStrafe() {
-		return this.canStrafe.get(this.mob) && !GoalHelper.isRunning(this.mob.goalSelector, EAAvoidEntityGoal.class);
+		return this.canStrafe.get(this.mob) && !GoalHelper.isRunning(this.mob.goalSelector, EAIAvoidEntityGoal.class);
 	}
 
 	protected abstract void attackTick(LivingEntity target, double distanceFromTarget, boolean canSeeTarget);

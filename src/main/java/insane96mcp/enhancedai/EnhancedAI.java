@@ -37,9 +37,9 @@ public class EnhancedAI
 
         MinecraftForge.EVENT_BUS.register(this);
 
-        EASounds.SOUND_EVENTS.register(context.getModEventBus());
-		EAAttributes.ATTRIBUTES.register(context.getModEventBus());
-		EAEntities.ENTITIES.register(context.getModEventBus());
+        EAISounds.SOUND_EVENTS.register(context.getModEventBus());
+		EAIAttributes.ATTRIBUTES.register(context.getModEventBus());
+		EAIEntities.ENTITIES.register(context.getModEventBus());
 
         Reflection.init();
 

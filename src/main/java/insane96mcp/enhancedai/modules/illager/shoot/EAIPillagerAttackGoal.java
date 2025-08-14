@@ -26,7 +26,7 @@ import org.joml.Vector3f;
 import java.util.EnumSet;
 import java.util.List;
 
-public class EAPillagerAttackGoal extends Goal {
+public class EAIPillagerAttackGoal extends Goal {
     public static final UniformInt PATHFINDING_DELAY_RANGE = TimeUtil.rangeOfSeconds(1, 2);
     private final Pillager mob;
     private CrossbowState crossbowState;
@@ -35,7 +35,7 @@ public class EAPillagerAttackGoal extends Goal {
     private int attackDelay;
     private int updatePathDelay;
 
-    public EAPillagerAttackGoal(Pillager pMob, double pSpeedModifier) {
+    public EAIPillagerAttackGoal(Pillager pMob, double pSpeedModifier) {
         this.crossbowState = CrossbowState.UNCHARGED;
         this.mob = pMob;
         this.speedModifier = pSpeedModifier;

@@ -47,9 +47,9 @@ public class SilverfishFeature extends Feature {
 			return;
 
 		silverfish.goalSelector.removeAllGoals(goal -> goal instanceof Silverfish.SilverfishMergeWithStoneGoal);
-		silverfish.goalSelector.addGoal(5, new EASilverfishMergeWithStoneGoal(silverfish));
+		silverfish.goalSelector.addGoal(5, new EAISilverfishMergeWithStoneGoal(silverfish));
 		silverfish.goalSelector.removeAllGoals(goal -> goal instanceof Silverfish.SilverfishWakeUpFriendsGoal);
-		silverfish.friendsGoal = new EASilverfishWakeUpFriendsGoal(silverfish);
+		silverfish.friendsGoal = new EAISilverfishWakeUpFriendsGoal(silverfish);
 		silverfish.goalSelector.addGoal(3, silverfish.friendsGoal);
 
 		CHANCE_TO_MERGE_WITH_STONE.applyIfAbsent(silverfish, chanceToMergeWithStone);

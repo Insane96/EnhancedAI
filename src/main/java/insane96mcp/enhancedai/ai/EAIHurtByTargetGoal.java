@@ -10,7 +10,7 @@ import net.minecraft.world.phys.AABB;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class EAHurtByTargetGoal extends TargetGoal {
+public class EAIHurtByTargetGoal extends TargetGoal {
 	private static final TargetingConditions HURT_BY_TARGETING = TargetingConditions.forCombat().ignoreLineOfSight().ignoreInvisibilityTesting();
 	private boolean alertSameType;
 	/** Store the previous revengeTimer value */
@@ -18,7 +18,7 @@ public class EAHurtByTargetGoal extends TargetGoal {
 	@Nullable
 	public Class<?>[] toIgnoreAlert;
 
-	public EAHurtByTargetGoal(PathfinderMob pMob, Class<?>... pToIgnoreDamage) {
+	public EAIHurtByTargetGoal(PathfinderMob pMob, Class<?>... pToIgnoreDamage) {
 		super(pMob, true);
 		this.toIgnoreDamage = pToIgnoreDamage;
 		//this.setFlags(EnumSet.of(Goal.Flag.TARGET));
@@ -52,7 +52,7 @@ public class EAHurtByTargetGoal extends TargetGoal {
 		return this.canAttack(hypotheticalNewMob, HURT_BY_TARGETING);
 	}
 
-	public EAHurtByTargetGoal setAlertOthers(Class<?>... pReinforcementTypes) {
+	public EAIHurtByTargetGoal setAlertOthers(Class<?>... pReinforcementTypes) {
 		this.alertSameType = true;
 		this.toIgnoreAlert = pReinforcementTypes;
 		return this;

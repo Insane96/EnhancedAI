@@ -1,10 +1,10 @@
 package insane96mcp.enhancedai.modules.skeleton;
 
 import insane96mcp.enhancedai.EnhancedAI;
-import insane96mcp.enhancedai.ai.EAAvoidTargetGoal;
+import insane96mcp.enhancedai.ai.EAIAvoidTargetGoal;
 import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.enhancedai.modules.skeleton.shoot.EARangedBowAttackGoal;
+import insane96mcp.enhancedai.modules.skeleton.shoot.EAIRangedBowAttackGoal;
 import insane96mcp.enhancedai.utils.GoalHelper;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
@@ -43,13 +43,13 @@ public class SkeletonFleeTarget extends Feature {
         AVOID_TARGET = EAIData.ofBool(this.createDataKey("avoid_target"), (mob, avoidTarget) -> {
             if (!(mob instanceof AbstractSkeleton skeleton))
                 return;
-            GoalHelper.removeGoal(skeleton.goalSelector, EAAvoidTargetGoal.class);
-            if (avoidTarget && (GoalHelper.hasGoal(skeleton.goalSelector, skeleton.bowGoal) || GoalHelper.hasGoal(skeleton.goalSelector, EARangedBowAttackGoal.class)))
-                skeleton.goalSelector.addGoal(1, new EAAvoidTargetGoal(skeleton, FLEE_DISTANCE_FAR, FLEE_DISTANCE_NEAR, FLEE_SPEED_FAR, FLEE_SPEED_NEAR));
+            GoalHelper.removeGoal(skeleton.goalSelector, EAIAvoidTargetGoal.class);
+            if (avoidTarget && (GoalHelper.hasGoal(skeleton.goalSelector, skeleton.bowGoal) || GoalHelper.hasGoal(skeleton.goalSelector, EAIRangedBowAttackGoal.class)))
+                skeleton.goalSelector.addGoal(1, new EAIAvoidTargetGoal(skeleton, FLEE_DISTANCE_FAR, FLEE_DISTANCE_NEAR, FLEE_SPEED_FAR, FLEE_SPEED_NEAR));
             ATTACK_WHEN_AVOIDING.changed(mob);
         });
         ATTACK_WHEN_AVOIDING = EAIData.ofBool(this.createDataKey("attack_when_avoiding"), (mob, attackWhenAvoiding) -> {
-            GoalHelper.getGoal(mob.goalSelector, EAAvoidTargetGoal.class).ifPresent(goal -> goal.setAttackWhenRunning(attackWhenAvoiding));
+            GoalHelper.getGoal(mob.goalSelector, EAIAvoidTargetGoal.class).ifPresent(goal -> goal.setAttackWhenRunning(attackWhenAvoiding));
         });
         FLEE_DISTANCE_FAR = EAIData.ofInt(this.createDataKey("flee_distance_far"));
         FLEE_DISTANCE_NEAR = EAIData.ofInt(this.createDataKey("flee_distance_near"));

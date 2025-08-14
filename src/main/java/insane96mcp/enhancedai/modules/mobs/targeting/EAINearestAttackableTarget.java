@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.modules.mobs.targeting;
 
-import insane96mcp.enhancedai.setup.EAAttributes;
+import insane96mcp.enhancedai.setup.EAIAttributes;
 import insane96mcp.insanelib.ai.ILNearestAttackableTargetGoal;
 import insane96mcp.insanelib.data.IdTagMatcher;
 import net.minecraft.server.level.ServerPlayer;
@@ -12,30 +12,30 @@ import net.minecraft.world.entity.player.Player;
 /**
  * Extension of ILNearestAttackableTargetGoal making use of XRay attribute
  */
-public class EANearestAttackableTarget<T extends LivingEntity> extends ILNearestAttackableTargetGoal<T> {
+public class EAINearestAttackableTarget<T extends LivingEntity> extends ILNearestAttackableTargetGoal<T> {
 
     public TargetingConditions targetEntitySelectorXRay;
 
-    public EANearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, boolean mustSee, boolean mustReach, TargetingConditions targetingConditions) {
+    public EAINearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, boolean mustSee, boolean mustReach, TargetingConditions targetingConditions) {
         super(goalOwnerIn, targetClassIn, mustSee, mustReach, null);
         this.targetEntitySelector = targetingConditions;
         this.targetEntitySelectorXRay = targetingConditions.copy().ignoreLineOfSight();
     }
 
-    public EANearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, boolean mustSee, boolean mustReach, TargetingConditions targetingConditions, int forgetTicks) {
+    public EAINearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, boolean mustSee, boolean mustReach, TargetingConditions targetingConditions, int forgetTicks) {
         super(goalOwnerIn, targetClassIn, mustSee, mustReach, null);
         this.targetEntitySelector = targetingConditions;
         this.targetEntitySelectorXRay = targetingConditions.copy().ignoreLineOfSight();
         this.unseenMemoryTicks = forgetTicks;
     }
 
-    public EANearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, IdTagMatcher idTagMatcher, boolean mustSee, boolean mustReach, TargetingConditions targetingConditions) {
+    public EAINearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, IdTagMatcher idTagMatcher, boolean mustSee, boolean mustReach, TargetingConditions targetingConditions) {
         this(goalOwnerIn, targetClassIn, mustSee, mustReach, targetingConditions);
         this.targetEntitySelector.selector(idTagMatcher::matchesEntity);
         this.targetEntitySelectorXRay.selector(idTagMatcher::matchesEntity);
     }
 
-    public EANearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, IdTagMatcher idTagMatcher, boolean mustSee, boolean mustReach, TargetingConditions targetingConditions, int forgetTicks) {
+    public EAINearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, IdTagMatcher idTagMatcher, boolean mustSee, boolean mustReach, TargetingConditions targetingConditions, int forgetTicks) {
         this(goalOwnerIn, targetClassIn, mustSee, mustReach, targetingConditions);
         this.targetEntitySelector.selector(idTagMatcher::matchesEntity);
         this.targetEntitySelectorXRay.selector(idTagMatcher::matchesEntity);
@@ -60,6 +60,6 @@ public class EANearestAttackableTarget<T extends LivingEntity> extends ILNearest
     }
 
     protected double getFollowXRayDistance() {
-        return this.mob.getAttributeValue(EAAttributes.XRAY_FOLLOW_RANGE.get());
+        return this.mob.getAttributeValue(EAIAttributes.XRAY_FOLLOW_RANGE.get());
     }
 }

@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.Mod;
 public class ClientSetup {
 	@SubscribeEvent
 	public static void init(final EntityRenderersEvent.RegisterRenderers event) {
-		event.registerEntityRenderer(EAEntities.THROWN_WEB.get(), ThrownItemRenderer::new);
-		event.registerEntityRenderer(EAEntities.FISHING_HOOK.get(), FishingHookRenderer::new);
+		event.registerEntityRenderer(EAIEntities.THROWN_WEB.get(), ThrownItemRenderer::new);
+		event.registerEntityRenderer(EAIEntities.FISHING_HOOK.get(), FishingHookRenderer::new);
 	}
 }

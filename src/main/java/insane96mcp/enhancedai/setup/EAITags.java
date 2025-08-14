@@ -2,7 +2,7 @@ package insane96mcp.enhancedai.setup;
 
 import insane96mcp.enhancedai.EnhancedAI;
 
-public class EATags {
+public class EAITags {
 	public static class Flee {
 		public static final String AVOID_TARGET = EnhancedAI.RESOURCE_PREFIX + "avoid_target";
 		public static final String ATTACK_WHEN_AVOIDING = EnhancedAI.RESOURCE_PREFIX + "attack_when_avoiding";

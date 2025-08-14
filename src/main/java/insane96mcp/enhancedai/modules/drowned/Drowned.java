@@ -10,7 +10,6 @@ import insane96mcp.insanelib.util.MCUtils;
 import insane96mcp.insanelib.util.ModNBTData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.TagKey;
@@ -69,7 +68,7 @@ public class Drowned extends Feature {
 				|| !drowned.getType().is(CHANGE_DROWNED_SWIMMING))
 			return;
 
-		drowned.moveControl = new EADrownedMoveControl(drowned);
+		drowned.moveControl = new EAIDrownedMoveControl(drowned);
 		//drowned.waterNavigation.getNodeEvaluator().setCanFloat(true);
 		((SwimNodeEvaluator) drowned.waterNavigation.getNodeEvaluator()).allowBreaching = true;
 		drowned.goalSelector.removeAllGoals(goal -> goal instanceof net.minecraft.world.entity.monster.Drowned.DrownedSwimUpGoal);
@@ -98,15 +97,15 @@ public class Drowned extends Feature {
 			else if (fireResistanceTime == 600)
 				drowned.playSound(SoundEvents.GENERIC_EXTINGUISH_FIRE);
 		}
-		drowned.setCustomName(Component.literal(fireResistanceTime + ""));
+		//drowned.setCustomName(Component.literal(fireResistanceTime + ""));
 		ModNBTData.put(drowned, FIRE_RESISTANCE_TIME, fireResistanceTime);
 	}
 
 	//Same as MoveControl but uses forge:swim_speed instead of minecraft:generic.movement_speed
-	static class EADrownedMoveControl extends MoveControl {
+	static class EAIDrownedMoveControl extends MoveControl {
 		private final net.minecraft.world.entity.monster.Drowned drowned;
 
-		public EADrownedMoveControl(net.minecraft.world.entity.monster.Drowned p_32433_) {
+		public EAIDrownedMoveControl(net.minecraft.world.entity.monster.Drowned p_32433_) {
 			super(p_32433_);
 			this.drowned = p_32433_;
 		}

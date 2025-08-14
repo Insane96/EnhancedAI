@@ -5,8 +5,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.monster.Spider;
 
-public class EASpiderTargetGoal<T extends LivingEntity> extends EANearestAttackableTarget<T> {
-    public EASpiderTargetGoal(Spider goalOwnerIn, Class<T> targetClassIn, boolean checkSight, boolean nearbyOnlyIn, TargetingConditions targetingConditions) {
+public class EAISpiderTargetGoal<T extends LivingEntity> extends EAINearestAttackableTarget<T> {
+    public EAISpiderTargetGoal(Spider goalOwnerIn, Class<T> targetClassIn, boolean checkSight, boolean nearbyOnlyIn, TargetingConditions targetingConditions) {
         super(goalOwnerIn, targetClassIn, checkSight, nearbyOnlyIn, targetingConditions);
     }
 
