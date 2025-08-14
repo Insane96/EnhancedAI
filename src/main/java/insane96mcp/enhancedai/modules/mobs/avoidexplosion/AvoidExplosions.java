@@ -10,6 +10,7 @@ import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
@@ -20,6 +21,8 @@ import java.util.List;
 @LoadFeature(module = Modules.Ids.MOBS, description = "Mobs will run away from exploding creepers / TNT. Use the entity type tag enhancedai:avoid_explosions/can_run to whitelist them")
 public class AvoidExplosions extends Feature {
 	public static final TagKey<EntityType<?>> CAN_RUN_FROM_EXPLOSION = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("avoid_explosions/can_run"));
+	@Config(min = 0d, max = 1d, description = "Chance for a mob to be able to run from explosions.")
+	public static Double chance = 0.8d;
 	@Config(min = 0d, max = 10d, description = "Speed multiplier when the mob runs from explosions and it's within 7 blocks from him.")
 	public static Double runSpeedNear = 1.1d;
 	@Config(min = 0d, max = 10d, description = "Speed multiplier when the mob runs from explosions and it's farther than 7 blocks from him.")
@@ -52,26 +55,26 @@ public class AvoidExplosions extends Feature {
 		if (!this.isEnabled())
 			return;
 
-		alertTNT(event);
-		if (event.getEntity().getType().is(CAN_RUN_FROM_EXPLOSION) && event.getEntity() instanceof PathfinderMob mob) {
-			CAN_RUN_FROM_EXPLOSIONS.applyIfAbsent(mob, true);
+		alertTNT(event.getEntity());
+		if (event.getEntity() instanceof PathfinderMob mob && mob.getType().is(CAN_RUN_FROM_EXPLOSION)) {
+			CAN_RUN_FROM_EXPLOSIONS.applyIfAbsent(mob, mob.getRandom().nextDouble() < chance);
 			FLEE_SPEED_FAR.applyIfAbsent(mob, runSpeedFar);
 			FLEE_SPEED_NEAR.applyIfAbsent(mob, runSpeedNear);
 			CAN_RUN_FROM_TNT.applyIfAbsent(mob, fleeTnt);
 		}
 	}
 
-	private void alertTNT(EntityJoinLevelEvent event) {
-		if (event.getEntity().getType() != EntityType.TNT)
+	private void alertTNT(Entity entity) {
+		if (entity.getType() != EntityType.TNT)
 			return;
 
-		List<PathfinderMob> pathfinderMobs = event.getEntity().level().getEntitiesOfClass(PathfinderMob.class, event.getEntity().getBoundingBox().inflate(8d));
+		List<PathfinderMob> pathfinderMobs = entity.level().getEntitiesOfClass(PathfinderMob.class, entity.getBoundingBox().inflate(8d));
 		for (PathfinderMob pathfinderMob : pathfinderMobs) {
 			if (!CAN_RUN_FROM_TNT.get(pathfinderMob)
 					|| !pathfinderMob.getType().is(CAN_RUN_FROM_EXPLOSION))
 				continue;
 			GoalHelper.getGoal(pathfinderMob.goalSelector, AvoidExplosionGoal.class)
-					.ifPresent(goal -> goal.runFrom(event.getEntity(), 8d));
+					.ifPresent(goal -> goal.runFrom(entity, 8d));
 		}
 	}
 }
