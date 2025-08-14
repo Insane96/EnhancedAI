@@ -13,6 +13,8 @@ Check the command for more infos.
 * Added a new Anti-Cheese feature (from the old "Endermen Get Over Here" feature, which is now gone)
   * Endermen (configurable) will now teleport the target close to them if they can't reach or see them for a few seconds
   * Item disruption has been disabled by default
+* Leap feature is now the Parkour feature and it's enabled by default
+  * Mobs can now leap up to 3 blocks forwards on the same Y level as the target
 * Added sun-resistant Drowned
   * Drowned have 30 seconds where they don't burn in sunlight. During this time, they will not seek water
 * Pillagers now try to reposition to not hit allies (or when they hit an ally)
@@ -30,6 +32,7 @@ Check the command for more infos.
 
 ### Not yet Ported
 * Witches: everything except dark art requires a full rewrite to make it less aggressing in changing vanilla code
+* Custom Flee: requires a bit of thought to make it work with the new AI data
 
 ## 2.7.1
 * Villagers no longer use target changes

@@ -12,12 +12,12 @@ import net.minecraft.world.entity.Mob;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@LoadFeature(module = Modules.Ids.MOBS, enabledByDefault = false, description = "Makes mobs be able to leap over a few blocks.")
-public class Leap extends Feature {
-    public static final TagKey<EntityType<?>> ALLOW_LEAPING = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("allow_leaping"));
+@LoadFeature(module = Modules.Ids.MOBS, description = "Makes mobs be able to leap over a few blocks. Only entity types in the `enhancedai:parkour/can_leap` tag can leap.")
+public class Parkour extends Feature {
+    public static final TagKey<EntityType<?>> ALLOW_LEAPING = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("parkour/can_leap"));
 
-    public Leap(Module module, boolean enabledByDefault, boolean canBeDisabled) {
-        super(module, enabledByDefault, canBeDisabled);
+    public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
+        super.init(module, enabledByDefault, canBeDisabled);
     }
 
     @SubscribeEvent

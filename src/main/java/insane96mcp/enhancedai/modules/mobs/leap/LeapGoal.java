@@ -1,5 +1,6 @@
 package insane96mcp.enhancedai.modules.mobs.leap;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -10,44 +11,71 @@ import java.util.EnumSet;
 public class LeapGoal extends Goal {
 	protected LivingEntity target;
 	protected Mob goalOwner;
-	protected int ticksWithoutPath;
 
+	private int jumpBlocks = 0;
+	private Vec3 lastPosition = null;
+	private int lastPositionTickstamp = Integer.MAX_VALUE;
 
 	public LeapGoal(Mob goalOwner) {
 		super();
 		this.goalOwner = goalOwner;
-		this.setFlags(EnumSet.of(Flag.MOVE, Flag.JUMP));
+		this.setFlags(EnumSet.of(Flag.JUMP));
 	}
 
 	@Override
 	public boolean canUse() {
-		if (!this.goalOwner.onGround())
+		if (!this.goalOwner.onGround()
+				|| this.goalOwner.isPassenger())
 			return false;
 		this.target = this.goalOwner.getTarget();
 		if (this.target == null)
 			return false;
-		if (this.goalOwner.getNavigation().isDone() || this.goalOwner.getNavigation().isStuck())
-			ticksWithoutPath++;
-		else {
-			ticksWithoutPath = 0;
+		if (!this.isStuck())
 			return false;
+		Vec3 direction = new Vec3(this.target.getX() - this.goalOwner.getX(), this.target.getY() - this.goalOwner.getY(), this.target.getZ() - this.goalOwner.getZ()).normalize();
+
+		//TODO Check 1 block above and below
+		for (int i = 1; i <= 3; i++) {
+			BlockPos pos = BlockPos.containing(this.goalOwner.position().add(direction.scale(i + 0.1d)).add(0.0, -0.01d, 0.0));
+			if (this.goalOwner.level().getBlockState(pos).isSolid()) {
+				jumpBlocks = i;
+				break;
+			}
 		}
-		return this.goalOwner.distanceToSqr(this.target) < 100 && ticksWithoutPath > adjustedTickDelay(15);
+		return jumpBlocks > 0;
 	}
 
 	@Override
 	public void stop() {
-		this.ticksWithoutPath = 0;
+		this.lastPosition = null;
+		this.lastPositionTickstamp = Integer.MAX_VALUE;
+		this.jumpBlocks = 0;
 	}
 
 	@Override
 	public void start() {
-		this.goalOwner.setJumping(true);
+		this.goalOwner.getJumpControl().jump();
 		double distanceY = this.target.getY() - this.goalOwner.getY();
 		double distanceX = this.target.getX() - this.goalOwner.getX();
 		double distanceZ = this.target.getZ() - this.goalOwner.getZ();
 
-		this.goalOwner.setDeltaMovement(new Vec3(distanceX, distanceY, distanceZ).normalize().add(0, 0.2d, 0));
+		double factor = 0.65d - ((3 - jumpBlocks) * 0.2d);
+		this.goalOwner.setDeltaMovement(this.goalOwner.getDeltaMovement().add(new Vec3(distanceX, distanceY, distanceZ).normalize()).multiply(factor, 1, factor));
+		this.goalOwner.getNavigation().stop();
 		this.stop();
+	}
+
+	/**
+	 * Returns true if the mob has been stuck in the same spot (radius 1.5 blocks) for more than 3 seconds
+	 */
+	public boolean isStuck() {
+		if (this.goalOwner.getTarget() == null)
+			return false;
+
+		if (this.lastPosition == null || this.goalOwner.distanceToSqr(this.lastPosition) > 1d) {
+			this.lastPosition = this.goalOwner.position();
+			this.lastPositionTickstamp = this.goalOwner.tickCount;
+		}
+		return /*this.goalOwner.getNavigation().isDone() ||*/ this.goalOwner.tickCount - this.lastPositionTickstamp >= reducedTickDelay(30);
 	}
 }
