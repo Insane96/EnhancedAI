@@ -13,9 +13,9 @@ import java.util.function.BiConsumer;
 public class EAIData<T> {
     public static final List<EAIData<?>> DATA = new ArrayList<>();
 
-    private final ResourceLocation id;
-    private final BiConsumer<Mob, T> onChange;
-    private final Class<T> type;
+    protected final ResourceLocation id;
+    protected final BiConsumer<Mob, T> onChange;
+    protected final Class<T> type;
 
     protected EAIData(ResourceLocation id, BiConsumer<Mob, T> onChange, Class<T> type) {
         this.id = id;
@@ -41,7 +41,7 @@ public class EAIData<T> {
         if (!ModNBTData.contains(mob, this.id))
             apply(mob, value);
         else
-            onChange.accept(mob, ModNBTData.get(mob, this.id, this.type));
+            onChange.accept(mob, get(mob));
     }
 
     public ResourceLocation id() {
