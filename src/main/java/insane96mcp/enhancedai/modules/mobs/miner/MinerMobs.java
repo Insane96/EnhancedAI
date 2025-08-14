@@ -1,8 +1,11 @@
 package insane96mcp.enhancedai.modules.mobs.miner;
 
 import insane96mcp.enhancedai.EnhancedAI;
+import insane96mcp.enhancedai.data.EAIData;
+import insane96mcp.enhancedai.data.EAIDataList;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.setup.NBTUtils;
+import insane96mcp.enhancedai.utils.GoalHelper;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
@@ -22,6 +25,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+
+import java.util.List;
 
 @LoadFeature(module = Modules.Ids.MOBS, description = "Mobs can mine blocks to reach the target. Uses offhand item to mine. Only mobs in the entity type tag enhancedai:miner_mobs/can_mine can spawn with the ability to mine and blocks in the tag enhancedai:miner_mobs/blacklist cannot be mined.")
 public class MinerMobs extends Feature {
@@ -55,8 +60,17 @@ public class MinerMobs extends Feature {
 	@Config(description = "Dimensions where mobs can't spawn with the ability to mine.")
 	public static Blacklist dimensionBlacklist = new Blacklist();
 
-	public MinerMobs(Module module, boolean enabledByDefault, boolean canBeDisabled) {
-		super(module, enabledByDefault, canBeDisabled);
+	public static EAIData<Boolean> MINER;
+	public static EAIDataList<String> DIMENSION_WHITELIST;
+
+	public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
+		super.init(module, enabledByDefault, canBeDisabled);
+		MINER = EAIData.ofBool(this.createDataKey("miner"), (mob, miner) -> {
+			GoalHelper.removeGoal(mob.goalSelector, BlockBreakerGoal.class);
+			if (miner)
+				mob.goalSelector.addGoal(1, new BlockBreakerGoal(mob, maxDistance, timeToBreakMultiplier, canMineWithToolOnly, canMineWithProperToolOnly, alwaysRequireProperTool));
+		});
+		DIMENSION_WHITELIST = EAIDataList.of(this.createDataKey("dimension_whitelist"), String.class);
 	}
 
 	//Lowest priority so other mods can set persistent data
@@ -71,20 +85,18 @@ public class MinerMobs extends Feature {
 
 		CompoundTag persistentData = mob.getPersistentData();
 
-		boolean miner = NBTUtils.getBooleanOrPutDefaultLegacy(persistentData, MINER, mob.getRandom().nextDouble() < minerChance);
 		double timeToBreakMultiplier1 = NBTUtils.getDoubleOrPutDefaultLegacy(persistentData, TIME_TO_BREAK_MULTIPLIER, timeToBreakMultiplier);
 		boolean toolOnly = NBTUtils.getBooleanOrPutDefaultLegacy(persistentData, TOOL_ONLY, canMineWithToolOnly);
 		boolean properToolOnly = NBTUtils.getBooleanOrPutDefaultLegacy(persistentData, PROPER_TOOL_ONLY, canMineWithProperToolOnly);
 		boolean properToolRequired = NBTUtils.getBooleanOrPutDefaultLegacy(persistentData, ALWAYS_REQUIRE_PROPER_TOOL, alwaysRequireProperTool);
 
-		if (miner) {
-			mob.goalSelector.addGoal(1, new BlockBreakerGoal(mob, maxDistance, timeToBreakMultiplier1, toolOnly, properToolOnly, properToolRequired));
-			if (equipStonePick && mob.getOffhandItem().isEmpty())
-			{
-				mob.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.STONE_PICKAXE));
-				mob.setDropChance(EquipmentSlot.OFFHAND, -1f);
-			}
+		if (equipStonePick && mob.getOffhandItem().isEmpty())
+		{
+			mob.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.STONE_PICKAXE));
+			mob.setDropChance(EquipmentSlot.OFFHAND, -1f);
 		}
+		MINER.applyIfAbsent(mob, mob.getRandom().nextDouble() < minerChance);
+		DIMENSION_WHITELIST.applyIfAbsent(mob, List.of("minecraft:overworld", "minecraft:the_nether", "minecraft:the_end"));
 	}
 
 	public static boolean isDimensionBlackOrNotWhitelisted(Level level) {
