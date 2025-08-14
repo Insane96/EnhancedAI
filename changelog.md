@@ -27,6 +27,9 @@ Check the command for more infos.
 * Fixed fisher mobs canceling the fishing rod cast if they can't see the target
 * Fixed dark art witches dropping the equipped spawn egg
 
+### Not yet Ported
+* Witches: everything except dark art requires a full rewrite to make it less aggressing in changing vanilla code
+
 ## 2.7.1
 * Villagers no longer use target changes
 * Cats no longer use animal changes
