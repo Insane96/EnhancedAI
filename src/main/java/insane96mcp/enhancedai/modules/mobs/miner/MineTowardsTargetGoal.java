@@ -7,6 +7,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -33,56 +34,45 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
-public class BlockBreakerGoal extends Goal {
+public class MineTowardsTargetGoal extends Goal {
 
 	private final Mob miner;
 	private LivingEntity target;
 	private final double reachDistance;
-	private final double maxDistanceFromTarget;
-	private final double timeToBreakMultiplier;
 	private final List<BlockPos> targetBlocks = new ArrayList<>();
 	private int tickToBreak = 0;
 	private int breakingTick = 0;
 	private BlockState blockState = null;
 	private int prevBreakProgress = 0;
-	private final boolean toolOnly;
-	private final boolean properToolOnly;
-	private final boolean properToolRequired;
 
 	private Vec3 lastPosition = null;
 	private int lastPositionTickstamp = 0;
 
 	private Path path = null;
 
-	public BlockBreakerGoal(Mob miner, double maxDistanceFromTarget, double timeToBreakMultiplier, boolean toolOnly, boolean properToolOnly, boolean properToolRequired){
+	public MineTowardsTargetGoal(Mob miner){
 		this.miner = miner;
-		this.reachDistance = 4;
-		this.maxDistanceFromTarget = maxDistanceFromTarget == 0 ? 64 * 64 : maxDistanceFromTarget * maxDistanceFromTarget;
-		this.timeToBreakMultiplier = timeToBreakMultiplier;
-		this.toolOnly = toolOnly;
-		this.properToolOnly = properToolOnly;
-		this.properToolRequired = properToolRequired;
+		this.reachDistance = miner.getAttribute(ForgeMod.BLOCK_REACH.get()) == null ? 4.5 : miner.getAttributeValue(ForgeMod.BLOCK_REACH.get());
 		this.setFlags(EnumSet.of(Flag.LOOK, Flag.MOVE));
 	}
 
 	public boolean canUse() {
-		if (!this.miner.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING))
+		if (!MinerMobs.isValidDimension(this.miner)
+				|| !this.miner.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)
+				|| (MinerMobs.TOOL_REQUIREMENT.get(this.miner) == MinerMobs.ToolRequirement.ANY_TOOL && !(this.miner.getOffhandItem().getItem() instanceof DiggerItem))
+				|| this.miner.getTarget() == null)
 			return false;
-		if (this.toolOnly && !(this.miner.getOffhandItem().getItem() instanceof DiggerItem))
-			return false;
-
-		if (this.miner.getTarget() == null)
-			return false;
-
+		float maxTargetDistance = MinerMobs.MAX_TARGET_DISTANCE.get(this.miner);
+		maxTargetDistance *= maxTargetDistance;
 		return this.isStuck()
 				&& (this.miner.distanceToSqr(miner.getTarget()) > 2d || !this.miner.hasLineOfSight(miner.getTarget()))
-				&& this.miner.distanceToSqr(miner.getTarget()) < maxDistanceFromTarget;
+				&& (this.miner.distanceToSqr(miner.getTarget()) < MinerMobs.MAX_TARGET_DISTANCE.get(this.miner) * MinerMobs.MAX_TARGET_DISTANCE.get(this.miner) || maxTargetDistance == 0);
 	}
 
 	public boolean canContinueToUse() {
 		if (this.targetBlocks.isEmpty())
 			return false;
-		if (this.properToolOnly && this.blockState != null && !this.canBreakBlock())
+		if (this.blockState != null && !this.canBreakBlock())
 			return false;
 
 		if (this.target == null || !this.target.isAlive())
@@ -101,7 +91,6 @@ public class BlockBreakerGoal extends Goal {
 		fillTargetBlocks();
 		if (!this.targetBlocks.isEmpty()) {
 			initBlockBreak();
-			this.miner.setAggressive(true);
 		}
 	}
 
@@ -123,8 +112,9 @@ public class BlockBreakerGoal extends Goal {
 	public void tick() {
 		if (this.targetBlocks.isEmpty())
 			return;
-		if (this.properToolOnly && this.blockState != null && !this.canBreakBlock())
+		if (this.blockState != null && !this.canBreakBlock())
 			return;
+		this.miner.setAggressive(true);
 		BlockPos pos = this.targetBlocks.get(0);
 		this.breakingTick++;
 		this.miner.getLookControl().setLookAt(pos.getX() + 0.5d, pos.getY() + 0.5d, pos.getZ() + 0.5d);
@@ -140,7 +130,7 @@ public class BlockBreakerGoal extends Goal {
 			this.miner.level().playSound(null, pos, soundType.getHitSound(), SoundSource.BLOCKS, (soundType.getVolume() + 1.0F) / 8.0F, soundType.getPitch() * 0.5F);
 		}
 		if (this.breakingTick >= this.tickToBreak && this.miner.level() instanceof ServerLevel level) {
-			if (ForgeEventFactory.onEntityDestroyBlock(this.miner, this.targetBlocks.get(0), this.blockState) && this.miner.level().destroyBlock(pos, false, this.miner)) {
+			if (ForgeEventFactory.onEntityDestroyBlock(this.miner, this.targetBlocks.get(0), this.blockState) && this.miner.level().destroyBlock(pos, false, this.miner) && (!this.blockState.requiresCorrectToolForDrops() || this.miner.getItemBySlot(EquipmentSlot.OFFHAND).isCorrectToolForDrops(this.blockState))) {
 				BlockEntity blockentity = this.blockState.hasBlockEntity() ? this.miner.level().getBlockEntity(pos) : null;
 				LootParams.Builder lootparams$builder = (new LootParams.Builder(level)).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos)).withParameter(LootContextParams.TOOL, this.miner.getOffhandItem()).withOptionalParameter(LootContextParams.BLOCK_ENTITY, blockentity).withOptionalParameter(LootContextParams.THIS_ENTITY, this.miner);
 				this.blockState.spawnAfterBreak(level, pos, this.miner.getOffhandItem(), false);
@@ -168,7 +158,7 @@ public class BlockBreakerGoal extends Goal {
 			BlockHitResult rayTraceResult = this.miner.level().clip(new ClipContext(this.miner.position().add(0, i + 0.5d, 0), this.target.getEyePosition(1f).add(0, i, 0), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.miner));
             if (rayTraceResult.getType() == HitResult.Type.MISS
 					|| this.targetBlocks.contains(rayTraceResult.getBlockPos())
-					|| rayTraceResult.getBlockPos().getY() > MinerMobs.maxY)
+					|| rayTraceResult.getBlockPos().getY() > MinerMobs.MAX_Y.get(this.miner))
                 continue;
 
             double distance = this.miner.distanceToSqr(rayTraceResult.getLocation());
@@ -177,12 +167,12 @@ public class BlockBreakerGoal extends Goal {
 
 			BlockState state = this.miner.level().getBlockState(rayTraceResult.getBlockPos());
 
-            if (state.hasBlockEntity()
-					|| state.getDestroySpeed(this.miner.level(), rayTraceResult.getBlockPos()) == -1
-					|| state.hasBlockEntity() && MinerMobs.blacklistTileEntities)
-                continue;
+			if (state.getDestroySpeed(this.miner.level(), rayTraceResult.getBlockPos()) == -1
+					|| (state.hasBlockEntity() && MinerMobs.blacklistTileEntities))
+				continue;
 
-			if ((!MinerMobs.blockBlacklistAsWhitelist && state.is(MinerMobs.BLOCK_BLACKLIST)) || (MinerMobs.blockBlacklistAsWhitelist && !state.is(MinerMobs.BLOCK_BLACKLIST)))
+			boolean listed = state.is(MinerMobs.BLOCK_BLACKLIST);
+			if (listed != MinerMobs.blockBlacklistAsWhitelist)
 				continue;
 
             this.targetBlocks.add(rayTraceResult.getBlockPos());
@@ -214,7 +204,7 @@ public class BlockBreakerGoal extends Goal {
 	private int computeTickToBreak() {
 		int canHarvestBlock = this.canHarvestBlock() ? 30 : 100;
 		double diggingSpeed = this.getDigSpeed() / this.blockState.getDestroySpeed(this.miner.level(), this.targetBlocks.get(0)) / canHarvestBlock;
-		return Mth.ceil((1f / diggingSpeed) * this.timeToBreakMultiplier);
+		return Mth.ceil((1f / diggingSpeed) * MinerMobs.TIME_TO_BREAK_MULTIPLIER.get(this.miner));
 	}
 
 	private float getDigSpeed() {
@@ -243,15 +233,17 @@ public class BlockBreakerGoal extends Goal {
 			digSpeed *= miningFatigueAmplifier;
 		}
 
-		if (this.miner.isEyeInFluidType(ForgeMod.WATER_TYPE.get()) && !EnchantmentHelper.hasAquaAffinity(this.miner)) {
+		if (this.miner.isEyeInFluidType(ForgeMod.WATER_TYPE.get()) && !EnchantmentHelper.hasAquaAffinity(this.miner))
 			digSpeed /= 5.0F;
-		}
 
 		return digSpeed;
 	}
 
 	private boolean canBreakBlock() {
-		if (!this.blockState.requiresCorrectToolForDrops() || !this.properToolRequired)
+		MinerMobs.ToolRequirement toolRequirement = MinerMobs.TOOL_REQUIREMENT.get(this.miner);
+		if (toolRequirement == MinerMobs.ToolRequirement.NONE || toolRequirement == MinerMobs.ToolRequirement.ANY_TOOL)
+			return true;
+		if ((toolRequirement == MinerMobs.ToolRequirement.CORRECT_TOOL_FOR_REQUIRED) && !this.blockState.requiresCorrectToolForDrops())
 			return true;
 
 		ItemStack stack = this.miner.getOffhandItem();

@@ -18,6 +18,7 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
   * Mobs can now leap up to 3 blocks forwards on the same Y level as the target
 * Added sun-resistant Drowned
   * Drowned have 30 seconds where they don't burn in sunlight. During this time, they will not seek water
+* Miner mobs now use the `forge:block_reach` attribute
 * Pillagers now try to reposition to not hit allies (or when they hit an ally)
 * Merged Pillager and Witch flee features into a single "Target Flee" feature
 * Web throwing feature is no longer limited to spiders

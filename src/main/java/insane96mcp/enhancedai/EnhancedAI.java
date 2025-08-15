@@ -5,6 +5,7 @@ import insane96mcp.enhancedai.command.EAICommand;
 import insane96mcp.enhancedai.data.mpr.EAIChangeDataProperty;
 import insane96mcp.enhancedai.modules.animal.AnimalScaredAttack;
 import insane96mcp.enhancedai.modules.mobs.MeleeAttacking;
+import insane96mcp.enhancedai.modules.mobs.miner.MinerMobs;
 import insane96mcp.enhancedai.modules.mobs.targeting.Targeting;
 import insane96mcp.enhancedai.setup.*;
 import insane96mcp.mobspropertiesrandomness.data.json.property.PropertiesRegistry;
@@ -14,6 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.commands.DebugPathCommand;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
@@ -36,16 +38,17 @@ public class EnhancedAI
         context.registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, Config.COMMON_SPEC, MOD_ID + "/common.toml");
 
         MinecraftForge.EVENT_BUS.register(this);
-
-        EAISounds.SOUND_EVENTS.register(context.getModEventBus());
-		EAIAttributes.ATTRIBUTES.register(context.getModEventBus());
-		EAIEntities.ENTITIES.register(context.getModEventBus());
+		IEventBus modEventBus = context.getModEventBus();
+		EAISounds.SOUND_EVENTS.register(modEventBus);
+		EAIAttributes.ATTRIBUTES.register(modEventBus);
+		EAIEntities.ENTITIES.register(modEventBus);
 
         Reflection.init();
 
-        context.getModEventBus().addListener(AnimalScaredAttack::attribute);
-        context.getModEventBus().addListener(MeleeAttacking::attributeModificationEvent);
-        context.getModEventBus().addListener(Targeting::xrayRangeAttribute);
+		modEventBus.addListener(MinerMobs::addAttribute);
+        modEventBus.addListener(AnimalScaredAttack::attribute);
+        modEventBus.addListener(MeleeAttacking::attributeModificationEvent);
+        modEventBus.addListener(Targeting::xrayRangeAttribute);
 
         if (ModList.get().isLoaded("mobspropertiesrandomness")) {
             PropertiesRegistry.PROPERTIES.put(location("change_data"), EAIChangeDataProperty.class);
