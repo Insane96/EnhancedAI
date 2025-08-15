@@ -150,7 +150,6 @@ public class EAIData<T> {
 				list.add(s.trim());
 			return type.cast(list);
 		}
-
 		else
             throw new IllegalStateException("Unsupported type: " + type);
     }
