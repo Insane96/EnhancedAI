@@ -28,7 +28,8 @@ public class LeapGoal extends Goal {
 				|| this.goalOwner.isPassenger())
 			return false;
 		this.target = this.goalOwner.getTarget();
-		if (this.target == null)
+		if (this.target == null
+				|| !this.goalOwner.hasLineOfSight(this.target))
 			return false;
 		if (!this.isStuck())
 			return false;
