@@ -1,9 +1,9 @@
 # Changelog
 
 ## Upcoming
-You are able to change AI at runtime without having to reload the world thanks to the new tech: AI Data.  
+You are able to change AI at runtime without having to reload the world thanks to the new tech: AI Data, which lets you change parameters per mob, without having to reload the world.  
 AI Data is defined as a resource location (`<namespace>:<id>`), by default the namespace is obviously `enhancedai`.  
-Due how the vanilla AI works, the goals already present in the mob can't be changed with this system without a huge amount of work. E.g. For the "Animals not temped" feature they already have the Tempt AI, so it's impossible to add it back if it's removed.
+Due how the vanilla AI works, the goals already present in the mob can't be changed with this system without a huge amount of work. E.g. For the "Animals not temped" feature they already have the Tempt AI, so it's impossible to add it back if it's removed.  
 Check the command for more infos.  
 The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `enhancedai:miner_mobs/can_mine`)
 
@@ -12,10 +12,10 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
     E.g. `/enhancedai set @e[type=creeper] enhancedai:creeper_swell/tnt_like true` will enable tnt like for all the creepers currently loaded. You can also get the value with `get` on an entity  
     A MobsPropertiesRandomness property will come to make use of the AI Data id instead of NBT
 * Added a new Anti-Cheese feature (from the old "Endermen Get Over Here" feature, which is now gone)
-  * Endermen (configurable) will now teleport the target close to them if they can't reach or see them for a few seconds
+  * Endermen will now teleport the target close to them if they can't reach or see them for a few seconds
   * Item disruption has been disabled by default
 * Added back the Shielding feature
-  * Due to not being able to make mobs use the shield and block (since they have no animation for it), mobs with a shield now have a chance to block damage.
+  * Due to not being able to make mobs use the shield to block (since they have no animation for it), mobs with a shield now have a chance to block damage.
   * Each shield (e.g. from Shields+) can be configured to have a different chance to block
 * Leap feature is now the Parkour feature and it's enabled by default
   * Mobs can now leap up to 3 blocks forwards on the same Y level as the target

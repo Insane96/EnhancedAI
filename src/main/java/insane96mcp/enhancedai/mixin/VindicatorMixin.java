@@ -1,15 +1,16 @@
 package insane96mcp.enhancedai.mixin;
 
+import com.llamalad7.mixinextras.expression.Definition;
+import com.llamalad7.mixinextras.expression.Expression;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Local;
 import insane96mcp.enhancedai.modules.mobs.OpenDoors;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.entity.monster.Vindicator;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Vindicator.class)
 public abstract class VindicatorMixin extends AbstractIllager {
@@ -17,9 +18,12 @@ public abstract class VindicatorMixin extends AbstractIllager {
 		super(pEntityType, pLevel);
 	}
 
-	@Inject(at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/world/entity/ai/navigation/GroundPathNavigation;setCanOpenDoors(Z)V"), method = "customServerAiStep")
-	public void onSetCanOpenDoors(CallbackInfo ci) {
+	@Definition(id = "flag", local = @Local(type = boolean.class))
+	@Expression("flag")
+	@ModifyExpressionValue(method = "customServerAiStep", at = @At("MIXINEXTRAS:EXPRESSION"))
+	public boolean onSetCanOpenDoors(boolean original) {
 		if (OpenDoors.shouldBeAbleToOpenDoors((Vindicator) (Object) this))
-			((GroundPathNavigation)this.getNavigation()).setCanOpenDoors(true);
+			return OpenDoors.CAN_OPEN_DOORS_DATA.get(this);
+		return original;
 	}
 }
