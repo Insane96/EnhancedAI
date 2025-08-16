@@ -44,6 +44,7 @@ public class Modules {
 		warden = Module.Builder.create(Ids.WARDEN, "Warden", ModConfig.Type.COMMON, Config.builder).build();
 	}
 
+	@SuppressWarnings("deprecation")
 	public static class Ids {
 		public static final String ANIMAL = EnhancedAI.RESOURCE_PREFIX + "animal";
 		public static final String BLAZE = EnhancedAI.RESOURCE_PREFIX + "blaze";

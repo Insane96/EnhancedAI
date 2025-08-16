@@ -65,7 +65,7 @@ public class PearlUseGoal extends Goal {
 		double d3 = Math.sqrt(d0 * d0 + d2 * d2);
 		double pitch = Mth.wrapDegrees((float)(-(Mth.atan2(d1, d3) * (double)(180F / (float)Math.PI))));
 		double yaw = Mth.wrapDegrees((float)(Mth.atan2(d2, d0) * (double)(180F / (float)Math.PI)) - 90.0F);
-		thrownEnderPearl.shootFromRotation(this.pearler, (float) (pitch - 3f - d1), (float) (yaw), 0.0F, 1.5F, PearlerMobs.inaccuracy);
+		thrownEnderPearl.shootFromRotation(this.pearler, (float) (pitch - 3f - d1), (float) (yaw), 0.0F, 1.5F, PearlerMobs.INACCURACY.get(this.pearler));
 		this.pearler.level().addFreshEntity(thrownEnderPearl);
 		stack.shrink(1);
 		this.cooldown = reducedTickDelay(100);
