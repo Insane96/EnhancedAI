@@ -5,6 +5,7 @@ import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
+import insane96mcp.insanelib.data.IdTagValue;
 import insane96mcp.insanelib.util.ModNBTData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
@@ -19,9 +20,15 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
+import java.util.ArrayList;
+import java.util.List;
+
 //TODO JsonFeature to configure chance to block per shield
 @LoadFeature(module = Modules.Ids.MOBS, description = "Gives mobs a chance to negate damage when equipped with a shield.")
 public class Shielding extends Feature {
+
+	public static final List<IdTagValue> DEFAULT_SHIELD_BLOCK_CHANCE = List.of(IdTagValue.newId("minecraft:shield", 0.2d));
+	public static final List<IdTagValue> shieldBlockChance = new ArrayList<>();
 
 	@Config(description = "Chance for entity types in the `enhancedai:shielding/can_equip_shield` tag to spawn with a shield in the offhand.")
 	public static double chanceToEquip = 0.08d;
