@@ -50,7 +50,9 @@ public class BitingMobs extends Feature {
 			return;
 
 		if (mob.getRandom().nextDouble() < chance.getByDifficulty(event.getEntity().level())) {
-			DamageSource damageSource = mob.damageSources().source(BITE_DAMAGE_TYPE,  mob);
+			DamageSource damageSource = mob.damageSources().source(BITE_DAMAGE_TYPE, mob);
+			if (attacker.isInvulnerableTo(damageSource))
+				return;
 			attacker.hurt(damageSource, damage.floatValue());
 		}
 	}

@@ -14,6 +14,8 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
 * Added a new Anti-Cheese feature (from the old "Endermen Get Over Here" feature, which is now gone)
   * Endermen (configurable) will now teleport the target close to them if they can't reach or see them for a few seconds
   * Item disruption has been disabled by default
+* Added back the Shielding feature
+  * Due to not being able to make mobs use the shield and block (since they have no animation for it), mobs with a shield now have a chance to block damage.
 * Leap feature is now the Parkour feature and it's enabled by default
   * Mobs can now leap up to 3 blocks forwards on the same Y level as the target
 * Added sun-resistant Drowned
@@ -34,8 +36,9 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
 * Fixed dark art witches dropping the equipped spawn egg
 
 ### Not yet Ported
-* Witches: everything except dark art requires a full rewrite to make it less aggressing in changing vanilla code
+* Witches: everything except dark art requires a full rewrite to make it less aggressive in changing vanilla code
 * Custom Flee: requires a bit of thought to make it work with the new AI data
+* Riding: Requires a rewrite to allow different mobs to use different mounts
 
 ## 2.7.1
 * Villagers no longer use target changes
