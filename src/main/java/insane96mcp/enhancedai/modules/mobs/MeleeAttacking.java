@@ -3,7 +3,6 @@ package insane96mcp.enhancedai.modules.mobs;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
-import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.Difficulty;
 import net.minecraft.world.entity.Entity;
@@ -21,19 +20,15 @@ public class MeleeAttacking extends Feature {
 	//Directly stolen from 1.20.2
 	private static final double DEFAULT_ATTACK_REACH = Math.sqrt(2.04F) - (double)0.6F;
 
-	@Config(description = "If true melee monsters (zombies, etc) will attack based off the forge:entity_reach attribute instead of a fixed ~0.82 blocks. By default, mobs' forge:attack_range is set to 0.82 blocks, like vanilla 1.20.2.")
-	public static Boolean meleeAttacksAttributeBased = true;
+	@Config(description = "If true melee monsters (zombies, etc) will attack like 1.20.2+ and the attack range is based off the forge:entity_reach attribute (default 0.82 blocks).")
+	public static Boolean attackReachAttributeBased = true;
 
-	@Config(description = "If true melee monsters (zombies, etc) attack rate is defined by their attack speed -40%, minimum once every 0.5 seconds with no weapon. This effectively buffs any mob that has no weapon.")
+	@Config(description = "If true melee monsters (zombies, etc) attack speed is 4 (like the player) and will be based off the `minecraft:generic.attack_speed` attribute.")
 	public static Boolean attackSpeed$attributeBased = true;
-	@Config(min = 0d, max = 4d, description = "Multiplies the attack speed of monsters by this value. E.g. 0.6 means that mobs attack 40% slower than the player with the same equipment")
-	public static Difficulty attackSpeed$multiplier = new Difficulty(0.5d, 0.5d, 0.5d);
-	@Config(min = 0f, max = 4f, description = "The maximum attack speed a mob can attack with (in attacks per second, 2 is an attack every 0.5 seconds, 1.25 is an attack every 0.8s, 1 is an attack every 1s). In vanilla mobs have 1 attack speed.")
-	public static Double attackSpeed$maximum = 2d;
-
-	public MeleeAttacking(Module module, boolean enabledByDefault, boolean canBeDisabled) {
-		super(module, enabledByDefault, canBeDisabled);
-	}
+	@Config(min = 0d, max = 4d, description = "Multiplies the attack speed of monsters by this value.")
+	public static Difficulty attackSpeed$multiplier = new Difficulty(0.25d, 0.25d, 0.25d);
+	@Config(min = 0f, max = 4f, description = "The maximum attack speed a mob can attack with (in attacks per second, 2 is an attack every 0.5 seconds, 1.25 is an attack every 0.8s, 1 is an attack every 1s).")
+	public static Double attackSpeed$maximum = 4d;
 
 	public static void attributeModificationEvent(EntityAttributeModificationEvent event) {
 		for (EntityType<? extends LivingEntity> entityType : event.getTypes()) {
@@ -44,8 +39,8 @@ public class MeleeAttacking extends Feature {
 		}
 	}
 
-	public static Boolean shouldChangeAttackRange() {
-		return isEnabled(MeleeAttacking.class) && meleeAttacksAttributeBased;
+	public static Boolean shouldChangeAttackReach() {
+		return isEnabled(MeleeAttacking.class) && attackReachAttributeBased;
 	}
 
 	public static Boolean shouldUseAttackSpeedAttribute() {
@@ -69,7 +64,7 @@ public class MeleeAttacking extends Feature {
 		}
 
 		double attackReach = DEFAULT_ATTACK_REACH;
-		if (MeleeAttacking.shouldChangeAttackRange())
+		if (MeleeAttacking.shouldChangeAttackReach())
 			attackReach = attacker.getAttributeValue(ForgeMod.ENTITY_REACH.get());
 		return aabb.inflate(attackReach, 0.0D, attackReach);
 	}
