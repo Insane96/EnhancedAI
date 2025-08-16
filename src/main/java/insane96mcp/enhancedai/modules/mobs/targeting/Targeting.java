@@ -83,8 +83,9 @@ public class Targeting extends JsonFeature {
 	@Config(min = 0d, max = 1d, description = "If the mobs' affected by blindness effect the target range is multiplied by this value")
 	public static Double blindnessRangeMultiplier = .1d;
 
-	public Targeting(Module module, boolean enabledByDefault, boolean canBeDisabled) {
-		super(module, enabledByDefault, canBeDisabled);
+	@Override
+	public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
+		super.init(module, enabledByDefault, canBeDisabled);
 		JSON_CONFIGS.add(new JsonConfig<>("custom_hostile.json", customHostile, CUSTOM_HOSTILE_DEFAULT_LIST, CustomHostileConfig.LIST_TYPE));
 	}
 

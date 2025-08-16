@@ -21,8 +21,9 @@ public class Flee extends JsonFeature {
 
 	public static final List<CustomFleeConfig> customFlee = new ArrayList<>();
 
-	public Flee(Module module, boolean enabledByDefault, boolean canBeDisabled) {
-		super(module, enabledByDefault, canBeDisabled);
+	@Override
+	public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
+		super.init(module, enabledByDefault, canBeDisabled);
 		JSON_CONFIGS.add(new JsonConfig<>("custom_flee.json", customFlee, CUSTOM_FLEE_DEFAULT, CustomFleeConfig.LIST_TYPE));
 	}
 

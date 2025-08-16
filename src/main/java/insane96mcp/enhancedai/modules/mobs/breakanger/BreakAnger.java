@@ -23,8 +23,9 @@ public class BreakAnger extends JsonFeature {
 
 	public static final List<BreakAngerConfig> angeringList = new ArrayList<>();
 
-	public BreakAnger(Module module, boolean enabledByDefault, boolean canBeDisabled) {
-		super(module, enabledByDefault, canBeDisabled);
+	@Override
+	public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
+		super.init(module, enabledByDefault, canBeDisabled);
 		JSON_CONFIGS.add(new JsonConfig<>("break_anger_config.json", angeringList, ANGERING_LIST_DEFAULT, BreakAngerConfig.LIST_TYPE));
 	}
 
