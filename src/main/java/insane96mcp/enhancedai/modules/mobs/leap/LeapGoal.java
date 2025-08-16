@@ -70,10 +70,11 @@ public class LeapGoal extends Goal {
 	 * Returns true if the mob has been stuck in the same spot (radius 0.6 blocks) for more than 3 seconds
 	 */
 	public boolean isStuck() {
-		if (this.goalOwner.getTarget() == null)
+		if (this.goalOwner.getTarget() == null
+				|| this.goalOwner.distanceToSqr(this.goalOwner.getTarget()) < 1)
 			return false;
 
-		if (this.lastPosition == null || this.goalOwner.distanceToSqr(this.lastPosition) > 0.774d) {
+		if (this.lastPosition == null || this.goalOwner.distanceToSqr(this.lastPosition) > 0.36d) {
 			this.lastPosition = this.goalOwner.position();
 			this.lastPositionTickstamp = this.goalOwner.tickCount;
 		}
