@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.mobs.leap;
+package insane96mcp.enhancedai.modules.mobs.parkour;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
@@ -8,7 +8,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 
-public class LeapGoal extends Goal {
+public class ParkourGoal extends Goal {
 	protected LivingEntity target;
 	protected Mob goalOwner;
 
@@ -16,7 +16,7 @@ public class LeapGoal extends Goal {
 	private Vec3 lastPosition = null;
 	private int lastPositionTickstamp = Integer.MAX_VALUE;
 
-	public LeapGoal(Mob goalOwner) {
+	public ParkourGoal(Mob goalOwner) {
 		super();
 		this.goalOwner = goalOwner;
 		this.setFlags(EnumSet.of(Flag.JUMP));

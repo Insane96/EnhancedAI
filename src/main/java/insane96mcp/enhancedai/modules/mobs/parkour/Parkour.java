@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.mobs.leap;
+package insane96mcp.enhancedai.modules.mobs.parkour;
 
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
@@ -27,6 +27,6 @@ public class Parkour extends Feature {
                 || !mob.getType().is(ALLOW_LEAPING))
             return;
 
-        mob.goalSelector.addGoal(2, new LeapGoal(mob));
+        mob.goalSelector.addGoal(2, new ParkourGoal(mob));
     }
 }
