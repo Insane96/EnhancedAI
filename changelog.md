@@ -16,6 +16,7 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
   * Item disruption has been disabled by default
 * Added back the Shielding feature
   * Due to not being able to make mobs use the shield and block (since they have no animation for it), mobs with a shield now have a chance to block damage.
+  * Each shield (e.g. from Shields+) can be configured to have a different chance to block
 * Leap feature is now the Parkour feature and it's enabled by default
   * Mobs can now leap up to 3 blocks forwards on the same Y level as the target
 * Added sun-resistant Drowned

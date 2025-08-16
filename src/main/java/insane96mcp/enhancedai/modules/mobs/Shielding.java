@@ -1,7 +1,8 @@
-package insane96mcp.enhancedai.modules.mobs.shielding;
+package insane96mcp.enhancedai.modules.mobs;
 
+import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.insanelib.base.Feature;
+import insane96mcp.insanelib.base.JsonFeature;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
@@ -15,7 +16,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.ShieldItem;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -23,24 +23,37 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO JsonFeature to configure chance to block per shield
 @LoadFeature(module = Modules.Ids.MOBS, description = "Gives mobs a chance to negate damage when equipped with a shield.")
-public class Shielding extends Feature {
+public class Shielding extends JsonFeature {
 
-	public static final List<IdTagValue> DEFAULT_SHIELD_BLOCK_CHANCE = List.of(IdTagValue.newId("minecraft:shield", 0.2d));
+	public static final List<IdTagValue> DEFAULT_SHIELD_BLOCK_CHANCE = List.of(
+			IdTagValue.newId("minecraft:shield", 0.2d),
+			IdTagValue.newId("shieldsplus:wooden_shield", 0.1d),
+			IdTagValue.newId("shieldsplus:stone_shield", 0.15d),
+			IdTagValue.newId("shieldsplus:iron_shield", 0.2d),
+			IdTagValue.newId("shieldsplus:golden_shield", 0.1d),
+			IdTagValue.newId("shieldsplus:diamond_shield", 0.25d),
+			IdTagValue.newId("shieldsplus:netherite_shield", 0.35d),
+			IdTagValue.newId("iguanatweaksreborn:copper_shield", 0.15d)
+	);
 	public static final List<IdTagValue> shieldBlockChance = new ArrayList<>();
 
 	@Config(description = "Chance for entity types in the `enhancedai:shielding/can_equip_shield` tag to spawn with a shield in the offhand.")
 	public static double chanceToEquip = 0.08d;
-	@Config
-	public static double chanceToBlock = 0.20d;
 
 	public static ResourceLocation HAS_SHIELD_BEEN_GIVEN;
 
-    public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
-        super.init(module, enabledByDefault, canBeDisabled);
+	@Override
+	public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
+		super.init(module, enabledByDefault, canBeDisabled);
 		HAS_SHIELD_BEEN_GIVEN = this.createDataKey("has_shield_been_given");
-    }
+		JSON_CONFIGS.add(new JsonConfig<>("shield_block_chance.json", shieldBlockChance, DEFAULT_SHIELD_BLOCK_CHANCE, IdTagValue.LIST_TYPE));
+	}
+
+	@Override
+	public String getModConfigFolder() {
+		return EnhancedAI.CONFIG_FOLDER;
+	}
 
 	@SubscribeEvent
 	public void onMobSpawn(EntityJoinLevelEvent event) {
@@ -60,10 +73,19 @@ public class Shielding extends Feature {
 		LivingEntity attacked = event.getEntity();
 		if (!this.isEnabled()
 				|| event.getSource().is(DamageTypeTags.BYPASSES_SHIELD)
-				|| !(attacked.getOffhandItem().getItem() instanceof ShieldItem)
 				|| attacked.level().isClientSide)
             return;
 
+		float chance = 0f;
+		ItemStack offHandItem = attacked.getOffhandItem();
+		for (IdTagValue shieldChance : shieldBlockChance) {
+			if (shieldChance.id.matchesItem(offHandItem)) {
+				chance = (float) shieldChance.value;
+				break;
+			}
+		}
+		if (chance == 0f)
+			return;
 		//TODO Add disabling shield
 		/*if (event.getSource().getDirectEntity() instanceof LivingEntity attacker
 				&& attacker.getMainHandItem().is(ItemTags.AXES)
@@ -73,8 +95,9 @@ public class Shielding extends Feature {
 			this.stopUsingItem();
 			this.level().broadcastEntityEvent(this, (byte)30);
 		}
-		else*/ if (attacked.getRandom().nextDouble() < chanceToBlock) {
+		else*/ if (attacked.getRandom().nextDouble() < chance) {
 			event.setCanceled(true);
+			offHandItem.hurt((int) event.getAmount(), attacked.getRandom(), null);
 			attacked.playSound(SoundEvents.SHIELD_BLOCK, 1.0F, 0.8F + attacked.level().random.nextFloat() * 0.4F);
 		}
     }
