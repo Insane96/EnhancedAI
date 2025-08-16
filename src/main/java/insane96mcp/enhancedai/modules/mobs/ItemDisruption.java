@@ -1,13 +1,16 @@
 package insane96mcp.enhancedai.modules.mobs;
 
 import insane96mcp.enhancedai.EnhancedAI;
+import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.Difficulty;
+import insane96mcp.insanelib.util.ModNBTData;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -22,11 +25,9 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@LoadFeature(module = Modules.Ids.MOBS, enabledByDefault = false, description = "Endermen will make the player's item fall from his hands. Add/remove mobs via the enhancedai:can_disrupt_item entity type tag")
+@LoadFeature(module = Modules.Ids.MOBS, enabledByDefault = false, description = "Endermen will make the player's item fall from his hands. Add/remove mobs via the enhancedai:item_disruption/can_disrupt entity type tag")
 public class ItemDisruption extends Feature {
-    public static final TagKey<EntityType<?>> CAN_DISRUPT_ITEM = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("can_disrupt_item"));
-    public static final String ITEM_DISRUPTION_CHANCE = EnhancedAI.RESOURCE_PREFIX + "item_disruption_chance";
-    public static final String LAST_DISRUPTION = EnhancedAI.RESOURCE_PREFIX + "last_disruption";
+    public static final TagKey<EntityType<?>> CAN_DISRUPT_ITEM = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("item_disruption/can_disrupt"));
 
     @Config(min = 0d, max = 1d, description = "Chance can be changed within entity data's ForgeData.\"enhancedai:item_disruption_chance\"")
     public static Difficulty chance = new Difficulty(0.25d, 0.25d, 0.35d);
@@ -34,8 +35,15 @@ public class ItemDisruption extends Feature {
     @Config(description = "Cooldown (in ticks) before being able to use the ability again.")
     public static Integer cooldown = 200;
 
-    public ItemDisruption(Module module, boolean enabledByDefault, boolean canBeDisabled) {
-        super(module, enabledByDefault, canBeDisabled);
+	public static ResourceLocation LAST_DISRUPTION;
+	public static EAIData<Double> CHANCE;
+	public static EAIData<Integer> COOLDOWN;
+
+    public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
+        super.init(module, enabledByDefault, canBeDisabled);
+		LAST_DISRUPTION = this.createDataKey("last_disruption");
+		CHANCE = EAIData.ofDouble(this.createDataKey("chance"));
+		COOLDOWN = EAIData.ofInt(this.createDataKey("cooldown"));
     }
 
     @SubscribeEvent
@@ -45,10 +53,10 @@ public class ItemDisruption extends Feature {
                 || !(event.getSource().getDirectEntity() instanceof Mob mob))
             return;
 
-        if (mob.level().getGameTime() - mob.getPersistentData().getInt(LAST_DISRUPTION) < cooldown)
+        if (mob.level().getGameTime() - ModNBTData.get(mob, LAST_DISRUPTION, Long.class) < COOLDOWN.get(mob))
             return;
 
-        if (mob.getRandom().nextFloat() >= mob.getPersistentData().getFloat(ITEM_DISRUPTION_CHANCE))
+        if (mob.getRandom().nextFloat() >= CHANCE.get(mob))
             return;
 
         ItemStack stack;
@@ -80,16 +88,16 @@ public class ItemDisruption extends Feature {
             player.containerMenu.sendAllDataToRemote();
         });
         ItemEntity itementity = new ItemEntity(player.level(), player.getX(), player.getY() + player.getBbHeight() / 2f, player.getZ(), stack);
-        double x = player.getX() - mob.getX();
+        /*double x = player.getX() - mob.getX();
         double z = player.getZ() - mob.getZ();
-        /*Vec2 dir = new Vec2((float) x, (float) z).normalized();
+        Vec2 dir = new Vec2((float) x, (float) z).normalized();
         if (mob.getRandom().nextBoolean())
             itementity.setDeltaMovement(itementity.getDeltaMovement().add(-dir.y * 0.4f, 0.1f, dir.x * 0.4f));
         else
             itementity.setDeltaMovement(itementity.getDeltaMovement().add(dir.y * 0.4f, 0.1f, -dir.x * 0.4f));*/
         itementity.setPickUpDelay(30);
         mob.level().addFreshEntity(itementity);
-        mob.getPersistentData().putLong(LAST_DISRUPTION, mob.level().getGameTime());
+        ModNBTData.put(mob, LAST_DISRUPTION, mob.level().getGameTime());
     }
 
     @SubscribeEvent
@@ -97,10 +105,10 @@ public class ItemDisruption extends Feature {
         if (!this.isEnabled()
                 || event.getLevel().isClientSide
                 || !(event.getEntity() instanceof Mob mob)
-                || !mob.getType().is(CAN_DISRUPT_ITEM)
-                || mob.getPersistentData().contains(ITEM_DISRUPTION_CHANCE))
+                || !mob.getType().is(CAN_DISRUPT_ITEM))
             return;
 
-        mob.getPersistentData().putFloat(ITEM_DISRUPTION_CHANCE, (float) chance.getByDifficulty(mob.level()));
+		CHANCE.applyIfAbsent(mob, chance.getByDifficulty(mob.level()));
+		COOLDOWN.applyIfAbsent(mob, cooldown);
     }
 }
