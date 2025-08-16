@@ -78,6 +78,6 @@ public class LeapGoal extends Goal {
 			this.lastPosition = this.goalOwner.position();
 			this.lastPositionTickstamp = this.goalOwner.tickCount;
 		}
-		return /*this.goalOwner.getNavigation().isDone() ||*/ this.goalOwner.tickCount - this.lastPositionTickstamp >= reducedTickDelay(30);
+		return /*this.goalOwner.getNavigation().isDone() ||*/ this.goalOwner.tickCount - this.lastPositionTickstamp >= reducedTickDelay(40);
 	}
 }
