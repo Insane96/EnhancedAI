@@ -1,7 +1,9 @@
 package insane96mcp.enhancedai.modules.mobs;
 
 import insane96mcp.enhancedai.EnhancedAI;
+import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.utils.GoalHelper;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
@@ -19,22 +21,29 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.EnumSet;
 
-@LoadFeature(module = Modules.Ids.MOBS, description = "Makes mobs be able to jump in place when target is a few blocks above the mob.")
+@LoadFeature(module = Modules.Ids.MOBS, description = "Makes mobs be able to jump in place when their target is a few blocks above them. Only entity types in the `enhancedai:jump/can_jump` tag can jump")
 public class Jump extends Feature {
-    public static final TagKey<EntityType<?>> ALLOW_JUMPING = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("allow_jumping"));
+    public static final TagKey<EntityType<?>> CAN_JUMP = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("jump/can_jump"));
 
-    public Jump(Module module, boolean enabledByDefault, boolean canBeDisabled) {
-        super(module, enabledByDefault, canBeDisabled);
+	public static EAIData<Boolean> CAN_JUMP_DATA;
+
+    public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
+        super.init(module, enabledByDefault, canBeDisabled);
+		CAN_JUMP_DATA = EAIData.ofBool(this.createDataKey("can_jump"), (mob, canJump) -> {
+			GoalHelper.removeGoal(mob.goalSelector, JumpGoal.class);
+			if (canJump)
+				mob.goalSelector.addGoal(1, new JumpGoal(mob));
+		});
     }
 
     @SubscribeEvent
     public void onMobSpawn(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
                 || !(event.getEntity() instanceof Mob mob)
-                || !mob.getType().is(ALLOW_JUMPING))
+                || !mob.getType().is(CAN_JUMP))
             return;
 
-        mob.goalSelector.addGoal(1, new JumpGoal(mob));
+		CAN_JUMP_DATA.applyIfAbsent(mob, true);
     }
 
     public static class JumpGoal extends Goal {
