@@ -3,7 +3,6 @@ package insane96mcp.enhancedai.modules.mobs;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
-import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
@@ -15,10 +14,6 @@ public class Spawning extends Feature {
 	public static Integer monstersDespawningDistance = 96;
 	@Config(min = 0, max = 128, description = "How far away from any player monsters will be able to randomly despawn? Vanilla is 32")
 	public static Integer minMonstersDespawningDistance = 48;
-
-	public Spawning(Module module, boolean enabledByDefault, boolean canBeDisabled) {
-		super(module, enabledByDefault, canBeDisabled);
-	}
 
 	@Override
 	public void readConfig(final ModConfigEvent event) {
