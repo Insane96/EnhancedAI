@@ -29,7 +29,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 public class ItemDisruption extends Feature {
     public static final TagKey<EntityType<?>> CAN_DISRUPT_ITEM = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("item_disruption/can_disrupt"));
 
-    @Config(min = 0d, max = 1d, description = "Chance can be changed within entity data's ForgeData.\"enhancedai:item_disruption_chance\"")
+    @Config(min = 0d, max = 1d)
     public static Difficulty chance = new Difficulty(0.25d, 0.25d, 0.35d);
 
     @Config(description = "Cooldown (in ticks) before being able to use the ability again.")
