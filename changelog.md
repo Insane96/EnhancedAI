@@ -17,6 +17,8 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
 * Added back the Shielding feature
   * Due to not being able to make mobs use the shield to block (since they have no animation for it), mobs with a shield now have a chance to block damage.
   * Each shield (e.g. from Shields+) can be configured to have a different chance to block
+* Added Sprint in Movement feature
+  * Some mobs can now sprint towards the target when close enough
 * Leap feature is now the Parkour feature and it's enabled by default
   * Mobs can now leap up to 3 blocks forwards on the same Y level as the target
 * Added sun-resistant Drowned

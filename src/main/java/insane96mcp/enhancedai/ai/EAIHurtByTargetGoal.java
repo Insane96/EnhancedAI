@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.ai;
 
-import insane96mcp.enhancedai.modules.mobs.targeting.Targeting;
+import insane96mcp.enhancedai.modules.mobs.targeting.TargetingLegacy;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
@@ -33,7 +33,7 @@ public class EAIHurtByTargetGoal extends TargetGoal {
 		if (currentTarget != null && currentTarget == hypotheticalNewMob)
 			return false;
 		//New check to prefer players oven non-player entities if enabled
-		if (currentTarget instanceof Player && !(hypotheticalNewMob instanceof Player) && Targeting.betterHurtByTarget$preferPlayers)
+		if (currentTarget instanceof Player && !(hypotheticalNewMob instanceof Player) && TargetingLegacy.betterHurtByTarget$preferPlayers)
 			return false;
 
 		//New check to not switch target if the current one is closer
