@@ -2,7 +2,6 @@ package insane96mcp.enhancedai.modules.mobs.targeting;
 
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.ai.EAIHurtByTargetGoal;
-import insane96mcp.enhancedai.setup.EAIAttributes;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.JsonFeature;
 import insane96mcp.insanelib.base.Module;
@@ -11,7 +10,6 @@ import insane96mcp.insanelib.base.config.Difficulty;
 import insane96mcp.insanelib.data.IdTagMatcher;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -24,9 +22,7 @@ import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -63,8 +59,6 @@ public class TargetingLegacy extends JsonFeature {
 	public static Double betterHurtByTarget$preventInfighting = 0.9d;
 	@Config(min = 0d, max = 1d, description = "Chances for a mob to spawn neutral")
 	public static Difficulty neutralChances = new Difficulty(0.25d, 0.10d, 0.04d);
-	@Config(min = 0d, max = 1d, description = "If the mobs' affected by blindness effect the target range is multiplied by this value")
-	public static Double blindnessRangeMultiplier = .1d;
 
 	@Override
 	public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
@@ -75,15 +69,6 @@ public class TargetingLegacy extends JsonFeature {
 	@Override
 	public String getModConfigFolder() {
 		return EnhancedAI.CONFIG_FOLDER;
-	}
-
-	public static void xrayRangeAttribute(EntityAttributeModificationEvent event) {
-		for (EntityType<? extends LivingEntity> entityType : event.getTypes()) {
-			if (event.has(entityType, EAIAttributes.XRAY_FOLLOW_RANGE.get()))
-				continue;
-
-			event.add(entityType, EAIAttributes.XRAY_FOLLOW_RANGE.get(), 0d);
-		}
 	}
 
 	//High priority as should run before specific mobs
@@ -185,15 +170,5 @@ public class TargetingLegacy extends JsonFeature {
 				targetGoal.setInstaTarget();
 			mob.targetSelector.addGoal(chc.priority, targetGoal);
 		}
-	}
-
-	@SubscribeEvent
-	public void onTargetDistanceMultiplier(LivingEvent.LivingVisibilityEvent event) {
-		if (!this.isEnabled()
-				|| blindnessRangeMultiplier == 1d)
-			return;
-
-		if (event.getLookingEntity() instanceof LivingEntity livingEntity && livingEntity.hasEffect(MobEffects.BLINDNESS))
-			event.modifyVisibility(blindnessRangeMultiplier);
 	}
 }

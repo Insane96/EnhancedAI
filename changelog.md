@@ -36,6 +36,7 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
 * Fixed warden sonic boom range being disabled
   * Now configurable as fixed value instead of multiplier, obviously compatible with AI data
 * Fixed temporary cobwebs breaking any block in the cobweb's position
+* Fixed blindness multiplier not making mobs forget the target
 * Fixed disabling "Melee Attacking" feature making melee attacks have no cooldown
 * Fixed fisher mobs canceling the fishing rod cast if they can't see the target
 * Fixed dark art witches dropping the equipped spawn egg

@@ -25,12 +25,16 @@ public class ParkourGoal extends Goal {
 	@Override
 	public boolean canUse() {
 		if (!this.goalOwner.onGround()
-				|| this.goalOwner.isPassenger())
+				|| this.goalOwner.isPassenger()) {
+			this.resetLastPosition();
 			return false;
+		}
 		this.target = this.goalOwner.getTarget();
 		if (this.target == null
-				|| !this.goalOwner.hasLineOfSight(this.target))
+				|| !this.goalOwner.hasLineOfSight(this.target)) {
+			this.resetLastPosition();
 			return false;
+		}
 		if (!this.isStuck())
 			return false;
 		Vec3 direction = new Vec3(this.target.getX() - this.goalOwner.getX(), this.target.getY() - this.goalOwner.getY(), this.target.getZ() - this.goalOwner.getZ()).normalize();
@@ -48,8 +52,7 @@ public class ParkourGoal extends Goal {
 
 	@Override
 	public void stop() {
-		this.lastPosition = null;
-		this.lastPositionTickstamp = Integer.MAX_VALUE;
+		this.resetLastPosition();
 		this.jumpBlocks = 0;
 	}
 
@@ -71,13 +74,20 @@ public class ParkourGoal extends Goal {
 	 */
 	public boolean isStuck() {
 		if (this.goalOwner.getTarget() == null
-				|| this.goalOwner.distanceToSqr(this.goalOwner.getTarget()) < 1)
+				|| this.goalOwner.distanceToSqr(this.goalOwner.getTarget()) < 1) {
+			this.resetLastPosition();
 			return false;
+		}
 
 		if (this.lastPosition == null || this.goalOwner.distanceToSqr(this.lastPosition) > 0.36d) {
 			this.lastPosition = this.goalOwner.position();
 			this.lastPositionTickstamp = this.goalOwner.tickCount;
 		}
 		return /*this.goalOwner.getNavigation().isDone() ||*/ this.goalOwner.tickCount - this.lastPositionTickstamp >= reducedTickDelay(40);
+	}
+
+	public void resetLastPosition() {
+		this.lastPosition = null;
+		this.lastPositionTickstamp = Integer.MAX_VALUE;
 	}
 }

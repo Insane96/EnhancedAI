@@ -59,7 +59,7 @@ public class EAINearestAttackableTarget<T extends LivingEntity> extends ILNeares
         }
     }
 
-    protected double getFollowXRayDistance() {
+	protected double getFollowXRayDistance() {
         return this.mob.getAttributeValue(EAIAttributes.XRAY_FOLLOW_RANGE.get());
     }
 }
