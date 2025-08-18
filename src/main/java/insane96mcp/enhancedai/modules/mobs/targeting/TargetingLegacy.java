@@ -1,7 +1,6 @@
 package insane96mcp.enhancedai.modules.mobs.targeting;
 
 import insane96mcp.enhancedai.EnhancedAI;
-import insane96mcp.enhancedai.ai.EAIHurtByTargetGoal;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.JsonFeature;
 import insane96mcp.insanelib.base.Module;
@@ -13,13 +12,10 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
-import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
@@ -27,12 +23,10 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class TargetingLegacy extends JsonFeature {
 	public static final TagKey<EntityType<?>> USE_TARGET_CHANGES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("use_target_changes"));
-	public static final TagKey<EntityType<?>> ALLOW_TARGET_SWITCH = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("allow_target_switch"));
 
 	public static final String IS_NEUTRAL = EnhancedAI.RESOURCE_PREFIX + "is_neutral";
 
@@ -51,12 +45,6 @@ public class TargetingLegacy extends JsonFeature {
     public static Double forgetTargetChance = 0.1d;
     @Config(description = "If the mob can forget the target it will forget about it after this amount of ticks have passed while not seeing the target.")
     public static Integer unseenForgotTicks = 400;
-	@Config(description = "Mobs will actually switch target when attacked unless it's the same or if the current one it's closer.")
-	public static Boolean betterHurtByTarget$enable = true;
-	@Config(description = "Mobs will prefer to attack players instead of other mobs (Note that 'Prevent infighting' should be disabled).")
-	public static Boolean betterHurtByTarget$preferPlayers = true;
-	@Config(min = 0d, max = 1d, description = "Change for a mob to not attack other mobs when hit.")
-	public static Double betterHurtByTarget$preventInfighting = 0.9d;
 	@Config(min = 0d, max = 1d, description = "Chances for a mob to spawn neutral")
 	public static Difficulty neutralChances = new Difficulty(0.25d, 0.10d, 0.04d);
 
@@ -81,43 +69,6 @@ public class TargetingLegacy extends JsonFeature {
 
 		processTargetGoal(mob);
 		processCustomTargetGoal(mob);
-		processHurtByGoal(mob);
-	}
-
-	private void processHurtByGoal(Mob mob) {
-		if (!betterHurtByTarget$enable
-				|| !(mob instanceof PathfinderMob pathfinderMob)
-				|| !pathfinderMob.getType().is(USE_TARGET_CHANGES))
-			return;
-
-		List<HurtByTargetGoal> toRemove = new ArrayList<>();
-		List<WrappedGoal> toAdd = new ArrayList<>();
-		for (WrappedGoal prioritizedGoal : pathfinderMob.targetSelector.availableGoals) {
-			if (!(prioritizedGoal.getGoal() instanceof HurtByTargetGoal goal))
-				continue;
-			toRemove.add(goal);
-
-			List<Class<?>> toIgnoreDamage = new ArrayList<>(Arrays.asList(goal.toIgnoreDamage));
-			//Prevent infighting
-			if (betterHurtByTarget$preventInfighting > 0 && mob.getRandom().nextFloat() < betterHurtByTarget$preventInfighting && mob instanceof Enemy)
-				toIgnoreDamage.add(Enemy.class);
-			EAIHurtByTargetGoal newGoal = new EAIHurtByTargetGoal(pathfinderMob, toIgnoreDamage.toArray(Class[]::new));
-			if (goal.toIgnoreAlert != null)
-				newGoal.setAlertOthers(goal.toIgnoreAlert);
-			toAdd.add(new WrappedGoal(prioritizedGoal.getPriority(), newGoal));
-		}
-
-		toAdd.forEach(wrappedGoal -> pathfinderMob.targetSelector.addGoal(wrappedGoal.getPriority(), wrappedGoal.getGoal()));
-		if (!toRemove.isEmpty())
-			toRemove.forEach(pathfinderMob.targetSelector::removeGoal);
-		else if (mob.getType().is(ALLOW_TARGET_SWITCH)) {
-			List<Class<?>> toIgnoreDamage = new ArrayList<>();
-			//Prevent infighting
-			if (betterHurtByTarget$preventInfighting > 0 && mob.getRandom().nextFloat() < betterHurtByTarget$preventInfighting)
-				toIgnoreDamage.add(Enemy.class);
-			EAIHurtByTargetGoal newGoal = new EAIHurtByTargetGoal(pathfinderMob, toIgnoreDamage.toArray(Class[]::new));
-			pathfinderMob.targetSelector.addGoal(1, newGoal);
-		}
 	}
 
 	private void processTargetGoal(Mob mob) {

@@ -1,11 +1,13 @@
 package insane96mcp.enhancedai.ai;
 
-import insane96mcp.enhancedai.modules.mobs.targeting.TargetingLegacy;
+import insane96mcp.enhancedai.modules.mobs.targeting.Targeting;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
+import org.apache.commons.lang3.ArrayUtils;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -13,15 +15,14 @@ import java.util.List;
 public class EAIHurtByTargetGoal extends TargetGoal {
 	private static final TargetingConditions HURT_BY_TARGETING = TargetingConditions.forCombat().ignoreLineOfSight().ignoreInvisibilityTesting();
 	private boolean alertSameType;
-	/** Store the previous revengeTimer value */
-	public final Class<?>[] toIgnoreDamage;
+
+	public Class<?>[] toIgnoreDamage;
 	@Nullable
 	public Class<?>[] toIgnoreAlert;
 
 	public EAIHurtByTargetGoal(PathfinderMob pMob, Class<?>... pToIgnoreDamage) {
 		super(pMob, true);
 		this.toIgnoreDamage = pToIgnoreDamage;
-		//this.setFlags(EnumSet.of(Goal.Flag.TARGET));
 	}
 
 	public boolean canUse() {
@@ -33,7 +34,7 @@ public class EAIHurtByTargetGoal extends TargetGoal {
 		if (currentTarget != null && currentTarget == hypotheticalNewMob)
 			return false;
 		//New check to prefer players oven non-player entities if enabled
-		if (currentTarget instanceof Player && !(hypotheticalNewMob instanceof Player) && TargetingLegacy.betterHurtByTarget$preferPlayers)
+		if (currentTarget instanceof Player && !(hypotheticalNewMob instanceof Player) && Targeting.HURT_BY_PREFER_PLAYERS.get(this.mob))
 			return false;
 
 		//New check to not switch target if the current one is closer
@@ -103,5 +104,15 @@ public class EAIHurtByTargetGoal extends TargetGoal {
 
 	protected void alertOther(Mob pMob, LivingEntity pTarget) {
 		pMob.setTarget(pTarget);
+	}
+
+	public void preventInfighting() {
+		if (ArrayUtils.contains(this.toIgnoreDamage, Enemy.class))
+			this.toIgnoreDamage = ArrayUtils.removeElement(this.toIgnoreDamage, Enemy.class);
+	}
+
+	public void allowInfighting() {
+		if (!ArrayUtils.contains(this.toIgnoreDamage, Enemy.class))
+			this.toIgnoreDamage = ArrayUtils.add(this.toIgnoreDamage, Enemy.class);
 	}
 }
