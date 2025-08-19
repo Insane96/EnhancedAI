@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## Alpha 3.0.0
 You are able to change AI at runtime without having to reload the world thanks to the new tech: AI Data, which lets you change parameters per mob, without having to reload the world.  
 AI Data is defined as a resource location (`<namespace>:<id>`), by default the namespace is obviously `enhancedai`.  
 Due how the vanilla AI works, the goals already present in the mob can't be changed with this system without a huge amount of work. E.g. For the "Animals not temped" feature they already have the Tempt AI, so it's impossible to add it back if it's removed.  
