@@ -17,9 +17,7 @@ public class EAINearestAttackableTarget<T extends LivingEntity> extends ILNeares
     public TargetingConditions targetEntitySelectorXRay;
 
     public EAINearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, boolean mustSee, boolean mustReach, TargetingConditions targetingConditions) {
-        super(goalOwnerIn, targetClassIn, mustSee, mustReach, null);
-        this.targetEntitySelector = targetingConditions;
-        this.targetEntitySelectorXRay = targetingConditions.copy().ignoreLineOfSight();
+		this(goalOwnerIn, targetClassIn, mustSee, mustReach, targetingConditions, 60);
     }
 
     public EAINearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, boolean mustSee, boolean mustReach, TargetingConditions targetingConditions, int forgetTicks) {
@@ -30,9 +28,7 @@ public class EAINearestAttackableTarget<T extends LivingEntity> extends ILNeares
     }
 
     public EAINearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, IdTagMatcher idTagMatcher, boolean mustSee, boolean mustReach, TargetingConditions targetingConditions) {
-        this(goalOwnerIn, targetClassIn, mustSee, mustReach, targetingConditions);
-        this.targetEntitySelector.selector(idTagMatcher::matchesEntity);
-        this.targetEntitySelectorXRay.selector(idTagMatcher::matchesEntity);
+        this(goalOwnerIn, targetClassIn, idTagMatcher, mustSee, mustReach, targetingConditions, 60);
     }
 
     public EAINearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, IdTagMatcher idTagMatcher, boolean mustSee, boolean mustReach, TargetingConditions targetingConditions, int forgetTicks) {
@@ -58,6 +54,17 @@ public class EAINearestAttackableTarget<T extends LivingEntity> extends ILNeares
             this.nearestTarget = this.mob.level().getNearestPlayer(this.targetEntitySelectorXRay.range(this.getFollowXRayDistance()), this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ());
         }
     }
+
+	@Override
+	public boolean canUse() {
+		int targetChance = Targeting.TARGET_CHANCE.get(this.mob);
+		if (targetChance > 0 && this.mob.getRandom().nextInt(targetChance) != 0)
+			return false;
+		else {
+			this.findTarget();
+			return this.nearestTarget != null;
+		}
+	}
 
 	protected double getFollowXRayDistance() {
         return this.mob.getAttributeValue(EAIAttributes.XRAY_FOLLOW_RANGE.get());

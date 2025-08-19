@@ -23,6 +23,7 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
   * Mobs can now leap up to 3 blocks forwards on the same Y level as the target
 * Added sun-resistant Drowned
   * Drowned have 30 seconds where they don't burn in sunlight. During this time, they will not seek water
+* Added a de-stuck goal for spiders. When targeting someone and stuck on a wall for more than 2 seconds they will throw themselves at the target
 * Miner mobs now use the `forge:block_reach` attribute
 * Melee mobs default attack speed multiplier is now 0.25 (so 1 attack/sec instead of 2)
 * Removed Warden Interactions

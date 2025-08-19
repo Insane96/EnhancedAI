@@ -36,7 +36,7 @@ public class BreakVehicleGoal extends Goal {
 	}
 
 	public void start() {
-		this.attackCooldown = reducedTickDelay(15);
+		this.attackCooldown = this.adjustedTickDelay(15);
 	}
 
 	public void stop() {
@@ -56,6 +56,6 @@ public class BreakVehicleGoal extends Goal {
 			this.mob.swing(InteractionHand.MAIN_HAND);
 			this.mob.doHurtTarget(this.vehicle);
 		}
-		this.attackCooldown = reducedTickDelay(15);
+		this.attackCooldown = this.adjustedTickDelay(15);
 	}
 }

@@ -22,7 +22,7 @@ public class EAISilverfishMergeWithStoneGoal extends RandomStrollGoal {
 	public EAISilverfishMergeWithStoneGoal(Silverfish pSilverfish) {
 		super(pSilverfish, 1.0D, 10);
 		this.setFlags(EnumSet.of(Goal.Flag.MOVE));
-		this.initialCooldown = reducedTickDelay(30);
+		this.initialCooldown = this.adjustedTickDelay(30);
 	}
 
 	public boolean canUse() {
@@ -33,7 +33,7 @@ public class EAISilverfishMergeWithStoneGoal extends RandomStrollGoal {
 		if (--this.initialCooldown > 0)
 			return false;
 		RandomSource randomsource = this.mob.getRandom();
-		if (net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.mob.level(), this.mob) && randomsource.nextInt(reducedTickDelay(SilverfishFeature.CHANCE_TO_MERGE_WITH_STONE.get(this.mob))) == 0) {
+		if (net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.mob.level(), this.mob) && randomsource.nextInt(this.adjustedTickDelay(SilverfishFeature.CHANCE_TO_MERGE_WITH_STONE.get(this.mob))) == 0) {
 			this.selectedDirection = Direction.getRandom(randomsource);
 			BlockPos blockpos = BlockPos.containing(this.mob.getX(), this.mob.getY() + 0.5D, this.mob.getZ()).relative(this.selectedDirection);
 			BlockState blockstate = this.mob.level().getBlockState(blockpos);

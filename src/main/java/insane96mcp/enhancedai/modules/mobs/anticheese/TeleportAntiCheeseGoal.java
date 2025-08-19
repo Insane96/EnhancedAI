@@ -35,7 +35,7 @@ public class TeleportAntiCheeseGoal extends Goal {
             this.awayFromTargetTick = 0;
         }
 
-        return this.awayFromTargetTick > reducedTickDelay(50);
+        return this.awayFromTargetTick > this.adjustedTickDelay(50);
     }
 
     @SuppressWarnings("ConstantConditions")

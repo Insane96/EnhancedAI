@@ -56,8 +56,8 @@ public class SearchMountGoal extends Goal {
             this.mob.startRiding(this.mount, false);
             this.stop();
         }
-        if (++this.unreachableTime > reducedTickDelay(200)) {
-            this.cooldown = reducedTickDelay(200);
+        if (++this.unreachableTime > this.adjustedTickDelay(200)) {
+            this.cooldown = this.adjustedTickDelay(200);
             this.stop();
         }
     }

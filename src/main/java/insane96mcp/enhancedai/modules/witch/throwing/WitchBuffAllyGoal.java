@@ -30,7 +30,7 @@ public class WitchBuffAllyGoal<T extends LivingEntity> extends NearestAttackable
     }
 
     public void start() {
-        this.cooldown = reducedTickDelay(DEFAULT_COOLDOWN);
+        this.cooldown = this.adjustedTickDelay(DEFAULT_COOLDOWN);
         super.start();
     }
 

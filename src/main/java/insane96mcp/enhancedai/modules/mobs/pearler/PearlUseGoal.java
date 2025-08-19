@@ -17,7 +17,7 @@ public class PearlUseGoal extends Goal {
 	//Runs every other tick
 	private final Mob pearler;
 	private LivingEntity target;
-	private int cooldown = reducedTickDelay(50);
+	private int cooldown = this.adjustedTickDelay(50);
 
 	ThrownEnderpearl thrownEnderPearl;
 
@@ -68,7 +68,7 @@ public class PearlUseGoal extends Goal {
 		thrownEnderPearl.shootFromRotation(this.pearler, (float) (pitch - 3f - d1), (float) (yaw), 0.0F, 1.5F, PearlerMobs.INACCURACY.get(this.pearler));
 		this.pearler.level().addFreshEntity(thrownEnderPearl);
 		stack.shrink(1);
-		this.cooldown = reducedTickDelay(100);
+		this.cooldown = this.adjustedTickDelay(100);
 	}
 
 	public void stop() {

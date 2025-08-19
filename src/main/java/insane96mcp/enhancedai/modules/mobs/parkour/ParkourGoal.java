@@ -83,7 +83,7 @@ public class ParkourGoal extends Goal {
 			this.lastPosition = this.goalOwner.position();
 			this.lastPositionTickstamp = this.goalOwner.tickCount;
 		}
-		return /*this.goalOwner.getNavigation().isDone() ||*/ this.goalOwner.tickCount - this.lastPositionTickstamp >= reducedTickDelay(40);
+		return /*this.goalOwner.getNavigation().isDone() ||*/ this.goalOwner.tickCount - this.lastPositionTickstamp >= this.adjustedTickDelay(40);
 	}
 
 	public void resetLastPosition() {

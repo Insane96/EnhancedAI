@@ -1,7 +1,10 @@
 package insane96mcp.enhancedai.ai;
 
 import insane96mcp.enhancedai.modules.mobs.targeting.Targeting;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.monster.Enemy;
@@ -20,7 +23,7 @@ public class EAIHurtByTargetGoal extends TargetGoal {
 	@Nullable
 	public Class<?>[] toIgnoreAlert;
 
-	public EAIHurtByTargetGoal(PathfinderMob pMob, Class<?>... pToIgnoreDamage) {
+	public EAIHurtByTargetGoal(Mob pMob, Class<?>... pToIgnoreDamage) {
 		super(pMob, true);
 		this.toIgnoreDamage = pToIgnoreDamage;
 	}
