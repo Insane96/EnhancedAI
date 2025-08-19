@@ -40,8 +40,15 @@ public class Movement extends Feature {
     @Config(min = 0d, max = 4d, description = "How faster mobs can swim. Setting to 0 will leave the swim speed as vanilla. I recommend using mods like Mobs Properties Randomness to have more control over the attribute.")
     public static Double swimSpeedAdditionMultiplier = 2.5d;
 
+	@Config(min = 0d, description = "Multiplies the chance for a mob to randomly stroll by this value.")
+	public static Double randomStrollChanceMultiplier = 0.5d;
+
+	@Config
+	public static Boolean allowRandomStrollAwayFromPlayer = true;
+
 	public static EAIData<Boolean> CAN_CLIMB_DATA;
 	public static EAIData<Boolean> CAN_SPRINT_DATA;
+	public static EAIData<Double> RANDOM_STROLL_CHANCE_MULTIPLIER;
 
     public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
         super.init(module, enabledByDefault, canBeDisabled);
@@ -55,17 +62,19 @@ public class Movement extends Feature {
 			if (canSprint)
 				mob.goalSelector.addGoal(1, new SprintGoal(mob));
 		});
+		RANDOM_STROLL_CHANCE_MULTIPLIER = EAIData.ofDouble(this.createDataKey("random_stroll_chance_multiplier"));
     }
 
     @SubscribeEvent
     public void onMobSpawn(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
-                || !(event.getEntity() instanceof Mob mob)
-                || !mob.getType().is(CAN_CLIMB))
+                || !(event.getEntity() instanceof Mob mob))
             return;
 
-		CAN_CLIMB_DATA.applyIfAbsent(mob, mob.getRandom().nextDouble() < allowClimbingChance);
-		CAN_SPRINT_DATA.applyIfAbsent(mob, mob.getRandom().nextDouble() < sprintChance);
+		if (mob.getType().is(CAN_CLIMB))
+			CAN_CLIMB_DATA.applyIfAbsent(mob, mob.getRandom().nextDouble() < allowClimbingChance);
+		if (mob.getType().is(CAN_SPRINT))
+			CAN_SPRINT_DATA.applyIfAbsent(mob, mob.getRandom().nextDouble() < sprintChance);
 
         if (bonusMovementSpeed > 0d)
             MCUtils.applyModifier(mob, Attributes.MOVEMENT_SPEED, UUID_MOV_SPEED_MULTIPLIER, "Enhanced AI Mov Speed Bonus", bonusMovementSpeed, AttributeModifier.Operation.MULTIPLY_BASE, true);
@@ -73,5 +82,7 @@ public class Movement extends Feature {
         if (swimSpeedAdditionMultiplier != 0d) {
             MCUtils.applyModifier(mob, ForgeMod.SWIM_SPEED.get(), UUID_SWIM_SPEED_MULTIPLIER, "Enhanced AI Swim Speed Bonus", swimSpeedAdditionMultiplier, AttributeModifier.Operation.MULTIPLY_BASE, false);
         }
+
+		RANDOM_STROLL_CHANCE_MULTIPLIER.applyIfAbsent(mob, randomStrollChanceMultiplier);
     }
 }

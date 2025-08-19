@@ -19,6 +19,8 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
   * Each shield (e.g. from Shields+) can be configured to have a different chance to block
 * Added Sprint in Movement feature
   * Some mobs can now sprint towards the target when close enough
+* Added Random Stroll Chance multiplier in Movement feature
+  * Mobs now have a higher chance to randomly walk around when not targeting. By default they now stroll twice as often
 * Leap feature is now the Parkour feature and it's enabled by default
   * Mobs can now leap up to 3 blocks forwards on the same Y level as the target
 * Added sun-resistant Drowned
@@ -46,6 +48,7 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
 * Witches: everything except dark art requires a full rewrite to make it less aggressive in changing vanilla code
 * Custom Flee: requires a bit of thought to make it work with the new AI data
 * Riding: Requires a rewrite to allow different mobs to use different mounts
+* Custom Targeting: requires a bit of thought to make it work with the new AI data
 
 ## 2.7.1
 * Villagers no longer use target changes
