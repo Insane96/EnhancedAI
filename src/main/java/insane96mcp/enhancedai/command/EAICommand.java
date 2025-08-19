@@ -96,13 +96,13 @@ public class EAICommand {
 								List<WrappedGoal> availableGoals = new ArrayList<>(mob.goalSelector.availableGoals);
 								availableGoals.sort(Comparator.comparingInt(WrappedGoal::getPriority));
 								for (WrappedGoal goal : availableGoals) {
-									component.append(CommonComponents.NEW_LINE).append(CommonComponents.SPACE).append(Component.literal("(" + goal.getPriority() + ") " + goal.getGoal().getClass().getSimpleName()));
+									component.append(CommonComponents.NEW_LINE).append(CommonComponents.SPACE).append(Component.literal("(" + goal.getPriority() + ") " + goal.getGoal().getClass().getSimpleName() + "  " + goal.getFlags()));
 								}
 								component.append(CommonComponents.NEW_LINE).append(CommonComponents.NEW_LINE).append(Component.literal("Target Selector: "));
 								List<WrappedGoal> targetGoals = new ArrayList<>(mob.targetSelector.availableGoals);
 								targetGoals.sort(Comparator.comparingInt(WrappedGoal::getPriority));
 								for (WrappedGoal goal : targetGoals) {
-									component.append(CommonComponents.NEW_LINE).append(CommonComponents.SPACE).append(Component.literal("(" + goal.getPriority() + ") " + goal.getGoal().getClass().getSimpleName()));
+									component.append(CommonComponents.NEW_LINE).append(CommonComponents.SPACE).append(Component.literal("(" + goal.getPriority() + ") " + goal.getGoal().getClass().getSimpleName() + "  " + goal.getFlags()));
 								}
 
 								ctx.getSource().sendSuccess(() -> component, true);
