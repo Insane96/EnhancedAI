@@ -10,6 +10,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.monster.Drowned;
 import net.minecraft.world.level.pathfinder.SwimNodeEvaluator;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
@@ -29,7 +30,7 @@ public class DrownedSwimmingAttribute extends Feature {
 	@SubscribeEvent
 	public void onSpawn(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
-				|| !(event.getEntity() instanceof net.minecraft.world.entity.monster.Drowned drowned)
+				|| !(event.getEntity() instanceof Drowned drowned)
 				|| !drowned.getType().is(AFFECTED_ENTITY_TYPES))
 			return;
 

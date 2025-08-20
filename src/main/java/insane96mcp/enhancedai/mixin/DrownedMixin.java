@@ -3,12 +3,13 @@ package insane96mcp.enhancedai.mixin;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import insane96mcp.enhancedai.modules.drowned.DrownedAttackDuringDay;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.Drowned;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(net.minecraft.world.entity.monster.Drowned.class)
+@Mixin(Drowned.class)
 public abstract class DrownedMixin extends Zombie {
     public DrownedMixin(EntityType<? extends Zombie> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);

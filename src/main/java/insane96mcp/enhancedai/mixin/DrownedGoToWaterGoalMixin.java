@@ -4,6 +4,7 @@ import insane96mcp.enhancedai.modules.drowned.SunResistantDrowned;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.util.ModNBTData;
 import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.monster.Drowned;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -11,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(net.minecraft.world.entity.monster.Drowned.DrownedGoToWaterGoal.class)
+@Mixin(Drowned.DrownedGoToWaterGoal.class)
 public abstract class DrownedGoToWaterGoalMixin {
     @Shadow @Final private PathfinderMob mob;
 

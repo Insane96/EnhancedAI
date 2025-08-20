@@ -13,6 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.Drowned;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -21,7 +22,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 public class SunResistantDrowned extends Feature {
 	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("drowned/sun_resistant"));
 
-	@Config(min = 0, description = "If > 0, mobs will be fire resistant for a while until the water in their body evaporates. During this time, they will not seek water")
+	@Config(min = 1, description = "Drowneds are sun resistant for this amount of ticks until the water in their body evaporates. During this time, they will not seek water")
 	public static Integer sunResistant = 600;
 
 	public static ResourceLocation TIME;
@@ -37,7 +38,7 @@ public class SunResistantDrowned extends Feature {
 	@SubscribeEvent
 	public void onSpawn(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
-				|| !(event.getEntity() instanceof net.minecraft.world.entity.monster.Drowned drowned)
+				|| !(event.getEntity() instanceof Drowned drowned)
 				|| !drowned.getType().is(AFFECTED_ENTITY_TYPES))
 			return;
 
@@ -48,7 +49,7 @@ public class SunResistantDrowned extends Feature {
 	@SubscribeEvent
 	public void onTick(LivingEvent.LivingTickEvent event) {
 		if (!this.isEnabled()
-				|| !(event.getEntity() instanceof net.minecraft.world.entity.monster.Drowned drowned)
+				|| !(event.getEntity() instanceof Drowned drowned)
 				|| drowned.level().isClientSide)
 			return;
 

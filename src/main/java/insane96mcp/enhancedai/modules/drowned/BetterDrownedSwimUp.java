@@ -11,35 +11,36 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.util.DefaultRandomPos;
+import net.minecraft.world.entity.monster.Drowned;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@LoadFeature(module = Modules.Ids.DROWNED, description = "Replaces the drowned swim up goal with a better one, allowing them to leap out of the water. Only drowned in the enhancedai:drowned/change_swim_up entity type tag are affected by this feature.")
+@LoadFeature(module = Modules.Ids.DROWNED, description = "Replaces the drowned swim up goal with a better one, allowing them to leap out of the water. Only entity types in the enhancedai:drowned/change_swim_up tag are affected by this feature.")
 public class BetterDrownedSwimUp extends Feature {
 	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("drowned/change_swim_up"));
 
 	@SubscribeEvent
 	public void onSpawn(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
-				|| !(event.getEntity() instanceof net.minecraft.world.entity.monster.Drowned drowned)
+				|| !(event.getEntity() instanceof Drowned drowned)
 				|| !drowned.getType().is(AFFECTED_ENTITY_TYPES))
 			return;
 
-		drowned.goalSelector.removeAllGoals(goal -> goal instanceof net.minecraft.world.entity.monster.Drowned.DrownedSwimUpGoal);
+		drowned.goalSelector.removeAllGoals(goal -> goal instanceof Drowned.DrownedSwimUpGoal);
 		drowned.goalSelector.addGoal(6, new DrownedSwimUpGoal(drowned, 1.0D, drowned.level().getSeaLevel()));
 	}
 
 	static class DrownedSwimUpGoal extends Goal {
-		private final net.minecraft.world.entity.monster.Drowned drowned;
+		private final Drowned drowned;
 		private final double speedModifier;
 		private final int seaLevel;
 		private boolean stuck;
 
 		private int leapTick = 0;
 
-		public DrownedSwimUpGoal(net.minecraft.world.entity.monster.Drowned pDrowned, double pSpeedModifier, int pSeaLevel) {
+		public DrownedSwimUpGoal(Drowned pDrowned, double pSpeedModifier, int pSeaLevel) {
 			this.drowned = pDrowned;
 			this.speedModifier = pSpeedModifier;
 			this.seaLevel = pSeaLevel;
@@ -50,7 +51,7 @@ public class BetterDrownedSwimUp extends Feature {
 		}
 
 		public boolean canContinueToUse() {
-			return this.canUse() && !this.stuck;
+			return this.canUse() && !this.stuck && this.leapTick > 0;
 		}
 
 		public void tick() {
@@ -79,9 +80,7 @@ public class BetterDrownedSwimUp extends Feature {
 					));
 
 					this.drowned.getNavigation().stop();
-					this.stop();
 				}
-				leapTick = 10;
 			}
 
 		}
@@ -93,6 +92,7 @@ public class BetterDrownedSwimUp extends Feature {
 
 		public void stop() {
 			this.drowned.setSearchingForLand(false);
+			this.leapTick = this.adjustedTickDelay(10);
 		}
 
 		protected boolean closeToNextPos() {
