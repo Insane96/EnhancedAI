@@ -1,0 +1,13 @@
+{
+    "values": [
+        "minecraft:creeper",
+        {
+            "required": false,
+            "id": "caverns_and_chasms:deeper"
+        },
+        {
+            "required": false,
+            "id": "savage_and_ravage:creepie"
+        }
+    ]
+}

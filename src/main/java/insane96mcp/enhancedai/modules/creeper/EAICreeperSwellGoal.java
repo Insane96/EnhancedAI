@@ -56,28 +56,28 @@ public class EAICreeperSwellGoal extends Goal {
 		if (creeperAttackTarget == null)
 			return false;
 
-		this.isBreaching = Creeper.BREACH.get(this.swellingCreeper) && canBreach(this.creeperAttackTarget);
+		this.isBreaching = CreeperSwell.BREACH.get(this.swellingCreeper) && canBreach(this.creeperAttackTarget);
 
 		return (this.swellingCreeper.getSwellDir() > 0) ||
 				this.isBreaching ||
-				((this.swellingCreeper.getSensing().hasLineOfSight(this.creeperAttackTarget) || Creeper.IGNORE_WALLS.get(this.swellingCreeper))
+				((this.swellingCreeper.getSensing().hasLineOfSight(this.creeperAttackTarget) || CreeperSwell.IGNORE_WALLS.get(this.swellingCreeper))
 						&& this.swellingCreeper.distanceToSqr(this.creeperAttackTarget) < explosionSizeSqr * IGNITE_DISTANCE_MULTIPLIER_SQR);
 	}
 
 	public void start() {
         if (walkingFuse && !beta)
-            MCUtils.applyModifier(this.swellingCreeper, Attributes.MOVEMENT_SPEED, WALKING_FUSE_SPEED_MODIFIER_UUID, "Walking fuse speed modifier", Creeper.WALKING_FUSE_SPEED_MODIFIER.get(this.swellingCreeper), AttributeModifier.Operation.MULTIPLY_BASE, false);
+            MCUtils.applyModifier(this.swellingCreeper, Attributes.MOVEMENT_SPEED, WALKING_FUSE_SPEED_MODIFIER_UUID, "Walking fuse speed modifier", CreeperSwell.WALKING_FUSE_SPEED_MODIFIER.get(this.swellingCreeper), AttributeModifier.Operation.MULTIPLY_BASE, false);
         else
             this.swellingCreeper.getNavigation().stop();
         this.swellingCreeper.setSwellDir(1);
 		this.swellingCreeper.lookAt(this.creeperAttackTarget, 30f, 30f);
 		this.angle = (float) Math.toDegrees(Math.atan2(this.swellingCreeper.getZ() - this.creeperAttackTarget.getZ(), this.swellingCreeper.getX() - this.creeperAttackTarget.getX())) - 90;
-		if (Creeper.BETA_LEFT_STRAFE.get(this.swellingCreeper))
+		if (CreeperSwell.BETA_LEFT_STRAFE.get(this.swellingCreeper))
 			this.angle += 180;
 		//Update the explosion size in case the creeper becomes charged
 		explosionSize = CreeperUtils.getExplosionSize(this.swellingCreeper);
 		explosionSizeSqr = explosionSize * explosionSize;
-		if (Creeper.insaneSurvivalOverhaulIntegration) {
+		if (CreeperSwell.insaneSurvivalOverhaulIntegration) {
 			this.swellingCreeper.getPersistentData().putFloat("iguanatweaksreborn:explosion_ray_strength_multiplier", this.isBreaching ? 0.01f : 0.3f);
 		}
 	}
@@ -99,7 +99,7 @@ public class EAICreeperSwellGoal extends Goal {
 			this.tryCancelSwell();*/
 		else if (this.swellingCreeper.distanceToSqr(this.creeperAttackTarget) > (explosionSizeSqr * 2d * 2d) && !isBreaching)
 			this.tryCancelSwell();
-		else if (!this.swellingCreeper.getSensing().hasLineOfSight(this.creeperAttackTarget) && !Creeper.IGNORE_WALLS.get(this.swellingCreeper) && !isBreaching)
+		else if (!this.swellingCreeper.getSensing().hasLineOfSight(this.creeperAttackTarget) && !CreeperSwell.IGNORE_WALLS.get(this.swellingCreeper) && !isBreaching)
 			this.tryCancelSwell();
 		else {
 			if (this.swellingCreeper.tickCount % 5 == 0) {
@@ -118,7 +118,7 @@ public class EAICreeperSwellGoal extends Goal {
 				if (this.swellingCreeper.level().getBlockState(blockPos).isSolid())
 					this.swellingCreeper.getJumpControl().jump();
 				float angleDelta = (float) ((1f / this.explosionSize) * 25f * this.swellingCreeper.getAttributeValue(Attributes.MOVEMENT_SPEED));
-                if (Creeper.BETA_LEFT_STRAFE.get(this.swellingCreeper))
+                if (CreeperSwell.BETA_LEFT_STRAFE.get(this.swellingCreeper))
                     angle += angleDelta;
                 else
                     angle -= angleDelta;
@@ -141,7 +141,7 @@ public class EAICreeperSwellGoal extends Goal {
 	}
 
 	private void tryCancelSwell() {
-		if (!Creeper.FORCE_EXPLODE.get(this.swellingCreeper))
+		if (!CreeperSwell.FORCE_EXPLODE.get(this.swellingCreeper))
 			this.swellingCreeper.setSwellDir(-1);
 	}
 
@@ -157,17 +157,17 @@ public class EAICreeperSwellGoal extends Goal {
 	public void setBeta(boolean beta) {
 		this.beta = beta;
 		if (beta)
-			Creeper.BETA_LEFT_STRAFE.apply(this.swellingCreeper, this.swellingCreeper.getRandom().nextBoolean());
+			CreeperSwell.BETA_LEFT_STRAFE.apply(this.swellingCreeper, this.swellingCreeper.getRandom().nextBoolean());
 	}
 
 	public boolean canBreach(LivingEntity target) {
-		if (!Creeper.BREACH.get(this.swellingCreeper))
+		if (!CreeperSwell.BREACH.get(this.swellingCreeper))
 			return false;
 		double yDistance = this.swellingCreeper.getY() - target.getY();
 		double x = target.getX() - this.swellingCreeper.getX();
 		double z = target.getZ() - this.swellingCreeper.getZ();
 		double xzDistance = x * x + z * z;
-		double horizontalRange = Creeper.BREACH_HORIZONTAL_RANGE.get(this.swellingCreeper);
+		double horizontalRange = CreeperSwell.BREACH_HORIZONTAL_RANGE.get(this.swellingCreeper);
 		return this.isStuck()
 				&& !this.swellingCreeper.getSensing().hasLineOfSight(target)
 				&& !this.swellingCreeper.isInWater()

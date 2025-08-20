@@ -1,5 +1,10 @@
 # Changelog
 
+## Upcoming
+* Many features have been split into multiple features
+  * This makes it easier to disable single features
+  * E.g. Creeper Swell has been split into Creeper Swell, Creeper Launch, Tnt Like Creepers and Disable Falling Swelling features.
+
 ## Alpha 3.0.0
 You are able to change AI at runtime without having to reload the world thanks to the new tech: AI Data, which lets you change parameters per mob, without having to reload the world.  
 AI Data is defined as a resource location (`<namespace>:<id>`), by default the namespace is obviously `enhancedai`.  

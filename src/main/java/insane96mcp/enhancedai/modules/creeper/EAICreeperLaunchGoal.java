@@ -50,7 +50,7 @@ public class EAICreeperLaunchGoal extends Goal {
 		if (--cooldown > 0)
 			return false;
 
-		if (!this.launchingCreeper.getSensing().hasLineOfSight(target) && !Creeper.BREACH.get(this.launchingCreeper))
+		if (!this.launchingCreeper.getSensing().hasLineOfSight(target) && !CreeperSwell.BREACH.get(this.launchingCreeper))
 			return false;
 
 		if (this.launchingCreeper.level().getBlockState(this.launchingCreeper.blockPosition().above(3)).blocksMotion())
@@ -125,7 +125,7 @@ public class EAICreeperLaunchGoal extends Goal {
 		double distanceZ = this.creeperAttackTarget.getZ() - this.launchingCreeper.getZ();
 		double distanceXZ = Math.sqrt(distanceX * distanceX + distanceZ * distanceZ);
 
-		float inaccuracy = Creeper.LAUNCH_INACCURACY.get(this.launchingCreeper).floatValue();
+		float inaccuracy = CreeperLaunch.INACCURACY.get(this.launchingCreeper).floatValue();
 		distanceX += Mth.randomBetween(this.launchingCreeper.getRandom(), -inaccuracy, inaccuracy);
 		distanceZ += Mth.randomBetween(this.launchingCreeper.getRandom(), -inaccuracy, inaccuracy);
 		//TODO better Y speed, right now when creeper Y distance is below 7 you always get 7 which isn't good when the creeper's Y distance is 0, and when the Y Distance is higher than about 25 the creeper will go to space
