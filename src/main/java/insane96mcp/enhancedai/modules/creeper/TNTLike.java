@@ -17,7 +17,7 @@ import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@LoadFeature(module = Modules.Ids.CREEPER, name = "Tnt like creepers", description = "Creepers will ignite when they take explosion damage.")
+@LoadFeature(module = Modules.Ids.CREEPER, name = "Tnt like creepers", description = "Creepers will ignite when they take explosion damage. Only entity types in the enhancedai:creeper/tnt_like tag will be affected by this feature.")
 public class TNTLike extends Feature {
 	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("creeper/tnt_like"));
 

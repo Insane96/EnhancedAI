@@ -1,5 +1,8 @@
-package insane96mcp.enhancedai.modules.creeper;
+package insane96mcp.enhancedai.modules.creeper.launch;
 
+import insane96mcp.enhancedai.modules.creeper.CreeperSwell;
+import insane96mcp.enhancedai.modules.creeper.CreeperUtils;
+import insane96mcp.enhancedai.modules.creeper.EAICreeperSwellGoal;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;

@@ -13,7 +13,7 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@LoadFeature(module = Modules.Ids.CREEPER, description = "Creepers will no longer ignite when falling.")
+@LoadFeature(module = Modules.Ids.CREEPER, description = "Creepers will no longer ignite when falling. Only entity types in the enhancedai:creeper/disable_falling_swelling tag will be affected by this feature.")
 public class DisableFallingSwelling extends Feature {
 	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("creeper/disable_falling_swelling"));
 

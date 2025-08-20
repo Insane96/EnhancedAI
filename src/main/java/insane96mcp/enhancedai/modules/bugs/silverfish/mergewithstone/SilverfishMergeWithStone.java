@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.bugs.silverfish;
+package insane96mcp.enhancedai.modules.bugs.silverfish.mergewithstone;
 
 import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;

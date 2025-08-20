@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.creeper;
+package insane96mcp.enhancedai.modules.creeper.launch;
 
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.data.EAIData;
@@ -22,7 +22,7 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@LoadFeature(module = Modules.Ids.CREEPER, description	= "Creepers can ignite and throw themselves at players.")
+@LoadFeature(module = Modules.Ids.CREEPER, description	= "Creepers can ignite and throw themselves at players. Only entity types in the enhancedai:creeper/can_launch tag will be affected by this feature.")
 public class CreeperLaunch extends Feature {
 	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("creeper/can_launch"));
 
