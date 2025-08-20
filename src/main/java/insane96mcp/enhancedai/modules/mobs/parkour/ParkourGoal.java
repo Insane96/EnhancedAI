@@ -16,6 +16,8 @@ public class ParkourGoal extends Goal {
 	private Vec3 lastPosition = null;
 	private int lastPositionTickstamp = Integer.MAX_VALUE;
 
+	private boolean waitForLanding = false;
+
 	public ParkourGoal(Mob goalOwner) {
 		super();
 		this.goalOwner = goalOwner;
@@ -51,9 +53,18 @@ public class ParkourGoal extends Goal {
 	}
 
 	@Override
+	public boolean canContinueToUse() {
+		return waitForLanding && !this.goalOwner.onGround();
+	}
+
+	@Override
 	public void stop() {
 		this.resetLastPosition();
 		this.jumpBlocks = 0;
+		this.waitForLanding = false;
+		this.goalOwner.getNavigation().stop();
+		if (this.target != null && !this.target.isDeadOrDying() && !this.target.isRemoved())
+			this.goalOwner.getNavigation().moveTo(this.target, 1f);
 	}
 
 	@Override
@@ -65,8 +76,7 @@ public class ParkourGoal extends Goal {
 
 		double factor = 0.65d - ((3 - jumpBlocks) * 0.2d);
 		this.goalOwner.setDeltaMovement(this.goalOwner.getDeltaMovement().add(new Vec3(distanceX, distanceY, distanceZ).normalize()).multiply(factor, 1, factor));
-		this.goalOwner.getNavigation().stop();
-		this.stop();
+		this.waitForLanding = true;
 	}
 
 	/**

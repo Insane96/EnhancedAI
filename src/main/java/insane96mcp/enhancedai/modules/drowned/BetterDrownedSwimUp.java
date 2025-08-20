@@ -75,7 +75,7 @@ public class BetterDrownedSwimUp extends Feature {
 
 					this.drowned.setDeltaMovement(new Vec3(
 							dir.x * 0.5,
-							0.5,
+							0.4,
 							dir.z * 0.5
 					));
 
