@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.mixin;
 
-import insane96mcp.enhancedai.modules.drowned.Drowned;
+import insane96mcp.enhancedai.modules.drowned.SunResistantDrowned;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.util.ModNBTData;
 import net.minecraft.world.entity.PathfinderMob;
@@ -17,12 +17,12 @@ public abstract class DrownedGoToWaterGoalMixin {
 
     @Inject(method = "canUse", at = @At(value = "HEAD"), cancellable = true)
     public void enhancedai$canUse(CallbackInfoReturnable<Boolean> cir) {
-        if (!Feature.isEnabled(Drowned.class))
+        if (!Feature.isEnabled(SunResistantDrowned.class))
             return;
-		int sunResistantTicks = Drowned.SUN_RESISTANT_TICKS.get(this.mob);
+		int sunResistantTicks = SunResistantDrowned.TICKS.get(this.mob);
 		if (sunResistantTicks <= 0)
 			return;
-        if (ModNBTData.get(this.mob, Drowned.SUN_RESISTANCE_TIME, Integer.class) < sunResistantTicks)
+        if (ModNBTData.get(this.mob, SunResistantDrowned.TIME, Integer.class) < sunResistantTicks)
             cir.setReturnValue(false);
     }
 }

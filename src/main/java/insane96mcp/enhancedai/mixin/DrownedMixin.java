@@ -1,7 +1,7 @@
 package insane96mcp.enhancedai.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import insane96mcp.enhancedai.modules.drowned.Drowned;
+import insane96mcp.enhancedai.modules.drowned.DrownedAttackDuringDay;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.level.Level;
@@ -16,8 +16,6 @@ public abstract class DrownedMixin extends Zombie {
 
     @ModifyReturnValue(method = "okTarget", at = @At(value = "RETURN", ordinal = 0))
     public boolean enhancedai$okTarget(boolean original) {
-        if (!Drowned.allowAttackDuringDay())
-            return original;
-        return original || this.level().isDay();
+        return original || (DrownedAttackDuringDay.allowAttackDuringDay(this) && this.level().isDay());
     }
 }
