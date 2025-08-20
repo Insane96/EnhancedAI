@@ -70,26 +70,26 @@ public class EAIBlazeAttackGoal extends Goal {
             if (this.attackTime <= 0) {
                 ++this.attackStep;
                 if (this.attackStep == 1) {
-                    this.attackTime = Blaze.CHARGE_TIME.get(this.blaze);
+                    this.attackTime = BlazeAttack.CHARGE_TIME.get(this.blaze);
                     this.blaze.setCharged(true);
                 }
-                else if (this.attackStep <= Blaze.FIREBALLS_SHOT.get(this.blaze) + 1) {
-                    this.attackTime = Blaze.TIME_BETWEEN_FIREBALLS.get(this.blaze);
+                else if (this.attackStep <= BlazeAttack.FIREBALLS_SHOT.get(this.blaze) + 1) {
+                    this.attackTime = BlazeAttack.TIME_BETWEEN_FIREBALLS.get(this.blaze);
                 }
                 else {
-                    this.attackTime = Blaze.RECHARGE_TIME.get(this.blaze);
+                    this.attackTime = BlazeAttack.RECHARGE_TIME.get(this.blaze);
                     this.attackStep = 0;
                     this.blaze.setCharged(false);
                 }
 
                 if (this.attackStep > 1) {
-                    double inaccuracy = Blaze.INACCURACY.get(this.blaze);
+                    double inaccuracy = BlazeAttack.INACCURACY.get(this.blaze);
                     if (inaccuracy == -1)
                         inaccuracy = Math.sqrt(Math.sqrt(distanceSqrToTarget)) * 0.5D;
                     if (!this.blaze.isSilent())
                         this.blaze.level().levelEvent(null, 1018, this.blaze.blockPosition(), 0);
 
-                    for (int i = 0; i < Blaze.FIREBALLS_PER_SHOT.get(this.blaze); i++) {
+                    for (int i = 0; i < BlazeAttack.FIREBALLS_PER_SHOT.get(this.blaze); i++) {
                         SmallFireball smallfireball = new SmallFireball(this.blaze.level(), this.blaze, xDir + this.blaze.getRandom().nextGaussian() * inaccuracy, yDir, zDir + this.blaze.getRandom().nextGaussian() * inaccuracy);
                         smallfireball.setPos(smallfireball.getX(), this.blaze.getY(0.5D) + 0.5D, smallfireball.getZ());
                         this.blaze.level().addFreshEntity(smallfireball);

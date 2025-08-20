@@ -2,6 +2,7 @@ package insane96mcp.enhancedai.modules.bugs.silverfish;
 
 import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.utils.GoalHelper;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
@@ -10,11 +11,9 @@ import net.minecraft.world.entity.monster.Silverfish;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@LoadFeature(module = Modules.Ids.BUGS, description = "Let them swarm. This also changes the Merge With stone goal to have 1.5 seconds cooldown before trying to merge, to prevent them from instantly getting into stone without having the chance to target someone.")
-public class SilverfishFeature extends Feature {
+@LoadFeature(module = Modules.Ids.BUGS, description = "Let them swarm.")
+public class SilverfishWakeUpFriends extends Feature {
 
-	@Config(min = 1, description = "Chance (1 in x every 2 ticks) for a silverfish to merge with a stone block. Vanilla is 10.")
-	public static Integer chanceToMergeWithStone = 10;
 	@Config(min = 0, description = "Vanilla is 20.")
 	public static Integer ticksAfterHurtToWakeUpFriends = 10;
 	@Config(min = 1, description = "In vanilla everytime a silverfish is woken up there is 1 in 2 chance to stop waking up more silverfish. This changes the 1 in x chance.")
@@ -24,7 +23,6 @@ public class SilverfishFeature extends Feature {
 	@Config(min = 1, max = 32, description = "XZ range on which a hurt silverfish checks for infested stone to break. Vanilla is 10.")
 	public static Integer horizontalWakeUpRange = 10;
 
-	public static EAIData<Integer> CHANCE_TO_MERGE_WITH_STONE;
 	public static EAIData<Integer> TICKS_AFTER_HURT_TO_WAKE_UP_FRIENDS;
 	public static EAIData<Integer> CHANCE_TO_STOP_WAKING_UP_FRIENDS;
 	public static EAIData<Integer> VERTICAL_WAKE_UP_RANGE;
@@ -32,7 +30,6 @@ public class SilverfishFeature extends Feature {
 
 	public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super.init(module, enabledByDefault, canBeDisabled);
-		CHANCE_TO_MERGE_WITH_STONE = EAIData.ofInt(this.createDataKey("chance_to_merge_with_stone"));
 		TICKS_AFTER_HURT_TO_WAKE_UP_FRIENDS = EAIData.ofInt(this.createDataKey("ticks_after_hurt_to_wake_up_friends"));
 		CHANCE_TO_STOP_WAKING_UP_FRIENDS = EAIData.ofInt(this.createDataKey("chance_to_stop_waking_up_friends"));
 		VERTICAL_WAKE_UP_RANGE = EAIData.ofInt(this.createDataKey("vertical_wake_up_range"));
@@ -46,13 +43,10 @@ public class SilverfishFeature extends Feature {
 				|| !(event.getEntity() instanceof Silverfish silverfish))
 			return;
 
-		silverfish.goalSelector.removeAllGoals(goal -> goal instanceof Silverfish.SilverfishMergeWithStoneGoal);
-		silverfish.goalSelector.addGoal(5, new EAISilverfishMergeWithStoneGoal(silverfish));
-		silverfish.goalSelector.removeAllGoals(goal -> goal instanceof Silverfish.SilverfishWakeUpFriendsGoal);
+		GoalHelper.removeGoal(silverfish.goalSelector, Silverfish.SilverfishWakeUpFriendsGoal.class);
 		silverfish.friendsGoal = new EAISilverfishWakeUpFriendsGoal(silverfish);
 		silverfish.goalSelector.addGoal(3, silverfish.friendsGoal);
 
-		CHANCE_TO_MERGE_WITH_STONE.applyIfAbsent(silverfish, chanceToMergeWithStone);
 		TICKS_AFTER_HURT_TO_WAKE_UP_FRIENDS.applyIfAbsent(silverfish, ticksAfterHurtToWakeUpFriends);
 		CHANCE_TO_STOP_WAKING_UP_FRIENDS.applyIfAbsent(silverfish, chanceToStopWakingUpFriends);
 		VERTICAL_WAKE_UP_RANGE.applyIfAbsent(silverfish, verticalWakeUpRange);

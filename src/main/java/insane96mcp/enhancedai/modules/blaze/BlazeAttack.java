@@ -19,8 +19,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.ArrayList;
 
 @LoadFeature(module = Modules.Ids.BLAZE, description = "Make blazes fire faster/more fireballs. Only mobs in enhancedai:blaze/change_attack entity type tag are affected by this feature.")
-public class Blaze extends Feature {
-    public static final TagKey<EntityType<?>> CHANGE_BLAZE_ATTACK = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("blaze/change_attack"));
+public class BlazeAttack extends Feature {
+    public static final TagKey<EntityType<?>> CHANGE_ATTACK = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("blaze_attack/change_attack"));
 
     @Config(min = 1, max = 300, description = "How many ticks pass between shooting fireballs. Vanilla is 6")
     public static MinMax timeBetweenFireballs = new MinMax(4, 10);
@@ -57,7 +57,7 @@ public class Blaze extends Feature {
     public void onSpawn(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
                 || !(event.getEntity() instanceof net.minecraft.world.entity.monster.Blaze blaze)
-                || !blaze.getType().is(CHANGE_BLAZE_ATTACK))
+                || !blaze.getType().is(CHANGE_ATTACK))
             return;
 
         ArrayList<Goal> goalsToRemove = new ArrayList<>();
