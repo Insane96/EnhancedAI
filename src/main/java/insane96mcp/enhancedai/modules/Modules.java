@@ -1,7 +1,7 @@
 package insane96mcp.enhancedai.modules;
 
 import insane96mcp.enhancedai.EnhancedAI;
-import insane96mcp.enhancedai.setup.Config;
+import insane96mcp.enhancedai.setup.EAIConfig;
 import insane96mcp.insanelib.base.Module;
 import net.minecraftforge.fml.config.ModConfig;
 
@@ -18,6 +18,7 @@ public class Modules {
 	public static Module enderman;
 	public static Module bugs;
 	public static Module skeleton;
+	public static Module snowGolem;
 	public static Module spider;
 	public static Module villager;
 	public static Module witch;
@@ -25,23 +26,28 @@ public class Modules {
 	public static Module warden;
 
 	public static void init() {
-		animal = Module.Builder.create(Ids.ANIMAL, "Animals", ModConfig.Type.COMMON, Config.builder).build();
-		blaze = Module.Builder.create(Ids.BLAZE, "Blazes", ModConfig.Type.COMMON, Config.builder).build();
-		creeper = Module.Builder.create(Ids.CREEPER, "Creepers", ModConfig.Type.COMMON, Config.builder).build();
-		drowned = Module.Builder.create(Ids.DROWNED, "Drowned", ModConfig.Type.COMMON, Config.builder).build();
-		enderman = Module.Builder.create(Ids.ENDERMAN, "Endermen", ModConfig.Type.COMMON, Config.builder).build();
-		ghast = Module.Builder.create(Ids.GHAST, "Ghasts", ModConfig.Type.COMMON, Config.builder).build();
-		golem = Module.Builder.create(Ids.PETS, "Pets", ModConfig.Type.COMMON, Config.builder).build();
-		mobs = Module.Builder.create(Ids.MOBS, "Mobs", ModConfig.Type.COMMON, Config.builder).build();
-		illager = Module.Builder.create(Ids.ILLAGER, "Illagers", ModConfig.Type.COMMON, Config.builder).build();
-		shulker = Module.Builder.create(Ids.SHULKER, "Shulkers", ModConfig.Type.COMMON, Config.builder).build();
-		bugs = Module.Builder.create(Ids.BUGS, "Bugs", ModConfig.Type.COMMON, Config.builder).build();
-		skeleton = Module.Builder.create(Ids.SKELETON, "Skeletons", ModConfig.Type.COMMON, Config.builder).build();
-		slime = Module.Builder.create(Ids.SLIME, "Slimes", ModConfig.Type.COMMON, Config.builder).build();
-		spider = Module.Builder.create(Ids.SPIDER, "Spiders", ModConfig.Type.COMMON, Config.builder).build();
-		villager = Module.Builder.create(Ids.VILLAGER, "Villagers", ModConfig.Type.COMMON, Config.builder).build();
-		witch = Module.Builder.create(Ids.WITCH, "Witches", ModConfig.Type.COMMON, Config.builder).build();
-		warden = Module.Builder.create(Ids.WARDEN, "Warden", ModConfig.Type.COMMON, Config.builder).build();
+		animal = create(Ids.ANIMAL, "Animals");
+		blaze = create(Ids.BLAZE, "Blazes");
+		creeper = create(Ids.CREEPER, "Creepers");
+		drowned = create(Ids.DROWNED, "Drowned");
+		enderman = create(Ids.ENDERMAN, "Endermen");
+		ghast = create(Ids.GHAST, "Ghast");
+		golem = create(Ids.PETS, "Pets");
+		mobs = create(Ids.MOBS, "Mobs");
+		illager = create(Ids.ILLAGER, "Illagers");
+		shulker = create(Ids.SHULKER, "Shulkers");
+		bugs = create(Ids.BUGS, "Bugs");
+		skeleton = create(Ids.SKELETON, "Skeletons");
+		snowGolem = create(Ids.SNOW_GOLEM, "Snow Golems");
+		slime = create(Ids.SLIME, "Slimes");
+		spider = create(Ids.SPIDER, "Spiders");
+		villager = create(Ids.VILLAGER, "Villagers");
+		witch = create(Ids.WITCH, "Witches");
+		warden = create(Ids.WARDEN, "Warden");
+	}
+
+	public static Module create(String id, String name) {
+		return Module.Builder.create(id, name, ModConfig.Type.COMMON, EAIConfig.builder).build();
 	}
 
 	@SuppressWarnings("deprecation")
@@ -60,6 +66,7 @@ public class Modules {
 		public static final String SPIDER = EnhancedAI.RESOURCE_PREFIX + "spider";
 		public static final String SHULKER = EnhancedAI.RESOURCE_PREFIX + "shulker";
 		public static final String SLIME = EnhancedAI.RESOURCE_PREFIX + "slime";
+		public static final String SNOW_GOLEM = EnhancedAI.RESOURCE_PREFIX + "snow_golem";
 		public static final String VILLAGER = EnhancedAI.RESOURCE_PREFIX + "villager";
 		public static final String WARDEN = EnhancedAI.RESOURCE_PREFIX + "warden";
 		public static final String WITCH = EnhancedAI.RESOURCE_PREFIX + "witch";

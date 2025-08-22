@@ -9,7 +9,7 @@ import net.minecraftforge.fml.config.ModConfig;
 import org.apache.commons.lang3.tuple.Pair;
 
 @Mod.EventBusSubscriber(modid = EnhancedAI.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class Config {
+public class EAIConfig {
 	public static final ForgeConfigSpec COMMON_SPEC;
 	public static final CommonConfig COMMON;
 

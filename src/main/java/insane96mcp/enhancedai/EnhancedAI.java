@@ -35,7 +35,7 @@ public class EnhancedAI
     public static final String CONFIG_FOLDER = "config/" + MOD_ID;
     
     public EnhancedAI(FMLJavaModLoadingContext context) {
-        context.registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, Config.COMMON_SPEC, MOD_ID + "/common.toml");
+        context.registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, EAIConfig.COMMON_SPEC, MOD_ID + "/common.toml");
 
         MinecraftForge.EVENT_BUS.register(this);
 		IEventBus modEventBus = context.getModEventBus();
