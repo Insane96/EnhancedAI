@@ -1,0 +1,13 @@
+{
+	"target": "#enhancedai:iron_golems",
+	"properties": [
+		{
+			"property": "event",
+			"event": "damaged",
+			"id": "enhancedai:innate_damage_resistance",
+			"target": "this",
+			"damage_modifier": 0.4,
+			"damage_modifier_operation": "multiply"
+		}
+	]
+}

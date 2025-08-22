@@ -2,13 +2,12 @@ package insane96mcp.enhancedai;
 
 import com.mojang.brigadier.CommandDispatcher;
 import insane96mcp.enhancedai.command.EAICommand;
-import insane96mcp.enhancedai.data.mpr.EAIChangeDataProperty;
+import insane96mcp.enhancedai.data.mpr.EAIPropertiesRegistry;
 import insane96mcp.enhancedai.modules.animal.AnimalScaredAttack;
 import insane96mcp.enhancedai.modules.mobs.MeleeAttacking;
 import insane96mcp.enhancedai.modules.mobs.miner.MinerMobs;
 import insane96mcp.enhancedai.modules.mobs.targeting.Targeting;
 import insane96mcp.enhancedai.setup.*;
-import insane96mcp.mobspropertiesrandomness.data.json.property.PropertiesRegistry;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.resources.ResourceLocation;
@@ -51,8 +50,9 @@ public class EnhancedAI
         modEventBus.addListener(Targeting::xrayRangeAttribute);
 
         if (ModList.get().isLoaded("mobspropertiesrandomness")) {
-            PropertiesRegistry.PROPERTIES.put(location("change_data"), EAIChangeDataProperty.class);
-        }
+			EAIPropertiesRegistry.init();
+			//PropertiesRegistry.PROPERTIES.put(location("change_data"), EAIChangeDataProperty.class);
+		}
     }
 
     @SubscribeEvent
