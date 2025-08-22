@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.pets.snowgolem;
+package insane96mcp.enhancedai.modules.snowgolem.shooting;
 
 import insane96mcp.enhancedai.ai.EAIRangedAttackGoal;
 import insane96mcp.enhancedai.data.EAIData;
