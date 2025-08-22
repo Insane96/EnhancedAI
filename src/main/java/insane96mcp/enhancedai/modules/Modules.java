@@ -13,7 +13,6 @@ public class Modules {
 	public static Module ghast;
 	public static Module shulker;
 	public static Module slime;
-	public static Module golem;
 	public static Module illager;
 	public static Module enderman;
 	public static Module bugs;
@@ -32,7 +31,6 @@ public class Modules {
 		drowned = create(Ids.DROWNED, "Drowned");
 		enderman = create(Ids.ENDERMAN, "Endermen");
 		ghast = create(Ids.GHAST, "Ghast");
-		golem = create(Ids.PETS, "Pets");
 		mobs = create(Ids.MOBS, "Mobs");
 		illager = create(Ids.ILLAGER, "Illagers");
 		shulker = create(Ids.SHULKER, "Shulkers");
@@ -60,7 +58,6 @@ public class Modules {
 		public static final String GHAST = EnhancedAI.RESOURCE_PREFIX + "ghast";
 		public static final String ILLAGER = EnhancedAI.RESOURCE_PREFIX + "illager";
 		public static final String MOBS = EnhancedAI.RESOURCE_PREFIX + "mobs";
-		public static final String PETS = EnhancedAI.RESOURCE_PREFIX + "pets";
 		public static final String BUGS = EnhancedAI.RESOURCE_PREFIX + "bugs";
 		public static final String SKELETON = EnhancedAI.RESOURCE_PREFIX + "skeleton";
 		public static final String SPIDER = EnhancedAI.RESOURCE_PREFIX + "spider";
