@@ -5,7 +5,7 @@
   * This makes it easier to disable single features
   * E.g. Creeper Swell has been split into Creeper Swell, Creeper Launch, Tnt Like Creepers and Disable Falling Swelling features.
 * Some features have been implemented through MPR
-  * E.g. Iron golem resistance
+  * E.g. Iron golem resistance and wolves buffs
 
 ## Alpha 3.0.0
 You are able to change AI at runtime without having to reload the world thanks to the new tech: AI Data, which lets you change parameters per mob, without having to reload the world.  

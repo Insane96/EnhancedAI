@@ -1,0 +1,23 @@
+{
+	"target": "#enhancedai:slow_passive_healing",
+	"properties": [
+		{
+			"property": "event",
+			"event": "tick",
+			"id": "enhancedai:slow_passive_healing",
+			"update_interval": 20,
+			"apply_properties": [
+				{
+					"property": "heal",
+					"amount": 1
+				}
+			],
+			"conditions": [
+				{
+					"condition": "chance",
+					"chance": 0.05
+				}
+			]
+		}
+	]
+}
