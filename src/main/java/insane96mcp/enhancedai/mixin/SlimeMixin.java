@@ -1,6 +1,9 @@
 package insane96mcp.enhancedai.mixin;
 
-import insane96mcp.enhancedai.modules.slime.Slimes;
+import insane96mcp.enhancedai.modules.slime.SlimeJumpDelay;
+import insane96mcp.enhancedai.modules.slime.SlimeSize;
+import insane96mcp.insanelib.base.Feature;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.Slime;
@@ -23,19 +26,18 @@ public abstract class SlimeMixin extends Mob {
 
     @ModifyArg(method = "finalizeSpawn", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/monster/Slime;setSize(IZ)V", ordinal = 0))
     public int onFinalizeSpawnSetSize(int size) {
-        if (!Slimes.shouldOverrideSpawnSize()
-                || !this.getType().is(Slimes.AFFECT_SLIME_SPAWN_SIZE))
+        if (!SlimeSize.shouldOverrideSpawnSize()
+                || !this.getType().is(SlimeSize.AFFECTED_ENTITY_TYPES))
             return size;
 
-        return this.getRandom().nextInt(Slimes.maxSpawnSize + 1);
+        return this.getRandom().nextInt(SlimeSize.maxSpawnSize + 1);
     }
 
     @Inject(method = "getJumpDelay", at = @At("RETURN"), cancellable = true)
     public void onJumpDelay(CallbackInfoReturnable<Integer> cir) {
-        if (!Slimes.shouldChangeJumpDelay()
-                || !this.getType().is(Slimes.AFFECT_SLIME_JUMP_RATE))
+        if (!Feature.isEnabled(SlimeJumpDelay.class))
             return;
 
-        cir.setReturnValue((int) (cir.getReturnValue() * Slimes.jumpDelayMultiplier));
+        cir.setReturnValue(Mth.nextInt(this.random, SlimeJumpDelay.JUMP_DELAY_MIN.get(this), SlimeJumpDelay.JUMP_DELAY_MAX.get(this)));
     }
 }

@@ -1,0 +1,14 @@
+{
+	"target": "#enhancedai:spiders",
+	"properties": [
+		{
+			"property": "event",
+			"event": "damaged",
+			"target": "this",
+			"id": "enhancedai:spider_fall_damage",
+			"damage_modifier": 0.1,
+			"damage_modifier_operation": "multiply",
+			"damage_type": "#minecraft:is_fall"
+		}
+	]
+}
