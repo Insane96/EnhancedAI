@@ -72,7 +72,7 @@ public class CreeperSwell extends Feature {
 	@Config(description = "If true, Angry Creeper emits particles")
 	public static Boolean angry$particles = true;
 	@Config(description = "The special sound effect that the Angry Creeper plays")
-	public static FuseExplodeSounds angry$sounds = FuseExplodeSounds.OLD;
+	public static FuseExplodeSounds angry$sounds = FuseExplodeSounds.CENA;
 	@Config(description = "If true, Angry Creeper will have a name")
 	public static Boolean angry$name = true;
 	@Config(description = "When ignited, Angry Creeper will not stop swelling")
