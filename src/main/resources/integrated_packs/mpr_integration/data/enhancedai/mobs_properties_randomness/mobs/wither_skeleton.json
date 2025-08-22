@@ -1,0 +1,36 @@
+{
+	"target": "minecraft:wither_skeleton",
+	"properties": [
+		{
+			"property": "equipment",
+			"slot": "mainhand",
+			"items": [
+				{
+					"item": "minecraft:bow",
+					"functions": [
+						{
+							"function": "enchant",
+							"type": "with_levels",
+							"lvl": {
+								"min": 5,
+								"max": 13
+							},
+							"conditions": [
+								{
+									"condition": "chance",
+									"chance": 0.2
+								}
+							]
+						}
+					]
+				}
+			],
+			"conditions": [
+				{
+					"condition": "chance",
+					"chance": 0.2
+				}
+			]
+		}
+	]
+}
