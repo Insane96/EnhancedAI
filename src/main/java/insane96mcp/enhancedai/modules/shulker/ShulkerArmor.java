@@ -14,9 +14,9 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
 
 import java.util.UUID;
 
-@LoadFeature(module = Modules.Ids.SHULKER, description = "Use the `enhancedai:apply_shulker_armor_modifiers` to add more shulkers that are affected by this feature.")
+@LoadFeature(module = Modules.Ids.SHULKER, description = "Only entity types in the `enhancedai:shulker/apply_armor_modifiers` tag will be affected by this feature.")
 public class ShulkerArmor extends Feature {
-    public static final TagKey<EntityType<?>> APPLY_ARMOR_MODIFIERS = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("apply_shulker_armor_modifiers"));
+    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("shulker/apply_armor_modifiers"));
     @Config(min = 0)
     public static Double armorWhenClosed = 30d;
     @Config(min = 0)
@@ -38,6 +38,6 @@ public class ShulkerArmor extends Feature {
     }
 
     public static boolean isAffectedByArmorModifiers(Shulker shulker) {
-        return Feature.isEnabled(ShulkerArmor.class) && shulker.getType().is(APPLY_ARMOR_MODIFIERS);
+        return Feature.isEnabled(ShulkerArmor.class) && shulker.getType().is(AFFECTED_ENTITY_TYPES);
     }
 }

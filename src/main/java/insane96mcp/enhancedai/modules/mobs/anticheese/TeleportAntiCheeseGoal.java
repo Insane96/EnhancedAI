@@ -24,7 +24,7 @@ public class TeleportAntiCheeseGoal extends Goal {
     public boolean canUse() {
         this.target = this.mob.getTarget();
         if (this.target == null
-                || this.target.getType().is(AntiCheese.CANT_BE_TELEPORTED)
+                || this.target.getType().is(TeleportAntiCheese.CANT_BE_TELEPORTED)
                 || !this.mob.getNavigation().isDone())
             return false;
 
