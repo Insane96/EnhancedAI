@@ -1,6 +1,7 @@
 # Changelog
 
 ## Upcoming
+* Attribute renamed: `enhancedai:generic.xray_follow_range` -> `enhancedai:xray_follow_range`
 * Many features have been split into multiple features
   * This makes it easier to disable single features
   * E.g. Creeper Swell has been split into Creeper Swell, Creeper Launch, Tnt Like Creepers and Disable Falling Swelling features.
