@@ -1,0 +1,12 @@
+{
+	"target": "minecraft:warden",
+	"properties": [
+		{
+			"property": "attribute_modifier",
+			"attribute": "forge:step_height_addition",
+			"modifier_name": "Enhanced AI Warden Step Height",
+			"amount": 0.5,
+			"operation": "addition"
+		}
+	]
+}

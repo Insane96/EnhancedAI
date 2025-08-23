@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.mixin;
 
-import insane96mcp.enhancedai.modules.warden.WardenFeature;
+import insane96mcp.enhancedai.modules.warden.WardenDarknessRange;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.warden.Warden;
@@ -18,6 +18,6 @@ public abstract class WardenMixin extends Monster {
 
 	@ModifyConstant(method = "customServerAiStep", constant = {@Constant(intValue = 20)})
 	private int onCustomServerAiStep(int range) {
-		return (int) WardenFeature.changeDarknessRange((Warden) (Object) this, range);
+		return (int) WardenDarknessRange.changeRange((Warden) (Object) this, range);
 	}
 }

@@ -2,7 +2,7 @@ package insane96mcp.enhancedai.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import insane96mcp.enhancedai.modules.warden.WardenFeature;
+import insane96mcp.enhancedai.modules.warden.WardenSonicBoomRange;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.entity.ai.behavior.warden.SonicBoom;
@@ -23,12 +23,12 @@ public abstract class SonicBoomMixin extends Behavior<Warden> {
 
 	@ModifyExpressionValue(method = "lambda$tick$1", at = @At(value = "CONSTANT", args = {"doubleValue=15.0"}))
 	private static double enhancedai$onRange1(double original, @Local(argsOnly = true) Warden owner) {
-		return WardenFeature.changeSonicBoomRange(owner, original);
+		return WardenSonicBoomRange.changeRange(owner, original);
 	}
 
 	@ModifyExpressionValue(method = "lambda$tick$1", at = @At(value = "CONSTANT", args = {"doubleValue=20.0"}))
 	private static double enhancedai$onRange2(double range, @Local(argsOnly = true) Warden owner) {
-		return WardenFeature.changeSonicBoomRange(owner, range);
+		return WardenSonicBoomRange.changeRange(owner, range);
 	}
 
 	@ModifyExpressionValue(method = "start(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/monster/warden/Warden;J)V", at = @At(value = "CONSTANT", args = {"floatValue=3.0"}))
@@ -43,11 +43,11 @@ public abstract class SonicBoomMixin extends Behavior<Warden> {
 
 	@ModifyExpressionValue(method = "checkExtraStartConditions(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/monster/warden/Warden;)Z", at = @At(value = "CONSTANT", args = {"doubleValue=15.0"}))
 	private double enhancedai$onExtraConditionsRange1(double range, ServerLevel level, Warden owner) {
-		return WardenFeature.changeSonicBoomRange(owner, range);
+		return WardenSonicBoomRange.changeRange(owner, range);
 	}
 
 	@ModifyExpressionValue(method = "checkExtraStartConditions(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/monster/warden/Warden;)Z", at = @At(value = "CONSTANT", args = {"doubleValue=20.0"}))
 	private double enhancedai$onExtraConditionsRange2(double range, ServerLevel level, Warden owner) {
-		return WardenFeature.changeSonicBoomRange(owner,range);
+		return WardenSonicBoomRange.changeRange(owner,range);
 	}
 }

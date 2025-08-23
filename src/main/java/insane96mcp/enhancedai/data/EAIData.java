@@ -37,6 +37,7 @@ public class EAIData<T> {
         this.onChange.accept(mob, this.get(mob));
     }
 
+	/// Adds NBT if not present and runs onChange
     public void applyIfAbsent(Mob mob, T value) {
         if (!ModNBTData.contains(mob, this.id))
             apply(mob, value);

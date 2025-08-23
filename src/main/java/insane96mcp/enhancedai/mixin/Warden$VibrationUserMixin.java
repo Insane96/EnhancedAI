@@ -1,7 +1,7 @@
 package insane96mcp.enhancedai.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import insane96mcp.enhancedai.modules.warden.WardenFeature;
+import insane96mcp.enhancedai.modules.warden.WardenListenRange;
 import net.minecraft.world.entity.monster.warden.Warden;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -10,6 +10,6 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class Warden$VibrationUserMixin {
 	@ModifyReturnValue(method = "getListenerRadius", at = @At("RETURN"))
     public int enhancedai$wardenListenRadius(int original) {
-        return WardenFeature.changeListenRange(original);
+        return WardenListenRange.changeRange(original);
     }
 }
