@@ -30,10 +30,10 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import javax.annotation.Nullable;
 
-@LoadFeature(module = Modules.Ids.ILLAGER, description = "Use the enhancedai:pillager_shoot/better_shooting entity type tag to add more skeletons that are affected by this feature")
+@LoadFeature(module = Modules.Ids.ILLAGER, description = "Use the enhancedai:illager/better_shooting entity type tag to add more skeletons that are affected by this feature")
 public class PillagerShoot extends Feature {
 
-	public static final TagKey<EntityType<?>> BETTER_PILLAGER_SHOOT = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("pillager_shoot/better_shooting"));
+	public static final TagKey<EntityType<?>> BETTER_PILLAGER_SHOOT = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("illager/better_shooting"));
 
 	@Config(min = 1, max = 64, description = "The range from where a pillager will shoot a target")
 	public static MinMax shootingRange = new MinMax(24, 32);

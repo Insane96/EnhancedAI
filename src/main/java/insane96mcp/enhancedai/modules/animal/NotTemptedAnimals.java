@@ -19,10 +19,10 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@LoadFeature(module = Modules.Ids.ANIMAL, description = "Makes animals not tempted by food. Use the entity type tag enhancedai:not_tempted_animals/can_ignore_food_temptation to change animals.")
+@LoadFeature(module = Modules.Ids.ANIMAL, description = "Makes animals not tempted by food. Use the entity type tag enhancedai:animal/can_ignore_food_temptation to change animals.")
 public class NotTemptedAnimals extends Feature {
     //TODO Some animals should attack the player with the food in the hand
-    public static final TagKey<EntityType<?>> CAN_IGNORE_FOOD_TEMPTATION = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("not_tempted_animals/can_ignore_food_temptation"));
+    public static final TagKey<EntityType<?>> CAN_IGNORE_FOOD_TEMPTATION = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("animal/can_ignore_food_temptation"));
     public static ResourceLocation NOT_TEMPTED;
 
     @Config(min = 0d, max = 1d, description = "Animals have this percentage chance to not be temped by food.")

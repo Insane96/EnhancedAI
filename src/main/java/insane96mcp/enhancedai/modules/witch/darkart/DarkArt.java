@@ -18,9 +18,9 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@LoadFeature(module = Modules.Ids.WITCH, description = "Witches summon Villagers and cast a lightning upon them. Only entity types in the `enhancedai:dark_art/can_perform` tag will be affected (can be used for any mob, not only witches).")
+@LoadFeature(module = Modules.Ids.WITCH, description = "Witches summon Villagers and cast a lightning upon them. Only entity types in the `enhancedai:witch/can_perform_dark_arts` tag will be affected (can be used for any mob, not only witches).")
 public class DarkArt extends Feature {
-	public static final TagKey<EntityType<?>> CAN_PERFORM = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("dark_art/can_perform"));
+	public static final TagKey<EntityType<?>> CAN_PERFORM = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("witch/can_perform_dark_arts"));
     @Config(min = 0d, max = 1d, description = "Chance for a witch to get the Dark Art AI (as soon as they have a target and are less than 10 blocks away from the target will summon a Villager and cast a lightning bolt on them")
     public static Double chance = 0.333d;
 	@Config(min = 0d, description = "At which distance from the witch will she start performing the Dark Art")

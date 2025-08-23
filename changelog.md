@@ -6,6 +6,7 @@
   * E.g. Creeper Swell has been split into Creeper Swell, Creeper Launch, Tnt Like Creepers and Disable Falling Swelling features.
 * Some features have been implemented through MPR
   * E.g. Iron golem resistance and wolves buffs
+* Cleaned up entity type tags to be split by module
 * Fixed anti-cheese probably not working
 
 ## Alpha 3.0.0

@@ -32,15 +32,15 @@ public class AnimalsPanic extends Feature {
 
     public static ResourceLocation PANIC_SPEED_MODIFIER;
 
+	//TODO Ugly
     public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
         super.init(module, enabledByDefault, canBeDisabled);
         PANIC = EAIData.ofBool(this.createDataKey("panic"), (mob, panic) -> {
             if (!(mob instanceof PathfinderMob pathfinderMob))
                 return;
-            if (!GoalHelper.hasGoal(mob.goalSelector, PanicGoal.class))
+			GoalHelper.removeGoal(mob.goalSelector, PanicGoal.class);
+            if (panic)
                 mob.goalSelector.addGoal(0, new PanicGoal(pathfinderMob, ModNBTData.get(mob, PANIC_SPEED_MODIFIER, Double.class)));
-            if (!panic)
-                GoalHelper.removeGoal(mob.goalSelector, PanicGoal.class);
         });
         PANIC_SPEED_MODIFIER = this.createDataKey("panic_speed_mod");
     }

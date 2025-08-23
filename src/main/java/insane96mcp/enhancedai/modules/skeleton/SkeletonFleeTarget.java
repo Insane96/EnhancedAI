@@ -5,6 +5,7 @@ import insane96mcp.enhancedai.ai.EAIAvoidTargetGoal;
 import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.modules.skeleton.shoot.EAIRangedBowAttackGoal;
+import insane96mcp.enhancedai.modules.skeleton.shoot.SkeletonShoot;
 import insane96mcp.enhancedai.utils.GoalHelper;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
@@ -15,9 +16,9 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
 
-@LoadFeature(module = Modules.Ids.SKELETON, description = "Skeletons try to stay away from the target. Use the enhancedai:skeleton_flee_target/can_flee entity type tag to add/remove skeletons that are affected by this feature. This doesn't work if Skeleton Shoot feature is disabled")
+@LoadFeature(module = Modules.Ids.SKELETON, description = "Skeletons try to stay away from the target. Only entity types in `enhancedai:skeleton/can_flee` tag are affected by this feature. This disables itself if Skeleton Shoot feature is disabled")
 public class SkeletonFleeTarget extends Feature {
-    public static final TagKey<EntityType<?>> CAN_FLEE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("skeleton_flee_target/can_flee"));
+    public static final TagKey<EntityType<?>> CAN_FLEE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("skeleton/can_flee"));
     @Config(min = 0d, max = 1d, description = "Chance for a Skeleton to spawn with the ability to avoid the target")
     public static Double avoidTargetChance = 0.5d;
     @Config(min = 0d, max = 1d, description = "Chance for a Skeleton to be able to shoot while running from the target")
@@ -38,7 +39,12 @@ public class SkeletonFleeTarget extends Feature {
     public static EAIData<Double> FLEE_SPEED_FAR;
     public static EAIData<Double> FLEE_SPEED_NEAR;
 
-    public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
+	@Override
+	public boolean isEnabled() {
+		return super.isEnabled() && Feature.isEnabled(SkeletonShoot.class);
+	}
+
+	public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
         super.init(module, enabledByDefault, canBeDisabled);
         AVOID_TARGET = EAIData.ofBool(this.createDataKey("avoid_target"), (mob, avoidTarget) -> {
             if (!(mob instanceof AbstractSkeleton skeleton))
