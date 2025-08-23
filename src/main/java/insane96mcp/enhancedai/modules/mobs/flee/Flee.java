@@ -21,6 +21,7 @@ public class Flee extends JsonFeature {
 
 	public static final List<CustomFleeConfig> customFlee = new ArrayList<>();
 
+	//TODO per mob?
 	@Override
 	public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super.init(module, enabledByDefault, canBeDisabled);

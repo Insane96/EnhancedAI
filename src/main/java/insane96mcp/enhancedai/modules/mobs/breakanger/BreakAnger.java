@@ -23,6 +23,7 @@ public class BreakAnger extends JsonFeature {
 
 	public static final List<BreakAngerConfig> angeringList = new ArrayList<>();
 
+	//TODO Per mob?
 	@Override
 	public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super.init(module, enabledByDefault, canBeDisabled);

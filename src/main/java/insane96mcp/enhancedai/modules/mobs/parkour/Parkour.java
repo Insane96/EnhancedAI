@@ -1,7 +1,9 @@
 package insane96mcp.enhancedai.modules.mobs.parkour;
 
 import insane96mcp.enhancedai.EnhancedAI;
+import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.utils.GoalHelper;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
@@ -16,8 +18,15 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 public class Parkour extends Feature {
     public static final TagKey<EntityType<?>> ALLOW_LEAPING = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("parkour/can_leap"));
 
+	public static EAIData<Boolean> CAN_PARKOUR;
+
     public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
         super.init(module, enabledByDefault, canBeDisabled);
+		CAN_PARKOUR = EAIData.ofBool(this.createDataKey("can_parkour"), (mob, canParkour) -> {
+			GoalHelper.removeGoal(mob.goalSelector, ParkourGoal.class);
+			if (canParkour)
+				mob.goalSelector.addGoal(2, new ParkourGoal(mob));
+		});
     }
 
     @SubscribeEvent
@@ -27,6 +36,6 @@ public class Parkour extends Feature {
                 || !mob.getType().is(ALLOW_LEAPING))
             return;
 
-        mob.goalSelector.addGoal(2, new ParkourGoal(mob));
+		CAN_PARKOUR.applyIfAbsent(mob, true);
     }
 }
