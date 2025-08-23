@@ -8,6 +8,8 @@
 * Some features have been implemented through MPR
   * E.g. Iron golem resistance and wolves buffs
 * Cleaned up entity type tags to be split by module
+* You now have more control over which mobs can ride other mobs
+* Fixed command not accepting strings correctly (you have to surround them with quotes)
 * Fixed anti-cheese probably not working
 
 ## Alpha 3.0.0

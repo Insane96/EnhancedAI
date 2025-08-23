@@ -1,14 +1,16 @@
 package insane96mcp.enhancedai.modules.mobs.riding;
 
 import insane96mcp.enhancedai.EnhancedAI;
+import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.Difficulty;
+import insane96mcp.insanelib.util.ModNBTData;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
@@ -17,53 +19,55 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@LoadFeature(module = Modules.Ids.MOBS, description = "Makes mobs ride other mobs")
+@LoadFeature(module = Modules.Ids.MOBS, description = "Makes mobs ride other mobs. Mobs in the `enhancedai:mobs/riding/can_be_mounted` tag will be able to be mounted, while mobs in the `enhancedai:mobs/riding/can_mount` tag will be able to mount other mobs.")
 public class Riding extends Feature {
-    public static final TagKey<EntityType<?>> CAN_BE_MOUNTED = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("can_be_mounted"));
-    public static final TagKey<EntityType<?>> CAN_MOUNT = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("can_mount"));
-    public static final String CAN_SEARCH_MOUNT = EnhancedAI.RESOURCE_PREFIX + "can_search_mount";
-    public static final String SUFFOCATION_WHILE_RIDING = EnhancedAI.RESOURCE_PREFIX + "suffocation_while_riding";
-    @Config(min = 0d, max = 1d, description = "Chance for a mob to have an AI to go and ride mobs. Use enhancedai:can_be_mounted and enhancedai:can_mount entity type tags")
+    public static final TagKey<EntityType<?>> CAN_BE_MOUNTED = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/riding/can_be_mounted"));
+    public static final TagKey<EntityType<?>> CAN_MOUNT = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/riding/can_mount"));
+    @Config(min = 0d, max = 1d, description = "Chance for a mob to have an AI to go and ride mobs.")
     public static Difficulty chance = new Difficulty(0.03d, 0.06d, 0.1d);
 
     @Config(description = "If true, riding mobs will dismount if take too much suffocation damage.")
     public static Boolean stopMountingIfSuffocating = true;
 
-    public Riding(Module module, boolean enabledByDefault, boolean canBeDisabled) {
-        super(module, enabledByDefault, canBeDisabled);
-    }
+	public static ResourceLocation SUFFOCATION_WHILE_RIDING;
+	public static EAIData<String> CAN_MOUNT_DATA;
 
-    @SubscribeEvent
-    public void onMobJoinWorld(EntityJoinLevelEvent event) {
+	@Override
+	public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
+		super.init(module, enabledByDefault, canBeDisabled);
+		SUFFOCATION_WHILE_RIDING = this.createDataKey("suffocation_while_riding");
+		CAN_MOUNT_DATA = EAIData.ofString(this.createDataKey("can_mount"));
+	}
+
+	@SubscribeEvent
+    public void onEntityJoinLevel(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
                 || event.getLevel().isClientSide
                 || !(event.getEntity() instanceof Mob mob)
                 || !mob.getType().is(CAN_MOUNT))
             return;
 
-        boolean canSearchMount = NBTUtils.getBooleanOrPutDefaultLegacy(mob.getPersistentData(), CAN_SEARCH_MOUNT, mob.getRandom().nextDouble() < chance.getByDifficulty(mob.level()));
-        if (!canSearchMount)
-            return;
-
-        mob.targetSelector.addGoal(1, new SearchMountGoal(mob));
+		if (mob.getRandom().nextDouble() < chance.getByDifficulty(mob.level()))
+			CAN_MOUNT_DATA.applyIfAbsent(mob, CAN_BE_MOUNTED.location().toString());
+		mob.targetSelector.addGoal(1, new SearchMountGoal(mob));
     }
 
     @SubscribeEvent
     public void onDamageTaken(LivingDamageEvent event) {
         if (!this.isEnabled()
-                || !(event.getEntity() instanceof Mob)
+                || !(event.getEntity() instanceof Mob mob)
                 || !stopMountingIfSuffocating
                 || !event.getSource().is(DamageTypes.IN_WALL)
                 || event.getEntity().getVehicle() == null)
             return;
 
-        float suffocatingDamageTaken = event.getEntity().getPersistentData().getFloat(SUFFOCATION_WHILE_RIDING);
+        float suffocatingDamageTaken = ModNBTData.get(mob, SUFFOCATION_WHILE_RIDING, Float.class);
         suffocatingDamageTaken += event.getAmount();
         if (suffocatingDamageTaken >= 6f) {
-            event.getEntity().stopRiding();
-            event.getEntity().getPersistentData().remove(SUFFOCATION_WHILE_RIDING);
+			mob.stopRiding();
+            ModNBTData.remove(mob, SUFFOCATION_WHILE_RIDING);
         }
         else
-            event.getEntity().getPersistentData().putFloat(SUFFOCATION_WHILE_RIDING, suffocatingDamageTaken);
+            ModNBTData.put(mob, SUFFOCATION_WHILE_RIDING, suffocatingDamageTaken);
     }
 }

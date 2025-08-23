@@ -38,7 +38,7 @@ public class EAICommand {
                 .then(Commands.literal("set")
                         .then(Commands.argument("target", EntityArgument.entity())
                                 .then(Commands.argument("data", ResourceLocationArgument.id()).suggests(DATA)
-                                        .then(Commands.argument("value", StringArgumentType.word())
+                                        .then(Commands.argument("value", StringArgumentType.string())
                                                 .executes((ctx) -> {
                                                     ResourceLocation id = ResourceLocationArgument.getId(ctx, "data");
                                                     String valueStr = StringArgumentType.getString(ctx, "value");
