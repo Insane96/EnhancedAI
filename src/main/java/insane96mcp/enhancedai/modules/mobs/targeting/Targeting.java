@@ -18,11 +18,9 @@ import insane96mcp.insanelib.util.ModNBTData;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
@@ -31,34 +29,28 @@ import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 @LoadFeature(module = Modules.Ids.MOBS, description = "Change how mobs target players. Check the config options below for entity type tags.")
 public class Targeting extends JsonFeature {
-	public static final TagKey<EntityType<?>> CHANGE_FOLLOW_RANGE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("targeting/follow_range_override"));
-	public static final TagKey<EntityType<?>> BETTER_HURT_BY = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("targeting/better_hurt_by"));
-	public static final TagKey<EntityType<?>> BETTER_NEARBY_TARGETING = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("targeting/better_nearby_targeting"));
-	public static final TagKey<EntityType<?>> ALLOW_TARGET_SWITCH = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("targeting/allow_target_switch"));
-	public static final TagKey<EntityType<?>> APPLY_XRAY = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("targeting/apply_xray"));
-	public static final TagKey<EntityType<?>> VISITED_NODES_MULTIPLIER = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("targeting/visited_nodes_multiplier"));
-	public static final TagKey<EntityType<?>> BLINDNESS_RANGE_MULTIPLIER = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("targeting/blindness_range_multiplier"));
+	public static final TagKey<EntityType<?>> CHANGE_FOLLOW_RANGE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/targeting/follow_range_override"));
+	public static final TagKey<EntityType<?>> BETTER_HURT_BY = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/targeting/better_hurt_by"));
+	public static final TagKey<EntityType<?>> BETTER_NEARBY_TARGETING = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/targeting/better_nearby_targeting"));
+	public static final TagKey<EntityType<?>> ALLOW_TARGET_SWITCH = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/targeting/allow_target_switch"));
+	public static final TagKey<EntityType<?>> APPLY_XRAY = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/targeting/apply_xray"));
+	public static final TagKey<EntityType<?>> VISITED_NODES_MULTIPLIER = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/targeting/visited_nodes_multiplier"));
 
-	public static final UUID BLINDNESS_FOLLOW_RANGE_UUID = UUID.fromString("b90bdf38-1c2a-4cb2-a85e-8214618e6cf0");
-
-	@Config(min = 0d, max = 128d, description = "How far away can the mobs see the player. This overrides the vanilla value (16 for most mobs). Setting 'Max' to 0 will leave the follow range as vanilla. I recommend using mods like Mobs Properties Randomness to have more control over the attribute. Only mobs in the entity type tag `enhancedai:targeting/follow_range_override` will be affected by this override")
+	@Config(min = 0d, max = 128d, description = "How far away can the mobs see the player. This overrides the vanilla value (16 for most mobs). Setting 'Max' to 0 will leave the follow range as vanilla. I recommend using mods like Mobs Properties Randomness to have more control over the attribute. Only mobs in the entity type tag `enhancedai:mobs/targeting/follow_range_override` will be affected by this override")
 	public static MinMax followRangeOverride = new MinMax(32, 48);
-	@Config(min = 0d, max = 128d, description = "How far away can the mobs see the player even through walls. Setting 'Max' to 0 will make mobs not able to see through walls. I recommend using mods like Mobs Properties Randomness to have more control over the attribute; the attribute name is 'enhancedai:generic.xray_follow_range'. Only mobs in the entity type tag `enhancedai:targeting/apply_xray` will be affected by this override.")
+	@Config(min = 0d, max = 128d, description = "How far away can the mobs see the player even through walls. This only works with 'Better Nearby Targeting' enabled. Setting 'Max' to 0 will make mobs not able to see through walls. I recommend using mods like Mobs Properties Randomness to have more control over the attribute; the attribute name is 'enhancedai:generic.xray_follow_range'. Only mobs in the entity type tag `enhancedai:mobs/targeting/apply_xray` will be affected by this override.")
 	public static MinMax xrayRangeOverride = new MinMax(16, 24);
 
-	@Config(description = "Mobs will actually switch target when attacked unless it's the same or if the current one it's closer. Only entity types in the entity type tag `enhancedai:targeting/better_hurt_by` tag will be affected by this. Use the entity type tag `enhancedai:targeting/allow_target_switch` to allow more entity types to switch targets (e.g. creepers in vanilla can't switch targets).")
+	@Config(description = "Mobs will actually switch target when attacked unless it's the same or if the current one it's closer. Only entity types in the entity type tag `enhancedai:mobs/targeting/better_hurt_by` tag will be affected by this. Use the entity type tag `enhancedai:mobs/targeting/allow_target_switch` to allow more entity types to switch targets (e.g. creepers in vanilla can't switch targets).")
 	public static Boolean betterHurtByTarget$enable = true;
 	@Config(description = "Setting this to true allows overriding target AI only for players.")
 	public static Boolean betterHurtByTarget$playerOnly = false;
@@ -74,15 +66,12 @@ public class Targeting extends JsonFeature {
 	@Config(min = 0d, max = 1d, description = "Chances for a mob to spawn neutral (so will not attack players until provoked)")
 	public static Difficulty betterNearbyTargeting$neutralChances = new Difficulty(0.25d, 0.10d, 0.04d);
 
-	@Config(description = "Mobs will be able to find better and longer paths to the target the higher this value is. The higher the more performance heavy. Only entity types in the tag `enhancedai:targeting/visited_nodes_multiplier` tag will be affected by this. Vanilla is 1.0")
+	@Config(description = "Mobs will be able to find better and longer paths to the target the higher this value is. The higher the more performance heavy. Only entity types in the tag `enhancedai:mobs/targeting/visited_nodes_multiplier` tag will be affected by this. Vanilla is 1.0")
 	public static Double maxVisitedNodesMultiplier = 4d;
-	@Config(min = 0d, max = 1d, description = "If the mobs' affected by blindness effect, it's follow range is multiplied by this value.")
-	public static Double blindnessRangeMultiplier = .15d;
 
 	public static ResourceLocation FOLLOW_RANGES_PROCESSED;
 	public static ResourceLocation NEUTRAL;
 	public static EAIData<Double> MAX_VISITED_NODES_MULTIPLIER;
-	public static EAIData<Double> BLINDNESS_RANGE_MULTIPLIER_DATA;
 	public static EAIData<Boolean> HURT_BY_PREFER_PLAYERS;
 	public static EAIData<Boolean> HURT_BY_PREVENT_INFIGHTING;
 	public static EAIData<Integer> TARGET_CHANCE;
@@ -95,7 +84,6 @@ public class Targeting extends JsonFeature {
 		NEUTRAL = this.createDataKey("neutral");
 		MAX_VISITED_NODES_MULTIPLIER = EAIData.ofDouble(this.createDataKey("max_visited_nodes_multiplier"),
 				(mob, multiplier) -> mob.getNavigation().setMaxVisitedNodesMultiplier(multiplier.floatValue()));
-		BLINDNESS_RANGE_MULTIPLIER_DATA = EAIData.ofDouble(this.createDataKey("blindness_range_multiplier"));
 		HURT_BY_PREFER_PLAYERS = EAIData.ofBool(this.createDataKey("hurt_by_prefer_players"));
 		HURT_BY_PREVENT_INFIGHTING = EAIData.ofBool(this.createDataKey("hurt_by_prevent_infighting"), (mob, preventInfighting) ->
 			GoalHelper.getGoal(mob.goalSelector, EAIHurtByTargetGoal.class).ifPresent(goal -> {
@@ -104,6 +92,7 @@ public class Targeting extends JsonFeature {
 			})
 		);
 		TARGET_CHANCE = EAIData.ofInt(this.createDataKey("target_chance"));
+		UNSEEN_FORGET_TICKS = EAIData.ofInt(this.createDataKey("unseen_forget_ticks"));
 	}
 
 	@Override
@@ -132,7 +121,6 @@ public class Targeting extends JsonFeature {
 		processTargetGoal(mob);
 		processHurtByGoal(mob);
 		processMaxTargetingNodes(mob);
-		processBlindnessRangeMultiplier(mob);
 	}
 
 	private void processFollowRanges(Mob mob) {
@@ -224,40 +212,5 @@ public class Targeting extends JsonFeature {
 		if (!mob.getType().is(VISITED_NODES_MULTIPLIER))
 			return;
 		MAX_VISITED_NODES_MULTIPLIER.applyIfAbsent(mob, maxVisitedNodesMultiplier);
-	}
-
-	private void processBlindnessRangeMultiplier(Mob mob) {
-		if (!mob.getType().is(BLINDNESS_RANGE_MULTIPLIER))
-			return;
-		BLINDNESS_RANGE_MULTIPLIER_DATA.applyIfAbsent(mob, blindnessRangeMultiplier);
-	}
-
-	@SubscribeEvent
-	public void onTargetDistanceMultiplier(LivingEvent.LivingVisibilityEvent event) {
-		if (!this.isEnabled()
-				|| !BLINDNESS_RANGE_MULTIPLIER_DATA.has(event.getLookingEntity())
-				|| !(event.getLookingEntity() instanceof LivingEntity livingEntity)
-				|| !livingEntity.hasEffect(MobEffects.BLINDNESS))
-			return;
-
-		event.modifyVisibility(BLINDNESS_RANGE_MULTIPLIER_DATA.get(livingEntity));
-	}
-
-	@SubscribeEvent
-	public void onBlindnessApply(MobEffectEvent.Added event) {
-		if (!this.isEnabled()
-				|| !BLINDNESS_RANGE_MULTIPLIER_DATA.has(event.getEntity()))
-			return;
-
-		MCUtils.applyModifier(event.getEntity(), Attributes.FOLLOW_RANGE, BLINDNESS_FOLLOW_RANGE_UUID, "Enhanced AI Blindness Multiplier", BLINDNESS_RANGE_MULTIPLIER_DATA.get(event.getEntity()) - 1f, AttributeModifier.Operation.MULTIPLY_TOTAL, true);
-	}
-
-	@SubscribeEvent
-	public void onBlindnessRemove(MobEffectEvent.Remove event) {
-		if (!this.isEnabled()
-				|| event.getEntity().getAttribute(Attributes.FOLLOW_RANGE) == null)
-			return;
-
-		event.getEntity().getAttribute(Attributes.FOLLOW_RANGE).removeModifier(BLINDNESS_FOLLOW_RANGE_UUID);
 	}
 }

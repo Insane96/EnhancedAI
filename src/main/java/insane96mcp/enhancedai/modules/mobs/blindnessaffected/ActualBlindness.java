@@ -1,0 +1,89 @@
+package insane96mcp.enhancedai.modules.mobs.blindnessaffected;
+
+import insane96mcp.enhancedai.EnhancedAI;
+import insane96mcp.enhancedai.data.EAIData;
+import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.insanelib.base.Feature;
+import insane96mcp.insanelib.base.LoadFeature;
+import insane96mcp.insanelib.base.Module;
+import insane96mcp.insanelib.base.config.Config;
+import insane96mcp.insanelib.util.MCUtils;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.living.MobEffectEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+
+import java.util.UUID;
+
+@LoadFeature(module = Modules.Ids.MOBS, description = "Makes mobs follow range actually affected by blindness effect. Only entity types in `enhancedai:mobs/blindness_range_multiplier` tag will be affected by this.")
+public class ActualBlindness extends Feature {
+	public static final TagKey<EntityType<?>> BLINDNESS_RANGE_MULTIPLIER = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/blindness_range_multiplier"));
+
+	public static final UUID BLINDNESS_FOLLOW_RANGE_UUID = UUID.fromString("b90bdf38-1c2a-4cb2-a85e-8214618e6cf0");
+
+	@Config(min = 0d, max = 1d, description = "Follow range is multiplied by this value if the mob has blindness.")
+	public static Double blindnessRangeMultiplier = .15d;
+
+	public static EAIData<Double> BLINDNESS_RANGE_MULTIPLIER_DATA;
+
+	@Override
+	public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
+		super.init(module, enabledByDefault, canBeDisabled);
+		BLINDNESS_RANGE_MULTIPLIER_DATA = EAIData.ofDouble(this.createDataKey("blindness_range_multiplier"));
+	}
+
+	//High priority as should run before specific mobs
+	@SubscribeEvent(priority = EventPriority.HIGH)
+	public void onMobSpawn(EntityJoinLevelEvent event) {
+		if (!this.isEnabled()
+				|| event.getLevel().isClientSide
+				|| !(event.getEntity() instanceof Mob mob))
+			return;
+
+		processBlindnessRangeMultiplier(mob);
+	}
+
+	private void processBlindnessRangeMultiplier(Mob mob) {
+		if (!mob.getType().is(BLINDNESS_RANGE_MULTIPLIER))
+			return;
+		BLINDNESS_RANGE_MULTIPLIER_DATA.applyIfAbsent(mob, blindnessRangeMultiplier);
+	}
+
+	@SubscribeEvent
+	public void onTargetDistanceMultiplier(LivingEvent.LivingVisibilityEvent event) {
+		if (!this.isEnabled()
+				|| !BLINDNESS_RANGE_MULTIPLIER_DATA.has(event.getLookingEntity())
+				|| !(event.getLookingEntity() instanceof LivingEntity livingEntity)
+				|| !livingEntity.hasEffect(MobEffects.BLINDNESS))
+			return;
+
+		event.modifyVisibility(BLINDNESS_RANGE_MULTIPLIER_DATA.get(livingEntity));
+	}
+
+	@SubscribeEvent
+	public void onBlindnessApply(MobEffectEvent.Added event) {
+		if (!this.isEnabled()
+				|| !BLINDNESS_RANGE_MULTIPLIER_DATA.has(event.getEntity()))
+			return;
+
+		MCUtils.applyModifier(event.getEntity(), Attributes.FOLLOW_RANGE, BLINDNESS_FOLLOW_RANGE_UUID, "Enhanced AI Blindness Multiplier", BLINDNESS_RANGE_MULTIPLIER_DATA.get(event.getEntity()) - 1f, AttributeModifier.Operation.MULTIPLY_TOTAL, true);
+	}
+
+	@SubscribeEvent
+	public void onBlindnessRemove(MobEffectEvent.Remove event) {
+		if (!this.isEnabled()
+				|| event.getEntity().getAttribute(Attributes.FOLLOW_RANGE) == null)
+			return;
+
+		event.getEntity().getAttribute(Attributes.FOLLOW_RANGE).removeModifier(BLINDNESS_FOLLOW_RANGE_UUID);
+	}
+}
