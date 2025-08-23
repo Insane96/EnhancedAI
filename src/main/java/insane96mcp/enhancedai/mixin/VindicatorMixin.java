@@ -23,7 +23,7 @@ public abstract class VindicatorMixin extends AbstractIllager {
 	@ModifyExpressionValue(method = "customServerAiStep", at = @At("MIXINEXTRAS:EXPRESSION"))
 	public boolean onSetCanOpenDoors(boolean original) {
 		if (OpenDoors.shouldBeAbleToOpenDoors((Vindicator) (Object) this))
-			return OpenDoors.CAN_OPEN_DOORS_DATA.get(this);
+			return OpenDoors.CAN_OPEN_DOORS.get(this);
 		return original;
 	}
 }

@@ -18,9 +18,9 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@LoadFeature(module = Modules.Ids.MOBS, description = "Make mobs flee from the target. Use the enhancedai:flee_target/can_flee entity type tag to add/remove entities that are affected by this feature. Mobs like animals have they're own feature for fleeing the target due to having different conditions.")
+@LoadFeature(module = Modules.Ids.MOBS, description = "Make mobs flee from the target. Use the enhancedai:mobs/can_flee entity type tag to add/remove entities that are affected by this feature. Mobs like animals have they're own feature for fleeing the target due to having different conditions.")
 public class FleeTarget extends Feature {
-	public static final TagKey<EntityType<?>> CAN_FLEE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("flee_target/can_flee"));
+	public static final TagKey<EntityType<?>> CAN_FLEE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/can_flee"));
 	@Config(min = 0d, max = 1d, description = "Chance for a mob to spawn with the ability to avoid the target")
 	public static Double avoidTargetChance = 0.5d;
 	@Config(min = 0d, max = 1d, description = "Chance for a mob to be able to attack while running from a target. This only works for ranged mobs")

@@ -28,7 +28,7 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
 * Added Sprint in Movement feature
   * Some mobs can now sprint towards the target when close enough
 * Added Random Stroll Chance multiplier in Movement feature
-  * Mobs now have a higher chance to randomly walk around when not targeting. By default they now stroll twice as often
+  * Mobs now have a higher chance to randomly walk around when not targeting
 * Leap feature is now the Parkour feature and it's enabled by default
   * Mobs can now leap up to 3 blocks forwards on the same Y level as the target
 * Added sun-resistant Drowned

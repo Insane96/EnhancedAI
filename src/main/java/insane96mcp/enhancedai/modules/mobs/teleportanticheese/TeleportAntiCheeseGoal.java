@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.mobs.anticheese;
+package insane96mcp.enhancedai.modules.mobs.teleportanticheese;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;

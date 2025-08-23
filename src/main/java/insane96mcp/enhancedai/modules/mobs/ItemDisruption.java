@@ -25,9 +25,9 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@LoadFeature(module = Modules.Ids.MOBS, enabledByDefault = false, description = "Endermen will make the player's item fall from his hands. Add/remove mobs via the enhancedai:item_disruption/can_disrupt entity type tag")
+@LoadFeature(module = Modules.Ids.MOBS, enabledByDefault = false, description = "Endermen will make the player's item fall from his hands. Add/remove mobs via the enhancedai:mobs/can_disrupt_item entity type tag")
 public class ItemDisruption extends Feature {
-    public static final TagKey<EntityType<?>> CAN_DISRUPT_ITEM = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("item_disruption/can_disrupt"));
+    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/can_disrupt_item"));
 
     @Config(min = 0d, max = 1d)
     public static Difficulty chance = new Difficulty(0.25d, 0.25d, 0.35d);
@@ -105,7 +105,7 @@ public class ItemDisruption extends Feature {
         if (!this.isEnabled()
                 || event.getLevel().isClientSide
                 || !(event.getEntity() instanceof Mob mob)
-                || !mob.getType().is(CAN_DISRUPT_ITEM))
+                || !mob.getType().is(AFFECTED_ENTITY_TYPES))
             return;
 
 		CHANCE.applyIfAbsent(mob, chance.getByDifficulty(mob.level()));

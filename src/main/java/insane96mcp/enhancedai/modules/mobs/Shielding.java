@@ -8,9 +8,12 @@ import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.data.IdTagValue;
 import insane96mcp.insanelib.util.ModNBTData;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -23,8 +26,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-@LoadFeature(module = Modules.Ids.MOBS, description = "Gives mobs a chance to negate damage when equipped with a shield.")
+@LoadFeature(module = Modules.Ids.MOBS, description = "Gives mobs a chance to negate damage when equipped with a shield. Only entity types in `enhancedai:mobs/can_equip_shield` tag will be equipped a shield.")
 public class Shielding extends JsonFeature {
+	public static final TagKey<EntityType<?>> CAN_EQUIP_SHIELD = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/can_equip_shield"));
 
 	public static final List<IdTagValue> DEFAULT_SHIELD_BLOCK_CHANCE = List.of(
 			IdTagValue.newId("minecraft:shield", 0.2d),
@@ -38,7 +42,7 @@ public class Shielding extends JsonFeature {
 	);
 	public static final List<IdTagValue> shieldBlockChance = new ArrayList<>();
 
-	@Config(description = "Chance for entity types in the `enhancedai:shielding/can_equip_shield` tag to spawn with a shield in the offhand.")
+	@Config
 	public static double chanceToEquip = 0.08d;
 
 	public static ResourceLocation HAS_SHIELD_BEEN_GIVEN;

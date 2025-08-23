@@ -21,10 +21,10 @@ import net.minecraft.world.item.Items;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@LoadFeature(module = Modules.Ids.MOBS, description = "Let mobs use Fishing Rods, reeling players in. Either put a Fishing Rod in main or off hand and when near enough from the target they will use it. Only mobs in enhancedai:fisher_mobs/can_equip_rod entity type tag are affected by this feature.")
+@LoadFeature(module = Modules.Ids.MOBS, description = "Let mobs use Fishing Rods, reeling players in. Either put a Fishing Rod in main or off hand and when near enough from the target they will use it. Only mobs in enhancedai:mobs/can_equip_fishing_rod entity type tag are affected by this feature.")
 public class FisherMobs extends Feature {
-	public static final TagKey<EntityType<?>> CAN_EQUIP_FISHING_ROD = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("fisher_mobs/can_equip_rod"));
-    public static final TagKey<Item> FISHER_RODS = TagKey.create(Registries.ITEM, EnhancedAI.location("fisher_mobs/valid_rods"));
+	public static final TagKey<EntityType<?>> CAN_EQUIP_FISHING_ROD = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/can_equip_fishing_rod"));
+    public static final TagKey<Item> FISHER_RODS = TagKey.create(Registries.ITEM, EnhancedAI.location("valid_fisher_rods"));
 
 	@Config(min = 0d, max = 1d, description = "Chance for entity types in the enhancedai:fisher_mobs/can_equip_rod tag to spawn with a Fishing Rod in the offhand.\nIf you require more control, use Mobs Properties Randomness")
 	public static Double equipFishingRodChance = 0.07;

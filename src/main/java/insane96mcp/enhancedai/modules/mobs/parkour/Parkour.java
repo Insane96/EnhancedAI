@@ -14,9 +14,9 @@ import net.minecraft.world.entity.Mob;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@LoadFeature(module = Modules.Ids.MOBS, description = "Makes mobs be able to leap over a few blocks. Only entity types in the `enhancedai:parkour/can_leap` tag can leap.")
+@LoadFeature(module = Modules.Ids.MOBS, description = "Makes mobs be able to leap over a few blocks. Only entity types in the `enhancedai:mobs/can_parkour` tag can leap.")
 public class Parkour extends Feature {
-    public static final TagKey<EntityType<?>> ALLOW_LEAPING = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("parkour/can_leap"));
+    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/can_parkour"));
 
 	public static EAIData<Boolean> CAN_PARKOUR;
 
@@ -33,7 +33,7 @@ public class Parkour extends Feature {
     public void onMobSpawn(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
                 || !(event.getEntity() instanceof Mob mob)
-                || !mob.getType().is(ALLOW_LEAPING))
+                || !mob.getType().is(AFFECTED_ENTITY_TYPES))
             return;
 
 		CAN_PARKOUR.applyIfAbsent(mob, true);

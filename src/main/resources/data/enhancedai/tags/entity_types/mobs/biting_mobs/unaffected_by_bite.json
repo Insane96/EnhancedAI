@@ -9,6 +9,7 @@
         {
             "required": false,
             "id": "pet_cemetery:zombie_wolf"
-        }
+        },
+		"#forge:bosses"
     ]
 }

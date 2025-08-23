@@ -18,14 +18,14 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 @LoadFeature(module = Modules.Ids.MOBS, name = "Anti-Cheese", description = "Prevent players from abusing some game mechanics to stop mobs, like vehicles or 2 block tall holes for endermen.")
 public class VehicleAntiCheese extends Feature {
-    public static final TagKey<EntityType<?>> PREVENT_VEHICLE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("vehicle_anti_cheese/prevent_riding"));
-    public static final TagKey<EntityType<?>> CAN_BREAK_VEHICLE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("vehicle_anti_cheese/break_vehicle"));
-    public static final TagKey<EntityType<?>> VALID_VEHICLES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("vehicle_anti_cheese/valid_vehicles"));
+    public static final TagKey<EntityType<?>> PREVENT_VEHICLE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/vehicle_anti_cheese/prevent_riding"));
+    public static final TagKey<EntityType<?>> CAN_BREAK_VEHICLE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/vehicle_anti_cheese/break_vehicle"));
+    public static final TagKey<EntityType<?>> VALID_VEHICLES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/vehicle_anti_cheese/valid_vehicles"));
 
-    @Config(description = "If true, entity types in the enhancedai:vehicle_anti_cheese/prevent_riding tag will not be able to mount vehicles in `enhancedai:anti_cheese/valid_vehicles`.")
+    @Config(description = "If true, entity types in the enhancedai:vehicle_anti_cheese/prevent_riding tag will not be able to mount vehicles in `enhancedai:mobs/vehicle_anti_cheese/valid_vehicles`.")
     public static Boolean preventRidingVehicles = false;
 
-    @Config(description = "If true, entity types in the enhancedai:vehicle_anti_cheese/break_vehicle tag will get an AI to break vehicles in `enhancedai:vehicle_anti_cheese/valid_vehicles` tag.")
+    @Config(description = "If true, entity types in the enhancedai:mobs/vehicle_anti_cheese/break_vehicle tag will get an AI to break vehicles in `enhancedai:mobs/vehicle_anti_cheese/valid_vehicles` tag.")
     public static Boolean breakVehicles = true;
 
 	public static EAIData<Boolean> PREVENT_RIDING;

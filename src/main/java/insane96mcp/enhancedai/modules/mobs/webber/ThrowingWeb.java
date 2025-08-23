@@ -30,18 +30,18 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@LoadFeature(module = Modules.Ids.MOBS, description = "Makes mobs (spiders by default) throw a web at a player, slowing them. Only entity types in the `enhancedai:throwing_web/can_throw_webs` tag will be affected. Entity types in `enhancedai:throwing_web/poisonous_webs` will throw poisonous webs and apply poison the same way as when a cave spider attacks an entity.")
+@LoadFeature(module = Modules.Ids.MOBS, description = "Makes mobs (spiders by default) throw a web at a player, slowing them. Only entity types in the `enhancedai:mobs/throwing_web/can_throw_webs` tag will be affected. Entity types in `enhancedai:mobs/throwing_web/poisonous_webs` will throw poisonous webs and apply poison the same way as when a cave spider attacks an entity.")
 public class ThrowingWeb extends Feature {
-	public static final TagKey<EntityType<?>> CAN_THROW_WEBS = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("throwing_web/can_throw_webs"));
-	public static final TagKey<EntityType<?>> POISONOUS_WEBS = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("throwing_web/poisonous_webs"));
+	public static final TagKey<EntityType<?>> CAN_THROW_WEBS = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/throwing_web/can_throw_webs"));
+	public static final TagKey<EntityType<?>> POISONOUS_WEBS = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/throwing_web/poisonous_webs"));
 
-	@Config(min = 0d, max = 1d, description = "Chance for a mob to spawn with the ability to throw webs at the target. Only entity types in the `enhancedai:throwing_web/can_throw_webs` tag are affected.")
+	@Config(min = 0d, max = 1d, description = "Chance for a mob to spawn with the ability to throw webs at the target. Only entity types in the `enhancedai:mobs/throwing_web/can_throw_webs` tag are affected.")
 	public static Double chance = 0.1d;
 	@Config
 	public static Boolean placeWebOnBlockHit = false;
 	@Config
 	public static Boolean placeWebOnEntityHit = false;
-	@Config(description = "If true, entity types in `enhancedai:throwing_web/poisonous_webs` tag thrown webs' will poison entities hit like when cave spiders hit entity in melee.")
+	@Config(description = "If true, entity types in `enhancedai:mobs/throwing_web/poisonous_webs` tag thrown webs' will poison entities hit like when cave spiders hit entity in melee.")
 	public static Boolean poisonousWebs = true;
 	@Config(min = -1, max = 6000, description = "After how many ticks will the cobweb placed by the web projectile be destroyed? Setting to -1 will prevent the cobweb from being destroyed.")
 	public static Integer destroyWebAfter = 100;

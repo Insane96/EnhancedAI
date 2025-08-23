@@ -16,15 +16,15 @@ import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@LoadFeature(module = Modules.Ids.MOBS, description = "Use `enhancedai:open_doors/can_open_doors` to add more mobs that can open doors.")
+@LoadFeature(module = Modules.Ids.MOBS, description = "Only entity types in `enhancedai:mobs/can_open_doors` tag are affected by this feature.")
 public class OpenDoors extends Feature {
-    public static final TagKey<EntityType<?>> CAN_OPEN_DOORS = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("open_doors/can_open_doors"));
+    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/can_open_doors"));
 
-	public static EAIData<Boolean> CAN_OPEN_DOORS_DATA;
+	public static EAIData<Boolean> CAN_OPEN_DOORS;
 
     public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
         super.init(module, enabledByDefault, canBeDisabled);
-		CAN_OPEN_DOORS_DATA = EAIData.ofBool(this.createDataKey("can_open_doors"), (mob, canOpenDoors) -> {
+		CAN_OPEN_DOORS = EAIData.ofBool(this.createDataKey("can_open_doors"), (mob, canOpenDoors) -> {
 			GoalHelper.removeGoal(mob.goalSelector, OpenDoorGoal.class);
 			if (canOpenDoors)
 				mob.goalSelector.addGoal(2, new OpenDoorGoal(mob, false));
@@ -41,10 +41,10 @@ public class OpenDoors extends Feature {
                 || event.getLevel().isClientSide)
             return;
 
-		CAN_OPEN_DOORS_DATA.applyIfAbsent(mob, true);
+		CAN_OPEN_DOORS.applyIfAbsent(mob, true);
     }
 
     public static boolean shouldBeAbleToOpenDoors(Mob mob) {
-        return Feature.isEnabled(OpenDoors.class) && mob.getType().is(CAN_OPEN_DOORS);
+        return Feature.isEnabled(OpenDoors.class) && mob.getType().is(AFFECTED_ENTITY_TYPES);
     }
 }

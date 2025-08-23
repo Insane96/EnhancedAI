@@ -18,9 +18,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.List;
 
-@LoadFeature(module = Modules.Ids.MOBS, description = "Mobs will run away from exploding creepers / TNT. Use the entity type tag enhancedai:avoid_explosions/can_run to whitelist them")
+@LoadFeature(module = Modules.Ids.MOBS, description = "Mobs will run away from exploding creepers / TNT. Only entity types in `enhancedai:mobs/can_run_from_explosions` tag will be affected by this feature")
 public class AvoidExplosions extends Feature {
-	public static final TagKey<EntityType<?>> CAN_RUN_FROM_EXPLOSION = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("avoid_explosions/can_run"));
+	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/can_run_from_explosions"));
 	@Config(min = 0d, max = 1d, description = "Chance for a mob to be able to run from explosions.")
 	public static Double chance = 0.8d;
 	@Config(min = 0d, max = 10d, description = "Speed multiplier when the mob runs from explosions and it's within 7 blocks from him.")
@@ -28,13 +28,12 @@ public class AvoidExplosions extends Feature {
 	@Config(min = 0d, max = 10d, description = "Speed multiplier when the mob runs from explosions and it's farther than 7 blocks from him.")
 	public static Double runSpeedFar = 1.0d;
 	@Config(min = 0d, max = 10d, description = "Entities also flee from TnTs")
-	public static Boolean fleeTnt = false;
+	public static Boolean fleeTnt = true;
 
 	public static EAIData<Boolean> CAN_RUN_FROM_EXPLOSIONS;
 	public static EAIData<Boolean> CAN_RUN_FROM_TNT;
 	public static EAIData<Double> FLEE_SPEED_FAR;
 	public static EAIData<Double> FLEE_SPEED_NEAR;
-	//TODO Add a way to make mobs run from anything
 
 	public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super.init(module, enabledByDefault, canBeDisabled);
@@ -56,7 +55,7 @@ public class AvoidExplosions extends Feature {
 			return;
 
 		alertTNT(event.getEntity());
-		if (event.getEntity() instanceof PathfinderMob mob && mob.getType().is(CAN_RUN_FROM_EXPLOSION)) {
+		if (event.getEntity() instanceof PathfinderMob mob && mob.getType().is(AFFECTED_ENTITY_TYPES)) {
 			CAN_RUN_FROM_EXPLOSIONS.applyIfAbsent(mob, mob.getRandom().nextDouble() < chance);
 			FLEE_SPEED_FAR.applyIfAbsent(mob, runSpeedFar);
 			FLEE_SPEED_NEAR.applyIfAbsent(mob, runSpeedNear);
@@ -71,7 +70,7 @@ public class AvoidExplosions extends Feature {
 		List<PathfinderMob> pathfinderMobs = entity.level().getEntitiesOfClass(PathfinderMob.class, entity.getBoundingBox().inflate(8d));
 		for (PathfinderMob pathfinderMob : pathfinderMobs) {
 			if (!CAN_RUN_FROM_TNT.get(pathfinderMob)
-					|| !pathfinderMob.getType().is(CAN_RUN_FROM_EXPLOSION))
+					|| !pathfinderMob.getType().is(AFFECTED_ENTITY_TYPES))
 				continue;
 			GoalHelper.getGoal(pathfinderMob.goalSelector, AvoidExplosionGoal.class)
 					.ifPresent(goal -> goal.runFrom(entity, 8d));

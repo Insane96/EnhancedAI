@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.mobs.movement;
+package insane96mcp.enhancedai.modules.mobs.climbing;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
@@ -11,11 +11,11 @@ import net.minecraft.world.phys.Vec3;
 import java.util.EnumSet;
 import java.util.Optional;
 
-public class ClimbLaddersGoal extends Goal {
+public class ClimbClimbableGoal extends Goal {
 	protected LivingEntity target;
 	protected Mob goalOwner;
 
-	public ClimbLaddersGoal(Mob goalOwner) {
+	public ClimbClimbableGoal(Mob goalOwner) {
 		super();
 		this.goalOwner = goalOwner;
 		this.setFlags(EnumSet.of(Flag.MOVE, Flag.JUMP));

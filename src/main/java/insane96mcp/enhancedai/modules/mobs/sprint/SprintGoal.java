@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.mobs.movement;
+package insane96mcp.enhancedai.modules.mobs.sprint;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
