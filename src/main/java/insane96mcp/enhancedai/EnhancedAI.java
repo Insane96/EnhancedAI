@@ -8,8 +8,10 @@ import insane96mcp.enhancedai.modules.mobs.MeleeAttacking;
 import insane96mcp.enhancedai.modules.mobs.miner.MinerMobs;
 import insane96mcp.enhancedai.modules.mobs.targeting.Targeting;
 import insane96mcp.enhancedai.setup.*;
+import insane96mcp.insanelib.InsaneLib;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.commands.DebugPathCommand;
 import net.minecraftforge.common.MinecraftForge;
@@ -19,6 +21,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.MissingMappingsEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -61,6 +64,14 @@ public class EnhancedAI
         CommandBuildContext context = event.getBuildContext();
         EAICommand.register(dispatcher, context);
     }
+
+	@SubscribeEvent
+	public void onMissingMappings(MissingMappingsEvent event) {
+		InsaneLib.handleMissingMappings(event, MOD_ID, Registries.ATTRIBUTE, name -> switch (name) {
+			case "generic.xray_follow_range" -> EAIAttributes.XRAY_FOLLOW_RANGE.get();
+			default -> null;
+		});
+	}
 
     @SubscribeEvent
     public void registerCommands(RegisterCommandsEvent event) {
