@@ -35,9 +35,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.UUID;
 
@@ -86,7 +84,7 @@ public abstract class WitchMixin extends Raider {
 
 	@ModifyExpressionValue(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/monster/Witch;isDrinkingPotion()Z"))
 	public boolean enhancedai$playSoundWhenDrinking(boolean original) {
-		if (original && ThirstyWitches.playSoundWhenDrinking && this.usingTime % 4 == 0)
+		if (original && !this.isSilent() && ThirstyWitches.playSoundWhenDrinking && this.usingTime % 4 == 0)
 			this.playSound(SoundEvents.GENERIC_DRINK, 0.75f, this.random.nextFloat() * 0.1F + 0.9F);
 		return original;
 	}
@@ -149,55 +147,6 @@ public abstract class WitchMixin extends Raider {
 		}
 
 		original.call(instance, equipmentSlot, enhancedai$stackToUse);
-	}
-
-	@Inject(at = @At("HEAD"), method = "aiStep", cancellable = true)
-	private void aiStep(CallbackInfo ci) {
-/*
-		if (this.isDrinkingPotion()) {
-
-		}
-		else {
-
-			if nothing to drink {
-				if (WitchPotionThrowing.shouldUseSlowFalling() && this.fallDistance > 8 && !this.hasEffect(MobEffects.SLOW_FALLING)) {
-					ItemStack slowFallingStack = MCUtils.setCustomEffects(new ItemStack(Items.SPLASH_POTION), List.of(new MobEffectInstance(MobEffects.SLOW_FALLING, 300, 0)));
-					this.getLookControl().setLookAt(this.getX(), this.getY(), this.getZ());
-					if (!this.isSilent()) {
-						this.playSound(SoundEvents.WITCH_THROW, 1.0F, 0.8F + this.getRandom().nextFloat() * 0.4F);
-					}
-					this.level().levelEvent(LevelEvent.PARTICLES_SPELL_POTION_SPLASH, this.blockPosition(), PotionUtils.getColor(slowFallingStack));
-					List<MobEffectInstance> mobEffects = PotionUtils.getMobEffects(slowFallingStack);
-					for (MobEffectInstance mobEffect : mobEffects) {
-						this.addEffect(new MobEffectInstance(mobEffect));
-					}
-				}
-
-				if (!this.hasEffect(MobEffects.INVISIBILITY) && this.onGround() && --this.enhancedAI$invisibilityCooldown <= 0 && this.getHealth() < this.getMaxHealth() * WitchPotionThrowing.healthThresholdInvisibility) {
-					ThrownPotion thrownPotion = new ThrownPotion(this.level(), this);
-					thrownPotion.setItem(MCUtils.setCustomEffects(new ItemStack(Items.SPLASH_POTION), List.of(new MobEffectInstance(MobEffects.INVISIBILITY, 200))));
-					thrownPotion.shoot(0, -1d, 0, 0.1f, 2f);
-					this.level().addFreshEntity(thrownPotion);
-
-					//Try 5 times to find a random spot
-					for (int i = 0; i < 5; i++) {
-						Vec3 randomPos = DefaultRandomPos.getPos(this, 16, 9);
-						if (randomPos != null) {
-							this.getNavigation().moveTo(randomPos.x, randomPos.y, randomPos.z, 1.1f);
-							break;
-						}
-					}
-
-					this.enhancedAI$invisibilityCooldown = 20;
-				}
-			}
-		}
-
-		if (this.random.nextFloat() < 7.5E-4F) {
-			this.level().broadcastEntityEvent(this, EntityEvent.WITCH_HAT_MAGIC);
-		}
-
-		super.aiStep();*/
 	}
 
 	@Shadow

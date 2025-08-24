@@ -10,13 +10,27 @@ import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.MinMax;
+import insane96mcp.insanelib.util.MCUtils;
+import insane96mcp.insanelib.util.ModNBTData;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
+import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.entity.monster.Witch;
+import net.minecraft.world.entity.projectile.ThrownPotion;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.level.block.LevelEvent;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
@@ -51,6 +65,7 @@ public class WitchPotionThrowing extends Feature {
     @Config(min = 0d, max = 1d, description = "When below this health percentage Witches will throw Invisibility potions at their feet.")
     public static Double invisibilityHealthThreshold = 0.40d;
 
+    public static ResourceLocation INVISIBILITY_COOLDOWN;
 	public static EAIData<Double> LINGERING_CHANCE;
 	public static EAIData<Integer> ATTACK_COOLDOWN;
 	public static EAIData<Integer> ATTACK_RANGE;
@@ -61,6 +76,7 @@ public class WitchPotionThrowing extends Feature {
 
     public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
         super.init(module, enabledByDefault, canBeDisabled);
+        INVISIBILITY_COOLDOWN = this.createDataKey("invisibility_cooldown");
 		LINGERING_CHANCE = EAIData.ofDouble(this.createDataKey("lingering_chance"));
 		ATTACK_COOLDOWN = EAIData.ofInt(this.createDataKey("attack_cooldown"));
 		ATTACK_RANGE = EAIData.ofInt(this.createDataKey("attack_range"));
@@ -107,6 +123,56 @@ public class WitchPotionThrowing extends Feature {
 		GoalHelper.removeGoal(witch.goalSelector, RangedAttackGoal.class);
 		witch.goalSelector.addGoal(2, new WitchThrowPotionGoal(witch));
 		//witch.targetSelector.addGoal(2, new WitchBuffAllyGoal<>(witch, Mob.class, true, (livingEntity -> livingEntity != null && !witch.hasActiveRaid() && livingEntity.getType() != EntityType.WITCH)));
+    }
+
+    @SubscribeEvent
+    public void onWitchTick(LivingEvent.LivingTickEvent event) {
+        if (!this.isEnabled()
+                || !(event.getEntity() instanceof Witch witch)
+                || !witch.getType().is(AFFECTED_ENTITY_TYPES)
+                || !witch.isAlive()
+                || witch.level().isClientSide
+                || witch.isDrinkingPotion())
+            return;
+
+        if (WitchPotionThrowing.shouldUseSlowFalling() && witch.fallDistance > 7 && !witch.hasEffect(MobEffects.SLOW_FALLING)) {
+            ItemStack slowFallingStack = MCUtils.setCustomEffects(new ItemStack(Items.SPLASH_POTION), List.of(new MobEffectInstance(MobEffects.SLOW_FALLING, 300, 0)));
+            witch.getLookControl().setLookAt(witch.getX(), witch.getY(), witch.getZ());
+            if (!witch.isSilent())
+                witch.playSound(SoundEvents.WITCH_THROW, 1.0F, 0.8F + witch.getRandom().nextFloat() * 0.4F);
+            witch.level().levelEvent(LevelEvent.PARTICLES_SPELL_POTION_SPLASH, witch.blockPosition(), PotionUtils.getColor(slowFallingStack));
+            List<MobEffectInstance> mobEffects = PotionUtils.getMobEffects(slowFallingStack);
+            for (MobEffectInstance mobEffect : mobEffects) {
+                witch.addEffect(new MobEffectInstance(mobEffect));
+            }
+        }
+
+        if (!witch.hasEffect(MobEffects.INVISIBILITY) && witch.onGround() && canUseInvisibility(witch) && witch.getHealth() < witch.getMaxHealth() * INVISIBILITY_HEALTH_THRESHOLD.get(witch)) {
+            ThrownPotion thrownPotion = new ThrownPotion(witch.level(), witch);
+            thrownPotion.setItem(MCUtils.setCustomEffects(new ItemStack(Items.SPLASH_POTION), List.of(new MobEffectInstance(MobEffects.INVISIBILITY, 200))));
+            thrownPotion.shoot(0, -1d, 0, 0.1f, 2f);
+            witch.level().addFreshEntity(thrownPotion);
+
+            //Try 5 times to find a random spot
+            for (int i = 0; i < 5; i++) {
+                Vec3 randomPos = DefaultRandomPos.getPos(witch, 16, 9);
+                if (randomPos != null) {
+                    witch.getNavigation().moveTo(randomPos.x, randomPos.y, randomPos.z, 1.1f);
+                    break;
+                }
+            }
+
+            ModNBTData.put(witch, INVISIBILITY_COOLDOWN, 20);
+        }
+    }
+
+    public static boolean canUseInvisibility(Witch witch) {
+        int cooldown = ModNBTData.get(witch, INVISIBILITY_COOLDOWN, Integer.class);
+        if (--cooldown > 0) {
+            ModNBTData.put(witch, INVISIBILITY_COOLDOWN, cooldown);
+            return false;
+        }
+        return true;
     }
 
     public static boolean shouldUseSlowFalling() {

@@ -1,7 +1,7 @@
 # Changelog
 
 ## Upcoming
-* Ported thirsty witches
+* Finished porting witches
 
 ## Alpha 3.0.1
 This version has no Witches (except for dark arts and fleeing) as they are WIP
