@@ -28,7 +28,7 @@ import java.util.List;
 
 @LoadFeature(module = Modules.Ids.MOBS, description = "Gives mobs a chance to negate damage when equipped with a shield. Only entity types in `enhancedai:mobs/can_equip_shield` tag will be equipped a shield.")
 public class Shielding extends JsonFeature {
-	public static final TagKey<EntityType<?>> CAN_EQUIP_SHIELD = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/can_equip_shield"));
+	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/can_equip_shield"));
 
 	public static final List<IdTagValue> DEFAULT_SHIELD_BLOCK_CHANCE = List.of(
 			IdTagValue.newId("minecraft:shield", 0.2d),
@@ -64,7 +64,8 @@ public class Shielding extends JsonFeature {
 		if (!this.isEnabled()
 				|| !(event.getEntity() instanceof Mob mob)
 				|| ModNBTData.get(mob, HAS_SHIELD_BEEN_GIVEN, Boolean.class)
-				|| mob.level().isClientSide)
+				|| mob.level().isClientSide
+				|| mob.getType().is(AFFECTED_ENTITY_TYPES))
 			return;
 
 		if (mob.getRandom().nextDouble() < chanceToEquip)

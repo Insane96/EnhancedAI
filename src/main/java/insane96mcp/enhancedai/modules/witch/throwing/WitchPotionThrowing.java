@@ -1,21 +1,19 @@
 package insane96mcp.enhancedai.modules.witch.throwing;
 
 import insane96mcp.enhancedai.EnhancedAI;
+import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.data.PotionOrMobEffect;
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.enhancedai.setup.NBTUtils;
+import insane96mcp.enhancedai.utils.GoalHelper;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.MinMax;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
-import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.monster.Witch;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
@@ -26,50 +24,60 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-@LoadFeature(module = Modules.Ids.WITCH, description = "Witches throw potions farther, faster and more potion types. Also no longer chase player if they can't see him. Use the enhancedai:better_potion_throwing entity type tag to add more witches that are affected by this feature.")
+@LoadFeature(module = Modules.Ids.WITCH, description = "Witches throw potions farther, faster and more potion types. Also no longer chase player if they can't see him. Use the enhancedai:witch/better_potion_throwing entity type tag to add more witches that are affected by this feature.")
 public class WitchPotionThrowing extends Feature {
-    public static final TagKey<EntityType<?>> BETTER_POTION_THROWING = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("better_potion_throwing"));
-    public static final String APPRENTICE = EnhancedAI.RESOURCE_PREFIX + "apprentice";
-    public static final String ATTACK_SPEED = EnhancedAI.RESOURCE_PREFIX + "attack_speed";
-    public static final String ATTACK_RANGE = EnhancedAI.RESOURCE_PREFIX + "attack_range";
-    public static final String LINGERING_CHANCE = EnhancedAI.RESOURCE_PREFIX + "lingering_chance";
-    public static final String ANOTHER_THROW_CHANCE = EnhancedAI.RESOURCE_PREFIX + "another_throw_chance";
+    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("witch/better_potion_throwing"));
 
     private static ForgeConfigSpec.ConfigValue<List<? extends String>> badPotionsListConfig;
     private static ForgeConfigSpec.ConfigValue<List<? extends String>> goodPotionsListConfig;
-    public static final List<String> badPotionsListDefault = List.of("minecraft:weakness", "minecraft:slowness", "minecraft:hunger,600,0", "minecraft:mining_fatigue,600,0", "minecraft:poison", "minecraft:blindness,120,0", "minecraft:strong_harming");
-    public static final List<String> goodPotionsListDefault = List.of("minecraft:regeneration", "minecraft:swiftness", "minecraft:strength", "minecraft:healing");
+    public static final List<String> badPotionsListDefault = List.of("minecraft:weakness", "minecraft:slowness", "minecraft:hunger,600,0", "minecraft:mining_fatigue,600,0", "minecraft:poison", "minecraft:blindness,120,0", "minecraft:harming");
+    public static final List<String> goodPotionsListDefault = List.of("minecraft:regeneration", "minecraft:swiftness", "minecraft:strength", "minecraft:healing", "minecraft:invisibility");
 
     public static ArrayList<PotionOrMobEffect> badPotionsList;
     public static ArrayList<PotionOrMobEffect> goodPotionsList;
 
     @Config(min = 0d, max = 1d, description = "Chance for the potions thrown by the Witch to be lingering.")
     public static Double lingeringChance = 0.15d;
-    @Config(min = 0d, max = 1d, description = "Chance for the Witch to throw another random potion right after she threw one.")
-    public static Double anotherThrowChance = 0.20d;
     @Config(min = 1, description = "Speed at which Witches throw potions (in ticks).")
-    public static MinMax throwSpeed = new MinMax(70, 90);
+    public static MinMax attackCooldown = new MinMax(70, 90);
     @Config(min = 8, max = 64, description = "Range at which Witches throw potions.")
-    public static MinMax throwRange = new MinMax(16, 24);
-    @Config(min = 0d, max = 1d, description = "Chance for a Witch to be an apprentice. Apprentice Witches throw random potions instead of in order, and have a chance to throw a wrong (good) potion.")
-    public static Double apprenticeWitchChance = 0.6d;
+    public static MinMax attackRange = new MinMax(16, 24);
+	@Config(min = 0d)
+	public static Double inaccuracy = 1d;
+	@Config(min = 0d, max = 1d, description = "Chance for a Witch to be an apprentice. Apprentice Witches throw random potions instead of in order, and have a chance to throw a wrong (good) potion.")
+	public static Double apprenticeChance = 0.5d;
     @Config(description = "If true, witches will throw a potion of slow falling at their feet when they're falling for more than 8 blocks.")
     public static Boolean useSlowFalling = true;
     @Config(min = 0d, max = 1d, description = "When below this health percentage Witches will throw Invisibility potions at their feet.")
-    public static Double healthThresholdInvisibility = 0.40d;
+    public static Double invisibilityHealthThreshold = 0.40d;
 
-    public WitchPotionThrowing(Module module, boolean enabledByDefault, boolean canBeDisabled) {
-        super(module, enabledByDefault, canBeDisabled);
+	public static EAIData<Double> LINGERING_CHANCE;
+	public static EAIData<Integer> ATTACK_COOLDOWN;
+	public static EAIData<Integer> ATTACK_RANGE;
+	public static EAIData<Double> INACCURACY;
+	public static EAIData<Boolean> APPRENTICE;
+	public static EAIData<Boolean> USE_SLOW_FALL;
+	public static EAIData<Double> INVISIBILITY_HEALTH_THRESHOLD;
+
+    public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
+        super.init(module, enabledByDefault, canBeDisabled);
+		LINGERING_CHANCE = EAIData.ofDouble(this.createDataKey("lingering_chance"));
+		ATTACK_COOLDOWN = EAIData.ofInt(this.createDataKey("attack_cooldown"));
+		ATTACK_RANGE = EAIData.ofInt(this.createDataKey("attack_range"));
+		INACCURACY = EAIData.ofDouble(this.createDataKey("inaccuracy"));
+		APPRENTICE = EAIData.ofBool(this.createDataKey("apprentice"));
+		USE_SLOW_FALL = EAIData.ofBool(this.createDataKey("use_slow_fall"));
+		INVISIBILITY_HEALTH_THRESHOLD = EAIData.ofDouble(this.createDataKey("invisibility_health_threshold"));
     }
 
     @Override
     public void loadConfigOptions() {
         super.loadConfigOptions();
         badPotionsListConfig = this.getBuilder()
-                .comment("A list of potions that the witch can throw at enemies. Format is effect_id,duration,amplifier. The potions are thrown in order and witches will not throw the same potion if the target has already the effect.")
+                .comment("A list of potions that the witch can throw at enemies. Format is effect_id,duration,amplifier. The potions are thrown in order and witches will not throw a potion if the target has already the effect.")
                 .defineList("Bad Potions List", badPotionsListDefault, o -> o instanceof String);
         goodPotionsListConfig = this.getBuilder()
-                .comment("A list of potions that the witch can throw at allies (in raids). Format is effect_id,duration,amplifier. The potions are thrown in order and witches will not throw the same potion if the target has already the effect.")
+                .comment("A list of potions that the witch can throw at allies (in raids). Format is effect_id,duration,amplifier. The potions are thrown in order and witches will not throw a potion if the target has already the effect.")
                 .defineList("Good Potions List", goodPotionsListDefault, o -> o instanceof String);
     }
 
@@ -86,24 +94,19 @@ public class WitchPotionThrowing extends Feature {
         if (!this.isEnabled()
                 || event.getLevel().isClientSide
                 || !(event.getEntity() instanceof Witch witch)
-                || !witch.getType().is(BETTER_POTION_THROWING))
+                || !witch.getType().is(AFFECTED_ENTITY_TYPES))
             return;
 
-        CompoundTag persistentData = witch.getPersistentData();
-        int attackSpeed = NBTUtils.getIntOrPutDefaultLegacy(persistentData, ATTACK_SPEED, throwSpeed.getIntRandBetween(witch.getRandom()));
-        int attackRange = NBTUtils.getIntOrPutDefaultLegacy(persistentData, ATTACK_RANGE, throwRange.getIntRandBetween(witch.getRandom()));
-        double lingeringChance1 = NBTUtils.getDoubleOrPutDefaultLegacy(persistentData, LINGERING_CHANCE, lingeringChance);
-        double anotherThrowChance1 = NBTUtils.getDoubleOrPutDefaultLegacy(persistentData, ANOTHER_THROW_CHANCE, anotherThrowChance);
-        boolean apprentice = NBTUtils.getBooleanOrPutDefaultLegacy(persistentData, APPRENTICE, witch.getRandom().nextDouble() < apprenticeWitchChance);
-
-        List<Goal> rangedAttackGoals = witch.goalSelector.availableGoals.stream()
-                .map(WrappedGoal::getGoal)
-                .filter(g -> g instanceof RangedAttackGoal)
-                .toList();
-        rangedAttackGoals.forEach(witch.goalSelector::removeGoal);
-
-        witch.goalSelector.addGoal(2, new WitchThrowPotionGoal(witch, attackSpeed, attackSpeed, attackRange, lingeringChance1, anotherThrowChance1, apprentice));
-        //witch.targetSelector.addGoal(2, new WitchBuffAllyGoal<>(witch, Mob.class, true, (livingEntity -> livingEntity != null && !witch.hasActiveRaid() && livingEntity.getType() != EntityType.WITCH)));
+		LINGERING_CHANCE.applyIfAbsent(witch, lingeringChance);
+		ATTACK_COOLDOWN.applyIfAbsent(witch, attackCooldown.getIntRandBetween(witch.getRandom()));
+		ATTACK_RANGE.applyIfAbsent(witch, attackRange.getIntRandBetween(witch.getRandom()));
+		INACCURACY.applyIfAbsent(witch, inaccuracy);
+		APPRENTICE.applyIfAbsent(witch, witch.getRandom().nextDouble() < apprenticeChance);
+		USE_SLOW_FALL.applyIfAbsent(witch, useSlowFalling);
+		INVISIBILITY_HEALTH_THRESHOLD.applyIfAbsent(witch, invisibilityHealthThreshold);
+		GoalHelper.removeGoal(witch.goalSelector, RangedAttackGoal.class);
+		witch.goalSelector.addGoal(2, new WitchThrowPotionGoal(witch));
+		//witch.targetSelector.addGoal(2, new WitchBuffAllyGoal<>(witch, Mob.class, true, (livingEntity -> livingEntity != null && !witch.hasActiveRaid() && livingEntity.getType() != EntityType.WITCH)));
     }
 
     public static boolean shouldUseSlowFalling() {

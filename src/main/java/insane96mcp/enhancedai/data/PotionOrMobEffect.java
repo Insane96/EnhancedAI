@@ -5,6 +5,7 @@ import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -50,8 +51,7 @@ public class PotionOrMobEffect {
 		return stack;
 	}
 
-	@Nullable
-	public MobEffect getMobEffect() {
+	public List<MobEffect> getMobEffects() {
 		List<MobEffect> mobEffects = new ArrayList<>();
 		if (this.potion != null) {
 			for (MobEffectInstance mobEffectInstance1 : this.potion.getEffects()) {
@@ -61,7 +61,16 @@ public class PotionOrMobEffect {
 		else {
 			mobEffects.add(this.mobEffectInstance.getEffect());
 		}
-		return !mobEffects.isEmpty() ? mobEffects.get(0) : null;
+		return mobEffects;
+	}
+
+	public boolean hasMobEffect(LivingEntity living) {
+		List<MobEffect> mobEffects = this.getMobEffects();
+		for (MobEffectInstance mobEffect : living.getActiveEffects()) {
+			if (mobEffects.contains(mobEffect.getEffect()))
+				return true;
+		}
+		return false;
 	}
 
 	public static ArrayList<PotionOrMobEffect> parseList(List<? extends String> list) {

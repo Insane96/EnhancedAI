@@ -72,6 +72,7 @@ public class ActualBlindness extends Feature {
 	@SubscribeEvent
 	public void onBlindnessApply(MobEffectEvent.Added event) {
 		if (!this.isEnabled()
+				|| event.getEffectInstance().getEffect() != MobEffects.BLINDNESS
 				|| !BLINDNESS_RANGE_MULTIPLIER_DATA.has(event.getEntity()))
 			return;
 
@@ -81,6 +82,8 @@ public class ActualBlindness extends Feature {
 	@SubscribeEvent
 	public void onBlindnessRemove(MobEffectEvent.Remove event) {
 		if (!this.isEnabled()
+				|| event.getEffectInstance() == null
+				|| event.getEffectInstance().getEffect() != MobEffects.BLINDNESS
 				|| event.getEntity().getAttribute(Attributes.FOLLOW_RANGE) == null)
 			return;
 

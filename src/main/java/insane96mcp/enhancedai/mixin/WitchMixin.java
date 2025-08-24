@@ -14,7 +14,6 @@ import insane96mcp.insanelib.util.MCUtils;
 import insane96mcp.insanelib.util.ModNBTData;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -108,8 +107,7 @@ public abstract class WitchMixin extends Raider {
 		distance *= distance;
 		if (this.getTarget() != null && this.getTarget() instanceof Player && this.distanceToSqr(this.getTarget()) > distance) {
 			for (PotionOrMobEffect potionOrMobEffect : ThirstyWitches.drinkPotion) {
-				MobEffect mobEffect = potionOrMobEffect.getMobEffect();
-				if (mobEffect != null && this.hasEffect(mobEffect))
+				if (potionOrMobEffect.hasMobEffect(this))
 					continue;
 
 				enhancedai$stackToUse = potionOrMobEffect.getPotionStack();
@@ -158,22 +156,6 @@ public abstract class WitchMixin extends Raider {
 /*
 		if (this.isDrinkingPotion()) {
 
-			if (this.usingTime-- <= 0) {
-				this.setUsingItem(false);
-				ItemStack itemstack = this.getMainHandItem();
-				this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
-				if (itemstack.is(Items.POTION)) {
-					List<MobEffectInstance> list = PotionUtils.getMobEffects(itemstack);
-					for(MobEffectInstance mobeffectinstance : list) {
-						this.addEffect(new MobEffectInstance(mobeffectinstance));
-					}
-				}
-				else if (itemstack.is(Items.MILK_BUCKET)) {
-					this.curePotionEffects(itemstack);
-				}
-
-				this.getAttribute(Attributes.MOVEMENT_SPEED).removeModifier(SPEED_MODIFIER_DRINKING);
-			}
 		}
 		else {
 
