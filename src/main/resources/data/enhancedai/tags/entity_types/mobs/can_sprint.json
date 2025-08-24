@@ -5,7 +5,6 @@
         "minecraft:drowned",
         "minecraft:skeleton",
         "minecraft:stray",
-        "minecraft:snow_golem",
         "minecraft:wandering_trader",
         "minecraft:enderman",
         "minecraft:piglin",
@@ -14,7 +13,6 @@
         "minecraft:piglin_brute",
         "minecraft:pillager",
         "minecraft:vindicator",
-        "minecraft:witch",
         "minecraft:wither_skeleton",
         "minecraft:zombie_villager",
         {

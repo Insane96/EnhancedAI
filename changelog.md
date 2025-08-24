@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Ported thirsty witches
+
 ## Alpha 3.0.1
 This version has no Witches (except for dark arts and fleeing) as they are WIP
 * Attribute renamed: `enhancedai:generic.xray_follow_range` -> `enhancedai:xray_follow_range`

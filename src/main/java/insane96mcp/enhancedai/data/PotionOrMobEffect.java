@@ -40,7 +40,7 @@ public class PotionOrMobEffect {
 		return getStackInternal(Items.LINGERING_POTION);
 	}
 
-	public ItemStack getStackInternal(Item item) {
+	private ItemStack getStackInternal(Item item) {
 		ItemStack stack;
 		if (this.potion != null)
 			stack = PotionUtils.setPotion(new ItemStack(item), this.potion);
