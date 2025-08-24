@@ -90,7 +90,8 @@ public abstract class WitchMixin extends Raider {
 	@Expression("potion != null")
 	@ModifyExpressionValue(method = "aiStep", at = @At("MIXINEXTRAS:EXPRESSION"))
 	private boolean enhancedai$newUseItem(boolean original) {
-		if (!Feature.isEnabled(ThirstyWitches.class))
+		if (!Feature.isEnabled(ThirstyWitches.class)
+				|| !this.getType().is(ThirstyWitches.AFFECTED_ENTITY_TYPES))
 			return original;
 
 		enhancedai$stackToUse = ItemStack.EMPTY;
@@ -134,7 +135,8 @@ public abstract class WitchMixin extends Raider {
 
 	@WrapOperation(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/monster/Witch;setItemSlot(Lnet/minecraft/world/entity/EquipmentSlot;Lnet/minecraft/world/item/ItemStack;)V", ordinal = 1))
 	private void enhancedai$changeUseItem(Witch instance, EquipmentSlot equipmentSlot, ItemStack itemStack, Operation<Void> original) {
-		if (!Feature.isEnabled(ThirstyWitches.class)) {
+		if (!Feature.isEnabled(ThirstyWitches.class)
+				|| !this.getType().is(ThirstyWitches.AFFECTED_ENTITY_TYPES)) {
 			original.call(instance, equipmentSlot, itemStack);
 			return;
 		}
@@ -165,50 +167,8 @@ public abstract class WitchMixin extends Raider {
 			}
 		}
 		else {
-			ItemStack stack = ItemStack.EMPTY;
 
-			if (this.getTarget() != null && this.getTarget() instanceof Player && this.distanceToSqr(this.getTarget()) > 36d) {
-				List<PotionOrMobEffect> listToLoop = ThirstyWitches.drinkPotion;
-				for (PotionOrMobEffect potionOrMobEffect : listToLoop) {
-					MobEffect mobEffect = potionOrMobEffect.getMobEffect();
-					if (mobEffect != null && this.hasEffect(mobEffect))
-						continue;
-
-					stack = potionOrMobEffect.getPotionStack();
-					break;
-				}
-			}
-			else {
-				if (this.random.nextFloat() < ThirstyWitches.waterBreathingChance && this.isEyeInFluid(FluidTags.WATER) && !this.hasEffect(MobEffects.WATER_BREATHING) && this.getAirSupply() < this.getMaxAirSupply() / 2) {
-					stack = PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER_BREATHING);
-				}
-				else if (this.random.nextFloat() < ThirstyWitches.fireResistanceChance && (this.isOnFire() || this.getLastDamageSource() != null && this.getLastDamageSource().is(DamageTypeTags.IS_FIRE)) && !this.hasEffect(MobEffects.FIRE_RESISTANCE)) {
-					stack = PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.FIRE_RESISTANCE);
-				}
-				else if (this.getHealth() / this.getMaxHealth() < ThirstyWitches.healingThreshold && this.random.nextFloat() < ThirstyWitches.healingChance) {
-					if (this.getHealth() < this.getMaxHealth() * ThirstyWitches.strongHealingThreshold)
-						stack = PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.STRONG_HEALING);
-					else
-						stack = PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.HEALING);
-				}
-			}
-
-			if (stack == null && MCUtils.hasLongNegativeEffect(this) && this.random.nextDouble() < ThirstyWitches.milkChance)
-				stack = new ItemStack(Items.MILK_BUCKET);
-
-			if (stack != ItemStack.EMPTY) {
-				this.setItemSlot(EquipmentSlot.MAINHAND, stack);
-				this.usingTime = this.getMainHandItem().getUseDuration();
-				this.setUsingItem(true);
-				if (!this.isSilent()) {
-					this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.WITCH_DRINK, this.getSoundSource(), 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
-				}
-
-				AttributeInstance attributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
-				attributeinstance.removeModifier(SPEED_MODIFIER_DRINKING);
-				attributeinstance.addTransientModifier(SPEED_MODIFIER_DRINKING);
-			}
-			else {
+			if nothing to drink {
 				if (WitchPotionThrowing.shouldUseSlowFalling() && this.fallDistance > 8 && !this.hasEffect(MobEffects.SLOW_FALLING)) {
 					ItemStack slowFallingStack = MCUtils.setCustomEffects(new ItemStack(Items.SPLASH_POTION), List.of(new MobEffectInstance(MobEffects.SLOW_FALLING, 300, 0)));
 					this.getLookControl().setLookAt(this.getX(), this.getY(), this.getZ());
