@@ -1,7 +1,8 @@
 # Changelog
 
-## Upcoming
+## Alpha 3.0.2
 * Finished porting witches
+* Decided to not port custom attack and flee for now, will see in the future
 
 ## Alpha 3.0.1
 This version has no Witches (except for dark arts and fleeing) as they are WIP
