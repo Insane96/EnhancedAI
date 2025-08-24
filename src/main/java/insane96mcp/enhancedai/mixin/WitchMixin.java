@@ -1,39 +1,22 @@
 package insane96mcp.enhancedai.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import insane96mcp.enhancedai.data.PotionOrMobEffect;
-import insane96mcp.enhancedai.modules.Modules;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import insane96mcp.enhancedai.modules.witch.ThirstyWitches;
 import insane96mcp.enhancedai.modules.witch.darkart.DarkArt;
-import insane96mcp.enhancedai.modules.witch.throwing.WitchPotionThrowing;
-import insane96mcp.insanelib.util.MCUtils;
+import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.util.ModNBTData;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.DamageTypeTags;
-import net.minecraft.tags.FluidTags;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.EntityEvent;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableWitchTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestHealableRaiderTargetGoal;
-import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.PotionUtils;
-import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.LevelEvent;
-import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -42,7 +25,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.List;
 import java.util.UUID;
 
 @Mixin(Witch.class)
@@ -80,9 +62,19 @@ public abstract class WitchMixin extends Raider {
 		return alive && !ModNBTData.get(this, DarkArt.PERFORMING_DARK_ARTS, Boolean.class);
 	}
 
+	@WrapOperation(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/monster/Witch;setItemSlot(Lnet/minecraft/world/entity/EquipmentSlot;Lnet/minecraft/world/item/ItemStack;)V"))
+	private void enhancedai$changeUseItem(Witch instance, EquipmentSlot equipmentSlot, ItemStack itemStack, Operation<Void> original) {
+		if (!Feature.isEnabled(ThirstyWitches.class)) {
+			original.call(instance, equipmentSlot, itemStack);
+			return;
+		}
+
+
+	}
+
 	@Inject(at = @At("HEAD"), method = "aiStep", cancellable = true)
 	private void aiStep(CallbackInfo ci) {
-        if (!Modules.witch.isEnabled())
+        /*if (!Modules.witch.isEnabled())
             return;
 
         ci.cancel();
@@ -198,7 +190,7 @@ public abstract class WitchMixin extends Raider {
 			this.level().broadcastEntityEvent(this, EntityEvent.WITCH_HAT_MAGIC);
 		}
 
-		super.aiStep();
+		super.aiStep();*/
 	}
 
 	@Shadow

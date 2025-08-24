@@ -1,6 +1,7 @@
 # Changelog
 
-## Upcoming
+## Alpha 3.0.1
+This version has no Witches (except for dark arts and fleeing) as they are WIP
 * Attribute renamed: `enhancedai:generic.xray_follow_range` -> `enhancedai:xray_follow_range`
 * Many features have been split into multiple features
   * This makes it easier to disable single features
@@ -11,6 +12,11 @@
 * You now have more control over which mobs can ride other mobs
 * Fixed command not accepting strings correctly (you have to surround them with quotes)
 * Fixed anti-cheese probably not working
+
+### Not yet Ported
+* Witches: everything except dark art requires a full rewrite to make it less aggressive in changing vanilla code
+* Custom Flee: requires a bit of thought to make it work with the new AI data
+* Custom Targeting: requires a bit of thought to make it work with the new AI data
 
 ## Alpha 3.0.0
 You are able to change AI at runtime without having to reload the world thanks to the new tech: AI Data, which lets you change parameters per mob, without having to reload the world.  
@@ -55,12 +61,6 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
 * Fixed disabling "Melee Attacking" feature making melee attacks have no cooldown
 * Fixed fisher mobs canceling the fishing rod cast if they can't see the target
 * Fixed dark art witches dropping the equipped spawn egg
-
-### Not yet Ported
-* Witches: everything except dark art requires a full rewrite to make it less aggressive in changing vanilla code
-* Custom Flee: requires a bit of thought to make it work with the new AI data
-* Riding: Requires a rewrite to allow different mobs to use different mounts
-* Custom Targeting: requires a bit of thought to make it work with the new AI data
 
 ## 2.7.1
 * Villagers no longer use target changes
