@@ -24,6 +24,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestHealableRaiderTargetGoal
 import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
@@ -76,10 +77,18 @@ public abstract class WitchMixin extends Raider {
 		return alive && !ModNBTData.get(this, DarkArt.PERFORMING_DARK_ARTS, Boolean.class);
 	}
 
+	@WrapOperation(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"))
+	public boolean enhancedai$drinkMilk(ItemStack instance, Item pItem, Operation<Boolean> original) {
+		boolean ret = original.call(instance, pItem);
+		if (!ret && instance.is(Items.MILK_BUCKET))
+			Items.MILK_BUCKET.finishUsingItem(instance, this.level(), this);
+		return ret;
+	}
+
 	@ModifyExpressionValue(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/monster/Witch;isDrinkingPotion()Z"))
 	public boolean enhancedai$playSoundWhenDrinking(boolean original) {
-		if (original && this.usingTime % 8 == 0)
-			this.playSound(SoundEvents.GENERIC_DRINK, 1.0f, this.random.nextFloat() * 0.1F + 0.9F);
+		if (original && ThirstyWitches.playSoundWhenDrinking && this.usingTime % 4 == 0)
+			this.playSound(SoundEvents.GENERIC_DRINK, 0.75f, this.random.nextFloat() * 0.1F + 0.9F);
 		return original;
 	}
 
@@ -128,7 +137,7 @@ public abstract class WitchMixin extends Raider {
 				enhancedai$stackToUse = PotionUtils.setPotion(new ItemStack(Items.POTION), potion);
 		}
 
-		if (enhancedai$stackToUse == null && MCUtils.hasLongNegativeEffect(this) && this.random.nextDouble() < ThirstyWitches.MILK_CHANCE.get(this))
+		if (enhancedai$stackToUse.isEmpty() && MCUtils.hasLongNegativeEffect(this) && this.random.nextDouble() < ThirstyWitches.MILK_CHANCE.get(this))
 			enhancedai$stackToUse = new ItemStack(Items.MILK_BUCKET);
 		return !enhancedai$stackToUse.isEmpty();
 	}
