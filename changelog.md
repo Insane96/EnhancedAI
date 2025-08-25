@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Fixed mobs with ranged attack AI trying to parkour
+
 ## Alpha 3.0.2
 * Finished porting witches
 * Decided to not port custom attack and flee for now, will see in the future

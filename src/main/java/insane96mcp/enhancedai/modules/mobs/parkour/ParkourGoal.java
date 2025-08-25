@@ -1,9 +1,12 @@
 package insane96mcp.enhancedai.modules.mobs.parkour;
 
+import insane96mcp.enhancedai.ai.EAIRangedAttackGoal;
+import insane96mcp.enhancedai.modules.illager.shoot.EAIPillagerAttackGoal;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
@@ -24,33 +27,65 @@ public class ParkourGoal extends Goal {
 		this.setFlags(EnumSet.of(Flag.JUMP));
 	}
 
-	@Override
-	public boolean canUse() {
-		if (!this.goalOwner.onGround()
-				|| this.goalOwner.isPassenger()) {
-			this.resetLastPosition();
-			return false;
-		}
-		this.target = this.goalOwner.getTarget();
-		if (this.target == null
-				|| !this.goalOwner.hasLineOfSight(this.target)) {
-			this.resetLastPosition();
-			return false;
-		}
-		if (!this.isStuck())
-			return false;
-		Vec3 direction = new Vec3(this.target.getX() - this.goalOwner.getX(), this.target.getY() - this.goalOwner.getY(), this.target.getZ() - this.goalOwner.getZ()).normalize();
+    private static final int MAX_FORWARD_BLOCK_CHECK = 3;
+    private static final double FORWARD_STEP_EPSILON = 0.1d;
+    private static final double SLIGHT_DOWNWARD_NUDGE = -0.01d;
 
-		//TODO Check 1 block above and below
-		for (int i = 1; i <= 3; i++) {
-			BlockPos pos = BlockPos.containing(this.goalOwner.position().add(direction.scale(i + 0.1d)).add(0.0, -0.01d, 0.0));
-			if (this.goalOwner.level().getBlockState(pos).isSolid()) {
-				jumpBlocks = i;
-				break;
-			}
-		}
-		return jumpBlocks > 0;
-	}
+    @Override
+    public boolean canUse() {
+        if (!this.goalOwner.onGround()
+                || this.goalOwner.isPassenger()
+                || hasConflictingRunningGoals()) {
+            this.resetLastPosition();
+            return false;
+        }
+
+        this.target = this.goalOwner.getTarget();
+        if (this.target == null || !this.goalOwner.hasLineOfSight(this.target)) {
+            this.resetLastPosition();
+            return false;
+        }
+
+        if (!this.isStuck()) {
+            return false;
+        }
+
+        Vec3 toTargetDir = new Vec3(
+                this.target.getX() - this.goalOwner.getX(),
+                this.target.getY() - this.goalOwner.getY(),
+                this.target.getZ() - this.goalOwner.getZ()
+        ).normalize();
+
+        // TODO Check 1 block above and below
+        this.jumpBlocks = findJumpBlocksTowardsTarget(toTargetDir);
+
+        return this.jumpBlocks > 0;
+    }
+
+    private boolean hasConflictingRunningGoals() {
+        return this.goalOwner.goalSelector.getRunningGoals().anyMatch(wrappedGoal ->
+                isConflictingGoal(wrappedGoal.getGoal())
+        );
+    }
+
+    private boolean isConflictingGoal(Goal goal) {
+        return goal instanceof RangedAttackGoal
+                || goal instanceof EAIRangedAttackGoal
+                || goal instanceof EAIPillagerAttackGoal;
+    }
+
+    private int findJumpBlocksTowardsTarget(Vec3 toTargetDir) {
+        for (int offsetBlocks = 1; offsetBlocks <= MAX_FORWARD_BLOCK_CHECK; offsetBlocks++) {
+            Vec3 probe = this.goalOwner.position()
+                    .add(toTargetDir.scale(offsetBlocks + FORWARD_STEP_EPSILON))
+                    .add(0.0, SLIGHT_DOWNWARD_NUDGE, 0.0);
+            BlockPos candidatePos = BlockPos.containing(probe);
+            if (this.goalOwner.level().getBlockState(candidatePos).isSolid()) {
+                return offsetBlocks;
+            }
+        }
+        return 0;
+    }
 
 	@Override
 	public boolean canContinueToUse() {
