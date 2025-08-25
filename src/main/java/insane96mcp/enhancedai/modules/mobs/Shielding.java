@@ -78,6 +78,7 @@ public class Shielding extends JsonFeature {
 		LivingEntity attacked = event.getEntity();
 		if (!this.isEnabled()
 				|| event.getSource().is(DamageTypeTags.BYPASSES_SHIELD)
+                || !(event.getEntity() instanceof Mob)
 				|| attacked.level().isClientSide)
             return;
 
