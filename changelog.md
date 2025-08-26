@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## Alpha 3.0.3
 * Halved the default time Drowned are sun-resistant
 * Fixed mobs with ranged attack AI trying to parkour
 * Fixed player blocking hits when wielding a shield
