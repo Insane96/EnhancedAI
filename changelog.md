@@ -1,5 +1,12 @@
 # Changelog
 
+## Upcoming
+* Fisher Mobs
+  * Fishing range is now configurable
+    * And has been increased from 24 to 32
+  * Pull strength is now capped
+* Parkour is now disabled by default
+
 ## Alpha 3.0.3
 * Halved the default time Drowned are sun-resistant
 * Fixed mobs with ranged attack AI trying to parkour
