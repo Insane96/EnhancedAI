@@ -4,6 +4,7 @@
 * Halved the default time Drowned are sun-resistant
 * Fixed mobs with ranged attack AI trying to parkour
 * Fixed player blocking hits when wielding a shield
+* Fixed shield being given to mobs outside the entity type tag
 
 ## Alpha 3.0.2
 * Finished porting witches

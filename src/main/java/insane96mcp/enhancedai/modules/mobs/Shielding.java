@@ -65,7 +65,7 @@ public class Shielding extends JsonFeature {
 				|| !(event.getEntity() instanceof Mob mob)
 				|| ModNBTData.get(mob, HAS_SHIELD_BEEN_GIVEN, Boolean.class)
 				|| mob.level().isClientSide
-				|| mob.getType().is(AFFECTED_ENTITY_TYPES))
+				|| !mob.getType().is(AFFECTED_ENTITY_TYPES))
 			return;
 
 		if (mob.getRandom().nextDouble() < chanceToEquip)
