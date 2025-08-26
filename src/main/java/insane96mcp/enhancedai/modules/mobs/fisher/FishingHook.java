@@ -32,6 +32,8 @@ public class FishingHook extends Projectile {
     private Entity hookedIn;
     private FishHookState currentState = FishHookState.FLYING;
 
+    private static final double MAX_PULL_STRENGTH = 0.6d;
+
     public FishingHook(EntityType<? extends FishingHook> p_150141_, Level p_150142_) {
         super(p_150141_, p_150142_);
         this.noCulling = true;
@@ -215,7 +217,13 @@ public class FishingHook extends Projectile {
     protected void pullEntity(Entity entity) {
         Entity owner = this.getOwner();
         if (owner != null) {
-            Vec3 vec3 = (new Vec3(owner.getX() - this.getX(), Math.max(owner.getY() - this.getY(), 1d), owner.getZ() - this.getZ())).scale(entity instanceof LivingEntity ? 0.3D : 0.1d);
+            Vec3 vec3 = (new Vec3(owner.getX() - this.getX(), Math.max(owner.getY() - this.getY(), 1d), owner.getZ() - this.getZ())).scale(0.3d);
+            // Clamp the impulse to avoid excessive pull strength
+            double len = vec3.length();
+            if (len > FisherMobs.maxPullStrength && len > 0d) {
+                vec3 = vec3.scale(FisherMobs.maxPullStrength / len);
+            }
+
             entity.stopRiding();
             entity.setDeltaMovement(entity.getDeltaMovement().add(vec3));
         }

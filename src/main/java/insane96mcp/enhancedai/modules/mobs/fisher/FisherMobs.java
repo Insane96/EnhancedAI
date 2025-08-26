@@ -41,8 +41,13 @@ public class FisherMobs extends Feature {
 	@Config(min = 0d, description = "After how many ticks a mob will be forced to reel in the bobber.")
 	public static Integer forceReelIn = 60;
 
-	@Config(min = 0d, description = "Range at which the mob will stop fishing and attack the target")
-	public static Double attackRange = 5d;
+    @Config(min = 0d, description = "Range at which the mob will fish targets")
+    public static Double fishRange = 32d;
+    @Config(min = 0d, description = "Range at which the mob will stop fishing and attack the target")
+    public static Double attackRange = 5d;
+
+    @Config(min = 0d)
+    public static Double maxPullStrength = 3.5d;
 
 	@Config(min = 0d)
 	public static Integer inaccuracy = 1;
@@ -52,6 +57,7 @@ public class FisherMobs extends Feature {
 	public static EAIData<Integer> REEL_IN_TICKS;
 	public static EAIData<Integer> COOLDOWN;
 	public static EAIData<Integer> FORCE_REEL_IN;
+	public static EAIData<Double> FISH_RANGE;
 	public static EAIData<Double> ATTACK_RANGE;
 	public static EAIData<Integer> INACCURACY;
 
@@ -62,6 +68,7 @@ public class FisherMobs extends Feature {
 		REEL_IN_TICKS = EAIData.ofInt(this.createDataKey("reel_in_ticks"));
 		COOLDOWN = EAIData.ofInt(this.createDataKey("cooldown"));
 		FORCE_REEL_IN = EAIData.ofInt(this.createDataKey("force_reel_in"));
+		FISH_RANGE = EAIData.ofDouble(this.createDataKey("fish_range"));
 		ATTACK_RANGE = EAIData.ofDouble(this.createDataKey("attack_range"));
 		INACCURACY = EAIData.ofInt(this.createDataKey("inaccuracy"));
 	}
@@ -83,6 +90,7 @@ public class FisherMobs extends Feature {
 		REEL_IN_TICKS.applyIfAbsent(mob, (int) reelInTicks.getByDifficulty(mob.level()));
 		COOLDOWN.applyIfAbsent(mob, (int) cooldown.getByDifficulty(mob.level()));
 		FORCE_REEL_IN.applyIfAbsent(mob, forceReelIn);
+		FISH_RANGE.applyIfAbsent(mob, fishRange);
 		ATTACK_RANGE.applyIfAbsent(mob, attackRange);
 		INACCURACY.applyIfAbsent(mob, inaccuracy);
 	}
