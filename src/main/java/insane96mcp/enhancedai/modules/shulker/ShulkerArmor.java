@@ -18,11 +18,11 @@ import java.util.UUID;
 public class ShulkerArmor extends Feature {
     public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("shulker/apply_armor_modifiers"));
     @Config(min = 0)
-    public static Double armorWhenClosed = 30d;
+    public static Double armorWhenClosed = 24d;
     @Config(min = 0)
-    public static Double armorWhenPeeking = 20d;
+    public static Double armorWhenPeeking = 16d;
     @Config(min = 0)
-    public static Double armorWhenOpen = 10d;
+    public static Double armorWhenOpen = 8d;
 
     private static final UUID COVERED_ARMOR_MODIFIER_UUID = UUID.fromString("7E0292F2-9434-48D5-A29F-9583AF7DF27F");
     public static AttributeModifier CLOSED_MODIFIER;

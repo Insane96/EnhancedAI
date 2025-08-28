@@ -25,6 +25,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
@@ -161,14 +162,9 @@ public class Targeting extends JsonFeature {
 			if (neutral && goal.targetType == Player.class)
 				continue;
 
-			EAINearestAttackableTarget<? extends LivingEntity> newTargetGoal;
+            EAINearestAttackableTarget<? extends LivingEntity> newTargetGoal = createTargetGoal(mob, goal);
 
-			if (mob instanceof Spider)
-				newTargetGoal = new EAISpiderTargetGoal<>((Spider) mob, goal.targetType, false, true, goal.targetConditions);
-			else
-				newTargetGoal = new EAINearestAttackableTarget<>(mob, goal.targetType, false, true, goal.targetConditions);
-
-			toAdd.add(new WrappedGoal(prioritizedGoal.getPriority(), newTargetGoal));
+            toAdd.add(new WrappedGoal(prioritizedGoal.getPriority(), newTargetGoal));
 		}
 		toRemove.forEach(mob.targetSelector::removeGoal);
 		toAdd.forEach(wrappedGoal ->
@@ -176,7 +172,22 @@ public class Targeting extends JsonFeature {
 		TARGET_CHANCE.applyIfAbsent(mob, betterHurtByTarget$targetChance);
 	}
 
-	private void processHurtByGoal(Mob mob) {
+    private static EAINearestAttackableTarget<? extends LivingEntity> createTargetGoal(Mob mob, NearestAttackableTargetGoal<?> goal) {
+        EAINearestAttackableTarget<? extends LivingEntity> newTargetGoal = new EAINearestAttackableTarget<>(mob, goal.targetType, false, true, goal.targetConditions);;
+
+        if (mob instanceof Spider spider)
+            newTargetGoal = new EAISpiderTargetGoal<>(spider, goal.targetType, false, true, goal.targetConditions);
+        else if (mob instanceof Shulker shulker) {
+            if (goal instanceof Shulker.ShulkerNearestAttackGoal)
+                newTargetGoal = new EAIShulkerNearestAttackTargetGoal<>(shulker, goal.targetType, false, true, goal.targetConditions);
+            else if (goal instanceof Shulker.ShulkerDefenseAttackGoal)
+                newTargetGoal = new EAIShulkerNearestDefenseTargetGoal<>(shulker, goal.targetType, false, true, goal.targetConditions);
+        }
+
+        return newTargetGoal;
+    }
+
+    private void processHurtByGoal(Mob mob) {
 		if (!betterHurtByTarget$enable
 				|| !mob.getType().is(BETTER_HURT_BY))
 			return;

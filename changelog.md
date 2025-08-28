@@ -6,6 +6,9 @@
     * And has been increased from 24 to 32
   * Pull strength is now capped
 * Parkour is now disabled by default
+* Lowered default shulker armor
+* Fixed shulkers attacking each-oth****er and in peaceful
+  * Had to create custom Targeting AIs for them
 
 ## Alpha 3.0.3
 * Halved the default time Drowned are sun-resistant
