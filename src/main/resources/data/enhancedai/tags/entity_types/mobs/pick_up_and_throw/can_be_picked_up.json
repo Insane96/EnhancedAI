@@ -1,0 +1,19 @@
+{
+    "values": [
+        "minecraft:creeper",
+        "minecraft:zombie",
+        "minecraft:husk",
+        "minecraft:zombie_villager",
+        "minecraft:drowned",
+        "minecraft:spider",
+        "minecraft:cave_spider",
+        {
+            "required": false,
+            "id": "caverns_and_chasms:deeper"
+        },
+        {
+            "required": false,
+            "id": "caverns_and_chasms:mime"
+        }
+    ]
+}
