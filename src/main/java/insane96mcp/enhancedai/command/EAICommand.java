@@ -5,6 +5,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.data.EAIData;
+import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -97,12 +98,16 @@ public class EAICommand {
 								availableGoals.sort(Comparator.comparingInt(WrappedGoal::getPriority));
 								for (WrappedGoal goal : availableGoals) {
 									component.append(CommonComponents.NEW_LINE).append(CommonComponents.SPACE).append(Component.literal("(" + goal.getPriority() + ") " + goal.getGoal().getClass().getSimpleName() + "  " + goal.getFlags()));
+                                    if (goal.isRunning())
+                                        component.withStyle(ChatFormatting.GREEN);
 								}
 								component.append(CommonComponents.NEW_LINE).append(CommonComponents.NEW_LINE).append(Component.literal("Target Selector: "));
 								List<WrappedGoal> targetGoals = new ArrayList<>(mob.targetSelector.availableGoals);
 								targetGoals.sort(Comparator.comparingInt(WrappedGoal::getPriority));
 								for (WrappedGoal goal : targetGoals) {
 									component.append(CommonComponents.NEW_LINE).append(CommonComponents.SPACE).append(Component.literal("(" + goal.getPriority() + ") " + goal.getGoal().getClass().getSimpleName() + "  " + goal.getFlags()));
+                                    if (goal.isRunning())
+                                        component.withStyle(ChatFormatting.GREEN);
 								}
 
 								ctx.getSource().sendSuccess(() -> component, true);

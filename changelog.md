@@ -7,8 +7,10 @@
   * Pull strength is now capped
 * Parkour is now disabled by default
 * Lowered default shulker armor
-* Fixed shulkers attacking each-oth****er and in peaceful
+* Fixed shulkers attacking each other and in peaceful
   * Had to create custom Targeting AIs for them
+* list_goals command now shows running goals in green
+* Web Throwers feature is no longer limited to player targets
 
 ## Alpha 3.0.3
 * Halved the default time Drowned are sun-resistant
