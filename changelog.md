@@ -1,6 +1,9 @@
 # Changelog
 
 ## Upcoming
+* Added Fire Immune Ticks
+  * Set how many ticks a mob will be immune to fire before it starts to burn
+  * By default it's now the same as the player (20 ticks)
 * Fisher Mobs
   * Fishing range is now configurable
     * And has been increased from 24 to 32
