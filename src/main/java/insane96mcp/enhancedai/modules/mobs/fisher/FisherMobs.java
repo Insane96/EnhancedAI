@@ -41,13 +41,13 @@ public class FisherMobs extends Feature {
 	@Config(min = 0d, description = "After how many ticks a mob will be forced to reel in the bobber.")
 	public static Integer forceReelIn = 60;
 
-    @Config(min = 0d, description = "Range at which the mob will fish targets")
-    public static Double fishRange = 32d;
+    @Config(min = 0d, max = 30, description = "Range at which the mob will fish targets")
+    public static Double fishRange = 24d;
     @Config(min = 0d, description = "Range at which the mob will stop fishing and attack the target")
     public static Double attackRange = 5d;
 
     @Config(min = 0d)
-    public static Double maxPullStrength = 3.5d;
+    public static Double maxPullStrength = 4d;
 
 	@Config(min = 0d)
 	public static Integer inaccuracy = 1;

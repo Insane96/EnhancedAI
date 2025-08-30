@@ -1,12 +1,13 @@
 # Changelog
 
 ## Upcoming
+* Added Pick up and Throw feature
+  * Zombies are now able to pick up some mobs and throw them at you
 * Added Fire Immune Ticks
   * Set how many ticks a mob will be immune to fire before it starts to burn
   * By default it's now the same as the player (20 ticks)
 * Fisher Mobs
   * Fishing range is now configurable
-    * And has been increased from 24 to 32
   * Pull strength is now capped
 * Parkour is now disabled by default
 * Lowered default shulker armor
@@ -14,6 +15,7 @@
   * Had to create custom Targeting AIs for them
 * list_goals command now shows running goals in green
 * Web Throwers feature is no longer limited to player targets
+* Fixed prevent infighting not working
 
 ## Alpha 3.0.3
 * Halved the default time Drowned are sun-resistant

@@ -217,7 +217,7 @@ public class FishingHook extends Projectile {
     protected void pullEntity(Entity entity) {
         Entity owner = this.getOwner();
         if (owner != null) {
-            Vec3 vec3 = (new Vec3(owner.getX() - this.getX(), Math.max(owner.getY() - this.getY(), 1d), owner.getZ() - this.getZ())).scale(0.3d);
+            Vec3 vec3 = (new Vec3(owner.getX() - this.getX(), Math.max(owner.getY() - this.getY(), 3.5d), owner.getZ() - this.getZ())).scale(0.3d);
             // Clamp the impulse to avoid excessive pull strength
             double len = vec3.length();
             if (len > FisherMobs.maxPullStrength && len > 0d) {
