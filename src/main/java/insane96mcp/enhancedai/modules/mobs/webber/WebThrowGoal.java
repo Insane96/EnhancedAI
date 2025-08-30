@@ -4,12 +4,11 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.player.Player;
 
 public class WebThrowGoal extends Goal {
 
 	private final Mob mob;
-	private Player targetPlayer;
+	private LivingEntity target;
 
 	private int cooldown;
 
@@ -18,11 +17,11 @@ public class WebThrowGoal extends Goal {
 	}
 
 	public boolean canUse() {
-		LivingEntity target = this.mob.getTarget();
-		if (!(target instanceof Player))
+		this.target = this.mob.getTarget();
+		if (this.target == null)
 			return false;
 
-		double distance = this.mob.distanceToSqr(target);
+		double distance = this.mob.distanceToSqr(this.target);
 		if (--this.cooldown > 0)
 			return false;
 
@@ -38,20 +37,17 @@ public class WebThrowGoal extends Goal {
 	}
 
 	public void start() {
-		this.targetPlayer = (Player) this.mob.getTarget();
-		if (this.targetPlayer == null)
+		if (!this.mob.hasLineOfSight(this.target))
 			return;
-		if (!this.mob.hasLineOfSight(this.targetPlayer))
-			return;
-		double distance = this.mob.distanceTo(this.targetPlayer);
-		double distanceY = this.targetPlayer.getY() - this.mob.getY();
+		double distance = this.mob.distanceTo(this.target);
+		double distanceY = this.target.getY() - this.mob.getY();
 		float f = 2.0F / 3.0F;
 		ThrownWebEntity thrownWeb = new ThrownWebEntity(this.mob.level(), this.mob);
-		double d0 = this.targetPlayer.getX() - this.mob.getX();
-		double d2 = this.targetPlayer.getZ() - this.mob.getZ();
+		double d0 = this.target.getX() - this.mob.getX();
+		double d2 = this.target.getZ() - this.mob.getZ();
 		double distanceXZ = Math.sqrt(d0 * d0 + d2 * d2);
-		double yPos = this.targetPlayer.getY(0d);
-		yPos += this.targetPlayer.getEyeHeight() * 0.5 + (distanceY / distanceXZ);
+		double yPos = this.target.getY(0d);
+		yPos += this.target.getEyeHeight() * 0.5 + (distanceY / distanceXZ);
 		double d1 = yPos - thrownWeb.getY();
 		thrownWeb.shoot(d0, d1 + distanceXZ * 0.18d, d2, f * 1.1f + ((float)distance / 32f) + (float)Math.max(distanceY / 48d, 0f), 0);
 		thrownWeb.setDamage(ThrowingWeb.DAMAGE.get(this.mob).floatValue());
@@ -65,6 +61,6 @@ public class WebThrowGoal extends Goal {
 	}
 
 	public void stop() {
-		this.targetPlayer = null;
+		this.target = null;
 	}
 }
