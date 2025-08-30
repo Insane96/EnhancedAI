@@ -87,7 +87,7 @@ public class Targeting extends JsonFeature {
 				(mob, multiplier) -> mob.getNavigation().setMaxVisitedNodesMultiplier(multiplier.floatValue()));
 		HURT_BY_PREFER_PLAYERS = EAIData.ofBool(this.createDataKey("hurt_by_prefer_players"));
 		HURT_BY_PREVENT_INFIGHTING = EAIData.ofBool(this.createDataKey("hurt_by_prevent_infighting"), (mob, preventInfighting) ->
-			GoalHelper.getGoal(mob.goalSelector, EAIHurtByTargetGoal.class).ifPresent(goal -> {
+			GoalHelper.getGoal(mob.targetSelector, EAIHurtByTargetGoal.class).ifPresent(goal -> {
 				if (preventInfighting) goal.preventInfighting();
 				else goal.allowInfighting();
 			})
