@@ -6,6 +6,7 @@
 * Added Fire Immune Ticks
   * Set how many ticks a mob will be immune to fire before it starts to burn
   * By default it's now the same as the player (20 ticks)
+* Only 50% of mobs will get the xray range override
 * Fisher Mobs
   * Fishing range is now configurable
   * Pull strength is now capped
