@@ -21,7 +21,7 @@ public class PickUpAndThrow extends Feature {
     public static final TagKey<EntityType<?>> CAN_PICK_UP = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/pick_up_and_throw/can_pick_up"));
 
     @Config(min = 0d, max = 1d, description = "Chance for a mob to have an AI to go and pick up and throw mobs.")
-    public static Difficulty chance = new Difficulty(0.03d, 0.06d, 0.1d);
+    public static Difficulty chance = new Difficulty(0.05d, 0.05d, 0.1d);
     @Config(min = 0d, description = "Min distance from the target to let the mob pick up a mob")
     public static Integer minDistanceToPickUp = 5;
     @Config(min = 0, description = "Max distance beyond which the mob will not throw the picked up mob")
@@ -58,10 +58,12 @@ public class PickUpAndThrow extends Feature {
 
 		if (mob.getRandom().nextDouble() < chance.getByDifficulty(mob.level()))
 			CAN_PICK_UP_DATA.applyIfAbsent(mob, CAN_BE_PICKED_UP.location().toString());
+        else
+            CAN_PICK_UP_DATA.applyIfAbsent(mob, "");
         MIN_DISTANCE_TO_PICK_UP.applyIfAbsent(mob, minDistanceToPickUp);
         MAX_DISTANCE_TO_THROW.applyIfAbsent(mob, maxDistanceToThrow);
         SPEED_MODIFIER_TO_PICK_UP.applyIfAbsent(mob, speedModifierToPickUp);
         COOLDOWN.applyIfAbsent(mob, cooldown);
-		mob.targetSelector.addGoal(1, new PickUpAndThrowGoal(mob));
+		mob.targetSelector.addGoal(0, new PickUpAndThrowGoal(mob));
     }
 }
