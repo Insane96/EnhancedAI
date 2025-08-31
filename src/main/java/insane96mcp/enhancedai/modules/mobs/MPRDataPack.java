@@ -8,7 +8,7 @@ import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.util.IntegratedPack;
 import net.minecraftforge.fml.ModList;
 
-@LoadFeature(module = Modules.Ids.MOBS, name = "MPR data pack", description = "Enables an MPR data pack that adds even more buffs to mobs.")
+@LoadFeature(module = Modules.Ids.MOBS, name = "MPR data pack", description = "Enables a Mobs Properties Randomness data pack that adds even more buffs to mobs.")
 public class MPRDataPack extends Feature {
 
 	@Override
