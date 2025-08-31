@@ -1,0 +1,13 @@
+{
+    "values": [
+        "#enhancedai:all_mobs"
+    ],
+    "remove": [
+        "minecraft:witch",
+        "minecraft:enderman",
+        "minecraft:wolf",
+        "minecraft:trader_llama",
+        "minecraft:llama",
+        "minecraft:pillager"
+    ]
+}
