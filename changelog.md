@@ -12,6 +12,7 @@
   * Pull strength is now capped
 * Parkour is now disabled by default
 * Lowered default shulker armor
+* Enderman and wandering traders can no longer sprint
 * Fixed shulkers attacking each other and in peaceful
   * Had to create custom Targeting AIs for them
 * list_goals command now shows running goals in green
