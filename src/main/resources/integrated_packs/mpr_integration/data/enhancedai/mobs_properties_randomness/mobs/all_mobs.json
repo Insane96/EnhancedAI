@@ -1,5 +1,5 @@
 {
-	"target": "#enhancedai:all_mobs",
+	"target": "#enhancedai:speed_bonus",
 	"properties": [
 		{
 			"property": "attribute_modifier",
