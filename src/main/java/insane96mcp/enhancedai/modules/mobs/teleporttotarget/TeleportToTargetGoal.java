@@ -2,7 +2,6 @@ package insane96mcp.enhancedai.modules.mobs.teleporttotarget;
 
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -17,7 +16,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
@@ -129,6 +127,7 @@ public class TeleportToTargetGoal extends Goal {
         entity.playSound(SoundEvents.ENDERMAN_TELEPORT, 4f, 0.5f);
         entity.setNoGravity(true);
         entity.setInvisible(true);
+        //entity.setGlowingTag(true);
     }
 
     public void show(LivingEntity entity) {
@@ -139,13 +138,12 @@ public class TeleportToTargetGoal extends Goal {
     }
 
     private void teleportTowards(LivingEntity entity) {
-        Vec3 vec3 = new Vec3(entity.getX() - this.actualTarget.getX(), entity.getY(0.5D) - this.actualTarget.getEyeY(), entity.getZ() - this.actualTarget.getZ());
+        Vec3 vec3 = new Vec3(this.actualTarget.getX() - entity.getX(), this.actualTarget.getY() - entity.getY(0.5D), this.actualTarget.getZ() - entity.getZ());
         vec3 = vec3.normalize();
-        double distance = 32d;
-        double distanceHalf = distance / 2d;
-        double x = entity.getX() + (entity.getRandom().nextDouble() - 0.5D) * distanceHalf - vec3.x * distance;
-        double y = entity.getY() + (entity.getRandom().nextInt((int) distance) - distanceHalf) - vec3.y * distance;
-        double z = entity.getZ() + (entity.getRandom().nextDouble() - 0.5D) * distanceHalf - vec3.z * distance;
+        double distance = entity.distanceTo(this.actualTarget) - 2;
+        double x = entity.getX() + vec3.x * distance;
+        double y = entity.getY() + vec3.y * distance;
+        double z = entity.getZ() + vec3.z * distance;
         this.teleport(entity, x, y, z);
     }
 
@@ -155,26 +153,17 @@ public class TeleportToTargetGoal extends Goal {
     private void teleport(LivingEntity entity, double pX, double pY, double pZ) {
         BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos(pX, pY, pZ);
 
-        while (blockpos$mutableblockpos.getY() > entity.level().getMinBuildHeight() && !entity.level().getBlockState(blockpos$mutableblockpos).blocksMotion()) {
-            blockpos$mutableblockpos.move(Direction.DOWN);
-        }
 
         BlockState blockstate = entity.level().getBlockState(blockpos$mutableblockpos);
         boolean flag = blockstate.blocksMotion();
         boolean flag1 = blockstate.getFluidState().is(FluidTags.WATER);
         if (flag && !flag1) {
-            net.minecraftforge.event.entity.EntityTeleportEvent.EnderEntity event = net.minecraftforge.event.ForgeEventFactory.onEnderTeleport(entity, pX, pY, pZ);
-            if (event.isCanceled())
-                return;
-            Vec3 vec3 = entity.position();
-            boolean flag2 = entity.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
-            if (flag2) {
+            do {
+                pY++;
+                Vec3 vec3 = entity.position();
+                entity.teleportTo(pX, pY, pZ);
                 entity.level().gameEvent(GameEvent.TELEPORT, vec3, GameEvent.Context.of(entity));
-                if (!entity.isSilent()) {
-                    entity.level().playSound((Player)null, entity.xo, entity.yo, entity.zo, SoundEvents.ENDERMAN_TELEPORT, entity.getSoundSource(), 1.0F, 1.0F);
-                    entity.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
-                }
-            }
+            } while (entity.getY() < entity.level().getMaxBuildHeight() && !entity.level().noCollision(entity));
         }
     }
 }
