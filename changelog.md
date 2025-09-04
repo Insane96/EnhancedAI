@@ -4,7 +4,10 @@
 * Added Pick up and Throw feature
   * Zombies are now able to pick up some mobs and throw them at you
 * Added Teleport to target feature
-  * Similar to Pick up and throw feature, teleports an entity close to the target
+  * Similar to Pick up and throw feature, enderman will teleport an entity close to the target
+* Added Witches Allied Monsters feature
+  * Makes witches target monsters and throw potions at them
+  * Also changed the 
 * Added Fire Immune Ticks
   * Set how many ticks a mob will be immune to fire before it starts to burn
   * By default it's now the same as the player (20 ticks)

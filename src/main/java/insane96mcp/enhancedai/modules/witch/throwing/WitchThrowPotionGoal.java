@@ -3,11 +3,13 @@ package insane96mcp.enhancedai.modules.witch.throwing;
 import insane96mcp.enhancedai.data.PotionOrMobEffect;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.Potions;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -93,6 +95,12 @@ public class WitchThrowPotionGoal extends Goal {
         }
 
         if (potionOrMobEffect != null) {
+            if (this.target.getMobType() == MobType.UNDEAD) {
+                if (potionOrMobEffect.getPotion() == Potions.HEALING || potionOrMobEffect.getPotion() == Potions.REGENERATION)
+                    potionOrMobEffect = new PotionOrMobEffect(Potions.HARMING);
+                else if (potionOrMobEffect.getPotion() == Potions.STRONG_HEALING || potionOrMobEffect.getPotion() == Potions.STRONG_REGENERATION || potionOrMobEffect.getPotion() == Potions.LONG_REGENERATION)
+                    potionOrMobEffect = new PotionOrMobEffect(Potions.STRONG_HARMING);
+            }
             ThrownPotion thrownpotion = new ThrownPotion(witch.level(), this.witch);
             ItemStack stack = witch.getRandom().nextDouble() < WitchPotionThrowing.LINGERING_CHANCE.get(this.witch) ? potionOrMobEffect.getLingeringPotionStack() : potionOrMobEffect.getSplashPotionStack();
             thrownpotion.setItem(stack);

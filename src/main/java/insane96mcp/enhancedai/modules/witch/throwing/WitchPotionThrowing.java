@@ -45,7 +45,7 @@ public class WitchPotionThrowing extends Feature {
     private static ForgeConfigSpec.ConfigValue<List<? extends String>> badPotionsListConfig;
     private static ForgeConfigSpec.ConfigValue<List<? extends String>> goodPotionsListConfig;
     public static final List<String> badPotionsListDefault = List.of("minecraft:weakness", "minecraft:slowness", "minecraft:hunger,600,0", "minecraft:mining_fatigue,600,0", "minecraft:poison", "minecraft:blindness,120,0", "minecraft:harming");
-    public static final List<String> goodPotionsListDefault = List.of("minecraft:regeneration", "minecraft:swiftness", "minecraft:strength", "minecraft:healing", "minecraft:invisibility");
+    public static final List<String> goodPotionsListDefault = List.of("minecraft:regeneration", "minecraft:swiftness", "minecraft:strength", "minecraft:invisibility", "minecraft:healing");
 
     public static ArrayList<PotionOrMobEffect> badPotionsList;
     public static ArrayList<PotionOrMobEffect> goodPotionsList;
@@ -93,7 +93,7 @@ public class WitchPotionThrowing extends Feature {
                 .comment("A list of potions that the witch can throw at enemies. Format is effect_id,duration,amplifier. The potions are thrown in order and witches will not throw a potion if the target has already the effect.")
                 .defineList("Bad Potions List", badPotionsListDefault, o -> o instanceof String);
         goodPotionsListConfig = this.getBuilder()
-                .comment("A list of potions that the witch can throw at allies (in raids). Format is effect_id,duration,amplifier. The potions are thrown in order and witches will not throw a potion if the target has already the effect.")
+                .comment("A list of potions that the witch can throw at allies (in raids). Format is effect_id,duration,amplifier. The potions are thrown in order and witches will not throw a potion if the target has already the effect. Witches will throw harming potions instead of healing if the target is undead.")
                 .defineList("Good Potions List", goodPotionsListDefault, o -> o instanceof String);
     }
 

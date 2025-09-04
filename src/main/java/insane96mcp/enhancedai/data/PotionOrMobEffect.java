@@ -102,4 +102,8 @@ public class PotionOrMobEffect {
 		}
 		return ForgeRegistries.POTIONS.getValue(effectRL);
 	}
+
+    public Potion getPotion() {
+        return this.potion;
+    }
 }
