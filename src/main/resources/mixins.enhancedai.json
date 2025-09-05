@@ -16,6 +16,7 @@
         "DrownedMixin",
         "DrownedMoveControlMixin",
         "EntityMixin",
+        "MagmaCubeMixin",
         "MeleeAttackGoalMixin",
         "MobCategoryMixin",
         "MobMixin",

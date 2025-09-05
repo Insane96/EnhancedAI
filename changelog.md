@@ -7,7 +7,9 @@
   * Similar to Pick up and throw feature, enderman will teleport an entity close to the target
 * Added Witches Allied Monsters feature
   * Makes witches target monsters and throw potions at them
-  * Also changed the 
+  * Also changed the Potion throwing feature to change healing and regen potions into harming potions
+* Added Magma Cube Surf Speed feature
+  * Magma cubes will swim in lava much faster
 * Added Fire Immune Ticks
   * Set how many ticks a mob will be immune to fire before it starts to burn
   * By default it's now the same as the player (20 ticks)
