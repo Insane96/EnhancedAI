@@ -39,15 +39,6 @@ public class AnimalScaredAttack extends Feature {
     public static final TagKey<EntityType<?>> SCARED_BY_PLAYERS = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("animal/scared_attack/can_be_scared_by_players"));
     public static final UUID FOLLOW_RANGE_REDUCTION_UUID = UUID.fromString("62e016b0-90d0-4e72-9d40-fffac566df20");
 
-    public static EAIData<Boolean> NEUTRAL;
-    public static EAIData<Boolean> HOSTILE;
-    public static EAIData<Boolean> PLAYER_SCARED;
-    public static EAIData<Double> ATTACK_MOVEMENT_SPEED_MODIFIER;
-    public static EAIData<Integer> FLEE_DISTANCE_FAR;
-    public static EAIData<Integer> FLEE_DISTANCE_NEAR;
-    public static EAIData<Double> FLEE_SPEED_FAR;
-    public static EAIData<Double> FLEE_SPEED_NEAR;
-
     @Config(min = 0d, max = 1d, description = "Animals have this percentage chance to be able to fight back instead of fleeing. Animals have a slightly bigger range to attack. Attack damage can't be changed via config due to limitations so use mods like Mobs Properties Randomness to change the damage. Base damage is 3")
     public static Double neutralChance = 0.35d;
     @Config(min = 0d, max = 1d, description = "Animals have this percentage chance to be hostile. Hostile animals are also neutral.")
@@ -70,6 +61,17 @@ public class AnimalScaredAttack extends Feature {
     public static Boolean knockbackSizeBased = true;
 
     private static final double BASE_ATTACK_DAMAGE = 3d;
+
+    public static EAIData<Boolean> NEUTRAL;
+    public static EAIData<Boolean> HOSTILE;
+    public static EAIData<Boolean> PLAYER_SCARED;
+    public static EAIData<Double> ATTACK_MOVEMENT_SPEED_MODIFIER;
+    public static EAIData<Integer> FLEE_DISTANCE_FAR;
+    public static EAIData<Integer> FLEE_DISTANCE_NEAR;
+    public static EAIData<Double> FLEE_SPEED_FAR;
+    public static EAIData<Double> FLEE_SPEED_NEAR;
+    public static EAIData<Integer> HORIZONTAL_FLEE_DISTANCE;
+    public static EAIData<Integer> VERTICAL_FLEE_DISTANCE;
 
     public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
         super.init(module, enabledByDefault, canBeDisabled);
@@ -101,7 +103,7 @@ public class AnimalScaredAttack extends Feature {
                 return;
             GoalHelper.removeGoal(mob.goalSelector, AnimalAvoidPlayersGoal.class);
             if (scared)
-                pathfinderMob.goalSelector.addGoal(1, new AnimalAvoidPlayersGoal(pathfinderMob, Player.class, FLEE_DISTANCE_FAR, FLEE_DISTANCE_NEAR, FLEE_SPEED_FAR, FLEE_SPEED_NEAR));
+                pathfinderMob.goalSelector.addGoal(1, new AnimalAvoidPlayersGoal(pathfinderMob, FLEE_DISTANCE_FAR, FLEE_DISTANCE_NEAR, FLEE_SPEED_FAR, FLEE_SPEED_NEAR, HORIZONTAL_FLEE_DISTANCE, VERTICAL_FLEE_DISTANCE));
         });
         ATTACK_MOVEMENT_SPEED_MODIFIER = EAIData.ofDouble(this.createDataKey("attack_movement_speed_mod"), (mob, value) -> {
             GoalHelper.getGoal(mob.goalSelector, AnimalMeleeAttackGoal.class).ifPresent(animalMeleeAttackGoal -> ((MeleeAttackGoalAccessor) animalMeleeAttackGoal).setSpeedModifier(value));
@@ -110,6 +112,8 @@ public class AnimalScaredAttack extends Feature {
         FLEE_DISTANCE_NEAR = EAIData.ofInt(this.createDataKey("flee_distance_near"));
         FLEE_SPEED_FAR = EAIData.ofDouble(this.createDataKey("flee_speed_far"));
         FLEE_SPEED_NEAR = EAIData.ofDouble(this.createDataKey("flee_speed_near"));
+        HORIZONTAL_FLEE_DISTANCE = EAIData.ofInt(this.createDataKey("horizontal_flee_distance"));
+        VERTICAL_FLEE_DISTANCE = EAIData.ofInt(this.createDataKey("vertical_flee_distance"));
     }
 
     public static void attribute(EntityAttributeModificationEvent event) {
@@ -175,8 +179,21 @@ public class AnimalScaredAttack extends Feature {
     }
 
     public static class AnimalAvoidPlayersGoal extends EAIAvoidEntityGoal<Player> {
-        public AnimalAvoidPlayersGoal(PathfinderMob entity, Class<Player> classToAvoidIn, EAIData<Integer> avoidDistance, EAIData<Integer> avoidDistanceNear, EAIData<Double> farSpeed, EAIData<Double> nearSpeed) {
-            super(entity, classToAvoidIn, avoidDistance, avoidDistanceNear, farSpeed, nearSpeed);
+        public AnimalAvoidPlayersGoal(PathfinderMob entity,
+                                      EAIData<Integer> avoidDistanceFar,
+                                      EAIData<Integer> avoidDistanceNear,
+                                      EAIData<Double> farSpeed,
+                                      EAIData<Double> nearSpeed,
+                                      EAIData<Integer> horizontalDistance,
+                                      EAIData<Integer> verticalDistance) {
+            super(new EAIAvoidEntityGoal.Builder<>(entity,
+                    Player.class,
+                    avoidDistanceFar,
+                    avoidDistanceNear,
+                    farSpeed,
+                    nearSpeed,
+                    horizontalDistance,
+                    verticalDistance));
         }
 
         @Override
