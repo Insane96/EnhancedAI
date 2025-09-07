@@ -13,6 +13,8 @@
 * Added Fire Immune Ticks
   * Set how many ticks a mob will be immune to fire before it starts to burn
   * By default it's now the same as the player (20 ticks)
+* Added slime fixes
+  * Fixes attack of slimes dealing damage every tick. Now they deal damage only when jumping and landing, with the range like melee mobs
 * Only 50% of mobs will get the xray range override
 * Fisher Mobs
   * Fishing range is now configurable
