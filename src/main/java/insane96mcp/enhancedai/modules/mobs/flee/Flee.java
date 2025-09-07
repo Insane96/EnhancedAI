@@ -1,13 +1,13 @@
 package insane96mcp.enhancedai.modules.mobs.flee;
 
 import insane96mcp.enhancedai.EnhancedAI;
-import insane96mcp.enhancedai.ai.EAAvoidEntityGoalLegacy;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.JsonFeature;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.data.IdTagMatcher;
-import net.minecraft.world.entity.LivingEntity;
+import insane96mcp.insanelib.util.ModNBTData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -21,11 +21,14 @@ public class Flee extends JsonFeature {
 
 	public static final List<CustomFleeConfig> customFlee = new ArrayList<>();
 
-	//TODO per mob?
+    public static ResourceLocation CUSTOM_FLEE;
+
 	@Override
 	public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super.init(module, enabledByDefault, canBeDisabled);
 		JSON_CONFIGS.add(new JsonConfig<>("custom_flee.json", customFlee, CUSTOM_FLEE_DEFAULT, CustomFleeConfig.LIST_TYPE));
+
+        CUSTOM_FLEE = this.createDataKey("custom_flee");
 	}
 
 	@Override
@@ -41,13 +44,15 @@ public class Flee extends JsonFeature {
 				|| customFlee.isEmpty())
 			return;
 
-		for (CustomFleeConfig cfc : customFlee) {
-			if (!cfc.entity.matchesEntity(mob) || mob.getRandom().nextFloat() > cfc.chance)
-				continue;
+        if (!ModNBTData.contains(mob, CUSTOM_FLEE)) {
+            for (CustomFleeConfig cfc : customFlee) {
+                if (!cfc.entity.matchesEntity(mob) || mob.getRandom().nextFloat() > cfc.chance)
+                    continue;
 
-			EAAvoidEntityGoalLegacy<LivingEntity> avoidEntityGoal = new EAAvoidEntityGoalLegacy<>(mob, LivingEntity.class, cfc.fleeFrom, (float) cfc.avoidDistance, (float) cfc.avoidDistanceNear, cfc.speedMultiplier, cfc.speedMultiplierNear);
+                cfc.tryApply(mob);
+            }
+        }
 
-			mob.targetSelector.addGoal(cfc.priority, avoidEntityGoal);
-		}
+        //TODO add /remove goal
 	}
 }

@@ -4,7 +4,12 @@ import com.google.gson.*;
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.reflect.TypeToken;
 import insane96mcp.insanelib.data.IdTagMatcher;
+import insane96mcp.insanelib.util.ModNBTData;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.world.entity.PathfinderMob;
 
 import java.util.ArrayList;
 
@@ -29,6 +34,19 @@ public class CustomFleeConfig {
 		this.speedMultiplier = speedMultiplier;
 		this.speedMultiplierNear = speedMultiplierNear;
 	}
+
+    public void tryApply(PathfinderMob mob) {
+        ListTag customFleeListTag = ModNBTData.getList(mob, Flee.CUSTOM_FLEE, Tag.TAG_COMPOUND);
+        CompoundTag newTag = new CompoundTag();
+        newTag.putInt("priority", priority);
+        newTag.putString("flee_from", fleeFrom.getSerializedName());
+        newTag.putDouble("avoid_distance", avoidDistance);
+        newTag.putDouble("avoid_distance_near", avoidDistanceNear);
+        newTag.putDouble("speed_multiplier", speedMultiplier);
+        newTag.putDouble("speed_multiplier_near", speedMultiplierNear);
+        customFleeListTag.add(newTag);
+        ModNBTData.put(mob, Flee.CUSTOM_FLEE, customFleeListTag);
+    }
 
 	public static final java.lang.reflect.Type LIST_TYPE = new TypeToken<ArrayList<CustomFleeConfig>>(){}.getType();
 
