@@ -1,0 +1,150 @@
+name: Issue Report
+description: Report an issue.
+labels: [bug,unreviewed]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before submitting an issue, please search the following links to make sure your issue is not covered:
+        
+        * **[Pinned Issues](/Insane96/EnhancedAI/issues)**: Some commonly reported issues are pinned
+        * **[The Search Bar](/Insane96/EnhancedAI/issues)**: See already reported issues.
+        
+        Please fill in the following template to report your issue. EAI is shorthand for Enhanced AI.
+
+  - type: markdown
+    attributes:
+      value: "## Versions"
+
+  - type: input
+    id: minecraft-version
+    attributes:
+      label: Minecraft Version
+      placeholder: "E.g.: 1.20.1"
+      description: "'Latest' is not a valid answer, write an exact version number"
+    validations:
+      required: true
+  - type: dropdown
+    id: modloader
+    attributes:
+      label: "Modloader"
+      options:
+        - 'Forge'
+        - 'NeoForge'
+        - 'Fabric'
+    validations:
+      required: true
+  - type: dropdown
+    id: plugins
+    attributes:
+      label: "Are you using servers that accept plugins such as Bukkit or Paper?"
+      options:
+        - 'No'
+        - 'Yes'
+    validations:
+      required: true
+  - type: input
+    id: forge-version
+    attributes:
+      label: "Modloader Version"
+      placeholder: "E.g.: 43.4.0"
+      description: "'Latest' is not a valid answer, write an exact version number"
+    validations:
+      required: true
+  - type: input
+    id: lib-version
+    attributes:
+      label: "InsaneLib Version"
+      placeholder: "E.g.: 1.21.20"
+      description: "'Latest' is not a valid answer, write an exact version number"
+    validations:
+      required: true
+  - type: input
+    id: mod-version
+    attributes:
+      label: "EAI Version"
+      description: "'Latest' is not a valid answer, write an exact version number"
+    validations:
+      required: true
+
+
+  - type: markdown
+    attributes:
+      value: "## Issue Description"
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe your issue
+    validations:
+      required: true
+
+  - type: input
+    id: crash-report
+    attributes:
+      label: Crash Report
+      description: Paste a link to the crash report, if present. Attaching latest.log and debug.log will also help. Use https://mclo.gs
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: "## Minimal Mods"
+
+  - type: dropdown
+    id: just-tinkers
+    attributes:
+      label: "Can you reproduce with just EAI?"
+      description: "Test by removing all other mods besides EAI and required dependencies."
+      options:
+        - 'I have not tried'
+        - 'No'
+        - 'Yes'
+    validations:
+      required: true
+
+  - type: dropdown
+    id: performance-enhancers
+    attributes:
+      label: "Performance Enchancers"
+      description: "Select the minimal list of performance mods you were using when you reproduced the issue."
+      multiple: true
+      options:
+        - 'Optifine'
+        - 'Performant'
+        - 'Rubidium/Embeddium/Xenon'
+        - 'Radium'
+        - 'Other (specify under other mods)'
+        - 'None of the above'
+    validations:
+      required: true
+
+  - type: textarea
+    id: other-mods
+    attributes:
+      label: Other mods
+      description: If you cannot reproduce with just EAI, list the smallest number of mods needed to reproduce this issue.
+
+
+  - type: markdown
+    attributes:
+      value: |
+        ## Confirm the following
+        
+        Please check the following to see if your issue is covered:
+        * [Pinned issues](/Insane96/EnhancedAI/issues)
+        * [The search bar](/Insane96/EnhancedAI/issues)
+
+  - type: dropdown
+    id: searched
+    attributes:
+      label: "Searched for known issues?"
+      description: "Select all that apply."
+      multiple: true
+      options:
+        - 'Checked pinned issues'
+        - 'Searched open issues'
+        - 'Searched closed issues'
+        - 'I did not search'
+    validations:
+      required: true
