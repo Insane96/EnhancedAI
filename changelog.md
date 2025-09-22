@@ -15,6 +15,8 @@
   * By default it's now the same as the player (20 ticks)
 * Added slime fixes
   * Fixes attack of slimes dealing damage every tick. Now they deal damage only when jumping and landing, with the range like melee mobs
+* Added Pathfinding feature
+  * Mobs are able to pathfind towards the target even if there's no block directly below them
 * Only 50% of mobs will get the xray range override
 * Fisher Mobs
   * Fishing range is now configurable
