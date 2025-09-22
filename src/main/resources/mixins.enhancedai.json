@@ -29,6 +29,7 @@
         "SnowballMixin",
         "SonicBoomMixin",
         "VindicatorMixin",
+        "WalkNodeEvaluatorMixin",
         "Warden$VibrationUserMixin",
         "WardenMixin",
         "WitchMixin",
