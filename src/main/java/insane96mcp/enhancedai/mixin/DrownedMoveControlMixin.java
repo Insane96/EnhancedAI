@@ -1,7 +1,7 @@
 package insane96mcp.enhancedai.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import insane96mcp.enhancedai.modules.drowned.DrownedSwimmingAttribute;
+import insane96mcp.enhancedai.modules.mobs.Swimmers;
 import insane96mcp.insanelib.base.Feature;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -19,7 +19,7 @@ public abstract class DrownedMoveControlMixin extends MoveControl {
 
 	@ModifyExpressionValue(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/ai/attributes/Attributes;MOVEMENT_SPEED:Lnet/minecraft/world/entity/ai/attributes/Attribute;"))
     public Attribute enhancedai$changeSwimSpeedAttribute(Attribute original) {
-		if (!Feature.isEnabled(DrownedSwimmingAttribute.class))
+		if (!Feature.isEnabled(Swimmers.class))
 			return original;
 		return ForgeMod.SWIM_SPEED.get();
     }
