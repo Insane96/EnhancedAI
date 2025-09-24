@@ -7,6 +7,7 @@ import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -114,7 +115,7 @@ public class FishingHook extends Projectile {
                     if (!this.hookedIn.isRemoved() && this.hookedIn.level().dimension() == this.level().dimension()) {
                         this.setPos(this.hookedIn.getX(), this.hookedIn.getY(0.8D), this.hookedIn.getZ());
                     } else {
-                        this.setHookedEntity((Entity)null);
+                        this.setHookedEntity(null);
                         this.currentState = FishHookState.FLYING;
                     }
                 }
@@ -149,10 +150,9 @@ public class FishingHook extends Projectile {
 
     protected void onHitEntity(EntityHitResult p_37144_) {
         super.onHitEntity(p_37144_);
-        if (!this.level().isClientSide) {
+        this.playSound(SoundEvents.FISHING_BOBBER_SPLASH, 1f, 0.5f);
+        if (!this.level().isClientSide)
             this.setHookedEntity(p_37144_.getEntity());
-        }
-
     }
 
     protected void onHitBlock(BlockHitResult p_37142_) {
