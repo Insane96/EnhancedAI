@@ -25,6 +25,7 @@
 * Fisher Mobs
   * Fishing range is now configurable
   * Pull strength is now capped
+  * Increased fishing hook throw sound volume
 * Parkour is now disabled by default
 * Lowered default shulker armor
 * Enderman and wandering traders can no longer sprint
