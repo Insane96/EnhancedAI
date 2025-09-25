@@ -39,8 +39,8 @@ public class EAAvoidEntityGoal<T extends LivingEntity> extends Goal {
 		this.goalOwner = entityIn;
 		this.classToAvoid = avoidClass;
 		this.avoidTargetSelector = targetPredicate;
-		this.avoidDistance = avoidDistance * avoidDistance;
-		this.avoidDistanceNear = avoidDistanceNear * avoidDistanceNear;
+		this.avoidDistance = avoidDistance;
+		this.avoidDistanceNear = avoidDistanceNear;
 		this.nearSpeed = nearSpeedIn;
 		this.farSpeed = farSpeedIn;
 		this.predicateOnAvoidEntity = p_i48859_9_;
