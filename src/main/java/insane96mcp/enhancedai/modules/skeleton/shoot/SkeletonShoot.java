@@ -1,7 +1,6 @@
 package insane96mcp.enhancedai.modules.skeleton.shoot;
 
 import insane96mcp.enhancedai.EnhancedAI;
-import insane96mcp.enhancedai.ai.EAAvoidEntityGoal;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
@@ -62,19 +61,19 @@ public class SkeletonShoot extends Feature {
 		int shootingCooldown1 = NBTUtils.getIntOrPutDefault(persistentData, SHOOTING_COOLDOWN, shootingCooldown.getIntRandBetween(skeleton.getRandom()));
 		int bowChargeTicks1 = NBTUtils.getIntOrPutDefault(persistentData, BOW_CHARGE_TICKS, bowChargeTicks.getIntRandBetween(skeleton.getRandom()));
 
-		boolean hasAIArrowAttack = false;
-		for (WrappedGoal prioritizedGoal : skeleton.goalSelector.availableGoals) {
+		List<Goal> goalsToRemove = skeleton.goalSelector.availableGoals.stream()
+				.map(WrappedGoal::getGoal)
+				.filter(g -> g instanceof EARangedBowAttackGoal)
+				.toList();
+
+		goalsToRemove.forEach(skeleton.goalSelector::removeGoal);
+        boolean hasAIArrowAttack = false;
+        for (WrappedGoal prioritizedGoal : skeleton.goalSelector.availableGoals) {
             if (prioritizedGoal.getGoal().equals(skeleton.bowGoal)) {
                 hasAIArrowAttack = true;
                 break;
             }
-		}
-		List<Goal> avoidEntityGoals = skeleton.goalSelector.availableGoals.stream()
-				.map(WrappedGoal::getGoal)
-				.filter(g -> g instanceof EAAvoidEntityGoal<?>)
-				.toList();
-
-		avoidEntityGoals.forEach(skeleton.goalSelector::removeGoal);
+        }
 		if (hasAIArrowAttack) {
 			if (spammer) {
 				shootingCooldown1 = 30;

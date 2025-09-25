@@ -4,6 +4,7 @@ import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.ai.EAAvoidEntityGoal;
 import insane96mcp.enhancedai.ai.EAAvoidTargetGoal;
 import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.modules.skeleton.shoot.EARangedBowAttackGoal;
 import insane96mcp.enhancedai.setup.EATags;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.insanelib.base.Feature;
@@ -59,8 +60,10 @@ public class SkeletonFleeTarget extends Feature {
 
         boolean hasAIArrowAttack = false;
         for (WrappedGoal prioritizedGoal : skeleton.goalSelector.availableGoals) {
-            if (prioritizedGoal.getGoal().equals(skeleton.bowGoal))
+            if (prioritizedGoal.getGoal().equals(skeleton.bowGoal) || prioritizedGoal.getGoal() instanceof EARangedBowAttackGoal) {
                 hasAIArrowAttack = true;
+                break;
+            }
         }
         List<Goal> avoidEntityGoals = skeleton.goalSelector.availableGoals.stream()
                 .map(WrappedGoal::getGoal)
