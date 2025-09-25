@@ -18,6 +18,7 @@
         "DrownedMoveControlMixin",
         "EntityMixin",
         "GroundPathNavigationMixin",
+        "LivingEntityMixin",
         "MagmaCubeMixin",
         "MeleeAttackGoalMixin",
         "MobCategoryMixin",

@@ -7,7 +7,7 @@
   * Similar to Pick up and throw feature, enderman will teleport an entity close to the target
 * Added Witches Allied Monsters feature
   * Makes witches target monsters and throw potions at them
-  * Also changed the Potion throwing feature to change healing and regen potions into harming potions
+  * Also changed the Potion throwing feature to change healing and regen potions into harming potions if targeting undead mobs
 * Added Magma Cube Surf Speed feature
   * Magma cubes will swim in lava much faster
 * Added Fire Immune Ticks
@@ -25,9 +25,10 @@
 * Fisher Mobs
   * Fishing range is now configurable
   * Pull strength is now capped
-  * Increased fishing hook throw sound volume
+  * Increased fishing hook throw sound range
   * When hooked, the hook will now play a low-pitched splash sound 
 * Parkour is now disabled by default
+  * Mobs pathfind is too slow, making them jump even when not needed
 * Lowered default shulker armor
 * Enderman and wandering traders can no longer sprint
 * Fixed shulkers attacking each other and in peaceful
