@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.7.2
+* Fixed skeletons not removing the ranged attack goal when changing weapons and not checking if they had mod's ranged attack goal when adding avoid entity goal
+* Fixed (again?) performance issues with animals fleeing
+
 ## 2.7.1
 * Villagers no longer use target changes
 * Cats no longer use animal changes
