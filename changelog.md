@@ -21,6 +21,8 @@
 * Changed Drowned Swim Speed Attribute feature
   * Now Swimmers feature under Mobs module
   * Added fish swim speed config option (defaults to 2.5x vanilla speed)
+* Snow Golems Bonus Stats has been moved to MPR Data Pack
+  * The feature also made snowballs not trigger invulnerability frames, so it's now a "new" feature
 * Only 50% of mobs will get the xray range override
 * Fisher Mobs
   * Fishing range is now configurable

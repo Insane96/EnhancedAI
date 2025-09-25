@@ -1,13 +1,13 @@
 {
-	"target": "#enhancedai:iron_golems",
+	"target": "#enhancedai:snow_golems",
 	"properties": [
-		{
-			"property": "event",
-			"event": "damaged",
-			"id": "enhancedai:innate_damage_resistance",
-			"target": "this",
-			"damage_modifier": 0.4,
-			"damage_modifier_operation": "multiply"
-		}
-	]
+        {
+            "property": "attribute_modifier",
+            "attribute": "minecraft:generic.armor",
+            "uuid": "8230810c-c178-4c01-b066-95e831b6defe",
+            "modifier_name": "Enhanced AI Bonus Armor",
+            "amount": 5,
+            "operation": "addition"
+        }
+    ]
 }
