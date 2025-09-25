@@ -23,18 +23,18 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@LoadFeature(module = Modules.Ids.MOBS, description = "Mobs will emit a shockwave when falling damaging nearby entities. Only entity types in enhancedai:mobs/shockwave tag are affected by this feature.")
+@LoadFeature(module = Modules.Ids.MOBS, description = "Mobs will jump off the ground to emit a shockwave when falling damaging nearby entities. Only entity types in enhancedai:mobs/shockwave tag are affected by this feature.")
 public class FallingShockwave extends Feature {
     public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/shockwave"));
     ResourceKey<DamageType> DAMAGE_TYPE = ResourceKey.create(Registries.DAMAGE_TYPE, EnhancedAI.location("shockwave"));
     @Config(min = 0, description = "The minimum fall distance for the shockwave to be emitted.")
-    public static Integer minFallDistance = 4;
+    public static Integer minFallDistance = 3;
     @Config(min = 0, description = "Damage per block of fall distance after the minimum fall distance.")
     public static Double damagePerBlock = 1d;
     @Config(min = 0)
-    public static Double baseRange = 3d;
+    public static Double baseRange = 2d;
     @Config(min = 0)
-    public static Double rangePerBlock = 0.1d;
+    public static Double rangePerBlock = 0.2d;
 
     public static EAIData<Integer> MIN_FALL_DISTANCE;
     public static EAIData<Double> DAMAGE_PER_BLOCK;
@@ -67,13 +67,13 @@ public class FallingShockwave extends Feature {
         double rangePerBlock = RANGE_PER_BLOCK.get(entity);
         double range = baseRange + rangePerBlock * (event.getDistance() - minFallDistance + 1);
         Level level = entity.level();
-        for (LivingEntity target : level.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().setMinY(entity.getY()).setMaxY(entity.getY()).inflate(range, 1D, range))) {
-            if (entity != target)
+        for (LivingEntity target : level.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().setMinY(entity.getY()).setMaxY(entity.getY()).inflate(range, 1.5D, range))) {
+            if (entity != target && target.onGround())
                 target.hurt(entity.damageSources().source(DAMAGE_TYPE, entity), (float) damage);
         }
 
         if (level instanceof ServerLevel serverLevel) {
-            serverLevel.sendParticles(ParticleTypes.CLOUD, entity.getX(), entity.getY(), entity.getZ(), 200, range, 0.5, range, 0);
+            serverLevel.sendParticles(ParticleTypes.CLOUD, entity.getX(), entity.getY(), entity.getZ(), (int) (50 * range), range, 1.5, range, 0);
             serverLevel.playSound(null, entity, SoundEvents.IRON_GOLEM_DAMAGE, SoundSource.PLAYERS, 2f, 0.5f);
         }
 	}
