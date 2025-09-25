@@ -11,6 +11,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
@@ -22,7 +23,7 @@ public class EAICreeperSwellGoal extends Goal {
 
 	private static final UUID WALKING_FUSE_SPEED_MODIFIER_UUID = UUID.fromString("ab376fec-5a15-4d3e-8fa2-0be4b6bc1849");
 
-	protected final net.minecraft.world.entity.monster.Creeper swellingCreeper;
+	protected final Creeper swellingCreeper;
 	private LivingEntity creeperAttackTarget;
 
 	private boolean walkingFuse = false;
@@ -41,7 +42,7 @@ public class EAICreeperSwellGoal extends Goal {
 	private Vec3 lastPosition = null;
 	private int lastPositionTickstamp = 0;
 
-	public EAICreeperSwellGoal(net.minecraft.world.entity.monster.Creeper creeper) {
+	public EAICreeperSwellGoal(Creeper creeper) {
 		this.swellingCreeper = creeper;
 	}
 
@@ -156,8 +157,6 @@ public class EAICreeperSwellGoal extends Goal {
 
 	public void setBeta(boolean beta) {
 		this.beta = beta;
-		if (beta)
-			CreeperSwell.BETA_LEFT_STRAFE.apply(this.swellingCreeper, this.swellingCreeper.getRandom().nextBoolean());
 	}
 
 	public boolean canBreach(LivingEntity target) {
@@ -175,7 +174,7 @@ public class EAICreeperSwellGoal extends Goal {
 				&& yDistance > -CreeperUtils.getExplosionSize(this.swellingCreeper) - 2;
 	}
 
-	public static boolean canCreeperBreach(net.minecraft.world.entity.monster.Creeper creeper, LivingEntity target) {
+	public static boolean canCreeperBreach(Creeper creeper, LivingEntity target) {
 		Set<WrappedGoal> availableGoals = creeper.goalSelector.getAvailableGoals();
 
 		return availableGoals.stream()
