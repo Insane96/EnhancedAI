@@ -112,7 +112,6 @@ public class EAIAvoidEntityGoal<T extends LivingEntity> extends Goal {
         }
     }
 
-    // -------- BUILDER --------
     public static class Builder<T extends LivingEntity> {
         private final PathfinderMob goalOwner;
         private final Class<T> classToAvoid;

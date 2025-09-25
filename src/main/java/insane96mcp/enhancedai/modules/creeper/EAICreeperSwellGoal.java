@@ -1,9 +1,8 @@
 package insane96mcp.enhancedai.modules.creeper;
 
+import insane96mcp.enhancedai.ai.BetaStrafe;
 import insane96mcp.enhancedai.modules.mobs.avoidexplosion.AvoidExplosionGoal;
 import insane96mcp.insanelib.util.MCUtils;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -14,6 +13,7 @@ import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.phys.Vec3;
 
+import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
@@ -36,8 +36,8 @@ public class EAICreeperSwellGoal extends Goal {
 	@SuppressWarnings("FieldCanBeLocal")
 	private final double IGNITE_DISTANCE_MULTIPLIER_SQR = 1.35d * 1.35d;
 
-	boolean beta = false;
-	float angle = 0;
+    @Nullable
+	BetaStrafe betaStrafe;
 
 	private Vec3 lastPosition = null;
 	private int lastPositionTickstamp = 0;
@@ -66,21 +66,19 @@ public class EAICreeperSwellGoal extends Goal {
 	}
 
 	public void start() {
-        if (walkingFuse && !beta)
+        if (walkingFuse && this.betaStrafe == null)
             MCUtils.applyModifier(this.swellingCreeper, Attributes.MOVEMENT_SPEED, WALKING_FUSE_SPEED_MODIFIER_UUID, "Walking fuse speed modifier", CreeperSwell.WALKING_FUSE_SPEED_MODIFIER.get(this.swellingCreeper), AttributeModifier.Operation.MULTIPLY_BASE, false);
         else
             this.swellingCreeper.getNavigation().stop();
         this.swellingCreeper.setSwellDir(1);
 		this.swellingCreeper.lookAt(this.creeperAttackTarget, 30f, 30f);
-		this.angle = (float) Math.toDegrees(Math.atan2(this.swellingCreeper.getZ() - this.creeperAttackTarget.getZ(), this.swellingCreeper.getX() - this.creeperAttackTarget.getX())) - 90;
-		if (CreeperSwell.BETA_LEFT_STRAFE.get(this.swellingCreeper))
-			this.angle += 180;
+        if (this.betaStrafe != null)
+            this.betaStrafe.start();
 		//Update the explosion size in case the creeper becomes charged
 		explosionSize = CreeperUtils.getExplosionSize(this.swellingCreeper);
 		explosionSizeSqr = explosionSize * explosionSize;
-		if (CreeperSwell.insaneSurvivalOverhaulIntegration) {
+		if (CreeperSwell.insaneSurvivalOverhaulIntegration)
 			this.swellingCreeper.getPersistentData().putFloat("iguanatweaksreborn:explosion_ray_strength_multiplier", this.isBreaching ? 0.01f : 0.3f);
-		}
 	}
 
 	public void stop() {
@@ -90,7 +88,6 @@ public class EAICreeperSwellGoal extends Goal {
 		AttributeInstance movementSpeed = this.swellingCreeper.getAttribute(Attributes.MOVEMENT_SPEED);
 		if (movementSpeed != null)
 			movementSpeed.removeModifier(WALKING_FUSE_SPEED_MODIFIER_UUID);
-		this.angle = 0;
 	}
 
 	public void tick() {
@@ -108,22 +105,8 @@ public class EAICreeperSwellGoal extends Goal {
 				alertNearby();
 			}
 			this.swellingCreeper.lookAt(this.creeperAttackTarget, 30f, 30f);
-			if (this.beta && this.swellingCreeper.onGround()) {
-				Vec3 mov = new Vec3(
-						this.swellingCreeper.getDeltaMovement().x + Math.cos(Math.toRadians(angle)) * (this.explosionSize * 0.075f) * this.swellingCreeper.getAttributeValue(Attributes.MOVEMENT_SPEED),
-						this.swellingCreeper.getDeltaMovement().y,
-						this.swellingCreeper.getDeltaMovement().z + Math.sin(Math.toRadians(angle)) * (this.explosionSize * 0.075f) * this.swellingCreeper.getAttributeValue(Attributes.MOVEMENT_SPEED));
-				this.swellingCreeper.setDeltaMovement(mov);
-				Direction direction = Direction.fromYRot(angle - 90);
-				BlockPos.MutableBlockPos blockPos = new BlockPos.MutableBlockPos(this.swellingCreeper.getX() + mov.x, this.swellingCreeper.getY(), this.swellingCreeper.getZ() + mov.z).move(direction);
-				if (this.swellingCreeper.level().getBlockState(blockPos).isSolid())
-					this.swellingCreeper.getJumpControl().jump();
-				float angleDelta = (float) ((1f / this.explosionSize) * 25f * this.swellingCreeper.getAttributeValue(Attributes.MOVEMENT_SPEED));
-                if (CreeperSwell.BETA_LEFT_STRAFE.get(this.swellingCreeper))
-                    angle += angleDelta;
-                else
-                    angle -= angleDelta;
-            }
+            if (this.betaStrafe != null)
+                this.betaStrafe.tick();
 		}
 	}
 
@@ -156,7 +139,10 @@ public class EAICreeperSwellGoal extends Goal {
 	}
 
 	public void setBeta(boolean beta) {
-		this.beta = beta;
+        if (beta)
+            this.betaStrafe = new BetaStrafe(this.swellingCreeper, CreeperSwell.BETA_LEFT_STRAFE.get(this.swellingCreeper), 0.5d);
+        else
+            this.betaStrafe = null;
 	}
 
 	public boolean canBreach(LivingEntity target) {
