@@ -52,6 +52,7 @@ public class SkeletonShoot extends Feature {
 				|| !skeleton.getType().is(BETTER_SKELETON_SHOOT))
 			return;
 
+        GoalHelper.removeGoal(skeleton.goalSelector, EAIRangedBowAttackGoal.class);
 		if (GoalHelper.hasGoal(skeleton.goalSelector, skeleton.bowGoal)) {
 			skeleton.goalSelector.removeGoal(skeleton.bowGoal);
 			EAIRangedBowAttackGoal rangedBowAttackGoal = new EAIRangedBowAttackGoal(skeleton, 1.0d, SHOOTING_COOLDOWN, INACCURACY, SHOOTING_RANGE, STRAFE, BOW_CHARGE_TICKS);

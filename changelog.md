@@ -40,6 +40,7 @@
 * list_goals command now shows running goals in green
 * Web Throwers feature is no longer limited to player targets
 * Fixed prevent infighting not working
+* Fixed skeletons still having the Bow Goal even without a bow
 
 ## Alpha 3.0.3
 * Halved the default time Drowned are sun-resistant
