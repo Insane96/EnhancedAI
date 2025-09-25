@@ -18,6 +18,8 @@
 * Added Pathfinding feature
   * Mobs are able to pathfind towards the target even if there's no block directly below them
   * Fixes mobs walking over open trapdoors
+* Added Falling Shockwave
+  * Iron golems will now jump and emit a shockwave on land damaging and launching up nearby mobs
 * Changed Drowned Swim Speed Attribute feature
   * Now Swimmers feature under Mobs module
   * Added fish swim speed config option (defaults to 2.5x vanilla speed)

@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.mobs;
+package insane96mcp.enhancedai.modules.mobs.fallingshockwave;
 
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.data.EAIData;
@@ -23,20 +23,24 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@LoadFeature(module = Modules.Ids.MOBS, description = "Mobs will jump off the ground to emit a shockwave when falling damaging nearby entities. Only entity types in enhancedai:mobs/shockwave tag are affected by this feature.")
+@LoadFeature(module = Modules.Ids.MOBS, description = "Mobs will jump off the ground to emit a shockwave when falling damaging nearby entities. Only entity types in enhancedai:mobs/shockwave/can_use tag are affected by this feature and entity types in the enhancedai:mobs/shockwave/damage_invulnerable tag will not be damaged by the shockwave.")
 public class FallingShockwave extends Feature {
-    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/shockwave"));
+    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/shockwave/can_use"));
+    public static final TagKey<EntityType<?>> SHOCKWAVE_INVULNERABLE_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/shockwave/damage_invulnerable"));
     ResourceKey<DamageType> DAMAGE_TYPE = ResourceKey.create(Registries.DAMAGE_TYPE, EnhancedAI.location("shockwave"));
-    @Config(min = 0, description = "The minimum fall distance for the shockwave to be emitted.")
-    public static Integer minFallDistance = 3;
-    @Config(min = 0, description = "Damage per block of fall distance after the minimum fall distance.")
+    @Config(min = 0)
+    public static Double jumpStrength = 1d;
+    @Config(min = 0, description = "In ticks")
+    public static Integer jumpCooldown = 600;
+    @Config(min = 0, description = "Damage per block of fall distance.")
     public static Double damagePerBlock = 1d;
     @Config(min = 0)
     public static Double baseRange = 2d;
     @Config(min = 0)
     public static Double rangePerBlock = 0.2d;
 
-    public static EAIData<Integer> MIN_FALL_DISTANCE;
+    public static EAIData<Double> JUMP_STRENGTH;
+    public static EAIData<Integer> JUMP_COOLDOWN;
     public static EAIData<Double> DAMAGE_PER_BLOCK;
     public static EAIData<Double> BASE_RANGE;
     public static EAIData<Double> RANGE_PER_BLOCK;
@@ -44,7 +48,8 @@ public class FallingShockwave extends Feature {
     @Override
     public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
         super.init(module, enabledByDefault, canBeDisabled);
-        MIN_FALL_DISTANCE = EAIData.ofInt(this.createDataKey("min_fall_distance"));
+        JUMP_STRENGTH = EAIData.ofDouble(this.createDataKey("jump_strength"));
+        JUMP_COOLDOWN = EAIData.ofInt(this.createDataKey("jump_cooldown"));
         DAMAGE_PER_BLOCK = EAIData.ofDouble(this.createDataKey("damage_per_block"));
         BASE_RANGE = EAIData.ofDouble(this.createDataKey("base_range"));
         RANGE_PER_BLOCK = EAIData.ofDouble(this.createDataKey("range_per_block"));
@@ -59,17 +64,18 @@ public class FallingShockwave extends Feature {
         double damage = DAMAGE_PER_BLOCK.get(entity);
         if (damage <= 0)
             return;
-        int minFallDistance = MIN_FALL_DISTANCE.get(entity);
-        if (event.getDistance() < minFallDistance)
+        if (event.getDistance() < 1d)
             return;
-        damage = damage * (event.getDistance() - minFallDistance + 1);
+        damage = damage * (event.getDistance() - 1);
         double baseRange = BASE_RANGE.get(entity);
         double rangePerBlock = RANGE_PER_BLOCK.get(entity);
-        double range = baseRange + rangePerBlock * (event.getDistance() - minFallDistance + 1);
+        double range = baseRange + rangePerBlock * (event.getDistance() - 1);
         Level level = entity.level();
         for (LivingEntity target : level.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().setMinY(entity.getY()).setMaxY(entity.getY()).inflate(range, 1.5D, range))) {
-            if (entity != target && target.onGround())
+            if (entity != target && target.onGround() && !target.getType().is(SHOCKWAVE_INVULNERABLE_ENTITY_TYPES)) {
                 target.hurt(entity.damageSources().source(DAMAGE_TYPE, entity), (float) damage);
+                target.setDeltaMovement(target.getDeltaMovement().add(0, 0.5, 0));
+            }
         }
 
         if (level instanceof ServerLevel serverLevel) {
@@ -85,9 +91,11 @@ public class FallingShockwave extends Feature {
                 || !mob.getType().is(AFFECTED_ENTITY_TYPES))
             return;
 
-        MIN_FALL_DISTANCE.applyIfAbsent(mob, minFallDistance);
+        JUMP_STRENGTH.applyIfAbsent(mob, jumpStrength);
+        JUMP_COOLDOWN.applyIfAbsent(mob, jumpCooldown);
         DAMAGE_PER_BLOCK.applyIfAbsent(mob, damagePerBlock);
         BASE_RANGE.applyIfAbsent(mob, baseRange);
         RANGE_PER_BLOCK.applyIfAbsent(mob, rangePerBlock);
+        mob.goalSelector.addGoal(1, new FallingShockwaveGoal(mob));
     }
 }
