@@ -138,7 +138,7 @@ public class EAICreeperSwellGoal extends Goal {
 		this.walkingFuse = walkingFuse;
 	}
 
-	public void setBeta(boolean beta) {
+	public void setBetaStrafe(boolean beta) {
         if (beta)
             this.betaStrafe = new BetaStrafe(this.swellingCreeper, CreeperSwell.BETA_LEFT_STRAFE.get(this.swellingCreeper), 0.5d);
         else

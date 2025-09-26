@@ -41,18 +41,6 @@ import java.util.function.Supplier;
 public class CreeperSwell extends Feature {
 	public static final TagKey<EntityType<?>> CHANGE_CREEPER_SWELL = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("creeper/change_swell"));
 
-	public static EAIData<Boolean> WALKING_FUSE;
-	public static EAIData<Double> WALKING_FUSE_SPEED_MODIFIER;
-	public static EAIData<Boolean> IGNORE_WALLS;
-	public static EAIData<Boolean> BREACH;
-	public static EAIData<Double> BREACH_HORIZONTAL_RANGE;
-	public static EAIData<Boolean> BETA;
-	public static EAIData<Boolean> BETA_LEFT_STRAFE;
-	public static EAIData<Boolean> BLOW_UP_ON_DEATH;
-	public static EAIData<Boolean> FORCE_EXPLODE;
-	public static EAIData<Boolean> ANGRY;
-	public static EAIData<String> EXPLOSION_SOUND;
-
 	@Config(min = 0d, max = 1d, description = "Percentage chance for a Creeper to keep walking while exploding. This is overwritten if the creeper has the beta property.")
 	public static Double walkingFuse$chance = 0.1d;
 	@Config(min = -1d, max = 64d, description = "Speed modifier when a walking fuse creeper is swelling.")
@@ -63,8 +51,8 @@ public class CreeperSwell extends Feature {
 	public static Double breach$chance = 0.075d;
 	@Config(min = 0, description = "How far away (horizontally) from the target breaching creepers can breach.")
 	public static Integer breach$horizontalRange = 24;
-	@Config(min = 0d, max = 1d, description = "Beta creepers when exploding will walk around the target, like the creepers in pre-1.2. This takes precedence over walking fuse.")
-	public static Double beta$chance = 0.35d;
+	@Config(min = 0d, max = 1d, description = "Creepers with beta strafing will walk around the target, like the in pre-1.2. This takes precedence over walking fuse.")
+	public static Double betaStrafe$chance = 0.35d;
 
 	//Angry
 	@Config(min = 0d, max = 1d, description = "Chance for a creeper to spawn angry")
@@ -88,6 +76,18 @@ public class CreeperSwell extends Feature {
 	@Config(description = "If Insane's Survival Overhaul is installed and Explosion Overhaul feature is enabled, Angry creeper will deal more knockback and break more blocks, breaching creepers will break more blocks")
 	public static Boolean insaneSurvivalOverhaulIntegration = true;
 
+    public static EAIData<Boolean> WALKING_FUSE;
+    public static EAIData<Double> WALKING_FUSE_SPEED_MODIFIER;
+    public static EAIData<Boolean> IGNORE_WALLS;
+    public static EAIData<Boolean> BREACH;
+    public static EAIData<Double> BREACH_HORIZONTAL_RANGE;
+    public static EAIData<Boolean> BETA_STRAFE;
+    public static EAIData<Boolean> BETA_LEFT_STRAFE;
+    public static EAIData<Boolean> BLOW_UP_ON_DEATH;
+    public static EAIData<Boolean> FORCE_EXPLODE;
+    public static EAIData<Boolean> ANGRY;
+    public static EAIData<String> EXPLOSION_SOUND;
+
 	public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super.init(module, enabledByDefault, canBeDisabled);
 		WALKING_FUSE = EAIData.ofBool(this.createDataKey("walking_fuse"), (mob, walkingFuse) -> {
@@ -97,8 +97,8 @@ public class CreeperSwell extends Feature {
 		IGNORE_WALLS = EAIData.ofBool(this.createDataKey("ignore_walls"));
 		BREACH = EAIData.ofBool(this.createDataKey("breach"));
 		BREACH_HORIZONTAL_RANGE = EAIData.ofDouble(this.createDataKey("breach_horizontal_range"));
-		BETA = EAIData.ofBool(this.createDataKey("beta"), (mob, beta) -> {
-			GoalHelper.getGoal(mob.goalSelector, EAICreeperSwellGoal.class).ifPresent(eaCreeperSwellGoal -> eaCreeperSwellGoal.setBeta(beta));
+		BETA_STRAFE = EAIData.ofBool(this.createDataKey("beta_strafe"), (mob, beta) -> {
+			GoalHelper.getGoal(mob.goalSelector, EAICreeperSwellGoal.class).ifPresent(eaCreeperSwellGoal -> eaCreeperSwellGoal.setBetaStrafe(beta));
 		});
 		BETA_LEFT_STRAFE = EAIData.ofBool(this.createDataKey("beta_left_strafe"));
 		BLOW_UP_ON_DEATH = EAIData.ofBool(this.createDataKey("blow_up_on_death"));
@@ -179,7 +179,7 @@ public class CreeperSwell extends Feature {
 		IGNORE_WALLS.applyIfAbsent(creeper, creeper.getRandom().nextDouble() < ignoreWallsChance);
 		BREACH.applyIfAbsent(creeper, creeper.getRandom().nextDouble() < breach$chance);
 		BREACH_HORIZONTAL_RANGE.applyIfAbsent(creeper, breach$horizontalRange.doubleValue());
-		BETA.applyIfAbsent(creeper, creeper.getRandom().nextDouble() < beta$chance);
+		BETA_STRAFE.applyIfAbsent(creeper, creeper.getRandom().nextDouble() < betaStrafe$chance);
         BETA_LEFT_STRAFE.apply(creeper, creeper.getRandom().nextBoolean());
 		BLOW_UP_ON_DEATH.applyIfAbsent(creeper, blowUpOnDeath == BlowUpOnDeath.ALL || (blowUpOnDeath == BlowUpOnDeath.CHARGED && creeper.isPowered()) || (ANGRY.get(creeper) && angry$explodeOnDeath));
 		ANGRY.applyIfAbsent(creeper, creeper.getRandom().nextDouble() < angry$chance);
