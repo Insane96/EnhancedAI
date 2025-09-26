@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## Beta 3.1.0
 * Added Pick up and Throw feature
   * Zombies are now able to pick up some mobs and throw them at you
 * Added Teleport to target feature
