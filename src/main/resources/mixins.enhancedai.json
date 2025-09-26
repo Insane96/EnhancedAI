@@ -23,6 +23,7 @@
         "MeleeAttackGoalMixin",
         "MobCategoryMixin",
         "MobMixin",
+        "ProjectileUtilMixin",
         "RandomStrollGoalMixin",
         "RavagerMixin",
         "ShulkerBulletMixin",

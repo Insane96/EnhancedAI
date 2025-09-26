@@ -10,16 +10,20 @@
   * Also changed the Potion throwing feature to change healing and regen potions into harming potions if targeting undead mobs
 * Added Magma Cube Surf Speed feature
   * Magma cubes will swim in lava much faster
-* Added Fire Immune Ticks
+* Added Fire Immune Ticks feature
   * Set how many ticks a mob will be immune to fire before it starts to burn
   * By default it's now the same as the player (20 ticks)
-* Added slime fixes
+* Added slime fixes feature
   * Fixes attack of slimes dealing damage every tick. Now they deal damage only when jumping and landing, with the range like melee mobs
 * Added Pathfinding feature
   * Mobs are able to pathfind towards the target even if there's no block directly below them
   * Fixes mobs walking over open trapdoors
-* Added Falling Shockwave
+* Added Falling Shockwave feature
   * Iron golems will now jump and emit a shockwave on land damaging and launching up nearby mobs
+* Added Drowning Targets feature
+  * Drowned will now pick up targets with low air and try to drown them
+* Added Air Steal feature
+  * Drowned now steals air from the attacked entity
 * Changed Drowned Swim Speed Attribute feature
   * Now Swimmers feature under Mobs module
   * Added fish swim speed config option (defaults to 2.5x vanilla speed)
