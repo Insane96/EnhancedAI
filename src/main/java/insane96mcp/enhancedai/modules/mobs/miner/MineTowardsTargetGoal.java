@@ -1,5 +1,6 @@
 package insane96mcp.enhancedai.modules.mobs.miner;
 
+import insane96mcp.enhancedai.modules.mobs.MeleeAttacking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
@@ -65,8 +66,8 @@ public class MineTowardsTargetGoal extends Goal {
 		float maxTargetDistance = MinerMobs.MAX_TARGET_DISTANCE.get(this.miner);
 		maxTargetDistance *= maxTargetDistance;
 		return this.isStuck()
-				&& (this.miner.distanceToSqr(miner.getTarget()) > 2d || !this.miner.hasLineOfSight(miner.getTarget()))
-				&& (this.miner.distanceToSqr(miner.getTarget()) < MinerMobs.MAX_TARGET_DISTANCE.get(this.miner) * MinerMobs.MAX_TARGET_DISTANCE.get(this.miner) || maxTargetDistance == 0);
+				&& (!MeleeAttacking.isWithinMeleeAttackRange(this.miner, this.miner.getTarget()) || !this.miner.getSensing().hasLineOfSight(this.miner.getTarget()))
+				&& (this.miner.distanceToSqr(miner.getTarget()) < maxTargetDistance || maxTargetDistance == 0);
 	}
 
 	public boolean canContinueToUse() {
@@ -191,7 +192,7 @@ public class MineTowardsTargetGoal extends Goal {
 		if (this.miner.getTarget() == null)
 			return false;
 
-		if (this.miner.distanceTo(this.miner.getTarget()) <= 2.25)
+		if (MeleeAttacking.isWithinMeleeAttackRange(this.miner, this.miner.getTarget()) && this.miner.getSensing().hasLineOfSight(this.miner.getTarget()))
 			return false;
 		if (this.lastPosition == null || this.miner.distanceToSqr(this.lastPosition) > 2.25d) {
 			this.lastPosition = this.miner.position();

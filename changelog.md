@@ -42,6 +42,7 @@
   * Had to create custom Targeting AIs for them
 * list_goals command now shows running goals in green
 * Web Throwers feature is no longer limited to player targets
+* Fixed miner mobs not mining when too close to the target
 * Fixed prevent infighting not working
 * Fixed skeletons still having the Bow Goal even without a bow
 
