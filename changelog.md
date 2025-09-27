@@ -1,5 +1,9 @@
 # Changelog
 
+## Upcoming
+* Fisher mobs
+  * Pulling items from inventory no longer launches them into the farlands
+
 ## Beta 3.1.0
 * Added Pick up and Throw feature
   * Zombies are now able to pick up some mobs and throw them at you

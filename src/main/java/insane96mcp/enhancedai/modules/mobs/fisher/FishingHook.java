@@ -217,12 +217,14 @@ public class FishingHook extends Projectile {
     protected void pullEntity(Entity entity) {
         Entity owner = this.getOwner();
         if (owner != null) {
-            Vec3 vec3 = (new Vec3(owner.getX() - this.getX(), Math.max(owner.getY() - this.getY(), 3.5d), owner.getZ() - this.getZ())).scale(0.3d);
+            Vec3 vec3 = (new Vec3(owner.getX() - this.getX(), Math.max(owner.getY() - this.getY(), 2.5d), owner.getZ() - this.getZ())).scale(0.3d);
             // Clamp the impulse to avoid excessive pull strength
             double len = vec3.length();
             if (len > FisherMobs.maxPullStrength && len > 0d) {
                 vec3 = vec3.scale(FisherMobs.maxPullStrength / len);
             }
+            if (!(entity instanceof LivingEntity))
+                vec3 = vec3.scale(0.2d);
 
             entity.stopRiding();
             entity.setDeltaMovement(entity.getDeltaMovement().add(vec3));
@@ -235,10 +237,6 @@ public class FishingHook extends Projectile {
 
     public void remove(Entity.RemovalReason removalReason) {
         super.remove(removalReason);
-    }
-
-    public void onClientRemoval() {
-
     }
 
     public void setOwner(@Nullable Entity p_150154_) {
