@@ -103,7 +103,7 @@ public class Targeting extends JsonFeature {
 		return EnhancedAI.CONFIG_FOLDER;
 	}
 
-	public static void xrayRangeAttribute(EntityAttributeModificationEvent event) {
+	public static void attribute(EntityAttributeModificationEvent event) {
 		for (EntityType<? extends LivingEntity> entityType : event.getTypes()) {
 			if (event.has(entityType, EAIAttributes.XRAY_FOLLOW_RANGE.get()))
 				continue;

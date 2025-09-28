@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.data.mpr;
+package insane96mcp.enhancedai.data.mpr.property;
 
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.mobspropertiesrandomness.data.json.property.MPRProperty;

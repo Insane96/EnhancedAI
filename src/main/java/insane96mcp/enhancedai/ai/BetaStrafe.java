@@ -28,7 +28,8 @@ public class BetaStrafe {
     }
 
     public void tick() {
-        if (this.mob.getTarget() == null)
+        if (this.mob.getTarget() == null
+                || this.mob.hurtTime > 0)
             return;
 
         double movementSpeed = mob.getAttributeValue(Attributes.MOVEMENT_SPEED);

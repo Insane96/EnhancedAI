@@ -31,12 +31,12 @@ public class Shielding extends JsonFeature {
 	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/can_equip_shield"));
 
 	public static final List<IdTagValue> DEFAULT_SHIELD_BLOCK_CHANCE = List.of(
-			IdTagValue.newId("minecraft:shield", 0.2d),
-			IdTagValue.newId("shieldsplus:wooden_shield", 0.1d),
+			IdTagValue.newId("minecraft:shield", 0.20d),
+			IdTagValue.newId("shieldsplus:wooden_shield", 0.10d),
 			IdTagValue.newId("shieldsplus:stone_shield", 0.15d),
-			IdTagValue.newId("shieldsplus:iron_shield", 0.2d),
-			IdTagValue.newId("shieldsplus:golden_shield", 0.1d),
-			IdTagValue.newId("shieldsplus:diamond_shield", 0.25d),
+			IdTagValue.newId("shieldsplus:iron_shield", 0.20d),
+			IdTagValue.newId("shieldsplus:golden_shield", 0.10d),
+			IdTagValue.newId("shieldsplus:diamond_shield", 0.30d),
 			IdTagValue.newId("shieldsplus:netherite_shield", 0.35d),
 			IdTagValue.newId("iguanatweaksreborn:copper_shield", 0.15d)
 	);
