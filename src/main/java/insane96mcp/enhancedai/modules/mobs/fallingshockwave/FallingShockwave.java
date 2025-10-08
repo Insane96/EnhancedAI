@@ -31,7 +31,7 @@ public class FallingShockwave extends Feature {
     @Config(min = 0)
     public static Double jumpStrength = 1d;
     @Config(min = 0, description = "In ticks")
-    public static Integer jumpCooldown = 600;
+    public static Integer jumpCooldown = 300;
     @Config(min = 0, description = "Damage per block of fall distance.")
     public static Double damagePerBlock = 1d;
     @Config(min = 0)

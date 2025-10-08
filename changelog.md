@@ -6,8 +6,8 @@
   * Leader mobs have heavily increased health and high armor and have 100% chance to spawn reinforcements when hit
   * Each time they're hit, the chance decreases
   * This feature has also an MPR condition `enhancedai:is_leader` to check if the mob is a leader.
-* Fisher mobs
-  * Pulling items from inventory no longer launches them into the farlands
+* Fisher mobs pulling items from inventory no longer launches them into the farlands
+* Halved shockwave jump cooldown
 
 ## Beta 3.1.0
 * Added Pick up and Throw feature
