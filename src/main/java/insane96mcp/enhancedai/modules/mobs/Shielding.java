@@ -12,6 +12,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -46,11 +47,13 @@ public class Shielding extends JsonFeature {
 	public static double chanceToEquip = 0.08d;
 
 	public static ResourceLocation HAS_SHIELD_BEEN_GIVEN;
+    public static ResourceLocation LAST_HURT_BY_AXE;
 
 	@Override
 	public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super.init(module, enabledByDefault, canBeDisabled);
 		HAS_SHIELD_BEEN_GIVEN = this.createDataKey("has_shield_been_given");
+        LAST_HURT_BY_AXE = this.createDataKey("last_hurt_by_axe");
 		JSON_CONFIGS.add(new JsonConfig<>("shield_block_chance.json", shieldBlockChance, DEFAULT_SHIELD_BLOCK_CHANCE, IdTagValue.LIST_TYPE));
 	}
 
@@ -79,7 +82,12 @@ public class Shielding extends JsonFeature {
 		if (!this.isEnabled()
 				|| event.getSource().is(DamageTypeTags.BYPASSES_SHIELD)
                 || !(event.getEntity() instanceof Mob)
+                || !(event.getSource().getDirectEntity() instanceof LivingEntity attacker)
 				|| attacked.level().isClientSide)
+            return;
+
+        long lastHurtByAxe = ModNBTData.get(attacked, LAST_HURT_BY_AXE, Long.class);
+        if (lastHurtByAxe > 0L && attacked.level().getGameTime() - lastHurtByAxe < 32L)
             return;
 
 		float chance = 0f;
@@ -92,19 +100,16 @@ public class Shielding extends JsonFeature {
 		}
 		if (chance == 0f)
 			return;
-		//TODO Add disabling shield
-		/*if (event.getSource().getDirectEntity() instanceof LivingEntity attacker
-				&& attacker.getMainHandItem().is(ItemTags.AXES)
-				&& attacked.getRandom().nextFloat() < 0.75f) {
-
-			this.getCooldowns().addCooldown(this.getUseItem().getItem(), 100);
-			this.stopUsingItem();
-			this.level().broadcastEntityEvent(this, (byte)30);
-		}
-		else*/ if (attacked.getRandom().nextDouble() < chance) {
+		if (attacked.getRandom().nextDouble() < chance) {
 			event.setCanceled(true);
 			offHandItem.hurt((int) event.getAmount(), attacked.getRandom(), null);
-			attacked.playSound(SoundEvents.SHIELD_BLOCK, 1.0F, 0.8F + attacked.level().random.nextFloat() * 0.4F);
+            if (attacker.getMainHandItem().is(ItemTags.AXES)) {
+                ModNBTData.put(attacked, LAST_HURT_BY_AXE, attacked.level().getGameTime());
+                attacked.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.8F + attacked.level().random.nextFloat() * 0.4F);
+            }
+            else {
+                attacked.playSound(SoundEvents.SHIELD_BLOCK, 1.0F, 0.8F + attacked.level().random.nextFloat() * 0.4F);
+            }
 		}
     }
 }
