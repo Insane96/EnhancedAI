@@ -187,7 +187,7 @@ public class Leaders extends Feature {
 
         LEADER.applyIfAbsent(mob, mob.getRandom().nextDouble() < leaderChance);
         CHARGE_PER_SPAWN.applyIfAbsent(mob, chargePerSpawn);
-        if (removeVanillaSpawnReinforcementsChance) {
+        if (removeVanillaSpawnReinforcementsChance && mob.getAttribute(Attributes.SPAWN_REINFORCEMENTS_CHANCE) != null) {
             mob.getAttribute(Attributes.SPAWN_REINFORCEMENTS_CHANCE).removeModifiers();
             mob.getAttribute(Attributes.SPAWN_REINFORCEMENTS_CHANCE).setBaseValue(0);
         }

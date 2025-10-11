@@ -1,5 +1,8 @@
 # Changelog
 
+## Beta 3.2.1
+* Crash fix with Leader mobs
+
 ## Beta 3.2.0
 * Added Leader mobs
   * Zombies and skeletons now have a 5% chance to spawn as a leader
