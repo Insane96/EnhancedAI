@@ -31,20 +31,20 @@ public class SkeletonShoot extends Feature {
 	@Config(min = 0d, max = 30d, description = "How much inaccuracy does the arrow fired by skeletons have. Vanilla skeletons have 10/6/2 inaccuracy in easy/normal/hard difficulty.")
 	public static Difficulty inaccuracy = new Difficulty(6, 5, 3);
 
-	public static EAIData<Boolean> STRAFE;
-	public static EAIData<Integer> SHOOTING_RANGE;
+    public static EAIData<Integer> SHOOTING_RANGE;
 	public static EAIData<Integer> SHOOTING_COOLDOWN;
-	public static EAIData<Integer> BOW_CHARGE_TICKS;
-	public static EAIData<Double> INACCURACY;
+    public static EAIData<Integer> BOW_CHARGE_TICKS;
+    public static EAIData<Boolean> STRAFE;
+    public static EAIData<Double> INACCURACY;
 
 	public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super.init(module, enabledByDefault, canBeDisabled);
-		SHOOTING_COOLDOWN = EAIData.ofInt(this.createDataKey("shooting_cooldown"));
-		STRAFE = EAIData.ofBool(this.createDataKey("strafe"));
-		INACCURACY = EAIData.ofDouble(this.createDataKey("inaccuracy"));
-		SHOOTING_RANGE = EAIData.ofInt(this.createDataKey("shooting_range"));
-		BOW_CHARGE_TICKS = EAIData.ofInt(this.createDataKey("bow_charge_ticks"));
-	}
+        SHOOTING_RANGE = EAIData.ofInt(this.createDataKey("shooting_range"));
+        SHOOTING_COOLDOWN = EAIData.ofInt(this.createDataKey("shooting_cooldown"));
+        BOW_CHARGE_TICKS = EAIData.ofInt(this.createDataKey("bow_charge_ticks"));
+        STRAFE = EAIData.ofBool(this.createDataKey("strafe"));
+        INACCURACY = EAIData.ofDouble(this.createDataKey("inaccuracy"));
+    }
 
 	public static void onReassessWeaponGoal(AbstractSkeleton skeleton) {
 		if (!isEnabled(SkeletonShoot.class)
