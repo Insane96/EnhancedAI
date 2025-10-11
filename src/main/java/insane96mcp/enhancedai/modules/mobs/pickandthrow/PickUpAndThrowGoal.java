@@ -35,11 +35,13 @@ public class PickUpAndThrowGoal extends Goal {
     @Override
     public boolean canUse() {
         if (!PickUpAndThrow.CAN_PICK_UP_DATA.has(this.mob)
-                || this.mob.isVehicle()
                 || this.mob.getTarget() == null
                 || this.mob.getTarget().distanceTo(this.mob) < PickUpAndThrow.MIN_DISTANCE_TO_PICK_UP.get(this.mob)
                 || --this.cooldown > 0)
             return false;
+
+        if (this.mob.isVehicle())
+            return true;
 
         this.targetingConditions.range(this.getFollowDistance());
         TagKey<EntityType<?>> tag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.parse(PickUpAndThrow.CAN_PICK_UP_DATA.get(this.mob)));

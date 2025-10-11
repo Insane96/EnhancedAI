@@ -8,6 +8,8 @@
   * This feature has also an MPR condition `enhancedai:is_leader` to check if the mob is a leader.
 * Added Alert Range in targeting
   * Some mobs will now alert nearby mobs making them target the player that hurt it
+* Added Panic on Fire
+  * Most mobs will now panic when on fire
 * Mobs shields are now disabled for 1.6 seconds if attacked with Axes
 * Fisher mobs pulling items from inventory no longer launches them into the farlands
 * Halved shockwave jump cooldown
