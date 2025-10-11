@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## Beta 3.2.0
 * Added Leader mobs
   * Zombies and skeletons now have a 5% chance to spawn as a leader
   * Leader mobs have heavily increased health and high armor and have 100% chance to spawn reinforcements when hit
