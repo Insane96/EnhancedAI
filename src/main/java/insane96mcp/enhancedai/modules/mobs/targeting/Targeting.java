@@ -17,6 +17,7 @@ import insane96mcp.insanelib.util.MCUtils;
 import insane96mcp.insanelib.util.ModNBTData;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -242,7 +243,8 @@ public class Targeting extends JsonFeature {
                 || alertRange <= 0
                 || !(event.getEntity() instanceof Mob mob)
                 || !mob.getType().is(ALERT_NEARBY)
-                || !(event.getSource().getEntity() instanceof LivingEntity attacker))
+                || !(event.getSource().getEntity() instanceof ServerPlayer attacker)
+                || !attacker.gameMode.isSurvival())
             return;
 
         event.getEntity().level()
