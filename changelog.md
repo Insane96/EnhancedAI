@@ -6,6 +6,8 @@
   * Leader mobs have heavily increased health and high armor and have 100% chance to spawn reinforcements when hit
   * Each time they're hit, the chance decreases
   * This feature has also an MPR condition `enhancedai:is_leader` to check if the mob is a leader.
+* Added Alert Range in targeting
+  * Some mobs will now alert nearby mobs making them target the player that hurt it
 * Fisher mobs pulling items from inventory no longer launches them into the farlands
 * Halved shockwave jump cooldown
 

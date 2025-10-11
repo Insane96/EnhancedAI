@@ -30,6 +30,7 @@ import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -45,6 +46,7 @@ public class Targeting extends JsonFeature {
 	public static final TagKey<EntityType<?>> ALLOW_TARGET_SWITCH = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/targeting/allow_target_switch"));
 	public static final TagKey<EntityType<?>> APPLY_XRAY = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/targeting/apply_xray"));
 	public static final TagKey<EntityType<?>> VISITED_NODES_MULTIPLIER = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/targeting/visited_nodes_multiplier"));
+	public static final TagKey<EntityType<?>> ALERT_NEARBY = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/targeting/alert_nearby"));
 
 	@Config(min = 0d, max = 128d, description = "How far away can the mobs see the player. This overrides the vanilla value (16 for most mobs). Setting 'Max' to 0 will leave the follow range as vanilla. I recommend using mods like Mobs Properties Randomness to have more control over the attribute. Only mobs in the entity type tag `enhancedai:mobs/targeting/follow_range_override` will be affected by this override")
 	public static MinMax followRangeOverride = new MinMax(32, 48);
@@ -61,6 +63,9 @@ public class Targeting extends JsonFeature {
 	public static Boolean betterHurtByTarget$preferPlayers = false;
 	@Config(min = 0d, max = 1d, description = "Change for a mob to not attack other mobs when hit.")
 	public static Double betterHurtByTarget$preventInfighting = 0.9d;
+
+    @Config(min = 0, description = "Mobs in the entity type tag `enhancedai:mobs/targeting/alert_nearby` will alert nearby mobs in this range and target the player.")
+    public static Integer alertRange = 32;
 
 	@Config(description = "Mobs NearestAttackableTargetGoal will be replaced with mod's one for better configuration and targeting.")
 	public static Boolean betterNearbyTargeting$enable = true;
@@ -79,6 +84,7 @@ public class Targeting extends JsonFeature {
 	public static EAIData<Boolean> HURT_BY_PREVENT_INFIGHTING;
 	public static EAIData<Integer> TARGET_CHANCE;
 	public static EAIData<Integer> UNSEEN_FORGET_TICKS;
+	public static EAIData<Integer> ALERT_RANGE;
 
 	@Override
 	public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
@@ -96,6 +102,7 @@ public class Targeting extends JsonFeature {
 		);
 		TARGET_CHANCE = EAIData.ofInt(this.createDataKey("target_chance"));
 		UNSEEN_FORGET_TICKS = EAIData.ofInt(this.createDataKey("unseen_forget_ticks"));
+        ALERT_RANGE = EAIData.ofInt(this.createDataKey("alert_range"));
 	}
 
 	@Override
@@ -124,6 +131,7 @@ public class Targeting extends JsonFeature {
 		processTargetGoal(mob);
 		processHurtByGoal(mob);
 		processMaxTargetingNodes(mob);
+        ALERT_RANGE.applyIfAbsent(mob, alertRange);
 	}
 
 	private void processFollowRanges(Mob mob) {
@@ -227,4 +235,25 @@ public class Targeting extends JsonFeature {
 			return;
 		MAX_VISITED_NODES_MULTIPLIER.applyIfAbsent(mob, maxVisitedNodesMultiplier);
 	}
+
+    @SubscribeEvent
+    public void onEntityHurt(LivingHurtEvent event) {
+        if (!this.isEnabled()
+                || alertRange <= 0
+                || !(event.getEntity() instanceof Mob mob)
+                || !mob.getType().is(ALERT_NEARBY)
+                || !(event.getSource().getEntity() instanceof LivingEntity attacker))
+            return;
+
+        event.getEntity().level()
+                .getEntities(mob, mob.getBoundingBox().inflate(ALERT_RANGE.get(mob)), entity -> entity.getType() == mob.getType())
+                .forEach(entity -> {
+                    if (!(entity instanceof Mob nearbyMob))
+                        return;
+                    //Don't switch target if current one is closer
+                    if (nearbyMob.getTarget() != null && nearbyMob.distanceToSqr(nearbyMob.getTarget()) <= nearbyMob.distanceToSqr(attacker))
+                        return;
+                    nearbyMob.setTarget(attacker);
+                });
+    }
 }
