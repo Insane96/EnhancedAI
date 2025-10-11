@@ -29,9 +29,9 @@ public class FishingTargetGoal extends Goal {
 	}
 
 	public boolean canUse() {
-		LivingEntity target = this.fisher.getTarget();
-		if (target == null
-                || target.isDeadOrDying())
+		this.target = this.fisher.getTarget();
+		if (this.target == null
+                || this.target.isDeadOrDying())
 			return false;
 
 		if (!this.fisher.getMainHandItem().is(FisherMobs.FISHER_RODS) && !this.fisher.getOffhandItem().is(FisherMobs.FISHER_RODS))
@@ -41,9 +41,9 @@ public class FishingTargetGoal extends Goal {
 			return false;
 
 		double attackRange = FisherMobs.ATTACK_RANGE.get(this.fisher);
-		if (this.fisher.distanceToSqr(target) < attackRange * attackRange)
+		if (this.fisher.distanceToSqr(this.target) < attackRange * attackRange)
 			return false;
-		return this.fisher.getSensing().hasLineOfSight(target);
+		return this.fisher.getSensing().hasLineOfSight(this.target);
     }
 
     private double getFishRangeSqr() {
@@ -53,8 +53,6 @@ public class FishingTargetGoal extends Goal {
     }
 
 	public void start() {
-		this.target = this.fisher.getTarget();
-        //noinspection DataFlowIssue
         if (this.fisher.distanceTo(this.target) <= getFishRangeSqr())
             this.fisher.getNavigation().stop();
     }
