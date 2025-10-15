@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Fixed Pick Up and Throw no longer working if the goal stopped and the mob had a passenger
+
 ## Beta 3.2.1
 * Crash fix with Leader mobs
 

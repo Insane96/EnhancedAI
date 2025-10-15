@@ -40,8 +40,10 @@ public class PickUpAndThrowGoal extends Goal {
                 || --this.cooldown > 0)
             return false;
 
-        if (this.mob.isVehicle())
-            return true;
+        if (this.mob.getFirstPassenger() instanceof Mob passenger) {
+			this.pickUp = passenger;
+			return true;
+		}
 
         this.targetingConditions.range(this.getFollowDistance());
         TagKey<EntityType<?>> tag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.parse(PickUpAndThrow.CAN_PICK_UP_DATA.get(this.mob)));
