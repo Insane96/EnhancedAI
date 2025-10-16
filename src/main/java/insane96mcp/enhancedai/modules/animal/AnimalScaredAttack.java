@@ -151,6 +151,8 @@ public class AnimalScaredAttack extends Feature {
         FLEE_DISTANCE_NEAR.applyIfAbsent(animal, fleeDistanceNear);
         FLEE_SPEED_FAR.applyIfAbsent(animal, fleeSpeedFar);
         FLEE_SPEED_NEAR.applyIfAbsent(animal, fleeSpeedNear);
+		HORIZONTAL_FLEE_DISTANCE.applyIfAbsent(animal, 12);
+		VERTICAL_FLEE_DISTANCE.applyIfAbsent(animal, 7);
     }
 
     public static class AnimalMeleeAttackGoal extends MeleeAttackGoal {
