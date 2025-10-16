@@ -1,6 +1,7 @@
-package insane96mcp.enhancedai.modules.creeper;
+package insane96mcp.enhancedai.modules.creeper.swell;
 
 import insane96mcp.enhancedai.ai.BetaStrafe;
+import insane96mcp.enhancedai.modules.creeper.CreeperUtils;
 import insane96mcp.enhancedai.modules.mobs.avoidexplosion.AvoidExplosionGoal;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.world.entity.LivingEntity;

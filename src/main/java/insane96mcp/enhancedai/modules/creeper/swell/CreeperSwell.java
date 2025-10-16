@@ -1,4 +1,4 @@
-package insane96mcp.enhancedai.modules.creeper;
+package insane96mcp.enhancedai.modules.creeper.swell;
 
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.data.EAIData;

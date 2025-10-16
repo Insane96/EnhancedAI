@@ -2,7 +2,7 @@
 
 ## Upcoming
 * Fixed Pick Up and Throw no longer working if the goal stopped and the mob had a passenger
-* Fixed horizontal and vertical flee distance not applied to animals
+* Fixed horizontal and vertical flee distance not applied to animals 
 
 ## Beta 3.2.1
 * Crash fix with Leader mobs

@@ -2,8 +2,8 @@ package insane96mcp.enhancedai.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import insane96mcp.enhancedai.modules.creeper.CreeperSwell;
 import insane96mcp.enhancedai.modules.creeper.DisableFallingSwelling;
+import insane96mcp.enhancedai.modules.creeper.swell.CreeperSwell;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;

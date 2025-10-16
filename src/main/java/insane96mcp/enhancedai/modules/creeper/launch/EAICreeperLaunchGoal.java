@@ -1,8 +1,8 @@
 package insane96mcp.enhancedai.modules.creeper.launch;
 
-import insane96mcp.enhancedai.modules.creeper.CreeperSwell;
 import insane96mcp.enhancedai.modules.creeper.CreeperUtils;
-import insane96mcp.enhancedai.modules.creeper.EAICreeperSwellGoal;
+import insane96mcp.enhancedai.modules.creeper.swell.CreeperSwell;
+import insane96mcp.enhancedai.modules.creeper.swell.EAICreeperSwellGoal;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -10,13 +10,14 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 
 public class EAICreeperLaunchGoal extends Goal {
 
-	protected final net.minecraft.world.entity.monster.Creeper launchingCreeper;
+	protected final Creeper launchingCreeper;
 	private LivingEntity creeperAttackTarget;
 
 	private int ticksBeforeLaunching;
