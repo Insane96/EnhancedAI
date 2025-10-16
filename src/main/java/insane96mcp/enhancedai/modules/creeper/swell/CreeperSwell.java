@@ -113,8 +113,9 @@ public class CreeperSwell extends Feature {
 				compoundNBT.putByte("ExplosionRadius", angry$explosionPower.byteValue());
 				if (angry$name)
 					creeper.setCustomName(Component.literal("Angry Creeper"));
-				if (angry$fire)
-					TagsFeature.setExplosionCausesFire(true, creeper);
+				else
+					creeper.setCustomName(null);
+				TagsFeature.setExplosionCausesFire(angry$fire, creeper);
 				if (insaneSurvivalOverhaulIntegration) {
 					creeper.getPersistentData().putFloat("iguanatweaksreborn:explosion_knockback_multiplier", 2f);
 					creeper.getPersistentData().putFloat("iguanatweaksreborn:explosion_ray_strength_multiplier", 0.01f);
