@@ -22,12 +22,6 @@ public class TeleportToTarget extends Feature {
 
     @Config(min = 0d, max = 1d, description = "Chance for a mob to have an AI to go and pick up and throw mobs.")
     public static Difficulty chance = new Difficulty(0.35d, 0.35d, 0.5d);
-    @Config(min = 0d, description = "Min distance from the target to let the mob pick up a mob")
-    public static Integer minDistanceToPickUp = 5;
-    @Config(min = 0, description = "Max distance beyond which the mob will not throw the picked up mob")
-    public static Integer maxDistanceToThrow = 24;
-    @Config(min = 0d, description = "Speed modifier to apply to the mob when it picks up another mob")
-    public static Double speedModifierToPickUp = 1.25d;
     @Config(min = 0, description = "Cooldown (in ticks) after throwing a mob. Also goes on cooldown if can't reach the targeted mob for a few seconds")
     public static Integer cooldown = 600;
 

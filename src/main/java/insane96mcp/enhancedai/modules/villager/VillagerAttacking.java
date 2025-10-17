@@ -18,8 +18,6 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import java.util.Optional;
-
 @LoadFeature(module = Modules.Ids.VILLAGER, description = "Make villagers fight back. Use the enhancedai:villager/can_attack type tag to add more villagers, only works with entities that extend vanilla Villagers. Attack damage can't be changed via config due to limitation so use mods like Mobs Properties Randomness to change the damage. Base damage is 4.")
 public class VillagerAttacking extends Feature {
     public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("villager/can_attack"));
@@ -41,8 +39,8 @@ public class VillagerAttacking extends Feature {
 		SPEED_MULTIPLIER = EAIData.ofDouble(this.createDataKey("speed_multiplier"), (mob, speedMultiplier) -> {
 			if (!mob.getType().is(AFFECTED_ENTITY_TYPES))
 				return;
-			Optional<MeleeAttackGoal> meleeAttackGoal = GoalHelper.getGoal(mob.goalSelector, MeleeAttackGoal.class);
-			meleeAttackGoal.ifPresent(attackGoal -> ((MeleeAttackGoalAccessor) attackGoal).setSpeedModifier(speedMultiplier));
+			GoalHelper.getGoal(mob.goalSelector, MeleeAttackGoal.class)
+					.ifPresent(attackGoal -> ((MeleeAttackGoalAccessor) attackGoal).setSpeedModifier(speedMultiplier));
 		});
     }
 

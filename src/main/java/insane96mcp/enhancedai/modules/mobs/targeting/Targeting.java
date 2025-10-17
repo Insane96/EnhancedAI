@@ -113,10 +113,8 @@ public class Targeting extends JsonFeature {
 
 	public static void attribute(EntityAttributeModificationEvent event) {
 		for (EntityType<? extends LivingEntity> entityType : event.getTypes()) {
-			if (event.has(entityType, EAIAttributes.XRAY_FOLLOW_RANGE.get()))
-				continue;
-
-			event.add(entityType, EAIAttributes.XRAY_FOLLOW_RANGE.get(), 0d);
+			if (!event.has(entityType, EAIAttributes.XRAY_FOLLOW_RANGE.get()))
+				event.add(entityType, EAIAttributes.XRAY_FOLLOW_RANGE.get(), 0d);
 		}
 	}
 

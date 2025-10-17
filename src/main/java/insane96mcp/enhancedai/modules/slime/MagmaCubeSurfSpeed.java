@@ -9,7 +9,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 
-@LoadFeature(module = Modules.Ids.SLIME, description = "Make magma cubes swim in lava faster.Only entity types in `enhancedai:slime/magma_cube_surf_speed` tag are affected by this feature.")
+@LoadFeature(module = Modules.Ids.SLIME, description = "Make magma cubes swim in lava faster. Only entity types in `enhancedai:slime/magma_cube_surf_speed` tag are affected by this feature.")
 public class MagmaCubeSurfSpeed extends Feature {
     public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("slime/magma_cube_surf_speed"));
     @Config(min = 0)
