@@ -4,6 +4,7 @@
 * Fixed Pick Up and Throw no longer working if the goal stopped and the mob had a passenger
 * Fixed horizontal and vertical flee distance not applied to animals 
 * Minor angry creeper fix
+* Animals calling other animals now has increased range if they can see each other
 
 ## Beta 3.2.1
 * Crash fix with Leader mobs

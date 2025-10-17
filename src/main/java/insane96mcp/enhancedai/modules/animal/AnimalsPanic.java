@@ -26,7 +26,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 public class AnimalsPanic extends Feature {
 	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("animal/can_panic"));
     @Config(min = 1, description = "Range at which an animal alerts other animals to panic/attack.")
-    public static Integer fleeRange = 24;
+    public static Integer fleeRange = 16;
+	@Config(description = "The flee range will be this value if the animal can see the other animals")
+	public static Integer fleeRangeIfSeen = 32;
 
     public static EAIData<Double> PANIC_SPEED_MODIFIER;
 
@@ -45,8 +47,14 @@ public class AnimalsPanic extends Feature {
 				|| !animal.getType().is(AFFECTED_ENTITY_TYPES))
             return;
 
-        animal.level().getNearbyEntities(Animal.class, TargetingConditions.forNonCombat().ignoreLineOfSight(), animal, animal.getBoundingBox().inflate(fleeRange))
-                .stream().filter(otherAnimal -> otherAnimal.getType().equals(animal.getType()))
+        animal.level().getNearbyEntities(Animal.class, TargetingConditions.forNonCombat().ignoreLineOfSight(), animal, animal.getBoundingBox().inflate(fleeRangeIfSeen))
+                .stream().filter(otherAnimal -> {
+					if (!otherAnimal.getType().equals(animal.getType()))
+						return false;
+					if (!otherAnimal.getSensing().hasLineOfSight(animal) && otherAnimal.distanceToSqr(animal) > fleeRange * fleeRange)
+						return false;
+					return otherAnimal.distanceTo(animal) < fleeRangeIfSeen;
+				})
                 .forEach(nearbyAnimal -> nearbyAnimal.setLastHurtByMob(attacker));
     }
 
