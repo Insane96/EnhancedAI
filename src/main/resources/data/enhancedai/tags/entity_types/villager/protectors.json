@@ -1,0 +1,9 @@
+{
+	"values": [
+		"minecraft:iron_golem",
+        {
+            "required": false,
+            "id": "guardvillagers:guard"
+        }
+	]
+}
