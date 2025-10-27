@@ -1,7 +1,13 @@
 # Changelog
 
 ## Upcoming
+* Added Villager Alert Protectors
+  * Villagers will now alert nearby iron golems about nearby hostiles
+* Added Push Resistance
+  * A new attribute that defines how much a mob resists being pushed
+  * Used by MPR Data Pack for Iron Golems
 * Animals calling other animals now has increased range if they can see each other
+* Increased Falling Shockwave jump strength
 * Horses can no longer be hostile, only neutral
 * Fixed Pick Up and Throw no longer working if the goal stopped and the mob had a passenger
 * Fixed horizontal and vertical flee distance not applied to animals 

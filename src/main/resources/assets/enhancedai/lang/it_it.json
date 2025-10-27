@@ -4,5 +4,6 @@
 
 	"death.attack.bite": "%s è stato morso/a da %s",
 
-	"attribute.name.xray_follow_range": "Raggio di rilevamento delle creature XRay"
+	"attribute.name.xray_follow_range": "Raggio di rilevamento delle creature XRay",
+	"attribute.name.push_resistance": "Resistenza alla spinta"
 }

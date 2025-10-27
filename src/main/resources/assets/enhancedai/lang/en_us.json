@@ -4,5 +4,6 @@
 
 	"death.attack.bite": "%s was bitten by %s",
 
-	"attribute.name.xray_follow_range": "Mob XRay Follow Range"
+	"attribute.name.xray_follow_range": "Mob XRay Follow Range",
+	"attribute.name.push_resistance": "Push Resistance"
 }

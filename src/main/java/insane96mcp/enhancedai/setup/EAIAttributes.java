@@ -11,4 +11,5 @@ public class EAIAttributes {
 	public static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(ForgeRegistries.ATTRIBUTES, EnhancedAI.MOD_ID);
 
 	public static final RegistryObject<Attribute> XRAY_FOLLOW_RANGE = ATTRIBUTES.register("xray_follow_range", () -> new RangedAttribute("attribute.name.xray_follow_range", 0d, 0d, 256d));
+	public static final RegistryObject<Attribute> PUSH_RESISTANCE = ATTRIBUTES.register("push_resistance", () -> new RangedAttribute("attribute.name.push_resistance", 0d, 0d, 1d));
 }
