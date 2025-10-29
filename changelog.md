@@ -7,6 +7,8 @@
   * A new attribute that defines how much a mob resists being pushed
   * Used by MPR Data Pack for Iron Golems
 * Animals calling other animals now has increased range if they can see each other
+* Hurt by target goal now checks for visibility percent
+  * So even if a mob is hurt, it will forget the target if out of range
 * Increased Falling Shockwave jump strength
 * Horses can no longer be hostile, only neutral
 * Fixed Pick Up and Throw no longer working if the goal stopped and the mob had a passenger

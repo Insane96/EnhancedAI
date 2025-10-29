@@ -10,6 +10,7 @@ import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.scores.Team;
 import org.apache.commons.lang3.ArrayUtils;
 
 import javax.annotation.Nullable;
@@ -22,8 +23,9 @@ public class EAIHurtByTargetGoal extends TargetGoal {
 	public Class<?>[] toIgnoreDamage;
 	@Nullable
 	public Class<?>[] toIgnoreAlert;
+    private int unseenTicks;
 
-	public EAIHurtByTargetGoal(Mob pMob, Class<?>... pToIgnoreDamage) {
+    public EAIHurtByTargetGoal(Mob pMob, Class<?>... pToIgnoreDamage) {
 		super(pMob, true);
 		this.toIgnoreDamage = pToIgnoreDamage;
 	}
@@ -62,10 +64,43 @@ public class EAIHurtByTargetGoal extends TargetGoal {
 		return this;
 	}
 
+    @Override
+    public boolean canContinueToUse() {
+        LivingEntity target = this.mob.getTarget();
+        if (target == null)
+            target = this.targetMob;
+
+        if (target == null)
+            return false;
+        if (!this.mob.canAttack(target))
+            return false;
+
+        Team team = this.mob.getTeam();
+        Team team1 = target.getTeam();
+        if (team != null && team1 == team)
+            return false;
+
+        double visibilityPercent = target.getVisibilityPercent(this.mob);
+        double range = Math.max(this.getFollowDistance() * visibilityPercent, 2.0D);
+        if (this.mob.distanceToSqr(target) > range * range)
+            return false;
+        if (this.mustSee) {
+            if (this.mob.getSensing().hasLineOfSight(target))
+                this.unseenTicks = 0;
+            else if (++this.unseenTicks > reducedTickDelay(this.unseenMemoryTicks))
+                return false;
+        }
+
+        this.mob.setTarget(target);
+        return true;
+
+    }
+
 	public void start() {
 		this.mob.setTarget(this.mob.getLastHurtByMob());
 		this.targetMob = this.mob.getTarget();
 		this.unseenMemoryTicks = 300;
+        this.unseenTicks = 0;
 		if (this.alertSameType) {
 			this.alertOthers();
 		}
