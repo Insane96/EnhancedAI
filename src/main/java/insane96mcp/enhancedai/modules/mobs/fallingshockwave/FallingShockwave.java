@@ -29,7 +29,7 @@ public class FallingShockwave extends Feature {
     public static final TagKey<EntityType<?>> SHOCKWAVE_INVULNERABLE_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/shockwave/damage_invulnerable"));
     ResourceKey<DamageType> DAMAGE_TYPE = ResourceKey.create(Registries.DAMAGE_TYPE, EnhancedAI.location("shockwave"));
     @Config(min = 0)
-    public static Double jumpStrength = 1d;
+    public static Double jumpStrength = 1.5d;
     @Config(min = 0, description = "In ticks")
     public static Integer jumpCooldown = 300;
     @Config(min = 0, description = "Damage per block of fall distance.")

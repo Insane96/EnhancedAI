@@ -1,6 +1,7 @@
 package insane96mcp.enhancedai.modules.villager;
 
 import insane96mcp.enhancedai.EnhancedAI;
+import insane96mcp.enhancedai.ai.EAIHurtByTargetGoal;
 import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.mixin.accessors.MeleeAttackGoalAccessor;
 import insane96mcp.enhancedai.modules.Modules;
@@ -12,8 +13,11 @@ import insane96mcp.insanelib.base.config.Config;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -58,5 +62,27 @@ public class VillagerAttacking extends Feature {
 		FIGHTS_BACK_ENEMIES.applyIfAbsent(villager, villagersFightBackEnemies);
 		ATTACK_BELOW_REPUTATION.applyIfAbsent(villager, minReputationFightBack);
 		SPEED_MULTIPLIER.applyIfAbsent(villager, speedMultiplier);
+    }
+
+    public static class EAIVillagerHurtByTargetGoal extends EAIHurtByTargetGoal {
+
+        Villager villager;
+
+        public EAIVillagerHurtByTargetGoal(Villager villager, Class<?>... toIgnoreDamage) {
+            super(villager, toIgnoreDamage);
+            this.villager = villager;
+        }
+
+        @Override
+        public boolean canUse() {
+            if (!super.canUse())
+                return false;
+            LivingEntity hurtVillager = this.mob.getLastHurtByMob();
+            if (hurtVillager instanceof Player player)
+                return villager.getPlayerReputation(player) <= ATTACK_BELOW_REPUTATION.get(this.villager);
+            else if (hurtVillager instanceof Enemy)
+                return FIGHTS_BACK_ENEMIES.get(this.villager);
+            return true;
+        }
     }
 }
