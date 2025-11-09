@@ -5,7 +5,7 @@
 			"property": "event",
 			"event": "tick",
 			"id": "enhancedai:slow_passive_healing",
-			"update_interval": 20,
+			"update_interval": 1,
 			"apply_properties": [
 				{
 					"property": "heal",

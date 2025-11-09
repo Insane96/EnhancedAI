@@ -15,6 +15,7 @@
 * Fixed horizontal and vertical flee distance not applied to animals 
 * Removed custom flee
   * Hasn't been implemented yet
+* Fixed slow passive healing from MPR Data Pack being 20x slower than intended
 * Minor angry creeper fix
 
 ## Beta 3.2.1
