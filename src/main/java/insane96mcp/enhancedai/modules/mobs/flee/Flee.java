@@ -1,9 +1,7 @@
 package insane96mcp.enhancedai.modules.mobs.flee;
 
 import insane96mcp.enhancedai.EnhancedAI;
-import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.JsonFeature;
-import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.data.IdTagMatcher;
 import insane96mcp.insanelib.util.ModNBTData;
@@ -15,7 +13,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-@LoadFeature(module = Modules.Ids.MOBS, canBeDisabled = false, description = "Custom Json config to set mobs from running from other mobs")
+//@LoadFeature(module = Modules.Ids.MOBS, canBeDisabled = false, description = "Custom Json config to set mobs from running from other mobs")
 public class Flee extends JsonFeature {
 	public static final List<CustomFleeConfig> CUSTOM_FLEE_DEFAULT = List.of(new CustomFleeConfig(1, IdTagMatcher.newTag("enhancedai:all_mobs"), IdTagMatcher.newId("minecraft:warden"), 1d, 16, 8, 1, 1.1));
 

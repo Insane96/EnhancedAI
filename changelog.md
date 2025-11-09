@@ -13,6 +13,8 @@
 * Horses can no longer be hostile, only neutral
 * Fixed Pick Up and Throw no longer working if the goal stopped and the mob had a passenger
 * Fixed horizontal and vertical flee distance not applied to animals 
+* Removed custom flee
+  * Hasn't been implemented yet
 * Minor angry creeper fix
 
 ## Beta 3.2.1
