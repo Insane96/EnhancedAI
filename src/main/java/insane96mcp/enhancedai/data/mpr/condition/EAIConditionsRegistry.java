@@ -13,5 +13,6 @@ public class EAIConditionsRegistry {
 
 	public static void init() {
 		register("is_leader", EAIIsLeaderCondition.class);
+		register("data", EAIDataCondition.class);
 	}
 }

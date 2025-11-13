@@ -14,6 +14,9 @@
   * Split shockwave range to horizontal and vertical
   * Increased default jump strength
 * Horses can no longer be hostile, only neutral
+* Added MPR support with a property and a condition
+  * `enhancedai:change_data` to set data keys values
+  * `enhancedai:data` to check data keys values
 * Added `/enhancedai list_data_keys` command
   * Logs all the data keys
 * Fixed Pick Up and Throw no longer working if the goal stopped and the mob had a passenger

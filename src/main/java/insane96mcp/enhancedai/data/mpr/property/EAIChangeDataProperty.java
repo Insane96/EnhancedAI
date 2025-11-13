@@ -63,7 +63,10 @@ public class EAIChangeDataProperty extends MPRProperty {
         public JsonElement serialize(EAIChangeDataProperty src, Type typeOfSrc, JsonSerializationContext context) {
             JsonObject jObject = new JsonObject();
             jObject.addProperty("data", src.data.toString());
-            jObject.add("value", context.serialize(src.value));
+            if (src.value != null)
+                jObject.add("value", context.serialize(src.value));
+            if (src.stringValue != null)
+                jObject.addProperty("string_value", src.stringValue);
             return src.endSerialization(jObject, context);
         }
     }
