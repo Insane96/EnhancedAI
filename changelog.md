@@ -11,6 +11,8 @@
   * So even if a mob is hurt, it will forget the target if out of range
 * Increased Falling Shockwave jump strength
 * Horses can no longer be hostile, only neutral
+* Added `/enhancedai list_data_keys` command
+  * Logs all the data keys
 * Fixed Pick Up and Throw no longer working if the goal stopped and the mob had a passenger
 * Fixed horizontal and vertical flee distance not applied to animals 
 * Removed custom flee
