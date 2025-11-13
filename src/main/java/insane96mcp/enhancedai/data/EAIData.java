@@ -160,4 +160,9 @@ public class EAIData<T> {
             throw new IllegalArgumentException("Invalid boolean value: " + input);
         return Boolean.parseBoolean(input);
     }
+
+    @SuppressWarnings("unchecked")
+    public static <T> void apply(EAIData<T> data, Mob mob, Object value) {
+        data.apply(mob, (T) value);
+    }
 }

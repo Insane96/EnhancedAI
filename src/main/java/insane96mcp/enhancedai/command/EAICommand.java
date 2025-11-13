@@ -60,7 +60,7 @@ public class EAICommand {
 
 													Entity entity = EntityArgument.getEntity(ctx, "target");
 													if (entity instanceof Mob mob)
-														apply(data, mob, parsed);
+														EAIData.apply(data, mob, parsed);
                                                     ctx.getSource().sendSuccess(() -> Component.literal("Changed %s to %s".formatted(data.id(), parsed)), true);
                                                     return 1;
                                                 })
@@ -125,10 +125,5 @@ public class EAICommand {
 								ctx.getSource().sendSuccess(() -> component, true);
 								return 1;
 							}))));
-    }
-
-    @SuppressWarnings("unchecked")
-    private static <T> void apply(EAIData<T> data, Mob mob, Object value) {
-        data.apply(mob, (T) value);
     }
 }

@@ -9,7 +9,10 @@
 * Animals calling other animals now has increased range if they can see each other
 * Hurt by target goal now checks for visibility percent
   * So even if a mob is hurt, it will forget the target if out of range
-* Increased Falling Shockwave jump strength
+* Falling Shockwave
+  * If jump strength is 0 the goal will be disabled
+  * Split shockwave range to horizontal and vertical
+  * Increased default jump strength
 * Horses can no longer be hostile, only neutral
 * Added `/enhancedai list_data_keys` command
   * Logs all the data keys
