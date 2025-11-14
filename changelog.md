@@ -6,6 +6,11 @@
 * Added Push Resistance
   * A new attribute that defines how much a mob resists being pushed
   * Used by MPR Data Pack for Iron Golems
+* Added MPR support with a property and a condition
+    * `enhancedai:change_data` to set data keys values
+    * `enhancedai:data` to check data keys values
+* Added `/enhancedai list_data_keys` command
+    * Logs all the data keys
 * Animals calling other animals now has increased range if they can see each other
 * Hurt by target goal now checks for visibility percent
   * So even if a mob is hurt, it will forget the target if out of range
@@ -14,11 +19,6 @@
   * Split shockwave range to horizontal and vertical
   * Increased default jump strength
 * Horses can no longer be hostile, only neutral
-* Added MPR support with a property and a condition
-  * `enhancedai:change_data` to set data keys values
-  * `enhancedai:data` to check data keys values
-* Added `/enhancedai list_data_keys` command
-  * Logs all the data keys
 * Fixed Pick Up and Throw no longer working if the goal stopped and the mob had a passenger
 * Fixed horizontal and vertical flee distance not applied to animals 
 * Removed custom flee
