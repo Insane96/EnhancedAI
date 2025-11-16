@@ -1,5 +1,6 @@
 package insane96mcp.enhancedai.modules.witch.darkart;
 
+import insane96mcp.enhancedai.modules.witch.alliedmonsters.AlliedMonsters;
 import insane96mcp.insanelib.util.MCUtils;
 import insane96mcp.insanelib.util.ModNBTData;
 import net.minecraft.core.BlockPos;
@@ -39,6 +40,7 @@ public class DarkArtWitchGoal extends Goal {
     public boolean canUse() {
         return this.mob.getTarget() != null
                 && !(this.mob.getTarget() instanceof Raider)
+                && !this.mob.getTarget().getType().is(AlliedMonsters.ELIGIBLE_TARGETS)
                 && this.mob.getTarget().distanceToSqr(this.mob) < DarkArt.triggerDistance * DarkArt.triggerDistance
                 && this.mob.getSensing().hasLineOfSight(this.mob.getTarget())
                 && this.phase == Phase.EQUIP_EGG;

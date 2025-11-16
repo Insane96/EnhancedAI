@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Fixed Dark art witches triggering when targeting allied monsters
+
 ## Beta 3.3.0
 * Added Villager Alert Protectors
   * Villagers will now alert nearby iron golems about nearby hostiles
