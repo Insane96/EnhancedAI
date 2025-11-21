@@ -4,6 +4,7 @@ import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.ai.EAIHurtByTargetGoal;
 import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.modules.mobs.Spawning;
 import insane96mcp.enhancedai.setup.EAIAttributes;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.enhancedai.utils.GoalHelper;
@@ -120,8 +121,9 @@ public class Targeting extends JsonFeature {
 
 	//High priority as should run before specific mobs
 	@SubscribeEvent(priority = EventPriority.HIGH)
-	public void onMobSpawn(EntityJoinLevelEvent event) {
+	public void onEntityJoinLevel(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
+                || Spawning.isUnaffectedByFeatures(event.getEntity())
 				|| event.getLevel().isClientSide
 				|| !(event.getEntity() instanceof Mob mob))
 			return;

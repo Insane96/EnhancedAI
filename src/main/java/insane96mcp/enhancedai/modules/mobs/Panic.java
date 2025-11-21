@@ -45,8 +45,9 @@ public class Panic extends Feature {
     }
 
     @SubscribeEvent
-	public void onSpawn(EntityJoinLevelEvent event) {
+	public void onEntityJoinLevel(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
+                || Spawning.isUnaffectedByFeatures(event.getEntity())
                 || !(event.getEntity() instanceof PathfinderMob mob)
                 || !event.getEntity().getType().is(AFFECTED_ENTITY_TYPES))
 			return;

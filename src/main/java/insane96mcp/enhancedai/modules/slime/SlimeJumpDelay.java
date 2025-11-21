@@ -34,7 +34,7 @@ public class SlimeJumpDelay extends Feature {
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public void onSpawn(EntityJoinLevelEvent event) {
+	public void onEntityJoinLevel(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
 				|| !(event.getEntity() instanceof Slime slime)
 				|| !event.getEntity().getType().is(AFFECTED_ENTITY_TYPES))

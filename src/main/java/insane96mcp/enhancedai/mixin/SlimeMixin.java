@@ -2,7 +2,7 @@ package insane96mcp.enhancedai.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import insane96mcp.enhancedai.modules.slime.SlimeFixes;
+import insane96mcp.enhancedai.modules.slime.SlimeAttackFix;
 import insane96mcp.enhancedai.modules.slime.SlimeJumpDelay;
 import insane96mcp.enhancedai.modules.slime.SlimeSize;
 import insane96mcp.insanelib.base.Feature;
@@ -42,7 +42,7 @@ public abstract class SlimeMixin extends Mob {
 
     @ModifyArg(method = "finalizeSpawn", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/monster/Slime;setSize(IZ)V", ordinal = 0))
     public int onFinalizeSpawnSetSize(int size) {
-        if (!SlimeSize.shouldOverrideSpawnSize()
+        if (!SlimeSize.shouldOverrideSpawnSize((Slime) (Object) this)
                 || !this.getType().is(SlimeSize.AFFECTED_ENTITY_TYPES))
             return size;
 
@@ -59,7 +59,7 @@ public abstract class SlimeMixin extends Mob {
 
     @Inject(method = "playerTouch", at = @At("HEAD"), cancellable = true)
     public void onPlayerTouch(Player player, CallbackInfo ci) {
-        if (!Feature.isEnabled(SlimeFixes.class))
+        if (!Feature.isEnabled(SlimeAttackFix.class))
             return;
         ci.cancel();
     }
@@ -67,7 +67,7 @@ public abstract class SlimeMixin extends Mob {
     @WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Mob;tick()V"))
     public void onTick(Slime instance, Operation<Void> original) {
         original.call(instance);
-        if (!Feature.isEnabled(SlimeFixes.class)
+        if (!Feature.isEnabled(SlimeAttackFix.class)
                 || this.getTarget() == null
                 || !this.isWithinMeleeAttackRange(this.getTarget())
                 || !this.isDealsDamage()
@@ -79,7 +79,7 @@ public abstract class SlimeMixin extends Mob {
 
     @WrapOperation(method = "dealDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/monster/Slime;distanceToSqr(Lnet/minecraft/world/entity/Entity;)D"))
     public double onDealDamage(Slime instance, Entity entity, Operation<Double> original) {
-        if (!Feature.isEnabled(SlimeFixes.class))
+        if (!Feature.isEnabled(SlimeAttackFix.class))
             return original.call(instance, entity);
         return 0d;
     }

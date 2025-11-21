@@ -15,7 +15,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TargetingLegacy extends JsonFeature {
+public class CustomTargeting extends JsonFeature {
 
 	public static final String IS_NEUTRAL = EnhancedAI.RESOURCE_PREFIX + "is_neutral";
 
@@ -44,7 +44,7 @@ public class TargetingLegacy extends JsonFeature {
 
 	//High priority as should run before specific mobs
 	@SubscribeEvent(priority = EventPriority.HIGH)
-	public void onMobSpawn(EntityJoinLevelEvent event) {
+	public void onEntityJoinLevel(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
 				|| event.getLevel().isClientSide
 				|| !(event.getEntity() instanceof Mob mob))

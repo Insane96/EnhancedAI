@@ -2,6 +2,7 @@ package insane96mcp.enhancedai.modules.villager;
 
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.modules.mobs.Spawning;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.config.Config;
@@ -27,8 +28,9 @@ public class VillagerAlertProtectors extends Feature {
 
     //Lowest priority so other mods can set persistent data
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void onSpawn(LivingEvent.LivingTickEvent event) {
+    public void onLivingTick(LivingEvent.LivingTickEvent event) {
         if (!this.isEnabled()
+                || Spawning.isUnaffectedByFeatures(event.getEntity())
                 || !(event.getEntity() instanceof Villager villager)
                 || !villager.getType().is(AFFECTED_ENTITY_TYPES)
                 || (villager.tickCount + villager.getId()) % 10 != 0)

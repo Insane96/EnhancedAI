@@ -27,6 +27,7 @@ public class FireImmuneTicks extends Feature {
     @SubscribeEvent
     public void onEntityJoinLevel(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
+                || Spawning.isUnaffectedByFeatures(event.getEntity())
                 || event.getLevel().isClientSide
                 || !(event.getEntity() instanceof Mob mob))
             return;

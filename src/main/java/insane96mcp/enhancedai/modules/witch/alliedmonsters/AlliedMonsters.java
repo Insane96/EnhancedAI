@@ -3,6 +3,7 @@ package insane96mcp.enhancedai.modules.witch.alliedmonsters;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.modules.mobs.Spawning;
 import insane96mcp.enhancedai.utils.GoalHelper;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
@@ -35,6 +36,7 @@ public class AlliedMonsters extends Feature {
 	@SubscribeEvent
 	public void onEntityJoinLevel(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
+                || Spawning.isUnaffectedByFeatures(event.getEntity())
 				|| !(event.getEntity() instanceof Witch witch)
 				|| !witch.getType().is(AFFECTED_ENTITY_TYPES))
 			return;

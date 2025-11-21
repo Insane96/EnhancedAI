@@ -1,6 +1,9 @@
 # Changelog
 
 ## Upcoming
+* Added a config option to make mobs not affected by (most of) Enhanced AI features based off their spawn type
+  * This adds a new NBT `enhancedai:unaffected_by_features` that if true will prevent the mob from getting any changes from Enhanced AI features
+* Sprinting mobs now sprint to reach the target faster, but will stop sprinting when 3 blocks away from them
 * Fixed Dark art witches triggering when targeting allied monsters
 
 ## Beta 3.3.0

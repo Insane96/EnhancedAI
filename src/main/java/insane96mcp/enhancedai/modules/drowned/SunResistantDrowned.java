@@ -3,6 +3,7 @@ package insane96mcp.enhancedai.modules.drowned;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.modules.mobs.Spawning;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
@@ -36,8 +37,9 @@ public class SunResistantDrowned extends Feature {
 	}
 
 	@SubscribeEvent
-	public void onSpawn(EntityJoinLevelEvent event) {
+	public void onEntityJoinLevel(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
+                || Spawning.isUnaffectedByFeatures(event.getEntity())
 				|| !(event.getEntity() instanceof Drowned drowned)
 				|| !drowned.getType().is(AFFECTED_ENTITY_TYPES))
 			return;

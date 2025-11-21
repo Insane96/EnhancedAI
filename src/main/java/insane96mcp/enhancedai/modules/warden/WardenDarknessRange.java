@@ -2,6 +2,7 @@ package insane96mcp.enhancedai.modules.warden;
 
 import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.modules.mobs.Spawning;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
@@ -26,6 +27,7 @@ public class WardenDarknessRange extends Feature {
     @SubscribeEvent
     public void onWardenJoinLevel(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
+                || Spawning.isUnaffectedByFeatures(event.getEntity())
                 || !(event.getEntity() instanceof Warden warden))
             return;
 

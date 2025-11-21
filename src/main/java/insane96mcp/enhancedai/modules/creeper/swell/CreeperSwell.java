@@ -3,6 +3,7 @@ package insane96mcp.enhancedai.modules.creeper.swell;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.modules.mobs.Spawning;
 import insane96mcp.enhancedai.setup.EAISounds;
 import insane96mcp.enhancedai.utils.GoalHelper;
 import insane96mcp.insanelib.base.Feature;
@@ -165,6 +166,7 @@ public class CreeperSwell extends Feature {
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void eventEntityJoinWorld(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
+                || Spawning.isUnaffectedByFeatures(event.getEntity())
 				|| event.getLevel().isClientSide
 				|| !(event.getEntity() instanceof Creeper creeper)
 				|| !creeper.getType().is(CHANGE_CREEPER_SWELL))

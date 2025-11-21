@@ -3,6 +3,7 @@ package insane96mcp.enhancedai.modules.creeper.launch;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.modules.mobs.Spawning;
 import insane96mcp.enhancedai.utils.GoalHelper;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
@@ -65,8 +66,9 @@ public class CreeperLaunch extends Feature {
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void eventEntityJoinWorld(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
+                || Spawning.isUnaffectedByFeatures(event.getEntity())
 				|| event.getLevel().isClientSide
-				|| !(event.getEntity() instanceof net.minecraft.world.entity.monster.Creeper creeper)
+				|| !(event.getEntity() instanceof Creeper creeper)
 				|| !creeper.getType().is(AFFECTED_ENTITY_TYPES))
 			return;
 

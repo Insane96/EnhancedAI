@@ -2,6 +2,7 @@ package insane96mcp.enhancedai.modules.shulker;
 
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.modules.mobs.Spawning;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.config.Config;
@@ -38,6 +39,6 @@ public class ShulkerArmor extends Feature {
     }
 
     public static boolean isAffectedByArmorModifiers(Shulker shulker) {
-        return Feature.isEnabled(ShulkerArmor.class) && shulker.getType().is(AFFECTED_ENTITY_TYPES);
+        return Feature.isEnabled(ShulkerArmor.class) && shulker.getType().is(AFFECTED_ENTITY_TYPES) && !Spawning.isUnaffectedByFeatures(shulker);
     }
 }

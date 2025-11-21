@@ -3,6 +3,7 @@ package insane96mcp.enhancedai.modules.mobs.parkour;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.modules.mobs.Spawning;
 import insane96mcp.enhancedai.utils.GoalHelper;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
@@ -30,8 +31,9 @@ public class Parkour extends Feature {
     }
 
     @SubscribeEvent
-    public void onMobSpawn(EntityJoinLevelEvent event) {
+    public void onEntityJoinLevel(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
+                || Spawning.isUnaffectedByFeatures(event.getEntity())
                 || !(event.getEntity() instanceof Mob mob)
                 || !mob.getType().is(AFFECTED_ENTITY_TYPES))
             return;

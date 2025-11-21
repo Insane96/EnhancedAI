@@ -5,6 +5,7 @@ import insane96mcp.enhancedai.ai.EAIAvoidEntityGoal;
 import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.mixin.accessors.MeleeAttackGoalAccessor;
 import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.modules.mobs.Spawning;
 import insane96mcp.enhancedai.modules.mobs.targeting.EAINearestAttackableTarget;
 import insane96mcp.enhancedai.setup.EAIAttributes;
 import insane96mcp.enhancedai.utils.GoalHelper;
@@ -127,8 +128,9 @@ public class AnimalScaredAttack extends Feature {
 
     //Lowest priority so other mods can set persistent data
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void onSpawn(EntityJoinLevelEvent event) {
+    public void onEntityJoinLevel(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
+                || Spawning.isUnaffectedByFeatures(event.getEntity())
                 || event.getEntity() instanceof Enemy
                 || !(event.getEntity() instanceof Animal animal))
             return;

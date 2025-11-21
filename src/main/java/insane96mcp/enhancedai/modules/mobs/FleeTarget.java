@@ -60,8 +60,9 @@ public class FleeTarget extends Feature {
 
 	//Lowest priority so other mods can set persistent data
 	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public void onSpawn(EntityJoinLevelEvent event) {
+	public void onEntityJoinLevel(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
+                || Spawning.isUnaffectedByFeatures(event.getEntity())
 				|| event.getLevel().isClientSide
 				|| !(event.getEntity() instanceof Mob mob)
 				|| !mob.getType().is(CAN_FLEE))

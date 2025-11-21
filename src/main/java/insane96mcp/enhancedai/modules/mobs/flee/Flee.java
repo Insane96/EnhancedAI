@@ -35,7 +35,7 @@ public class Flee extends JsonFeature {
 	}
 
 	@SubscribeEvent
-	public void onMobSpawn(EntityJoinLevelEvent event) {
+	public void onEntityJoinLevel(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
 				|| event.getLevel().isClientSide
 				|| !(event.getEntity() instanceof PathfinderMob mob)

@@ -2,6 +2,7 @@ package insane96mcp.enhancedai.modules.snowgolem;
 
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.modules.mobs.Spawning;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.config.Config;
@@ -23,6 +24,7 @@ public class SnowGolemsHealedBySnowballs extends Feature {
 	@SubscribeEvent
 	public void onProjectileImpactSnowGolemEvent(ProjectileImpactEvent event) {
 		if (!this.isEnabled()
+                || Spawning.isUnaffectedByFeatures(event.getEntity())
 				|| !(event.getProjectile() instanceof Snowball)
 				|| !(event.getRayTraceResult() instanceof EntityHitResult entityHitResult)
 				|| !(entityHitResult.getEntity() instanceof SnowGolem snowGolemHit))

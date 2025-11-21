@@ -63,8 +63,9 @@ public class Shielding extends JsonFeature {
 	}
 
 	@SubscribeEvent
-	public void onMobSpawn(EntityJoinLevelEvent event) {
+	public void onEntityJoinLevel(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
+                || Spawning.isUnaffectedByFeatures(event.getEntity())
 				|| !(event.getEntity() instanceof Mob mob)
 				|| ModNBTData.get(mob, HAS_SHIELD_BEEN_GIVEN, Boolean.class)
 				|| mob.level().isClientSide

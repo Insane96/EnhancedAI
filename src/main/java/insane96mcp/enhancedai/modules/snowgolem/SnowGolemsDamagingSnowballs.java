@@ -3,6 +3,7 @@ package insane96mcp.enhancedai.modules.snowgolem;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.modules.mobs.Spawning;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
@@ -34,6 +35,7 @@ public class SnowGolemsDamagingSnowballs extends Feature {
     @SubscribeEvent
     public void onProjectileImpactEvent(ProjectileImpactEvent event) {
         if (!this.isEnabled()
+                || Spawning.isUnaffectedByFeatures(event.getEntity())
                 || !(event.getProjectile().getOwner() instanceof SnowGolem snowGolem)
                 || !(event.getRayTraceResult() instanceof EntityHitResult entityHitResult)
                 || !(entityHitResult.getEntity() instanceof LivingEntity entityHit)
@@ -52,7 +54,7 @@ public class SnowGolemsDamagingSnowballs extends Feature {
     }
 
     @SubscribeEvent
-    public void onSpawn(EntityJoinLevelEvent event) {
+    public void onEntityJoinLevel(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
                 || event.getLevel().isClientSide
                 || !(event.getEntity() instanceof SnowGolem snowGolem)

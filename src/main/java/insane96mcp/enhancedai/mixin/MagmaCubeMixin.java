@@ -19,7 +19,7 @@ public class MagmaCubeMixin extends Slime {
 
     @WrapOperation(method = "jumpInLiquidInternal", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/monster/MagmaCube;setDeltaMovement(DDD)V"))
     public void onJumpInLiquidInternal(MagmaCube instance, double x, double y, double z, Operation<Void> original) {
-        double multiplier = MagmaCubeSurfSpeed.getSpeedMultiplier();
+        double multiplier = MagmaCubeSurfSpeed.getSpeedMultiplier((MagmaCube) (Object) this);
         original.call(instance, x * multiplier, y, z * multiplier);
     }
 }

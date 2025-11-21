@@ -2,6 +2,7 @@ package insane96mcp.enhancedai.modules.shulker;
 
 import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.modules.mobs.Spawning;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
@@ -44,8 +45,9 @@ public class ShulkerBullets extends Feature {
     }
 
     @SubscribeEvent
-    public void onSpawn(EntityJoinLevelEvent event) {
+    public void onEntityJoinLevel(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
+                || Spawning.isUnaffectedByFeatures(event.getEntity())
                 || event.getLevel().isClientSide
                 || !(event.getEntity() instanceof Shulker shulker))
             return;

@@ -37,6 +37,7 @@ public class OpenDoors extends Feature {
     @SubscribeEvent
     public void onEntityJoinLevel(EntityJoinLevelEvent event) {
         if (!(event.getEntity() instanceof Mob mob)
+                || Spawning.isUnaffectedByFeatures(event.getEntity())
                 || !shouldBeAbleToOpenDoors(mob)
                 || event.getLevel().isClientSide)
             return;

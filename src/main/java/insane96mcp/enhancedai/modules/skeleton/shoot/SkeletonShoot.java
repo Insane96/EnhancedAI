@@ -3,6 +3,7 @@ package insane96mcp.enhancedai.modules.skeleton.shoot;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.modules.mobs.Spawning;
 import insane96mcp.enhancedai.utils.GoalHelper;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
@@ -48,6 +49,7 @@ public class SkeletonShoot extends Feature {
 
 	public static void onReassessWeaponGoal(AbstractSkeleton skeleton) {
 		if (!isEnabled(SkeletonShoot.class)
+                || Spawning.isUnaffectedByFeatures(skeleton)
 				|| skeleton.level().isClientSide
 				|| !skeleton.getType().is(BETTER_SKELETON_SHOOT))
 			return;

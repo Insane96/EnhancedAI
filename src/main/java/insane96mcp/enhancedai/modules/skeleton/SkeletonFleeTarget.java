@@ -4,6 +4,7 @@ import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.ai.EAIAvoidTargetGoal;
 import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.modules.mobs.Spawning;
 import insane96mcp.enhancedai.modules.skeleton.shoot.EAIRangedBowAttackGoal;
 import insane96mcp.enhancedai.modules.skeleton.shoot.SkeletonShoot;
 import insane96mcp.enhancedai.utils.GoalHelper;
@@ -65,6 +66,7 @@ public class SkeletonFleeTarget extends Feature {
 
     public static void onReassessWeaponGoal(AbstractSkeleton skeleton) {
         if (!isEnabled(SkeletonFleeTarget.class)
+                || Spawning.isUnaffectedByFeatures(skeleton)
                 || !skeleton.getType().is(CAN_FLEE))
             return;
 

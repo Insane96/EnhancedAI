@@ -2,6 +2,7 @@ package insane96mcp.enhancedai.modules.animal;
 
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.modules.mobs.Spawning;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.enhancedai.utils.GoalHelper;
 import insane96mcp.insanelib.base.Feature;
@@ -35,8 +36,9 @@ public class NotTemptedAnimals extends Feature {
 
     //Lowest priority so other mods can set persistent data
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void onSpawn(EntityJoinLevelEvent event) {
+    public void onEntityJoinLevel(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
+                || Spawning.isUnaffectedByFeatures(event.getEntity())
                 || event.getEntity() instanceof Enemy
                 || !(event.getEntity() instanceof Animal animal))
             return;

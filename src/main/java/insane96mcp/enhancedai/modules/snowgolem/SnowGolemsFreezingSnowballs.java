@@ -3,6 +3,7 @@ package insane96mcp.enhancedai.modules.snowgolem;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.modules.mobs.Spawning;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
@@ -57,8 +58,9 @@ public class SnowGolemsFreezingSnowballs extends Feature {
     }
 
     @SubscribeEvent
-    public void onSpawn(EntityJoinLevelEvent event) {
+    public void onEntityJoinLevel(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
+                || Spawning.isUnaffectedByFeatures(event.getEntity())
                 || event.getLevel().isClientSide
                 || !(event.getEntity() instanceof SnowGolem snowGolem)
 				|| !snowGolem.getType().is(AFFECTED_ENTITY_TYPES))

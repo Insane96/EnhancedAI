@@ -68,6 +68,7 @@ public class BitingMobs extends Feature {
 	@SubscribeEvent
 	public void onJoinLevelEvent(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
+                || Spawning.isUnaffectedByFeatures(event.getEntity())
 				|| event.getLevel().isClientSide
 				|| !(event.getEntity() instanceof Mob mob)
 				|| !mob.getType().is(CAN_BITE))

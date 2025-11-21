@@ -3,6 +3,7 @@ package insane96mcp.enhancedai.modules.mobs.avoidexplosion;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.modules.mobs.Spawning;
 import insane96mcp.enhancedai.utils.GoalHelper;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
@@ -50,8 +51,9 @@ public class AvoidExplosions extends Feature {
 	}
 
 	@SubscribeEvent
-	public void onMobSpawn(EntityJoinLevelEvent event) {
-		if (!this.isEnabled())
+	public void onEntityJoinLevel(EntityJoinLevelEvent event) {
+		if (!this.isEnabled()
+                || Spawning.isUnaffectedByFeatures(event.getEntity()))
 			return;
 
 		alertTNT(event.getEntity());

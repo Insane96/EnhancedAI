@@ -33,8 +33,9 @@ public class Swimmers extends Feature {
     public static Double fishSwimSpeed = 0.025d;
 
 	@SubscribeEvent
-	public void onSpawn(EntityJoinLevelEvent event) {
-		if (!this.isEnabled())
+	public void onEntityJoinLevel(EntityJoinLevelEvent event) {
+		if (!this.isEnabled()
+                || Spawning.isUnaffectedByFeatures(event.getEntity()))
 			return;
 
         if (drowned$swimSpeedMultiplier > 0d && event.getEntity() instanceof LivingEntity livingEntity && livingEntity.getType().is(SWIM_SPEED_MULTIPLIER_AFFECTED))

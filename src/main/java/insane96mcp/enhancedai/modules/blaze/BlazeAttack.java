@@ -3,6 +3,7 @@ package insane96mcp.enhancedai.modules.blaze;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.modules.mobs.Spawning;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
@@ -12,6 +13,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.monster.Blaze;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -54,15 +56,16 @@ public class BlazeAttack extends Feature {
 
     //Lowest priority so other mods can set persistent data
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void onSpawn(EntityJoinLevelEvent event) {
+    public void onEntityJoinLevel(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
-                || !(event.getEntity() instanceof net.minecraft.world.entity.monster.Blaze blaze)
+                || Spawning.isUnaffectedByFeatures(event.getEntity())
+                || !(event.getEntity() instanceof Blaze blaze)
                 || !blaze.getType().is(CHANGE_ATTACK))
             return;
 
         ArrayList<Goal> goalsToRemove = new ArrayList<>();
         blaze.goalSelector.availableGoals.forEach(prioritizedGoal -> {
-            if (prioritizedGoal.getGoal() instanceof net.minecraft.world.entity.monster.Blaze.BlazeAttackGoal)
+            if (prioritizedGoal.getGoal() instanceof Blaze.BlazeAttackGoal)
                 goalsToRemove.add(prioritizedGoal.getGoal());
         });
 

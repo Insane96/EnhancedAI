@@ -1,6 +1,7 @@
 package insane96mcp.enhancedai.modules.spider;
 
 import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.modules.mobs.Spawning;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.config.Config;
@@ -14,8 +15,9 @@ public class StuckFix extends Feature {
 	public static Boolean stuckFix = true;
 
 	@SubscribeEvent
-	public void onSpawn(EntityJoinLevelEvent event) {
+	public void onEntityJoinLevel(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
+                || Spawning.isUnaffectedByFeatures(event.getEntity())
 				|| !(event.getEntity() instanceof Spider spider)
 				|| !stuckFix)
 			return;
