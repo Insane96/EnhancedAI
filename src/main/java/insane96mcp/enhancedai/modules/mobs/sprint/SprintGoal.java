@@ -30,7 +30,7 @@ public class SprintGoal extends Goal {
 
 	@Override
 	public boolean canContinueToUse() {
-		return super.canContinueToUse() && this.sprintTicks > 0 && this.goalOwner.distanceToSqr(this.target) > 9;
+		return super.canContinueToUse() && this.sprintTicks > 0 && this.goalOwner.distanceToSqr(this.target) > 4;
 	}
 
 	@Override
