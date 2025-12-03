@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 3.3.1
 * Added a config option to make mobs not affected by (most of) Enhanced AI features based off their spawn type
   * This adds a new NBT `enhancedai:unaffected_by_features` that if true will prevent the mob from getting any changes from Enhanced AI features
 * Targeting has been upgraded

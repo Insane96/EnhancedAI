@@ -17,7 +17,7 @@ import net.minecraft.world.entity.monster.Witch;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@LoadFeature(module = Modules.Ids.WITCH, description = "Witches can throw potions to monsters. Only witches in the `witch/allied_monsters/can_target_monsters` entity type tag will be able to target monsters. The monsters targeted will be in the `witch/allied_monsters/eligible_targets` entity type tag.")
+@LoadFeature(module = Modules.Ids.WITCH, description = "Witches can throw potions to monsters. Only witches in the `witch/allied_monsters/can_target_monsters` entity type tag will be able to target monsters. The monsters targeted are in the `witch/allied_monsters/eligible_targets` entity type tag.")
 public class AlliedMonsters extends Feature {
 	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("witch/allied_monsters/can_target_monsters"));
 	public static final TagKey<EntityType<?>> ELIGIBLE_TARGETS = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("witch/allied_monsters/eligible_targets"));
