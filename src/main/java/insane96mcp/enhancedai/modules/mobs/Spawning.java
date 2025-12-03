@@ -24,7 +24,7 @@ import java.util.List;
 public class Spawning extends Feature {
 
 	@Config(min = 0, max = 128, description = "How far away from any player monsters will instantly despawn? Vanilla is 128. Reducing this makes mobs more crowded around players.")
-	public static Integer monstersDespawningDistance = 96;
+	public static Integer monstersDespawningDistance = 112;
 	@Config(min = 0, max = 128, description = "How far away from any player monsters will be able to randomly despawn? Vanilla is 32")
 	public static Integer minMonstersDespawningDistance = 48;
 

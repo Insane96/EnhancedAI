@@ -1,6 +1,7 @@
 # Changelog
 
 ## Upcoming
+* Increased default despawn distance (96 -> 112) 
 * Minor updates to config comments
 
 ## 3.3.1
