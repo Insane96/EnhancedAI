@@ -1,8 +1,9 @@
 # Changelog
 
-## Upcoming
+## 3.3.2
 * Increased default despawn distance (96 -> 112) 
 * Minor updates to config comments
+* Fixed crash with Random Stroll and Twilight Forest's Naga
 
 ## 3.3.1
 * Added a config option to make mobs not affected by (most of) Enhanced AI features based off their spawn type

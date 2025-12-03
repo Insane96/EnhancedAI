@@ -20,7 +20,7 @@ public class RandomStrollGoalMixin {
 	public int enhancedai$interval(int original) {
 		if (!RandomStroll.RANDOM_STROLL_CHANCE_MULTIPLIER.has(this.mob))
 			return original;
-		return (int) (original * RandomStroll.RANDOM_STROLL_CHANCE_MULTIPLIER.get(this.mob));
+		return (int) Math.max(1, original * RandomStroll.RANDOM_STROLL_CHANCE_MULTIPLIER.get(this.mob));
 	}
 
 	@ModifyExpressionValue(method = "canUse", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/ai/goal/RandomStrollGoal;checkNoActionTime:Z"))
