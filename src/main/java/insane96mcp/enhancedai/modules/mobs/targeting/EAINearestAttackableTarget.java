@@ -39,32 +39,78 @@ public class EAINearestAttackableTarget<T extends LivingEntity> extends ILNeares
     }
 
     @Override
-    protected void findTarget() {
-        this.targetEntitySelector.range(this.getFollowDistance());
-        super.findTarget();
-        if (this.nearestTarget != null
-                || this.getFollowXRayDistance() <= 0d)
-            return;
-        this.targetEntitySelectorXRay.range(this.getFollowXRayDistance());
-        if (this.targetClass != Player.class && this.targetClass != ServerPlayer.class) {
-            this.nearestTarget = this.mob.level().getNearestEntity(this.targetClass, this.targetEntitySelectorXRay.range(this.getFollowXRayDistance()), this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ(), this.getTargetSearchArea(this.getFollowXRayDistance()));
-        }
+    public boolean canUse() {
+        int targetChance = Targeting.TARGET_CHANCE.get(this.mob);
+        if (targetChance > 0 && this.mob.getRandom().nextInt(targetChance) != 0)
+            return false;
         else {
-            //Try to find the nearest player without xray, then try with xray if the attribute is not 0
-            this.nearestTarget = this.mob.level().getNearestPlayer(this.targetEntitySelectorXRay.range(this.getFollowXRayDistance()), this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ());
+            this.findTarget();
+            return this.nearestTarget != null;
         }
     }
 
-	@Override
-	public boolean canUse() {
-		int targetChance = Targeting.TARGET_CHANCE.get(this.mob);
-		if (targetChance > 0 && this.mob.getRandom().nextInt(targetChance) != 0)
-			return false;
-		else {
-			this.findTarget();
-			return this.nearestTarget != null;
-		}
-	}
+    @Override
+    protected void findTarget() {
+        // Try normal targeting first
+        this.targetEntitySelector.range(this.getFollowDistance());
+        super.findTarget();
+
+        // Try glowing entities if enabled and no target found
+        if (this.nearestTarget == null && Targeting.seeGlowingEntities) {
+            tryFindGlowingTarget();
+        }
+
+        // Try xray targeting if no target found and xray is available
+        if (this.nearestTarget == null && this.getFollowXRayDistance() > 0d) {
+            tryFindXRayTarget();
+        }
+    }
+
+    private void tryFindGlowingTarget() {
+        TargetingConditions targetingConditionsGlowing = targetEntitySelector.copy().ignoreLineOfSight().ignoreInvisibilityTesting();
+        targetingConditionsGlowing.selector(
+            targetEntitySelector.selector != null
+                ? targetEntitySelector.selector.and(LivingEntity::isCurrentlyGlowing)
+                : LivingEntity::isCurrentlyGlowing
+        );
+        this.nearestTarget = this.mob.level().getNearestEntity(
+            this.targetClass,
+            targetingConditionsGlowing,
+            this.mob,
+            this.mob.getX(),
+            this.mob.getEyeY(),
+            this.mob.getZ(),
+            this.getTargetSearchArea(this.getFollowDistance())
+        );
+    }
+
+    private void tryFindXRayTarget() {
+        this.targetEntitySelectorXRay.range(this.getFollowXRayDistance());
+
+        if (isPlayerTargetClass()) {
+            this.nearestTarget = this.mob.level().getNearestPlayer(
+                this.targetEntitySelectorXRay,
+                this.mob,
+                this.mob.getX(),
+                this.mob.getEyeY(),
+                this.mob.getZ()
+            );
+        } else {
+            this.nearestTarget = this.mob.level().getNearestEntity(
+                this.targetClass,
+                this.targetEntitySelectorXRay,
+                this.mob,
+                this.mob.getX(),
+                this.mob.getEyeY(),
+                this.mob.getZ(),
+                this.getTargetSearchArea(this.getFollowXRayDistance())
+            );
+        }
+    }
+
+    private boolean isPlayerTargetClass() {
+        return this.targetClass == Player.class || this.targetClass == ServerPlayer.class;
+    }
 
 	protected double getFollowXRayDistance() {
         return this.mob.getAttributeValue(EAIAttributes.XRAY_FOLLOW_RANGE.get());

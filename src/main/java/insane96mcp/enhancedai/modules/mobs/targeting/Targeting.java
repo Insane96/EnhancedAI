@@ -50,12 +50,15 @@ public class Targeting extends JsonFeature {
 	public static final TagKey<EntityType<?>> VISITED_NODES_MULTIPLIER = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/targeting/visited_nodes_multiplier"));
 	public static final TagKey<EntityType<?>> ALERT_NEARBY = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/targeting/alert_nearby"));
 
-	@Config(min = 0d, max = 128d, description = "How far away can the mobs see the player. This overrides the vanilla value (16 for most mobs). Setting 'Max' to 0 will leave the follow range as vanilla. I recommend using mods like Mobs Properties Randomness to have more control over the attribute. Only mobs in the entity type tag `enhancedai:mobs/targeting/follow_range_override` will be affected by this override")
+	@Config(min = 0d, max = 128d, description = "How far away can the mobs see the player. This overrides the vanilla value (16 for most mobs). Setting 'Max' to 0 will leave the follow range as vanilla. Use mods like Mobs Properties Randomness to have more control over the attribute. Only mobs in the entity type tag `enhancedai:mobs/targeting/follow_range_override` will be affected by this override")
 	public static MinMax followRangeOverride = new MinMax(32, 48);
-    @Config(min = 0d, max = 128d, description = "How far away can the mobs see the player even through walls. This only works with 'Better Nearby Targeting' enabled. Setting 'Max' to 0 will make mobs not able to see through walls. I recommend using mods like Mobs Properties Randomness to have more control over the attribute; the attribute name is 'enhancedai:xray_follow_range'. Only mobs in the entity type tag `enhancedai:mobs/targeting/apply_xray` will be affected by this override.")
+    @Config(min = 0d, max = 128d, description = "How far away can the mobs see the player even through walls. This only works with 'Better Nearby Targeting' enabled. Setting 'Max' to 0 will make mobs not able to see through walls. Use mods like Mobs Properties Randomness to have more control over the attribute; the attribute name is 'enhancedai:xray_follow_range'. Only mobs in the entity type tag `enhancedai:mobs/targeting/apply_xray` will be affected by this override.")
     public static MinMax xrayRangeOverride = new MinMax(16, 24);
     @Config(min = 0d, max = 1d, description = "Chance for a mob the get the xray range override.")
     public static Double xrayRangeOverrideChance = 0.5d;
+
+    @Config
+    public static Boolean seeGlowingEntities = true;
 
 	@Config(description = "Mobs will actually switch target when attacked unless it's the same or if the current one it's closer. Only entity types in the entity type tag `enhancedai:mobs/targeting/better_hurt_by` tag will be affected by this. Use the entity type tag `enhancedai:mobs/targeting/allow_target_switch` to allow more entity types to switch targets (e.g. creepers in vanilla can't switch targets).")
 	public static Boolean betterHurtByTarget$enable = true;
