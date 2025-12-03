@@ -16,7 +16,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@LoadFeature(module = Modules.Ids.MOBS, description = "Makes mobs pick up and throw other mobs. Mobs in the `enhancedai:mobs/teleport_to_target/can_be_teleported` tag will be able to be picked up, while mobs in the `enhancedai:mobs/teleport_to_target/can_teleport` tag will be able to pick up other mobs.")
+@LoadFeature(module = Modules.Ids.MOBS, description = "Makes mobs teleport other mobs close to the target. Mobs in the `enhancedai:mobs/teleport_to_target/can_be_teleported` tag will be able to be picked up, while mobs in the `enhancedai:mobs/teleport_to_target/can_teleport` tag will be able to pick up other mobs.")
 public class TeleportToTarget extends Feature {
     public static final TagKey<EntityType<?>> CAN_BE_TELEPORTED = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/teleport_to_target/can_be_teleported"));
     public static final TagKey<EntityType<?>> CAN_TELEPORT = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/teleport_to_target/can_teleport"));

@@ -16,7 +16,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@LoadFeature(module = Modules.Ids.MOBS, description = "Makes mobs be able to climb ladders, and similar blocks. Only entity types in `enhancedai:mobs/can_climb` tag are affected by this feature.")
+@LoadFeature(module = Modules.Ids.MOBS, description = "Makes mobs be able to climb ladders and similar blocks. Only entity types in `enhancedai:mobs/can_climb` tag are affected by this feature.")
 public class Climbing extends Feature {
     public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/can_climb"));
 

@@ -17,7 +17,7 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@LoadFeature(module = Modules.Ids.MOBS, name = "Anti-Cheese", description = "Prevent players from abusing some game mechanics to stop mobs, like vehicles or 2 block tall holes for endermen.")
+@LoadFeature(module = Modules.Ids.MOBS, name = "Anti-Cheese", description = "Allows mobs to break vehicles to escape.")
 public class VehicleAntiCheese extends Feature {
     public static final TagKey<EntityType<?>> PREVENT_VEHICLE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/vehicle_anti_cheese/prevent_riding"));
     public static final TagKey<EntityType<?>> CAN_BREAK_VEHICLE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/vehicle_anti_cheese/break_vehicle"));
