@@ -40,8 +40,8 @@ public class GhastShootFireballGoal extends Goal {
         if (target == null)
             return;
 
-        boolean ignoreLineOfSight = GhastFeature.SHOOT_WHEN_NOT_SEEN.get(this.ghast);
-        int fireballsToShot = GhastFeature.FIREBALLS_SHOT.get(this.ghast);
+        boolean ignoreLineOfSight = GhastShooting.SHOOT_WHEN_NOT_SEEN.get(this.ghast);
+        int fireballsToShot = GhastShooting.FIREBALLS_SHOT.get(this.ghast);
         // 64d
         if (target.distanceToSqr(this.ghast) < 4096d && (this.ghast.hasLineOfSight(target) || ignoreLineOfSight)) {
             Level level = this.ghast.level();
@@ -68,7 +68,7 @@ public class GhastShootFireballGoal extends Goal {
                     this.cooldownBetweenFireballs = 5;
                 }
                 if (this.fireballsShot == fireballsToShot) {
-                    this.chargeTime = -GhastFeature.ATTACK_COOLDOWN.get(this.ghast);
+                    this.chargeTime = -GhastShooting.ATTACK_COOLDOWN.get(this.ghast);
                     if (ignoreLineOfSight && !this.ghast.hasLineOfSight(target))
                         this.chargeTime /= 4;
                     this.fireballsShot = 0;

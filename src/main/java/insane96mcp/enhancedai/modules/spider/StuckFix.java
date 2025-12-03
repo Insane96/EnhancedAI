@@ -11,7 +11,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 @LoadFeature(module = Modules.Ids.SPIDER)
 public class StuckFix extends Feature {
-	@Config(description = "Adds a new AI to spiders that will prevent them from climbing if they were stuck on a wall for more than 2 seconds.")
+	@Config(description = "Adds a new AI to spiders that will prevent them from climbing if they were stuck on a wall for more than 2 seconds and will detach them launching towards the target.")
 	public static Boolean stuckFix = true;
 
 	@SubscribeEvent

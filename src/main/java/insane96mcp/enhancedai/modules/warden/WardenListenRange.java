@@ -13,7 +13,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 @LoadFeature(module = Modules.Ids.WARDEN, description = "Change the distance at which vibrations reach wardens.")
 public class WardenListenRange extends Feature {
-    @Config
+    @Config(description = "Vanilla is 16")
     public static Integer range = 32;
 
 	public static EAIData<Integer> RANGE;

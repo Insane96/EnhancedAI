@@ -14,7 +14,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 @LoadFeature(module = Modules.Ids.WARDEN, description = "Change the distance at which the darkness effect is applied.")
 public class WardenDarknessRange extends Feature {
 
-    @Config
+    @Config(description = "Vanilla is 20")
     public static Integer range = 50;
 
 	public static EAIData<Integer> RANGE;

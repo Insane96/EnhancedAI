@@ -16,7 +16,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
 
-@LoadFeature(module = Modules.Ids.SKELETON, description = "Skeletons are more precise when shooting and strafing is removed, can hit a target from up to 64 blocks and try to stay away from the target. Only entity types in `enhancedai:skeleton/better_shooting` tag are affected by this feature")
+@LoadFeature(module = Modules.Ids.SKELETON, description = "Skeletons are more precise when shooting and can hit a target farther away. Only entity types in `enhancedai:skeleton/better_shooting` tag are affected by this feature")
 public class SkeletonShoot extends Feature {
 
 	public static final TagKey<EntityType<?>> BETTER_SKELETON_SHOOT = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("skeleton/better_shooting"));

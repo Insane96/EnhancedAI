@@ -21,7 +21,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.ArrayList;
 
 @LoadFeature(module = Modules.Ids.GHAST, description = "Various changes to ghast shooting. Only ghast in enhancedai:ghast/change_shooting entity type tag are affected by this feature.")
-public class GhastFeature extends Feature {
+public class GhastShooting extends Feature {
     public static final TagKey<EntityType<?>> CHANGE_GHAST_SHOOT = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("ghast/change_shoot"));
 
     @Config(min = 1, max = 300, description = "How many ticks pass between shooting fireballs. Vanilla is 40")

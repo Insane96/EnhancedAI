@@ -14,7 +14,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 @LoadFeature(module = Modules.Ids.WARDEN, description = "Change the max distance from target where warden can use the sonic boom. Vanilla is 15 horizontal and 20 vertical.")
 public class WardenSonicBoomRange extends Feature {
 
-    @Config
+    @Config(description = "Vanilla is 15 horizontal and 20 vertical")
     public static Integer range = 50;
 
 	public static EAIData<Integer> RANGE;
