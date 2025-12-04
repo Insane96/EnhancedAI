@@ -29,6 +29,7 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.entity.monster.Spider;
+import net.minecraft.world.entity.monster.Vindicator;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
@@ -192,6 +193,8 @@ public class Targeting extends JsonFeature {
 
         if (mob instanceof Spider spider)
             newTargetGoal = new EAISpiderTargetGoal<>(spider, goal.targetType, false, true, goal.targetConditions);
+        else if (mob instanceof Vindicator vindicator && goal instanceof Vindicator.VindicatorJohnnyAttackGoal)
+            newTargetGoal = new EAIVindicatorJohnnyTargetGoal(vindicator, false, true, goal.targetConditions);
         else if (mob instanceof Shulker shulker) {
             if (goal instanceof Shulker.ShulkerNearestAttackGoal)
                 newTargetGoal = new EAIShulkerNearestAttackTargetGoal<>(shulker, goal.targetType, false, true, goal.targetConditions);

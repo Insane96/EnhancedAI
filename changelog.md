@@ -3,6 +3,7 @@
 ## Upcoming
 * Fixed mounting 2 or more drowneds at the same time
 * Fixed stuck on drowned on respawn
+* Fixed vindicators attacking anything
 
 ## 3.3.2
 * Increased default despawn distance (96 -> 112) 
