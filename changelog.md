@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 3.3.3
 * Fixed mounting 2 or more drowneds at the same time
 * Fixed stuck on drowned on respawn
 * Fixed vindicators attacking anything
