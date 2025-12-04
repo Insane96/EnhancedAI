@@ -12,6 +12,7 @@ import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -26,6 +27,7 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @LoadFeature(module = Modules.Ids.MOBS, description = "Makes mobs pick up targets to drown them. Only entity types in the enhancedai:mobs/drowning_targets tag are affected by this feature.")
@@ -64,7 +66,9 @@ public class DrowningTargets extends Feature {
                 || !event.isDismounting()
                 || !(event.getEntityBeingMounted() instanceof Drowned drowned)
                 || !event.getEntityBeingMounted().isAlive()
-                || !(event.getEntityMounting() instanceof Player player))
+                || !(event.getEntityMounting() instanceof Player player)
+                || player.isCreative()
+                || !player.isAlive())
             return;
 
         event.setCanceled(true);
@@ -93,7 +97,8 @@ public class DrowningTargets extends Feature {
 
         @Override
         public boolean canContinueToUse() {
-            return this.mob.getPassengers().contains(this.mob.getTarget());
+            Optional<Entity> passenger0 = this.mob.getPassengers().stream().findFirst();
+            return passenger0.isPresent() && passenger0.get() == this.mob.getTarget() && passenger0.get().isAlive();
         }
 
         public void tick() {
@@ -107,6 +112,8 @@ public class DrowningTargets extends Feature {
         }
 
         public void start() {
+            if (this.mob.getTarget().isPassenger())
+                this.mob.getTarget().stopRiding();
             this.mob.getTarget().startRiding(this.mob);
             MCUtils.applyModifier(this.mob, Attributes.ATTACK_DAMAGE, ATTACK_DAMAGE_UUID, "Drowning Targets", -1, AttributeModifier.Operation.MULTIPLY_TOTAL);
         }
