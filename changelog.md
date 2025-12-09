@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.3.4
+* Melee Attacking feature now only affects vanilla mobs by default
+  * Use `enhancedai:mobs/melee_attacking` entity type tag to add more mobs
+  * Now also checks for `enhancedai:unaffected_by_features` NBT
+
 ## 3.3.3
 * Fixed mounting 2 or more drowneds at the same time
 * Fixed stuck on drowned on respawn

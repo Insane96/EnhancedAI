@@ -1,10 +1,13 @@
 package insane96mcp.enhancedai.modules.mobs;
 
+import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.base.config.Difficulty;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -14,8 +17,9 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 
-@LoadFeature(module = Modules.Ids.MOBS, description = "Changes mobs attack range to use the 1.20.2 mechanic")
+@LoadFeature(module = Modules.Ids.MOBS, description = "Changes mobs attack range to use the 1.20.2 mechanic. Only entities in the `enhancedai:mobs/melee_attacking` entity type tag will be affected.")
 public class MeleeAttacking extends Feature {
+	public static final TagKey<EntityType<?>> CHANGE_MELEE_ATTACKING = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/melee_attacking"));
 
 	//Directly stolen from 1.20.2
 	private static final double DEFAULT_ATTACK_REACH = Math.sqrt(2.04F) - (double)0.6F;
@@ -45,6 +49,10 @@ public class MeleeAttacking extends Feature {
 
 	public static Boolean shouldUseAttackSpeedAttribute() {
 		return isEnabled(MeleeAttacking.class) && attackSpeed$attributeBased;
+	}
+
+	public static Boolean shouldBeAffectedByFeature(LivingEntity attacker) {
+		return isEnabled(MeleeAttacking.class) && !Spawning.isUnaffectedByFeatures(attacker) && attacker.getType().is(CHANGE_MELEE_ATTACKING);
 	}
 
 	public static boolean isWithinMeleeAttackRange(LivingEntity attacker, LivingEntity attacked) {

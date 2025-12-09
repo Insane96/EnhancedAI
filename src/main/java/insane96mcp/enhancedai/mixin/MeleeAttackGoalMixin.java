@@ -45,7 +45,7 @@ public abstract class MeleeAttackGoalMixin extends Goal {
 
 	@Inject(at = @At(value = "HEAD"), method = "checkAndPerformAttack", cancellable = true)
 	public void getAttackReachSqr(LivingEntity attacked, double distanceSqr, CallbackInfo ci) {
-		if (!Feature.isEnabled(MeleeAttacking.class))
+		if (!MeleeAttacking.shouldBeAffectedByFeature(this.mob))
 			return;
 		if (MeleeAttacking.isWithinMeleeAttackRange(this.mob, attacked) && this.isTimeToAttack() && this.mob.getSensing().hasLineOfSight(attacked)) {
 			this.resetAttackCooldown();
