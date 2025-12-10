@@ -52,7 +52,6 @@ public class EAINearestAttackableTarget<T extends LivingEntity> extends ILNeares
     @Override
     protected void findTarget() {
         // Try normal targeting first
-        this.targetEntitySelector.range(this.getFollowDistance());
         super.findTarget();
 
         // Try glowing entities if enabled and no target found
