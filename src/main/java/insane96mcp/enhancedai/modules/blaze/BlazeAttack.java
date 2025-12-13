@@ -4,6 +4,7 @@ import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.modules.mobs.Spawning;
+import insane96mcp.enhancedai.utils.GoalHelper;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
 import insane96mcp.insanelib.base.Module;
@@ -12,13 +13,10 @@ import insane96mcp.insanelib.base.config.MinMax;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Blaze;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-
-import java.util.ArrayList;
 
 @LoadFeature(module = Modules.Ids.BLAZE, description = "Make blazes fire faster/more fireballs. Only mobs in enhancedai:blaze/change_attack entity type tag are affected by this feature.")
 public class BlazeAttack extends Feature {
@@ -63,15 +61,9 @@ public class BlazeAttack extends Feature {
                 || !blaze.getType().is(CHANGE_ATTACK))
             return;
 
-        ArrayList<Goal> goalsToRemove = new ArrayList<>();
-        blaze.goalSelector.availableGoals.forEach(prioritizedGoal -> {
-            if (prioritizedGoal.getGoal() instanceof Blaze.BlazeAttackGoal)
-                goalsToRemove.add(prioritizedGoal.getGoal());
-        });
-
-        goalsToRemove.forEach(blaze.goalSelector::removeGoal);
-
+        GoalHelper.removeGoal(blaze.goalSelector, Blaze.BlazeAttackGoal.class);
         blaze.goalSelector.addGoal(4, new EAIBlazeAttackGoal(blaze));
+
         TIME_BETWEEN_FIREBALLS.applyIfAbsent(blaze, timeBetweenFireballs.getIntRandBetween(blaze.getRandom()));
         FIREBALLS_SHOT.applyIfAbsent(blaze, fireballsShot.getIntRandBetween(blaze.getRandom()));
         RECHARGE_TIME.applyIfAbsent(blaze, rechargeTime.getIntRandBetween(blaze.getRandom()));

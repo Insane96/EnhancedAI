@@ -1,5 +1,8 @@
 # Changelog
 
+## Upcoming
+* Blazes no longer panic on fire. Fixes failing to shoot
+
 ## 3.3.4
 * Melee Attacking feature now only affects vanilla mobs by default
   * Use `enhancedai:mobs/melee_attacking` entity type tag to add more mobs
