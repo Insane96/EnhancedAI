@@ -1,7 +1,8 @@
 # Changelog
 
-## Upcoming
+## 3.3.5
 * Blazes no longer panic on fire. Fixes failing to shoot
+* Fixed compatibility with latest MPR
 
 ## 3.3.4
 * Melee Attacking feature now only affects vanilla mobs by default

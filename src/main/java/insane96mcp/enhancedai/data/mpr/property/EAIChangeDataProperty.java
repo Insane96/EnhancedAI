@@ -42,7 +42,7 @@ public class EAIChangeDataProperty extends MPRProperty {
         EAIData<?> data = optData.get();
 
         if (this.value != null)
-            EAIData.apply(data, mob, this.value.getValue(living));
+            EAIData.apply(data, mob, this.value.getDoubleBetween(living));
         else if (this.stringValue != null)
             EAIData.apply(data, mob, this.stringValue);
         return true;
