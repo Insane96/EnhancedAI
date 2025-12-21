@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.3.6
+* Fixed change_data property not working with booleans
+
 ## 3.3.5
 * Blazes no longer panic on fire. Fixes failing to shoot
 * Fixed compatibility with latest MPR
@@ -10,7 +13,7 @@
   * Now also checks for `enhancedai:unaffected_by_features` NBT
 
 ## 3.3.3
-* Fixed mounting 2 or more drowneds at the same time
+* Fixed mounting 2 or more drowned at the same time
 * Fixed stuck on drowned on respawn
 * Fixed vindicators attacking anything
 
