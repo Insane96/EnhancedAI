@@ -34,10 +34,12 @@ public class FallingShockwave extends Feature {
     public static Double jumpStrength = 1.5d;
     @Config(min = 0, description = "In ticks")
     public static Integer jumpCooldown = 300;
+    @Config(min = 0, description = "If the mob falls for less than these blocks, the shockwave will not happen")
+    public static Integer minFallDistance = 3;
     @Config(min = 0, description = "Damage per block of fall distance.")
     public static Double damagePerBlock = 1d;
     @Config(min = 0, description = "Fall distance multiplied by this")
-    public static Double knockupStrengthRatio = 0.08d;
+    public static Double knockUpStrengthRatio = 0.08d;
     @Config(min = 0)
     public static Double horizontalBaseRange = 2d;
     @Config(min = 0)
@@ -49,6 +51,7 @@ public class FallingShockwave extends Feature {
 
     public static EAIData<Double> JUMP_STRENGTH;
     public static EAIData<Integer> JUMP_COOLDOWN;
+    public static EAIData<Integer> MIN_FALL_DISTANCE;
     public static EAIData<Double> DAMAGE_PER_BLOCK;
     public static EAIData<Double> KNOCKUP_STRENGTH_RATIO;
     public static EAIData<Double> HORIZONTAL_BASE_RANGE;
@@ -65,6 +68,7 @@ public class FallingShockwave extends Feature {
                 mob.goalSelector.addGoal(1, new FallingShockwaveGoal(mob));
         });
         JUMP_COOLDOWN = EAIData.ofInt(this.createDataKey("jump_cooldown"));
+        MIN_FALL_DISTANCE = EAIData.ofInt(this.createDataKey("min_fall_distance"));
         DAMAGE_PER_BLOCK = EAIData.ofDouble(this.createDataKey("damage_per_block"));
         KNOCKUP_STRENGTH_RATIO = EAIData.ofDouble(this.createDataKey("knockup_strength_ratio"));
         HORIZONTAL_BASE_RANGE = EAIData.ofDouble(this.createDataKey("horizontal_base_range"));
@@ -82,7 +86,7 @@ public class FallingShockwave extends Feature {
         double damage = DAMAGE_PER_BLOCK.get(entity);
         if (damage <= 0)
             return;
-        if (event.getDistance() < 1d)
+        if (event.getDistance() < MIN_FALL_DISTANCE.get(entity))
             return;
         damage = damage * (event.getDistance() - 1);
         double horizontalBaseRange = HORIZONTAL_BASE_RANGE.get(entity);
@@ -116,8 +120,9 @@ public class FallingShockwave extends Feature {
 
         JUMP_STRENGTH.applyIfAbsent(mob, jumpStrength);
         JUMP_COOLDOWN.applyIfAbsent(mob, jumpCooldown);
+        MIN_FALL_DISTANCE.applyIfAbsent(mob, minFallDistance);
         DAMAGE_PER_BLOCK.applyIfAbsent(mob, damagePerBlock);
-        KNOCKUP_STRENGTH_RATIO.applyIfAbsent(mob, knockupStrengthRatio);
+        KNOCKUP_STRENGTH_RATIO.applyIfAbsent(mob, knockUpStrengthRatio);
         HORIZONTAL_BASE_RANGE.applyIfAbsent(mob, horizontalBaseRange);
         VERTICAL_BASE_RANGE.applyIfAbsent(mob, verticalBaseRange);
         HORIZONTAL_RANGE_PER_BLOCK.applyIfAbsent(mob, horizontalRangePerBlock);

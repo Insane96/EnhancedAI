@@ -1,7 +1,8 @@
 # Changelog
 
-## Upcoming
-* Ghast no longer have their follow range overridden
+## 3.3.6.1
+* Ghasts no longer have their follow range overridden
+* Falling Shockwave now only applies if the mob falls for at least 3 blocks
 
 ## 3.3.6
 * Fixed change_data property not working with booleans
