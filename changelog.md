@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.3.6.2
+* Fixed error with MPR when setting integer data
+
 ## 3.3.6.1
 * Ghasts no longer have their follow range overridden
 * Falling Shockwave now only applies if the mob falls for at least 3 blocks

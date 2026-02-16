@@ -46,6 +46,8 @@ public class EAIChangeDataProperty extends MPRProperty {
         if (this.value != null) {
             if (data.type() == Boolean.class)
                 EAIData.apply(data, mob, this.value.getDoubleBetween(living) >= 1d);
+            else if (data.type() == Integer.class)
+                EAIData.apply(data, mob, this.value.getIntBetween(living));
             else
                 EAIData.apply(data, mob, this.value.getDoubleBetween(living));
         }
