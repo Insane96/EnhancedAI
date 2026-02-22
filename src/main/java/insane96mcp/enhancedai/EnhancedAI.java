@@ -1,67 +1,65 @@
 package insane96mcp.enhancedai;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.logging.LogUtils;
 import insane96mcp.enhancedai.command.EAICommand;
 import insane96mcp.enhancedai.data.mpr.condition.EAIConditionsRegistry;
 import insane96mcp.enhancedai.data.mpr.property.EAIPropertiesRegistry;
+import insane96mcp.enhancedai.modules.EAIModules;
 import insane96mcp.enhancedai.modules.animal.AnimalScaredAttack;
 import insane96mcp.enhancedai.modules.mobs.Leaders;
 import insane96mcp.enhancedai.modules.mobs.MeleeAttacking;
 import insane96mcp.enhancedai.modules.mobs.PushResistance;
 import insane96mcp.enhancedai.modules.mobs.miner.MinerMobs;
 import insane96mcp.enhancedai.modules.mobs.targeting.Targeting;
-import insane96mcp.enhancedai.setup.*;
-import insane96mcp.insanelib.InsaneLib;
+import insane96mcp.enhancedai.setup.EAIAttributes;
+import insane96mcp.enhancedai.setup.Reflection;
+import insane96mcp.insanelib.setup.ILModConfig;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.commands.DebugPathCommand;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.MissingMappingsEvent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 
 @Mod(EnhancedAI.MOD_ID)
 public class EnhancedAI
 {
-	public static final String MOD_ID = "enhancedai";
-    @Deprecated
-    /// Use EnhancedAI.location instead
-	public static final String RESOURCE_PREFIX = MOD_ID + ":";
-    public static final Logger LOGGER = LogManager.getLogger();
+    public static final String MOD_ID = "enhancedai";
+    public static final org.slf4j.Logger LOGGER = LogUtils.getLogger();
 
     public static final String CONFIG_FOLDER = "config/" + MOD_ID;
-    
-    public EnhancedAI(FMLJavaModLoadingContext context) {
-        context.registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, EAIConfig.COMMON_SPEC, MOD_ID + "/common.toml");
 
-        MinecraftForge.EVENT_BUS.register(this);
-		IEventBus modEventBus = context.getModEventBus();
-		EAISounds.SOUND_EVENTS.register(modEventBus);
-		EAIAttributes.ATTRIBUTES.register(modEventBus);
-		EAIEntities.ENTITIES.register(modEventBus);
+    public static ILModConfig CONFIG;
+
+    public EnhancedAI(IEventBus eventBus, ModContainer modContainer) {
+        CONFIG = new ILModConfig(MOD_ID, ModConfig.Type.COMMON, eventBus, EAIModules::init, EnhancedAI.class.getClassLoader());
+        modContainer.registerConfig(ModConfig.Type.COMMON, CONFIG.spec);
+
+        NeoForge.EVENT_BUS.register(this);
+        //EAISounds.SOUND_EVENTS.register(eventBus);
+        EAIAttributes.ATTRIBUTES.register(eventBus);
+        //EAIEntities.ENTITIES.register(eventBus);
 
         Reflection.init();
 
-		modEventBus.addListener(MinerMobs::addAttribute);
-        modEventBus.addListener(AnimalScaredAttack::attribute);
-        modEventBus.addListener(MeleeAttacking::attributeModificationEvent);
-        modEventBus.addListener(Targeting::attribute);
-        modEventBus.addListener(PushResistance::attribute);
-        modEventBus.addListener(Leaders::attribute);
+        eventBus.addListener(MinerMobs::addAttribute);
+        eventBus.addListener(AnimalScaredAttack::attribute);
+        eventBus.addListener(MeleeAttacking::attributeModificationEvent);
+        eventBus.addListener(Targeting::attribute);
+        eventBus.addListener(PushResistance::attribute);
+        eventBus.addListener(Leaders::attribute);
 
         if (ModList.get().isLoaded("mobspropertiesrandomness")) {
-			EAIPropertiesRegistry.init();
+            EAIPropertiesRegistry.init();
             EAIConditionsRegistry.init();
-			//PropertiesRegistry.PROPERTIES.put(location("change_data"), EAIChangeDataProperty.class);
-		}
+        }
     }
 
     @SubscribeEvent
@@ -70,14 +68,6 @@ public class EnhancedAI
         CommandBuildContext context = event.getBuildContext();
         EAICommand.register(dispatcher, context);
     }
-
-	@SubscribeEvent
-	public void onMissingMappings(MissingMappingsEvent event) {
-		InsaneLib.handleMissingMappings(event, MOD_ID, Registries.ATTRIBUTE, name -> switch (name) {
-			case "generic.xray_follow_range" -> EAIAttributes.XRAY_FOLLOW_RANGE.get();
-			default -> null;
-		});
-	}
 
     @SubscribeEvent
     public void registerCommands(RegisterCommandsEvent event) {

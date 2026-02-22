@@ -2,21 +2,21 @@ package insane96mcp.enhancedai.modules.mobs.teleportanticheese;
 
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.data.EAIData;
-import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.modules.EAIModules;
 import insane96mcp.enhancedai.modules.mobs.Spawning;
 import insane96mcp.enhancedai.utils.GoalHelper;
-import insane96mcp.insanelib.base.Feature;
-import insane96mcp.insanelib.base.LoadFeature;
-import insane96mcp.insanelib.base.Module;
-import insane96mcp.insanelib.base.config.Config;
+import insane96mcp.insanelib.core.feature.Feature;
+import insane96mcp.insanelib.core.feature.LoadFeature;
+import insane96mcp.insanelib.core.feature.Module;
+import insane96mcp.insanelib.core.feature.config.Config;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
-@LoadFeature(module = Modules.Ids.MOBS, name = "Teleport anti-cheese", description = "Prevent players from abusing water or 2 high gaps to bully endermen.")
+@LoadFeature(module = EAIModules.Ids.MOBS, name = "Teleport anti-cheese", description = "Prevent players from abusing water or 2 high gaps to bully endermen.")
 public class TeleportAntiCheese extends Feature {
     public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/teleport_anti_cheese/can_use"));
     public static final TagKey<EntityType<?>> CANT_BE_TELEPORTED = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/teleport_anti_cheese/cant_be_teleported"));

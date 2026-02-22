@@ -1,15 +1,15 @@
 package insane96mcp.enhancedai.modules.spider;
 
-import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.modules.EAIModules;
 import insane96mcp.enhancedai.modules.mobs.Spawning;
-import insane96mcp.insanelib.base.Feature;
-import insane96mcp.insanelib.base.LoadFeature;
-import insane96mcp.insanelib.base.config.Config;
+import insane96mcp.insanelib.core.feature.Feature;
+import insane96mcp.insanelib.core.feature.LoadFeature;
+import insane96mcp.insanelib.core.feature.config.Config;
 import net.minecraft.world.entity.monster.Spider;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
-@LoadFeature(module = Modules.Ids.SPIDER)
+@LoadFeature(module = EAIModules.Ids.SPIDER)
 public class StuckFix extends Feature {
 	@Config(description = "Adds a new AI to spiders that will prevent them from climbing if they were stuck on a wall for more than 2 seconds and will detach them launching towards the target.")
 	public static Boolean stuckFix = true;

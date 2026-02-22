@@ -1,10 +1,9 @@
 package insane96mcp.enhancedai.mixin;
 
 import insane96mcp.enhancedai.modules.drowned.SunResistantDrowned;
-import insane96mcp.insanelib.base.Feature;
-import insane96mcp.insanelib.util.ModNBTData;
+import insane96mcp.insanelib.core.ModNBTData;
+import insane96mcp.insanelib.core.feature.Feature;
 import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.monster.Drowned;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -12,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(Drowned.DrownedGoToWaterGoal.class)
+@Mixin(targets = "net/minecraft/world/entity/monster/Drowned$DrownedGoToWaterGoal")
 public abstract class DrownedGoToWaterGoalMixin {
     @Shadow @Final private PathfinderMob mob;
 

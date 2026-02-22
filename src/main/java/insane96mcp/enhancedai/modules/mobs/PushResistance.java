@@ -1,15 +1,15 @@
 package insane96mcp.enhancedai.modules.mobs;
 
-import insane96mcp.enhancedai.modules.Modules;
+import insane96mcp.enhancedai.modules.EAIModules;
 import insane96mcp.enhancedai.setup.EAIAttributes;
-import insane96mcp.insanelib.base.Feature;
-import insane96mcp.insanelib.base.LoadFeature;
+import insane96mcp.insanelib.core.feature.Feature;
+import insane96mcp.insanelib.core.feature.LoadFeature;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
+import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 
-@LoadFeature(module = Modules.Ids.MOBS, description = "Adds a new push resistance attribute to mobs. This is added to some vanilla mobs through MPR data pack")
+@LoadFeature(module = EAIModules.Ids.MOBS, description = "Adds a new push resistance attribute to mobs. This is added to some vanilla mobs through MPR data pack")
 public class PushResistance extends Feature {
     public static void attribute(EntityAttributeModificationEvent event) {
         for (EntityType<? extends LivingEntity> entityType : event.getTypes()) {

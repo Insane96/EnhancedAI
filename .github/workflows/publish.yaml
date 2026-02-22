@@ -17,15 +17,13 @@ jobs:                                     #The place where you actually tell the
         run: env
 
       - name: Checkout Repository
-        uses: actions/checkout@v3
-        with:
-          submodules: true
+        uses: actions/checkout@v6
 
       - name: Setup Java
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v5
         with:
           distribution: "temurin"
-          java-version: 17
+          java-version: 21
 
       - name: Make Gradle Wrapper Executable
         if: ${{ runner.os != 'Windows' }}
@@ -33,6 +31,17 @@ jobs:                                     #The place where you actually tell the
 
       - name: Build
         run: ./gradlew clean build
+
+      - name: Read Changelog
+        id: read_changelog
+        run: |
+          delimiter="$(openssl rand -hex 8)"
+          {
+            echo "changelog<<${delimiter}"
+            cat changelog.md
+            printf '\n'
+            echo "${delimiter}"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Publish (CurseForge+Modrinth)
         uses: Kir-Antipov/mc-publish@v3.3
@@ -46,4 +55,4 @@ jobs:                                     #The place where you actually tell the
           files: |
             build/libs/!(*-@(slim)).jar
 
-          changelog: https://github.com/Insane96/EnhancedAI/blob/1.20.1/changelog.md
+          changelog: ${{ steps.read_changelog.outputs.changelog }}

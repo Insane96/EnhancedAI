@@ -1,14 +1,14 @@
 package insane96mcp.enhancedai.modules.mobs.flee;
 
 import insane96mcp.enhancedai.EnhancedAI;
-import insane96mcp.insanelib.base.JsonFeature;
-import insane96mcp.insanelib.base.Module;
+import insane96mcp.insanelib.core.ModNBTData;
+import insane96mcp.insanelib.core.feature.JsonFeature;
+import insane96mcp.insanelib.core.feature.Module;
 import insane96mcp.insanelib.data.IdTagMatcher;
-import insane96mcp.insanelib.util.ModNBTData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.PathfinderMob;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
 import java.util.ArrayList;
 import java.util.List;

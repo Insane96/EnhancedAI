@@ -10,7 +10,7 @@ body:
         * **[Pinned Issues](/Insane96/EnhancedAI/issues)**: Some commonly reported issues are pinned
         * **[The Search Bar](/Insane96/EnhancedAI/issues)**: See already reported issues.
         
-        Please fill in the following template to report your issue. EAI is shorthand for Enhanced AI.
+        Please fill in the following template to report your issue. EAI is shorthand for EnhancedAI.
 
   - type: markdown
     attributes:
@@ -82,7 +82,7 @@ body:
   - type: input
     id: crash-report
     attributes:
-      label: Crash Report
+      label: Logs / Crash Report
       description: Paste a link to the crash report, if present. Attaching latest.log and debug.log will also help. Use https://mclo.gs
     validations:
       required: false
@@ -92,9 +92,9 @@ body:
       value: "## Minimal Mods"
 
   - type: dropdown
-    id: just-tinkers
+    id: just-iso
     attributes:
-      label: "Can you reproduce with just EAI?"
+      label: "Reproduce the issue with just EAI"
       description: "Test by removing all other mods besides EAI and required dependencies."
       options:
         - 'I have not tried'
@@ -107,7 +107,7 @@ body:
     id: performance-enhancers
     attributes:
       label: "Performance Enchancers"
-      description: "Select the minimal list of performance mods you were using when you reproduced the issue."
+      description: "Test without Performance enhancers. If the mod works properly without them, report the issue to the relative performance enhancer."
       multiple: true
       options:
         - 'Optifine'
@@ -119,11 +119,23 @@ body:
     validations:
       required: true
 
+  - type: dropdown
+    id: sinytra
+    attributes:
+      label: "Sinytra Connector"
+      description: "If the problem arises with Sinytra please report it to them. Do you use Sinytra Connector?"
+      multiple: true
+      options:
+        - 'No'
+        - 'Yes'
+    validations:
+      required: true
+
   - type: textarea
     id: other-mods
     attributes:
       label: Other mods
-      description: If you cannot reproduce with just EAI, list the smallest number of mods needed to reproduce this issue.
+      description: If you cannot reproduce with just MPR, list the smallest number of mods needed to reproduce this issue.
 
 
   - type: markdown
@@ -132,19 +144,17 @@ body:
         ## Confirm the following
         
         Please check the following to see if your issue is covered:
-        * [Pinned issues](/Insane96/EnhancedAI/issues)
-        * [The search bar](/Insane96/EnhancedAI/issues)
+        * [Pinned issues](/Insane96/MobsPropertiesRandomness/issues)
+        * [Existing issues](/Insane96/MobsPropertiesRandomness/issues)
 
   - type: dropdown
     id: searched
     attributes:
-      label: "Searched for known issues?"
+      label: "Confirm the following"
       description: "Select all that apply."
       multiple: true
       options:
         - 'Checked pinned issues'
-        - 'Searched open issues'
-        - 'Searched closed issues'
-        - 'I did not search'
+        - 'Searched existing issues'
     validations:
       required: true

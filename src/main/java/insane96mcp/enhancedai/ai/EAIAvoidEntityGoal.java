@@ -1,7 +1,7 @@
 package insane96mcp.enhancedai.ai;
 
 import insane96mcp.enhancedai.data.EAIData;
-import insane96mcp.insanelib.data.IdTagMatcher;
+import insane96mcp.insanelib.data.ObjTag;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.EntityType;
@@ -44,8 +44,8 @@ public class EAIAvoidEntityGoal<T extends LivingEntity> extends Goal {
         Predicate<LivingEntity> predicate = builder.predicate
                 .and(EntitySelector.NO_CREATIVE_OR_SPECTATOR);
 
-        if (builder.idTagMatcher != null) {
-            predicate = predicate.and(builder.idTagMatcher::matchesEntity);
+        if (builder.objTag != null) {
+            predicate = predicate.and(builder.objTag::matchesEntity);
         }
 
         if (builder.entityTypesToAvoid != null) {
@@ -123,7 +123,7 @@ public class EAIAvoidEntityGoal<T extends LivingEntity> extends Goal {
         private final EAIData<Integer> verticalDistance;
 
         private Predicate<LivingEntity> predicate = e -> true;
-        private @Nullable IdTagMatcher idTagMatcher = null;
+        private @Nullable ObjTag<EntityType<?>> objTag = null;
         private @Nullable TagKey<EntityType<?>> entityTypesToAvoid = null;
 
         public Builder(PathfinderMob goalOwner, Class<T> classToAvoid,
@@ -144,8 +144,8 @@ public class EAIAvoidEntityGoal<T extends LivingEntity> extends Goal {
             return this;
         }
 
-        public Builder<T> withIdTagMatcher(IdTagMatcher matcher) {
-            this.idTagMatcher = matcher;
+        public Builder<T> withObjTag(ObjTag<EntityType<?>> matcher) {
+            this.objTag = matcher;
             return this;
         }
 

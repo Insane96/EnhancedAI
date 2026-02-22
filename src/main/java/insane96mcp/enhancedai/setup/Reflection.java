@@ -1,10 +1,10 @@
 package insane96mcp.enhancedai.setup;
 
-import insane96mcp.enhancedai.utils.LogHelper;
+import insane96mcp.enhancedai.EnhancedAI;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
+import net.neoforged.fml.util.ObfuscationReflectionHelper;
 
 import java.lang.reflect.Method;
 
@@ -16,7 +16,7 @@ public class Reflection {
             return (AbstractArrow) AbstractSkeleton_getArrow.invoke(skeleton, stack, damage);
         }
         catch (Exception e) {
-            LogHelper.error(e.toString());
+            EnhancedAI.LOGGER.error(e.toString());
         }
         return null;
     }

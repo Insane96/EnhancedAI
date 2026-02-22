@@ -1,8 +1,8 @@
 package insane96mcp.enhancedai.modules.witch.darkart;
 
 import insane96mcp.enhancedai.modules.witch.alliedmonsters.AlliedMonsters;
+import insane96mcp.insanelib.core.ModNBTData;
 import insane96mcp.insanelib.util.MCUtils;
-import insane96mcp.insanelib.util.ModNBTData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;

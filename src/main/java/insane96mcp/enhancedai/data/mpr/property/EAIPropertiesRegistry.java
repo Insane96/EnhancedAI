@@ -6,7 +6,7 @@ import insane96mcp.mobspropertiesrandomness.data.json.property.MPRProperty;
 import static insane96mcp.mobspropertiesrandomness.data.json.property.PropertiesRegistry.PROPERTIES;
 
 public class EAIPropertiesRegistry {
-	/// Use you own namespace
+	/// Use your own namespace
 	private static void register(String id, Class<? extends MPRProperty> clazz) {
 		PROPERTIES.put(EnhancedAI.location(id), clazz);
 	}

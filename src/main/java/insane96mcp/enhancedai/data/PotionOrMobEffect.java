@@ -1,7 +1,9 @@
 package insane96mcp.enhancedai.data;
 
-import insane96mcp.enhancedai.utils.LogHelper;
+import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.insanelib.util.MCUtils;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -10,18 +12,17 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.alchemy.PotionUtils;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.world.item.alchemy.PotionContents;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PotionOrMobEffect {
-	Potion potion;
+	Holder<Potion> potion;
 	MobEffectInstance mobEffectInstance;
 
-	public PotionOrMobEffect(Potion potion) {
+	public PotionOrMobEffect(Holder<Potion> potion) {
 		this.potion = potion;
 	}
 
@@ -44,17 +45,17 @@ public class PotionOrMobEffect {
 	private ItemStack getStackInternal(Item item) {
 		ItemStack stack;
 		if (this.potion != null)
-			stack = PotionUtils.setPotion(new ItemStack(item), this.potion);
+			stack = PotionContents.createItemStack(item, this.potion);
 		else
-			stack = MCUtils.setCustomEffects(new ItemStack(item), List.of(new MobEffectInstance(this.mobEffectInstance)));
+			stack = MCUtils.createPotionStackFromEffectInstances(item, List.of(new MobEffectInstance(this.mobEffectInstance)));
 
 		return stack;
 	}
 
-	public List<MobEffect> getMobEffects() {
-		List<MobEffect> mobEffects = new ArrayList<>();
+	public List<Holder<MobEffect>> getMobEffects() {
+		List<Holder<MobEffect>> mobEffects = new ArrayList<>();
 		if (this.potion != null) {
-			for (MobEffectInstance mobEffectInstance1 : this.potion.getEffects()) {
+			for (MobEffectInstance mobEffectInstance1 : this.potion.value().getEffects()) {
 				mobEffects.add(mobEffectInstance1.getEffect());
 			}
 		}
@@ -65,7 +66,7 @@ public class PotionOrMobEffect {
 	}
 
 	public boolean hasMobEffect(LivingEntity living) {
-		List<MobEffect> mobEffects = this.getMobEffects();
+		List<Holder<MobEffect>> mobEffects = this.getMobEffects();
 		for (MobEffectInstance mobEffect : living.getActiveEffects()) {
 			if (mobEffects.contains(mobEffect.getEffect()))
 				return true;
@@ -76,7 +77,7 @@ public class PotionOrMobEffect {
 	public static ArrayList<PotionOrMobEffect> parseList(List<? extends String> list) {
 		ArrayList<PotionOrMobEffect> potionOrMobEffects = new ArrayList<>();
 		for (String s : list) {
-			Potion potion = parsePotion(s);
+			Holder<Potion> potion = parsePotion(s);
 			if (potion != null) {
 				potionOrMobEffects.add(new PotionOrMobEffect(potion));
 			}
@@ -85,7 +86,7 @@ public class PotionOrMobEffect {
 				if (mobEffectInstance != null)
 					potionOrMobEffects.add(new PotionOrMobEffect(mobEffectInstance));
 				else
-					LogHelper.warn("%s is not a valid potion or a mob effect instance", s);
+					EnhancedAI.LOGGER.warn("{} is not a valid potion or a mob effect instance", s);
 			}
 		}
 		return potionOrMobEffects;
@@ -95,15 +96,19 @@ public class PotionOrMobEffect {
 	 * Parses a string to Potion
 	 */
 	@Nullable
-	public static Potion parsePotion(String s) {
+	public static Holder<Potion> parsePotion(String s) {
 		ResourceLocation effectRL = ResourceLocation.tryParse(s);
-		if (effectRL == null) {
+		if (effectRL == null)
+			return null;
+		Potion potion = BuiltInRegistries.POTION.get(effectRL);
+		if (potion == null) {
+			EnhancedAI.LOGGER.warn("Potion {} not found", effectRL);
 			return null;
 		}
-		return ForgeRegistries.POTIONS.getValue(effectRL);
+		return Holder.direct(potion);
 	}
 
-    public Potion getPotion() {
+    public Holder<Potion> getPotion() {
         return this.potion;
     }
 }

@@ -1,7 +1,7 @@
 package insane96mcp.enhancedai.mixin;
 
 import insane96mcp.enhancedai.modules.mobs.MeleeAttacking;
-import insane96mcp.insanelib.base.Feature;
+import insane96mcp.insanelib.core.feature.Feature;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import org.spongepowered.asm.mixin.Mixin;

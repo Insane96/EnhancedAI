@@ -1,21 +1,13 @@
 {
-	"required": true,
+    "required": true,
 	"package": "insane96mcp.enhancedai.mixin",
-	"compatibilityLevel": "JAVA_8",
-	"refmap": "mixins.enhancedai.refmap.json",
-	"mixinextras": {
-		"minVersion": "0.5.0-beta.5"
-	},
-	"injectors": {
-		"defaultRequire": 1
-	},
-	"mixins": [
-		"AbstractFishMixin",
+    "compatibilityLevel": "JAVA_21",
+    "mixins": [
+        "AbstractFishMixin",
 		"AbstractSkeletonMixin",
 		"CreeperMixin",
 		"DrownedGoToWaterGoalMixin",
 		"DrownedMixin",
-		"DrownedMoveControlMixin",
 		"EntityMixin",
 		"GroundPathNavigationMixin",
 		"LivingEntityMixin",
@@ -40,9 +32,11 @@
 		"accessors.CreeperAccessor",
 		"accessors.MeleeAttackGoalAccessor",
 		"accessors.PanicGoalAccessor"
-	],
-	"minVersion": "0.8",
-	"client": [
-		"CreeperRendererMixin"
-	]
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    },
+    "overwrites": {
+        "requireAnnotations": true
+  }
 }

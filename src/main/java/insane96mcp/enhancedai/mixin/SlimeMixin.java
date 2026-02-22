@@ -5,7 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import insane96mcp.enhancedai.modules.slime.SlimeAttackFix;
 import insane96mcp.enhancedai.modules.slime.SlimeJumpDelay;
 import insane96mcp.enhancedai.modules.slime.SlimeSize;
-import insane96mcp.insanelib.base.Feature;
+import insane96mcp.insanelib.core.feature.Feature;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;

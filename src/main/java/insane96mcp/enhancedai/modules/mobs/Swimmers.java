@@ -1,10 +1,10 @@
 package insane96mcp.enhancedai.modules.mobs;
 
 import insane96mcp.enhancedai.EnhancedAI;
-import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.insanelib.base.Feature;
-import insane96mcp.insanelib.base.LoadFeature;
-import insane96mcp.insanelib.base.config.Config;
+import insane96mcp.enhancedai.modules.EAIModules;
+import insane96mcp.insanelib.core.feature.Feature;
+import insane96mcp.insanelib.core.feature.LoadFeature;
+import insane96mcp.insanelib.core.feature.config.Config;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
@@ -13,13 +13,12 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.monster.Drowned;
 import net.minecraft.world.level.pathfinder.SwimNodeEvaluator;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
 import java.util.UUID;
 
-@LoadFeature(module = Modules.Ids.MOBS, description = "Makes drowned swim speed based off swim speed attribute instead of movement speed.")
+@LoadFeature(module = EAIModules.Ids.MOBS, description = "Makes drowned swim speed based off swim speed attribute instead of movement speed.")
 public class Swimmers extends Feature {
     public static final TagKey<EntityType<?>> SWIM_SPEED_MULTIPLIER_AFFECTED = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/swim_speed_multiplier"));
 	final UUID UUID_SWIM_SPEED_MULTIPLIER = UUID.fromString("ba2adf05-2438-4d1f-8165-89173f0a1eae");

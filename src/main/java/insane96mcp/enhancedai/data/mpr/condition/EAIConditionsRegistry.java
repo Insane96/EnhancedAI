@@ -6,7 +6,7 @@ import insane96mcp.mobspropertiesrandomness.data.json.condition.MPRCondition;
 import static insane96mcp.mobspropertiesrandomness.data.json.condition.ConditionsRegistry.CONDITIONS;
 
 public class EAIConditionsRegistry {
-	/// Use you own namespace
+	/// Use your own namespace
 	private static void register(String id, Class<? extends MPRCondition> clazz) {
 		CONDITIONS.put(EnhancedAI.location(id), clazz);
 	}

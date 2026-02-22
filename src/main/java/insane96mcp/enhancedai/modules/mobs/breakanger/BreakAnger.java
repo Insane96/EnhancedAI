@@ -1,20 +1,20 @@
 package insane96mcp.enhancedai.modules.mobs.breakanger;
 
 import insane96mcp.enhancedai.EnhancedAI;
-import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.insanelib.base.JsonFeature;
-import insane96mcp.insanelib.base.LoadFeature;
-import insane96mcp.insanelib.base.Module;
+import insane96mcp.enhancedai.modules.EAIModules;
+import insane96mcp.insanelib.core.feature.JsonFeature;
+import insane96mcp.insanelib.core.feature.LoadFeature;
+import insane96mcp.insanelib.core.feature.Module;
 import insane96mcp.insanelib.data.IdTagMatcher;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Mob;
-import net.minecraftforge.event.level.BlockEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.level.BlockEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@LoadFeature(module = Modules.Ids.MOBS, description = "Make mobs angry when a block is broken. Check the mod's config folder Mobs/Break Anger/break_anger_config.json to change blocks and entities triggered.")
+@LoadFeature(module = EAIModules.Ids.MOBS, description = "Make mobs angry when a block is broken. Check the mod's config folder Mobs/Break Anger/break_anger_config.json to change blocks and entities triggered.")
 public class BreakAnger extends JsonFeature {
 
 	public static final List<BreakAngerConfig> ANGERING_LIST_DEFAULT = List.of(

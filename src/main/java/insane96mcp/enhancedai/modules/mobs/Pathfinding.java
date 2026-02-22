@@ -1,11 +1,11 @@
 package insane96mcp.enhancedai.modules.mobs;
 
-import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.insanelib.base.Feature;
-import insane96mcp.insanelib.base.LoadFeature;
-import insane96mcp.insanelib.base.config.Config;
+import insane96mcp.enhancedai.modules.EAIModules;
+import insane96mcp.insanelib.core.feature.Feature;
+import insane96mcp.insanelib.core.feature.LoadFeature;
+import insane96mcp.insanelib.core.feature.config.Config;
 
-@LoadFeature(module = Modules.Ids.MOBS)
+@LoadFeature(module = EAIModules.Ids.MOBS)
 public class Pathfinding extends Feature {
 
     @Config(description = "If true, mobs will try to pathfind to the standing position of the player, not the current position. Fixes mobs unable to pathfind to players that have no blocks below them (e.g. when crouching over an edge)")

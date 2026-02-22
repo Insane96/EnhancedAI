@@ -5,9 +5,7 @@ import insane96mcp.enhancedai.modules.mobs.fisher.FishingHook;
 import insane96mcp.enhancedai.modules.mobs.webber.ThrownWebEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class EAIEntities {
 	public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, EnhancedAI.MOD_ID);

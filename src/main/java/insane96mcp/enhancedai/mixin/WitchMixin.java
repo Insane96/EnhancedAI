@@ -9,9 +9,10 @@ import com.llamalad7.mixinextras.sugar.Local;
 import insane96mcp.enhancedai.data.PotionOrMobEffect;
 import insane96mcp.enhancedai.modules.witch.ThirstyWitches;
 import insane96mcp.enhancedai.modules.witch.darkart.DarkArt;
-import insane96mcp.insanelib.base.Feature;
+import insane96mcp.insanelib.core.ModNBTData;
+import insane96mcp.insanelib.core.feature.Feature;
 import insane96mcp.insanelib.util.MCUtils;
-import insane96mcp.insanelib.util.ModNBTData;
+import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.effect.MobEffects;
@@ -27,23 +28,21 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.ForgeMod;
+import net.neoforged.neoforge.common.NeoForgeMod;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
-
-import java.util.UUID;
 
 @Mixin(Witch.class)
 public abstract class WitchMixin extends Raider {
-	private static final UUID SPEED_MODIFIER_DRINKING_UUID = UUID.fromString("9629aa37-c8a0-4ef9-a99a-7ec039a5a4dd");
-	private static final AttributeModifier SPEED_MODIFIER_DRINKING = new AttributeModifier(SPEED_MODIFIER_DRINKING_UUID, "Drinking speed penalty", -0.25D, AttributeModifier.Operation.MULTIPLY_BASE);
-
+	@Shadow
+	@Final
+	private static AttributeModifier SPEED_MODIFIER_DRINKING;
 	@Shadow
 	private NearestHealableRaiderTargetGoal<Raider> healRaidersGoal;
 
@@ -53,21 +52,19 @@ public abstract class WitchMixin extends Raider {
 	@Shadow
 	private int usingTime;
 
-	@Unique
-    private int enhancedai$invisibilityCooldown = 20;
-
 	protected WitchMixin(EntityType<? extends Raider> p_37839_, Level p_37840_) {
 		super(p_37839_, p_37840_);
 	}
 
-	@ModifyArg(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/attributes/AttributeInstance;addTransientModifier(Lnet/minecraft/world/entity/ai/attributes/AttributeModifier;)V"))
+	//TODO I don't remember why I did recreate the drinking speed penalty modifier
+	/*@ModifyArg(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/attributes/AttributeInstance;addTransientModifier(Lnet/minecraft/world/entity/ai/attributes/AttributeModifier;)V"))
 	public AttributeModifier onAddSpeedPenalty(AttributeModifier attributeModifier) {
 		return SPEED_MODIFIER_DRINKING;
 	}
-	@ModifyArg(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/attributes/AttributeInstance;removeModifier(Lnet/minecraft/world/entity/ai/attributes/AttributeModifier;)V"))
-	public AttributeModifier onRemoveSpeedPenalty(AttributeModifier attributeModifier) {
-		return SPEED_MODIFIER_DRINKING;
-	}
+	@ModifyArg(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/attributes/AttributeInstance;removeModifier(Lnet/minecraft/resources/ResourceLocation;)Z"))
+	public ResourceLocation onRemoveSpeedPenalty(ResourceLocation id) {
+		return SPEED_MODIFIER_DRINKING.id();
+	}*/
 
 	@ModifyExpressionValue(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/monster/Witch;isAlive()Z"))
 	public boolean onIsAlive(boolean alive) {
@@ -92,8 +89,8 @@ public abstract class WitchMixin extends Raider {
 	@Unique
 	private ItemStack enhancedai$stackToUse;
 
-	@Definition(id = "potion", local = @Local(type = Potion.class))
-	@Expression("potion != null")
+	@Definition(id = "holder", local = @Local(type = Holder.class))
+	@Expression("holder != null")
 	@ModifyExpressionValue(method = "aiStep", at = @At("MIXINEXTRAS:EXPRESSION"))
 	private boolean enhancedai$newUseItem(boolean original) {
 		if (!Feature.isEnabled(ThirstyWitches.class)
@@ -113,9 +110,9 @@ public abstract class WitchMixin extends Raider {
 			}
 		}
 		else {
-			Potion potion = null;
+			Holder<Potion> potion = null;
 			if (this.random.nextFloat() < ThirstyWitches.WATER_BREATHING_CHANCE.get(this)
-					&& this.isEyeInFluidType(ForgeMod.WATER_TYPE.get())
+					&& this.isEyeInFluidType(NeoForgeMod.WATER_TYPE.value())
 					&& !this.hasEffect(MobEffects.WATER_BREATHING)
 					&& this.getAirSupply() < this.getMaxAirSupply() / 2)
 				potion = Potions.WATER_BREATHING;
@@ -130,7 +127,7 @@ public abstract class WitchMixin extends Raider {
 					potion = Potions.STRONG_HEALING;
 			}
 			if (potion != null)
-				enhancedai$stackToUse = PotionUtils.setPotion(new ItemStack(Items.POTION), potion);
+				enhancedai$stackToUse = PotionContents.createItemStack(Items.POTION, potion);
 		}
 
 		if (enhancedai$stackToUse.isEmpty() && MCUtils.hasLongNegativeEffect(this) && this.random.nextDouble() < ThirstyWitches.MILK_CHANCE.get(this))
@@ -148,10 +145,4 @@ public abstract class WitchMixin extends Raider {
 
 		original.call(instance, equipmentSlot, enhancedai$stackToUse);
 	}
-
-	@Shadow
-	public abstract boolean isDrinkingPotion();
-
-	@Shadow
-	public abstract void setUsingItem(boolean using);
 }

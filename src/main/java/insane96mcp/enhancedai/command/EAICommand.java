@@ -5,7 +5,6 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.data.EAIData;
-import insane96mcp.enhancedai.utils.LogHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -91,7 +90,7 @@ public class EAICommand {
                 .then(Commands.literal("list_data_keys")
                         .executes((ctx) -> {
                             EAIData.DATA.forEach(d ->
-                                    LogHelper.info(d.id().toString())
+                                    EnhancedAI.LOGGER.info(d.id().toString())
                             );
                             ctx.getSource().sendSuccess(() -> Component.literal("Logged list of data keys"), true);
                             return 1;

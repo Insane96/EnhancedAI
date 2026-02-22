@@ -5,7 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import insane96mcp.enhancedai.modules.mobs.FireImmuneTicks;
 import insane96mcp.enhancedai.modules.mobs.PushResistance;
-import insane96mcp.insanelib.base.Feature;
+import insane96mcp.insanelib.core.feature.Feature;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
