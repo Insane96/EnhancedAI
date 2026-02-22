@@ -92,8 +92,8 @@ public class AnimalScaredAttack extends Feature {
             mob.getAttribute(EAIAttributes.XRAY_FOLLOW_RANGE.get()).removeModifier(FOLLOW_RANGE_REDUCTION_UUID);
             if (hostile) {
                 NEUTRAL.apply(mob, true);
-                MCUtils.applyModifier(mob, Attributes.FOLLOW_RANGE, FOLLOW_RANGE_REDUCTION_UUID, "Reduced follow range for hostile Animals", -0.75d, AttributeModifier.Operation.MULTIPLY_BASE, true);
-                MCUtils.applyModifier(mob, EAIAttributes.XRAY_FOLLOW_RANGE.get(), FOLLOW_RANGE_REDUCTION_UUID, "Reduced follow range for hostile Animals", -0.75d, AttributeModifier.Operation.MULTIPLY_BASE, true);
+                MCUtils.applyModifier(mob, Attributes.FOLLOW_RANGE, FOLLOW_RANGE_REDUCTION_UUID, "Reduced follow range for hostile Animals", -0.75d, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, true);
+                MCUtils.applyModifier(mob, EAIAttributes.XRAY_FOLLOW_RANGE.get(), FOLLOW_RANGE_REDUCTION_UUID, "Reduced follow range for hostile Animals", -0.75d, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, true);
                 mob.targetSelector.addGoal(2, new AnimalNearestAttackableTargetGoal<>(mob, Player.class, false, false));
                 PLAYER_SCARED.apply(mob, false);
                 ATTACK_MOVEMENT_SPEED_MODIFIER.changed(mob);
@@ -142,7 +142,7 @@ public class AnimalScaredAttack extends Feature {
                 actualKnockback = (animal.getBbWidth() * animal.getBbWidth() * animal.getBbHeight()) * knockback / baseSize;
             AttributeInstance kbAttribute = animal.getAttribute(Attributes.ATTACK_KNOCKBACK);
             if (kbAttribute != null)
-                kbAttribute.addPermanentModifier(new AttributeModifier("Animal knockback", actualKnockback, AttributeModifier.Operation.ADDITION));
+                kbAttribute.addPermanentModifier(new AttributeModifier("Animal knockback", actualKnockback, AttributeModifier.Operation.ADD_VALUE));
         }
 
         ATTACK_MOVEMENT_SPEED_MODIFIER.applyIfAbsent(animal, speedModifier);

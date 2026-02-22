@@ -8,7 +8,7 @@ import insane96mcp.insanelib.core.feature.Feature;
 import insane96mcp.insanelib.core.feature.LoadFeature;
 import insane96mcp.insanelib.core.feature.Module;
 import insane96mcp.insanelib.core.feature.config.Config;
-import insane96mcp.insanelib.core.feature.config.Difficulty;
+import insane96mcp.insanelib.core.feature.config.DifficultyBasedConfig;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -30,7 +30,7 @@ public class ItemDisruption extends Feature {
     public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/can_disrupt_item"));
 
     @Config(min = 0d, max = 1d)
-    public static Difficulty chance = new Difficulty(0.25d, 0.25d, 0.35d);
+    public static DifficultyBasedConfig chance = new DifficultyBasedConfig(0.25d, 0.25d, 0.35d);
 
     @Config(description = "Cooldown (in ticks) before being able to use the ability again.")
     public static Integer cooldown = 200;

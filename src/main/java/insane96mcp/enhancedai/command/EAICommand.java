@@ -103,7 +103,7 @@ public class EAICommand {
 								if (!(entity instanceof Mob mob)) return 0;
 								MutableComponent component = Component.literal("Goals for " + entity.getName().getString());
 								component.append(CommonComponents.NEW_LINE).append(Component.literal("Goal Selector: "));
-								List<WrappedGoal> availableGoals = new ArrayList<>(mob.goalSelector.availableGoals);
+								List<WrappedGoal> availableGoals = new ArrayList<>(mob.goalSelector.getAvailableGoals());
 								availableGoals.sort(Comparator.comparingInt(WrappedGoal::getPriority));
 								for (WrappedGoal goal : availableGoals) {
                                     MutableComponent componentGoal = Component.literal("(" + goal.getPriority() + ") " + goal.getGoal().getClass().getSimpleName() + "  " + goal.getFlags());
@@ -112,7 +112,7 @@ public class EAICommand {
                                     component.append(CommonComponents.NEW_LINE).append(CommonComponents.SPACE).append(componentGoal);
 								}
 								component.append(CommonComponents.NEW_LINE).append(CommonComponents.NEW_LINE).append(Component.literal("Target Selector: "));
-								List<WrappedGoal> targetGoals = new ArrayList<>(mob.targetSelector.availableGoals);
+								List<WrappedGoal> targetGoals = new ArrayList<>(mob.targetSelector.getAvailableGoals());
 								targetGoals.sort(Comparator.comparingInt(WrappedGoal::getPriority));
 								for (WrappedGoal goal : targetGoals) {
                                     MutableComponent componentGoal = Component.literal("(" + goal.getPriority() + ") " + goal.getGoal().getClass().getSimpleName() + "  " + goal.getFlags());

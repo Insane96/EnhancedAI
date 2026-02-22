@@ -9,7 +9,7 @@ import insane96mcp.insanelib.core.feature.Feature;
 import insane96mcp.insanelib.core.feature.LoadFeature;
 import insane96mcp.insanelib.core.feature.Module;
 import insane96mcp.insanelib.core.feature.config.Config;
-import insane96mcp.insanelib.core.feature.config.MinMax;
+import insane96mcp.insanelib.core.feature.config.MinMaxConfig;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
@@ -23,17 +23,17 @@ public class BlazeAttack extends Feature {
     public static final TagKey<EntityType<?>> CHANGE_ATTACK = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("blaze_attack/change_attack"));
 
     @Config(min = 1, max = 300, description = "How many ticks pass between shooting fireballs. Vanilla is 6")
-    public static MinMax timeBetweenFireballs = new MinMax(4, 10);
+    public static MinMaxConfig timeBetweenFireballs = new MinMaxConfig(4, 10);
     @Config(min = 1, max = 64, description = "How many fireballs blazes shoots. Vanilla is 3")
-    public static MinMax fireballsShot = new MinMax(2, 6);
+    public static MinMaxConfig fireballsShot = new MinMaxConfig(2, 6);
     @Config(min = 1, max = 600, description = "Time (in ticks) taken by the blaze to recharge (before setting himself on fire). Vanilla is 100")
-    public static MinMax rechargeTime = new MinMax(60, 120);
+    public static MinMaxConfig rechargeTime = new MinMaxConfig(60, 120);
     @Config(min = 1, max = 600, description = "Time (in ticks) taken by the blaze to charge (while on fire before shooting fireballs). Vanilla is 60")
-    public static MinMax chargeTime = new MinMax(30, 80);
+    public static MinMaxConfig chargeTime = new MinMaxConfig(30, 80);
     @Config(min = 1, max = 8, description = "How many fireballs are shot per shot. Vanilla is 1")
-    public static MinMax fireballsPerShot = new MinMax(1, 2);
+    public static MinMaxConfig fireballsPerShot = new MinMaxConfig(1, 2);
     @Config(min = -1, max = 32, description = "The higher the more spread up shots will be. Setting both to -1 will use the vanilla behaviour (farther = more inaccuracy)")
-    public static MinMax inaccuracy = new MinMax(1, 3);
+    public static MinMaxConfig inaccuracy = new MinMaxConfig(1, 3);
 
     public static EAIData<Integer> TIME_BETWEEN_FIREBALLS;
     public static EAIData<Integer> FIREBALLS_SHOT;

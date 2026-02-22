@@ -17,6 +17,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -74,10 +75,10 @@ public class MinerMobs extends Feature {
 
 	public static void addAttribute(EntityAttributeModificationEvent event) {
 		for (EntityType<? extends LivingEntity> entityType : event.getTypes()) {
-			if (event.has(entityType, ForgeMod.BLOCK_REACH.get()))
+			if (event.has(entityType, Attributes.BLOCK_INTERACTION_RANGE))
 				continue;
 
-			event.add(entityType, ForgeMod.BLOCK_REACH.get());
+			event.add(entityType, Attributes.BLOCK_INTERACTION_RANGE);
 		}
 	}
 

@@ -19,12 +19,13 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
-import net.minecraft.world.level.NaturalSpawner;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
-import net.neoforged.neoforge.event.entity.living.LivingEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 import java.util.UUID;
 
@@ -36,7 +37,7 @@ public class Leaders extends Feature {
 
     public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/leaders"));
 
-    public static final RegistryObject<Attribute> SPAWN_REINFORCEMENTS_CHANCE = ATTRIBUTES.register("spawn_reinforcements_chance", () -> new RangedAttribute("attribute.name.spawn_reinforcements_chance", 0d, 0d, Double.MAX_VALUE));
+    public static final DeferredHolder<Attribute, Attribute> SPAWN_REINFORCEMENTS_CHANCE = ATTRIBUTES.register("spawn_reinforcements_chance", () -> new RangedAttribute("attribute.name.spawn_reinforcements_chance", 0d, 0d, Double.MAX_VALUE));
 
     @Config(min = 0, max = 1, description = "Chance for a mob to become a leader. Leader mobs have a high chance to spawn reinforcements.")
     public static Double leaderChance = 0.05d;
@@ -61,18 +62,18 @@ public class Leaders extends Feature {
 		super.init(module, enabledByDefault, canBeDisabled);
         LEADER = EAIData.ofBool(this.createDataKey("leader"), (mob, leader) -> {
             if (leader) {
-                MCUtils.applyModifier(mob, SPAWN_REINFORCEMENTS_CHANCE.get(), BONUS_STATS_UUID, "Enhanced AI Leader Spawn Reinforcements Chance", leaderSpawnReinforcementsChance, AttributeModifier.Operation.ADDITION);
+                MCUtils.applyModifier(mob, SPAWN_REINFORCEMENTS_CHANCE, BONUS_STATS_UUID, "Enhanced AI Leader Spawn Reinforcements Chance", leaderSpawnReinforcementsChance, AttributeModifier.Operation.ADD_VALUE);
             }
             else {
-                mob.getAttribute(SPAWN_REINFORCEMENTS_CHANCE.get()).removeModifier(BONUS_STATS_UUID);
+                mob.getAttribute(SPAWN_REINFORCEMENTS_CHANCE).removeModifier(BONUS_STATS_UUID);
             }
 
             if (!bonusStats)
                 return;
 
             if (leader) {
-                MCUtils.applyModifier(mob, Attributes.MAX_HEALTH, BONUS_STATS_UUID, "Enhanced AI Leader Health", 3, AttributeModifier.Operation.MULTIPLY_BASE);
-                MCUtils.applyModifier(mob, Attributes.ARMOR, BONUS_STATS_UUID, "Enhanced AI Leader Armor", 15, AttributeModifier.Operation.ADDITION);
+                MCUtils.applyModifier(mob, Attributes.MAX_HEALTH, BONUS_STATS_UUID, "Enhanced AI Leader Health", 3, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
+                MCUtils.applyModifier(mob, Attributes.ARMOR, BONUS_STATS_UUID, "Enhanced AI Leader Armor", 15, AttributeModifier.Operation.ADD_VALUE);
             }
             else {
                 mob.getAttribute(Attributes.MAX_HEALTH).removeModifier(BONUS_STATS_UUID);
@@ -84,26 +85,25 @@ public class Leaders extends Feature {
 
     public static void attribute(EntityAttributeModificationEvent event) {
         for (EntityType<? extends LivingEntity> entityType : event.getTypes()) {
-            if (event.has(entityType, SPAWN_REINFORCEMENTS_CHANCE.get())/*
-                    || entityType.getBaseClass().isAssignableFrom(Player.class)*/)
+            if (event.has(entityType, SPAWN_REINFORCEMENTS_CHANCE))
                 continue;
 
-            event.add(entityType, SPAWN_REINFORCEMENTS_CHANCE.get(), 0d);
+            event.add(entityType, SPAWN_REINFORCEMENTS_CHANCE, 0d);
         }
     }
 
     @SubscribeEvent
-    public void onHurt(LivingHurtEvent event) {
+    public void onHurt(LivingDamageEvent.Post event) {
         if (!this.isEnabled()
                 || !(event.getEntity() instanceof Mob mob)
                 || !(mob.level() instanceof ServerLevel serverLevel)
                 || event.getSource().getEntity() == null)
             return;
-        double chance = mob.getAttributeValue(SPAWN_REINFORCEMENTS_CHANCE.get());
+        double chance = mob.getAttributeValue(SPAWN_REINFORCEMENTS_CHANCE);
         if (chance <= 0)
             return;
         if (spawnReinforcementsChanceDamageScaled > 0)
-            chance *= (event.getAmount() / spawnReinforcementsChanceDamageScaled);
+            chance *= (event.getNewDamage() / spawnReinforcementsChanceDamageScaled);
         if (mob.getRandom().nextDouble() >= chance)
             return;
         int x = mob.getBlockX();
@@ -126,13 +126,14 @@ public class Leaders extends Feature {
                 y1 = worldHeight + 1;
             BlockPos.MutableBlockPos blockPos = new BlockPos.MutableBlockPos(x1, y1, z1);
             EntityType<?> entitytype = reinforcement.getType();
-            SpawnPlacements.Type spawnplacements$type = SpawnPlacements.getPlacementType(entitytype);
+            SpawnPlacementType spawnPlacementType = SpawnPlacements.getPlacementType(entitytype);
             reinforcement.setPos(x1 + 0.5, y1, z1 + 0.5);
 
             boolean foundSpawnPosition = true;
             if (y1 < worldHeight) {
-                while (!NaturalSpawner.isSpawnPositionOk(spawnplacements$type, mob.level(), blockPos, entitytype)
-                        || !SpawnPlacements.checkSpawnRules(entitytype, serverLevel, MobSpawnType.REINFORCEMENT, blockPos, mob.level().random)
+                //TODO No idea
+                while (/*!NaturalSpawner.isSpawnPositionOk(spawnPlacementType, mob.level(), blockPos, entitytype)
+                        ||*/ !SpawnPlacements.checkSpawnRules(entitytype, serverLevel, MobSpawnType.REINFORCEMENT, blockPos, mob.level().random)
                         || !mob.level().isUnobstructed(reinforcement)
                         || !mob.level().noCollision(reinforcement)
                         || mob.level().containsAnyLiquid(reinforcement.getBoundingBox())) {
@@ -147,8 +148,8 @@ public class Leaders extends Feature {
             }
             if (!foundSpawnPosition) {
                 foundSpawnPosition = true;
-                while (!NaturalSpawner.isSpawnPositionOk(spawnplacements$type, mob.level(), blockPos, entitytype)
-                        || !SpawnPlacements.checkSpawnRules(entitytype, serverLevel, MobSpawnType.REINFORCEMENT, blockPos, mob.level().random)
+                while (/*!NaturalSpawner.isSpawnPositionOk(spawnPlacementType, mob.level(), blockPos, entitytype)
+                        ||*/ !SpawnPlacements.checkSpawnRules(entitytype, serverLevel, MobSpawnType.REINFORCEMENT, blockPos, mob.level().random)
                         || !mob.level().isUnobstructed(reinforcement)
                         || !mob.level().noCollision(reinforcement)
                         || mob.level().containsAnyLiquid(reinforcement.getBoundingBox())) {
@@ -166,12 +167,12 @@ public class Leaders extends Feature {
 
             if (target != null)
                 reinforcement.setTarget(target);
-            reinforcement.finalizeSpawn(serverLevel, mob.level().getCurrentDifficultyAt(reinforcement.blockPosition()), MobSpawnType.REINFORCEMENT, null, null);
+            reinforcement.finalizeSpawn(serverLevel, mob.level().getCurrentDifficultyAt(reinforcement.blockPosition()), MobSpawnType.REINFORCEMENT, null);
             if (!reinforcesCanSpawnAsLeader)
                 LEADER.applyIfAbsent(reinforcement, false);
             serverLevel.addFreshEntityWithPassengers(reinforcement);
-            MCUtils.applyModifier(mob, SPAWN_REINFORCEMENTS_CHANCE.get(), UUID.randomUUID(), "Reinforcement caller charge", -chargePerSpawn, AttributeModifier.Operation.ADDITION);
-            MCUtils.applyModifier(reinforcement, SPAWN_REINFORCEMENTS_CHANCE.get(), UUID.randomUUID(), "Reinforcement callee charge", -chargePerSpawn, AttributeModifier.Operation.ADDITION);
+            MCUtils.applyModifier(mob, SPAWN_REINFORCEMENTS_CHANCE, UUID.randomUUID(), "Reinforcement caller charge", -chargePerSpawn, AttributeModifier.Operation.ADD_VALUE);
+            MCUtils.applyModifier(reinforcement, SPAWN_REINFORCEMENTS_CHANCE, UUID.randomUUID(), "Reinforcement callee charge", -chargePerSpawn, AttributeModifier.Operation.ADD_VALUE);
             break;
         }
     }
@@ -193,7 +194,7 @@ public class Leaders extends Feature {
     }
 
     @SubscribeEvent
-    public void onTick(LivingEvent.LivingTickEvent event) {
+    public void onTick(EntityTickEvent.Pre event) {
         if (!LEADER.get(event.getEntity())
                 || !(event.getEntity().level() instanceof ServerLevel serverLevel)
                 || (event.getEntity().tickCount + event.getEntity().getId()) % 10 != 0)

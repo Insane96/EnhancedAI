@@ -115,7 +115,7 @@ public class DrowningTargets extends Feature {
             if (this.mob.getTarget().isPassenger())
                 this.mob.getTarget().stopRiding();
             this.mob.getTarget().startRiding(this.mob);
-            MCUtils.applyModifier(this.mob, Attributes.ATTACK_DAMAGE, ATTACK_DAMAGE_UUID, "Drowning Targets", -1, AttributeModifier.Operation.MULTIPLY_TOTAL);
+            MCUtils.applyModifier(this.mob, Attributes.ATTACK_DAMAGE, ATTACK_DAMAGE_UUID, "Drowning Targets", -1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
         }
 
         @Override

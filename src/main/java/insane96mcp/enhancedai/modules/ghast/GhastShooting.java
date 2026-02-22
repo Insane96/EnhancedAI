@@ -8,7 +8,7 @@ import insane96mcp.insanelib.core.feature.Feature;
 import insane96mcp.insanelib.core.feature.LoadFeature;
 import insane96mcp.insanelib.core.feature.Module;
 import insane96mcp.insanelib.core.feature.config.Config;
-import insane96mcp.insanelib.core.feature.config.MinMax;
+import insane96mcp.insanelib.core.feature.config.MinMaxConfig;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
@@ -25,9 +25,9 @@ public class GhastShooting extends Feature {
     public static final TagKey<EntityType<?>> CHANGE_GHAST_SHOOT = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("ghast/change_shoot"));
 
     @Config(min = 1, max = 300, description = "How many ticks pass between shooting fireballs. Vanilla is 40")
-    public static MinMax attackCooldown = new MinMax(40, 50);
+    public static MinMaxConfig attackCooldown = new MinMaxConfig(40, 50);
     @Config(min = 1, max = 16, description = "How many fireballs ghast shoot in rapid succession. Vanilla is 1")
-    public static MinMax fireballsShot = new MinMax(1, 3);
+    public static MinMaxConfig fireballsShot = new MinMaxConfig(1, 3);
     @Config(min = 0d, max = 1d, description = "Chance for a Ghast to try and shoot the target even if can't see it. If enabled and the Ghast can't see the target, he will shoot 4 times as fast to breach.")
     public static Double shootWhenNotSeenChance = 0.3d;
 
@@ -52,7 +52,7 @@ public class GhastShooting extends Feature {
             return;
 
         ArrayList<Goal> goalsToRemove = new ArrayList<>();
-        ghast.goalSelector.availableGoals.forEach(prioritizedGoal -> {
+        ghast.goalSelector.getAvailableGoals().forEach(prioritizedGoal -> {
             if (prioritizedGoal.getGoal() instanceof Ghast.GhastShootFireballGoal)
                 goalsToRemove.add(prioritizedGoal.getGoal());
         });

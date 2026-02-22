@@ -45,7 +45,7 @@ public class EAIAvoidEntityGoal<T extends LivingEntity> extends Goal {
                 .and(EntitySelector.NO_CREATIVE_OR_SPECTATOR);
 
         if (builder.objTag != null) {
-            predicate = predicate.and(builder.objTag::matchesEntity);
+            predicate = predicate.and(obj -> builder.objTag.matches(obj.getType()));
         }
 
         if (builder.entityTypesToAvoid != null) {

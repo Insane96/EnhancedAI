@@ -8,7 +8,7 @@ import insane96mcp.insanelib.core.feature.Feature;
 import insane96mcp.insanelib.core.feature.LoadFeature;
 import insane96mcp.insanelib.core.feature.Module;
 import insane96mcp.insanelib.core.feature.config.Config;
-import insane96mcp.insanelib.core.feature.config.Difficulty;
+import insane96mcp.insanelib.core.feature.config.DifficultyBasedConfig;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
@@ -22,7 +22,7 @@ public class TeleportToTarget extends Feature {
     public static final TagKey<EntityType<?>> CAN_TELEPORT = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/teleport_to_target/can_teleport"));
 
     @Config(min = 0d, max = 1d, description = "Chance for a mob to have an AI to go and pick up and throw mobs.")
-    public static Difficulty chance = new Difficulty(0.35d, 0.35d, 0.5d);
+    public static DifficultyBasedConfig chance = new DifficultyBasedConfig(0.35d, 0.35d, 0.5d);
     @Config(min = 0, description = "Cooldown (in ticks) after throwing a mob. Also goes on cooldown if can't reach the targeted mob for a few seconds")
     public static Integer cooldown = 600;
 

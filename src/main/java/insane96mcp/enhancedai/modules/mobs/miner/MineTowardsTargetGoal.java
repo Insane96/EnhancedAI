@@ -4,6 +4,7 @@ import insane96mcp.enhancedai.modules.mobs.MeleeAttacking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectUtil;
@@ -11,11 +12,11 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.block.SoundType;
@@ -27,6 +28,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.event.EventHooks;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,7 +53,7 @@ public class MineTowardsTargetGoal extends Goal {
 
 	public MineTowardsTargetGoal(Mob miner){
 		this.miner = miner;
-		this.reachDistance = miner.getAttribute(ForgeMod.BLOCK_REACH.get()) == null ? 4.5 : miner.getAttributeValue(ForgeMod.BLOCK_REACH.get());
+		this.reachDistance = miner.getAttribute(Attributes.BLOCK_INTERACTION_RANGE) == null ? 4.5 : miner.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE);
 		this.setFlags(EnumSet.of(Flag.LOOK, Flag.MOVE));
 	}
 
@@ -129,7 +131,7 @@ public class MineTowardsTargetGoal extends Goal {
 			this.miner.level().playSound(null, pos, soundType.getHitSound(), SoundSource.BLOCKS, (soundType.getVolume() + 1.0F) / 8.0F, soundType.getPitch() * 0.5F);
 		}
 		if (this.breakingTick >= this.tickToBreak && this.miner.level() instanceof ServerLevel level) {
-			if (ForgeEventFactory.onEntityDestroyBlock(this.miner, this.targetBlocks.get(0), this.blockState) && this.miner.level().destroyBlock(pos, false, this.miner) && (!this.blockState.requiresCorrectToolForDrops() || this.miner.getItemBySlot(EquipmentSlot.OFFHAND).isCorrectToolForDrops(this.blockState))) {
+			if (EventHooks.onEntityDestroyBlock(this.miner, this.targetBlocks.get(0), this.blockState) && this.miner.level().destroyBlock(pos, false, this.miner) && (!this.blockState.requiresCorrectToolForDrops() || this.miner.getItemBySlot(EquipmentSlot.OFFHAND).isCorrectToolForDrops(this.blockState))) {
 				BlockEntity blockentity = this.blockState.hasBlockEntity() ? this.miner.level().getBlockEntity(pos) : null;
 				LootParams.Builder lootparams$builder = (new LootParams.Builder(level)).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos)).withParameter(LootContextParams.TOOL, this.miner.getOffhandItem()).withOptionalParameter(LootContextParams.BLOCK_ENTITY, blockentity).withOptionalParameter(LootContextParams.THIS_ENTITY, this.miner);
 				this.blockState.spawnAfterBreak(level, pos, this.miner.getOffhandItem(), false);
@@ -206,14 +208,11 @@ public class MineTowardsTargetGoal extends Goal {
 		return Mth.ceil((1f / diggingSpeed) * MinerMobs.TIME_TO_BREAK_MULTIPLIER.get(this.miner));
 	}
 
+	//TODO Copy new getDigSpeed
 	private float getDigSpeed() {
 		float digSpeed = this.miner.getOffhandItem().getDestroySpeed(this.blockState);
 		if (digSpeed > 1.0F) {
-			int efficiencyLevel = EnchantmentHelper.getBlockEfficiency(this.miner);
-			ItemStack itemstack = this.miner.getOffhandItem();
-			if (efficiencyLevel > 0 && !itemstack.isEmpty()) {
-				digSpeed += (float)(efficiencyLevel * efficiencyLevel + 1);
-			}
+			digSpeed += (float) this.miner.getAttributeValue(Attributes.MINING_EFFICIENCY);
 		}
 
 		if (MobEffectUtil.hasDigSpeed(this.miner)) {
@@ -232,8 +231,9 @@ public class MineTowardsTargetGoal extends Goal {
 			digSpeed *= miningFatigueAmplifier;
 		}
 
-		if (this.miner.isEyeInFluidType(ForgeMod.WATER_TYPE.get()) && !EnchantmentHelper.hasAquaAffinity(this.miner))
-			digSpeed /= 5.0F;
+		digSpeed *= (float)this.miner.getAttributeValue(Attributes.BLOCK_BREAK_SPEED);
+		if (this.miner.isEyeInFluid(FluidTags.WATER))
+			digSpeed *= (float) this.miner.getAttribute(Attributes.SUBMERGED_MINING_SPEED).getValue();
 
 		return digSpeed;
 	}

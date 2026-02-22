@@ -9,6 +9,7 @@ import net.minecraft.world.entity.monster.Silverfish;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.InfestedBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.event.EventHooks;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -33,7 +34,7 @@ public class EAISilverfishMergeWithStoneGoal extends RandomStrollGoal {
 		if (--this.initialCooldown > 0)
 			return false;
 		RandomSource randomsource = this.mob.getRandom();
-		if (net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.mob.level(), this.mob) && randomsource.nextInt(this.adjustedTickDelay(SilverfishMergeWithStone.CHANCE_TO_MERGE_WITH_STONE.get(this.mob))) == 0) {
+		if (EventHooks.canEntityGrief(this.mob.level(), this.mob) && randomsource.nextInt(this.adjustedTickDelay(SilverfishMergeWithStone.CHANCE_TO_MERGE_WITH_STONE.get(this.mob))) == 0) {
 			this.selectedDirection = Direction.getRandom(randomsource);
 			BlockPos blockpos = BlockPos.containing(this.mob.getX(), this.mob.getY() + 0.5D, this.mob.getZ()).relative(this.selectedDirection);
 			BlockState blockstate = this.mob.level().getBlockState(blockpos);

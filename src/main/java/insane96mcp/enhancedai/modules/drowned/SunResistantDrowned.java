@@ -17,7 +17,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Drowned;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
-import net.neoforged.neoforge.event.entity.living.LivingEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
 @LoadFeature(module = EAIModules.Ids.DROWNED, description = "Makes drowned immune to sunlight for a couple of seconds before starting to burn. Only entity types in the enhancedai:drowned/sun_resistant tag are affected by this feature.")
 public class SunResistantDrowned extends Feature {
@@ -49,7 +49,7 @@ public class SunResistantDrowned extends Feature {
 	}
 
 	@SubscribeEvent
-	public void onTick(LivingEvent.LivingTickEvent event) {
+	public void onTick(EntityTickEvent.Pre event) {
 		if (!this.isEnabled()
 				|| !(event.getEntity() instanceof Drowned drowned)
 				|| drowned.level().isClientSide)

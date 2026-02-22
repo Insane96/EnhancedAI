@@ -2,8 +2,8 @@ package insane96mcp.enhancedai.modules.witch.throwing;
 
 import insane96mcp.enhancedai.data.PotionOrMobEffect;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.player.Player;
@@ -95,7 +95,7 @@ public class WitchThrowPotionGoal extends Goal {
         }
 
         if (potionOrMobEffect != null) {
-            if (this.target.getMobType() == MobType.UNDEAD) {
+            if (this.target.getType().is(EntityTypeTags.UNDEAD)) {
                 if (potionOrMobEffect.getPotion() == Potions.HEALING || potionOrMobEffect.getPotion() == Potions.REGENERATION)
                     potionOrMobEffect = new PotionOrMobEffect(Potions.HARMING);
                 else if (potionOrMobEffect.getPotion() == Potions.STRONG_HEALING || potionOrMobEffect.getPotion() == Potions.STRONG_REGENERATION || potionOrMobEffect.getPotion() == Potions.LONG_REGENERATION)

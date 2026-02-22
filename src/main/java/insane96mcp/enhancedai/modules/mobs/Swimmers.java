@@ -14,6 +14,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.monster.Drowned;
 import net.minecraft.world.level.pathfinder.SwimNodeEvaluator;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
 import java.util.UUID;
@@ -38,7 +39,7 @@ public class Swimmers extends Feature {
 			return;
 
         if (drowned$swimSpeedMultiplier > 0d && event.getEntity() instanceof LivingEntity livingEntity && livingEntity.getType().is(SWIM_SPEED_MULTIPLIER_AFFECTED))
-            MCUtils.applyModifier(livingEntity, ForgeMod.SWIM_SPEED.get(), UUID_SWIM_SPEED_MULTIPLIER, "Enhanced AI Drowned Swim Speed Multiplier", drowned$swimSpeedMultiplier - 1, AttributeModifier.Operation.MULTIPLY_TOTAL);
+            MCUtils.applyModifier(livingEntity, NeoForgeMod.SWIM_SPEED, UUID_SWIM_SPEED_MULTIPLIER, "Enhanced AI Drowned Swim Speed Multiplier", drowned$swimSpeedMultiplier - 1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
 
         if (drowned$breaching && event.getEntity() instanceof Drowned drowned)
 		    ((SwimNodeEvaluator) drowned.waterNavigation.getNodeEvaluator()).allowBreaching = true;

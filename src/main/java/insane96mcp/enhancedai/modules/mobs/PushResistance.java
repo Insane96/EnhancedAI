@@ -13,18 +13,18 @@ import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 public class PushResistance extends Feature {
     public static void attribute(EntityAttributeModificationEvent event) {
         for (EntityType<? extends LivingEntity> entityType : event.getTypes()) {
-            if (!event.has(entityType, EAIAttributes.PUSH_RESISTANCE.get()))
-                event.add(entityType, EAIAttributes.PUSH_RESISTANCE.get());
+            if (!event.has(entityType, EAIAttributes.PUSH_RESISTANCE))
+                event.add(entityType, EAIAttributes.PUSH_RESISTANCE);
         }
     }
 
     public static double getPushResistance(Entity entity) {
         if (!Feature.isEnabled(PushResistance.class)
                 || !(entity instanceof LivingEntity living)
-                || living.getAttribute(EAIAttributes.PUSH_RESISTANCE.get()) == null)
+                || living.getAttribute(EAIAttributes.PUSH_RESISTANCE) == null)
             return 1d;
 
-        double resistance = living.getAttributeValue(EAIAttributes.PUSH_RESISTANCE.get());
+        double resistance = living.getAttributeValue(EAIAttributes.PUSH_RESISTANCE);
         return 1d - resistance;
     }
 }

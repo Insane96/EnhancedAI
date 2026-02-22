@@ -78,7 +78,7 @@ public class ActualBlindness extends Feature {
 				|| !BLINDNESS_RANGE_MULTIPLIER_DATA.has(event.getEntity()))
 			return;
 
-		MCUtils.applyModifier(event.getEntity(), Attributes.FOLLOW_RANGE, BLINDNESS_FOLLOW_RANGE_UUID, "Enhanced AI Blindness Multiplier", BLINDNESS_RANGE_MULTIPLIER_DATA.get(event.getEntity()) - 1f, AttributeModifier.Operation.MULTIPLY_TOTAL, true);
+		MCUtils.applyModifier(event.getEntity(), Attributes.FOLLOW_RANGE, BLINDNESS_FOLLOW_RANGE_UUID, "Enhanced AI Blindness Multiplier", BLINDNESS_RANGE_MULTIPLIER_DATA.get(event.getEntity()) - 1f, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL, true);
 	}
 
 	@SubscribeEvent

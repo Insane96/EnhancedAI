@@ -1,6 +1,5 @@
 package insane96mcp.enhancedai.modules;
 
-import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.insanelib.core.feature.Module;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
@@ -46,27 +45,27 @@ public class EAIModules {
 		warden = create(Ids.WARDEN, "Warden", eventBus, builder);
 	}
 
-	public static Module create(ResourceLocation id, String name, IEventBus eventBus, ModConfigSpec.Builder builder) {
-		return Module.Builder.create(id, name, ModConfig.Type.COMMON, builder, eventBus).build();
+	public static Module create(String id, String name, IEventBus eventBus, ModConfigSpec.Builder builder) {
+		return Module.Builder.create(ResourceLocation.parse(id), name, ModConfig.Type.COMMON, builder, eventBus).build();
 	}
 
 	public static class Ids {
-		public static final ResourceLocation ANIMAL = EnhancedAI.location("animal");
-		public static final ResourceLocation BLAZE = EnhancedAI.location("blaze");
-		public static final ResourceLocation CREEPER = EnhancedAI.location("creeper");
-		public static final ResourceLocation DROWNED = EnhancedAI.location("drowned");
-		public static final ResourceLocation ENDERMAN = EnhancedAI.location("enderman");
-		public static final ResourceLocation GHAST = EnhancedAI.location("ghast");
-		public static final ResourceLocation ILLAGER = EnhancedAI.location("illager");
-		public static final ResourceLocation MOBS = EnhancedAI.location("mobs");
-		public static final ResourceLocation BUGS = EnhancedAI.location("bugs");
-		public static final ResourceLocation SKELETON = EnhancedAI.location("skeleton");
-		public static final ResourceLocation SPIDER = EnhancedAI.location("spider");
-		public static final ResourceLocation SHULKER = EnhancedAI.location("shulker");
-		public static final ResourceLocation SLIME = EnhancedAI.location("slime");
-		public static final ResourceLocation SNOW_GOLEM = EnhancedAI.location("snow_golem");
-		public static final ResourceLocation VILLAGER = EnhancedAI.location("villager");
-		public static final ResourceLocation WARDEN = EnhancedAI.location("warden");
-		public static final ResourceLocation WITCH = EnhancedAI.location("witch");
+		public static final String ANIMAL = "enhancedai:animal";
+		public static final String BLAZE = "enhancedai:blaze";
+		public static final String CREEPER = "enhancedai:creeper";
+		public static final String DROWNED = "enhancedai:drowned";
+		public static final String ENDERMAN = "enhancedai:enderman";
+		public static final String GHAST = "enhancedai:ghast";
+		public static final String ILLAGER = "enhancedai:illager";
+		public static final String MOBS = "enhancedai:mobs";
+		public static final String BUGS = "enhancedai:bugs";
+		public static final String SKELETON = "enhancedai:skeleton";
+		public static final String SPIDER = "enhancedai:spider";
+		public static final String SHULKER = "enhancedai:shulker";
+		public static final String SLIME = "enhancedai:slime";
+		public static final String SNOW_GOLEM = "enhancedai:snow_golem";
+		public static final String VILLAGER = "enhancedai:villager";
+		public static final String WARDEN = "enhancedai:warden";
+		public static final String WITCH = "enhancedai:witch";
 	}
 }

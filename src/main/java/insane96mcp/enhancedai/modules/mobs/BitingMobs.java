@@ -7,14 +7,13 @@ import insane96mcp.insanelib.core.feature.Feature;
 import insane96mcp.insanelib.core.feature.LoadFeature;
 import insane96mcp.insanelib.core.feature.Module;
 import insane96mcp.insanelib.core.feature.config.Config;
-import insane96mcp.insanelib.core.feature.config.Difficulty;
+import insane96mcp.insanelib.core.feature.config.DifficultyBasedConfig;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -30,7 +29,7 @@ public class BitingMobs extends Feature {
 	ResourceKey<DamageType> BITE_DAMAGE_TYPE = ResourceKey.create(Registries.DAMAGE_TYPE, EnhancedAI.location("bite"));
 
 	@Config(min = 0d, max = 1d, description = "Chance for a Mob to bite the attacker")
-	public static Difficulty chance = new Difficulty(0.2d, 0.2d, 0.3d);
+	public static DifficultyBasedConfig chance = new DifficultyBasedConfig(0.2d, 0.2d, 0.3d);
 	@Config(min = 0d, description = "The damage dealt to the attacker when bit")
 	public static Double damage = 3d;
 
@@ -45,7 +44,7 @@ public class BitingMobs extends Feature {
 	}
 
 	@SubscribeEvent
-	public void onPlayerAttack(LivingDamageEvent event) {
+	public void onPlayerAttack(LivingDamageEvent.Pre event) {
 		if (!this.isEnabled()
 		 		|| event.getEntity().level().isClientSide
 				|| !(event.getEntity() instanceof Mob mob)
@@ -54,7 +53,8 @@ public class BitingMobs extends Feature {
 				|| mob.getAttribute(Attributes.ATTACK_DAMAGE) == null
 				|| !(event.getSource().getDirectEntity() instanceof LivingEntity attacker)
 				|| attacker.getType().is(UNAFFECTED_BY_BITE)
-				|| attacker.getMainHandItem().getAttributeModifiers(EquipmentSlot.MAINHAND).containsKey(Attributes.ATTACK_DAMAGE))
+				//TODO
+				/*|| attacker.getMainHandItem().getAttributeModifiers().containsKey(Attributes.ATTACK_DAMAGE)*/)
 			return;
 
 		if (mob.getRandom().nextDouble() < CHANCE.get(mob)) {

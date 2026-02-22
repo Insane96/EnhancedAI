@@ -41,7 +41,7 @@ public class AnimalsPanic extends Feature {
     }
 
     @SubscribeEvent
-    public void onAttacked(LivingDamageEvent event) {
+    public void onAttacked(LivingDamageEvent.Pre event) {
         if (!this.isEnabled()
                 || !(event.getEntity() instanceof Animal animal)
                 || !(event.getSource().getEntity() instanceof LivingEntity attacker)

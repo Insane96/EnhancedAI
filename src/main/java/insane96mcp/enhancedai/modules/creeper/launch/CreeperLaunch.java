@@ -9,7 +9,7 @@ import insane96mcp.insanelib.core.feature.Feature;
 import insane96mcp.insanelib.core.feature.LoadFeature;
 import insane96mcp.insanelib.core.feature.Module;
 import insane96mcp.insanelib.core.feature.config.Config;
-import insane96mcp.insanelib.core.feature.config.Difficulty;
+import insane96mcp.insanelib.core.feature.config.DifficultyBasedConfig;
 import insane96mcp.insanelib.network.message.MessageCreeperDataSync;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -21,7 +21,7 @@ import net.minecraft.world.entity.monster.Creeper;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
-import net.neoforged.neoforge.event.entity.living.LivingEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
 @LoadFeature(module = EAIModules.Ids.CREEPER, description	= "Creepers can ignite and throw themselves at players. Only entity types in the enhancedai:creeper/can_launch tag will be affected by this feature.")
 public class CreeperLaunch extends Feature {
@@ -32,7 +32,7 @@ public class CreeperLaunch extends Feature {
 	@Config(description = "If true, Launching Creepers emit particles")
 	public static Boolean particles = true;
 	@Config(min = 0d, max = 8d, description = "The inaccuracy of the launching creeper in Normal difficulty, easy is increased, hard is decreased.")
-	public static Difficulty inaccuracy = new Difficulty(2, 2, 1);
+	public static DifficultyBasedConfig inaccuracy = new DifficultyBasedConfig(2, 2, 1);
 	@Config(min = 0, max = 127, description = "The explosion radius of launching creepers. Set to 0 to not change. (Overrides Cena creepers explosion radius)")
 	public static Integer explosionRadius = 2;
 
@@ -78,7 +78,7 @@ public class CreeperLaunch extends Feature {
 	}
 
 	@SubscribeEvent
-	public void onCreeperTick(LivingEvent.LivingTickEvent event) {
+	public void onCreeperTick(EntityTickEvent.Pre event) {
 		if (!this.isEnabled()
 				|| !(event.getEntity() instanceof Creeper creeper)
 				|| !(creeper.level() instanceof ServerLevel serverLevel)

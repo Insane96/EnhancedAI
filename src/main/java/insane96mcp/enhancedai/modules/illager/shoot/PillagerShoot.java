@@ -9,8 +9,8 @@ import insane96mcp.insanelib.core.feature.Feature;
 import insane96mcp.insanelib.core.feature.LoadFeature;
 import insane96mcp.insanelib.core.feature.Module;
 import insane96mcp.insanelib.core.feature.config.Config;
-import insane96mcp.insanelib.core.feature.config.Difficulty;
-import insane96mcp.insanelib.core.feature.config.MinMax;
+import insane96mcp.insanelib.core.feature.config.DifficultyBasedConfig;
+import insane96mcp.insanelib.core.feature.config.MinMaxConfig;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.TagKey;
@@ -27,6 +27,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 
 import javax.annotation.Nullable;
 
@@ -36,11 +37,11 @@ public class PillagerShoot extends Feature {
 	public static final TagKey<EntityType<?>> BETTER_PILLAGER_SHOOT = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("illager/better_shooting"));
 
 	@Config(min = 1, max = 64, description = "The range from where a pillager will shoot a target")
-	public static MinMax shootingRange = new MinMax(24, 32);
+	public static MinMaxConfig shootingRange = new MinMaxConfig(24, 32);
 	@Config(min = 0, description = "The ticks cooldown before shooting. Vanilla is random between 20 and 40")
-	public static MinMax shootingCooldown = new MinMax(20, 40);
+	public static MinMaxConfig shootingCooldown = new MinMaxConfig(20, 40);
 	@Config(min = 0d, max = 30d, description = "How much inaccuracy does the arrow fired by pillagers have. Vanilla pillagers have 10/6/2 inaccuracy in easy/normal/hard difficulty.")
-	public static Difficulty inaccuracy = new Difficulty(5, 3, 1);
+	public static DifficultyBasedConfig inaccuracy = new DifficultyBasedConfig(5, 3, 1);
 
 	public static EAIData<Integer> SHOOTING_RANGE;
 	public static EAIData<Integer> SHOOTING_COOLDOWN;
@@ -71,7 +72,7 @@ public class PillagerShoot extends Feature {
 	}
 
 	@SubscribeEvent
-	public void onPillagerHitAlly(LivingHurtEvent event) {
+	public void onPillagerHitAlly(LivingDamageEvent.Post event) {
 		if (!this.isEnabled()
 				|| !(event.getEntity() instanceof Pillager hitPillager)
 				|| !(event.getSource().getEntity() instanceof Pillager shooter)

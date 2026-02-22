@@ -122,7 +122,7 @@ public class TeleportToTargetGoal extends Goal {
     }
 
     public void hide(LivingEntity entity) {
-        MCUtils.applyModifier(entity, Attributes.MOVEMENT_SPEED, MOVEMENT_SPEED_MODIFIER_UUID, "Teleport To Target modifier", -1, AttributeModifier.Operation.MULTIPLY_TOTAL, false);
+        MCUtils.applyModifier(entity, Attributes.MOVEMENT_SPEED, MOVEMENT_SPEED_MODIFIER_UUID, "Teleport To Target modifier", -1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL, false);
         ((ServerLevel)entity.level()).sendParticles(ParticleTypes.PORTAL, entity.getX(), entity.getEyeY(), entity.getZ(), 200, 0.5, 0.5, 0.5, 0.5);
         entity.playSound(SoundEvents.ENDERMAN_TELEPORT, 4f, 0.5f);
         entity.setNoGravity(true);

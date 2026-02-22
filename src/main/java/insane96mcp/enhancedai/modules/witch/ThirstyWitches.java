@@ -15,6 +15,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Witch;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
 import java.util.ArrayList;
@@ -24,7 +25,8 @@ import java.util.List;
 public class ThirstyWitches extends Feature {
 	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("witch/thirsty"));
 
-    private static ForgeConfigSpec.ConfigValue<List<? extends String>> drinkPotionConfig;
+	//TODO ObjTag List
+    private static ModConfigSpec.ConfigValue<List<? extends String>> drinkPotionConfig;
 
     public static final List<String> drinkPotionDefault = List.of("minecraft:strong_swiftness", "minecraft:regeneration");
 

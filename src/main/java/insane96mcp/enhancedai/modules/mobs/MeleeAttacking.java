@@ -5,7 +5,7 @@ import insane96mcp.enhancedai.modules.EAIModules;
 import insane96mcp.insanelib.core.feature.Feature;
 import insane96mcp.insanelib.core.feature.LoadFeature;
 import insane96mcp.insanelib.core.feature.config.Config;
-import insane96mcp.insanelib.core.feature.config.Difficulty;
+import insane96mcp.insanelib.core.feature.config.DifficultyBasedConfig;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
@@ -29,14 +29,14 @@ public class MeleeAttacking extends Feature {
 	@Config(description = "If true melee monsters (zombies, etc) attack speed is 4 (like the player) and will be based off the `minecraft:generic.attack_speed` attribute.")
 	public static Boolean attackSpeed$attributeBased = true;
 	@Config(min = 0d, max = 4d, description = "Multiplies the attack speed of monsters by this value.")
-	public static Difficulty attackSpeed$multiplier = new Difficulty(0.25d, 0.25d, 0.25d);
+	public static DifficultyBasedConfig attackSpeed$multiplier = new DifficultyBasedConfig(0.25d, 0.25d, 0.25d);
 	@Config(min = 0f, max = 4f, description = "The maximum attack speed a mob can attack with (in attacks per second, 2 is an attack every 0.5 seconds, 1.25 is an attack every 0.8s, 1 is an attack every 1s).")
 	public static Double attackSpeed$maximum = 4d;
 
 	public static void attributeModificationEvent(EntityAttributeModificationEvent event) {
 		for (EntityType<? extends LivingEntity> entityType : event.getTypes()) {
-			if (!event.has(entityType, ForgeMod.ENTITY_REACH.get()))
-				event.add(entityType, ForgeMod.ENTITY_REACH.get(), DEFAULT_ATTACK_REACH);
+			if (!event.has(entityType, Attributes.ENTITY_INTERACTION_RANGE))
+				event.add(entityType, Attributes.ENTITY_INTERACTION_RANGE, DEFAULT_ATTACK_REACH);
 			if (!event.has(entityType, Attributes.ATTACK_SPEED))
 				event.add(entityType, Attributes.ATTACK_SPEED, 4d);
 		}
@@ -72,7 +72,7 @@ public class MeleeAttacking extends Feature {
 
 		double attackReach = DEFAULT_ATTACK_REACH;
 		if (MeleeAttacking.shouldChangeAttackReach())
-			attackReach = attacker.getAttributeValue(ForgeMod.ENTITY_REACH.get());
+			attackReach = attacker.getAttributeValue(Attributes.ENTITY_INTERACTION_RANGE);
 		return aabb.inflate(attackReach, 0.0D, attackReach);
 	}
 
@@ -80,7 +80,7 @@ public class MeleeAttacking extends Feature {
 		AABB aabb = entity.getBoundingBox();
 		Entity vehicle = entity.getVehicle();
 		if (vehicle != null) {
-			Vec3 vec3 = new Vec3(entity.getX(), vehicle.getPassengersRidingOffset(), entity.getY());
+			Vec3 vec3 = new Vec3(entity.getX(), vehicle.getPassengerRidingPosition(entity).y, entity.getY());
 			return aabb.setMinY(Math.max(vec3.y, aabb.minY));
 		}
 		else {

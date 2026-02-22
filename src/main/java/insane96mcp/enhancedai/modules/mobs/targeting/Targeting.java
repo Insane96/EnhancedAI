@@ -8,13 +8,13 @@ import insane96mcp.enhancedai.modules.mobs.Spawning;
 import insane96mcp.enhancedai.setup.EAIAttributes;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.enhancedai.utils.GoalHelper;
+import insane96mcp.insanelib.core.JsonFeature;
 import insane96mcp.insanelib.core.ModNBTData;
-import insane96mcp.insanelib.core.feature.JsonFeature;
 import insane96mcp.insanelib.core.feature.LoadFeature;
 import insane96mcp.insanelib.core.feature.Module;
 import insane96mcp.insanelib.core.feature.config.Config;
-import insane96mcp.insanelib.core.feature.config.Difficulty;
-import insane96mcp.insanelib.core.feature.config.MinMax;
+import insane96mcp.insanelib.core.feature.config.DifficultyBasedConfig;
+import insane96mcp.insanelib.core.feature.config.MinMaxConfig;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -35,6 +35,7 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,9 +52,9 @@ public class Targeting extends JsonFeature {
 	public static final TagKey<EntityType<?>> ALERT_NEARBY = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/targeting/alert_nearby"));
 
 	@Config(min = 0d, max = 128d, description = "How far away can the mobs see targets. This overrides the vanilla value (16 for most mobs). Setting 'Max' to 0 will leave the follow range as vanilla. Use mods like Mobs Properties Randomness to have more control over the attribute. Only mobs in the entity type tag `enhancedai:mobs/targeting/follow_range_override` will be affected by this override")
-	public static MinMax followRangeOverride = new MinMax(32, 48);
+	public static MinMaxConfig followRangeOverride = new MinMaxConfig(32, 48);
     @Config(min = 0d, max = 128d, description = "How far away can the mobs see targets even through walls. This only works with 'Better Nearby Targeting' enabled. Setting 'Max' to 0 will make mobs not able to see through walls. Use mods like Mobs Properties Randomness to have more control over the attribute; the attribute name is 'enhancedai:xray_follow_range'. Only mobs in the entity type tag `enhancedai:mobs/targeting/apply_xray` will be affected by this override.")
-    public static MinMax xrayRangeOverride = new MinMax(16, 24);
+    public static MinMaxConfig xrayRangeOverride = new MinMaxConfig(16, 24);
     @Config(min = 0d, max = 1d, description = "Chance for a mob the get the xray range override.")
     public static Double xrayRangeOverrideChance = 0.5d;
 
@@ -77,7 +78,7 @@ public class Targeting extends JsonFeature {
 	@Config(description = "1 in x chance every other tick for a mob to target a nearby entity. Vanilla is 10. Setting to 0 will make the mob instantly target entities. The higher the more time will take mobs to target entities.")
 	public static Integer betterHurtByTarget$targetChance = 7;
 	@Config(min = 0d, max = 1d, description = "Chances for a mob to spawn neutral (so will not attack players until provoked)")
-	public static Difficulty betterNearbyTargeting$neutralChances = new Difficulty(0.25d, 0.10d, 0.04d);
+	public static DifficultyBasedConfig betterNearbyTargeting$neutralChances = new DifficultyBasedConfig(0.25d, 0.10d, 0.04d);
 
 	@Config(description = "Mobs will be able to find better and longer paths to the target the higher this value is. The higher the more performance heavy. Only entity types in the tag `enhancedai:mobs/targeting/visited_nodes_multiplier` tag will be affected by this. Vanilla is 1.0")
 	public static Double maxVisitedNodesMultiplier = 4d;
@@ -117,8 +118,8 @@ public class Targeting extends JsonFeature {
 
 	public static void attribute(EntityAttributeModificationEvent event) {
 		for (EntityType<? extends LivingEntity> entityType : event.getTypes()) {
-			if (!event.has(entityType, EAIAttributes.XRAY_FOLLOW_RANGE.get()))
-				event.add(entityType, EAIAttributes.XRAY_FOLLOW_RANGE.get(), 0d);
+			if (!event.has(entityType, EAIAttributes.XRAY_FOLLOW_RANGE))
+				event.add(entityType, EAIAttributes.XRAY_FOLLOW_RANGE, 0d);
 		}
 	}
 
@@ -144,14 +145,14 @@ public class Targeting extends JsonFeature {
 			if (mob.getType().is(CHANGE_FOLLOW_RANGE)
 					&& followRangeOverride.max != 0d
 					&& mob.getAttribute(Attributes.FOLLOW_RANGE) != null) {
-				MCUtils.setAttributeValue(mob, Attributes.FOLLOW_RANGE, followRangeOverride.getIntRandBetween(mob.getRandom()));
+				MCUtils.setAttributeBaseValue(mob, Attributes.FOLLOW_RANGE, followRangeOverride.getIntRandBetween(mob.getRandom()));
 			}
 
 			//noinspection ConstantConditions
 			if (mob.getType().is(APPLY_XRAY)
-					&& mob.getAttribute(EAIAttributes.XRAY_FOLLOW_RANGE.get()) != null
+					&& mob.getAttribute(EAIAttributes.XRAY_FOLLOW_RANGE) != null
                     && mob.getRandom().nextFloat() < xrayRangeOverrideChance) {
-				MCUtils.setAttributeValue(mob, EAIAttributes.XRAY_FOLLOW_RANGE.get(), xrayRangeOverride.getIntRandBetween(mob.getRandom()));
+				MCUtils.setAttributeBaseValue(mob, EAIAttributes.XRAY_FOLLOW_RANGE, xrayRangeOverride.getIntRandBetween(mob.getRandom()));
 			}
 		}
 		ModNBTData.put(mob, FOLLOW_RANGES_PROCESSED, true);
@@ -164,7 +165,7 @@ public class Targeting extends JsonFeature {
 
 		List<NearestAttackableTargetGoal<?>> toRemove = new ArrayList<>();
 		List<WrappedGoal> toAdd = new ArrayList<>();
-		for (WrappedGoal prioritizedGoal : mob.targetSelector.availableGoals) {
+		for (WrappedGoal prioritizedGoal : mob.targetSelector.getAvailableGoals()) {
 			if (!(prioritizedGoal.getGoal() instanceof NearestAttackableTargetGoal<?> goal))
 				continue;
 
@@ -211,7 +212,7 @@ public class Targeting extends JsonFeature {
 
 		List<HurtByTargetGoal> toRemove = new ArrayList<>();
 		List<WrappedGoal> toAdd = new ArrayList<>();
-		for (WrappedGoal prioritizedGoal : mob.targetSelector.availableGoals) {
+		for (WrappedGoal prioritizedGoal : mob.targetSelector.getAvailableGoals()) {
 			if (!(prioritizedGoal.getGoal() instanceof HurtByTargetGoal goal))
 				continue;
 			toRemove.add(goal);
@@ -243,7 +244,7 @@ public class Targeting extends JsonFeature {
 	}
 
     @SubscribeEvent
-    public void onEntityHurt(LivingHurtEvent event) {
+    public void onEntityHurt(LivingDamageEvent.Post event) {
         if (!this.isEnabled()
                 || alertRange <= 0
                 || !(event.getEntity() instanceof Mob mob)
@@ -257,7 +258,7 @@ public class Targeting extends JsonFeature {
                 .forEach(entity -> {
                     if (!(entity instanceof Mob nearbyMob))
                         return;
-                    //Don't switch target if current one is closer
+                    //Don't switch target if the current one is closer
                     if (nearbyMob.getTarget() != null && nearbyMob.distanceToSqr(nearbyMob.getTarget()) <= nearbyMob.distanceToSqr(attacker))
                         return;
                     nearbyMob.setTarget(attacker);

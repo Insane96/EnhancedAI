@@ -9,7 +9,7 @@ import insane96mcp.insanelib.core.feature.Feature;
 import insane96mcp.insanelib.core.feature.LoadFeature;
 import insane96mcp.insanelib.core.feature.Module;
 import insane96mcp.insanelib.core.feature.config.Config;
-import insane96mcp.insanelib.core.feature.config.Difficulty;
+import insane96mcp.insanelib.core.feature.config.DifficultyBasedConfig;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -25,7 +25,7 @@ public class Riding extends Feature {
     public static final TagKey<EntityType<?>> CAN_BE_MOUNTED = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/riding/can_be_mounted"));
     public static final TagKey<EntityType<?>> CAN_MOUNT = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/riding/can_mount"));
     @Config(min = 0d, max = 1d, description = "Chance for a mob to have an AI to go and ride mobs.")
-    public static Difficulty chance = new Difficulty(0.03d, 0.06d, 0.1d);
+    public static DifficultyBasedConfig chance = new DifficultyBasedConfig(0.03d, 0.06d, 0.1d);
 
     @Config(description = "If true, riding mobs will dismount if take too much suffocation damage.")
     public static Boolean stopMountingIfSuffocating = true;
@@ -55,7 +55,7 @@ public class Riding extends Feature {
     }
 
     @SubscribeEvent
-    public void onDamageTaken(LivingDamageEvent event) {
+    public void onDamageTaken(LivingDamageEvent.Pre event) {
         if (!this.isEnabled()
                 || !(event.getEntity() instanceof Mob mob)
                 || !stopMountingIfSuffocating
@@ -64,7 +64,7 @@ public class Riding extends Feature {
             return;
 
         float suffocatingDamageTaken = ModNBTData.get(mob, SUFFOCATION_WHILE_RIDING, Float.class);
-        suffocatingDamageTaken += event.getAmount();
+        suffocatingDamageTaken += event.getNewDamage();
         if (suffocatingDamageTaken >= 6f) {
 			mob.stopRiding();
             ModNBTData.remove(mob, SUFFOCATION_WHILE_RIDING);

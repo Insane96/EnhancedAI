@@ -11,7 +11,7 @@ import insane96mcp.insanelib.core.feature.Feature;
 import insane96mcp.insanelib.core.feature.LoadFeature;
 import insane96mcp.insanelib.core.feature.Module;
 import insane96mcp.insanelib.core.feature.config.Config;
-import insane96mcp.insanelib.core.feature.config.MinMax;
+import insane96mcp.insanelib.core.feature.config.MinMaxConfig;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -32,8 +32,9 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
-import net.neoforged.neoforge.event.entity.living.LivingEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,8 +43,9 @@ import java.util.List;
 public class WitchPotionThrowing extends Feature {
     public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("witch/better_potion_throwing"));
 
-    private static ForgeConfigSpec.ConfigValue<List<? extends String>> badPotionsListConfig;
-    private static ForgeConfigSpec.ConfigValue<List<? extends String>> goodPotionsListConfig;
+    //TODO ObjTag List
+    private static ModConfigSpec.ConfigValue<List<? extends String>> badPotionsListConfig;
+    private static ModConfigSpec.ConfigValue<List<? extends String>> goodPotionsListConfig;
     public static final List<String> badPotionsListDefault = List.of("minecraft:weakness", "minecraft:slowness", "minecraft:hunger,600,0", "minecraft:mining_fatigue,600,0", "minecraft:poison", "minecraft:blindness,120,0", "minecraft:harming");
     public static final List<String> goodPotionsListDefault = List.of("minecraft:regeneration", "minecraft:swiftness", "minecraft:strength", "minecraft:invisibility", "minecraft:healing");
 
@@ -53,9 +55,9 @@ public class WitchPotionThrowing extends Feature {
     @Config(min = 0d, max = 1d, description = "Chance for the potions thrown by the Witch to be lingering.")
     public static Double lingeringChance = 0.15d;
     @Config(min = 1, description = "Speed at which Witches throw potions (in ticks).")
-    public static MinMax attackCooldown = new MinMax(70, 90);
+    public static MinMaxConfig attackCooldown = new MinMaxConfig(70, 90);
     @Config(min = 8, max = 64, description = "Range at which Witches throw potions.")
-    public static MinMax attackRange = new MinMax(16, 24);
+    public static MinMaxConfig attackRange = new MinMaxConfig(16, 24);
 	@Config(min = 0d)
 	public static Double inaccuracy = 1d;
 	@Config(min = 0d, max = 1d, description = "Chance for a Witch to be an apprentice. Apprentice Witches throw random potions instead of in order, and have a chance to throw a wrong (good) potion.")
@@ -127,7 +129,7 @@ public class WitchPotionThrowing extends Feature {
     }
 
     @SubscribeEvent
-    public void onWitchTick(LivingEvent.LivingTickEvent event) {
+    public void onWitchTick(EntityTickEvent.Pre event) {
         if (!this.isEnabled()
                 || !(event.getEntity() instanceof Witch witch)
                 || !witch.getType().is(AFFECTED_ENTITY_TYPES)

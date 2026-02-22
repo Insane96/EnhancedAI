@@ -9,7 +9,7 @@ import insane96mcp.insanelib.core.feature.Feature;
 import insane96mcp.insanelib.core.feature.LoadFeature;
 import insane96mcp.insanelib.core.feature.Module;
 import insane96mcp.insanelib.core.feature.config.Config;
-import insane96mcp.insanelib.core.feature.config.MinMax;
+import insane96mcp.insanelib.core.feature.config.MinMaxConfig;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -28,7 +28,7 @@ public class PearlerMobs extends Feature {
 	@Config(min = 0d, max = 1d, description = "Chance for a mob to spawn with Ender Pearls in the offhand.\nI recommend Mobs Properties Randomness to have more control over mobs equipment.")
 	public static Double equipEnderPearlChance = 0.05;
 	@Config(min = 0, max = 16, description = "How many ender pearls will Mobs spawn with.")
-	public static MinMax enderPearlAmount = new MinMax(2, 4);
+	public static MinMaxConfig enderPearlAmount = new MinMaxConfig(2, 4);
 	@Config(min = 1, max = 16, description = "Inaccuracy when throwing the ender pearl.")
 	public static Integer inaccuracy = 3;
 

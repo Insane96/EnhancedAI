@@ -46,7 +46,7 @@ public class TNTLike extends Feature {
 	}
 
 	@SubscribeEvent
-	public void livingDamageEvent(LivingDamageEvent event) {
+	public void livingDamageEvent(LivingDamageEvent.Pre event) {
 		if (!this.isEnabled()
 				|| !event.getSource().is(DamageTypeTags.IS_EXPLOSION)
 				|| !(event.getEntity() instanceof Creeper creeper)

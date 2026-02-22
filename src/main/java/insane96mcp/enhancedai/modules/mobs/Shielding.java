@@ -2,12 +2,11 @@ package insane96mcp.enhancedai.modules.mobs;
 
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.EAIModules;
+import insane96mcp.insanelib.core.JsonFeature;
 import insane96mcp.insanelib.core.ModNBTData;
-import insane96mcp.insanelib.core.feature.JsonFeature;
 import insane96mcp.insanelib.core.feature.LoadFeature;
 import insane96mcp.insanelib.core.feature.Module;
 import insane96mcp.insanelib.core.feature.config.Config;
-import insane96mcp.insanelib.data.IdTagValue;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
@@ -22,6 +21,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +77,7 @@ public class Shielding extends JsonFeature {
 	}
 
     @SubscribeEvent
-    public void onMobAttacked(LivingAttackEvent event) {
+    public void onMobAttacked(LivingIncomingDamageEvent event) {
 		LivingEntity attacked = event.getEntity();
 		if (!this.isEnabled()
 				|| event.getSource().is(DamageTypeTags.BYPASSES_SHIELD)
@@ -102,7 +102,7 @@ public class Shielding extends JsonFeature {
 			return;
 		if (attacked.getRandom().nextDouble() < chance) {
 			event.setCanceled(true);
-			offHandItem.hurt((int) event.getAmount(), attacked.getRandom(), null);
+			offHandItem.hurtAndBreak((int) event.getAmount(), attacker, EquipmentSlot.OFFHAND);
             if (attacker.getMainHandItem().is(ItemTags.AXES)) {
                 ModNBTData.put(attacked, LAST_HURT_BY_AXE, attacked.level().getGameTime());
                 attacked.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.8F + attacked.level().random.nextFloat() * 0.4F);

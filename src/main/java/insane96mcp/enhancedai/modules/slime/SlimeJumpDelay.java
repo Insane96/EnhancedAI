@@ -7,7 +7,7 @@ import insane96mcp.insanelib.core.feature.Feature;
 import insane96mcp.insanelib.core.feature.LoadFeature;
 import insane96mcp.insanelib.core.feature.Module;
 import insane96mcp.insanelib.core.feature.config.Config;
-import insane96mcp.insanelib.core.feature.config.MinMax;
+import insane96mcp.insanelib.core.feature.config.MinMaxConfig;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
@@ -21,7 +21,7 @@ public class SlimeJumpDelay extends Feature {
     public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("slime/jump_rate"));
 
     @Config
-    public static MinMax jumpDelay = new MinMax(5, 15);
+    public static MinMaxConfig jumpDelay = new MinMaxConfig(5, 15);
 
 	public static EAIData<Integer> JUMP_DELAY_MIN;
 	public static EAIData<Integer> JUMP_DELAY_MAX;

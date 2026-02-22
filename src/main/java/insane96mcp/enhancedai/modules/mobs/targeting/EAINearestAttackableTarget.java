@@ -2,8 +2,9 @@ package insane96mcp.enhancedai.modules.mobs.targeting;
 
 import insane96mcp.enhancedai.setup.EAIAttributes;
 import insane96mcp.insanelib.ai.ILNearestAttackableTargetGoal;
-import insane96mcp.insanelib.data.IdTagMatcher;
+import insane96mcp.insanelib.data.ObjTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
@@ -27,14 +28,14 @@ public class EAINearestAttackableTarget<T extends LivingEntity> extends ILNeares
         this.unseenMemoryTicks = forgetTicks;
     }
 
-    public EAINearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, IdTagMatcher idTagMatcher, boolean mustSee, boolean mustReach, TargetingConditions targetingConditions) {
+    public EAINearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, ObjTag<EntityType<? extends LivingEntity>> idTagMatcher, boolean mustSee, boolean mustReach, TargetingConditions targetingConditions) {
         this(goalOwnerIn, targetClassIn, idTagMatcher, mustSee, mustReach, targetingConditions, 60);
     }
 
-    public EAINearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, IdTagMatcher idTagMatcher, boolean mustSee, boolean mustReach, TargetingConditions targetingConditions, int forgetTicks) {
+    public EAINearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, ObjTag<EntityType<? extends LivingEntity>> idTagMatcher, boolean mustSee, boolean mustReach, TargetingConditions targetingConditions, int forgetTicks) {
         this(goalOwnerIn, targetClassIn, mustSee, mustReach, targetingConditions);
-        this.targetEntitySelector.selector(idTagMatcher::matchesEntity);
-        this.targetEntitySelectorXRay.selector(idTagMatcher::matchesEntity);
+        this.targetEntitySelector.selector(living -> idTagMatcher.matches((EntityType<? extends LivingEntity>) living.getType()));
+        this.targetEntitySelectorXRay.selector(living -> idTagMatcher.matches((EntityType<? extends LivingEntity>) living.getType()));
         this.unseenMemoryTicks = forgetTicks;
     }
 
@@ -112,6 +113,6 @@ public class EAINearestAttackableTarget<T extends LivingEntity> extends ILNeares
     }
 
 	protected double getFollowXRayDistance() {
-        return this.mob.getAttributeValue(EAIAttributes.XRAY_FOLLOW_RANGE.get());
+        return this.mob.getAttributeValue(EAIAttributes.XRAY_FOLLOW_RANGE);
     }
 }

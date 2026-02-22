@@ -33,9 +33,9 @@ public class ShulkerArmor extends Feature {
     @Override
     public void readConfig(ModConfigEvent event) {
         super.readConfig(event);
-        CLOSED_MODIFIER = new AttributeModifier(COVERED_ARMOR_MODIFIER_UUID, "Covered armor bonus", armorWhenClosed, AttributeModifier.Operation.ADDITION);
-        PEEK_MODIFIER = new AttributeModifier(COVERED_ARMOR_MODIFIER_UUID, "Covered armor bonus", armorWhenPeeking, AttributeModifier.Operation.ADDITION);
-        OPEN_MODIFIER = new AttributeModifier(COVERED_ARMOR_MODIFIER_UUID, "Covered armor bonus", armorWhenOpen, AttributeModifier.Operation.ADDITION);
+        CLOSED_MODIFIER = new AttributeModifier(COVERED_ARMOR_MODIFIER_UUID, "Covered armor bonus", armorWhenClosed, AttributeModifier.Operation.ADD_VALUE);
+        PEEK_MODIFIER = new AttributeModifier(COVERED_ARMOR_MODIFIER_UUID, "Covered armor bonus", armorWhenPeeking, AttributeModifier.Operation.ADD_VALUE);
+        OPEN_MODIFIER = new AttributeModifier(COVERED_ARMOR_MODIFIER_UUID, "Covered armor bonus", armorWhenOpen, AttributeModifier.Operation.ADD_VALUE);
     }
 
     public static boolean isAffectedByArmorModifiers(Shulker shulker) {

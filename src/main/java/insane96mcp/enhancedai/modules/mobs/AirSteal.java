@@ -14,6 +14,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 
 @LoadFeature(module = EAIModules.Ids.MOBS, description = "Only entity types in the enhancedai:mobs/air_stealer tag are affected by this feature.")
 public class AirSteal extends Feature {
@@ -43,7 +44,7 @@ public class AirSteal extends Feature {
     }
 
     @SubscribeEvent
-    public void onAttack(LivingHurtEvent event) {
+    public void onAttack(LivingDamageEvent.Post event) {
         if (!this.isEnabled()
                 || event.getEntity().level().isClientSide
                 || !(event.getSource().getEntity() instanceof LivingEntity attacker)

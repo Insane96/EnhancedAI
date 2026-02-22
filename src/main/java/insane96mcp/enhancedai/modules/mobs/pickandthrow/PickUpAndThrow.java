@@ -8,7 +8,7 @@ import insane96mcp.insanelib.core.feature.Feature;
 import insane96mcp.insanelib.core.feature.LoadFeature;
 import insane96mcp.insanelib.core.feature.Module;
 import insane96mcp.insanelib.core.feature.config.Config;
-import insane96mcp.insanelib.core.feature.config.Difficulty;
+import insane96mcp.insanelib.core.feature.config.DifficultyBasedConfig;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
@@ -22,7 +22,7 @@ public class PickUpAndThrow extends Feature {
     public static final TagKey<EntityType<?>> CAN_PICK_UP = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/pick_up_and_throw/can_pick_up"));
 
     @Config(min = 0d, max = 1d, description = "Chance for a mob to have an AI to go and pick up and throw mobs.")
-    public static Difficulty chance = new Difficulty(0.05d, 0.05d, 0.1d);
+    public static DifficultyBasedConfig chance = new DifficultyBasedConfig(0.05d, 0.05d, 0.1d);
     @Config(min = 0d, description = "Min distance from the target to let the mob pick up a mob")
     public static Integer minDistanceToPickUp = 5;
     @Config(min = 0, description = "Max distance beyond which the mob will not throw the picked up mob")

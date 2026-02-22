@@ -9,7 +9,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
@@ -118,12 +117,8 @@ public abstract class MeleeAttackGoalMixin extends Goal {
 	@Unique
 	private int enhancedAI$getTicksUntilNextAttack() {
 		double attackSpeed = this.mob.getAttributeValue(Attributes.ATTACK_SPEED);
-		if (attackSpeed <= 0f) {
-			AttributeInstance instance = this.mob.getAttribute(Attributes.ATTACK_SPEED);
-			if (instance != null)
-				instance.setDirty();
+		if (attackSpeed <= 0f)
 			attackSpeed = this.mob.getAttributeValue(Attributes.ATTACK_SPEED);
-		}
 		attackSpeed *= MeleeAttacking.attackSpeed$multiplier.getByDifficulty(this.mob.level());
 		if (attackSpeed > MeleeAttacking.attackSpeed$maximum)
 			attackSpeed = MeleeAttacking.attackSpeed$maximum;

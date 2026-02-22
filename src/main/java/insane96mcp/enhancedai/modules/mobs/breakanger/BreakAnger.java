@@ -2,10 +2,12 @@ package insane96mcp.enhancedai.modules.mobs.breakanger;
 
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.EAIModules;
-import insane96mcp.insanelib.core.feature.JsonFeature;
+import insane96mcp.insanelib.core.JsonFeature;
 import insane96mcp.insanelib.core.feature.LoadFeature;
 import insane96mcp.insanelib.core.feature.Module;
-import insane96mcp.insanelib.data.IdTagMatcher;
+import insane96mcp.insanelib.data.ObjTag;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Mob;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -18,7 +20,7 @@ import java.util.List;
 public class BreakAnger extends JsonFeature {
 
 	public static final List<BreakAngerConfig> ANGERING_LIST_DEFAULT = List.of(
-		new BreakAngerConfig(IdTagMatcher.newTag("forge:ores/quartz"), IdTagMatcher.newId("minecraft:zombified_piglin"), 32d, false)
+		new BreakAngerConfig(ObjTag.tagOf(ResourceLocation.parse("forge:ores/quartz"), Registries.BLOCK), ObjTag.objOf(ResourceLocation.parse("minecraft:zombified_piglin"), Registries.ENTITY_TYPE), 32d, false)
 	);
 
 	public static final List<BreakAngerConfig> angeringList = new ArrayList<>();
@@ -27,7 +29,7 @@ public class BreakAnger extends JsonFeature {
 	@Override
 	public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super.init(module, enabledByDefault, canBeDisabled);
-		JSON_CONFIGS.add(new JsonConfig<>("break_anger_config.json", angeringList, ANGERING_LIST_DEFAULT, BreakAngerConfig.LIST_TYPE));
+		this.getJsonConfigs().add(new JsonConfig<>("break_anger_config.json", angeringList, ANGERING_LIST_DEFAULT, BreakAngerConfig.LIST_TYPE));
 	}
 
 	@Override
@@ -43,10 +45,10 @@ public class BreakAnger extends JsonFeature {
 
 		for (BreakAngerConfig breakAngerConfig : angeringList) {
 			List<Mob> entities = player.level().getEntitiesOfClass(Mob.class, player.getBoundingBox().inflate(breakAngerConfig.range));
-			if (!breakAngerConfig.block.matchesBlock(event.getState()))
+			if (!breakAngerConfig.block.matches(event.getState().getBlock()))
 				continue;
 			entities.stream()
-					.filter(mob -> breakAngerConfig.entity.matchesEntity(mob))
+					.filter(mob -> breakAngerConfig.entity.matches(mob.getType()))
 					.filter(mob -> !breakAngerConfig.requiresLineOfSight || mob.hasLineOfSight(player))
 					.forEach(mob -> mob.setTarget(player));
 		}

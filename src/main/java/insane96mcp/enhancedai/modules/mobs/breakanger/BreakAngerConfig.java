@@ -3,19 +3,22 @@ package insane96mcp.enhancedai.modules.mobs.breakanger;
 import com.google.gson.*;
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.reflect.TypeToken;
-import insane96mcp.insanelib.data.IdTagMatcher;
+import insane96mcp.insanelib.data.ObjTag;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.block.Block;
 
 import java.util.ArrayList;
 
 @JsonAdapter(BreakAngerConfig.Serializer.class)
 public class BreakAngerConfig {
-    public IdTagMatcher block;
-    public IdTagMatcher entity;
+    public ObjTag<Block> block;
+    public ObjTag<EntityType<?>> entity;
     public double range;
     public boolean requiresLineOfSight;
 
-    public BreakAngerConfig(IdTagMatcher block, IdTagMatcher entity, double range, boolean requiresLineOfSight) {
+    public BreakAngerConfig(ObjTag<Block> block, ObjTag<EntityType<?>> entity, double range, boolean requiresLineOfSight) {
         this.block = block;
         this.entity = entity;
         this.range = range;
@@ -28,8 +31,8 @@ public class BreakAngerConfig {
         @Override
         public BreakAngerConfig deserialize(JsonElement json, java.lang.reflect.Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             JsonObject jObject = json.getAsJsonObject();
-            IdTagMatcher block = context.deserialize(jObject.get("block"), IdTagMatcher.class);
-            IdTagMatcher entity = context.deserialize(jObject.get("entity"), IdTagMatcher.class);
+            ObjTag<Block> block = ObjTag.deserialize(jObject.get("block"), Registries.BLOCK);
+            ObjTag<EntityType<?>> entity = ObjTag.deserialize(jObject.get("entity"), Registries.ENTITY_TYPE);
             double range = GsonHelper.getAsDouble(jObject, "range");
             boolean requiresLineOfSight = GsonHelper.getAsBoolean(jObject, "requires_line_of_sight", false);
 
