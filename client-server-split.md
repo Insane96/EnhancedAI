@@ -1,235 +1,235 @@
-# EnhancedAI – Analisi Split Server / Client-Extra (Port a NeoForge 1.21.1)
+# EnhancedAI – Server / Client-Extra Split Analysis (NeoForge 1.21.1 Port)
 
-## Concetto generale
+## General concept
 
-| Mod | Chi deve averla | Scopo |
-|-----|----------------|-------|
-| **EnhancedAI** (server-side) | Solo il server (i client vanilla possono connettersi) | Tutte le modifiche all'AI, comportamento mob, pathfinding |
-| **EnhancedAI Extra** (client-required) | Sia server che client | Feature che usano entità custom visibili ai client |
+| Mod | Who needs it | Purpose |
+|-----|--------------|---------|
+| **EnhancedAI** (server-side) | Server only (vanilla clients can connect) | All AI changes, mob behavior, pathfinding |
+| **EnhancedAI Extra** (client-required) | Both server and client | Features that use custom entities visible to clients |
 
-Per far sì che un client vanilla possa connettersi alla server-side mod, in NeoForge 1.21.1 il `mods.toml` deve avere `displayTest = "IGNORE_SERVER_VERSION"`. Questo implica che la mod **non può registrare entity type custom che vengono tracciati dai client** (il client non saprebbe come gestirli).
+For vanilla clients to connect to the server-side mod, in NeoForge 1.21.1 `mods.toml` must have `displayTest = "IGNORE_SERVER_VERSION"`. This means the mod **cannot register custom entity types that are tracked by clients** (the client would not know how to handle them).
 
 ---
 
-## Features che rimangono nella mod Server-Side
+## Features that stay in the Server-Side mod
 
-Tutte le seguenti feature modificano esclusivamente logica server-side (AI goals, attributi, mixin a classi server) e non richiedono alcun codice sul client.
+All the following features modify exclusively server-side logic (AI goals, attributes, mixins to server classes) and require no code on the client.
 
-### Mobs (generali)
-- **AirSteal** – I mob rubano l'aria alle entità sott'acqua
-- **VehicleAntiCheese** – I mob rompono veicoli (barca, minecart) per raggiungere il target
-- **AvoidExplosions** – I mob scappano da Creeper/TNT che esplodono
-- **BitingMobs** – I mob mordono se colpiti con oggetti non-weapon
-- **ActualBlindness** – La cecità riduce il follow range dei mob
-- **BreakAnger** – I mob si arrabbiano quando si rompe un blocco vicino
-- **Climbing** – I mob scalano scale e blocchi arrampicabili
-- **FallingShockwave** – Shockwave quando un mob cade per almeno 3 blocchi
-- **FireImmuneTicks** – Gestione dell'immunità al fuoco
-- **FleeTarget** – I mob fuggono dal target
-- **ItemDisruption** – I mob interferiscono con gli oggetti in mano al giocatore
-- **Jump** – I mob possono saltare sul posto
-- **Leaders** – Meccanica del leader del gruppo
-- **MeleeAttacking** – Attacco corpo a corpo migliorato
-- **MinerMobs** – I mob minano blocchi per raggiungere il target
-- **Panic** – I mob entrano in panico quando in fiamme
-- **Parkour** – I mob fanno parkour
-- **Pathfinding** – Pathfinding migliorato (scale, porte, etc.)
-- **PearlerMobs** – I mob usano Ender Pearl per teletrasportarsi
-- **PickUpAndThrow** – I mob raccolgono e lanciano entità
-- **PushResistance** – Resistenza alla spinta
-- **RandomStroll** – Vagabondaggio casuale migliorato
-- **Riding** – I mob cavalcano altri mob
-- **Shielding** – Meccanica scudo migliorata
-- **Spawning** – Restrizioni e modifiche allo spawn
-- **Sprint** – I mob scattano verso il target
-- **Swimmers** – Nuoto migliorato
-- **TeleportAntiCheese** – Anti-cheese per enderman/mob che si teletrasportano
-- **TeleportToTarget** – I mob si teletrasportano sul target
-- **MPRDataPack** – Integrazione con Mobs Properties Randomness
+### Mobs (general)
+- **AirSteal** – Mobs steal air from entities underwater
+- **VehicleAntiCheese** – Mobs break vehicles (boat, minecart) to reach their target
+- **AvoidExplosions** – Mobs run away from exploding Creepers/TNT
+- **BitingMobs** – Mobs bite when hit with non-weapon items
+- **ActualBlindness** – Blindness reduces mobs' follow range
+- **BreakAnger** – Mobs get angry when a nearby block is broken
+- **Climbing** – Mobs can climb ladders and climbable blocks
+- **FallingShockwave** – Shockwave when a mob falls at least 3 blocks
+- **FireImmuneTicks** – Fire immunity mechanics for mobs
+- **FleeTarget** – Mobs flee from their target
+- **ItemDisruption** – Mobs interfere with items held by the player
+- **Jump** – Mobs can jump in place
+- **Leaders** – Group leader mechanics
+- **MeleeAttacking** – Enhanced melee attacking
+- **MinerMobs** – Mobs mine blocks to reach their target
+- **Panic** – Mobs panic when on fire
+- **Parkour** – Mobs can parkour
+- **Pathfinding** – Improved pathfinding (ladders, doors, etc.)
+- **PearlerMobs** – Mobs can use Ender Pearls to teleport
+- **PickUpAndThrow** – Mobs pick up and throw entities
+- **PushResistance** – Push resistance mechanics
+- **RandomStroll** – Improved random strolling
+- **Riding** – Mobs can ride other mobs
+- **Shielding** – Enhanced shield mechanics
+- **Spawning** – Spawn restrictions and modifications
+- **Sprint** – Mobs sprint toward their target
+- **Swimmers** – Improved swimming mechanics
+- **TeleportAntiCheese** – Anti-cheese for endermen/teleporting mobs
+- **TeleportToTarget** – Mobs teleport to their target
+- **MPRDataPack** – Mobs Properties Randomness datapack integration
 
-### Animali
-- **AnimalScaredAttack** – Gli animali contrattaccano o fuggono
-- **AnimalsPanic** – Gli animali entrano in panico quando uno viene attaccato
-- **NotTemptedAnimals** – Gli animali non sono attirati dal cibo
+### Animals
+- **AnimalScaredAttack** – Animals fight back or flee
+- **AnimalsPanic** – Animals panic when one of them is attacked
+- **NotTemptedAnimals** – Animals are not attracted by food
 
 ### Blaze
-- **BlazeAttack** – Attacco del Blaze più rapido / più palle di fuoco
+- **BlazeAttack** – Faster/more fireballs for Blazes
 
 ### Bugs (Silverfish)
-- **SilverfishMergeWithStone** – I Silverfish si nascondono nei blocchi
-- **SilverfishWakeUpFriends** – I Silverfish risvegliano gli amici
+- **SilverfishMergeWithStone** – Silverfish hide inside blocks
+- **SilverfishWakeUpFriends** – Silverfish wake up friends
 
 ### Creeper
-- **DisableFallingSwelling** – I Creeper non si innescano cadendo
-- **CreeperLaunch** – I Creeper si lanciano in aria durante l'esplosione
-- **CreeperSwell** – Modifiche varie all'innesco dei Creeper
-- **TNTLike** – I Creeper si innescano con danni da esplosione
+- **DisableFallingSwelling** – Creepers no longer ignite when falling
+- **CreeperLaunch** – Creepers launch into the air when exploding
+- **CreeperSwell** – Various changes to Creeper ignition
+- **TNTLike** – Creepers ignite when taking explosion damage
 
 ### Drowned
-- **BetterDrownedSwimUp** – Nuoto verso l'alto migliorato con salto
-- **DrownedAttackDuringDay** – I Drowned attaccano anche di giorno
-- **DrowningTargets** – I mob trascinano il target sott'acqua
-- **SunResistantDrowned** – I Drowned resistono temporaneamente alla luce solare
+- **BetterDrownedSwimUp** – Improved swim-up goal with leap capability
+- **DrownedAttackDuringDay** – Drowned attack during daytime
+- **DrowningTargets** – Mobs drag their target underwater
+- **SunResistantDrowned** – Drowned are temporarily immune to sunlight
 
 ### Ghast
-- **GhastShooting** – Sparo del Ghast migliorato
+- **GhastShooting** – Improved Ghast shooting
 
 ### Illager
-- **RavagerFeature** – Tag blocchi rompibili dal Ravager
-- **PillagerShoot** – Tiro del Pillager migliorato
+- **RavagerFeature** – Block tag for blocks breakable by Ravagers
+- **PillagerShoot** – Improved Pillager shooting
 
 ### Shulker
-- **ShulkerArmor** – Armatura dello Shulker migliorata
-- **ShulkerAttack** – Attacco dello Shulker migliorato
-- **ShulkerBullets** – Personalizzazione dei proiettili Shulker
+- **ShulkerArmor** – Enhanced Shulker armor
+- **ShulkerAttack** – Enhanced Shulker attack
+- **ShulkerBullets** – Shulker bullet customization
 
 ### Skeleton
-- **SkeletonFleeTarget** – Gli Skeleton mantengono distanza dal target
-- **SkeletonShoot** – Tiro dello Skeleton migliorato
-- **WitherSkeletons** – Modifiche allo Wither Skeleton
+- **SkeletonFleeTarget** – Skeletons keep their distance from the target
+- **SkeletonShoot** – Improved Skeleton shooting
+- **WitherSkeletons** – Wither Skeleton modifications
 
 ### Slime / Magma Cube
-- **MagmaCubeSurfSpeed** – Velocità in superficie delle Magma Cube
-- **SlimeAttackFix** – Fix danni ogni tick degli Slime
-- **SlimeJumpDelay** – Ritardo nei salti degli Slime
-- **SlimeSize** – Dimensioni degli Slime migliorate
+- **MagmaCubeSurfSpeed** – Magma Cube surface speed
+- **SlimeAttackFix** – Fix Slimes dealing damage every tick
+- **SlimeJumpDelay** – Slime jump delay mechanics
+- **SlimeSize** – Enhanced Slime size mechanics
 
 ### Snow Golem
-- **SnowballsInvulnerabilityFrames** – Frame di invulnerabilità palle di neve
-- **SnowGolemsDamagingSnowballs** – Palle di neve che danneggiano
-- **SnowGolemsFreezingSnowballs** – Palle di neve che congelano
-- **SnowGolemsHealedBySnowballs** – Snow Golem curati dalle palle di neve
+- **SnowballsInvulnerabilityFrames** – Snowball invulnerability frames
+- **SnowGolemsDamagingSnowballs** – Snow Golems throw damaging snowballs
+- **SnowGolemsFreezingSnowballs** – Snow Golems throw freezing snowballs
+- **SnowGolemsHealedBySnowballs** – Snow Golems healed by snowballs
 
 ### Spider
-- **DestuckWallGoal** – Spider che si destucca dalle pareti
-- **StuckFix** – Fix generali per spider bloccati
+- **DestuckWallGoal** – Spider unstuck from walls goal
+- **StuckFix** – General spider stuck fixes
 
 ### Villager
-- **VillagerAlertProtectors** – I Villager allertano i Golem
-- **VillagerAttacking** – Attacco dei Villager migliorato
+- **VillagerAlertProtectors** – Villagers alert Golems
+- **VillagerAttacking** – Enhanced Villager attacking
 
 ### Warden
-- **WardenDarknessRange** – Raggio dell'effetto Darkness
-- **WardenListenRange** – Raggio di ascolto
-- **WardenSonicBoomRange** – Raggio del Sonic Boom
+- **WardenDarknessRange** – Darkness effect range
+- **WardenListenRange** – Listen range
+- **WardenSonicBoomRange** – Sonic Boom range
 
 ### Witch
-- **AlliedMonsters** – Le Witch prendono di mira i mostri alleati del player
-- **DarkArt** – Meccaniche "dark art" per la Witch
-- **ThirstyWitches** – Le Witch bevono pozioni d'acqua
-- **WitchPotionThrowing** – Lancio pozioni della Witch migliorato
+- **AlliedMonsters** – Witches target monsters allied with the player
+- **DarkArt** – Dark art mechanics for Witches
+- **ThirstyWitches** – Witches drink water potions
+- **WitchPotionThrowing** – Enhanced Witch potion throwing
 
 ---
 
-## Analisi approfondita: possibile rendere server-side FisherMobs e ThrowingWeb?
+## In-depth analysis: can FisherMobs and ThrowingWeb be made server-side?
 
-### ThrowingWeb – `FallingBlockEntity` come alternativa
+### ThrowingWeb – `FallingBlockEntity` as an alternative
 
-**Risposta: Sì, tecnicamente fattibile.**
+**Answer: Yes, technically feasible.**
 
-`FallingBlockEntity` è un entity type vanilla, già registrato e renderizzato correttamente dal client vanilla senza nessuna mod. Renderebbe come un blocco di cobweb in volo, il che ha senso visivamente.
+`FallingBlockEntity` is a vanilla entity type, already registered and rendered correctly by the vanilla client without any mod. It would render as a flying cobweb block, which makes visual sense.
 
-**Cosa deve fare `ThrownWebEntity`:**
-1. Volare verso il target con traiettoria balistica (velocità iniziale + gravità)
-2. Colpire entità → danni, effetti, cobweb opzionale
-3. Colpire blocchi → cobweb opzionale
+**What `ThrownWebEntity` needs to do:**
+1. Fly toward the target with a ballistic trajectory (initial velocity + gravity)
+2. Hit an entity → damage, effects, optional cobweb placement
+3. Hit a block → optional cobweb placement
 
-**`FallingBlockEntity` può fare tutto questo:**
+**What `FallingBlockEntity` can cover:**
 
-| Comportamento | ThrownWebEntity | FallingBlockEntity |
+| Behavior | ThrownWebEntity | FallingBlockEntity |
 |---|---|---|
-| Traiettoria balistica | `shoot()` + `ThrowableItemProjectile.tick()` | `setDeltaMovement()` + gravità tick-by-tick → **identico** |
-| Collisione con blocchi | `onHitBlock()` | Già gestito nativamente dal `move()` |
-| Posizionamento cobweb su blocco | Manuale in `onHitBlock()` | Già nativo: vanilla piazza il blocco al landing (con `dropItem = false`) |
-| Collisione con entità | `onHitEntity()` | **Mancante** → serve mixin a `tick()` per AABB check manuale |
-| Owner + damage | Campi della classe | NBT persistente (`persistentData`) o mappa server-side |
-| Identificazione "nostra" | Tipo entità diverso | NBT tag custom (es. `enhancedai:owner_uuid`) |
+| Ballistic trajectory | `shoot()` + `ThrowableItemProjectile.tick()` | `setDeltaMovement()` + gravity per tick → **identical** |
+| Block collision | `onHitBlock()` | Already handled natively by `move()` |
+| Cobweb placement on block hit | Manual in `onHitBlock()` | Native: vanilla places the block on landing (with `dropItem = false`) |
+| Entity collision | `onHitEntity()` | **Missing** → needs a mixin to `tick()` for manual AABB check |
+| Owner + damage | Class fields | Persistent NBT (`persistentData`) or a server-side map |
+| Identifying "our" blocks | Different entity type | Custom NBT tag (e.g. `enhancedai:owner_uuid`) |
 
-**Mixin necessario su `FallingBlockEntity.tick()`:**
+**Required mixin on `FallingBlockEntity.tick()`:**
 ```java
-// pseudo-logica da aggiungere via mixin
+// pseudo-logic to add via mixin
 if (this.getPersistentData().contains("enhancedai:owner_uuid")) {
     AABB expanded = this.getBoundingBox().inflate(0.1);
     List<Entity> hit = level.getEntities(this, expanded, e -> e != owner && e.isAlive());
     if (!hit.isEmpty()) {
-        // applica danni + effetti + cobweb
+        // apply damage + effects + cobweb
         this.discard();
     }
 }
 ```
 
-**Svantaggi:**
-- Il rendering è un blocco di cobweb che vola, non un item projectile (ma è visivamente accettabile)
-- Il mixin a `FallingBlockEntity` è più soggetto a conflitti con altre mod
-- La fisica differisce leggermente: `FallingBlockEntity` applica drag (`0.98`) ma non ha il `normalize + speed` di `shoot()` → la traiettoria va ricalibrata nel `WebThrowGoal`
+**Downsides:**
+- Renders as a flying cobweb block, not an item projectile (visually acceptable)
+- Mixin on `FallingBlockEntity` is more prone to conflicts with other mods
+- Physics differ slightly: `FallingBlockEntity` applies drag (`0.98`) but lacks the `normalize + speed` of `shoot()` → trajectory needs recalibration in `WebThrowGoal`
 
-**Conclusione**: Fattibile per avere ThrowingWeb nella server-side mod senza client.
+**Conclusion**: Feasible to keep ThrowingWeb in the server-side mod without any client code.
 
 ---
 
-### FisherMobs – Mixin su vanilla `FishingHook` per accettare `LivingEntity`
+### FisherMobs – Mixin on vanilla `FishingHook` to accept `LivingEntity`
 
-**Risposta: Fattibile per la funzionalità, ma il rendering rimane un problema.**
+**Answer: Functional server-side, but rendering remains a problem.**
 
-**Problema principale del vanilla `FishingHook`:**
-Il vanilla `FishingHook` ha un campo `private final Player player` usato ovunque in `tick()` e `retrieve()`. Per far funzionare il hook con un mob owner tramite mixin servirebbe:
-1. `@Unique Entity livingOwner` aggiunto via mixin
-2. `@Redirect` su tutti gli accessi a `this.player` dentro `tick()` → non banale perché sono decine di reference
-3. Bypassare il costruttore che richiede `Player`
+**Core issue with vanilla `FishingHook`:**
+Vanilla `FishingHook` has a `private final Player player` field referenced throughout `tick()` and `retrieve()`. Making it work with a mob owner via mixin would require:
+1. Adding a `@Unique Entity livingOwner` field via mixin
+2. `@Redirect` on every access to `this.player` inside `tick()` — non-trivial given the number of references
+3. Bypassing the constructor that requires a `Player`
 
-È fattibile ma molto fragile e si rompe ad ogni aggiornamento vanilla.
+Technically doable but very fragile and breaks with every vanilla update.
 
-**Problema del rendering:**
-Il vanilla `FishingHookRenderer` fa questo:
+**Rendering problem:**
+The vanilla `FishingHookRenderer` does:
 ```java
 public void render(FishingHook hook, ...) {
-    Player player = hook.getPlayerOwner(); // ritorna null se non è un Player
-    if (player == null) return; // ← nessun render se owner è un mob
-    // disegna la linea dall'ARM del player...
+    Player player = hook.getPlayerOwner(); // returns null if owner is not a Player
+    if (player == null) return; // ← nothing renders if owner is a mob
+    // draws the line from the player's arm...
 }
 ```
-Anche se fixassimo il lato server, il client vanilla vedrebbe il hook **senza la linea** che collega al mob.
+Even if the server side were fixed, vanilla clients would see the hook **with no line** connecting it to the mob.
 
-**Per avere la linea visibile ci sono due opzioni:**
-- Mixin a `FishingHookRenderer` sul client → richiede comunque la mod client (Extra)
-- Usare la custom `FishingHook` + `FishingHookRenderer` propria (approccio attuale)
+**Options to make the line visible:**
+- Mixin `FishingHookRenderer` on the client → still requires client code (Extra mod)
+- Use the custom `FishingHook` + own `FishingHookRenderer` (current approach)
 
-**Conclusione**: Usare vanilla `FishingHook` via mixin è più complesso della soluzione custom, e il rendering della linea richiede comunque codice client. FisherMobs rimane nell'Extra.
+**Conclusion**: Mixin-ing vanilla `FishingHook` is more complex than the custom solution, and the fishing line still requires client code. FisherMobs stays in the Extra mod.
 
 ---
 
-## Features che vanno nell'Extra (client-required)
+## Features that go in the Extra mod (client-required)
 
-Queste feature usano **entità custom tracciate dai client** e quindi richiedono registrazione e rendering sul client.
+These features use **custom entities tracked by clients** and therefore require registration and rendering on the client.
 
-### FisherMobs – Mob che pescano i giocatori
-- **Entity**: `FishingHook` (estende `Projectile`)
-  - `clientTrackingRange(4)` → viene sincronizzata ai client
-  - Il client deve conoscere il tipo per non crashare
+### FisherMobs – Mobs that fish players
+- **Entity**: `FishingHook` (extends `Projectile`)
+  - `clientTrackingRange(4)` → synced to clients
+  - Client must know the type to avoid crashes
 - **Renderer**: `FishingHookRenderer` (`@OnlyIn(Dist.CLIENT)`)
-  - Render del gancio + corda verso il mob
-- **Goal**: `FishingTargetGoal`, `FishingHook` logic lato server
-- **Registrazione**: `EAIEntities.FISHING_HOOK`
+  - Renders the hook + fishing line toward the mob
+- **Goal**: `FishingTargetGoal`, server-side `FishingHook` logic
+- **Registration**: `EAIEntities.FISHING_HOOK`
 
-**Motivo**: Il client vanilla che si connette a un server con questa feature riceve pacchetti di spawn per un entity type sconosciuto → potenziale disconnessione o errori. Il renderer richiede codice client.
+**Reason**: A vanilla client connecting to a server with this feature receives spawn packets for an unknown entity type → potential disconnect or errors. The renderer requires client code.
 
-### ThrowingWeb – Mob che lanciano ragnatele
-- **Entity**: `ThrownWebEntity` (estende `ThrowableItemProjectile`)
-  - `setTrackingRange(4)` → sincronizzata ai client
-- **Renderer**: `ThrownItemRenderer` (vanilla), registrato in `ClientSetup`
-  - Anche se il renderer è vanilla, la **registrazione** avviene lato client in `ClientSetup`
-- **Registrazione**: `EAIEntities.THROWN_WEB`
+### ThrowingWeb – Mobs that throw cobwebs
+- **Entity**: `ThrownWebEntity` (extends `ThrowableItemProjectile`)
+  - `setTrackingRange(4)` → synced to clients
+- **Renderer**: `ThrownItemRenderer` (vanilla), registered in `ClientSetup`
+  - Even though the renderer is vanilla, the **registration** happens on the client in `ClientSetup`
+- **Registration**: `EAIEntities.THROWN_WEB`
 
-**Motivo**: Stesso problema di FisherMobs per il tipo entità sconosciuto. La registrazione del renderer è in `ClientSetup`.
+**Reason**: Same unknown entity type issue as FisherMobs. The renderer registration is in `ClientSetup`.
 
-### CreeperRendererMixin (futuro)
-- Attualmente **completamente commentato** (nessun effetto)
-- Se riabilitato: mixin a `CreeperRenderer` (classe client-only) → va nell'Extra
-- Scopo originale: modificare la scala visiva del Creeper durante il gonfiamento
+### CreeperRendererMixin (future)
+- Currently **fully commented out** (no effect)
+- If re-enabled: mixin to `CreeperRenderer` (client-only class) → goes in the Extra mod
+- Original purpose: modify the Creeper's visual scale during swelling
 
 ---
 
-## Struttura file da spostare nell'Extra
+## Files to move to the Extra mod
 
 ```
 src/main/java/insane96mcp/enhancedai/
@@ -239,36 +239,36 @@ src/main/java/insane96mcp/enhancedai/
 │   └── CreeperRendererMixin.java                 → EXTRA
 └── modules/mobs/
     ├── fisher/
-    │   ├── FishingHook.java                      → EXTRA (o condiviso)
+    │   ├── FishingHook.java                      → EXTRA
     │   ├── FishingHookRenderer.java              → EXTRA
     │   ├── FishingTargetGoal.java                → EXTRA
     │   └── FishingHookAI logic...                → EXTRA
     └── webber/
-        └── ThrownWebEntity.java  (registrazione) → registrazione nel EXTRA
-            (la logica server va nella server mod, renderer/reg client nell'extra)
+        └── ThrownWebEntity.java (registration)   → EXTRA
+            (server logic stays in server mod, renderer/registration in Extra)
 ```
 
-> **Nota**: `ThrownWebEntity` può essere divisa: la logica di comportamento (piazzare cobweb al hit) rimane nella server mod, ma la **registrazione dell'entity type** deve essere comune. In alternativa, si usa un approccio dove l'Extra dipende dalla server mod e ri-registra il renderer.
+> **Note**: `ThrownWebEntity` could be split: the behavior logic (placing cobweb on hit) stays in the server mod, but the **entity type registration** must be common. Alternatively, the Extra mod depends on the server mod and re-registers the renderer.
 
 ---
 
 ## Mixin configs
 
-Il file `mixins.enhancedai.json` già separa:
-- `"mixins"` → server-side (tutti i ~31 mixin attuali)
-- `"client"` → `CreeperRendererMixin` (attualmente commentato)
+The `mixins.enhancedai.json` file already separates:
+- `"mixins"` → server-side (all ~31 current mixins)
+- `"client"` → `CreeperRendererMixin` (currently commented out)
 
-Nell'Extra, si crea un nuovo `mixins.enhancedai_extra.json` con i mixin client-only.
+For the Extra mod, a new `mixins.enhancedai_extra.json` is created for client-only mixins.
 
 ---
 
-## Riepilogo
+## Summary
 
 | | Server-Side Mod | Extra Mod |
 |---|---|---|
-| **Requisiti client** | Nessuno (vanilla ok) | Deve essere installata anche sul client |
-| **N° feature** | ~70 | ~2 (+CreeperRenderer se riabilitato) |
-| **Entità custom** | Nessuna | FishingHook, ThrownWebEntity |
-| **Renderer** | Nessuno | FishingHookRenderer, ThrownItemRenderer reg. |
-| **Mixin client** | Nessuno | CreeperRendererMixin |
-| **Dipendenze** | InsaneLib, (MPR opzionale) | InsaneLib + EnhancedAI server mod |
+| **Client requirement** | None (vanilla clients ok) | Must be installed on the client too |
+| **Feature count** | ~70 | ~2 (+CreeperRenderer if re-enabled) |
+| **Custom entities** | None | FishingHook, ThrownWebEntity |
+| **Renderers** | None | FishingHookRenderer, ThrownItemRenderer reg. |
+| **Client mixins** | None | CreeperRendererMixin |
+| **Dependencies** | InsaneLib, (MPR optional) | InsaneLib + EnhancedAI server mod |
