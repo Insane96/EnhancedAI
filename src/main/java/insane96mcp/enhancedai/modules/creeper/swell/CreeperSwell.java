@@ -33,7 +33,7 @@ import net.neoforged.neoforge.event.tick.EntityTickEvent;
 public class CreeperSwell extends Feature {
 	public static final TagKey<EntityType<?>> CHANGE_CREEPER_SWELL = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("creeper/change_swell"));
 
-	//TODO Remove sounds
+	//TODO Move sounds to client mod
 	@Config(min = 0d, max = 1d, description = "Percentage chance for a Creeper to keep walking while exploding. This is overwritten if the creeper has the beta property.")
 	public static Double walkingFuse$chance = 0.1d;
 	@Config(min = -1d, max = 64d, description = "Speed modifier when a walking fuse creeper is swelling.")
