@@ -2,12 +2,9 @@ package insane96mcp.enhancedai.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import com.llamalad7.mixinextras.sugar.Local;
 import insane96mcp.enhancedai.modules.mobs.MeleeAttacking;
 import insane96mcp.insanelib.core.feature.Feature;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -19,9 +16,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(MeleeAttackGoal.class)
 public abstract class MeleeAttackGoalMixin extends Goal {
@@ -42,30 +37,11 @@ public abstract class MeleeAttackGoalMixin extends Goal {
 
 	@Shadow protected abstract void resetAttackCooldown();
 
-	@Inject(at = @At(value = "HEAD"), method = "checkAndPerformAttack", cancellable = true)
-	public void getAttackReachSqr(LivingEntity attacked, double distanceSqr, CallbackInfo ci) {
-		if (!MeleeAttacking.shouldBeAffectedByFeature(this.mob))
-			return;
-		if (MeleeAttacking.isWithinMeleeAttackRange(this.mob, attacked) && this.isTimeToAttack() && this.mob.getSensing().hasLineOfSight(attacked)) {
-			this.resetAttackCooldown();
-			this.mob.swing(InteractionHand.MAIN_HAND);
-			this.mob.doHurtTarget(attacked);
-		}
-		ci.cancel();
-	}
-
 	@ModifyExpressionValue(method = "canUse", at = @At(value = "CONSTANT", args = "longValue=20"))
 	public long onLastCanUseCheck(long constant) {
         if (!Feature.isEnabled(MeleeAttacking.class))
             return constant;
 		return 0L;
-	}
-
-	@ModifyReturnValue(method = "canUse", at = @At(value = "RETURN", ordinal = 6))
-	public boolean onCanUse(boolean original, @Local LivingEntity livingEntity) {
-        if (!Feature.isEnabled(MeleeAttacking.class))
-            return original;
-		return MeleeAttacking.isWithinMeleeAttackRange(this.mob, livingEntity);
 	}
 
 	@Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/navigation/PathNavigation;moveTo(Lnet/minecraft/world/entity/Entity;D)Z"))

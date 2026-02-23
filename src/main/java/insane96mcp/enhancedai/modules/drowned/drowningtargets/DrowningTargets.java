@@ -3,7 +3,6 @@ package insane96mcp.enhancedai.modules.drowned.drowningtargets;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.EAIModules;
-import insane96mcp.enhancedai.modules.mobs.MeleeAttacking;
 import insane96mcp.enhancedai.modules.mobs.Spawning;
 import insane96mcp.insanelib.core.feature.Feature;
 import insane96mcp.insanelib.core.feature.LoadFeature;
@@ -91,7 +90,7 @@ public class DrowningTargets extends Feature {
                     && this.mob.getTarget() != null
                     && this.mob.getTarget().isAlive()
                     && this.mob.getTarget().getAirSupply() <= 100
-                    && MeleeAttacking.isWithinMeleeAttackRange(this.mob, this.mob.getTarget())
+                    && this.mob.isWithinMeleeAttackRange(this.mob.getTarget())
                     && this.mob.hasLineOfSight(this.mob.getTarget());
         }
 

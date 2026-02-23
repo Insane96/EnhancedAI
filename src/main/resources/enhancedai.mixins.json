@@ -14,7 +14,6 @@
         "MagmaCubeMixin",
         "MeleeAttackGoalMixin",
         "MobCategoryMixin",
-        "MobMixin",
         "ProjectileUtilMixin",
         "RandomStrollGoalMixin",
         "RavagerMixin",
@@ -39,5 +38,8 @@
     },
     "overwrites": {
         "requireAnnotations": true
+    },
+    "mixinextras": {
+        "minVersion": "0.5.3"
     }
 }

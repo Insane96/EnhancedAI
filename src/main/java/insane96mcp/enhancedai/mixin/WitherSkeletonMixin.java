@@ -13,8 +13,8 @@ import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(WitherSkeleton.class)
 public class WitherSkeletonMixin {
-	@WrapOperation(method = "getArrow", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/projectile/AbstractArrow;setSecondsOnFire(I)V"))
-	public void onGetArrow(AbstractArrow instance, int ticks, Operation<Void> original) {
+	@WrapOperation(method = "getArrow", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/projectile/AbstractArrow;igniteForSeconds(F)V"))
+	public void onGetArrow(AbstractArrow instance, float ticks, Operation<Void> original) {
 		if (!WitherSkeletons.witherInsteadOfFire((WitherSkeleton) (Object) this)) {
 			original.call(instance, ticks);
 			return;

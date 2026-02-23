@@ -7,7 +7,6 @@ import insane96mcp.enhancedai.modules.slime.SlimeJumpDelay;
 import insane96mcp.enhancedai.modules.slime.SlimeSize;
 import insane96mcp.insanelib.core.feature.Feature;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -75,12 +74,5 @@ public abstract class SlimeMixin extends Mob {
             return;
 
         this.dealDamage(this.getTarget());
-    }
-
-    @WrapOperation(method = "dealDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/monster/Slime;distanceToSqr(Lnet/minecraft/world/entity/Entity;)D"))
-    public double onDealDamage(Slime instance, Entity entity, Operation<Double> original) {
-        if (!Feature.isEnabled(SlimeAttackFix.class))
-            return original.call(instance, entity);
-        return 0d;
     }
 }
