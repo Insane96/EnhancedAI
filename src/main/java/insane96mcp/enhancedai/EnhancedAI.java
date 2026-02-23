@@ -3,6 +3,7 @@ package insane96mcp.enhancedai;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.logging.LogUtils;
 import insane96mcp.enhancedai.command.EAICommand;
+import insane96mcp.enhancedai.data.PotionEffectList;
 import insane96mcp.enhancedai.data.mpr.condition.EAIConditionsRegistry;
 import insane96mcp.enhancedai.data.mpr.property.EAIPropertiesRegistry;
 import insane96mcp.enhancedai.modules.EAIModules;
@@ -14,6 +15,7 @@ import insane96mcp.enhancedai.modules.mobs.miner.MinerMobs;
 import insane96mcp.enhancedai.modules.mobs.targeting.Targeting;
 import insane96mcp.enhancedai.setup.EAIAttributes;
 import insane96mcp.enhancedai.setup.Reflection;
+import insane96mcp.insanelib.core.feature.Feature;
 import insane96mcp.insanelib.setup.ILModConfig;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -39,6 +41,7 @@ public class EnhancedAI
     public static ILModConfig CONFIG;
 
     public EnhancedAI(IEventBus eventBus, ModContainer modContainer) {
+        registerConfigTypes();
         CONFIG = new ILModConfig(MOD_ID, ModConfig.Type.COMMON, eventBus, EAIModules::init, EnhancedAI.class.getClassLoader());
         modContainer.registerConfig(ModConfig.Type.COMMON, CONFIG.spec);
 
@@ -72,6 +75,11 @@ public class EnhancedAI
     @SubscribeEvent
     public void registerCommands(RegisterCommandsEvent event) {
         DebugPathCommand.register(event.getDispatcher());
+    }
+
+    private static void registerConfigTypes() {
+        Feature.registerConfigType(PotionEffectList.class, (builder, name, annotation, defaultValue) ->
+                new PotionEffectList.COption(builder, name, annotation.description(), (PotionEffectList) defaultValue));
     }
 
     public static ResourceLocation location(String path) {

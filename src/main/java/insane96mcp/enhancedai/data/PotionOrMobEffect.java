@@ -111,4 +111,14 @@ public class PotionOrMobEffect {
     public Holder<Potion> getPotion() {
         return this.potion;
     }
+
+    public String serialize() {
+        if (this.potion != null) {
+            return BuiltInRegistries.POTION.getKey(this.potion.value()).toString();
+        }
+        else {
+            String effectId = BuiltInRegistries.MOB_EFFECT.getKey(this.mobEffectInstance.getEffect().value()).toString();
+            return effectId + "," + this.mobEffectInstance.getDuration() + "," + this.mobEffectInstance.getAmplifier();
+        }
+    }
 }

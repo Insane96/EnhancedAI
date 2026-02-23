@@ -2,7 +2,7 @@ package insane96mcp.enhancedai.modules.witch.throwing;
 
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.data.EAIData;
-import insane96mcp.enhancedai.data.PotionOrMobEffect;
+import insane96mcp.enhancedai.data.PotionEffectList;
 import insane96mcp.enhancedai.modules.EAIModules;
 import insane96mcp.enhancedai.modules.mobs.Spawning;
 import insane96mcp.enhancedai.utils.GoalHelper;
@@ -13,6 +13,7 @@ import insane96mcp.insanelib.core.feature.Module;
 import insane96mcp.insanelib.core.feature.config.Config;
 import insane96mcp.insanelib.core.feature.config.MinMaxConfig;
 import insane96mcp.insanelib.util.MCUtils;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
@@ -26,31 +27,24 @@ import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.event.config.ModConfigEvent;
-import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @LoadFeature(module = EAIModules.Ids.WITCH, description = "Witches throw potions farther, faster and more potion types. Also no longer chase player if they can't see him. Use the enhancedai:witch/better_potion_throwing entity type tag to add more witches that are affected by this feature.")
 public class WitchPotionThrowing extends Feature {
     public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("witch/better_potion_throwing"));
 
-    //TODO ObjTag List
-    private static ModConfigSpec.ConfigValue<List<? extends String>> badPotionsListConfig;
-    private static ModConfigSpec.ConfigValue<List<? extends String>> goodPotionsListConfig;
-    public static final List<String> badPotionsListDefault = List.of("minecraft:weakness", "minecraft:slowness", "minecraft:hunger,600,0", "minecraft:mining_fatigue,600,0", "minecraft:poison", "minecraft:blindness,120,0", "minecraft:harming");
-    public static final List<String> goodPotionsListDefault = List.of("minecraft:regeneration", "minecraft:swiftness", "minecraft:strength", "minecraft:invisibility", "minecraft:healing");
-
-    public static ArrayList<PotionOrMobEffect> badPotionsList;
-    public static ArrayList<PotionOrMobEffect> goodPotionsList;
+    @Config(name = "Bad Potions List", description = "A list of potions that the witch can throw at enemies. Format is effect_id,duration,amplifier. The potions are thrown in order and witches will not throw a potion if the target has already the effect.")
+    public static PotionEffectList badPotionsList = PotionEffectList.of(List.of("minecraft:weakness", "minecraft:slowness", "minecraft:hunger,600,0", "minecraft:mining_fatigue,600,0", "minecraft:poison", "minecraft:blindness,120,0", "minecraft:harming"));
+    @Config(name = "Good Potions List", description = "A list of potions that the witch can throw at allies (in raids). Format is effect_id,duration,amplifier. The potions are thrown in order and witches will not throw a potion if the target has already the effect. Witches will throw harming potions instead of healing if the target is undead.")
+    public static PotionEffectList goodPotionsList = PotionEffectList.of(List.of("minecraft:regeneration", "minecraft:swiftness", "minecraft:strength", "minecraft:invisibility", "minecraft:healing"));
 
     @Config(min = 0d, max = 1d, description = "Chance for the potions thrown by the Witch to be lingering.")
     public static Double lingeringChance = 0.15d;
@@ -88,24 +82,6 @@ public class WitchPotionThrowing extends Feature {
 		INVISIBILITY_HEALTH_THRESHOLD = EAIData.ofDouble(this.createDataKey("invisibility_health_threshold"));
     }
 
-    @Override
-    public void loadConfigOptions() {
-        super.loadConfigOptions();
-        badPotionsListConfig = this.getBuilder()
-                .comment("A list of potions that the witch can throw at enemies. Format is effect_id,duration,amplifier. The potions are thrown in order and witches will not throw a potion if the target has already the effect.")
-                .defineList("Bad Potions List", badPotionsListDefault, o -> o instanceof String);
-        goodPotionsListConfig = this.getBuilder()
-                .comment("A list of potions that the witch can throw at allies (in raids). Format is effect_id,duration,amplifier. The potions are thrown in order and witches will not throw a potion if the target has already the effect. Witches will throw harming potions instead of healing if the target is undead.")
-                .defineList("Good Potions List", goodPotionsListDefault, o -> o instanceof String);
-    }
-
-    @Override
-    public void readConfig(final ModConfigEvent event) {
-        super.readConfig(event);
-        badPotionsList = PotionOrMobEffect.parseList(badPotionsListConfig.get());
-        goodPotionsList = PotionOrMobEffect.parseList(goodPotionsListConfig.get());
-    }
-
     //Lowest priority so other mods can set persistent data
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onEntityJoinLevel(EntityJoinLevelEvent event) {
@@ -139,20 +115,20 @@ public class WitchPotionThrowing extends Feature {
             return;
 
         if (WitchPotionThrowing.shouldUseSlowFalling() && witch.fallDistance > 7 && !witch.hasEffect(MobEffects.SLOW_FALLING)) {
-            ItemStack slowFallingStack = MCUtils.setCustomEffects(new ItemStack(Items.SPLASH_POTION), List.of(new MobEffectInstance(MobEffects.SLOW_FALLING, 300, 0)));
+            ItemStack slowFallingStack = MCUtils.createPotionStackFromEffectInstances(Items.SPLASH_POTION, List.of(new MobEffectInstance(MobEffects.SLOW_FALLING, 300, 0)));
             witch.getLookControl().setLookAt(witch.getX(), witch.getY(), witch.getZ());
             if (!witch.isSilent())
                 witch.playSound(SoundEvents.WITCH_THROW, 1.0F, 0.8F + witch.getRandom().nextFloat() * 0.4F);
-            witch.level().levelEvent(LevelEvent.PARTICLES_SPELL_POTION_SPLASH, witch.blockPosition(), PotionUtils.getColor(slowFallingStack));
-            List<MobEffectInstance> mobEffects = PotionUtils.getMobEffects(slowFallingStack);
-            for (MobEffectInstance mobEffect : mobEffects) {
-                witch.addEffect(new MobEffectInstance(mobEffect));
-            }
+            PotionContents potionContents = slowFallingStack.get(DataComponents.POTION_CONTENTS);
+            //noinspection DataFlowIssue
+            witch.level().levelEvent(LevelEvent.PARTICLES_SPELL_POTION_SPLASH, witch.blockPosition(), potionContents.getColor());
+            potionContents.getAllEffects()
+                    .forEach(mobEffectInstance -> witch.addEffect(new MobEffectInstance(mobEffectInstance)));
         }
 
         if (!witch.hasEffect(MobEffects.INVISIBILITY) && witch.onGround() && canUseInvisibility(witch) && witch.getHealth() < witch.getMaxHealth() * INVISIBILITY_HEALTH_THRESHOLD.get(witch)) {
             ThrownPotion thrownPotion = new ThrownPotion(witch.level(), witch);
-            thrownPotion.setItem(MCUtils.setCustomEffects(new ItemStack(Items.SPLASH_POTION), List.of(new MobEffectInstance(MobEffects.INVISIBILITY, 200))));
+            thrownPotion.setItem(MCUtils.createPotionStackFromEffectInstances(Items.SPLASH_POTION, List.of(new MobEffectInstance(MobEffects.INVISIBILITY, 200))));
             thrownPotion.shoot(0, -1d, 0, 0.1f, 2f);
             witch.level().addFreshEntity(thrownPotion);
 

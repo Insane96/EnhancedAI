@@ -71,13 +71,13 @@ public class WitchThrowPotionGoal extends Goal {
     }
 
     private void throwPotionAtTarget() {
-        List<PotionOrMobEffect> listToLoop = WitchPotionThrowing.goodPotionsList;
+        List<PotionOrMobEffect> listToLoop = WitchPotionThrowing.goodPotionsList.entries;
 		if (this.target instanceof Player)
-			listToLoop = WitchPotionThrowing.badPotionsList;
+			listToLoop = WitchPotionThrowing.badPotionsList.entries;
 		boolean apprentice = WitchPotionThrowing.APPRENTICE.get(this.witch);
 		if (apprentice) {
-			listToLoop = new ArrayList<>(WitchPotionThrowing.badPotionsList);
-			listToLoop.addAll(WitchPotionThrowing.goodPotionsList);
+			listToLoop = new ArrayList<>(WitchPotionThrowing.badPotionsList.entries);
+			listToLoop.addAll(WitchPotionThrowing.goodPotionsList.entries);
 		}
 
         PotionOrMobEffect potionOrMobEffect = null;
