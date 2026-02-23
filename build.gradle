@@ -60,6 +60,7 @@ neoForge {
             systemProperty 'forge.logging.markers', 'REGISTRIES'
 
             logLevel = org.slf4j.event.Level.DEBUG
+            jvmArguments.addAll("-verbose:gc")
         }
     }
 

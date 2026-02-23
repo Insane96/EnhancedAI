@@ -18,7 +18,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
@@ -140,9 +139,7 @@ public class AnimalScaredAttack extends Feature {
             double actualKnockback = knockback;
             if (knockbackSizeBased)
                 actualKnockback = (animal.getBbWidth() * animal.getBbWidth() * animal.getBbHeight()) * knockback / baseSize;
-            AttributeInstance kbAttribute = animal.getAttribute(Attributes.ATTACK_KNOCKBACK);
-            if (kbAttribute != null)
-                kbAttribute.addPermanentModifier(new AttributeModifier(ANIMAL_KNOCKBACK_ID, actualKnockback, AttributeModifier.Operation.ADD_VALUE));
+            MCUtils.applyModifier(animal, Attributes.ATTACK_KNOCKBACK, ANIMAL_KNOCKBACK_ID, actualKnockback, AttributeModifier.Operation.ADD_VALUE);
         }
 
         ATTACK_MOVEMENT_SPEED_MODIFIER.applyIfAbsent(animal, speedModifier);

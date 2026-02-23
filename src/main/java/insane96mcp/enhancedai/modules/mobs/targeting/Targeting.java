@@ -8,8 +8,8 @@ import insane96mcp.enhancedai.modules.mobs.Spawning;
 import insane96mcp.enhancedai.setup.EAIAttributes;
 import insane96mcp.enhancedai.setup.NBTUtils;
 import insane96mcp.enhancedai.utils.GoalHelper;
-import insane96mcp.insanelib.core.JsonFeature;
 import insane96mcp.insanelib.core.ModNBTData;
+import insane96mcp.insanelib.core.feature.Feature;
 import insane96mcp.insanelib.core.feature.LoadFeature;
 import insane96mcp.insanelib.core.feature.Module;
 import insane96mcp.insanelib.core.feature.config.Config;
@@ -42,7 +42,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @LoadFeature(module = EAIModules.Ids.MOBS, description = "Change how mobs target players. Check the config options below for entity type tags.")
-public class Targeting extends JsonFeature {
+public class Targeting extends Feature {
 	public static final TagKey<EntityType<?>> CHANGE_FOLLOW_RANGE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/targeting/follow_range_override"));
 	public static final TagKey<EntityType<?>> BETTER_HURT_BY = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/targeting/better_hurt_by"));
 	public static final TagKey<EntityType<?>> BETTER_NEARBY_TARGETING = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/targeting/better_nearby_targeting"));
@@ -109,11 +109,6 @@ public class Targeting extends JsonFeature {
 		TARGET_CHANCE = EAIData.ofInt(this.createDataKey("target_chance"));
 		UNSEEN_FORGET_TICKS = EAIData.ofInt(this.createDataKey("unseen_forget_ticks"));
         ALERT_RANGE = EAIData.ofInt(this.createDataKey("alert_range"));
-	}
-
-	@Override
-	public String getModConfigFolder() {
-		return EnhancedAI.CONFIG_FOLDER;
 	}
 
 	public static void attribute(EntityAttributeModificationEvent event) {

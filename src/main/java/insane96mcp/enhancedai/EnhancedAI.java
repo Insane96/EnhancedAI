@@ -41,8 +41,8 @@ public class EnhancedAI
 
     public EnhancedAI(IEventBus eventBus, ModContainer modContainer) {
         registerConfigTypes();
-        CONFIG = new ILModConfig(MOD_ID, ModConfig.Type.SERVER, eventBus, EAIModules::init, EnhancedAI.class.getClassLoader());
-        modContainer.registerConfig(ModConfig.Type.SERVER, CONFIG.spec, CONFIG_FOLDER + "/server.toml");
+        CONFIG = new ILModConfig(MOD_ID, ModConfig.Type.COMMON, eventBus, EAIModules::init, EnhancedAI.class.getClassLoader());
+        modContainer.registerConfig(ModConfig.Type.COMMON, CONFIG.spec, MOD_ID + "/common.toml");
 
         NeoForge.EVENT_BUS.register(this);
         //EAISounds.SOUND_EVENTS.register(eventBus);
