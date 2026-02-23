@@ -4,18 +4,16 @@
 		{
 			"property": "attribute_modifier",
 			"attribute": "minecraft:generic.movement_speed",
-			"uuid": "8230810c-c178-4c01-b066-95e831b6defe",
-			"modifier_name": "Enhanced AI Bonus movement speed",
+			"id": "enhancedai:speed_bonus",
 			"amount": 0.15,
-			"operation": "multiply_base"
+			"operation": "add_multiplied_base"
 		},
 		{
 			"property": "attribute_modifier",
-			"attribute": "forge:swim_speed",
-			"uuid": "8230810c-c178-4c01-b066-95e831b6defe",
-			"modifier_name": "Enhanced AI Bonus swim speed",
+			"attribute": "neoforge:swim_speed",
+			"id": "enhancedai:swim_speed_bonus",
 			"amount": 2,
-			"operation": "multiply_base"
+			"operation": "add_multiplied_base"
 		}
 	]
 }

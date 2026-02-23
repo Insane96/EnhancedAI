@@ -1,0 +1,11 @@
+{
+	"target": "#minecraft:zombies",
+	"properties": [
+		{
+			"property": "nbt",
+			"path": "IsBaby",
+			"type": "boolean",
+			"value": 0
+		}
+	]
+}

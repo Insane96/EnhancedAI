@@ -79,7 +79,7 @@ configurations {
 
 dependencies {
     implementation "maven.modrinth:insanelib:${insanelib_version}"
-    compileOnly "maven.modrinth:mobs-properties-randomness:${mpr_version}"
+    implementation "maven.modrinth:mobs-properties-randomness:${mpr_version}"
 
     implementation(jarJar("io.github.llamalad7:mixinextras-neoforge:0.5.3"))
 }

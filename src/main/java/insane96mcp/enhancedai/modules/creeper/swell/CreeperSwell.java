@@ -11,7 +11,6 @@ import insane96mcp.insanelib.core.feature.LoadFeature;
 import insane96mcp.insanelib.core.feature.Module;
 import insane96mcp.insanelib.core.feature.config.Config;
 import insane96mcp.insanelib.module.base.TagsFeature;
-import insane96mcp.insanelib.network.message.MessageCreeperDataSync;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -134,7 +133,6 @@ public class CreeperSwell extends Feature {
 				//EXPLOSION_SOUND.apply(creeper, FuseExplodeSounds.NONE.name);
 			}
 			creeper.readAdditionalSaveData(compoundNBT);
-			MessageCreeperDataSync.syncCreeperToPlayers(creeper);
 		});
 		//EXPLOSION_SOUND = EAIData.ofString(this.createDataKey("explosion_sound"));
 	}

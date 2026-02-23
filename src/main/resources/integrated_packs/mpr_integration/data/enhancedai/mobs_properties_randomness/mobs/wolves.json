@@ -4,23 +4,23 @@
 		{
 			"property": "attribute_modifier",
 			"attribute": "minecraft:generic.max_health",
-			"modifier_name": "Enhanced AI Bonus stats to wolves",
+			"id": "enhancedai:wolves_health_bonus",
 			"amount": 1,
-			"operation": "multiply_base"
+			"operation": "add_multiplied_base"
 		},
 		{
 			"property": "attribute_modifier",
 			"attribute": "minecraft:generic.attack_damage",
-			"modifier_name": "Enhanced AI Bonus stats to wolves",
+			"id": "enhancedai:wolves_attack_damage_bonus",
 			"amount": 0.5,
-			"operation": "multiply_base"
+			"operation": "add_multiplied_base"
 		},
 		{
 			"property": "attribute_modifier",
 			"attribute": "minecraft:generic.movement_speed",
-			"modifier_name": "Enhanced AI Bonus stats to wolves",
-			"amount": 0.25,
-			"operation": "multiply_base"
+			"id": "enhancedai:wolves_movement_speed_bonus",
+			"amount": 0.20,
+			"operation": "add_multiplied_base"
 		}
 	]
 }

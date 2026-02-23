@@ -100,12 +100,12 @@ public class PotionOrMobEffect {
 		ResourceLocation effectRL = ResourceLocation.tryParse(s);
 		if (effectRL == null)
 			return null;
-		Potion potion = BuiltInRegistries.POTION.get(effectRL);
-		if (potion == null) {
+		var holder = BuiltInRegistries.POTION.getHolder(effectRL);
+		if (holder.isEmpty()) {
 			EnhancedAI.LOGGER.warn("Potion {} not found", effectRL);
 			return null;
 		}
-		return Holder.direct(potion);
+		return holder.get();
 	}
 
     public Holder<Potion> getPotion() {

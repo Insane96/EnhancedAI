@@ -1,4 +1,4 @@
-### Upcoming
+### 4.0.0.0-beta
 Ported to 1.21.1
 
 * Jump in place now makes mobs jump only if the target is at least one block higher

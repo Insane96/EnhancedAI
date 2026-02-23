@@ -11,11 +11,10 @@
 		},
         {
             "property": "attribute_modifier",
-            "attribute": "enhancedai:push_resistance",
-            "uuid": "8230810c-c178-4c01-b066-95e831b6defe",
-            "modifier_name": "Enhanced AI Push resistance",
+            "attribute": "insanelib:push_resistance",
+            "id": "enhancedai:iron_golems_push_resistance",
             "amount": 0.95,
-            "operation": "addition"
+            "operation": "add_value"
         }
 	]
 }

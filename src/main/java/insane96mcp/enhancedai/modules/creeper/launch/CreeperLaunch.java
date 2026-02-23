@@ -10,7 +10,6 @@ import insane96mcp.insanelib.core.feature.LoadFeature;
 import insane96mcp.insanelib.core.feature.Module;
 import insane96mcp.insanelib.core.feature.config.Config;
 import insane96mcp.insanelib.core.feature.config.DifficultyBasedConfig;
-import insane96mcp.insanelib.network.message.MessageCreeperDataSync;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -57,7 +56,6 @@ public class CreeperLaunch extends Feature {
 			else if (wasLaunch && explosionRadius > 0)
 				compoundNBT.putByte("ExplosionRadius", (byte) 3);
 			creeper.readAdditionalSaveData(compoundNBT);
-			MessageCreeperDataSync.syncCreeperToPlayers(creeper);
 		});
 		INACCURACY = EAIData.ofDouble(this.createDataKey("inaccuracy"));
 		PARTICLES = EAIData.ofBool(this.createDataKey("particles"));

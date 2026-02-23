@@ -1,0 +1,12 @@
+{
+	"target": "minecraft:spider",
+	"properties": [
+		{
+			"property": "attribute_modifier",
+			"attribute": "minecraft:generic.scale",
+			"id": "enhancedai:spider_scale",
+			"amount": -0.35,
+			"operation": "add_multiplied_base"
+		}
+	]
+}
