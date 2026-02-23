@@ -53,8 +53,8 @@ public class BitingMobs extends Feature {
 				|| mob.getAttribute(Attributes.ATTACK_DAMAGE) == null
 				|| !(event.getSource().getDirectEntity() instanceof LivingEntity attacker)
 				|| attacker.getType().is(UNAFFECTED_BY_BITE)
-				//TODO
-				/*|| attacker.getMainHandItem().getAttributeModifiers().containsKey(Attributes.ATTACK_DAMAGE)*/)
+				|| attacker.getMainHandItem().getAttributeModifiers().modifiers().stream()
+						.anyMatch(e -> e.attribute().value() == Attributes.ATTACK_DAMAGE.value()))
 			return;
 
 		if (mob.getRandom().nextDouble() < CHANCE.get(mob)) {
