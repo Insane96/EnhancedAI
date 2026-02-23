@@ -1,9 +1,11 @@
 package insane96mcp.enhancedai.modules.creeper.swell;
 
+import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.ai.BetaStrafe;
 import insane96mcp.enhancedai.modules.creeper.CreeperUtils;
 import insane96mcp.enhancedai.modules.mobs.avoidexplosion.AvoidExplosionGoal;
 import insane96mcp.insanelib.util.MCUtils;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -18,11 +20,10 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 public class EAICreeperSwellGoal extends Goal {
 
-	private static final UUID WALKING_FUSE_SPEED_MODIFIER_UUID = UUID.fromString("ab376fec-5a15-4d3e-8fa2-0be4b6bc1849");
+	private static final ResourceLocation WALKING_FUSE_SPEED_MODIFIER_ID = EnhancedAI.location("walking_fuse_speed_modifier");
 
 	protected final Creeper swellingCreeper;
 	private LivingEntity creeperAttackTarget;
@@ -68,7 +69,7 @@ public class EAICreeperSwellGoal extends Goal {
 
 	public void start() {
         if (walkingFuse && this.betaStrafe == null)
-            MCUtils.applyModifier(this.swellingCreeper, Attributes.MOVEMENT_SPEED, WALKING_FUSE_SPEED_MODIFIER_UUID, "Walking fuse speed modifier", CreeperSwell.WALKING_FUSE_SPEED_MODIFIER.get(this.swellingCreeper), AttributeModifier.Operation.MULTIPLY_BASE, false);
+            MCUtils.applyModifier(this.swellingCreeper, Attributes.MOVEMENT_SPEED, WALKING_FUSE_SPEED_MODIFIER_ID, CreeperSwell.WALKING_FUSE_SPEED_MODIFIER.get(this.swellingCreeper), AttributeModifier.Operation.ADD_MULTIPLIED_BASE, false);
         else
             this.swellingCreeper.getNavigation().stop();
         this.swellingCreeper.setSwellDir(1);
@@ -88,7 +89,7 @@ public class EAICreeperSwellGoal extends Goal {
 		this.swellingCreeper.setSwellDir(-1);
 		AttributeInstance movementSpeed = this.swellingCreeper.getAttribute(Attributes.MOVEMENT_SPEED);
 		if (movementSpeed != null)
-			movementSpeed.removeModifier(WALKING_FUSE_SPEED_MODIFIER_UUID);
+			movementSpeed.removeModifier(WALKING_FUSE_SPEED_MODIFIER_ID);
 	}
 
 	public void tick() {
@@ -117,7 +118,7 @@ public class EAICreeperSwellGoal extends Goal {
 			if (creatureEntity == this.swellingCreeper
 					|| creatureEntity == this.swellingCreeper.getVehicle())
 				continue;
-			creatureEntity.goalSelector.availableGoals.forEach(prioritizedGoal -> {
+			creatureEntity.goalSelector.getAvailableGoals().forEach(prioritizedGoal -> {
 				if (prioritizedGoal.getGoal() instanceof AvoidExplosionGoal avoidExplosionGoal) {
 					avoidExplosionGoal.runFrom(this.swellingCreeper, explosionSize);
 				}

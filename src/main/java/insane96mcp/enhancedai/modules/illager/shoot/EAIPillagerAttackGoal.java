@@ -122,7 +122,7 @@ public class EAIPillagerAttackGoal extends Goal {
 
             int useTicks = this.mob.getTicksUsingItem();
             ItemStack crossbow = this.mob.getUseItem();
-            if (useTicks >= CrossbowItem.getChargeDuration(crossbow)) {
+            if (useTicks >= CrossbowItem.getChargeDuration(crossbow, this.mob)) {
                 this.mob.releaseUsingItem();
                 this.crossbowState = CrossbowState.CHARGED;
                 this.attackDelay = PillagerShoot.SHOOTING_COOLDOWN.get(this.mob);

@@ -4,6 +4,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.projectile.SmallFireball;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 
@@ -90,8 +91,8 @@ public class EAIBlazeAttackGoal extends Goal {
                         this.blaze.level().levelEvent(null, 1018, this.blaze.blockPosition(), 0);
 
                     for (int i = 0; i < BlazeAttack.FIREBALLS_PER_SHOT.get(this.blaze); i++) {
-                        SmallFireball smallfireball = new SmallFireball(this.blaze.level(), this.blaze, xDir + this.blaze.getRandom().nextGaussian() * inaccuracy, yDir, zDir + this.blaze.getRandom().nextGaussian() * inaccuracy);
-                        smallfireball.setPos(smallfireball.getX(), this.blaze.getY(0.5D) + 0.5D, smallfireball.getZ());
+                        SmallFireball smallfireball = new SmallFireball(this.blaze.level(), this.blaze.getX(), this.blaze.getEyeY(), this.blaze.getZ(), new Vec3(xDir + this.blaze.getRandom().nextGaussian() * inaccuracy, yDir, zDir + this.blaze.getRandom().nextGaussian() * inaccuracy));
+                        smallfireball.setOwner(this.blaze);
                         this.blaze.level().addFreshEntity(smallfireball);
                     }
                 }

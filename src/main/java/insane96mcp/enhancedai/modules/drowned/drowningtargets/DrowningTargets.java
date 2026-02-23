@@ -11,6 +11,7 @@ import insane96mcp.insanelib.core.feature.Module;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -28,12 +29,11 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.EntityMountEvent;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @LoadFeature(module = EAIModules.Ids.MOBS, description = "Makes mobs pick up targets to drown them. Only entity types in the enhancedai:mobs/drowning_targets tag are affected by this feature.")
 public class DrowningTargets extends Feature {
 	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/drowning_targets"));
-    private static final UUID ATTACK_DAMAGE_UUID = UUID.fromString("8993201c-00fc-489e-a18c-1ebc94ba983f");
+    private static final ResourceLocation ATTACK_DAMAGE_ID = EnhancedAI.location("drowning_attack_damage_removal");
 
     public static EAIData<Boolean> DROWNING_TARGETS;
 
@@ -115,12 +115,12 @@ public class DrowningTargets extends Feature {
             if (this.mob.getTarget().isPassenger())
                 this.mob.getTarget().stopRiding();
             this.mob.getTarget().startRiding(this.mob);
-            MCUtils.applyModifier(this.mob, Attributes.ATTACK_DAMAGE, ATTACK_DAMAGE_UUID, "Drowning Targets", -1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+            MCUtils.applyModifier(this.mob, Attributes.ATTACK_DAMAGE, ATTACK_DAMAGE_ID, -1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
         }
 
         @Override
         public void stop() {
-            this.mob.getAttribute(Attributes.ATTACK_DAMAGE).removeModifier(ATTACK_DAMAGE_UUID);
+            this.mob.getAttribute(Attributes.ATTACK_DAMAGE).removeModifier(ATTACK_DAMAGE_ID);
         }
 
         protected boolean closeToNextPos() {

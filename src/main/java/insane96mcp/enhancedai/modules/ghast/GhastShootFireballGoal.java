@@ -61,7 +61,7 @@ public class GhastShootFireballGoal extends Goal {
                     }
 
                     double randomVariation = 0.5d * (fireballsToShot - 1);
-                    LargeFireball largefireball = new LargeFireball(level, this.ghast, dirX + Mth.nextDouble(ghast.getRandom(), -randomVariation, randomVariation), dirY, dirZ + Mth.nextDouble(ghast.getRandom(), -randomVariation, randomVariation), this.ghast.getExplosionPower());
+                    LargeFireball largefireball = new LargeFireball(level, this.ghast, new Vec3(dirX + Mth.nextDouble(ghast.getRandom(), -randomVariation, randomVariation), dirY, dirZ + Mth.nextDouble(ghast.getRandom(), -randomVariation, randomVariation)), this.ghast.getExplosionPower());
                     largefireball.setPos(this.ghast.getX() + vec3.x * 3d, this.ghast.getY(0.5d) - 0.3d, largefireball.getZ() + vec3.z * 3d);
                     level.addFreshEntity(largefireball);
                     this.fireballsShot++;

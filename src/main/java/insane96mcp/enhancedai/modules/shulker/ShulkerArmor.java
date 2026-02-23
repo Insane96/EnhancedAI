@@ -7,13 +7,12 @@ import insane96mcp.insanelib.core.feature.Feature;
 import insane96mcp.insanelib.core.feature.LoadFeature;
 import insane96mcp.insanelib.core.feature.config.Config;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.monster.Shulker;
 import net.neoforged.fml.event.config.ModConfigEvent;
-
-import java.util.UUID;
 
 @LoadFeature(module = EAIModules.Ids.SHULKER, description = "Only entity types in the `enhancedai:shulker/apply_armor_modifiers` tag will be affected by this feature.")
 public class ShulkerArmor extends Feature {
@@ -25,7 +24,7 @@ public class ShulkerArmor extends Feature {
     @Config(min = 0)
     public static Double armorWhenOpen = 8d;
 
-    private static final UUID COVERED_ARMOR_MODIFIER_UUID = UUID.fromString("7E0292F2-9434-48D5-A29F-9583AF7DF27F");
+    private static final ResourceLocation COVERED_ARMOR_MODIFIER_ID = EnhancedAI.location("covered_armor_bonus");
     public static AttributeModifier CLOSED_MODIFIER;
     public static AttributeModifier PEEK_MODIFIER;
     public static AttributeModifier OPEN_MODIFIER;
@@ -33,9 +32,9 @@ public class ShulkerArmor extends Feature {
     @Override
     public void readConfig(ModConfigEvent event) {
         super.readConfig(event);
-        CLOSED_MODIFIER = new AttributeModifier(COVERED_ARMOR_MODIFIER_UUID, "Covered armor bonus", armorWhenClosed, AttributeModifier.Operation.ADD_VALUE);
-        PEEK_MODIFIER = new AttributeModifier(COVERED_ARMOR_MODIFIER_UUID, "Covered armor bonus", armorWhenPeeking, AttributeModifier.Operation.ADD_VALUE);
-        OPEN_MODIFIER = new AttributeModifier(COVERED_ARMOR_MODIFIER_UUID, "Covered armor bonus", armorWhenOpen, AttributeModifier.Operation.ADD_VALUE);
+        CLOSED_MODIFIER = new AttributeModifier(COVERED_ARMOR_MODIFIER_ID, armorWhenClosed, AttributeModifier.Operation.ADD_VALUE);
+        PEEK_MODIFIER = new AttributeModifier(COVERED_ARMOR_MODIFIER_ID, armorWhenPeeking, AttributeModifier.Operation.ADD_VALUE);
+        OPEN_MODIFIER = new AttributeModifier(COVERED_ARMOR_MODIFIER_ID, armorWhenOpen, AttributeModifier.Operation.ADD_VALUE);
     }
 
     public static boolean isAffectedByArmorModifiers(Shulker shulker) {

@@ -7,6 +7,7 @@ import insane96mcp.insanelib.core.ModNBTData;
 import insane96mcp.insanelib.core.feature.LoadFeature;
 import insane96mcp.insanelib.core.feature.Module;
 import insane96mcp.insanelib.core.feature.config.Config;
+import insane96mcp.insanelib.data.ObjTagValue;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
@@ -17,6 +18,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -30,17 +32,17 @@ import java.util.List;
 public class Shielding extends JsonFeature {
 	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/can_equip_shield"));
 
-	public static final List<IdTagValue> DEFAULT_SHIELD_BLOCK_CHANCE = List.of(
-			IdTagValue.newId("minecraft:shield", 0.20d),
-			IdTagValue.newId("shieldsplus:wooden_shield", 0.10d),
-			IdTagValue.newId("shieldsplus:stone_shield", 0.15d),
-			IdTagValue.newId("shieldsplus:iron_shield", 0.20d),
-			IdTagValue.newId("shieldsplus:golden_shield", 0.10d),
-			IdTagValue.newId("shieldsplus:diamond_shield", 0.30d),
-			IdTagValue.newId("shieldsplus:netherite_shield", 0.35d),
-			IdTagValue.newId("iguanatweaksreborn:copper_shield", 0.15d)
+	public static final List<ObjTagValue<Item>> DEFAULT_SHIELD_BLOCK_CHANCE = List.of(
+			ObjTagValue.of("minecraft:shield", 0.20d, Registries.ITEM),
+			ObjTagValue.of("shieldsplus:wooden_shield", 0.10d, Registries.ITEM),
+			ObjTagValue.of("shieldsplus:stone_shield", 0.15d, Registries.ITEM),
+			ObjTagValue.of("shieldsplus:iron_shield", 0.20d, Registries.ITEM),
+			ObjTagValue.of("shieldsplus:golden_shield", 0.10d, Registries.ITEM),
+			ObjTagValue.of("shieldsplus:diamond_shield", 0.30d, Registries.ITEM),
+			ObjTagValue.of("shieldsplus:netherite_shield", 0.35d, Registries.ITEM),
+			ObjTagValue.of("iguanatweaksreborn:copper_shield", 0.15d, Registries.ITEM)
 	);
-	public static final List<IdTagValue> shieldBlockChance = new ArrayList<>();
+	public static final List<ObjTagValue<Item>> shieldBlockChance = new ArrayList<>();
 
 	@Config
 	public static double chanceToEquip = 0.08d;
@@ -53,7 +55,7 @@ public class Shielding extends JsonFeature {
 		super.init(module, enabledByDefault, canBeDisabled);
 		HAS_SHIELD_BEEN_GIVEN = this.createDataKey("has_shield_been_given");
         LAST_HURT_BY_AXE = this.createDataKey("last_hurt_by_axe");
-		JSON_CONFIGS.add(new JsonConfig<>("shield_block_chance.json", shieldBlockChance, DEFAULT_SHIELD_BLOCK_CHANCE, IdTagValue.LIST_TYPE));
+		this.getJsonConfigs().add(new JsonConfig<>("shield_block_chance.json", shieldBlockChance, DEFAULT_SHIELD_BLOCK_CHANCE, ObjTagValue.LIST_TYPE).withRegistryFor(Registries.ITEM));
 	}
 
 	@Override
@@ -92,8 +94,8 @@ public class Shielding extends JsonFeature {
 
 		float chance = 0f;
 		ItemStack offHandItem = attacked.getOffhandItem();
-		for (IdTagValue shieldChance : shieldBlockChance) {
-			if (shieldChance.id.matchesItem(offHandItem)) {
+		for (ObjTagValue<Item> shieldChance : shieldBlockChance) {
+			if (shieldChance.id.matches(offHandItem.getItem())) {
 				chance = (float) shieldChance.value;
 				break;
 			}

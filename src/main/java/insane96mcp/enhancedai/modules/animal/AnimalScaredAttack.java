@@ -15,6 +15,7 @@ import insane96mcp.insanelib.core.feature.Module;
 import insane96mcp.insanelib.core.feature.config.Config;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -31,14 +32,13 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
-import java.util.UUID;
-
 @LoadFeature(module = EAIModules.Ids.ANIMAL, description = "Make animals fight back or be scared by players. Use the entity type tag enhancedai:animal/scared_attack/can_be_neutral, enhancedai:animal/scared_attack/can_be_hostile, and enhancedai:animal/scared_attack/can_be_scared_by_players to add/remove animals.")
 public class AnimalScaredAttack extends Feature {
     public static final TagKey<EntityType<?>> CAN_BE_NEUTRAL = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("animal/scared_attack/can_be_neutral"));
     public static final TagKey<EntityType<?>> CAN_BE_HOSTILE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("animal/scared_attack/can_be_hostile"));
     public static final TagKey<EntityType<?>> SCARED_BY_PLAYERS = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("animal/scared_attack/can_be_scared_by_players"));
-    public static final UUID FOLLOW_RANGE_REDUCTION_UUID = UUID.fromString("62e016b0-90d0-4e72-9d40-fffac566df20");
+    public static final ResourceLocation FOLLOW_RANGE_REDUCTION_ID = EnhancedAI.location("follow_range_reduction");
+    public static final ResourceLocation ANIMAL_KNOCKBACK_ID = EnhancedAI.location("animal_knockback");
 
     @Config(min = 0d, max = 1d, description = "Animals have this percentage chance to be able to fight back instead of fleeing. Animals have a slightly bigger range to attack. Attack damage can't be changed via config due to limitations so use mods like Mobs Properties Randomness to change the damage. Base damage is 3")
     public static Double neutralChance = 0.35d;
@@ -88,12 +88,12 @@ public class AnimalScaredAttack extends Feature {
         });
         HOSTILE = EAIData.ofBool(this.createDataKey("hostile"), (mob, hostile) -> {
             GoalHelper.removeGoal(mob.targetSelector, AnimalNearestAttackableTargetGoal.class);
-            mob.getAttribute(Attributes.FOLLOW_RANGE).removeModifier(FOLLOW_RANGE_REDUCTION_UUID);
-            mob.getAttribute(EAIAttributes.XRAY_FOLLOW_RANGE.get()).removeModifier(FOLLOW_RANGE_REDUCTION_UUID);
+            mob.getAttribute(Attributes.FOLLOW_RANGE).removeModifier(FOLLOW_RANGE_REDUCTION_ID);
+            mob.getAttribute(EAIAttributes.XRAY_FOLLOW_RANGE).removeModifier(FOLLOW_RANGE_REDUCTION_ID);
             if (hostile) {
                 NEUTRAL.apply(mob, true);
-                MCUtils.applyModifier(mob, Attributes.FOLLOW_RANGE, FOLLOW_RANGE_REDUCTION_UUID, "Reduced follow range for hostile Animals", -0.75d, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, true);
-                MCUtils.applyModifier(mob, EAIAttributes.XRAY_FOLLOW_RANGE.get(), FOLLOW_RANGE_REDUCTION_UUID, "Reduced follow range for hostile Animals", -0.75d, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, true);
+                MCUtils.applyModifier(mob, Attributes.FOLLOW_RANGE, FOLLOW_RANGE_REDUCTION_ID, -0.75d, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, true);
+                MCUtils.applyModifier(mob, EAIAttributes.XRAY_FOLLOW_RANGE, FOLLOW_RANGE_REDUCTION_ID, -0.75d, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, true);
                 mob.targetSelector.addGoal(2, new AnimalNearestAttackableTargetGoal<>(mob, Player.class, false, false));
                 PLAYER_SCARED.apply(mob, false);
                 ATTACK_MOVEMENT_SPEED_MODIFIER.changed(mob);
@@ -142,7 +142,7 @@ public class AnimalScaredAttack extends Feature {
                 actualKnockback = (animal.getBbWidth() * animal.getBbWidth() * animal.getBbHeight()) * knockback / baseSize;
             AttributeInstance kbAttribute = animal.getAttribute(Attributes.ATTACK_KNOCKBACK);
             if (kbAttribute != null)
-                kbAttribute.addPermanentModifier(new AttributeModifier("Animal knockback", actualKnockback, AttributeModifier.Operation.ADD_VALUE));
+                kbAttribute.addPermanentModifier(new AttributeModifier(ANIMAL_KNOCKBACK_ID, actualKnockback, AttributeModifier.Operation.ADD_VALUE));
         }
 
         ATTACK_MOVEMENT_SPEED_MODIFIER.applyIfAbsent(animal, speedModifier);

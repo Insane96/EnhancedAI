@@ -1,5 +1,6 @@
 package insane96mcp.enhancedai.modules.mobs.teleporttotarget;
 
+import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -21,10 +22,9 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
-import java.util.UUID;
 
 public class TeleportToTargetGoal extends Goal {
-    private static final UUID MOVEMENT_SPEED_MODIFIER_UUID = UUID.fromString("31506c13-0cbd-4f60-be15-62445a6d0842");
+    private static final ResourceLocation MOVEMENT_SPEED_MODIFIER_ID = EnhancedAI.location("teleport_to_target");
 
     final Mob mob;
     final TargetingConditions targetingConditions;
@@ -122,7 +122,7 @@ public class TeleportToTargetGoal extends Goal {
     }
 
     public void hide(LivingEntity entity) {
-        MCUtils.applyModifier(entity, Attributes.MOVEMENT_SPEED, MOVEMENT_SPEED_MODIFIER_UUID, "Teleport To Target modifier", -1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL, false);
+        MCUtils.applyModifier(entity, Attributes.MOVEMENT_SPEED, MOVEMENT_SPEED_MODIFIER_ID, -1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL, false);
         ((ServerLevel)entity.level()).sendParticles(ParticleTypes.PORTAL, entity.getX(), entity.getEyeY(), entity.getZ(), 200, 0.5, 0.5, 0.5, 0.5);
         entity.playSound(SoundEvents.ENDERMAN_TELEPORT, 4f, 0.5f);
         entity.setNoGravity(true);
@@ -131,7 +131,7 @@ public class TeleportToTargetGoal extends Goal {
     }
 
     public void show(LivingEntity entity) {
-        entity.getAttribute(Attributes.MOVEMENT_SPEED).removeModifier(MOVEMENT_SPEED_MODIFIER_UUID);
+        entity.getAttribute(Attributes.MOVEMENT_SPEED).removeModifier(MOVEMENT_SPEED_MODIFIER_ID);
         entity.setNoGravity(false);
         entity.setInvisible(false);
         entity.playSound(SoundEvents.ENDERMAN_TELEPORT, 1f, 2f);

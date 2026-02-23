@@ -47,7 +47,7 @@ public class ItemDisruption extends Feature {
     }
 
     @SubscribeEvent
-    public void onHit(LivingDamageEvent event) {
+    public void onHit(LivingDamageEvent.Pre event) {
         if (!this.isEnabled()
                 || !(event.getEntity() instanceof ServerPlayer player)
                 || !(event.getSource().getDirectEntity() instanceof Mob mob))
@@ -74,7 +74,7 @@ public class ItemDisruption extends Feature {
         else
             stack = offHandItem.copy();
 
-        event.setCanceled(true);
+        event.setNewDamage(0);
         player.level().playSound(null, player, SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1.0f, 0.5f);
         Inventory inventory = player.getInventory();
         int slot = inventory.findSlotMatchingItem(stack);

@@ -6,12 +6,8 @@ import insane96mcp.insanelib.core.feature.Feature;
 import insane96mcp.insanelib.core.feature.LoadFeature;
 import insane96mcp.insanelib.core.feature.Module;
 import insane96mcp.insanelib.core.feature.config.Config;
-import insane96mcp.insanelib.module.base.TagsFeature;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.*;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.event.config.ModConfigEvent;
@@ -65,8 +61,10 @@ public class Spawning extends Feature {
     }
 
     public static boolean isSpawnTypeBlacklisted(LivingEntity living) {
+        if (!(living instanceof Mob mob))
+            return false;
         for (MobSpawnType spawnType : blacklistedSpawnTypes) {
-            if (TagsFeature.isSpawnType(spawnType, living))
+            if (mob.getSpawnType() == spawnType)
                 return true;
         }
         return false;

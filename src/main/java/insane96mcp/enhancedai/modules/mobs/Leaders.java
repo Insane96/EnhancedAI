@@ -11,6 +11,7 @@ import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
@@ -33,7 +34,7 @@ import static insane96mcp.enhancedai.setup.EAIAttributes.ATTRIBUTES;
 
 @LoadFeature(module = EAIModules.Ids.MOBS, description = "Allows mobs to call reinforcements (like vanilla zombies can, but better) and have leaders that have a high chance to call reinforcements. Only entity types in the `enhancedai:mobs/leaders` tag can jump. PLEASE NOTE that this feature uses a custom attribute (enhancedai:spawn_reinforcements_chance) instead of the vanilla one. This feature has also an MPR condition `enhancedai:is_leader` to check if the mob is a leader.")
 public class Leaders extends Feature {
-    private static final UUID BONUS_STATS_UUID = UUID.fromString("359f73af-4f99-4d5c-82dc-693b252793c5");
+    private static final ResourceLocation BONUS_STATS_ID = EnhancedAI.location("leader_bonus_stats");
 
     public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/leaders"));
 
@@ -62,22 +63,22 @@ public class Leaders extends Feature {
 		super.init(module, enabledByDefault, canBeDisabled);
         LEADER = EAIData.ofBool(this.createDataKey("leader"), (mob, leader) -> {
             if (leader) {
-                MCUtils.applyModifier(mob, SPAWN_REINFORCEMENTS_CHANCE, BONUS_STATS_UUID, "Enhanced AI Leader Spawn Reinforcements Chance", leaderSpawnReinforcementsChance, AttributeModifier.Operation.ADD_VALUE);
+                MCUtils.applyModifier(mob, SPAWN_REINFORCEMENTS_CHANCE, BONUS_STATS_ID, leaderSpawnReinforcementsChance, AttributeModifier.Operation.ADD_VALUE);
             }
             else {
-                mob.getAttribute(SPAWN_REINFORCEMENTS_CHANCE).removeModifier(BONUS_STATS_UUID);
+                mob.getAttribute(SPAWN_REINFORCEMENTS_CHANCE).removeModifier(BONUS_STATS_ID);
             }
 
             if (!bonusStats)
                 return;
 
             if (leader) {
-                MCUtils.applyModifier(mob, Attributes.MAX_HEALTH, BONUS_STATS_UUID, "Enhanced AI Leader Health", 3, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
-                MCUtils.applyModifier(mob, Attributes.ARMOR, BONUS_STATS_UUID, "Enhanced AI Leader Armor", 15, AttributeModifier.Operation.ADD_VALUE);
+                MCUtils.applyModifier(mob, Attributes.MAX_HEALTH, BONUS_STATS_ID, 3, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
+                MCUtils.applyModifier(mob, Attributes.ARMOR, BONUS_STATS_ID, 15, AttributeModifier.Operation.ADD_VALUE);
             }
             else {
-                mob.getAttribute(Attributes.MAX_HEALTH).removeModifier(BONUS_STATS_UUID);
-                mob.getAttribute(Attributes.ARMOR).removeModifier(BONUS_STATS_UUID);
+                mob.getAttribute(Attributes.MAX_HEALTH).removeModifier(BONUS_STATS_ID);
+                mob.getAttribute(Attributes.ARMOR).removeModifier(BONUS_STATS_ID);
             }
         });
         CHARGE_PER_SPAWN = EAIData.ofDouble(this.createDataKey("charge_per_spawn"));

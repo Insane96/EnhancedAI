@@ -7,6 +7,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.InfestedBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.event.EventHooks;
 
 public class EAISilverfishWakeUpFriendsGoal extends Silverfish.SilverfishWakeUpFriendsGoal {
 	private int lookForFriends;
@@ -45,7 +46,7 @@ public class EAISilverfishWakeUpFriendsGoal extends Silverfish.SilverfishWakeUpF
 					Block offsetBlock = offsetBlockState.getBlock();
 					if (!(offsetBlock instanceof InfestedBlock))
 						continue;
-					if (net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(level, this.silverfish))
+					if (EventHooks.canEntityGrief(level, this.silverfish))
 						level.destroyBlock(offsetBlockPos, true, this.silverfish);
 					else
 						level.setBlock(offsetBlockPos, ((InfestedBlock) offsetBlock).hostStateByInfested(level.getBlockState(offsetBlockPos)), 3);

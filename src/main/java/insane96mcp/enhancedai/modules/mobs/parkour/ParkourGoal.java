@@ -2,6 +2,7 @@ package insane96mcp.enhancedai.modules.mobs.parkour;
 
 import insane96mcp.enhancedai.ai.EAIRangedAttackGoal;
 import insane96mcp.enhancedai.modules.illager.shoot.EAIPillagerAttackGoal;
+import insane96mcp.enhancedai.utils.GoalHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -63,9 +64,7 @@ public class ParkourGoal extends Goal {
     }
 
     private boolean hasConflictingRunningGoals() {
-        return this.goalOwner.goalSelector.getRunningGoals().anyMatch(wrappedGoal ->
-                isConflictingGoal(wrappedGoal.getGoal())
-        );
+        return GoalHelper.isRunning(this.goalOwner.goalSelector, this::isConflictingGoal);
     }
 
     private boolean isConflictingGoal(Goal goal) {

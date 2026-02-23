@@ -10,6 +10,7 @@ import insane96mcp.insanelib.core.feature.Module;
 import insane96mcp.insanelib.core.feature.config.Config;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
@@ -23,13 +24,11 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEvent;
 import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 
-import java.util.UUID;
-
 @LoadFeature(module = EAIModules.Ids.MOBS, description = "Makes mobs follow range actually affected by blindness effect. Only entity types in `enhancedai:mobs/blindness_range_multiplier` tag will be affected by this.")
 public class ActualBlindness extends Feature {
 	public static final TagKey<EntityType<?>> BLINDNESS_RANGE_MULTIPLIER = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/blindness_range_multiplier"));
 
-	public static final UUID BLINDNESS_FOLLOW_RANGE_UUID = UUID.fromString("b90bdf38-1c2a-4cb2-a85e-8214618e6cf0");
+	public static final ResourceLocation BLINDNESS_FOLLOW_RANGE_ID = EnhancedAI.location("blindness_follow_range");
 
 	@Config(min = 0d, max = 1d, description = "Follow range is multiplied by this value if the mob has blindness.")
 	public static Double blindnessRangeMultiplier = .15d;
@@ -78,7 +77,7 @@ public class ActualBlindness extends Feature {
 				|| !BLINDNESS_RANGE_MULTIPLIER_DATA.has(event.getEntity()))
 			return;
 
-		MCUtils.applyModifier(event.getEntity(), Attributes.FOLLOW_RANGE, BLINDNESS_FOLLOW_RANGE_UUID, "Enhanced AI Blindness Multiplier", BLINDNESS_RANGE_MULTIPLIER_DATA.get(event.getEntity()) - 1f, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL, true);
+		MCUtils.applyModifier(event.getEntity(), Attributes.FOLLOW_RANGE, BLINDNESS_FOLLOW_RANGE_ID, BLINDNESS_RANGE_MULTIPLIER_DATA.get(event.getEntity()) - 1f, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL, true);
 	}
 
 	@SubscribeEvent
@@ -89,6 +88,6 @@ public class ActualBlindness extends Feature {
 				|| event.getEntity().getAttribute(Attributes.FOLLOW_RANGE) == null)
 			return;
 
-		event.getEntity().getAttribute(Attributes.FOLLOW_RANGE).removeModifier(BLINDNESS_FOLLOW_RANGE_UUID);
+		event.getEntity().getAttribute(Attributes.FOLLOW_RANGE).removeModifier(BLINDNESS_FOLLOW_RANGE_ID);
 	}
 }

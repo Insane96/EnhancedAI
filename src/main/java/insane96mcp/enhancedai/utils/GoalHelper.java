@@ -6,6 +6,7 @@ import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class GoalHelper {
@@ -15,7 +16,7 @@ public class GoalHelper {
     }
 
     public static <T extends Goal> Stream<T> getGoals(GoalSelector goalSelector, Class<T> goalClass) {
-        return goalSelector.availableGoals
+        return goalSelector.getAvailableGoals()
                 .stream()
                 .map(WrappedGoal::getGoal)
                 .filter(goal -> goalClass.isAssignableFrom(goal.getClass()))
@@ -34,7 +35,7 @@ public class GoalHelper {
     }
 
     private static <T extends Goal> Optional<WrappedGoal> findFirstMatchingGoal(GoalSelector goalSelector, Class<T> goalClass) {
-        return goalSelector.availableGoals
+        return goalSelector.getAvailableGoals()
                 .stream()
                 .filter(wrappedGoal -> goalClass.isAssignableFrom(wrappedGoal.getGoal().getClass()))
                 .findFirst();
@@ -52,7 +53,7 @@ public class GoalHelper {
     }
 
     public static <T extends Goal> boolean hasGoal(GoalSelector goalSelector, Goal goal) {
-        for (WrappedGoal wrappedGoal : goalSelector.availableGoals) {
+        for (WrappedGoal wrappedGoal : goalSelector.getAvailableGoals()) {
             if (wrappedGoal.getGoal() == goal)
                 return true;
         }
@@ -60,6 +61,10 @@ public class GoalHelper {
     }
 
     public static <T extends Goal> boolean isRunning(GoalSelector goalSelector, Class<T> goalClass) {
-        return goalSelector.getRunningGoals().anyMatch(goal -> goalClass.isAssignableFrom(goal.getClass()));
+        return goalSelector.getAvailableGoals().stream().filter(WrappedGoal::isRunning).anyMatch(goal -> goalClass.isAssignableFrom(goal.getGoal().getClass()));
+    }
+
+    public static boolean isRunning(GoalSelector goalSelector, Predicate<Goal> predicate) {
+        return goalSelector.getAvailableGoals().stream().filter(WrappedGoal::isRunning).anyMatch(wrappedGoal -> predicate.test(wrappedGoal.getGoal()));
     }
 }

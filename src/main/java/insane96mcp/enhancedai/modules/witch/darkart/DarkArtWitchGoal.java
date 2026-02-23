@@ -205,7 +205,7 @@ public class DarkArtWitchGoal extends Goal {
         Witch witch = EntityType.WITCH.create(serverLevel);
 		if (witch != null) {
 			witch.moveTo(this.villager.getX(), this.villager.getY(), this.villager.getZ(), this.villager.getYRot(), this.villager.getXRot());
-			witch.finalizeSpawn(serverLevel, this.mob.level().getCurrentDifficultyAt(witch.blockPosition()), MobSpawnType.CONVERSION, null, null);
+			witch.finalizeSpawn(serverLevel, this.mob.level().getCurrentDifficultyAt(witch.blockPosition()), MobSpawnType.CONVERSION, null);
 			serverLevel.addFreshEntityWithPassengers(witch);
 			if (!DarkArt.summonedWitchesCanBeDarkArt)
 				DarkArt.DARK_ARTS.apply(witch, false);
