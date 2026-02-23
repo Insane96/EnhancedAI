@@ -3,6 +3,7 @@ package insane96mcp.enhancedai.modules.mobs;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.modules.EAIModules;
+import insane96mcp.enhancedai.setup.EAIAttributes;
 import insane96mcp.insanelib.core.feature.Feature;
 import insane96mcp.insanelib.core.feature.LoadFeature;
 import insane96mcp.insanelib.core.feature.Module;
@@ -16,19 +17,14 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
-import net.neoforged.neoforge.registries.DeferredHolder;
-
-import static insane96mcp.enhancedai.setup.EAIAttributes.ATTRIBUTES;
 
 @LoadFeature(module = EAIModules.Ids.MOBS, description = "Allows mobs to call reinforcements (like vanilla zombies can, but better) and have leaders that have a high chance to call reinforcements. Only entity types in the `enhancedai:mobs/leaders` tag can jump. PLEASE NOTE that this feature uses a custom attribute (enhancedai:spawn_reinforcements_chance) instead of the vanilla one. This feature has also an MPR condition `enhancedai:is_leader` to check if the mob is a leader.")
 public class Leaders extends Feature {
@@ -36,8 +32,6 @@ public class Leaders extends Feature {
     private static final ResourceLocation REINFORCEMENT_CALLED_CHARGE_ID = EnhancedAI.location("reinforcement_called_charge");
 
     public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/leaders"));
-
-    public static final DeferredHolder<Attribute, Attribute> SPAWN_REINFORCEMENTS_CHANCE = ATTRIBUTES.register("spawn_reinforcements_chance", () -> new RangedAttribute("attribute.name.spawn_reinforcements_chance", 0d, 0d, Double.MAX_VALUE));
 
     @Config(min = 0, max = 1, description = "Chance for a mob to become a leader. Leader mobs have a high chance to spawn reinforcements.")
     public static Double leaderChance = 0.05d;
@@ -62,10 +56,10 @@ public class Leaders extends Feature {
 		super.init(module, enabledByDefault, canBeDisabled);
         LEADER = EAIData.ofBool(this.createDataKey("leader"), (mob, leader) -> {
             if (leader) {
-                MCUtils.applyModifier(mob, SPAWN_REINFORCEMENTS_CHANCE, BONUS_STATS_ID, leaderSpawnReinforcementsChance, AttributeModifier.Operation.ADD_VALUE);
+                MCUtils.applyModifier(mob, EAIAttributes.SPAWN_REINFORCEMENTS_CHANCE, BONUS_STATS_ID, leaderSpawnReinforcementsChance, AttributeModifier.Operation.ADD_VALUE);
             }
             else {
-                mob.getAttribute(SPAWN_REINFORCEMENTS_CHANCE).removeModifier(BONUS_STATS_ID);
+                mob.getAttribute(EAIAttributes.SPAWN_REINFORCEMENTS_CHANCE).removeModifier(BONUS_STATS_ID);
             }
 
             if (!bonusStats)
@@ -85,10 +79,10 @@ public class Leaders extends Feature {
 
     public static void attribute(EntityAttributeModificationEvent event) {
         for (EntityType<? extends LivingEntity> entityType : event.getTypes()) {
-            if (event.has(entityType, SPAWN_REINFORCEMENTS_CHANCE))
+            if (event.has(entityType, EAIAttributes.SPAWN_REINFORCEMENTS_CHANCE))
                 continue;
 
-            event.add(entityType, SPAWN_REINFORCEMENTS_CHANCE, 0d);
+            event.add(entityType, EAIAttributes.SPAWN_REINFORCEMENTS_CHANCE, 0d);
         }
     }
 
@@ -99,7 +93,7 @@ public class Leaders extends Feature {
                 || !(mob.level() instanceof ServerLevel serverLevel)
                 || event.getSource().getEntity() == null)
             return;
-        double chance = mob.getAttributeValue(SPAWN_REINFORCEMENTS_CHANCE);
+        double chance = mob.getAttributeValue(EAIAttributes.SPAWN_REINFORCEMENTS_CHANCE);
         if (chance <= 0)
             return;
         if (spawnReinforcementsChanceDamageScaled > 0)
@@ -171,13 +165,13 @@ public class Leaders extends Feature {
             if (!reinforcesCanSpawnAsLeader)
                 LEADER.applyIfAbsent(reinforcement, false);
             serverLevel.addFreshEntityWithPassengers(reinforcement);
-            AttributeModifier modifier = mob.getAttribute(SPAWN_REINFORCEMENTS_CHANCE).getModifier(REINFORCEMENT_CALLED_CHARGE_ID);
+            AttributeModifier modifier = mob.getAttribute(EAIAttributes.SPAWN_REINFORCEMENTS_CHANCE).getModifier(REINFORCEMENT_CALLED_CHARGE_ID);
             double currentCharge = 0;
             if (modifier != null)
                 currentCharge = modifier.amount();
             double newCharge = currentCharge - chargePerSpawn;
-            MCUtils.applyModifier(mob, SPAWN_REINFORCEMENTS_CHANCE, REINFORCEMENT_CALLED_CHARGE_ID, -newCharge, AttributeModifier.Operation.ADD_VALUE);
-            MCUtils.applyModifier(reinforcement, SPAWN_REINFORCEMENTS_CHANCE, REINFORCEMENT_CALLED_CHARGE_ID, -newCharge, AttributeModifier.Operation.ADD_VALUE);
+            MCUtils.applyModifier(mob, EAIAttributes.SPAWN_REINFORCEMENTS_CHANCE, REINFORCEMENT_CALLED_CHARGE_ID, -newCharge, AttributeModifier.Operation.ADD_VALUE);
+            MCUtils.applyModifier(reinforcement, EAIAttributes.SPAWN_REINFORCEMENTS_CHANCE, REINFORCEMENT_CALLED_CHARGE_ID, -newCharge, AttributeModifier.Operation.ADD_VALUE);
             break;
         }
     }

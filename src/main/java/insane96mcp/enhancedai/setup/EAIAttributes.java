@@ -9,6 +9,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class EAIAttributes {
 	public static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(BuiltInRegistries.ATTRIBUTE, EnhancedAI.MOD_ID);
+	public static final DeferredHolder<Attribute, Attribute> SPAWN_REINFORCEMENTS_CHANCE = ATTRIBUTES.register("spawn_reinforcements_chance", () -> new RangedAttribute("attribute.name.spawn_reinforcements_chance", 0d, 0d, Double.MAX_VALUE));
 
 	public static final DeferredHolder<Attribute, Attribute> XRAY_FOLLOW_RANGE = ATTRIBUTES.register("xray_follow_range", () -> new RangedAttribute("attribute.name.xray_follow_range", 0d, 0d, 256d));
 	public static final DeferredHolder<Attribute, Attribute> PUSH_RESISTANCE = ATTRIBUTES.register("push_resistance", () -> new RangedAttribute("attribute.name.push_resistance", 0d, 0d, 1d));

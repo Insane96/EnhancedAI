@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(WalkNodeEvaluator.class)
 public class WalkNodeEvaluatorMixin {
-    @ModifyExpressionValue(method = "getBlockPathTypeRaw", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;is(Lnet/minecraft/tags/TagKey;)Z", ordinal = 0))
+    @ModifyExpressionValue(method = "getPathTypeFromState", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;is(Lnet/minecraft/tags/TagKey;)Z", ordinal = 0))
     private static boolean enhancedai$preventWalkingOnOpenTrapdoor(boolean original, @Local BlockState blockstate) {
         if (!Pathfinding.shouldFixWalkingOverOpenTrapdoors()
                 || !original)
