@@ -120,14 +120,12 @@ public class Leaders extends Feature {
                 y1 = worldHeight + 1;
             BlockPos.MutableBlockPos blockPos = new BlockPos.MutableBlockPos(x1, y1, z1);
             EntityType<?> entitytype = reinforcement.getType();
-            SpawnPlacementType spawnPlacementType = SpawnPlacements.getPlacementType(entitytype);
             reinforcement.setPos(x1 + 0.5, y1, z1 + 0.5);
 
             boolean foundSpawnPosition = true;
             if (y1 < worldHeight) {
-                //TODO No idea
-                while (/*!NaturalSpawner.isSpawnPositionOk(spawnPlacementType, mob.level(), blockPos, entitytype)
-                        ||*/ !SpawnPlacements.checkSpawnRules(entitytype, serverLevel, MobSpawnType.REINFORCEMENT, blockPos, mob.level().random)
+                while (SpawnPlacements.isSpawnPositionOk(entitytype, mob.level(), blockPos)
+                        || !SpawnPlacements.checkSpawnRules(entitytype, serverLevel, MobSpawnType.REINFORCEMENT, blockPos, mob.level().random)
                         || !mob.level().isUnobstructed(reinforcement)
                         || !mob.level().noCollision(reinforcement)
                         || mob.level().containsAnyLiquid(reinforcement.getBoundingBox())) {
