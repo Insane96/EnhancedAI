@@ -29,6 +29,7 @@
         "WardenMixin",
         "WitchMixin",
         "WitherSkeletonMixin",
+        "accessors.AbstractSkeletonAccessor",
         "accessors.CreeperAccessor",
         "accessors.MeleeAttackGoalAccessor",
         "accessors.PanicGoalAccessor"

@@ -14,7 +14,6 @@ import insane96mcp.enhancedai.modules.mobs.PushResistance;
 import insane96mcp.enhancedai.modules.mobs.miner.MinerMobs;
 import insane96mcp.enhancedai.modules.mobs.targeting.Targeting;
 import insane96mcp.enhancedai.setup.EAIAttributes;
-import insane96mcp.enhancedai.setup.Reflection;
 import insane96mcp.insanelib.core.feature.Feature;
 import insane96mcp.insanelib.setup.ILModConfig;
 import net.minecraft.commands.CommandBuildContext;
@@ -49,8 +48,6 @@ public class EnhancedAI
         //EAISounds.SOUND_EVENTS.register(eventBus);
         EAIAttributes.ATTRIBUTES.register(eventBus);
         //EAIEntities.ENTITIES.register(eventBus);
-
-        Reflection.init();
 
         eventBus.addListener(MinerMobs::addAttribute);
         eventBus.addListener(AnimalScaredAttack::attribute);

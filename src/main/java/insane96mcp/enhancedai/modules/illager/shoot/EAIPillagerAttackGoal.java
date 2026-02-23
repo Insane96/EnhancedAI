@@ -1,5 +1,6 @@
 package insane96mcp.enhancedai.modules.illager.shoot;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -7,6 +8,7 @@ import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.CrossbowAttackMob;
@@ -16,9 +18,11 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.ChargedProjectiles;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
@@ -66,7 +70,7 @@ public class EAIPillagerAttackGoal extends Goal {
         if (this.mob.isUsingItem()) {
             this.mob.stopUsingItem();
             this.mob.setChargingCrossbow(false);
-            CrossbowItem.setCharged(this.mob.getUseItem(), false);
+            this.mob.getUseItem().set(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.EMPTY);
         }
     }
 
@@ -143,7 +147,7 @@ public class EAIPillagerAttackGoal extends Goal {
         else if (this.crossbowState == CrossbowState.READY_TO_ATTACK && hasLineOfSight) {
             this.performCrossbowAttack();
             ItemStack crossbow = this.mob.getItemInHand(ProjectileUtil.getWeaponHoldingHand(this.mob, (item) -> item instanceof CrossbowItem));
-            CrossbowItem.setCharged(crossbow, false);
+            crossbow.set(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.EMPTY);
             this.crossbowState = CrossbowState.UNCHARGED;
         }
 
@@ -164,7 +168,8 @@ public class EAIPillagerAttackGoal extends Goal {
     }
 
     public static void performShooting(Level pLevel, LivingEntity pShooter, InteractionHand pUsedHand, ItemStack crossbowStack, float inaccuracy) {
-        List<ItemStack> list = CrossbowItem.getChargedProjectiles(crossbowStack);
+        //TODO seems wrong
+        List<ItemStack> list = crossbowStack.getOrDefault(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.EMPTY).getItems();
         float[] afloat = getShotPitches(pShooter.getRandom());
 
         for (int i = 0; i < list.size(); ++i) {
@@ -183,7 +188,6 @@ public class EAIPillagerAttackGoal extends Goal {
             }
         }
 
-        CrossbowItem.onCrossbowShot(pLevel, pShooter, crossbowStack);
     }
 
     private static float[] getShotPitches(RandomSource pRandom) {
@@ -204,17 +208,20 @@ public class EAIPillagerAttackGoal extends Goal {
                 projectile = new FireworkRocketEntity(pLevel, pAmmoStack, pShooter, pShooter.getX(), pShooter.getEyeY() - (double) 0.15F, pShooter.getZ(), true);
             }
             else {
-                projectile = CrossbowItem.getArrow(pLevel, pShooter, pCrossbowStack, pAmmoStack);
+                ArrowItem arrowItem = pAmmoStack.getItem() instanceof ArrowItem ai ? ai : (ArrowItem) Items.ARROW;
+                AbstractArrow arrow = arrowItem.createArrow(pLevel, pAmmoStack, pShooter, pCrossbowStack);
+                arrow.setSoundEvent(SoundEvents.CROSSBOW_HIT);
                 if (pIsCreativeMode || pProjectileAngle != 0.0F) {
-                    ((AbstractArrow) projectile).pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
+                    arrow.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
                 }
+                projectile = arrow;
             }
 
             if (pShooter instanceof CrossbowAttackMob mob) {
                 attackEntityWithRangedAttack(pShooter, mob.getTarget(), pCrossbowStack, projectile, pProjectileAngle, inaccuracy);
             }
 
-            pCrossbowStack.hurtAndBreak(isShootingFirework ? 3 : 1, pShooter, entity -> entity.broadcastBreakEvent(pHand));
+            pCrossbowStack.hurtAndBreak(isShootingFirework ? 3 : 1, pShooter, pHand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
             pLevel.addFreshEntity(projectile);
             pLevel.playSound(null, pShooter.getX(), pShooter.getY(), pShooter.getZ(), SoundEvents.CROSSBOW_SHOOT, SoundSource.PLAYERS, 1.0F, pSoundPitch);
         }
@@ -231,8 +238,19 @@ public class EAIPillagerAttackGoal extends Goal {
         if (distanceXZ != 0f)
             yPos += distanceY / distanceXZ;
         float dirY = (float) (yPos - projectile.getY());
-        Vector3f shootRotation = ((CrossbowAttackMob) livingEntity).getProjectileShotVector(livingEntity, new Vec3(dirX, dirY + distanceXZ * 0.2f, dirZ), angle);
+        Vector3f shootRotation = getProjectileShotVector(livingEntity, new Vec3(dirX, dirY + distanceXZ * 0.2f, dirZ), angle);
         projectile.shoot(shootRotation.x(), shootRotation.y(), shootRotation.z(), 1.1f + ((float) distance / 32f) + (float) Math.max(distanceY / 48d, 0f), inaccuracy);
+    }
+
+    private static Vector3f getProjectileShotVector(LivingEntity shooter, Vec3 distance, float angle) {
+        Vector3f vector3f = distance.toVector3f().normalize();
+        Vector3f vector3f1 = new Vector3f(vector3f).cross(new Vector3f(0.0F, 1.0F, 0.0F));
+        if ((double) vector3f1.lengthSquared() <= 1.0E-7) {
+            Vec3 vec3 = shooter.getUpVector(1.0F);
+            vector3f1 = new Vector3f(vector3f).cross(vec3.toVector3f());
+        }
+        Vector3f vector3f2 = new Vector3f(vector3f).rotateAxis((float) (Math.PI / 2), vector3f1.x, vector3f1.y, vector3f1.z);
+        return new Vector3f(vector3f).rotateAxis(angle * (float) (Math.PI / 180.0), vector3f2.x, vector3f2.y, vector3f2.z);
     }
 
     enum CrossbowState {

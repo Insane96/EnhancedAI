@@ -2,7 +2,7 @@ package insane96mcp.enhancedai.modules.skeleton.shoot;
 
 import insane96mcp.enhancedai.ai.EAIRangedAttackGoal;
 import insane96mcp.enhancedai.data.EAIData;
-import insane96mcp.enhancedai.setup.Reflection;
+import insane96mcp.enhancedai.mixin.accessors.AbstractSkeletonAccessor;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
@@ -89,15 +89,16 @@ public class EAIRangedBowAttackGoal extends EAIRangedAttackGoal<AbstractSkeleton
 	}
 
 	protected void attackEntityWithRangedAttack(AbstractSkeleton entity, LivingEntity target, int chargeTicks) {
-		ItemStack itemstack = entity.getProjectile(entity.getItemInHand(ProjectileUtil.getWeaponHoldingHand(entity, item -> item == Items.BOW)));
+		ItemStack weapon = entity.getItemInHand(ProjectileUtil.getWeaponHoldingHand(entity, item -> item instanceof net.minecraft.world.item.BowItem));
+		ItemStack projectileStack = entity.getProjectile(entity.getItemInHand(ProjectileUtil.getWeaponHoldingHand(entity, item -> item == Items.BOW)));
 		double distance = entity.distanceTo(target);
 		double distanceY = target.getY() - entity.getY();
 		float f = 1; //distanceFactor / 20.0F;
 		f = (f * f + f * 2.0F) / 3.0F;
 		AbstractArrow abstractarrowentity;
-		abstractarrowentity = Reflection.AbstractSkeleton_getArrow(entity, itemstack, BowItem.getPowerForTime(chargeTicks));
-		if (entity.getMainHandItem().getItem() instanceof net.minecraft.world.item.BowItem)
-			abstractarrowentity = ((net.minecraft.world.item.BowItem)entity.getMainHandItem().getItem()).customArrow(abstractarrowentity);
+		abstractarrowentity = ((AbstractSkeletonAccessor)entity).invokeGetArrow(projectileStack, BowItem.getPowerForTime(chargeTicks), weapon);
+		if (entity.getMainHandItem().getItem() instanceof BowItem)
+			abstractarrowentity = ((BowItem)entity.getMainHandItem().getItem()).customArrow(abstractarrowentity, projectileStack, weapon);
 		double dirX = target.getX() - entity.getX();
 		double dirZ = target.getZ() - entity.getZ();
 		double distanceXZ = Math.sqrt(dirX * dirX + dirZ * dirZ);

@@ -28,13 +28,12 @@ import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
-import java.util.UUID;
-
 import static insane96mcp.enhancedai.setup.EAIAttributes.ATTRIBUTES;
 
 @LoadFeature(module = EAIModules.Ids.MOBS, description = "Allows mobs to call reinforcements (like vanilla zombies can, but better) and have leaders that have a high chance to call reinforcements. Only entity types in the `enhancedai:mobs/leaders` tag can jump. PLEASE NOTE that this feature uses a custom attribute (enhancedai:spawn_reinforcements_chance) instead of the vanilla one. This feature has also an MPR condition `enhancedai:is_leader` to check if the mob is a leader.")
 public class Leaders extends Feature {
     private static final ResourceLocation BONUS_STATS_ID = EnhancedAI.location("leader_bonus_stats");
+    private static final ResourceLocation REINFORCEMENT_CALLED_CHARGE_ID = EnhancedAI.location("reinforcement_called_charge");
 
     public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/leaders"));
 
@@ -172,8 +171,13 @@ public class Leaders extends Feature {
             if (!reinforcesCanSpawnAsLeader)
                 LEADER.applyIfAbsent(reinforcement, false);
             serverLevel.addFreshEntityWithPassengers(reinforcement);
-            MCUtils.applyModifier(mob, SPAWN_REINFORCEMENTS_CHANCE, UUID.randomUUID(), "Reinforcement caller charge", -chargePerSpawn, AttributeModifier.Operation.ADD_VALUE);
-            MCUtils.applyModifier(reinforcement, SPAWN_REINFORCEMENTS_CHANCE, UUID.randomUUID(), "Reinforcement callee charge", -chargePerSpawn, AttributeModifier.Operation.ADD_VALUE);
+            AttributeModifier modifier = mob.getAttribute(SPAWN_REINFORCEMENTS_CHANCE).getModifier(REINFORCEMENT_CALLED_CHARGE_ID);
+            double currentCharge = 0;
+            if (modifier != null)
+                currentCharge = modifier.amount();
+            double newCharge = currentCharge - chargePerSpawn;
+            MCUtils.applyModifier(mob, SPAWN_REINFORCEMENTS_CHANCE, REINFORCEMENT_CALLED_CHARGE_ID, -newCharge, AttributeModifier.Operation.ADD_VALUE);
+            MCUtils.applyModifier(reinforcement, SPAWN_REINFORCEMENTS_CHANCE, REINFORCEMENT_CALLED_CHARGE_ID, -newCharge, AttributeModifier.Operation.ADD_VALUE);
             break;
         }
     }
