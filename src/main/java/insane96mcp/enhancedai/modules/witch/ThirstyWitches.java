@@ -2,7 +2,7 @@ package insane96mcp.enhancedai.modules.witch;
 
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.data.EAIData;
-import insane96mcp.enhancedai.data.PotionOrMobEffect;
+import insane96mcp.enhancedai.data.PotionEffectList;
 import insane96mcp.enhancedai.modules.EAIModules;
 import insane96mcp.enhancedai.modules.mobs.Spawning;
 import insane96mcp.insanelib.core.feature.Feature;
@@ -14,23 +14,16 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Witch;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.event.config.ModConfigEvent;
-import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @LoadFeature(module = EAIModules.Ids.WITCH, description = "Witches drink more potions.")
 public class ThirstyWitches extends Feature {
 	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("witch/thirsty"));
 
-	//TODO ObjTag List
-    private static ModConfigSpec.ConfigValue<List<? extends String>> drinkPotionConfig;
-
-    public static final List<String> drinkPotionDefault = List.of("minecraft:strong_swiftness", "minecraft:regeneration");
-
-    public static ArrayList<PotionOrMobEffect> drinkPotion;
+	@Config(name = "Drinkable potions if targeting player", description = "A list of potions that the witch will drink when a player is targeted and it's at least 6 blocks away. Format is potion_id or effect_id,duration,amplifier. The potions are applied in order and witches will not drink the same potion if already has the effect.")
+    public static PotionEffectList drinkPotion = PotionEffectList.of(List.of("minecraft:strong_swiftness", "minecraft:regeneration"));
 
 	@Config(min = 0d, description = "When witches are this many blocks away from the player will be able to drink the potions in 'Drinkable potions if targeting player'")
 	public static Double customDrinkDistanceSafe = 6d;
@@ -66,20 +59,6 @@ public class ThirstyWitches extends Feature {
 		WATER_BREATHING_CHANCE = EAIData.ofDouble(this.createDataKey("water_breathing_chance"));
 		FIRE_RESISTANCE_CHANCE = EAIData.ofDouble(this.createDataKey("fire_resistance_chance"));
 		MILK_CHANCE = EAIData.ofDouble(this.createDataKey("milk_chance"));
-    }
-
-    @Override
-    public void loadConfigOptions() {
-        super.loadConfigOptions();
-        drinkPotionConfig = this.getBuilder()
-                .comment("A list of potions that the witch will drink when a player is targeted and it's at least 6 blocks away. Format is potion_id or effect_id,duration,amplifier. The potions are applied in order and witches will not drink the same potion if already has the effect.")
-                .defineList("Drinkable potions if targeting player", drinkPotionDefault, o -> o instanceof String);
-    }
-
-    @Override
-    public void readConfig(final ModConfigEvent event) {
-        super.readConfig(event);
-        drinkPotion = PotionOrMobEffect.parseList(drinkPotionConfig.get());
     }
 
 	@SubscribeEvent

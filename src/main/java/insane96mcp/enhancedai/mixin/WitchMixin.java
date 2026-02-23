@@ -17,10 +17,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableWitchTargetGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestHealableRaiderTargetGoal;
 import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
@@ -32,7 +28,6 @@ import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.NeoForgeMod;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -41,30 +36,11 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(Witch.class)
 public abstract class WitchMixin extends Raider {
 	@Shadow
-	@Final
-	private static AttributeModifier SPEED_MODIFIER_DRINKING;
-	@Shadow
-	private NearestHealableRaiderTargetGoal<Raider> healRaidersGoal;
-
-	@Shadow
-	private NearestAttackableWitchTargetGoal<Player> attackPlayersGoal;
-
-	@Shadow
 	private int usingTime;
 
 	protected WitchMixin(EntityType<? extends Raider> p_37839_, Level p_37840_) {
 		super(p_37839_, p_37840_);
 	}
-
-	//TODO I don't remember why I did recreate the drinking speed penalty modifier
-	/*@ModifyArg(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/attributes/AttributeInstance;addTransientModifier(Lnet/minecraft/world/entity/ai/attributes/AttributeModifier;)V"))
-	public AttributeModifier onAddSpeedPenalty(AttributeModifier attributeModifier) {
-		return SPEED_MODIFIER_DRINKING;
-	}
-	@ModifyArg(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/attributes/AttributeInstance;removeModifier(Lnet/minecraft/resources/ResourceLocation;)Z"))
-	public ResourceLocation onRemoveSpeedPenalty(ResourceLocation id) {
-		return SPEED_MODIFIER_DRINKING.id();
-	}*/
 
 	@ModifyExpressionValue(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/monster/Witch;isAlive()Z"))
 	public boolean onIsAlive(boolean alive) {
@@ -101,7 +77,7 @@ public abstract class WitchMixin extends Raider {
 		double distance = ThirstyWitches.CUSTOM_DRINK_DISTANCE_SAFE.get(this);
 		distance *= distance;
 		if (this.getTarget() != null && this.getTarget() instanceof Player && this.distanceToSqr(this.getTarget()) > distance) {
-			for (PotionOrMobEffect potionOrMobEffect : ThirstyWitches.drinkPotion) {
+			for (PotionOrMobEffect potionOrMobEffect : ThirstyWitches.drinkPotion.entries) {
 				if (potionOrMobEffect.hasMobEffect(this))
 					continue;
 
@@ -135,14 +111,13 @@ public abstract class WitchMixin extends Raider {
 		return !enhancedai$stackToUse.isEmpty();
 	}
 
-	@WrapOperation(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/monster/Witch;setItemSlot(Lnet/minecraft/world/entity/EquipmentSlot;Lnet/minecraft/world/item/ItemStack;)V", ordinal = 1))
-	private void enhancedai$changeUseItem(Witch instance, EquipmentSlot equipmentSlot, ItemStack itemStack, Operation<Void> original) {
+	@WrapOperation(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/alchemy/PotionContents;createItemStack(Lnet/minecraft/world/item/Item;Lnet/minecraft/core/Holder;)Lnet/minecraft/world/item/ItemStack;"))
+	private ItemStack enhancedai$changeUseItem(Item item, Holder<Potion> holder, Operation<ItemStack> original) {
 		if (!Feature.isEnabled(ThirstyWitches.class)
-				|| !this.getType().is(ThirstyWitches.AFFECTED_ENTITY_TYPES)) {
-			original.call(instance, equipmentSlot, itemStack);
-			return;
-		}
+				|| !this.getType().is(ThirstyWitches.AFFECTED_ENTITY_TYPES)
+				|| enhancedai$stackToUse.isEmpty())
+			return original.call(item, holder);
 
-		original.call(instance, equipmentSlot, enhancedai$stackToUse);
+		return enhancedai$stackToUse;
 	}
 }
