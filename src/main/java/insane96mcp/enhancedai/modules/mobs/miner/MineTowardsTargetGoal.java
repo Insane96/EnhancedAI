@@ -3,7 +3,6 @@ package insane96mcp.enhancedai.modules.mobs.miner;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectUtil;
@@ -27,6 +26,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.event.EventHooks;
 
 import java.util.ArrayList;
@@ -203,20 +203,19 @@ public class MineTowardsTargetGoal extends Goal {
 	// Copy-paste of vanilla code
 	private int computeTickToBreak() {
 		int canHarvestBlock = this.canHarvestBlock() ? 30 : 100;
+		//TODO Maybe check dig speed each tick
 		double diggingSpeed = this.getDigSpeed() / this.blockState.getDestroySpeed(this.miner.level(), this.targetBlocks.get(0)) / canHarvestBlock;
 		return Mth.ceil((1f / diggingSpeed) * MinerMobs.TIME_TO_BREAK_MULTIPLIER.get(this.miner));
 	}
 
-	//TODO Copy new getDigSpeed
 	private float getDigSpeed() {
 		float digSpeed = this.miner.getOffhandItem().getDestroySpeed(this.blockState);
 		if (digSpeed > 1.0F) {
 			digSpeed += (float) this.miner.getAttributeValue(Attributes.MINING_EFFICIENCY);
 		}
 
-		if (MobEffectUtil.hasDigSpeed(this.miner)) {
+		if (MobEffectUtil.hasDigSpeed(this.miner))
 			digSpeed *= 1.0F + (float)(MobEffectUtil.getDigSpeedAmplification(this.miner) + 1) * 0.2F;
-		}
 
 		if (this.miner.hasEffect(MobEffects.DIG_SLOWDOWN)) {
 			//noinspection ConstantConditions
@@ -231,7 +230,7 @@ public class MineTowardsTargetGoal extends Goal {
 		}
 
 		digSpeed *= (float)this.miner.getAttributeValue(Attributes.BLOCK_BREAK_SPEED);
-		if (this.miner.isEyeInFluid(FluidTags.WATER))
+		if (this.miner.isEyeInFluidType(NeoForgeMod.WATER_TYPE.value()))
 			digSpeed *= (float) this.miner.getAttribute(Attributes.SUBMERGED_MINING_SPEED).getValue();
 
 		return digSpeed;
