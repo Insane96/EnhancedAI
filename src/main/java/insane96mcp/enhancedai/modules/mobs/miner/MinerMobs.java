@@ -75,10 +75,10 @@ public class MinerMobs extends Feature {
 
 	public static void addAttribute(EntityAttributeModificationEvent event) {
 		for (EntityType<? extends LivingEntity> entityType : event.getTypes()) {
-			if (event.has(entityType, Attributes.BLOCK_INTERACTION_RANGE))
-				continue;
-
-			event.add(entityType, Attributes.BLOCK_INTERACTION_RANGE);
+			if (!event.has(entityType, Attributes.BLOCK_INTERACTION_RANGE))
+				event.add(entityType, Attributes.BLOCK_INTERACTION_RANGE);
+			if (!event.has(entityType, Attributes.BLOCK_BREAK_SPEED))
+				event.add(entityType, Attributes.BLOCK_BREAK_SPEED);
 		}
 	}
 

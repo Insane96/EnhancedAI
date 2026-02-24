@@ -1,3 +1,6 @@
+## Upcoming
+* Fixed crash with Miner mobs not having the block break speed attribute
+
 ### 4.0.0.0-beta
 Ported to 1.21.1
 
