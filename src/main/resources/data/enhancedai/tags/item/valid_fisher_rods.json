@@ -1,29 +1,5 @@
 {
     "values": [
-        "minecraft:fishing_rod",
-        {
-            "required": false,
-            "id": "tide:stone_fishing_rod"
-        },
-        {
-            "required": false,
-            "id": "tide:iron_fishing_rod"
-        },
-        {
-            "required": false,
-            "id": "tide:golden_fishing_rod"
-        },
-        {
-            "required": false,
-            "id": "tide:crystal_fishing_rod"
-        },
-        {
-            "required": false,
-            "id": "tide:diamond_fishing_rod"
-        },
-        {
-            "required": false,
-            "id": "tide:netherite_fishing_rod"
-        }
+        "minecraft:fishing_rod"
     ]
 }

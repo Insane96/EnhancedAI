@@ -7,6 +7,7 @@
         "minecraft:drowned",
         "minecraft:skeleton",
         "minecraft:stray",
+        "minecraft:bogged",
         "minecraft:cave_spider",
         {
             "required": false,

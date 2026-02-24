@@ -14,6 +14,7 @@
         "minecraft:rabbit",
         "minecraft:sheep",
         "minecraft:sniffer",
+        "minecraft:armadillo",
         {
             "required": false,
             "id": "environmental:duck"

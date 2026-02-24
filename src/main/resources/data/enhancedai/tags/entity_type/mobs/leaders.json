@@ -4,6 +4,7 @@
 		"minecraft:drowned",
         "minecraft:husk",
         "minecraft:skeleton",
-        "minecraft:stray"
+        "minecraft:stray",
+        "minecraft:bogged"
 	]
 }
