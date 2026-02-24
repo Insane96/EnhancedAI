@@ -1,4 +1,4 @@
-## Upcoming
+## 4.0.0.1-beta
 * Enabled Bogged, Breeze and Armadillo to use some features
 * Fixed crash with Miner mobs not having the block break speed attribute
 * Fixed zombie villagers not affected by some features
