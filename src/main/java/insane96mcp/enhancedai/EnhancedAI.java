@@ -10,7 +10,6 @@ import insane96mcp.enhancedai.modules.EAIModules;
 import insane96mcp.enhancedai.modules.animal.AnimalScaredAttack;
 import insane96mcp.enhancedai.modules.mobs.Leaders;
 import insane96mcp.enhancedai.modules.mobs.MeleeAttacking;
-import insane96mcp.enhancedai.modules.mobs.PushResistance;
 import insane96mcp.enhancedai.modules.mobs.miner.MinerMobs;
 import insane96mcp.enhancedai.modules.mobs.targeting.Targeting;
 import insane96mcp.enhancedai.setup.EAIAttributes;
@@ -53,7 +52,6 @@ public class EnhancedAI
         eventBus.addListener(AnimalScaredAttack::attribute);
         eventBus.addListener(MeleeAttacking::attributeModificationEvent);
         eventBus.addListener(Targeting::attribute);
-        eventBus.addListener(PushResistance::attribute);
         eventBus.addListener(Leaders::attribute);
 
         if (ModList.get().isLoaded("mobspropertiesrandomness")) {

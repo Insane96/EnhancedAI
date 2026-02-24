@@ -1,3 +1,6 @@
+## 4.0.0.3-beta
+* Moved Push Resistance feature to InsaneLib
+
 ## 4.0.0.2-beta
 * Removed Biting mobs and Falling Shockwave features since they require client-sided mod
 
