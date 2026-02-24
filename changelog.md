@@ -1,3 +1,6 @@
+## 4.0.0.2-beta
+* Removed Biting mobs and Falling Shockwave features since they require client-sided mod
+
 ## 4.0.0.1-beta
 * Enabled Bogged, Breeze and Armadillo to use some features
 * Fixed crash with Miner mobs not having the block break speed attribute
