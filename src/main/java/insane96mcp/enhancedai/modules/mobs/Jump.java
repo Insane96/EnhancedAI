@@ -79,7 +79,7 @@ public class Jump extends Feature {
             double bonusJumpBoost = 0;
             if (jumpBoost != null)
                 bonusJumpBoost = (jumpBoost.getAmplifier() + 1) * 0.75f;
-            return xzDistance < 8 && yDistance >= 1d && yDistance <= 1 + bonusJumpBoost + Mth.ceil(this.goalOwner.getBbHeight()) && ticksWithoutPath > adjustedTickDelay(25);
+            return xzDistance < 8 && yDistance >= this.goalOwner.getBbHeight() && yDistance <= 1 + bonusJumpBoost + Mth.ceil(this.goalOwner.getBbHeight()) && ticksWithoutPath > adjustedTickDelay(25);
         }
 
         @Override
