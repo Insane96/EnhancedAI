@@ -1,4 +1,4 @@
-## Upcoming
+## 4.0.0.4-beta
 * Jump in place now mobs jump only if the target is at least the height of the mob higher (e.g. zombies will jump if the target is at least 1.95 blocks higher)
 * Fixed mobs spawned by leaders attacking creative players
 * Fixed more crashes with Miner Mobs missing attributes
