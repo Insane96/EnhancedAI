@@ -157,7 +157,7 @@ public class Leaders extends Feature {
             if (!foundSpawnPosition || mob.level().hasNearbyAlivePlayer(x1, y1, z1, 7.0D))
                 continue;
 
-            if (target != null)
+            if (target != null && reinforcement.canAttack(target))
                 reinforcement.setTarget(target);
             reinforcement.finalizeSpawn(serverLevel, mob.level().getCurrentDifficultyAt(reinforcement.blockPosition()), MobSpawnType.REINFORCEMENT, null);
             if (!reinforcesCanSpawnAsLeader)
