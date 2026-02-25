@@ -79,6 +79,10 @@ public class MinerMobs extends Feature {
 				event.add(entityType, Attributes.BLOCK_INTERACTION_RANGE);
 			if (!event.has(entityType, Attributes.BLOCK_BREAK_SPEED))
 				event.add(entityType, Attributes.BLOCK_BREAK_SPEED);
+			if (!event.has(entityType, Attributes.MINING_EFFICIENCY))
+				event.add(entityType, Attributes.MINING_EFFICIENCY);
+			if (!event.has(entityType, Attributes.SUBMERGED_MINING_SPEED))
+				event.add(entityType, Attributes.SUBMERGED_MINING_SPEED);
 		}
 	}
 
