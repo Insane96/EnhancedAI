@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.mixin;
 
-import insane96mcp.enhancedai.modules.warden.WardenDarknessRange;
+import insane96mcp.enhancedai.module.warden.WardenDarknessRange;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.warden.Warden;

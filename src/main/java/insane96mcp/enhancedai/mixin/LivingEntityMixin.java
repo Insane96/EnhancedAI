@@ -1,7 +1,7 @@
 package insane96mcp.enhancedai.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import insane96mcp.enhancedai.modules.mobs.climbing.Climbing;
+import insane96mcp.enhancedai.module.mobs.climbing.Climbing;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;

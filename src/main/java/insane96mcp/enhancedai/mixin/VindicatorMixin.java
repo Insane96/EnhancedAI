@@ -4,7 +4,7 @@ import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import insane96mcp.enhancedai.modules.mobs.OpenDoors;
+import insane96mcp.enhancedai.module.mobs.OpenDoors;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.entity.monster.Vindicator;

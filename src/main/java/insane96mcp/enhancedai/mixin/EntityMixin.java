@@ -1,7 +1,7 @@
 package insane96mcp.enhancedai.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import insane96mcp.enhancedai.modules.mobs.FireImmuneTicks;
+import insane96mcp.enhancedai.module.mobs.FireImmuneTicks;
 import insane96mcp.insanelib.core.feature.Feature;
 import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;

@@ -2,7 +2,7 @@ package insane96mcp.enhancedai.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import insane96mcp.enhancedai.modules.warden.WardenSonicBoomRange;
+import insane96mcp.enhancedai.module.warden.WardenSonicBoomRange;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.entity.ai.behavior.warden.SonicBoom;

@@ -1,7 +1,7 @@
 package insane96mcp.enhancedai.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import insane96mcp.enhancedai.modules.mobs.Swimmers;
+import insane96mcp.enhancedai.module.mobs.Swimmers;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.AbstractFish;
 import net.minecraft.world.entity.animal.WaterAnimal;

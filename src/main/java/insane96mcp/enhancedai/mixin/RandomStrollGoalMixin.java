@@ -1,7 +1,7 @@
 package insane96mcp.enhancedai.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import insane96mcp.enhancedai.modules.mobs.RandomStroll;
+import insane96mcp.enhancedai.module.mobs.RandomStroll;
 import insane96mcp.insanelib.core.feature.Feature;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;

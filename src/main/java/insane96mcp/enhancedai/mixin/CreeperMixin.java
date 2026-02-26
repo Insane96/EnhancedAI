@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.mixin;
 
-import insane96mcp.enhancedai.modules.creeper.DisableFallingSwelling;
+import insane96mcp.enhancedai.module.creeper.DisableFallingSwelling;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Creeper;

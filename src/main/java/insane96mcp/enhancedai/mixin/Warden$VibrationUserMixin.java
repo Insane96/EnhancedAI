@@ -1,7 +1,7 @@
 package insane96mcp.enhancedai.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import insane96mcp.enhancedai.modules.warden.WardenListenRange;
+import insane96mcp.enhancedai.module.warden.WardenListenRange;
 import net.minecraft.world.entity.monster.warden.Warden;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

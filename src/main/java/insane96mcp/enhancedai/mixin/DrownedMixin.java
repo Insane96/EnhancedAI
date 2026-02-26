@@ -1,7 +1,7 @@
 package insane96mcp.enhancedai.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import insane96mcp.enhancedai.modules.drowned.DrownedAttackDuringDay;
+import insane96mcp.enhancedai.module.drowned.DrownedAttackDuringDay;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Drowned;
 import net.minecraft.world.entity.monster.Zombie;

@@ -2,7 +2,7 @@ package insane96mcp.enhancedai.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import insane96mcp.enhancedai.modules.slime.MagmaCubeSurfSpeed;
+import insane96mcp.enhancedai.module.slime.MagmaCubeSurfSpeed;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.MagmaCube;
 import net.minecraft.world.entity.monster.Slime;

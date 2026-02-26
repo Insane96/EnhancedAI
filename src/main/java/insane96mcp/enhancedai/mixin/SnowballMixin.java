@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.mixin;
 
-import insane96mcp.enhancedai.modules.snowgolem.SnowballsInvulnerabilityFrames;
+import insane96mcp.enhancedai.module.snowgolem.SnowballsInvulnerabilityFrames;
 import insane96mcp.insanelib.core.feature.Feature;
 import net.minecraft.world.entity.projectile.Snowball;
 import net.minecraft.world.phys.EntityHitResult;

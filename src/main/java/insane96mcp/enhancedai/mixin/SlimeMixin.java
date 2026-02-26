@@ -2,9 +2,9 @@ package insane96mcp.enhancedai.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import insane96mcp.enhancedai.modules.slime.SlimeAttackFix;
-import insane96mcp.enhancedai.modules.slime.SlimeJumpDelay;
-import insane96mcp.enhancedai.modules.slime.SlimeSize;
+import insane96mcp.enhancedai.module.slime.SlimeAttackFix;
+import insane96mcp.enhancedai.module.slime.SlimeJumpDelay;
+import insane96mcp.enhancedai.module.slime.SlimeSize;
 import insane96mcp.insanelib.core.feature.Feature;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;

@@ -2,7 +2,7 @@ package insane96mcp.enhancedai.data.mpr.condition;
 
 import com.google.gson.*;
 import com.google.gson.annotations.JsonAdapter;
-import insane96mcp.enhancedai.modules.mobs.Leaders;
+import insane96mcp.enhancedai.module.mobs.Leaders;
 import insane96mcp.mobspropertiesrandomness.data.json.condition.MPRCondition;
 import net.minecraft.world.entity.LivingEntity;
 

@@ -2,7 +2,7 @@ package insane96mcp.enhancedai.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import insane96mcp.enhancedai.modules.mobs.Pathfinding;
+import insane96mcp.enhancedai.module.mobs.Pathfinding;
 import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;

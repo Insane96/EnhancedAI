@@ -5,7 +5,7 @@ import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import insane96mcp.enhancedai.modules.illager.RavagerFeature;
+import insane96mcp.enhancedai.module.illager.RavagerFeature;
 import net.minecraft.world.entity.monster.Ravager;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LeavesBlock;

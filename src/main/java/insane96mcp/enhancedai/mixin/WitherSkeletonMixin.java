@@ -2,7 +2,7 @@ package insane96mcp.enhancedai.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import insane96mcp.enhancedai.modules.skeleton.WitherSkeletons;
+import insane96mcp.enhancedai.module.skeleton.WitherSkeletons;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.monster.WitherSkeleton;

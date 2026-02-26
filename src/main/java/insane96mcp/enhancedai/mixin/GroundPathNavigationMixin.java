@@ -1,7 +1,7 @@
 package insane96mcp.enhancedai.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import insane96mcp.enhancedai.modules.mobs.Pathfinding;
+import insane96mcp.enhancedai.module.mobs.Pathfinding;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;

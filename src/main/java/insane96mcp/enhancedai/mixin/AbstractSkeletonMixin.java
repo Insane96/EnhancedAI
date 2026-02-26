@@ -1,7 +1,7 @@
 package insane96mcp.enhancedai.mixin;
 
-import insane96mcp.enhancedai.modules.skeleton.SkeletonFleeTarget;
-import insane96mcp.enhancedai.modules.skeleton.shoot.SkeletonShoot;
+import insane96mcp.enhancedai.module.skeleton.SkeletonFleeTarget;
+import insane96mcp.enhancedai.module.skeleton.shoot.SkeletonShoot;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

@@ -1,0 +1,43 @@
+package insane96mcp.enhancedai.module.shulker;
+
+import insane96mcp.enhancedai.EnhancedAI;
+import insane96mcp.enhancedai.module.EAIModules;
+import insane96mcp.enhancedai.module.mobs.Spawning;
+import insane96mcp.insanelib.core.feature.Feature;
+import insane96mcp.insanelib.core.feature.LoadFeature;
+import insane96mcp.insanelib.core.feature.config.Config;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.monster.Shulker;
+import net.neoforged.fml.event.config.ModConfigEvent;
+
+@LoadFeature(module = EAIModules.SHULKER, description = "Only entity types in the `enhancedai:shulker/apply_armor_modifiers` tag will be affected by this feature.")
+public class ShulkerArmor extends Feature {
+    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("shulker/apply_armor_modifiers"));
+    @Config(min = 0)
+    public static Double armorWhenClosed = 24d;
+    @Config(min = 0)
+    public static Double armorWhenPeeking = 16d;
+    @Config(min = 0)
+    public static Double armorWhenOpen = 8d;
+
+    private static final ResourceLocation COVERED_ARMOR_MODIFIER_ID = EnhancedAI.location("covered_armor_bonus");
+    public static AttributeModifier CLOSED_MODIFIER;
+    public static AttributeModifier PEEK_MODIFIER;
+    public static AttributeModifier OPEN_MODIFIER;
+
+    @Override
+    public void readConfig(ModConfigEvent event) {
+        super.readConfig(event);
+        CLOSED_MODIFIER = new AttributeModifier(COVERED_ARMOR_MODIFIER_ID, armorWhenClosed, AttributeModifier.Operation.ADD_VALUE);
+        PEEK_MODIFIER = new AttributeModifier(COVERED_ARMOR_MODIFIER_ID, armorWhenPeeking, AttributeModifier.Operation.ADD_VALUE);
+        OPEN_MODIFIER = new AttributeModifier(COVERED_ARMOR_MODIFIER_ID, armorWhenOpen, AttributeModifier.Operation.ADD_VALUE);
+    }
+
+    public static boolean isAffectedByArmorModifiers(Shulker shulker) {
+        return Feature.isEnabled(ShulkerArmor.class) && shulker.getType().is(AFFECTED_ENTITY_TYPES) && !Spawning.isUnaffectedByFeatures(shulker);
+    }
+}

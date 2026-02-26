@@ -2,7 +2,7 @@ package insane96mcp.enhancedai.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import insane96mcp.enhancedai.modules.mobs.MeleeAttacking;
+import insane96mcp.enhancedai.module.mobs.MeleeAttacking;
 import insane96mcp.insanelib.core.feature.Feature;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.PathfinderMob;

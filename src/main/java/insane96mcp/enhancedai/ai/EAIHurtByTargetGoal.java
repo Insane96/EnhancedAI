@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.ai;
 
-import insane96mcp.enhancedai.modules.mobs.targeting.Targeting;
+import insane96mcp.enhancedai.module.mobs.targeting.Targeting;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;

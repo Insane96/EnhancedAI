@@ -1,6 +1,6 @@
 package insane96mcp.enhancedai.mixin;
 
-import insane96mcp.enhancedai.modules.drowned.SunResistantDrowned;
+import insane96mcp.enhancedai.module.drowned.SunResistantDrowned;
 import insane96mcp.insanelib.core.ModNBTData;
 import insane96mcp.insanelib.core.feature.Feature;
 import net.minecraft.world.entity.PathfinderMob;
