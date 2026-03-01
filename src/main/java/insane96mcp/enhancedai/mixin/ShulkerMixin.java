@@ -2,6 +2,7 @@ package insane96mcp.enhancedai.mixin;
 
 import insane96mcp.enhancedai.module.shulker.ShulkerArmor;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.AbstractGolem;
@@ -26,15 +27,23 @@ public class ShulkerMixin extends AbstractGolem {
     @Inject(method = "setRawPeekAmount", at = @At("RETURN"))
     public void onSetRawPeekAmount(int peekAmount, CallbackInfo ci) {
         if (this.level().isClientSide
-                || !ShulkerArmor.isAffectedByArmorModifiers((Shulker) (Object) this))
+                || !ShulkerArmor.isAffectedByArmorModifiers(self()))
             return;
 
-        this.getAttribute(Attributes.ARMOR).removeModifier(COVERED_ARMOR_MODIFIER);
+        AttributeInstance armorAttribute = this.getAttribute(Attributes.ARMOR);
+        armorAttribute.removeModifier(COVERED_ARMOR_MODIFIER);
+        armorAttribute.removeModifier(ShulkerArmor.CLOSED_MODIFIER);
+        armorAttribute.removeModifier(ShulkerArmor.OPEN_MODIFIER);
+        armorAttribute.removeModifier(ShulkerArmor.PEEK_MODIFIER);
         if (peekAmount == 0)
-            this.getAttribute(Attributes.ARMOR).addPermanentModifier(ShulkerArmor.CLOSED_MODIFIER);
+            armorAttribute.addPermanentModifier(ShulkerArmor.CLOSED_MODIFIER);
         else if (peekAmount == 100)
-            this.getAttribute(Attributes.ARMOR).addPermanentModifier(ShulkerArmor.OPEN_MODIFIER);
+            armorAttribute.addPermanentModifier(ShulkerArmor.OPEN_MODIFIER);
         else
-            this.getAttribute(Attributes.ARMOR).addPermanentModifier(ShulkerArmor.PEEK_MODIFIER);
+            armorAttribute.addPermanentModifier(ShulkerArmor.PEEK_MODIFIER);
+    }
+
+    public Shulker self() {
+        return (Shulker) (Object) this;
     }
 }
