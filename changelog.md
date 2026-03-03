@@ -1,6 +1,7 @@
 ## Upcoming
 * Zombified piglin can now mine
 * Reduced leader mobs spawn chance
+* Increased follow range override (32\~48 -> 32\~64)
 * Fixed shulker armor crashing the game
 
 ## 4.0.0.4-beta
