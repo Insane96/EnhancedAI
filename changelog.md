@@ -1,4 +1,5 @@
 ## Upcoming
+* Reduced leader mobs spawn chance
 * Fixed shulker armor crashing the game
 
 ## 4.0.0.4-beta
