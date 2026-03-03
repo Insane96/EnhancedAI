@@ -127,3 +127,9 @@ idea {
         downloadJavadoc = true
     }
 }
+
+tasks.register('zipMprIntegration', Zip) {
+    archiveFileName = "${mod_version}.zip"
+    destinationDirectory = layout.buildDirectory.dir("libs")
+    from "src/main/resources/integrated_packs/mpr_integration"
+}
