@@ -5,21 +5,21 @@
             "property": "attribute_modifier",
             "attribute": "minecraft:generic.max_health",
             "id": "enhancedai:skeleton_wolves_health_increase",
-            "operation": "multiply_base",
+            "operation": "add_multiplied-base",
             "amount": 1
         },
         {
             "property": "attribute_modifier",
             "attribute": "minecraft:generic.movement_speed",
             "id": "enhancedai:skeleton_wolves_speed_reduction",
-            "operation": "multiply_base",
+            "operation": "add_multiplied-base",
             "amount": -0.2
         },
         {
             "property": "attribute_modifier",
             "attribute": "minecraft:generic.attack_damage",
             "id": "enhancedai:skeleton_wolves_damage_reduction",
-            "operation": "multiply_base",
+            "operation": "add_multiplied-base",
             "amount": -0.5
         }
     ]

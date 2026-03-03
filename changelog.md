@@ -1,4 +1,4 @@
-## Upcoming
+## 4.0.1.0-beta
 * Updated MPR Integration data pack, porting stuff from Insane Survival Overhaul
   * Bees are smaller, Vexes are bigger, Phantoms, Sea Creatures, Skeletons and Zombies are randomly scaled
   * Drowned deal 50% less damage with tridents
