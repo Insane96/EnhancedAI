@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.3.6.3
+* Fixed angry creepers not blowing up on death
+
 ## 3.3.6.2
 * Fixed error with MPR when setting integer data
 
