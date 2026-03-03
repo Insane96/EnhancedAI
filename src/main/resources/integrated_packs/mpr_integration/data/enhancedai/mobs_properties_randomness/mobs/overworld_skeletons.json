@@ -1,0 +1,604 @@
+{
+    "target": "#enhancedai:overworld_skeletons",
+    "properties": [
+        {
+            "property": "enhancedai:change_data",
+            "data": "enhancedai:skeleton_shoot/inaccuracy",
+            "value": {
+                "min": 6,
+                "max": 10,
+                "modifiers": [
+                    {
+                        "modifier": "difficulty",
+                        "operation": "multiply",
+                        "hard": 0.5
+                    }
+                ]
+            }
+        },
+        {
+            "property": "equipment",
+            "slot": "offhand",
+            "functions": [
+                {
+                    "function": "enchant",
+                    "type": "with_levels",
+                    "lvl": {
+                        "min": 1,
+                        "max": 10,
+                        "modifiers": [
+                            {
+                                "modifier": "condition",
+                                "operation": "multiply",
+                                "value": 2,
+                                "conditions": [
+                                    {
+                                        "condition": "moon_phase",
+                                        "phases": [ "full_moon" ]
+                                    },
+                                    {
+                                        "condition": "light_level",
+                                        "light_level": {
+                                            "min": 12,
+                                            "max": 15
+                                        },
+                                        "type": "sky"
+                                    }
+                                ]
+                            },
+                            {
+                                "modifier": "condition",
+                                "operation": "multiply",
+                                "value": 2,
+                                "conditions": [
+                                    {
+                                        "condition": "light_level",
+                                        "light_level": {
+                                            "min": 0,
+                                            "max": 12
+                                        },
+                                        "type": "sky"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "conditions": [
+                        {
+                            "condition": "chance",
+                            "chance": {
+                                "value": 0.15,
+                                "modifiers": [
+                                    {
+                                        "modifier": "condition",
+                                        "operation": "add",
+                                        "value": 0.10,
+                                        "conditions": [
+                                            {
+                                                "condition": "moon_phase",
+                                                "phases": [ "full_moon" ]
+                                            },
+                                            {
+                                                "condition": "light_level",
+                                                "light_level": {
+                                                    "min": 12,
+                                                    "max": 15
+                                                },
+                                                "type": "sky"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "modifier": "condition",
+                                        "operation": "add",
+                                        "value": 0.10,
+                                        "conditions": [
+                                            {
+                                                "condition": "light_level",
+                                                "light_level": {
+                                                    "min": 0,
+                                                    "max": 12
+                                                },
+                                                "type": "sky"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ],
+            "conditions": [
+                {
+                    "condition": "chance",
+                    "chance": {
+                        "value": 0.15,
+                        "modifiers": [
+                            {
+                                "modifier": "condition",
+                                "operation": "add",
+                                "value": 0.10,
+                                "conditions": [
+                                    {
+                                        "condition": "moon_phase",
+                                        "phases": [ "full_moon" ]
+                                    },
+                                    {
+                                        "condition": "light_level",
+                                        "light_level": {
+                                            "min": 12,
+                                            "max": 15
+                                        },
+                                        "type": "sky"
+                                    }
+                                ]
+                            },
+                            {
+                                "modifier": "condition",
+                                "operation": "add",
+                                "value": 0.10,
+                                "conditions": [
+                                    {
+                                        "condition": "light_level",
+                                        "light_level": {
+                                            "min": 0,
+                                            "max": 12
+                                        },
+                                        "type": "sky"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "property": "presets",
+            "presets": [
+                {
+                    "preset": "enhancedai:leather_armor",
+                    "weight": 180
+                },
+                {
+                    "preset": "enhancedai:chainmail_armor",
+                    "weight": 40
+                },
+                {
+                    "preset": "enhancedai:golden_armor",
+                    "weight": 220
+                },
+                {
+                    "preset": "enhancedai:iron_armor",
+                    "weight": 8
+                },
+                {
+                    "preset": "enhancedai:diamond_armor",
+                    "weight": 1
+                }
+
+            ],
+            "conditions": [
+                {
+                    "condition": "chance",
+                    "chance": {
+                        "value": 0.15,
+                        "modifiers": [
+                            {
+                                "modifier": "condition",
+                                "operation": "add",
+                                "value": 0.10,
+                                "conditions": [
+                                    {
+                                        "condition": "moon_phase",
+                                        "phases": [ "full_moon" ]
+                                    },
+                                    {
+                                        "condition": "light_level",
+                                        "light_level": {
+                                            "min": 12,
+                                            "max": 15
+                                        },
+                                        "type": "sky"
+                                    }
+                                ]
+                            },
+                            {
+                                "modifier": "condition",
+                                "operation": "add",
+                                "value": 0.10,
+                                "conditions": [
+                                    {
+                                        "condition": "light_level",
+                                        "light_level": {
+                                            "min": 0,
+                                            "max": 12
+                                        },
+                                        "type": "sky"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "property": "equipment",
+            "slot": "head",
+            "functions": [
+                {
+                    "function": "enchant",
+                    "type": "with_levels",
+                    "lvl": {
+                        "min": 1,
+                        "max": 10,
+                        "modifiers": [
+                            {
+                                "modifier": "condition",
+                                "operation": "multiply",
+                                "value": 2,
+                                "conditions": [
+                                    {
+                                        "condition": "moon_phase",
+                                        "phases": [ "full_moon" ]
+                                    },
+                                    {
+                                        "condition": "light_level",
+                                        "light_level": {
+                                            "min": 12,
+                                            "max": 15
+                                        },
+                                        "type": "sky"
+                                    }
+                                ]
+                            },
+                            {
+                                "modifier": "condition",
+                                "operation": "multiply",
+                                "value": 2,
+                                "conditions": [
+                                    {
+                                        "condition": "light_level",
+                                        "light_level": {
+                                            "min": 0,
+                                            "max": 12
+                                        },
+                                        "type": "sky"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "conditions": [
+                        {
+                            "condition": "chance",
+                            "chance": {
+                                "value": 0.15,
+                                "modifiers": [
+                                    {
+                                        "modifier": "condition",
+                                        "operation": "add",
+                                        "value": 0.10,
+                                        "conditions": [
+                                            {
+                                                "condition": "moon_phase",
+                                                "phases": [ "full_moon" ]
+                                            },
+                                            {
+                                                "condition": "light_level",
+                                                "light_level": {
+                                                    "min": 12,
+                                                    "max": 15
+                                                },
+                                                "type": "sky"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "modifier": "condition",
+                                        "operation": "add",
+                                        "value": 0.10,
+                                        "conditions": [
+                                            {
+                                                "condition": "light_level",
+                                                "light_level": {
+                                                    "min": 0,
+                                                    "max": 12
+                                                },
+                                                "type": "sky"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "property": "equipment",
+            "slot": "chest",
+            "functions": [
+                {
+                    "function": "enchant",
+                    "type": "with_levels",
+                    "lvl": {
+                        "min": 1,
+                        "max": 10,
+                        "modifiers": [
+                            {
+                                "modifier": "condition",
+                                "operation": "multiply",
+                                "value": 2,
+                                "conditions": [
+                                    {
+                                        "condition": "moon_phase",
+                                        "phases": [ "full_moon" ]
+                                    },
+                                    {
+                                        "condition": "light_level",
+                                        "light_level": {
+                                            "min": 12,
+                                            "max": 15
+                                        },
+                                        "type": "sky"
+                                    }
+                                ]
+                            },
+                            {
+                                "modifier": "condition",
+                                "operation": "multiply",
+                                "value": 2,
+                                "conditions": [
+                                    {
+                                        "condition": "light_level",
+                                        "light_level": {
+                                            "min": 0,
+                                            "max": 12
+                                        },
+                                        "type": "sky"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "conditions": [
+                        {
+                            "condition": "chance",
+                            "chance": {
+                                "value": 0.15,
+                                "modifiers": [
+                                    {
+                                        "modifier": "condition",
+                                        "operation": "add",
+                                        "value": 0.10,
+                                        "conditions": [
+                                            {
+                                                "condition": "moon_phase",
+                                                "phases": [ "full_moon" ]
+                                            },
+                                            {
+                                                "condition": "light_level",
+                                                "light_level": {
+                                                    "min": 12,
+                                                    "max": 15
+                                                },
+                                                "type": "sky"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "modifier": "condition",
+                                        "operation": "add",
+                                        "value": 0.10,
+                                        "conditions": [
+                                            {
+                                                "condition": "light_level",
+                                                "light_level": {
+                                                    "min": 0,
+                                                    "max": 12
+                                                },
+                                                "type": "sky"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "property": "equipment",
+            "slot": "legs",
+            "functions": [
+                {
+                    "function": "enchant",
+                    "type": "with_levels",
+                    "lvl": {
+                        "min": 1,
+                        "max": 10,
+                        "modifiers": [
+                            {
+                                "modifier": "condition",
+                                "operation": "multiply",
+                                "value": 2,
+                                "conditions": [
+                                    {
+                                        "condition": "moon_phase",
+                                        "phases": [ "full_moon" ]
+                                    },
+                                    {
+                                        "condition": "light_level",
+                                        "light_level": {
+                                            "min": 12,
+                                            "max": 15
+                                        },
+                                        "type": "sky"
+                                    }
+                                ]
+                            },
+                            {
+                                "modifier": "condition",
+                                "operation": "multiply",
+                                "value": 2,
+                                "conditions": [
+                                    {
+                                        "condition": "light_level",
+                                        "light_level": {
+                                            "min": 0,
+                                            "max": 12
+                                        },
+                                        "type": "sky"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "conditions": [
+                        {
+                            "condition": "chance",
+                            "chance": {
+                                "value": 0.15,
+                                "modifiers": [
+                                    {
+                                        "modifier": "condition",
+                                        "operation": "add",
+                                        "value": 0.10,
+                                        "conditions": [
+                                            {
+                                                "condition": "moon_phase",
+                                                "phases": [ "full_moon" ]
+                                            },
+                                            {
+                                                "condition": "light_level",
+                                                "light_level": {
+                                                    "min": 12,
+                                                    "max": 15
+                                                },
+                                                "type": "sky"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "modifier": "condition",
+                                        "operation": "add",
+                                        "value": 0.10,
+                                        "conditions": [
+                                            {
+                                                "condition": "light_level",
+                                                "light_level": {
+                                                    "min": 0,
+                                                    "max": 12
+                                                },
+                                                "type": "sky"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "property": "equipment",
+            "slot": "feet",
+            "functions": [
+                {
+                    "function": "enchant",
+                    "type": "with_levels",
+                    "lvl": {
+                        "min": 1,
+                        "max": 10,
+                        "modifiers": [
+                            {
+                                "modifier": "condition",
+                                "operation": "multiply",
+                                "value": 2,
+                                "conditions": [
+                                    {
+                                        "condition": "moon_phase",
+                                        "phases": [ "full_moon" ]
+                                    },
+                                    {
+                                        "condition": "light_level",
+                                        "light_level": {
+                                            "min": 12,
+                                            "max": 15
+                                        },
+                                        "type": "sky"
+                                    }
+                                ]
+                            },
+                            {
+                                "modifier": "condition",
+                                "operation": "multiply",
+                                "value": 2,
+                                "conditions": [
+                                    {
+                                        "condition": "light_level",
+                                        "light_level": {
+                                            "min": 0,
+                                            "max": 12
+                                        },
+                                        "type": "sky"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "conditions": [
+                        {
+                            "condition": "chance",
+                            "chance": {
+                                "value": 0.15,
+                                "modifiers": [
+                                    {
+                                        "modifier": "condition",
+                                        "operation": "add",
+                                        "value": 0.10,
+                                        "conditions": [
+                                            {
+                                                "condition": "moon_phase",
+                                                "phases": [ "full_moon" ]
+                                            },
+                                            {
+                                                "condition": "light_level",
+                                                "light_level": {
+                                                    "min": 12,
+                                                    "max": 15
+                                                },
+                                                "type": "sky"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "modifier": "condition",
+                                        "operation": "add",
+                                        "value": 0.10,
+                                        "conditions": [
+                                            {
+                                                "condition": "light_level",
+                                                "light_level": {
+                                                    "min": 0,
+                                                    "max": 12
+                                                },
+                                                "type": "sky"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

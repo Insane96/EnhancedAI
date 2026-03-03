@@ -1,0 +1,15 @@
+{
+    "target": "#enhancedai:zombies",
+    "properties": [
+        {
+            "property": "attribute_modifier",
+            "attribute": "minecraft:generic.scale",
+            "id": "enhancedai:zombies_scale",
+            "amount": {
+                "min": -0.2,
+                "max": 0
+            },
+            "operation": "add_multiplied_base"
+        }
+    ]
+}

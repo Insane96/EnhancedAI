@@ -1,4 +1,12 @@
 ## Upcoming
+* Updated MPR Integration data pack, porting stuff from Insane Survival Overhaul
+  * Bees are smaller, Vexes are bigger, Phantoms, Sea Creatures, Skeletons and Zombies are randomly scaled
+  * Drowned deal 50% less damage with tridents
+  * Vexes have much less health
+  * Vindicators have less attack damage
+  * Skeletons and Zombies have a better chance to spawn with armor and weapons
+  * Small animals have less attack damage
+  * Zombies have a higher chance to spawn as miner the deeper they spawn
 * Zombified piglin can now mine
 * Reduced leader mobs spawn chance
 * Increased follow range override (32\~48 -> 32\~64)

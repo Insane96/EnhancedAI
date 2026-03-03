@@ -1,0 +1,12 @@
+{
+    "target": "minecraft:vex",
+    "properties": [
+        {
+            "property": "attribute_modifier",
+            "attribute": "minecraft:generic.max_health",
+            "id": "enhancedai:vex_nerf",
+            "operation": "add_value",
+            "amount": -10
+        }
+    ]
+}

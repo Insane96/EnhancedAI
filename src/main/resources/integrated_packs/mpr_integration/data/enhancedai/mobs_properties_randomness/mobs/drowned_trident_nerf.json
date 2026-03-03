@@ -1,0 +1,14 @@
+{
+    "target": "minecraft:drowned",
+    "properties": [
+        {
+            "property": "event",
+            "event": "attack",
+            "id": "enhancedai:reduce_drowned_trident_damage",
+            "target": "other",
+            "damage_type": "minecraft:trident",
+            "damage_modifier": 0.5,
+            "damage_modifier_operation": "multiply"
+        }
+    ]
+}

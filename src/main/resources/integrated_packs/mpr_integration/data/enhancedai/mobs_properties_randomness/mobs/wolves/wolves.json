@@ -1,0 +1,33 @@
+{
+    "target": "#enhancedai:wolves",
+    "properties": [
+        {
+            "property": "attribute_modifier",
+            "attribute": "minecraft:generic.max_health",
+            "id": "enhancedai:wolves_health_bonus",
+            "amount": 1,
+            "operation": "add_multiplied_base"
+        },
+        {
+            "property": "attribute_modifier",
+            "attribute": "minecraft:generic.attack_damage",
+            "id": "enhancedai:wolves_attack_damage_bonus",
+            "amount": 0.5,
+            "operation": "add_multiplied_base"
+        },
+        {
+            "property": "attribute_modifier",
+            "attribute": "minecraft:generic.movement_speed",
+            "id": "enhancedai:wolves_movement_speed_bonus",
+            "amount": 0.20,
+            "operation": "add_multiplied_base"
+        },
+        {
+            "property": "attribute_modifier",
+            "attribute": "minecraft:generic.attack_speed",
+            "id": "enhancedai:wolves_attack_speed_nerf",
+            "amount": -0.5,
+            "operation": "add_multiplied_base"
+        }
+    ]
+}

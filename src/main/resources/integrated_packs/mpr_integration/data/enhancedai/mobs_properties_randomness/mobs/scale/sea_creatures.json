@@ -1,0 +1,15 @@
+{
+    "target": "#enhancedai:sea_creatures",
+    "properties": [
+        {
+            "property": "attribute_modifier",
+            "attribute": "minecraft:generic.scale",
+            "id": "enhancedai:sea_creatures_scale",
+            "amount": {
+                "min": -0.5,
+                "max": 0.6
+            },
+            "operation": "add_multiplied_base"
+        }
+    ]
+}

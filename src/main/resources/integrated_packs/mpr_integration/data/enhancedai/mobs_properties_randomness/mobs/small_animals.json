@@ -1,0 +1,12 @@
+{
+    "target": "#enhancedai:small_animals",
+    "properties": [
+        {
+            "property": "attribute_modifier",
+            "attribute": "minecraft:generic.attack_damage",
+            "id": "enhancedai:small_animals_damage_nerf",
+            "operation": "add_multiplied_base",
+            "amount": -0.3
+        }
+    ]
+}

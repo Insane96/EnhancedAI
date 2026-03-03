@@ -1,0 +1,12 @@
+{
+    "target": "minecraft:vindicator",
+    "properties": [
+        {
+            "property": "attribute_modifier",
+            "attribute": "minecraft:generic.attack_damage",
+            "id": "enhancedai:vindicator_nerf",
+            "operation": "add_value",
+            "amount": -5
+        }
+    ]
+}

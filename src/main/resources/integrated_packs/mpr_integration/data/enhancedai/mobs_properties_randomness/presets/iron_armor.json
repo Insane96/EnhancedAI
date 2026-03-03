@@ -1,0 +1,100 @@
+{
+    "properties": [
+        {
+            "property": "equipment",
+            "slot": "head",
+            "items": [
+                {
+                    "item": "minecraft:iron_helmet"
+                }
+            ],
+            "conditions": [
+                {
+                    "condition": "chance",
+                    "chance": {
+                        "value": 0.5,
+                        "modifiers": [
+                            {
+                                "modifier": "difficulty",
+                                "operation": "add",
+                                "hard": 0.25
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "property": "equipment",
+            "slot": "chest",
+            "items": [
+                {
+                    "item": "minecraft:iron_chestplate"
+                }
+            ],
+            "conditions": [
+                {
+                    "condition": "chance",
+                    "chance": {
+                        "value": 0.5,
+                        "modifiers": [
+                            {
+                                "modifier": "difficulty",
+                                "operation": "add",
+                                "hard": 0.25
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "property": "equipment",
+            "slot": "legs",
+            "items": [
+                {
+                    "item": "minecraft:iron_leggings"
+                }
+            ],
+            "conditions": [
+                {
+                    "condition": "chance",
+                    "chance": {
+                        "value": 0.5,
+                        "modifiers": [
+                            {
+                                "modifier": "difficulty",
+                                "operation": "add",
+                                "hard": 0.25
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "property": "equipment",
+            "slot": "feet",
+            "items": [
+                {
+                    "item": "minecraft:iron_boots"
+                }
+            ],
+            "conditions": [
+                {
+                    "condition": "chance",
+                    "chance": {
+                        "value": 0.5,
+                        "modifiers": [
+                            {
+                                "modifier": "difficulty",
+                                "operation": "add",
+                                "hard": 0.25
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}

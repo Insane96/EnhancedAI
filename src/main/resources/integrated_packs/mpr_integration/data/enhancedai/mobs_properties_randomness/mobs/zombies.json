@@ -1,0 +1,38 @@
+{
+    "target": "#enhancedai:zombies",
+    "properties": [
+        {
+            "property": "enhancedai:change_data",
+            "data": "enhancedai:miner_mobs/miner",
+            "value": 1,
+            "conditions": [
+                {
+                    "condition": "chance",
+                    "chance": {
+                        "value": 0.05,
+                        "modifiers": [
+                            {
+                                "modifier": "deepness",
+                                "operation": "add",
+                                "amount_per_step": 0.01,
+                                "step": 8,
+                                "starting_y": 80
+                            },
+                            {
+                                "modifier": "condition",
+                                "operation": "multiply",
+                                "value": 0.35,
+                                "conditions": [
+                                    {
+                                        "condition": "spawn_type",
+                                        "spawn_types": ["spawner"]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}

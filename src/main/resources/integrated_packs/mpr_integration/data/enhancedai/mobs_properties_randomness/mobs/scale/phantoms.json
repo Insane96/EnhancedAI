@@ -1,0 +1,15 @@
+{
+    "target": "minecraft:phantom",
+    "properties": [
+        {
+            "property": "attribute_modifier",
+            "attribute": "minecraft:generic.scale",
+            "id": "enhancedai:phantom_scale",
+            "amount": {
+                "min": 0,
+                "max": 0.75
+            },
+            "operation": "add_multiplied_base"
+        }
+    ]
+}
