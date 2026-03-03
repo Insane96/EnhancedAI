@@ -1,4 +1,5 @@
 ## Upcoming
+* Zombified piglin can now mine
 * Reduced leader mobs spawn chance
 * Fixed shulker armor crashing the game
 

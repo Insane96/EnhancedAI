@@ -3,6 +3,7 @@
         "minecraft:zombie",
         "minecraft:husk",
         "minecraft:drowned",
-        "minecraft:zombie_villager"
+        "minecraft:zombie_villager",
+        "minecraft:zombified_piglin"
     ]
 }
