@@ -47,7 +47,7 @@ public class CustomHostileData {
     }
 
     public CustomHostileData addAttackGoal(boolean addAttackGoal) {
-        this.addAttackGoal = true;
+        this.addAttackGoal = addAttackGoal;
         return this;
     }
 
