@@ -1,3 +1,8 @@
+## Upcoming
+* Added back Custom Targeting
+  * Skeleton and Zombie horses are now hostile towards the player
+* Skeleton horses can no longer be neutral and scared by players (from Animals scared attack feature), but check Custom Targeting
+
 ## 4.0.1.0-beta
 * Updated MPR Integration data pack, porting stuff from Insane Survival Overhaul
   * Bees are smaller, Vexes are bigger, Phantoms, Sea Creatures, Skeletons and Zombies are randomly scaled

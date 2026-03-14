@@ -28,14 +28,14 @@ public class EAINearestAttackableTarget<T extends LivingEntity> extends ILNeares
         this.unseenMemoryTicks = forgetTicks;
     }
 
-    public EAINearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, ObjTag<EntityType<? extends LivingEntity>> idTagMatcher, boolean mustSee, boolean mustReach, TargetingConditions targetingConditions) {
+    public EAINearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, ObjTag<EntityType<?>> idTagMatcher, boolean mustSee, boolean mustReach, TargetingConditions targetingConditions) {
         this(goalOwnerIn, targetClassIn, idTagMatcher, mustSee, mustReach, targetingConditions, 60);
     }
 
-    public EAINearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, ObjTag<EntityType<? extends LivingEntity>> idTagMatcher, boolean mustSee, boolean mustReach, TargetingConditions targetingConditions, int forgetTicks) {
+    public EAINearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, ObjTag<EntityType<?>> idTagMatcher, boolean mustSee, boolean mustReach, TargetingConditions targetingConditions, int forgetTicks) {
         this(goalOwnerIn, targetClassIn, mustSee, mustReach, targetingConditions);
-        this.targetEntitySelector.selector(living -> idTagMatcher.matches((EntityType<? extends LivingEntity>) living.getType()));
-        this.targetEntitySelectorXRay.selector(living -> idTagMatcher.matches((EntityType<? extends LivingEntity>) living.getType()));
+        this.targetEntitySelector.selector(living -> idTagMatcher.matches(living.getType()));
+        this.targetEntitySelectorXRay.selector(living -> idTagMatcher.matches(living.getType()));
         this.unseenMemoryTicks = forgetTicks;
     }
 
