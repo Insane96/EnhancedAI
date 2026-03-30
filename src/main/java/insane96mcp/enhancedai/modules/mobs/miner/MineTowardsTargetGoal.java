@@ -28,15 +28,17 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.event.ForgeEventFactory;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.mobs.miner.persistence.BlockRespawnData;
+import net.minecraftforge.common.ForgeMod;
+import net.minecraftforge.event.ForgeEventFactory;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
+
 
 public class MineTowardsTargetGoal extends Goal {
 	private final Mob miner;
@@ -207,19 +209,19 @@ public class MineTowardsTargetGoal extends Goal {
 	private void fillTargetBlocks() {
 		int mobHeight = Mth.ceil(this.miner.getBbHeight());
 		for (int i = 0; i < mobHeight; i++) {
-			BlockHitResult rayTrace = this.miner.level().clip(new ClipContext(this.miner.position().add(0, i + 0.5d, 0), this.target.getEyePosition(1f).add(0, i, 0), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.miner));
-			if (rayTrace.getType() == HitResult.Type.MISS
-					|| this.targetBlocks.contains(rayTrace.getBlockPos())
-					|| rayTrace.getBlockPos().getY() > MinerMobs.MAX_Y.get(this.miner))
+			BlockHitResult rayTraceResult = this.miner.level().clip(new ClipContext(this.miner.position().add(0, i + 0.5d, 0), this.target.getEyePosition(1f).add(0, i, 0), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.miner));
+			if (rayTraceResult.getType() == HitResult.Type.MISS
+					|| this.targetBlocks.contains(rayTraceResult.getBlockPos())
+					|| rayTraceResult.getBlockPos().getY() > MinerMobs.MAX_Y.get(this.miner))
 				continue;
 
-			double distance = this.miner.distanceToSqr(rayTrace.getLocation());
+			double distance = this.miner.distanceToSqr(rayTraceResult.getLocation());
 			if (distance > this.reachDistance * this.reachDistance)
 				continue;
 
-			BlockState state = this.miner.level().getBlockState(rayTrace.getBlockPos());
+			BlockState state = this.miner.level().getBlockState(rayTraceResult.getBlockPos());
 
-			if (state.getDestroySpeed(this.miner.level(), rayTrace.getBlockPos()) == -1
+			if (state.getDestroySpeed(this.miner.level(), rayTraceResult.getBlockPos()) == -1
 					|| (state.hasBlockEntity() && MinerMobs.blacklistTileEntities))
 				continue;
 
@@ -227,7 +229,7 @@ public class MineTowardsTargetGoal extends Goal {
 			if (listed != MinerMobs.blockBlacklistAsWhitelist)
 				continue;
 
-			this.targetBlocks.add(rayTrace.getBlockPos());
+			this.targetBlocks.add(rayTraceResult.getBlockPos());
 		}
 		Collections.reverse(this.targetBlocks);
 	}
@@ -261,10 +263,10 @@ public class MineTowardsTargetGoal extends Goal {
 	}
 
 	private boolean canBreakBlock() {
-		MinerMobs.ToolRequirement toolReq = MinerMobs.TOOL_REQUIREMENT.get(this.miner);
-		if (toolReq == MinerMobs.ToolRequirement.NONE || toolReq == MinerMobs.ToolRequirement.ANY_TOOL)
+		MinerMobs.ToolRequirement toolRequirement = MinerMobs.TOOL_REQUIREMENT.get(this.miner);
+		if (toolRequirement == MinerMobs.ToolRequirement.NONE || toolRequirement == MinerMobs.ToolRequirement.ANY_TOOL)
 			return true;
-		if (toolReq == MinerMobs.ToolRequirement.CORRECT_TOOL_FOR_REQUIRED && !this.blockState.requiresCorrectToolForDrops())
+		if ((toolRequirement == MinerMobs.ToolRequirement.CORRECT_TOOL_FOR_REQUIRED) && !this.blockState.requiresCorrectToolForDrops())
 			return true;
 		ItemStack stack = this.miner.getOffhandItem();
 		return !stack.isEmpty() && stack.isCorrectToolForDrops(this.blockState);
