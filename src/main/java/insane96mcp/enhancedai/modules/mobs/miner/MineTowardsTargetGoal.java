@@ -32,14 +32,11 @@ import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.ForgeEventFactory;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.mobs.miner.persistence.BlockRespawnData;
-import static insane96mcp.enhancedai.modules.mobs.miner.MinerMobs.blacklistTileEntities;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
-
-
 
 public class MineTowardsTargetGoal extends Goal {
 	private final Mob miner;
@@ -223,7 +220,7 @@ public class MineTowardsTargetGoal extends Goal {
 			BlockState state = this.miner.level().getBlockState(rayTrace.getBlockPos());
 
 			if (state.getDestroySpeed(this.miner.level(), rayTrace.getBlockPos()) == -1
-					|| (state.hasBlockEntity() && blacklistTileEntities))
+					|| (state.hasBlockEntity() && MinerMobs.blacklistTileEntities))
 				continue;
 
 			boolean listed = state.is(MinerMobs.BLOCK_BLACKLIST);
