@@ -114,7 +114,7 @@ public class MinerMobs extends Feature {
 
 	//Lowest priority so other mods can set persistent data
 	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public void onSpawn(EntityJoinLevelEvent event) {
+	public void onEntityJoinLevel(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
 				|| event.getLevel().isClientSide
 				|| !(event.getEntity() instanceof Mob mob)
