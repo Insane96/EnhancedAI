@@ -143,17 +143,16 @@ public class MineTowardsTargetGoal extends Goal {
 		if (this.breakingTick >= this.tickToBreak && this.miner.level() instanceof ServerLevel level) {
 			if (!ForgeEventFactory.onEntityDestroyBlock(this.miner, pos, this.blockState)) return;
 
-			int respawnTime = MinerMobs.BLOCK_RESPAWN_TIME.get(this.miner);
-			boolean scaleByHardness = MinerMobs.SCALE_RESPAWN_BY_HARDNESS.get(this.miner);
+			int respawnTime = MinerMobs.blockRespawnTime;
+            boolean willRespawn = respawnTime > 0;
+            boolean scaleByHardness = MinerMobs.scaleRespawnByHardness;
 
 			if (scaleByHardness) {
 				double hardness = Math.max(0, this.blockState.getDestroySpeed(level, pos));
-				int baseTime = MinerMobs.BASE_RESPAWN_TIME.get(this.miner);
-				double multiplier = MinerMobs.HARDNESS_RESPAWN_MULTIPLIER.get(this.miner);
-				respawnTime = (int) Math.ceil(baseTime + hardness * multiplier);
+				int baseTime = MinerMobs.baseRespawnTime;
+				double multiplier = MinerMobs.hardnessRespawnMultiplier;
+				respawnTime = (int) Math.ceil(hardness * multiplier + baseTime);
 			}
-
-			boolean willRespawn = respawnTime > 0;
 
 			CompoundTag blockNbt = null;
 			if (willRespawn && MinerMobs.shouldSaveBlockNBT(this.blockState)) {
