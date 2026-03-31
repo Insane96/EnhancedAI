@@ -51,11 +51,11 @@ public class MinerMobs extends Feature {
 	public static Boolean blacklistTileEntities = true;
 	@Config(description = "Mobs with Miner AI will spawn with a Stone Pickaxe that never drops.")
 	public static Boolean equipStonePick = true;
-	@Config(min = 0, max = 1200, description = "Time in ticks for a mined block to respawn. Set to 0 for no respawn. (20 ticks = 1 second)")
+	@Config(min = 0, max = 72000, description = "Time in ticks for a mined block to respawn. Set to 0 for no respawn. (20 ticks = 1 second)")
 	public static int blockRespawnTime = 0;
 	@Config(description = "If true, block respawn time will scale based on the block's hardness.")
 	public static boolean scaleRespawnByHardness = false;
-	@Config(min = 0, max = 1200, description = "Base respawn time in ticks for a block (used if scaling by hardness is enabled).")
+	@Config(min = 0, max = 72000, description = "Base respawn time in ticks for a block (used if scaling by hardness is enabled).")
 	public static int baseRespawnTime = 200;
 	@Config(min = 0d, max = 100d, description = "Multiplier applied to the block's hardness when calculating respawn time (used if scaling by hardness is enabled).")
 	public static double hardnessRespawnMultiplier = 100d;
