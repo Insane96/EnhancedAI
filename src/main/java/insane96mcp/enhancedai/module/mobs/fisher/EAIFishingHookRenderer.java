@@ -3,7 +3,6 @@ package insane96mcp.enhancedai.module.mobs.fisher;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -14,10 +13,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
@@ -25,7 +22,6 @@ import net.neoforged.api.distmarker.OnlyIn;
 public class EAIFishingHookRenderer extends EntityRenderer<EAIFishingHook> {
     private static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.withDefaultNamespace("textures/entity/fishing_hook.png");
     private static final RenderType RENDER_TYPE = RenderType.entityCutout(TEXTURE_LOCATION);
-    private static final double VIEW_BOBBING_SCALE = 960.0;
 
     public EAIFishingHookRenderer(EntityRendererProvider.Context context) {
         super(context);
@@ -79,35 +75,6 @@ public class EAIFishingHookRenderer extends EntityRenderer<EAIFishingHook> {
 
             poseStack.popPose();
             super.render(fishingHook, entityYaw, partialTicks, poseStack, buffer, packedLight);
-        }
-    }
-
-    private Vec3 getPlayerHandPos(Player player, float p_340872_, float partialTick) {
-        int i = player.getMainArm() == HumanoidArm.RIGHT ? 1 : -1;
-        ItemStack itemstack = player.getMainHandItem();
-        if (!itemstack.canPerformAction(net.neoforged.neoforge.common.ItemAbilities.FISHING_ROD_CAST)) {
-            i = -i;
-        }
-
-        if (this.entityRenderDispatcher.options.getCameraType().isFirstPerson() && player == Minecraft.getInstance().player) {
-            double d4 = VIEW_BOBBING_SCALE / (double)this.entityRenderDispatcher.options.fov().get().intValue();
-            Vec3 vec3 = this.entityRenderDispatcher
-                    .camera
-                    .getNearPlane()
-                    .getPointOnPlane((float)i * 0.525F, -0.1F)
-                    .scale(d4)
-                    .yRot(p_340872_ * 0.5F)
-                    .xRot(-p_340872_ * 0.7F);
-            return player.getEyePosition(partialTick).add(vec3);
-        } else {
-            float f = Mth.lerp(partialTick, player.yBodyRotO, player.yBodyRot) * (float) (Math.PI / 180.0);
-            double d0 = (double)Mth.sin(f);
-            double d1 = (double)Mth.cos(f);
-            float f1 = player.getScale();
-            double d2 = (double)i * 0.35 * (double)f1;
-            double d3 = 0.8 * (double)f1;
-            float f2 = player.isCrouching() ? -0.1875F : 0.0F;
-            return player.getEyePosition(partialTick).add(-d1 * d2 - d0 * d3, (double)f2 - 0.45 * (double)f1, -d0 * d2 + d1 * d3);
         }
     }
 
