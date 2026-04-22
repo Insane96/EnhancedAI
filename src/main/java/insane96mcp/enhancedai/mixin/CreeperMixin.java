@@ -1,6 +1,10 @@
 package insane96mcp.enhancedai.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import insane96mcp.enhancedai.module.creeper.DisableFallingSwelling;
+import insane96mcp.enhancedai.module.creeper.swell.CreeperSwell;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Creeper;
@@ -17,7 +21,7 @@ public class CreeperMixin extends Monster {
 		super(p_33002_, p_33003_);
 	}
 
-	/*@WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/monster/Creeper;playSound(Lnet/minecraft/sounds/SoundEvent;FF)V"), method = "tick()V")
+	@WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/monster/Creeper;playSound(Lnet/minecraft/sounds/SoundEvent;FF)V"), method = "tick()V")
 	public void tickOnPlaySound(net.minecraft.world.entity.monster.Creeper instance, SoundEvent soundEvent, float volume, float pitch, Operation<Void> original) {
 		CreeperSwell.FuseExplodeSounds fuseExplodeSounds = CreeperSwell.FuseExplodeSounds.get(instance);
 		if (fuseExplodeSounds == CreeperSwell.FuseExplodeSounds.NONE) {
@@ -26,7 +30,7 @@ public class CreeperMixin extends Monster {
 		}
         //noinspection DataFlowIssue
         this.playSound(fuseExplodeSounds.fuse.get(), volume, 1f);
-	}*/
+	}
 
 	@Inject(method = "causeFallDamage", at = @At("HEAD"), cancellable = true)
 	public void causeFallDamage(float distance, float damageMultiplier, DamageSource source, CallbackInfoReturnable<Boolean> cir) {

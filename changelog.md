@@ -1,7 +1,10 @@
-## Upcoming
+## 4.1.0.0
+The mod is no longer server side only
+* Added back Fisher Mobs and Web Throwers
+* Added back Angry Creepers sound effects
 * Added back Custom Targeting
   * Skeleton and Zombie horses are now hostile towards the player
-* Skeleton horses can no longer be neutral and scared by players (from Animals scared attack feature), but check Custom Targeting
+* Skeleton horses can no longer be neutral and scared by players (from Animals scared attack feature), but have been added to Custom Targeting
 
 ## 4.0.1.0-beta
 * Updated MPR Integration data pack, porting stuff from Insane Survival Overhaul

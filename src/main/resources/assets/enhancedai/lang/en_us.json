@@ -1,0 +1,10 @@
+{
+	"enhancedai.subtitle.angry_creeper_fuse": "Angry Creeper about to explode",
+	"enhancedai.subtitle.angry_creeper_explode": "Angry Creeper explodes",
+
+    "death.attack.bite": "%s was bitten by %s",
+    "death.attack.shockwave": "%s was shocked by %s",
+
+	"attribute.name.xray_follow_range": "Mob XRay Follow Range",
+	"attribute.name.push_resistance": "Push Resistance"
+}

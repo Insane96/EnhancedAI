@@ -13,6 +13,8 @@ import insane96mcp.enhancedai.module.mobs.MeleeAttacking;
 import insane96mcp.enhancedai.module.mobs.miner.MinerMobs;
 import insane96mcp.enhancedai.module.mobs.targeting.Targeting;
 import insane96mcp.enhancedai.setup.EAIAttributes;
+import insane96mcp.enhancedai.setup.EAIEntities;
+import insane96mcp.enhancedai.setup.EAISounds;
 import insane96mcp.insanelib.core.feature.Feature;
 import insane96mcp.insanelib.setup.ILModConfig;
 import net.minecraft.commands.CommandBuildContext;
@@ -44,9 +46,9 @@ public class EnhancedAI
         modContainer.registerConfig(ModConfig.Type.COMMON, CONFIG.spec, MOD_ID + "/common.toml");
 
         NeoForge.EVENT_BUS.register(this);
-        //EAISounds.SOUND_EVENTS.register(eventBus);
+        EAISounds.SOUND_EVENTS.register(eventBus);
         EAIAttributes.ATTRIBUTES.register(eventBus);
-        //EAIEntities.ENTITIES.register(eventBus);
+        EAIEntities.ENTITIES.register(eventBus);
 
         eventBus.addListener(MinerMobs::addAttribute);
         eventBus.addListener(AnimalScaredAttack::attribute);

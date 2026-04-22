@@ -5,6 +5,7 @@ import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.mixin.accessors.CreeperAccessor;
 import insane96mcp.enhancedai.module.EAIModules;
 import insane96mcp.enhancedai.module.mobs.Spawning;
+import insane96mcp.enhancedai.setup.EAISounds;
 import insane96mcp.enhancedai.utils.GoalHelper;
 import insane96mcp.insanelib.core.feature.Feature;
 import insane96mcp.insanelib.core.feature.LoadFeature;
@@ -18,22 +19,29 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.SwellGoal;
 import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.EntityLeaveLevelEvent;
+import net.neoforged.neoforge.event.level.ExplosionEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
+
+import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 @LoadFeature(module = EAIModules.CREEPER, description = "Various changes to Creepers exploding. Ignoring Walls, Walking Fuse and smarter exploding based off explosion size. Only creepers in the enhancedai:creeper/change_swell entity type tag are affected by this feature.")
 public class CreeperSwell extends Feature {
 	public static final TagKey<EntityType<?>> CHANGE_CREEPER_SWELL = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("creeper/change_swell"));
 
-	//TODO Move sounds to client mod
 	@Config(min = 0d, max = 1d, description = "Percentage chance for a Creeper to keep walking while exploding. This is overwritten if the creeper has the beta property.")
 	public static Double walkingFuse$chance = 0.1d;
 	@Config(min = -1d, max = 64d, description = "Speed modifier when a walking fuse creeper is swelling.")
@@ -52,8 +60,8 @@ public class CreeperSwell extends Feature {
 	public static Double angry$chance = 0.03d;
 	@Config(description = "If true, Angry Creeper emits particles")
 	public static Boolean angry$particles = true;
-	//@Config(description = "The special sound effect that the Angry Creeper plays")
-	//public static FuseExplodeSounds angry$sounds = FuseExplodeSounds.CENA;
+	@Config(description = "The special sound effect that the Angry Creeper plays")
+	public static FuseExplodeSounds angry$sounds = FuseExplodeSounds.CENA;
 	@Config(description = "If true, Angry Creeper will have a name")
 	public static Boolean angry$name = true;
 	@Config(description = "When ignited, Angry Creeper will not stop swelling")
@@ -115,7 +123,7 @@ public class CreeperSwell extends Feature {
 				}
 				if (angry$forceExplosion)
 					FORCE_EXPLODE.apply(creeper, true);
-				//EXPLOSION_SOUND.apply(creeper, angry$sounds.name);
+				EXPLOSION_SOUND.apply(creeper, angry$sounds.name);
 			}
 			else {
 				compoundNBT.putShort("Fuse", (short) 30);
@@ -130,14 +138,14 @@ public class CreeperSwell extends Feature {
 				}
 				if (angry$forceExplosion)
 					FORCE_EXPLODE.apply(creeper, false);
-				//EXPLOSION_SOUND.apply(creeper, FuseExplodeSounds.NONE.name);
+				EXPLOSION_SOUND.apply(creeper, FuseExplodeSounds.NONE.name);
 			}
 			creeper.readAdditionalSaveData(compoundNBT);
 		});
-		//EXPLOSION_SOUND = EAIData.ofString(this.createDataKey("explosion_sound"));
+		EXPLOSION_SOUND = EAIData.ofString(this.createDataKey("explosion_sound"));
 	}
 
-	/*@SubscribeEvent
+	@SubscribeEvent
 	public void explosionStartEvent(ExplosionEvent.Detonate event) {
 		if (!this.isEnabled())
 			return;
@@ -151,7 +159,7 @@ public class CreeperSwell extends Feature {
 		if (fuseExplodeSounds != FuseExplodeSounds.NONE)
             //noinspection DataFlowIssue
             living.playSound(fuseExplodeSounds.explode.get(), 4.0f, 1f);
-	}*/
+	}
 
 	//Lowest priority so other mods can set persistent data
 	@SubscribeEvent(priority = EventPriority.LOWEST)
@@ -218,7 +226,7 @@ public class CreeperSwell extends Feature {
 		}
 	}
 
-	/*public enum FuseExplodeSounds {
+	public enum FuseExplodeSounds {
 		NONE("none", null, null),
 		CENA("cena", EAISounds.CREEPER_CENA_FUSE, EAISounds.CREEPER_CENA_EXPLODE),
 		WTF_BOOM("wtf_boom", EAISounds.WTF_BOOM_FUSE, EAISounds.WTF_BOOM_EXPLODE),
@@ -246,7 +254,7 @@ public class CreeperSwell extends Feature {
 			}
 			return NONE;
 		}
-	}*/
+	}
 
 	public enum BlowUpOnDeath {
 		NONE,

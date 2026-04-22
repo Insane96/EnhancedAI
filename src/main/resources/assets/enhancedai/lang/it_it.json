@@ -1,0 +1,10 @@
+{
+	"enhancedai.subtitle.angry_creeper_fuse": "Creeper incacchiato sta per esplodere",
+	"enhancedai.subtitle.angry_creeper_explode": "Creeper incacchiato esplode",
+
+	"death.attack.bite": "%s è stato morso/a da %s",
+	"death.attack.shockwave": "%s è stato travolto dall'onda d'urto di %s",
+	
+	"attribute.name.xray_follow_range": "Raggio di rilevamento delle creature XRay",
+	"attribute.name.push_resistance": "Resistenza alla spinta"
+}
