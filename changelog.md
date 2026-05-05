@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.3.7.0
+* Miner mobs' blocks broken can now regenerate back (disabled by default)
+  * Tool requirement is now "ANY_TOOL" by default
+
 ## 3.3.6.4
 * Crash fix with MPR change_data when applying an enum value (e.g. `enhancedai:miner_mobs/tool_requirement`)
 
