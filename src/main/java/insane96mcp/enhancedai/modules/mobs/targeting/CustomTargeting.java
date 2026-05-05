@@ -3,7 +3,6 @@ package insane96mcp.enhancedai.modules.mobs.targeting;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.insanelib.base.JsonFeature;
 import insane96mcp.insanelib.base.Module;
-import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.data.IdTagMatcher;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -17,19 +16,12 @@ import java.util.List;
 
 public class CustomTargeting extends JsonFeature {
 
-	public static final String IS_NEUTRAL = EnhancedAI.RESOURCE_PREFIX + "is_neutral";
-
 	public static final List<CustomHostileConfig> CUSTOM_HOSTILE_DEFAULT_LIST = List.of(
 			new CustomHostileConfig(2, IdTagMatcher.newTag("enhancedai:config/can_attack_villagers"), IdTagMatcher.newId("minecraft:villager"), 0.5f),
 			new CustomHostileConfig(2, IdTagMatcher.newTag("enhancedai:config/can_attack_iron_golem"), IdTagMatcher.newId("minecraft:iron_golem"), 0.5f)
 	);
 
 	public static final List<CustomHostileConfig> customHostile = new ArrayList<>();
-
-    @Config(description = "Chance for a mob to be able to forget about it's target. If the mob can forget the target it will forget about it after 'Unseen forgot ticks' have passed.")
-    public static Double forgetTargetChance = 0.1d;
-    @Config(description = "If the mob can forget the target it will forget about it after this amount of ticks have passed while not seeing the target.")
-    public static Integer unseenForgotTicks = 400;
 
 	@Override
 	public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {

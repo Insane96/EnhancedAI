@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.3.6.4
+* Crash fix with MPR change_data when applying an enum value (e.g. `enhancedai:miner_mobs/tool_requirement`)
+
 ## 3.3.6.3
 * Fixed angry creepers not blowing up on death
 
