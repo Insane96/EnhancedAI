@@ -1,6 +1,8 @@
 package insane96mcp.enhancedai.modules.mobs.miner;
 
+import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.mobs.MeleeAttacking;
+import insane96mcp.enhancedai.modules.mobs.miner.persistence.BlockRespawnData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -28,11 +30,8 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import insane96mcp.enhancedai.EnhancedAI;
-import insane96mcp.enhancedai.modules.mobs.miner.persistence.BlockRespawnData;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.ForgeEventFactory;
-
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -143,14 +142,14 @@ public class MineTowardsTargetGoal extends Goal {
 		if (this.breakingTick >= this.tickToBreak && this.miner.level() instanceof ServerLevel level) {
 			if (!ForgeEventFactory.onEntityDestroyBlock(this.miner, pos, this.blockState)) return;
 
-			int respawnTime = MinerMobs.blockRespawnTime;
+			int respawnTime = MinerMobs.blockRespawn$time;
             boolean willRespawn = respawnTime > 0;
-            boolean scaleByHardness = MinerMobs.scaleRespawnByHardness;
+            boolean scaleByHardness = MinerMobs.blockRespawn$scaleTimeByHardness;
 
 			if (scaleByHardness) {
 				double hardness = Math.max(0, this.blockState.getDestroySpeed(level, pos));
-				int baseTime = MinerMobs.baseRespawnTime;
-				double multiplier = MinerMobs.hardnessRespawnMultiplier;
+				int baseTime = MinerMobs.blockRespawn$respawnByHardnessBaseTime;
+				double multiplier = MinerMobs.blockRespawn$hardnessRespawnMultiplier;
 				respawnTime = (int) Math.ceil(hardness * multiplier + baseTime);
 			}
 
@@ -164,7 +163,8 @@ public class MineTowardsTargetGoal extends Goal {
 			if (willRespawn) {
 				// Remove block without drops, record for respawn
 				level.removeBlockEntity(pos);
-				level.setBlock(pos, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 3);
+				//level.setBlock(pos, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 3);
+				this.miner.level().destroyBlock(pos, false, this.miner);
 
 				long respawnAt = level.getGameTime() + respawnTime;
 				BlockRespawnData data = BlockRespawnData.get(level);
@@ -175,7 +175,8 @@ public class MineTowardsTargetGoal extends Goal {
 			}
 			else {
 				// Normal destruction with drops
-				if (this.miner.getItemBySlot(EquipmentSlot.OFFHAND).isCorrectToolForDrops(this.blockState)) {
+				if ((!this.blockState.requiresCorrectToolForDrops() || this.miner.getItemBySlot(EquipmentSlot.OFFHAND).isCorrectToolForDrops(this.blockState))
+						&& this.miner.level().destroyBlock(pos, false, this.miner)) {
 					BlockEntity blockEntity = this.blockState.hasBlockEntity() ? level.getBlockEntity(pos) : null;
 					LootParams.Builder lootparams = (new LootParams.Builder(level))
 							.withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
@@ -185,7 +186,6 @@ public class MineTowardsTargetGoal extends Goal {
 					this.blockState.spawnAfterBreak(level, pos, this.miner.getOffhandItem(), false);
 					this.blockState.getDrops(lootparams).forEach(stack ->
 							level.addFreshEntity(new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack)));
-					level.removeBlock(pos, false);
 				}
 			}
 

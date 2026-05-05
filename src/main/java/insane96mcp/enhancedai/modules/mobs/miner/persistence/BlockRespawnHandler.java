@@ -5,14 +5,12 @@ import insane96mcp.enhancedai.modules.mobs.miner.MinerMobs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -41,7 +39,7 @@ public class BlockRespawnHandler {
                 BlockPos pos = entry.getKey();
                 BlockRespawnData.RespawnEntry info = entry.getValue();
 
-                if (time >= info.time) {
+                if (time >= info.time()) {
                     try {
                         BlockState existing = level.getBlockState(pos);
                         if (!existing.isAir()) {
@@ -87,27 +85,21 @@ public class BlockRespawnHandler {
                             level.removeBlock(pos, false);
                         }
 
-                        // --- Push any entities up to avoid suffocation ---
-                        AABB box = new AABB(pos);
-                        for (Entity e : level.getEntities(null, box)) {
-                            e.setPos(e.getX(), e.getY() + 1.0, e.getZ());
-                        }
-
                         // --- Restore the saved block ---
-                        level.setBlock(pos, info.state, 3);
+                        level.setBlock(pos, info.state(), 3);
 
                         // --- Restore NBT if tile entity ---
-                        if (info.nbt != null) {
+                        if (info.nbt() != null) {
                             BlockEntity be = level.getBlockEntity(pos);
                             if (be != null) {
-                                be.load(info.nbt);
+                                be.load(info.nbt());
                                 be.setChanged();
                             } else {
                                 EnhancedAI.LOGGER.warn("BlockEntity missing at {} when respawning; NBT skipped.", pos);
                             }
                         }
 
-                        EnhancedAI.LOGGER.debug("Respawned block {} at {}", info.state.getBlock().getName().getString(), pos);
+                        EnhancedAI.LOGGER.debug("Respawned block {} at {}", info.state().getBlock().getName().getString(), pos);
 
                     } catch (Exception e) {
                         EnhancedAI.LOGGER.warn("Failed to respawn block at {}: {}", pos, e.getMessage());

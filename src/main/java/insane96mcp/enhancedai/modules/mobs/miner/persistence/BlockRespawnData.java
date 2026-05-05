@@ -1,14 +1,16 @@
 package insane96mcp.enhancedai.modules.mobs.miner.persistence;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.*;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.saveddata.SavedData;
-import net.minecraft.core.HolderGetter;
-import net.minecraft.nbt.NbtUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,17 +19,13 @@ public class BlockRespawnData extends SavedData {
 
 	private final Map<BlockPos, RespawnEntry> respawnEntries = new HashMap<>();
 
-	public static class RespawnEntry {
-		public final long time;
-		public final BlockState state;
-		public final CompoundTag nbt;
-
-		public RespawnEntry(long time, BlockState state, CompoundTag nbt) {
-			this.time = time;
-			this.state = state;
-			this.nbt = nbt != null ? nbt.copy() : null;
+	public record RespawnEntry(long time, BlockState state, CompoundTag nbt) {
+			public RespawnEntry(long time, BlockState state, CompoundTag nbt) {
+				this.time = time;
+				this.state = state;
+				this.nbt = nbt != null ? nbt.copy() : null;
+			}
 		}
-	}
 
 	public BlockRespawnData() {}
 

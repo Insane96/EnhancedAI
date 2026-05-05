@@ -18,13 +18,13 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraft.world.level.block.Block;
 
 import java.util.List;
 
@@ -36,7 +36,7 @@ public class MinerMobs extends Feature {
 	@Config(min = 0d, max = 1d, description = "Chance for a mob in the entity type tag enhancedai:can_be_miner to spawn with the miner ability")
 	public static Double minerChance = 0.07d;
 	@Config(description = "NONE: No item is required. ANY_TOOL: Any item that can break blocks in the off-hand is required. CORRECT_TOOL_FOR_REQUIRED: The mob is able to mine any blocks that don't require a tool, and require a tool for blocks that require it (e.g. can always mine dirt but can't mine stone). CORRECT_TOOL_FOR_ANY_BLOCK: The mob can only mine blocks if the tool is the right one for the block (e.g. can mine dirt only with a shovel).")
-	public static ToolRequirement toolRequirement = ToolRequirement.CORRECT_TOOL_FOR_REQUIRED;
+	public static ToolRequirement toolRequirement = ToolRequirement.ANY_TOOL;
 	@Config(min = -512, max = 1024, description = "Mobs can mine from the bottom of the world to this Y level.")
 	public static Integer maxY = 320;
 	@Config(min = 0, max = 128, description = "The maximum distance from the target at which the Mobs can mine. Set to 0 to always mine.")
