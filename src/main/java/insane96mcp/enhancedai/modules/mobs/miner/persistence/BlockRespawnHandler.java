@@ -45,9 +45,8 @@ public class BlockRespawnHandler {
                     try {
                         BlockState existing = level.getBlockState(pos);
                         if (!existing.isAir()) {
-                            if(!MinerMobs.usePickaxeDrop) {
-                                BlockEntity existingBe = level.getBlockEntity(pos);
-
+                            BlockEntity existingBe = level.getBlockEntity(pos);
+                            if (!MinerMobs.blockRespawn$usePickaxeDrop) {
                                 if (existingBe instanceof net.minecraft.world.Container container &&
                                         !(existingBe instanceof net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity)) {
                                     net.minecraft.world.Containers.dropContents(level, pos, container);
@@ -69,10 +68,9 @@ public class BlockRespawnHandler {
                                     level.addFreshEntity(itemEntity);
                                 }
 
-                                level.removeBlock(pos, false);
-                            } else {
-                                BlockEntity existingBe = level.getBlockEntity(pos);
-                            // --- drop blocks obstructing respawn like mining with a pickaxe ---
+                            }
+                            else {
+                                // --- drop blocks obstructing respawn like mining with a pickaxe ---
                                 LootParams.Builder lootBuilder = new LootParams.Builder(level)
                                         .withParameter(LootContextParams.ORIGIN, pos.getCenter())
                                         .withOptionalParameter(LootContextParams.BLOCK_ENTITY, existingBe)
@@ -85,8 +83,8 @@ public class BlockRespawnHandler {
                                             drop));
                                 }
                                 existing.spawnAfterBreak(level, pos, ItemStack.EMPTY, false);
-                                level.removeBlock(pos, false);
                             }
+                            level.removeBlock(pos, false);
                         }
 
                         // --- Push any entities up to avoid suffocation ---
