@@ -1,3 +1,6 @@
+## Upcoming
+* Lowered max follow range override and increased min xray range
+
 ## 4.1.0.0
 The mod is no longer server side only
 * Added back Fisher Mobs and Web Throwers
