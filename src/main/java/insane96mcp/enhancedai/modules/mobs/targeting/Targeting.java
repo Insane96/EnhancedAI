@@ -27,6 +27,8 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NonTameRandomTargetGoal;
+import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.monster.Vindicator;
@@ -188,19 +190,21 @@ public class Targeting extends JsonFeature {
 		TARGET_CHANCE.applyIfAbsent(mob, betterHurtByTarget$targetChance);
 	}
 
-    private static EAINearestAttackableTarget<? extends LivingEntity> createTargetGoal(Mob mob, NearestAttackableTargetGoal<?> goal) {
-        EAINearestAttackableTarget<? extends LivingEntity> newTargetGoal = new EAINearestAttackableTarget<>(mob, goal.targetType, false, true, goal.targetConditions);;
+    private static EAINearestAttackableTarget<? extends LivingEntity> createTargetGoal(Mob mob, NearestAttackableTargetGoal<?> originalGoal) {
+        EAINearestAttackableTarget<? extends LivingEntity> newTargetGoal = new EAINearestAttackableTarget<>(mob, originalGoal.targetType, false, true, originalGoal.targetConditions);
 
         if (mob instanceof Spider spider)
-            newTargetGoal = new EAISpiderTargetGoal<>(spider, goal.targetType, false, true, goal.targetConditions);
-        else if (mob instanceof Vindicator vindicator && goal instanceof Vindicator.VindicatorJohnnyAttackGoal)
-            newTargetGoal = new EAIVindicatorJohnnyTargetGoal(vindicator, false, true, goal.targetConditions);
+            newTargetGoal = new EAISpiderTargetGoal<>(spider, originalGoal.targetType, false, true, originalGoal.targetConditions);
+        else if (mob instanceof Vindicator vindicator && originalGoal instanceof Vindicator.VindicatorJohnnyAttackGoal)
+            newTargetGoal = new EAIVindicatorJohnnyTargetGoal(vindicator, false, true, originalGoal.targetConditions);
         else if (mob instanceof Shulker shulker) {
-            if (goal instanceof Shulker.ShulkerNearestAttackGoal)
-                newTargetGoal = new EAIShulkerNearestAttackTargetGoal<>(shulker, goal.targetType, false, true, goal.targetConditions);
-            else if (goal instanceof Shulker.ShulkerDefenseAttackGoal)
-                newTargetGoal = new EAIShulkerNearestDefenseTargetGoal<>(shulker, goal.targetType, false, true, goal.targetConditions);
+            if (originalGoal instanceof Shulker.ShulkerNearestAttackGoal)
+                newTargetGoal = new EAIShulkerNearestAttackTargetGoal<>(shulker, originalGoal.targetType, false, true, originalGoal.targetConditions);
+            else if (originalGoal instanceof Shulker.ShulkerDefenseAttackGoal)
+                newTargetGoal = new EAIShulkerNearestDefenseTargetGoal<>(shulker, originalGoal.targetType, false, true, originalGoal.targetConditions);
         }
+		else if (mob instanceof Wolf wolf && originalGoal instanceof NonTameRandomTargetGoal<?>)
+			newTargetGoal = new EAINonTameRandomTargetGoal<>(wolf, originalGoal.targetType, false, true, originalGoal.targetConditions);
 
         return newTargetGoal;
     }

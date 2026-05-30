@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.3.7.1
+* Fixed tamed wolves attacking sheep and baby turtles
+
 ## 3.3.7.0
 * Miner mobs' blocks broken can now regenerate back (disabled by default)
   * Tool requirement is now "ANY_TOOL" by default
