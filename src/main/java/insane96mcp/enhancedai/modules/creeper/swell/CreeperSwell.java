@@ -73,7 +73,7 @@ public class CreeperSwell extends Feature {
 	@Config(min = 0d, max = 12d, description = "Explosion power of Angry Creeper")
 	public static Double angry$explosionPower = 4d;
 	@Config(description = "Makes creepers blow up on death like when they were added back in 0.30")
-	public static BlowUpOnDeath blowUpOnDeath = BlowUpOnDeath.CHARGED;
+	public static BlowUpOnDeath blowUpOnDeath = BlowUpOnDeath.NONE;
 	@Config(description = "If Insane's Survival Overhaul is installed and Explosion Overhaul feature is enabled, Angry creeper will deal more knockback and break more blocks, breaching creepers will break more blocks")
 	public static Boolean insaneSurvivalOverhaulIntegration = true;
 
@@ -140,6 +140,7 @@ public class CreeperSwell extends Feature {
 					FORCE_EXPLODE.apply(creeper, false);
 				EXPLOSION_SOUND.apply(creeper, FuseExplodeSounds.NONE.name);
 			}
+			BLOW_UP_ON_DEATH.apply(creeper, blowUpOnDeath == BlowUpOnDeath.ALL || (blowUpOnDeath == BlowUpOnDeath.CHARGED && creeper.isPowered()) || (ANGRY.get(creeper) && angry$explodeOnDeath));
 			creeper.readAdditionalSaveData(compoundNBT);
 			MessageCreeperDataSync.syncCreeperToPlayers(creeper);
 		});
