@@ -15,7 +15,7 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-@LoadFeature(module = EAIModules.MOBS, description = "Use `config/enhancedai/Custom targeting` to set custom targeting")
+@LoadFeature(module = EAIModules.MOBS, description = "Use `config/enhancedai/Custom targeting` to set custom targeting. This might not work properly as the targeting system is not meant to be expanded like this. This is not applied through Data Keys, so can't be changed at runtime.")
 public class CustomTargeting extends JsonFeature {
 
 	public static final List<CustomHostileData> CUSTOM_HOSTILE_DEFAULT_LIST = List.of(
