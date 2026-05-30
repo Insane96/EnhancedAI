@@ -2,6 +2,7 @@
 
 ## 3.3.7.1
 * Fixed tamed wolves attacking sheep and baby turtles
+* Fixed angry creepers not blowing up on death
 
 ## 3.3.7.0
 * Miner mobs' blocks broken can now regenerate back (disabled by default)
