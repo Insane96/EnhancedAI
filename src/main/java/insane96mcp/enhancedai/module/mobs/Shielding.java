@@ -36,6 +36,7 @@ public class Shielding extends JsonFeature {
 			ObjTagValue.of("minecraft:shield", 0.20d, Registries.ITEM),
 			ObjTagValue.of("shieldsplus:wooden_shield", 0.10d, Registries.ITEM),
 			ObjTagValue.of("shieldsplus:stone_shield", 0.15d, Registries.ITEM),
+			ObjTagValue.of("shieldsplus:copper_shield", 0.15d, Registries.ITEM),
 			ObjTagValue.of("shieldsplus:iron_shield", 0.20d, Registries.ITEM),
 			ObjTagValue.of("shieldsplus:golden_shield", 0.10d, Registries.ITEM),
 			ObjTagValue.of("shieldsplus:diamond_shield", 0.30d, Registries.ITEM),
