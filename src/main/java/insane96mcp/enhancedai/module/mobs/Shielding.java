@@ -45,7 +45,7 @@ public class Shielding extends JsonFeature {
 	);
 	public static final List<ObjTagValue<Item>> shieldBlockChance = new ArrayList<>();
 
-	@Config
+	@Config(min = 0, max = 1)
 	public static double chanceToEquip = 0.08d;
 
 	public static ResourceLocation HAS_SHIELD_BEEN_GIVEN;
