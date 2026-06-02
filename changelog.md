@@ -1,6 +1,7 @@
 ## Upcoming
 * Lowered max follow range override and increased min xray range
 * Added Shields+'s copper shield to chances to block
+* Skeletons can no longer sprint
 
 ## 4.1.0.0
 The mod is no longer server side only
