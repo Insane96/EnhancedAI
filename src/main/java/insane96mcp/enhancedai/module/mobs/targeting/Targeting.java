@@ -78,7 +78,7 @@ public class Targeting extends Feature {
 	@Config(description = "1 in x chance every other tick for a mob to target a nearby entity. Vanilla is 10. Setting to 0 will make the mob instantly target entities. The higher the more time will take mobs to target entities.")
 	public static Integer betterHurtByTarget$targetChance = 7;
 	@Config(min = 0d, max = 1d, description = "Chances for a mob to spawn neutral (so will not attack players until provoked)")
-	public static DifficultyBasedConfig betterNearbyTargeting$neutralChances = new DifficultyBasedConfig(0.25d, 0.10d, 0.04d);
+	public static DifficultyBasedConfig betterNearbyTargeting$neutralChances = new DifficultyBasedConfig(0.15d, 0.10d, 0.05d);
 
 	@Config(description = "Mobs will be able to find better and longer paths to the target the higher this value is. The higher the more performance heavy. Only entity types in the tag `enhancedai:mobs/targeting/visited_nodes_multiplier` tag will be affected by this. Vanilla is 1.0")
 	public static Double maxVisitedNodesMultiplier = 4d;
