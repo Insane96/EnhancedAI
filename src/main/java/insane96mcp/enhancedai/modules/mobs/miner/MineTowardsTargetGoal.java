@@ -1,7 +1,10 @@
 package insane96mcp.enhancedai.modules.mobs.miner;
 
+import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.modules.mobs.MeleeAttacking;
+import insane96mcp.enhancedai.modules.mobs.miner.persistence.BlockRespawnData;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -35,8 +38,8 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
-public class MineTowardsTargetGoal extends Goal {
 
+public class MineTowardsTargetGoal extends Goal {
 	private final Mob miner;
 	private LivingEntity target;
 	private final double reachDistance;
@@ -51,7 +54,7 @@ public class MineTowardsTargetGoal extends Goal {
 
 	private Path path = null;
 
-	public MineTowardsTargetGoal(Mob miner){
+	public MineTowardsTargetGoal(Mob miner) {
 		this.miner = miner;
 		this.reachDistance = miner.getAttribute(ForgeMod.BLOCK_REACH.get()) == null ? 4.5 : miner.getAttributeValue(ForgeMod.BLOCK_REACH.get());
 		this.setFlags(EnumSet.of(Flag.LOOK, Flag.MOVE));
@@ -75,7 +78,6 @@ public class MineTowardsTargetGoal extends Goal {
 			return false;
 		if (this.blockState != null && !this.canBreakBlock())
 			return false;
-
 		if (this.target == null || !this.target.isAlive())
 			return false;
 
@@ -119,24 +121,74 @@ public class MineTowardsTargetGoal extends Goal {
 		BlockPos pos = this.targetBlocks.get(0);
 		this.breakingTick++;
 		this.miner.getLookControl().setLookAt(pos.getX() + 0.5d, pos.getY() + 0.5d, pos.getZ() + 0.5d);
-		if (this.prevBreakProgress != (int) ((this.breakingTick / (float) this.tickToBreak) * 10)) {
-			this.prevBreakProgress = (int) ((this.breakingTick / (float) this.tickToBreak) * 10);
-			this.miner.level().destroyBlockProgress(this.miner.getId(), pos, this.prevBreakProgress);
+
+		// progress visuals
+		int progress = (int) ((this.breakingTick / (float) this.tickToBreak) * 10);
+		if (this.prevBreakProgress != progress) {
+			this.prevBreakProgress = progress;
+			this.miner.level().destroyBlockProgress(this.miner.getId(), pos, progress);
 		}
-		if (this.breakingTick % 6 == 0) {
+
+		if (this.breakingTick % 6 == 0)
 			this.miner.swing(InteractionHand.MAIN_HAND);
-		}
+
 		if (this.breakingTick % 4 == 0) {
 			SoundType soundType = this.blockState.getSoundType(this.miner.level(), pos, this.miner);
-			this.miner.level().playSound(null, pos, soundType.getHitSound(), SoundSource.BLOCKS, (soundType.getVolume() + 1.0F) / 8.0F, soundType.getPitch() * 0.5F);
+			this.miner.level().playSound(null, pos, soundType.getHitSound(), SoundSource.BLOCKS,
+					(soundType.getVolume() + 1.0F) / 8.0F, soundType.getPitch() * 0.5F);
 		}
+
+		// --- Respawn-aware block breaking ---
 		if (this.breakingTick >= this.tickToBreak && this.miner.level() instanceof ServerLevel level) {
-			if (ForgeEventFactory.onEntityDestroyBlock(this.miner, this.targetBlocks.get(0), this.blockState) && this.miner.level().destroyBlock(pos, false, this.miner) && (!this.blockState.requiresCorrectToolForDrops() || this.miner.getItemBySlot(EquipmentSlot.OFFHAND).isCorrectToolForDrops(this.blockState))) {
-				BlockEntity blockentity = this.blockState.hasBlockEntity() ? this.miner.level().getBlockEntity(pos) : null;
-				LootParams.Builder lootparams$builder = (new LootParams.Builder(level)).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos)).withParameter(LootContextParams.TOOL, this.miner.getOffhandItem()).withOptionalParameter(LootContextParams.BLOCK_ENTITY, blockentity).withOptionalParameter(LootContextParams.THIS_ENTITY, this.miner);
-				this.blockState.spawnAfterBreak(level, pos, this.miner.getOffhandItem(), false);
-				this.blockState.getDrops(lootparams$builder).forEach((itemStack) -> level.addFreshEntity(new ItemEntity(level, pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f, itemStack)));
+			if (!ForgeEventFactory.onEntityDestroyBlock(this.miner, pos, this.blockState)) return;
+
+			int respawnTime = MinerMobs.blockRespawn$time;
+            boolean willRespawn = respawnTime > 0;
+            boolean scaleByHardness = MinerMobs.blockRespawn$scaleTimeByHardness;
+
+			if (scaleByHardness) {
+				double hardness = Math.max(0, this.blockState.getDestroySpeed(level, pos));
+				int baseTime = MinerMobs.blockRespawn$respawnByHardnessBaseTime;
+				double multiplier = MinerMobs.blockRespawn$hardnessRespawnMultiplier;
+				respawnTime = (int) Math.ceil(hardness * multiplier + baseTime);
 			}
+
+			CompoundTag blockNbt = null;
+			if (willRespawn && MinerMobs.shouldSaveBlockNBT(this.blockState)) {
+				BlockEntity blockEntity = level.getBlockEntity(pos);
+				if (blockEntity != null)
+					blockNbt = blockEntity.saveWithFullMetadata();
+			}
+
+			if (willRespawn) {
+				// Remove block without drops, record for respawn
+				level.removeBlockEntity(pos);
+				//level.setBlock(pos, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 3);
+				this.miner.level().destroyBlock(pos, false, this.miner);
+
+				long respawnAt = level.getGameTime() + respawnTime;
+				BlockRespawnData data = BlockRespawnData.get(level);
+				data.set(pos, respawnAt, this.blockState, blockNbt);
+
+				EnhancedAI.LOGGER.debug("Scheduled respawn for block {} at {} after {} ticks",
+						this.blockState.getBlock().getName().getString(), pos, respawnTime);
+			}
+			else {
+				// Normal destruction with drops
+				if ((!this.blockState.requiresCorrectToolForDrops() || this.miner.getItemBySlot(EquipmentSlot.OFFHAND).isCorrectToolForDrops(this.blockState))
+						&& this.miner.level().destroyBlock(pos, false, this.miner)) {
+					BlockEntity blockEntity = this.blockState.hasBlockEntity() ? level.getBlockEntity(pos) : null;
+					LootParams.Builder lootparams = (new LootParams.Builder(level))
+							.withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
+							.withParameter(LootContextParams.TOOL, this.miner.getOffhandItem())
+							.withOptionalParameter(LootContextParams.BLOCK_ENTITY, blockEntity)
+							.withOptionalParameter(LootContextParams.THIS_ENTITY, this.miner);
+					this.blockState.spawnAfterBreak(level, pos, this.miner.getOffhandItem(), false);
+					this.blockState.getDrops(lootparams).forEach(stack ->
+							level.addFreshEntity(new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack)));
+				}
+			}
+
 			this.miner.level().destroyBlockProgress(this.miner.getId(), pos, -1);
 			this.targetBlocks.remove(0);
 			if (!this.targetBlocks.isEmpty())
@@ -157,12 +209,12 @@ public class MineTowardsTargetGoal extends Goal {
 		int mobHeight = Mth.ceil(this.miner.getBbHeight());
 		for (int i = 0; i < mobHeight; i++) {
 			BlockHitResult rayTraceResult = this.miner.level().clip(new ClipContext(this.miner.position().add(0, i + 0.5d, 0), this.target.getEyePosition(1f).add(0, i, 0), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.miner));
-            if (rayTraceResult.getType() == HitResult.Type.MISS
+			if (rayTraceResult.getType() == HitResult.Type.MISS
 					|| this.targetBlocks.contains(rayTraceResult.getBlockPos())
 					|| rayTraceResult.getBlockPos().getY() > MinerMobs.MAX_Y.get(this.miner))
-                continue;
+				continue;
 
-            double distance = this.miner.distanceToSqr(rayTraceResult.getLocation());
+			double distance = this.miner.distanceToSqr(rayTraceResult.getLocation());
 			if (distance > this.reachDistance * this.reachDistance)
 				continue;
 
@@ -176,32 +228,11 @@ public class MineTowardsTargetGoal extends Goal {
 			if (listed != MinerMobs.blockBlacklistAsWhitelist)
 				continue;
 
-            this.targetBlocks.add(rayTraceResult.getBlockPos());
+			this.targetBlocks.add(rayTraceResult.getBlockPos());
 		}
 		Collections.reverse(this.targetBlocks);
 	}
 
-	public boolean requiresUpdateEveryTick() {
-		return true;
-	}
-
-	/**
-	 * Returns true if the miner has been stuck in the same spot (radius 1.5 blocks) for more than 3 seconds
-	 */
-	public boolean isStuck() {
-		if (this.miner.getTarget() == null)
-			return false;
-
-		if (MeleeAttacking.isWithinMeleeAttackRange(this.miner, this.miner.getTarget()) && this.miner.getSensing().hasLineOfSight(this.miner.getTarget()))
-			return false;
-		if (this.lastPosition == null || this.miner.distanceToSqr(this.lastPosition) > 2.25d) {
-			this.lastPosition = this.miner.position();
-			this.lastPositionTickstamp = this.miner.tickCount;
-		}
-		return this.miner.getNavigation().isDone() || this.miner.tickCount - this.lastPositionTickstamp >= 60;
-	}
-
-	// Copy-paste of vanilla code
 	private int computeTickToBreak() {
 		int canHarvestBlock = this.canHarvestBlock() ? 30 : 100;
 		double diggingSpeed = this.getDigSpeed() / this.blockState.getDestroySpeed(this.miner.level(), this.targetBlocks.get(0)) / canHarvestBlock;
@@ -211,32 +242,22 @@ public class MineTowardsTargetGoal extends Goal {
 	private float getDigSpeed() {
 		float digSpeed = this.miner.getOffhandItem().getDestroySpeed(this.blockState);
 		if (digSpeed > 1.0F) {
-			int efficiencyLevel = EnchantmentHelper.getBlockEfficiency(this.miner);
-			ItemStack itemstack = this.miner.getOffhandItem();
-			if (efficiencyLevel > 0 && !itemstack.isEmpty()) {
-				digSpeed += (float)(efficiencyLevel * efficiencyLevel + 1);
-			}
+			int efficiency = EnchantmentHelper.getBlockEfficiency(this.miner);
+			if (efficiency > 0) digSpeed += (float) (efficiency * efficiency + 1);
 		}
-
-		if (MobEffectUtil.hasDigSpeed(this.miner)) {
-			digSpeed *= 1.0F + (float)(MobEffectUtil.getDigSpeedAmplification(this.miner) + 1) * 0.2F;
-		}
-
+		if (MobEffectUtil.hasDigSpeed(this.miner))
+			digSpeed *= 1.0F + (MobEffectUtil.getDigSpeedAmplification(this.miner) + 1) * 0.2F;
 		if (this.miner.hasEffect(MobEffects.DIG_SLOWDOWN)) {
-			//noinspection ConstantConditions
 			float miningFatigueAmplifier = switch (this.miner.getEffect(MobEffects.DIG_SLOWDOWN).getAmplifier()) {
 				case 0 -> 0.3F;
 				case 1 -> 0.09F;
 				case 2 -> 0.0027F;
 				default -> 8.1E-4F;
 			};
-
 			digSpeed *= miningFatigueAmplifier;
 		}
-
 		if (this.miner.isEyeInFluidType(ForgeMod.WATER_TYPE.get()) && !EnchantmentHelper.hasAquaAffinity(this.miner))
 			digSpeed /= 5.0F;
-
 		return digSpeed;
 	}
 
@@ -246,22 +267,44 @@ public class MineTowardsTargetGoal extends Goal {
 			return true;
 		if ((toolRequirement == MinerMobs.ToolRequirement.CORRECT_TOOL_FOR_REQUIRED) && !this.blockState.requiresCorrectToolForDrops())
 			return true;
-
 		ItemStack stack = this.miner.getOffhandItem();
-		if (stack.isEmpty())
-			return false;
-
-		return stack.isCorrectToolForDrops(this.blockState);
+		return !stack.isEmpty() && stack.isCorrectToolForDrops(this.blockState);
 	}
 
 	private boolean canHarvestBlock() {
 		if (!this.blockState.requiresCorrectToolForDrops())
 			return true;
-
 		ItemStack stack = this.miner.getOffhandItem();
-		if (stack.isEmpty())
-			return false;
+		return !stack.isEmpty() && stack.isCorrectToolForDrops(this.blockState);
+	}
 
-		return stack.isCorrectToolForDrops(this.blockState);
+	public boolean requiresUpdateEveryTick() { return true; }
+
+	private boolean isStuck() {
+		if (this.miner.getTarget() == null)
+			return false;
+		if (MeleeAttacking.isWithinMeleeAttackRange(this.miner, this.miner.getTarget())
+				&& this.miner.getSensing().hasLineOfSight(this.miner.getTarget()))
+			return false;
+		if (this.lastPosition == null || this.miner.distanceToSqr(this.lastPosition) > 2.25d) {
+			this.lastPosition = this.miner.position();
+			this.lastPositionTickstamp = this.miner.tickCount;
+		}
+		return this.miner.getNavigation().isDone() || this.miner.tickCount - this.lastPositionTickstamp >= 60;
+	}
+
+	private void freeSpaceForRespawn(ServerLevel level, BlockPos pos) {
+		BlockState existing = level.getBlockState(pos);
+
+		// If block is already air, nothing to do
+		if (existing.isAir()) return;
+
+		// Drop the block as an item
+		existing.spawnAfterBreak(level, pos, ItemStack.EMPTY, true);
+		level.removeBlock(pos, false);
+
+		// Move any entities standing on the block slightly upward
+		level.getEntities(null, existing.getShape(level, pos).bounds().move(pos.getX(), pos.getY(), pos.getZ()))
+				.forEach(e -> e.setPos(e.getX(), e.getY() + 1.0, e.getZ()));
 	}
 }

@@ -5,7 +5,6 @@ import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.data.EAIDataEnum;
 import insane96mcp.enhancedai.data.EAIDataList;
 import insane96mcp.enhancedai.modules.Modules;
-import insane96mcp.enhancedai.modules.mobs.Spawning;
 import insane96mcp.enhancedai.utils.GoalHelper;
 import insane96mcp.insanelib.base.Feature;
 import insane96mcp.insanelib.base.LoadFeature;
@@ -20,6 +19,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
@@ -36,7 +36,7 @@ public class MinerMobs extends Feature {
 	@Config(min = 0d, max = 1d, description = "Chance for a mob in the entity type tag enhancedai:can_be_miner to spawn with the miner ability")
 	public static Double minerChance = 0.07d;
 	@Config(description = "NONE: No item is required. ANY_TOOL: Any item that can break blocks in the off-hand is required. CORRECT_TOOL_FOR_REQUIRED: The mob is able to mine any blocks that don't require a tool, and require a tool for blocks that require it (e.g. can always mine dirt but can't mine stone). CORRECT_TOOL_FOR_ANY_BLOCK: The mob can only mine blocks if the tool is the right one for the block (e.g. can mine dirt only with a shovel).")
-	public static ToolRequirement toolRequirement = ToolRequirement.CORRECT_TOOL_FOR_REQUIRED;
+	public static ToolRequirement toolRequirement = ToolRequirement.ANY_TOOL;
 	@Config(min = -512, max = 1024, description = "Mobs can mine from the bottom of the world to this Y level.")
 	public static Integer maxY = 320;
 	@Config(min = 0, max = 128, description = "The maximum distance from the target at which the Mobs can mine. Set to 0 to always mine.")
@@ -51,6 +51,16 @@ public class MinerMobs extends Feature {
 	public static Boolean blacklistTileEntities = true;
 	@Config(description = "Mobs with Miner AI will spawn with a Stone Pickaxe that never drops.")
 	public static Boolean equipStonePick = true;
+	@Config(min = 0, max = 72000, description = "Time in ticks for a mined block to respawn. Set to 0 for no respawn. (20 ticks = 1 second)")
+	public static int blockRespawn$time = 0;
+	@Config(description = "If true, block respawn time will scale based on the block's hardness.")
+	public static boolean blockRespawn$scaleTimeByHardness = false;
+	@Config(min = 0, max = 72000, description = "Base respawn time in ticks for a block (used if scaling by hardness is enabled).")
+	public static int blockRespawn$respawnByHardnessBaseTime = 200;
+	@Config(min = 0d, max = 100d, description = "Multiplier applied to the block's hardness when calculating respawn time (used if scaling by hardness is enabled).")
+	public static double blockRespawn$hardnessRespawnMultiplier = 100d;
+    @Config(description = "If true, when a respawning block respawns on top of an obstructing block, the obstructing block will drop as if mined with a pickaxe (by default the obstructing block drops itself).")
+    public static boolean blockRespawn$usePickaxeDrop = false;
 
 	public static EAIData<Boolean> MINER;
 	public static EAIDataEnum<ToolRequirement> TOOL_REQUIREMENT;
@@ -58,6 +68,7 @@ public class MinerMobs extends Feature {
 	public static EAIData<Integer> MAX_TARGET_DISTANCE;
 	public static EAIData<Double> TIME_TO_BREAK_MULTIPLIER;
 	public static EAIDataList<String> DIMENSION_WHITELIST;
+
 
 	public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super.init(module, enabledByDefault, canBeDisabled);
@@ -71,6 +82,7 @@ public class MinerMobs extends Feature {
 		MAX_TARGET_DISTANCE = EAIData.ofInt(this.createDataKey("max_target_distance"));
 		TIME_TO_BREAK_MULTIPLIER = EAIData.ofDouble(this.createDataKey("time_to_break_multiplier"));
 		DIMENSION_WHITELIST = EAIDataList.of(this.createDataKey("dimension_whitelist"), String.class);
+		net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(MineTowardsTargetGoal.class);
 	}
 
 	public static void addAttribute(EntityAttributeModificationEvent event) {
@@ -86,10 +98,9 @@ public class MinerMobs extends Feature {
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onEntityJoinLevel(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
-                || Spawning.isUnaffectedByFeatures(event.getEntity())
-		 		|| event.getLevel().isClientSide
+				|| event.getLevel().isClientSide
 				|| !(event.getEntity() instanceof Mob mob)
-		 		|| !mob.getType().is(CAN_BE_MINER))
+				|| !mob.getType().is(CAN_BE_MINER))
 			return;
 
 		boolean isMiner = mob.getRandom().nextDouble() < minerChance;
@@ -120,5 +131,10 @@ public class MinerMobs extends Feature {
 		ANY_TOOL,
 		CORRECT_TOOL_FOR_REQUIRED,
 		CORRECT_TOOL_FOR_ANY_BLOCK
+	}
+	public static boolean shouldSaveBlockNBT(BlockState state) {
+		if (state.hasBlockEntity()) return true;
+		// Could add a tag whitelist or any other dynamic condition
+		return false;
 	}
 }
