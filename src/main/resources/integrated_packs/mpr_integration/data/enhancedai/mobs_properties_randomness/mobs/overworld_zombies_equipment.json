@@ -34,7 +34,7 @@
                 {
                     "condition": "chance",
                     "chance": {
-                        "value": 0.15,
+                        "value": 0.1,
                         "modifiers": [
                             {
                                 "modifier": "condition",
@@ -126,7 +126,7 @@
                         {
                             "condition": "chance",
                             "chance": {
-                                "value": 0.15,
+                                "value": 0.1,
                                 "modifiers": [
                                     {
                                         "modifier": "condition",
@@ -220,7 +220,7 @@
                         {
                             "condition": "chance",
                             "chance": {
-                                "value": 0.15,
+                                "value": 0.1,
                                 "modifiers": [
                                     {
                                         "modifier": "condition",
@@ -314,7 +314,7 @@
                         {
                             "condition": "chance",
                             "chance": {
-                                "value": 0.15,
+                                "value": 0.1,
                                 "modifiers": [
                                     {
                                         "modifier": "condition",
@@ -408,7 +408,7 @@
                         {
                             "condition": "chance",
                             "chance": {
-                                "value": 0.15,
+                                "value": 0.1,
                                 "modifiers": [
                                     {
                                         "modifier": "condition",
@@ -604,7 +604,7 @@
                         {
                             "condition": "chance",
                             "chance": {
-                                "value": 0.15,
+                                "value": 0.1,
                                 "modifiers": [
                                     {
                                         "modifier": "condition",
@@ -650,7 +650,7 @@
                 {
                     "condition": "chance",
                     "chance": {
-                        "value": 0.15,
+                        "value": 0.1,
                         "modifiers": [
                             {
                                 "modifier": "condition",
