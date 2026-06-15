@@ -1,0 +1,55 @@
+{
+    "target": "#enhancedai:all_mobs",
+    "properties": [
+            {
+                "property": "attribute_modifier",
+                "attribute": "minecraft:generic.max_health",
+                "id": "enhancedai:max_health_deepness",
+                "amount": {
+                    "value": 0,
+                    "modifiers": [
+                        {
+                            "modifier": "deepness",
+                            "operation": "add",
+                            "amount_per_step": 0.5,
+                            "step": 64,
+                            "starting_y": 64
+                        }
+                    ],
+                    "round": 1
+                },
+                "operation": "add_multiplied_base"
+            },
+            {
+                "property": "attribute_modifier",
+                "attribute": "enhancedai:xray_follow_range",
+                "id": "enhancedai:xray_follow_range_deepness",
+                "amount": {
+                    "value": 0,
+                    "modifiers": [
+                        {
+                            "modifier": "deepness",
+                            "operation": "add",
+                            "amount_per_step": 0.5,
+                            "step": 64,
+                            "starting_y": 64
+                        }
+                    ]
+                },
+                "operation": "add_multiplied_base"
+            }
+    ],
+    "conditions": [
+        {
+            "condition": "light_level",
+            "light_level": 0,
+            "type": "sky"
+        },
+        {
+            "condition": "dimension",
+            "dimensions": [
+                "minecraft:overworld"
+            ]
+        }
+    ]
+}

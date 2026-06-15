@@ -1,0 +1,22 @@
+{
+    "target": "#enhancedai:speed_bonus",
+    "properties": [
+        {
+            "property": "attribute_modifier",
+            "attribute": "minecraft:generic.follow_range",
+            "id": "survivalreimagined:follow_range_nerf",
+            "amount": -0.25,
+            "operation": "add_multiplied_base"
+        },
+        {
+            "property": "attribute_modifier",
+            "attribute": "enhancedai:xray_follow_range",
+            "id": "survivalreimagined:xray_nerf",
+            "amount": -0.25,
+            "operation": "add_multiplied_base"
+        }
+    ],
+    "conditions": [
+        { "preset": "enhancedai:outside_when_not_full_moon" }
+    ]
+}

@@ -1,3 +1,9 @@
+## 4.1.0.2
+* MPR Data Pack
+  * Mobs that spawn in caves now have increased max health and xray follow range (up to +100% at bedrock level)
+  * Mobs that spawn outside (when not in full moon) will have lower follow range, xray follow range and movement speed
+* Decreased default xray follow range
+
 ## 4.1.0.1
 * Lowered max follow range override and increased min xray range
 * Added Shields+'s copper shield to chances to block

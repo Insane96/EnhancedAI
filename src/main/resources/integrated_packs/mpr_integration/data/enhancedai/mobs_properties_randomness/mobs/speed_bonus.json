@@ -5,7 +5,19 @@
 			"property": "attribute_modifier",
 			"attribute": "minecraft:generic.movement_speed",
 			"id": "enhancedai:speed_bonus",
-			"amount": 0.15,
+			"amount": {
+				"value": 0.15,
+				"modifiers": [
+					{
+						"modifier": "condition",
+						"operation": "add",
+						"value": -0.05,
+						"conditions": [
+							{ "preset": "enhancedai:outside_when_not_full_moon" }
+						]
+					}
+				]
+			},
 			"operation": "add_multiplied_base"
 		},
 		{
