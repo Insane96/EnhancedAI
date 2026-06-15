@@ -1,0 +1,44 @@
+[
+	{
+		"condition": "chance",
+		"chance": {
+			"value": 0.10,
+			"modifiers": [
+				{
+					"modifier": "condition",
+					"operation": "add",
+					"value": 0.10,
+					"conditions": [
+						{
+							"condition": "moon_phase",
+							"phases": [ "full_moon" ]
+						},
+						{
+							"condition": "light_level",
+							"light_level": {
+								"min": 12,
+								"max": 15
+							},
+							"type": "sky"
+						}
+					]
+				},
+				{
+					"modifier": "condition",
+					"operation": "add",
+					"value": 0.10,
+					"conditions": [
+						{
+							"condition": "light_level",
+							"light_level": {
+								"min": 0,
+								"max": 12
+							},
+							"type": "sky"
+						}
+					]
+				}
+			]
+		}
+	}
+]
