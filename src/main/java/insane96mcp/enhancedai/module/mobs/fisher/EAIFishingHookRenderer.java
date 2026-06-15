@@ -2,7 +2,6 @@ package insane96mcp.enhancedai.module.mobs.fisher;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -15,6 +14,7 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
@@ -34,7 +34,6 @@ public class EAIFishingHookRenderer extends EntityRenderer<EAIFishingHook> {
             poseStack.pushPose();
             poseStack.scale(0.5F, 0.5F, 0.5F);
             poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
-            poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
             PoseStack.Pose posestack$pose = poseStack.last();
             VertexConsumer vertexconsumer = buffer.getBuffer(RENDER_TYPE);
             vertex(vertexconsumer, posestack$pose, packedLight, 0.0F, 0, 0, 1);
@@ -48,23 +47,23 @@ public class EAIFishingHookRenderer extends EntityRenderer<EAIFishingHook> {
                 i = -i;
             }
 
-            float f2 = Mth.lerp(partialTicks, mob.yBodyRotO, mob.yBodyRot) * ((float)Math.PI / 180F);
-            double d0 = Mth.sin(f2);
-            double d1 = Mth.cos(f2);
-            double d2 = (double)i * 0.35D;
-            double d3 = 0.8D;
-            double d4 = Mth.lerp(partialTicks, fishingHook.xo, fishingHook.getX()) - d1 * d2 - d0 * 0.8D;
-            double d5 = fishingHook.yo + (double)fishingHook.getEyeHeight() + (fishingHook.getY() - fishingHook.yo) * (double)partialTicks;
-            double d6 = Mth.lerp(partialTicks, fishingHook.zo, fishingHook.getZ()) - d0 * d2 + d1 * 0.8D;
-            float f3 = fishingHook.isCrouching() ? -0.1875F : 0.0F;
+            float bodyRotRad = Mth.lerp(partialTicks, mob.yBodyRotO, mob.yBodyRot) * ((float)Math.PI / 180F);
+            double sinRot = Mth.sin(bodyRotRad);
+            double cosRot = Mth.cos(bodyRotRad);
+            float scale = mob.getScale();
+            double handOffsetSide = (double)i * 0.35D * (double)scale;
+            double handOffsetFwd = 0.8D * (double)scale;
+            float crouchOffset = mob.isCrouching() ? -0.1875F : 0.0F;
 
+            Vec3 eyePos = mob.getEyePosition(partialTicks);
+            double handX = eyePos.x + (-cosRot * handOffsetSide - sinRot * handOffsetFwd);
+            double handY = eyePos.y + (double)crouchOffset - 0.45D * (double)scale;
+            double handZ = eyePos.z + (-sinRot * handOffsetSide + cosRot * handOffsetFwd);
 
-            double d9 = Mth.lerp(partialTicks, fishingHook.xo, fishingHook.getX());
-            double d10 = Mth.lerp(partialTicks, fishingHook.yo, fishingHook.getY());
-            double d8 = Mth.lerp(partialTicks, fishingHook.zo, fishingHook.getZ());
-            float f4 = (float)(d4 - d9);
-            float f5 = (float)(d5 - d10) + f3;
-            float f6 = (float)(d6 - d8);
+            Vec3 hookPos = fishingHook.getPosition(partialTicks).add(0.0D, 0.25D, 0.0D);
+            float f4 = (float)(handX - hookPos.x);
+            float f5 = (float)(handY - hookPos.y);
+            float f6 = (float)(handZ - hookPos.z);
             VertexConsumer vertexconsumer1 = buffer.getBuffer(RenderType.lineStrip());
             PoseStack.Pose posestack$pose1 = poseStack.last();
             int j = 16;
