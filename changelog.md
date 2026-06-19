@@ -1,3 +1,6 @@
+## Upcoming
+* Fixed wrong quartz tag for Break anger
+
 ## 4.1.0.2
 * MPR Data Pack
   * Mobs that spawn in caves now have increased max health and xray follow range (up to +100% at bedrock level)

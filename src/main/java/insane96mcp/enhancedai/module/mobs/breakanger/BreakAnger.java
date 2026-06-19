@@ -16,11 +16,11 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-@LoadFeature(module = EAIModules.MOBS, description = "Make mobs angry when a block is broken. Check the mod's config folder Mobs/Break Anger/break_anger_config.json to change blocks and entities triggered.")
+@LoadFeature(module = EAIModules.MOBS, description = "Make mobs angry when a block is broken. Check the mod's config folder Mobs/Break anger/break_anger_config.json to change blocks and entities triggered.")
 public class BreakAnger extends JsonFeature {
 
 	public static final List<BreakAngerConfig> ANGERING_LIST_DEFAULT = List.of(
-		new BreakAngerConfig(ObjTag.tagOf(ResourceLocation.parse("forge:ores/quartz"), Registries.BLOCK), ObjTag.objOf(ResourceLocation.parse("minecraft:zombified_piglin"), Registries.ENTITY_TYPE), 32d, false)
+		new BreakAngerConfig(ObjTag.tagOf(ResourceLocation.parse("c:ores/quartz"), Registries.BLOCK), ObjTag.objOf(ResourceLocation.parse("minecraft:zombified_piglin"), Registries.ENTITY_TYPE), 32d, false)
 	);
 
 	public static final List<BreakAngerConfig> angeringList = new ArrayList<>();
