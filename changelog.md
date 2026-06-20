@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.3.7.3
+* Hopefully fixed broken Alex Mobs
+
 ## 3.3.7.2
 * Removed "Miner mobs' blocks broken can now regenerate back"
   * Was causing many issues when disabled

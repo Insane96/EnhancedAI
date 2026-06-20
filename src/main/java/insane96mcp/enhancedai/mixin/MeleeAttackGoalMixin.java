@@ -2,6 +2,8 @@ package insane96mcp.enhancedai.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import insane96mcp.enhancedai.modules.mobs.MeleeAttacking;
 import insane96mcp.insanelib.base.Feature;
@@ -21,7 +23,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(MeleeAttackGoal.class)
@@ -69,8 +70,10 @@ public abstract class MeleeAttackGoalMixin extends Goal {
 		return MeleeAttacking.isWithinMeleeAttackRange(this.mob, livingEntity);
 	}
 
-	@Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/navigation/PathNavigation;moveTo(Lnet/minecraft/world/entity/Entity;D)Z"))
-	public boolean onMoveTo(PathNavigation pathNavigation, Entity entity, double speedModifier) {
+	@WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/navigation/PathNavigation;moveTo(Lnet/minecraft/world/entity/Entity;D)Z"))
+	public boolean onMoveTo(PathNavigation instance, Entity entity, double speed, Operation<Boolean> original) {
+		if (!Feature.isEnabled(MeleeAttacking.class))
+			return original.call(instance, entity, speed);
 		Path path = this.mob.getNavigation().createPath(entity, 0);
 		return path != null && this.mob.getNavigation().moveTo(path, speedModifier);
 	}
