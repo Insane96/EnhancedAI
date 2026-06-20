@@ -38,6 +38,8 @@ public abstract class MeleeAttackGoalMixin extends Goal {
 
 	@WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/navigation/PathNavigation;moveTo(Lnet/minecraft/world/entity/Entity;D)Z"))
 	public boolean onMoveTo(PathNavigation instance, Entity entity, double speed, Operation<Boolean> original) {
+		if (!Feature.isEnabled(MeleeAttacking.class))
+			return original.call(instance, entity, speed);
 		Path path = this.mob.getNavigation().createPath(entity, 0);
 		return path != null && this.mob.getNavigation().moveTo(path, speedModifier);
 	}
