@@ -1,4 +1,7 @@
-## Upcoming
+## 4.1.1.0
+* Added Enderman module
+  * Added Look Anger Cone
+    * Makes it easier to anger endermen by looking at them
 * Fixed wrong quartz tag for Break anger
 
 ## 4.1.0.2
