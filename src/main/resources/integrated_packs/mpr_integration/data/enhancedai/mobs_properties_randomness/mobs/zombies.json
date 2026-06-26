@@ -9,14 +9,14 @@
                 {
                     "condition": "chance",
                     "chance": {
-                        "value": 0.05,
+                        "value": 0.02,
                         "modifiers": [
                             {
                                 "modifier": "deepness",
                                 "operation": "add",
                                 "amount_per_step": 0.01,
-                                "step": 8,
-                                "starting_y": 80
+                                "step": 16,
+                                "starting_y": 64
                             },
                             {
                                 "modifier": "condition",
@@ -31,7 +31,8 @@
                             }
                         ]
                     }
-                }
+                },
+                { "preset": "enhancedai:in_overworld_cave" }
             ]
         }
     ]

@@ -1,3 +1,7 @@
+## 4.1.1.1
+* MPR Data Pack
+  * Zombies now have more chance to spawn as miners only in caves
+
 ## 4.1.1.0
 * Added Enderman module
   * Added Look Anger Cone

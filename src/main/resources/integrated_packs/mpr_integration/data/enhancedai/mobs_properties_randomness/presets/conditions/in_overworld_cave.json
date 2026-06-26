@@ -1,0 +1,13 @@
+[
+    {
+        "condition": "light_level",
+        "light_level": 0,
+        "type": "sky"
+    },
+    {
+        "condition": "dimension",
+        "dimensions": [
+            "minecraft:overworld"
+        ]
+    }
+]
