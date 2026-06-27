@@ -1,3 +1,6 @@
+## Upcoming
+* Lowered xray range
+
 ## 4.1.1.1
 * MPR Data Pack
   * Zombies now have more chance to spawn as miners only in caves
