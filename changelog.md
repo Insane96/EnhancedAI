@@ -1,5 +1,6 @@
-## Upcoming
+## 4.1.1.2
 * Lowered xray range
+* Fixed crash with latest InsaneLib
 
 ## 4.1.1.1
 * MPR Data Pack

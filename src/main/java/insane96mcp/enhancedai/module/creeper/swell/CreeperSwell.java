@@ -11,7 +11,7 @@ import insane96mcp.insanelib.core.feature.Feature;
 import insane96mcp.insanelib.core.feature.LoadFeature;
 import insane96mcp.insanelib.core.feature.Module;
 import insane96mcp.insanelib.core.feature.config.Config;
-import insane96mcp.insanelib.module.base.TagsFeature;
+import insane96mcp.insanelib.module.base.NbtTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -116,7 +116,7 @@ public class CreeperSwell extends Feature {
 					creeper.setCustomName(Component.literal("Angry Creeper"));
 				else
 					creeper.setCustomName(null);
-				TagsFeature.setExplosionCausesFire(angry$fire, creeper);
+				NbtTags.setExplosionCausesFire(angry$fire, creeper);
 				if (insaneSurvivalOverhaulIntegration) {
 					creeper.getPersistentData().putFloat("iguanatweaksreborn:explosion_knockback_multiplier", 2f);
 					creeper.getPersistentData().putFloat("iguanatweaksreborn:explosion_ray_strength_multiplier", 0.01f);
@@ -131,7 +131,7 @@ public class CreeperSwell extends Feature {
 				if (angry$name)
 					creeper.setCustomName(null);
 				if (angry$fire)
-					TagsFeature.setExplosionCausesFire(false, creeper);
+					NbtTags.setExplosionCausesFire(false, creeper);
 				if (insaneSurvivalOverhaulIntegration) {
 					creeper.getPersistentData().remove("iguanatweaksreborn:explosion_knockback_multiplier");
 					creeper.getPersistentData().remove("iguanatweaksreborn:explosion_ray_strength_multiplier");
