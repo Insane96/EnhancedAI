@@ -1,6 +1,7 @@
 ## Upcoming
 * Leader mobs
   * Reinforcements now spawn even if non-entities damage them
+  * Added loot table enhancedai:leader_mob that will drop on leaders death
   * Lowered armor
 
 ## 4.1.1.2

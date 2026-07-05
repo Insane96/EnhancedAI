@@ -12,6 +12,7 @@ import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
@@ -19,17 +20,27 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
+
+import java.util.List;
 
 @LoadFeature(module = EAIModules.MOBS, description = "Allows mobs to call reinforcements (like vanilla zombies can, but better) and have leaders that have a high chance to call reinforcements. Only entity types in the `enhancedai:mobs/leaders` tag can jump. PLEASE NOTE that this feature uses a custom attribute (enhancedai:spawn_reinforcements_chance) instead of the vanilla one. This feature has also an MPR condition `enhancedai:is_leader` to check if the mob is a leader.")
 public class Leaders extends Feature {
     private static final ResourceLocation BONUS_STATS_ID = EnhancedAI.location("leader_bonus_stats");
     private static final ResourceLocation REINFORCEMENT_CALLED_CHARGE_ID = EnhancedAI.location("reinforcement_called_charge");
+    private static final ResourceKey<LootTable> LEADER_LOOT_TABLE = ResourceKey.create(Registries.LOOT_TABLE, EnhancedAI.location("leader_mob"));
 
     public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/leaders"));
 
@@ -193,6 +204,32 @@ public class Leaders extends Feature {
     }
 
     @SubscribeEvent
+    public void onDeath(LivingDeathEvent event) {
+        if (!this.isEnabled()
+                || !(event.getEntity() instanceof Mob mob)
+                || !LEADER.get(mob)
+                || !(event.getEntity().level() instanceof ServerLevel serverLevel))
+            return;
+
+        LootParams.Builder builder = new LootParams.Builder(serverLevel)
+                .withParameter(LootContextParams.THIS_ENTITY, mob)
+                .withParameter(LootContextParams.ORIGIN, mob.position())
+                .withParameter(LootContextParams.DAMAGE_SOURCE, event.getSource())
+                .withOptionalParameter(LootContextParams.DIRECT_ATTACKING_ENTITY, event.getSource().getDirectEntity())
+                .withOptionalParameter(LootContextParams.ATTACKING_ENTITY, event.getSource().getEntity());
+
+        if (event.getSource().getEntity() instanceof Player player)
+            builder.withParameter(LootContextParams.LAST_DAMAGE_PLAYER, player);
+
+        LootParams lootParams = builder.create(LootContextParamSets.ENTITY);
+        LootTable lootTable = serverLevel.getServer().reloadableRegistries().getLootTable(LEADER_LOOT_TABLE);
+        List<ItemStack> items = lootTable.getRandomItems(lootParams);
+        for (ItemStack stack : items) {
+            mob.spawnAtLocation(stack);
+        }
+    }
+
+@SubscribeEvent
     public void onTick(EntityTickEvent.Pre event) {
         if (!LEADER.get(event.getEntity())
                 || !(event.getEntity().level() instanceof ServerLevel serverLevel)
