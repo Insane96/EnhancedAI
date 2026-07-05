@@ -37,6 +37,8 @@ public class Leaders extends Feature {
     public static Double leaderChance = 0.03d;
     @Config(min = 0, description = "At this damage, the chance to spawn reinforcements is 100% of the attribute, otherwise is scaled. E.g. with this set to 6 and enhancedai:spawn_reinforcements_chance attribute set to 0.5 the chance to spawn reinforcements is 50% at 6 damage, 25% at 3 damage or 100% at 12 damage. Set to 0 to disable scaling with damage. This is damage before resistances (armor, etc).")
     public static Double spawnReinforcementsChanceDamageScaled = 6d;
+    @Config(min = 0, description = "If true, reinforcements will spawn only if the damage comes from an entity")
+    public static Boolean entityDamageOnly = false;
     @Config(description = "How much is enhancedai:spawn_reinforcements_chance reduced by each time a reinforcement is spawned.")
     public static Double chargePerSpawn = 0.05d;
     @Config
@@ -91,7 +93,7 @@ public class Leaders extends Feature {
         if (!this.isEnabled()
                 || !(event.getEntity() instanceof Mob mob)
                 || !(mob.level() instanceof ServerLevel serverLevel)
-                || event.getSource().getEntity() == null)
+                || (event.getSource().getEntity() == null && entityDamageOnly))
             return;
         double chance = mob.getAttributeValue(EAIAttributes.SPAWN_REINFORCEMENTS_CHANCE);
         if (chance <= 0)

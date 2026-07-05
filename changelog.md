@@ -1,5 +1,7 @@
 ## Upcoming
-* Lowered leader mobs armor
+* Leader mobs
+  * Reinforcements now spawn even if non-entities damage them
+  * Lowered armor
 
 ## 4.1.1.2
 * Lowered xray range
