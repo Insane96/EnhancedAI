@@ -89,7 +89,7 @@ public class Leaders extends Feature {
     }
 
     @SubscribeEvent
-    public void onHurt(LivingDamageEvent.Post event) {
+    public void onHurt(LivingDamageEvent.Pre event) {
         if (!this.isEnabled()
                 || !(event.getEntity() instanceof Mob mob)
                 || !(mob.level() instanceof ServerLevel serverLevel)
