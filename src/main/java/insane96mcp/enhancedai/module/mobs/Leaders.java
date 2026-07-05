@@ -43,7 +43,7 @@ public class Leaders extends Feature {
     public static Double leaderSpawnReinforcementsChance = 1d;
     @Config
     public static Boolean reinforcesCanSpawnAsLeader = false;
-    @Config(description = "If true, leader mobs will have 4x health and +15 armor.")
+    @Config(description = "If true, leader mobs will have 4x health and +10 armor.")
     public static Boolean bonusStats = true;
     @Config
     public static Boolean removeVanillaSpawnReinforcementsChance = true;
@@ -67,7 +67,7 @@ public class Leaders extends Feature {
 
             if (leader) {
                 MCUtils.applyModifier(mob, Attributes.MAX_HEALTH, BONUS_STATS_ID, 3, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
-                MCUtils.applyModifier(mob, Attributes.ARMOR, BONUS_STATS_ID, 15, AttributeModifier.Operation.ADD_VALUE);
+                MCUtils.applyModifier(mob, Attributes.ARMOR, BONUS_STATS_ID, 10, AttributeModifier.Operation.ADD_VALUE);
             }
             else {
                 mob.getAttribute(Attributes.MAX_HEALTH).removeModifier(BONUS_STATS_ID);

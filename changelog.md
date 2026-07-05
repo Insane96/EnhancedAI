@@ -1,3 +1,6 @@
+## Upcoming
+* Lowered leader mobs armor
+
 ## 4.1.1.2
 * Lowered xray range
 * Fixed crash with latest InsaneLib
