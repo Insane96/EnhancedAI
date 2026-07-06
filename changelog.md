@@ -1,4 +1,6 @@
 ## Upcoming
+* Targeting
+  * Mobs now have 50% chance to forget the target if they can't sense it (sight, xray or glowing) after 15s
 * Leader mobs
   * Reinforcements now spawn even if non-entities damage them
   * Added loot table enhancedai:leader_mob that will drop on leaders death. Empty by default

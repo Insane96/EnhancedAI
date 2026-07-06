@@ -61,6 +61,11 @@ public class Targeting extends Feature {
     @Config
     public static Boolean seeGlowingEntities = true;
 
+	@Config(min = 0, max = 1, description = "Chance for a mob to have to sense the target to keep targeting it. If the mob must sense the target might stop following it if can't sense it (through seeing, xray or glowing)")
+	public static Double mustSenseTarget = 0.5d;
+	@Config(description = "After how many ticks a mob will forget about the target if can't sense it anymore")
+	public static Integer unsensedForgetTick = 300;
+
 	@Config(description = "Mobs will actually switch target when attacked unless it's the same or if the current one it's closer. Only entity types in the entity type tag `enhancedai:mobs/targeting/better_hurt_by` tag will be affected by this. Use the entity type tag `enhancedai:mobs/targeting/allow_target_switch` to allow more entity types to switch targets (e.g. creepers in vanilla can't switch targets).")
 	public static Boolean betterHurtByTarget$enable = true;
 	@Config(description = "Setting this to true allows overriding target AI only for players.")
@@ -89,7 +94,8 @@ public class Targeting extends Feature {
 	public static EAIData<Boolean> HURT_BY_PREFER_PLAYERS;
 	public static EAIData<Boolean> HURT_BY_PREVENT_INFIGHTING;
 	public static EAIData<Integer> TARGET_CHANCE;
-	public static EAIData<Integer> UNSEEN_FORGET_TICKS;
+	public static EAIData<Boolean> MUST_SENSE_TARGET;
+	public static EAIData<Integer> UNSENSED_FORGET_TICKS;
 	public static EAIData<Integer> ALERT_RANGE;
 
 	@Override
@@ -107,7 +113,8 @@ public class Targeting extends Feature {
 			})
 		);
 		TARGET_CHANCE = EAIData.ofInt(this.createDataKey("target_chance"));
-		UNSEEN_FORGET_TICKS = EAIData.ofInt(this.createDataKey("unseen_forget_ticks"));
+		MUST_SENSE_TARGET = EAIData.ofBool(this.createDataKey("must_sense_target"));
+		UNSENSED_FORGET_TICKS = EAIData.ofInt(this.createDataKey("unsensed_forget_ticks"));
         ALERT_RANGE = EAIData.ofInt(this.createDataKey("alert_range"));
 	}
 
@@ -181,20 +188,22 @@ public class Targeting extends Feature {
 		toAdd.forEach(wrappedGoal ->
 				mob.targetSelector.addGoal(wrappedGoal.getPriority(), wrappedGoal.getGoal()));
 		TARGET_CHANCE.applyIfAbsent(mob, betterHurtByTarget$targetChance);
+		MUST_SENSE_TARGET.applyIfAbsent(mob, mob.getRandom().nextFloat() < mustSenseTarget);
+		UNSENSED_FORGET_TICKS.applyIfAbsent(mob, unsensedForgetTick);
 	}
 
     private static EAINearestAttackableTarget<? extends LivingEntity> createTargetGoal(Mob mob, NearestAttackableTargetGoal<?> goal) {
-        EAINearestAttackableTarget<? extends LivingEntity> newTargetGoal = new EAINearestAttackableTarget<>(mob, goal.targetType, false, true, goal.targetConditions);;
+        EAINearestAttackableTarget<? extends LivingEntity> newTargetGoal = new EAINearestAttackableTarget<>(mob, goal.targetType, true, goal.targetConditions);;
 
         if (mob instanceof Spider spider)
-            newTargetGoal = new EAISpiderTargetGoal<>(spider, goal.targetType, false, true, goal.targetConditions);
+            newTargetGoal = new EAISpiderTargetGoal<>(spider, goal.targetType, true, goal.targetConditions);
         else if (mob instanceof Vindicator vindicator && goal instanceof Vindicator.VindicatorJohnnyAttackGoal)
-            newTargetGoal = new EAIVindicatorJohnnyTargetGoal(vindicator, false, true, goal.targetConditions);
+            newTargetGoal = new EAIVindicatorJohnnyTargetGoal(vindicator, true, goal.targetConditions);
         else if (mob instanceof Shulker shulker) {
             if (goal instanceof Shulker.ShulkerNearestAttackGoal)
-                newTargetGoal = new EAIShulkerNearestAttackTargetGoal<>(shulker, goal.targetType, false, true, goal.targetConditions);
+                newTargetGoal = new EAIShulkerNearestAttackTargetGoal<>(shulker, goal.targetType, true, goal.targetConditions);
             else if (goal instanceof Shulker.ShulkerDefenseAttackGoal)
-                newTargetGoal = new EAIShulkerNearestDefenseTargetGoal<>(shulker, goal.targetType, false, true, goal.targetConditions);
+                newTargetGoal = new EAIShulkerNearestDefenseTargetGoal<>(shulker, goal.targetType, true, goal.targetConditions);
         }
 
         return newTargetGoal;

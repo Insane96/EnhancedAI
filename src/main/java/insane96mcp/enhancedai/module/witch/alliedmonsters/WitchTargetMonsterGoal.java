@@ -8,8 +8,8 @@ import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 public class WitchTargetMonsterGoal<T extends LivingEntity> extends EAINearestAttackableTarget<T> {
     int cooldown;
 
-    public WitchTargetMonsterGoal(Mob goalOwnerIn, Class<T> targetClassIn, boolean mustSee, boolean mustReach, TargetingConditions targetingConditions) {
-        super(goalOwnerIn, targetClassIn, mustSee, mustReach, targetingConditions);
+    public WitchTargetMonsterGoal(Mob goalOwnerIn, Class<T> targetClassIn, boolean mustReach, TargetingConditions targetingConditions) {
+        super(goalOwnerIn, targetClassIn, mustReach, targetingConditions);
     }
 
     @Override

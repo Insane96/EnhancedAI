@@ -29,7 +29,7 @@ public class AlliedMonsters extends Feature {
         ALLIED_MONSTERS = EAIData.ofBool(this.createDataKey("allied_monsters"), (witch, alliedMonsters) -> {
             GoalHelper.removeGoal(witch.targetSelector, WitchTargetMonsterGoal.class);
             if (alliedMonsters)
-                witch.targetSelector.addGoal(2, new WitchTargetMonsterGoal<>(witch, Mob.class, false, false, TargetingConditions.forNonCombat().selector(livingEntity -> livingEntity.getType().is(ELIGIBLE_TARGETS))));
+                witch.targetSelector.addGoal(2, new WitchTargetMonsterGoal<>(witch, Mob.class, false, TargetingConditions.forNonCombat().selector(livingEntity -> livingEntity.getType().is(ELIGIBLE_TARGETS))));
         });
     }
 

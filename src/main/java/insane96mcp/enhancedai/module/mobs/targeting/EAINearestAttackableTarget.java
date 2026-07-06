@@ -11,32 +11,24 @@ import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 
 /**
- * Extension of ILNearestAttackableTargetGoal making use of XRay attribute
+ * Extension of {@link ILNearestAttackableTargetGoal} making use of XRay attribute
  */
 public class EAINearestAttackableTarget<T extends LivingEntity> extends ILNearestAttackableTargetGoal<T> {
 
     public TargetingConditions targetEntitySelectorXRay;
 
-    public EAINearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, boolean mustSee, boolean mustReach, TargetingConditions targetingConditions) {
-		this(goalOwnerIn, targetClassIn, mustSee, mustReach, targetingConditions, 60);
-    }
+    public int unsensedTicks;
 
-    public EAINearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, boolean mustSee, boolean mustReach, TargetingConditions targetingConditions, int forgetTicks) {
-        super(goalOwnerIn, targetClassIn, mustSee, mustReach, null);
+    public EAINearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, boolean mustReach, TargetingConditions targetingConditions) {
+        super(goalOwnerIn, targetClassIn, false, mustReach, null);
         this.targetEntitySelector = targetingConditions;
         this.targetEntitySelectorXRay = targetingConditions.copy().ignoreLineOfSight();
-        this.unseenMemoryTicks = forgetTicks;
     }
 
-    public EAINearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, ObjTag<EntityType<?>> idTagMatcher, boolean mustSee, boolean mustReach, TargetingConditions targetingConditions) {
-        this(goalOwnerIn, targetClassIn, idTagMatcher, mustSee, mustReach, targetingConditions, 60);
-    }
-
-    public EAINearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, ObjTag<EntityType<?>> idTagMatcher, boolean mustSee, boolean mustReach, TargetingConditions targetingConditions, int forgetTicks) {
-        this(goalOwnerIn, targetClassIn, mustSee, mustReach, targetingConditions);
+    public EAINearestAttackableTarget(Mob goalOwnerIn, Class<T> targetClassIn, ObjTag<EntityType<?>> idTagMatcher, boolean mustReach, TargetingConditions targetingConditions) {
+        this(goalOwnerIn, targetClassIn, mustReach, targetingConditions);
         this.targetEntitySelector.selector(living -> idTagMatcher.matches(living.getType()));
         this.targetEntitySelectorXRay.selector(living -> idTagMatcher.matches(living.getType()));
-        this.unseenMemoryTicks = forgetTicks;
     }
 
     @Override
@@ -48,6 +40,37 @@ public class EAINearestAttackableTarget<T extends LivingEntity> extends ILNeares
             this.findTarget();
             return this.nearestTarget != null;
         }
+    }
+
+    @Override
+    public boolean canContinueToUse() {
+        if (!Targeting.MUST_SENSE_TARGET.get(this.mob))
+            return super.canContinueToUse();
+        LivingEntity target = this.mob.getTarget();
+        if (target == null)
+            target = this.targetMob;
+        if (target == null)
+            return super.canContinueToUse();
+
+        if (this.canSenseTarget(target))
+            this.unsensedTicks = 0;
+        else if (++this.unsensedTicks > reducedTickDelay(Targeting.UNSENSED_FORGET_TICKS.get(this.mob)))
+            return false;
+
+        return super.canContinueToUse();
+    }
+
+    public boolean canSenseTarget(LivingEntity target) {
+        if (this.mob.getSensing().hasLineOfSight(target))
+            return true;
+        double xrayDistance = this.getFollowXRayDistance();
+        if (xrayDistance > 0d && this.mob.distanceToSqr(target) <= xrayDistance * xrayDistance)
+            return true;
+
+        if (Targeting.seeGlowingEntities && target.isCurrentlyGlowing())
+            return true;
+
+        return false;
     }
 
     @Override

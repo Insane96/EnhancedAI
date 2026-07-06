@@ -8,8 +8,8 @@ import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.phys.AABB;
 
 public class EAIShulkerNearestDefenseTargetGoal<T extends LivingEntity> extends EAINearestAttackableTarget<T> {
-    public EAIShulkerNearestDefenseTargetGoal(Shulker goalOwnerIn, Class<T> targetClassIn, boolean checkSight, boolean nearbyOnlyIn, TargetingConditions targetingConditions) {
-        super(goalOwnerIn, targetClassIn, checkSight, nearbyOnlyIn, targetingConditions);
+    public EAIShulkerNearestDefenseTargetGoal(Shulker goalOwnerIn, Class<T> targetClassIn, boolean nearbyOnlyIn, TargetingConditions targetingConditions) {
+        super(goalOwnerIn, targetClassIn, nearbyOnlyIn, targetingConditions);
     }
 
     public boolean canUse() {

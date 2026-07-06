@@ -93,7 +93,7 @@ public class AnimalScaredAttack extends Feature {
                 NEUTRAL.apply(mob, true);
                 MCUtils.applyModifier(mob, Attributes.FOLLOW_RANGE, FOLLOW_RANGE_REDUCTION_ID, -0.75d, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, true);
                 MCUtils.applyModifier(mob, EAIAttributes.XRAY_FOLLOW_RANGE, FOLLOW_RANGE_REDUCTION_ID, -0.75d, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, true);
-                mob.targetSelector.addGoal(2, new AnimalNearestAttackableTargetGoal<>(mob, Player.class, false, false));
+                mob.targetSelector.addGoal(2, new AnimalNearestAttackableTargetGoal<>(mob, Player.class, false));
                 PLAYER_SCARED.apply(mob, false);
                 ATTACK_MOVEMENT_SPEED_MODIFIER.changed(mob);
             }
@@ -169,8 +169,8 @@ public class AnimalScaredAttack extends Feature {
 
     public static class AnimalNearestAttackableTargetGoal<T extends LivingEntity> extends EAINearestAttackableTarget<T> {
 
-        public AnimalNearestAttackableTargetGoal(Mob goalOwnerIn, Class<T> targetClassIn, boolean mustSee, boolean mustReach) {
-            super(goalOwnerIn, targetClassIn, mustSee, mustReach, TargetingConditions.forCombat());
+        public AnimalNearestAttackableTargetGoal(Mob goalOwnerIn, Class<T> targetClassIn, boolean mustReach) {
+            super(goalOwnerIn, targetClassIn, mustReach, TargetingConditions.forCombat());
         }
 
         @Override

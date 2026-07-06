@@ -24,6 +24,7 @@ public class CustomHostileData {
     public ObjTag<EntityType<?>> attacker;
     public ObjTag<EntityType<?>> target;
     public double chance;
+    //TODO replace with mustSense
     public boolean mustSee;
     public boolean addAttackGoal;
 
@@ -59,7 +60,7 @@ public class CustomHostileData {
         if (!this.attacker.matches(mob.getType()) || !this.checkChance(mob.getRandom()))
             return;
 
-        EAINearestAttackableTarget<LivingEntity> targetGoal = new EAINearestAttackableTarget<>(mob, LivingEntity.class, this.target, this.mustSee, false, TargetingConditions.forCombat());
+        EAINearestAttackableTarget<LivingEntity> targetGoal = new EAINearestAttackableTarget<>(mob, LivingEntity.class, this.target, false, TargetingConditions.forCombat());
 
         mob.targetSelector.addGoal(this.priority, targetGoal);
 

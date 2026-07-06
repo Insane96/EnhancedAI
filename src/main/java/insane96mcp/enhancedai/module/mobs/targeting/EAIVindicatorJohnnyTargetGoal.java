@@ -6,8 +6,8 @@ import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.monster.Vindicator;
 
 public class EAIVindicatorJohnnyTargetGoal extends EAINearestAttackableTarget<LivingEntity> {
-    public EAIVindicatorJohnnyTargetGoal(Vindicator goalOwnerIn, boolean checkSight, boolean nearbyOnlyIn, TargetingConditions targetingConditions) {
-        super(goalOwnerIn, LivingEntity.class, checkSight, nearbyOnlyIn, targetingConditions);
+    public EAIVindicatorJohnnyTargetGoal(Vindicator goalOwnerIn, boolean nearbyOnlyIn, TargetingConditions targetingConditions) {
+        super(goalOwnerIn, LivingEntity.class, nearbyOnlyIn, targetingConditions);
     }
 
     public boolean canUse() {
