@@ -1,8 +1,9 @@
 ## Upcoming
 * Leader mobs
   * Reinforcements now spawn even if non-entities damage them
-  * Added loot table enhancedai:leader_mob that will drop on leaders death
+  * Added loot table enhancedai:leader_mob that will drop on leaders death. Empty by default
   * Lowered armor
+* Fixed mobs pathing getting stuck sometimes if the path was the same as before
 
 ## 4.1.1.2
 * Lowered xray range
