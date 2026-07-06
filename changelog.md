@@ -1,4 +1,4 @@
-## Upcoming
+## 4.1.2.0
 * Targeting
   * Mobs now have 50% chance to forget the target if they can't sense it (sight, xray or glowing) after 15s
 * Leader mobs
