@@ -1,4 +1,4 @@
-## Upcoming
+## 4.2.0.0
 * Added back Biting Mobs
   * I totally forgot about this feature
 * Added back Falling Shockwave
