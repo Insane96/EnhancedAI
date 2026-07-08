@@ -9,6 +9,13 @@
 			"damage_modifier": 0.1,
 			"damage_modifier_operation": "multiply",
 			"damage_type": "#minecraft:is_fall"
+		},
+		{
+			"property": "attribute_modifier",
+			"attribute": "minecraft:generic.movement_speed",
+			"id": "enhancedai:speed_bonus",
+			"amount": -0.05,
+			"operation": "add_multiplied_base"
 		}
 	]
 }
