@@ -40,7 +40,6 @@ public abstract class MeleeAttackGoalMixin extends Goal {
 	public boolean onMoveTo(PathNavigation instance, Entity entity, double speed, Operation<Boolean> original) {
 		if (!Feature.isEnabled(MeleeAttacking.class))
 			return original.call(instance, entity, speed);
-		this.mob.getNavigation().stop();
 		Path path = this.mob.getNavigation().createPath(entity, 0);
 		return path != null && this.mob.getNavigation().moveTo(path, speedModifier);
 	}

@@ -1,3 +1,14 @@
+## Upcoming
+* Added back Biting Mobs
+  * I totally forgot about this feature
+* Added back Falling Shockwave
+  * I totally forgot about this feature
+* MPR Data Pack
+  * Slowed down spiders
+* Fixed Random Stroll not making use of the entity type tag
+* Reverted back 'Fixed mobs pathing getting stuck sometimes if the path was the same as before'
+  * Was making mobs getting stuck while normally walking
+
 ## 4.1.2.0
 * Targeting
   * Mobs now have 50% chance to forget the target if they can't sense it (sight, xray or glowing) after 15s
