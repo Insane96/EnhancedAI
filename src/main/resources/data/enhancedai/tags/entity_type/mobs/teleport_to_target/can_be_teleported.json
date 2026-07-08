@@ -1,10 +1,7 @@
 {
     "values": [
         "minecraft:creeper",
-        "minecraft:zombie",
-        "minecraft:husk",
-        "minecraft:zombie_villager",
-        "minecraft:drowned",
+        "#enhancedai:overworld_zombies",
         "minecraft:spider",
         "minecraft:cave_spider",
         {

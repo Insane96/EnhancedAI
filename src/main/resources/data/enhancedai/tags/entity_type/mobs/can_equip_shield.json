@@ -1,15 +1,8 @@
 {
 	"values": [
-		"minecraft:zombie",
-		"minecraft:husk",
-		"minecraft:drowned",
-		"minecraft:zombie_villager",
-		"minecraft:skeleton",
-		"minecraft:bogged",
-		"minecraft:stray",
-		"minecraft:wither_skeleton",
+		"#enhancedai:zombies",
+		"#enhancedai:skeletons",
 		"minecraft:piglin",
-		"minecraft:zombified_piglin",
 		"minecraft:piglin_brute",
 		"minecraft:pillager",
 		"minecraft:vindicator"

@@ -8,6 +8,11 @@
 * Fixed Random Stroll not making use of the entity type tag
 * Reverted back 'Fixed mobs pathing getting stuck sometimes if the path was the same as before'
   * Was making mobs getting stuck while normally walking
+* Fixed some missing mobs to use some features 
+  * Bogged couldn't attack villagers
+  * Witches didn't count zombie villagers, zombified piglins, bogged and wither skeletons as allied
+  * Zombie villagers couldn't be leaders
+  * Bogged couldn't use better nearby targeting
 
 ## 4.1.2.0
 * Targeting

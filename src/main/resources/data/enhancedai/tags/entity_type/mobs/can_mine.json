@@ -1,9 +1,5 @@
 {
     "values": [
-        "minecraft:zombie",
-        "minecraft:husk",
-        "minecraft:drowned",
-        "minecraft:zombie_villager",
-        "minecraft:zombified_piglin"
+        "#enhancedai:zombies"
     ]
 }

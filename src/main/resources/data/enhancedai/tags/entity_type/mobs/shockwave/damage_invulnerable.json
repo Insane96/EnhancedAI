@@ -1,6 +1,6 @@
 {
 	"values": [
-		"minecraft:iron_golem",
+		"#enhancedai:iron_golems",
 		"minecraft:villager"
 	]
 }
