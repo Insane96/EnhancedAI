@@ -1,5 +1,6 @@
-## Upcoming
+## 4.2.0.1
 * Fixed Wolves and Cats still attacking animals when tamed
+* Crash fix with Biting Mobs and Falling Shockwave
 
 ## 4.2.0.0
 * Added back Biting Mobs

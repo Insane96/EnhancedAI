@@ -64,12 +64,12 @@ Checked = ported to 1.21.1.
 - [x] Teleport Anti-Cheese
 - [x] Teleport To Target
 - [x] Vehicle Anti-Cheese
-- [ ] Biting Mobs *(moved to client-side extra mod)*
+- [x] Biting Mobs
 - [ ] Custom Flee *(never finished, WIP)*
-- [ ] Falling Shockwave *(moved to client-side extra mod)*
-- [ ] Fisher Mobs *(moved to client-side extra mod)*
+- [x] Falling Shockwave
+- [x] Fisher Mobs
 - [x] Push Resistance *(moved to InsaneLib)*
-- [ ] Web Throwers *(moved to client-side extra mod)*
+- [x] Web Throwers
 
 ## Shulker
 - [x] Shulker Armor
