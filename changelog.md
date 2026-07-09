@@ -1,3 +1,6 @@
+## Upcoming
+* Fixed Wolves and Cats still attacking animals when tamed
+
 ## 4.2.0.0
 * Added back Biting Mobs
   * I totally forgot about this feature

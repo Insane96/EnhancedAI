@@ -27,6 +27,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NonTameRandomTargetGoal;
 import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.monster.Vindicator;
@@ -168,7 +169,8 @@ public class Targeting extends Feature {
 		List<NearestAttackableTargetGoal<?>> toRemove = new ArrayList<>();
 		List<WrappedGoal> toAdd = new ArrayList<>();
 		for (WrappedGoal prioritizedGoal : mob.targetSelector.getAvailableGoals()) {
-			if (!(prioritizedGoal.getGoal() instanceof NearestAttackableTargetGoal<?> goal))
+			if (!(prioritizedGoal.getGoal() instanceof NearestAttackableTargetGoal<?> goal)
+					|| isGoalBlacklistedFromReplace(goal))
 				continue;
 
 			if (goal.targetType != Player.class && betterHurtByTarget$playerOnly)
@@ -208,6 +210,10 @@ public class Targeting extends Feature {
 
         return newTargetGoal;
     }
+
+	private static boolean isGoalBlacklistedFromReplace(NearestAttackableTargetGoal<?> goal) {
+		return goal instanceof NonTameRandomTargetGoal<?>;
+	}
 
     private void processHurtByGoal(Mob mob) {
 		if (!betterHurtByTarget$enable
