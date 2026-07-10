@@ -1,6 +1,7 @@
 ## Upcoming
 * Fixed Spider slowdown not working
 * Falling shockwave is now disabled by default
+* Fixed Not Tempted Animals not using the new EAIData system
 
 ## 4.2.0.1
 * Fixed Wolves and Cats still attacking animals when tamed
