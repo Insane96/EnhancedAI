@@ -1,4 +1,4 @@
-## Upcoming
+## 4.2.0.2
 * Fixed Spider slowdown not working
 * Falling shockwave is now disabled by default
 * Fixed Not Tempted Animals not using the new EAIData system
