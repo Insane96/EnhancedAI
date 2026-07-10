@@ -1,3 +1,6 @@
+## Upcoming
+* Fixed Spider slowdown not working
+
 ## 4.2.0.1
 * Fixed Wolves and Cats still attacking animals when tamed
 * Crash fix with Biting Mobs and Falling Shockwave

@@ -13,7 +13,7 @@
 		{
 			"property": "attribute_modifier",
 			"attribute": "minecraft:generic.movement_speed",
-			"id": "enhancedai:speed_bonus",
+			"id": "enhancedai:speed_bonus_nerf",
 			"amount": -0.05,
 			"operation": "add_multiplied_base"
 		}
