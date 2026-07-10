@@ -25,7 +25,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingFallEvent;
 
-@LoadFeature(module = EAIModules.MOBS, description = "Mobs will jump off the ground to emit a shockwave when falling damaging nearby entities. Only entity types in enhancedai:mobs/shockwave/can_use tag are affected by this feature and entity types in the enhancedai:mobs/shockwave/damage_invulnerable tag will not be damaged by the shockwave.")
+@LoadFeature(module = EAIModules.MOBS, description = "Mobs will jump off the ground to emit a shockwave when falling damaging nearby entities. Only entity types in enhancedai:mobs/shockwave/can_use tag are affected by this feature and entity types in the enhancedai:mobs/shockwave/damage_invulnerable tag will not be damaged by the shockwave.", enabledByDefault = false)
 public class FallingShockwave extends Feature {
     public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/shockwave/can_use"));
     public static final TagKey<EntityType<?>> SHOCKWAVE_INVULNERABLE_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/shockwave/damage_invulnerable"));
