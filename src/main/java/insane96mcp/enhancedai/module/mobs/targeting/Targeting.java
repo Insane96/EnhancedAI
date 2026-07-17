@@ -76,8 +76,10 @@ public class Targeting extends Feature {
 	@Config(min = 0d, max = 1d, description = "Change for a mob to not attack other mobs when hit.")
 	public static Double betterHurtByTarget$preventInfighting = 0.9d;
 
-    @Config(min = 0, description = "Mobs in the entity type tag `enhancedai:mobs/targeting/alert_nearby` will alert nearby mobs in this range and target the player.")
-    public static Integer alertRange = 32;
+	@Config(min = 0, description = "Mobs in the entity type tag `enhancedai:mobs/targeting/alert_nearby` will alert nearby mobs in this range and target the player.")
+	public static Integer alert$range = 32;
+	@Config(min = 0, max = 1, description = "If a mob can be alerted.")
+	public static Double alert$chanceForMobToBeAbleTo = 0.5d;
 
 	@Config(description = "Mobs NearestAttackableTargetGoal will be replaced with mod's one for better configuration and targeting.")
 	public static Boolean betterNearbyTargeting$enable = true;
@@ -98,6 +100,7 @@ public class Targeting extends Feature {
 	public static EAIData<Boolean> MUST_SENSE_TARGET;
 	public static EAIData<Integer> UNSENSED_FORGET_TICKS;
 	public static EAIData<Integer> ALERT_RANGE;
+	public static EAIData<Boolean> CAN_BE_ALERTED;
 
 	@Override
 	public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
@@ -117,6 +120,7 @@ public class Targeting extends Feature {
 		MUST_SENSE_TARGET = EAIData.ofBool(this.createDataKey("must_sense_target"));
 		UNSENSED_FORGET_TICKS = EAIData.ofInt(this.createDataKey("unsensed_forget_ticks"));
         ALERT_RANGE = EAIData.ofInt(this.createDataKey("alert_range"));
+		CAN_BE_ALERTED = EAIData.ofBool(this.createDataKey("can_be_alerted"));
 	}
 
 	public static void attribute(EntityAttributeModificationEvent event) {
@@ -139,7 +143,8 @@ public class Targeting extends Feature {
 		processTargetGoal(mob);
 		processHurtByGoal(mob);
 		processMaxTargetingNodes(mob);
-        ALERT_RANGE.applyIfAbsent(mob, alertRange);
+        ALERT_RANGE.applyIfAbsent(mob, alert$range);
+		CAN_BE_ALERTED.applyIfAbsent(mob, mob.getRandom().nextDouble() < alert$chanceForMobToBeAbleTo);
 	}
 
 	private void processFollowRanges(Mob mob) {
@@ -256,7 +261,7 @@ public class Targeting extends Feature {
     @SubscribeEvent
     public void onEntityHurt(LivingDamageEvent.Post event) {
         if (!this.isEnabled()
-                || alertRange <= 0
+                || alert$range <= 0
                 || !(event.getEntity() instanceof Mob mob)
                 || !mob.getType().is(ALERT_NEARBY)
                 || !(event.getSource().getEntity() instanceof ServerPlayer attacker)
@@ -266,7 +271,8 @@ public class Targeting extends Feature {
         event.getEntity().level()
                 .getEntities(mob, mob.getBoundingBox().inflate(ALERT_RANGE.get(mob)), entity -> entity.getType() == mob.getType())
                 .forEach(entity -> {
-                    if (!(entity instanceof Mob nearbyMob))
+                    if (!(entity instanceof Mob nearbyMob)
+							|| !CAN_BE_ALERTED.get(nearbyMob))
                         return;
                     //Don't switch target if the current one is closer
                     if (nearbyMob.getTarget() != null && nearbyMob.distanceToSqr(nearbyMob.getTarget()) <= nearbyMob.distanceToSqr(attacker))

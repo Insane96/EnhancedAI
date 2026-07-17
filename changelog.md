@@ -2,6 +2,7 @@
 * Leaders
   * Leaders now spawn with a banner on their head
   * Lowered chance
+* Now only 50% of mobs can be alerted when hurting a mob
 * Hopefully fixed getting stuck on drowned's back when dying on them
 
 ## 4.2.0.2
