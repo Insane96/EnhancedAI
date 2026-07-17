@@ -1,4 +1,4 @@
-## Upcoming
+## 4.2.1.0
 * Leaders
   * Leaders now spawn with a banner on their head
   * Lowered chance
