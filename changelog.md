@@ -1,5 +1,7 @@
 ## Upcoming
-* Lowered Leaders chance
+* Leaders
+  * Leaders now spawn with a banner on their head
+  * Lowered chance
 
 ## 4.2.0.2
 * Fixed Spider slowdown not working

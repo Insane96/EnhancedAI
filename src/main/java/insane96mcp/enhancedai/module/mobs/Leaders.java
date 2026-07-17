@@ -10,18 +10,26 @@ import insane96mcp.insanelib.core.feature.Module;
 import insane96mcp.insanelib.core.feature.config.Config;
 import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
+import net.minecraft.util.Unit;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.entity.BannerPattern;
+import net.minecraft.world.level.block.entity.BannerPatternLayers;
+import net.minecraft.world.level.block.entity.BannerPatterns;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -32,7 +40,6 @@ import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
-import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
 import java.util.List;
 
@@ -48,7 +55,7 @@ public class Leaders extends Feature {
     public static Double leaderChance = 0.02d;
     @Config(min = 0, description = "At this damage, the chance to spawn reinforcements is 100% of the attribute, otherwise is scaled. E.g. with this set to 6 and enhancedai:spawn_reinforcements_chance attribute set to 0.5 the chance to spawn reinforcements is 50% at 6 damage, 25% at 3 damage or 100% at 12 damage. Set to 0 to disable scaling with damage. This is damage before resistances (armor, etc).")
     public static Double spawnReinforcementsChanceDamageScaled = 6d;
-    @Config(min = 0, description = "If true, reinforcements will spawn only if the damage comes from an entity")
+    @Config(description = "If true, reinforcements will spawn only if the damage comes from an entity")
     public static Boolean entityDamageOnly = false;
     @Config(description = "How much is enhancedai:spawn_reinforcements_chance reduced by each time a reinforcement is spawned.")
     public static Double chargePerSpawn = 0.05d;
@@ -60,6 +67,8 @@ public class Leaders extends Feature {
     public static Boolean bonusStats = true;
     @Config
     public static Boolean removeVanillaSpawnReinforcementsChance = true;
+    @Config(description = "If true, leader mobs will wear a banner with the Mojang logo on their head, like raid captains do with the ominous banner.")
+    public static Boolean leaderBanner = true;
 
     public static EAIData<Boolean> LEADER;
     public static EAIData<Double> CHARGE_PER_SPAWN;
@@ -73,6 +82,17 @@ public class Leaders extends Feature {
             }
             else {
                 mob.getAttribute(EAIAttributes.SPAWN_REINFORCEMENTS_CHANCE).removeModifier(BONUS_STATS_ID);
+            }
+
+            if (leaderBanner) {
+                if (leader) {
+                    mob.setItemSlot(EquipmentSlot.HEAD, getLeaderBannerInstance(mob));
+                    mob.setDropChance(EquipmentSlot.HEAD, 2.0F);
+                }
+                else if (ItemStack.matches(mob.getItemBySlot(EquipmentSlot.HEAD), getLeaderBannerInstance(mob))) {
+                    mob.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
+                    mob.setDropChance(EquipmentSlot.HEAD, 0.085F);
+                }
             }
 
             if (!bonusStats)
@@ -89,6 +109,20 @@ public class Leaders extends Feature {
         });
         CHARGE_PER_SPAWN = EAIData.ofDouble(this.createDataKey("charge_per_spawn"));
 	}
+
+    private static ItemStack getLeaderBannerInstance(Mob mob) {
+        Holder<BannerPattern> mojangPattern = mob.registryAccess()
+                .registryOrThrow(Registries.BANNER_PATTERN)
+                .getHolderOrThrow(BannerPatterns.MOJANG);
+        BannerPatternLayers patterns = new BannerPatternLayers.Builder()
+                .add(mojangPattern, DyeColor.WHITE)
+                .build();
+        ItemStack banner = new ItemStack(Items.BLACK_BANNER);
+        banner.set(DataComponents.BANNER_PATTERNS, patterns);
+        banner.set(DataComponents.HIDE_ADDITIONAL_TOOLTIP, Unit.INSTANCE);
+        banner.set(DataComponents.ITEM_NAME, Component.translatable("enhancedai.leader_banner"));
+        return banner;
+    }
 
     public static void attribute(EntityAttributeModificationEvent event) {
         for (EntityType<? extends LivingEntity> entityType : event.getTypes()) {
@@ -192,6 +226,7 @@ public class Leaders extends Feature {
         if (!this.isEnabled()
                 || Spawning.isUnaffectedByFeatures(event.getEntity())
                 || !(event.getEntity() instanceof Mob mob)
+                || !(mob.level() instanceof ServerLevel)
                 || !mob.getType().is(AFFECTED_ENTITY_TYPES))
             return;
 
@@ -227,16 +262,6 @@ public class Leaders extends Feature {
         for (ItemStack stack : items) {
             mob.spawnAtLocation(stack);
         }
-    }
-
-@SubscribeEvent
-    public void onTick(EntityTickEvent.Pre event) {
-        if (!LEADER.get(event.getEntity())
-                || !(event.getEntity().level() instanceof ServerLevel serverLevel)
-                || (event.getEntity().tickCount + event.getEntity().getId()) % 10 != 0)
-            return;
-
-        serverLevel.sendParticles(ParticleTypes.INSTANT_EFFECT, event.getEntity().getX(), event.getEntity().getEyeY(), event.getEntity().getZ(), 1, 0.25, 0.25, 0.25, 0);
     }
 
     public static boolean isLeader(LivingEntity entity) {

@@ -6,5 +6,7 @@
     "death.attack.shockwave": "%s was shocked by %s",
 
 	"attribute.name.xray_follow_range": "Mob XRay Follow Range",
-	"attribute.name.push_resistance": "Push Resistance"
+	"attribute.name.push_resistance": "Push Resistance",
+
+	"enhancedai.leader_banner": "Leader Banner"
 }

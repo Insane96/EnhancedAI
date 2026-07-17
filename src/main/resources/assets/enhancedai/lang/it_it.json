@@ -6,5 +6,7 @@
 	"death.attack.shockwave": "%s è stato travolto dall'onda d'urto di %s",
 	
 	"attribute.name.xray_follow_range": "Raggio di rilevamento delle creature XRay",
-	"attribute.name.push_resistance": "Resistenza alla spinta"
+	"attribute.name.push_resistance": "Resistenza alla spinta",
+
+	"enhancedai.leader_banner": "Stendardo del leader"
 }
