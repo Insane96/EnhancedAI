@@ -120,6 +120,9 @@ public class DrowningTargets extends Feature {
         @Override
         public void stop() {
             this.mob.getAttribute(Attributes.ATTACK_DAMAGE).removeModifier(ATTACK_DAMAGE_ID);
+            for (Entity passenger : this.mob.getPassengers()) {
+                passenger.stopRiding();
+            }
         }
 
         protected boolean closeToNextPos() {
