@@ -1,3 +1,6 @@
+## Upcoming
+* Lowered Leaders chance
+
 ## 4.2.0.2
 * Fixed Spider slowdown not working
 * Falling shockwave is now disabled by default

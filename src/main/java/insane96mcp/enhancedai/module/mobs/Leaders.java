@@ -45,7 +45,7 @@ public class Leaders extends Feature {
     public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/leaders"));
 
     @Config(min = 0, max = 1, description = "Chance for a mob to become a leader. Leader mobs have a high chance to spawn reinforcements.")
-    public static Double leaderChance = 0.03d;
+    public static Double leaderChance = 0.02d;
     @Config(min = 0, description = "At this damage, the chance to spawn reinforcements is 100% of the attribute, otherwise is scaled. E.g. with this set to 6 and enhancedai:spawn_reinforcements_chance attribute set to 0.5 the chance to spawn reinforcements is 50% at 6 damage, 25% at 3 damage or 100% at 12 damage. Set to 0 to disable scaling with damage. This is damage before resistances (armor, etc).")
     public static Double spawnReinforcementsChanceDamageScaled = 6d;
     @Config(min = 0, description = "If true, reinforcements will spawn only if the damage comes from an entity")
