@@ -26,8 +26,8 @@ public class VillagerAlertProtectors extends Feature {
     @Config(min = 0)
     public static Integer alertRange = 40;
 
-    //Lowest priority so other mods can set persistent data
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    //Low priority so other mods can set persistent data
+    @SubscribeEvent(priority = EventPriority.LOW)
     public void onLivingTick(EntityTickEvent.Pre event) {
         if (!this.isEnabled()
                 || Spawning.isUnaffectedByFeatures(event.getEntity())

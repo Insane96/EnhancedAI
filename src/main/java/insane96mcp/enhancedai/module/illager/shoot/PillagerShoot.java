@@ -54,7 +54,7 @@ public class PillagerShoot extends Feature {
 		INACCURACY = EAIData.ofDouble(this.createDataKey("inaccuracy"));
 	}
 
-	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@SubscribeEvent(priority = EventPriority.LOW)
 	public void onEntityJoinLevel(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
                 || Spawning.isUnaffectedByFeatures(event.getEntity())

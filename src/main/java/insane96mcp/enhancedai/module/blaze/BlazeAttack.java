@@ -52,8 +52,8 @@ public class BlazeAttack extends Feature {
         INACCURACY = EAIData.ofInt(this.createDataKey("inaccuracy"));
     }
 
-    //Lowest priority so other mods can set persistent data
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    //Low priority so other mods can set persistent data
+    @SubscribeEvent(priority = EventPriority.LOW)
     public void onEntityJoinLevel(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
                 || Spawning.isUnaffectedByFeatures(event.getEntity())

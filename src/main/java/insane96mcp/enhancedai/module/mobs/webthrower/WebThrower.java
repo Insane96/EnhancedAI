@@ -106,8 +106,8 @@ public class WebThrower extends Feature {
 		SLOWNESS_MAX_SLOWNESS_AMPLIFIER = EAIData.ofInt(this.createDataKey("slowness/max_slowness_amplifier"));
 	}
 
-	//Lowest priority so other mods can set persistent data
-	@SubscribeEvent(priority = EventPriority.LOWEST)
+	//Low priority so other mods can set persistent data
+	@SubscribeEvent(priority = EventPriority.LOW)
 	public void onEntityJoinLevel(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
                 || Spawning.isUnaffectedByFeatures(event.getEntity())

@@ -161,8 +161,8 @@ public class CreeperSwell extends Feature {
             living.playSound(fuseExplodeSounds.explode.get(), 4.0f, 1f);
 	}
 
-	//Lowest priority so other mods can set persistent data
-	@SubscribeEvent(priority = EventPriority.LOWEST)
+	//Low priority so other mods can set persistent data
+	@SubscribeEvent(priority = EventPriority.LOW)
 	public void eventEntityJoinWorld(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
                 || Spawning.isUnaffectedByFeatures(event.getEntity())

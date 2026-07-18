@@ -61,7 +61,7 @@ public class CreeperLaunch extends Feature {
 		PARTICLES = EAIData.ofBool(this.createDataKey("particles"));
 	}
 
-	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@SubscribeEvent(priority = EventPriority.LOW)
 	public void eventEntityJoinWorld(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
                 || Spawning.isUnaffectedByFeatures(event.getEntity())

@@ -33,7 +33,7 @@ public class TNTLike extends Feature {
 		DATA = EAIData.ofBool(this.createDataKey("tnt_like"));
 	}
 
-	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@SubscribeEvent(priority = EventPriority.LOW)
 	public void eventEntityJoinWorld(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
                 || Spawning.isUnaffectedByFeatures(event.getEntity())

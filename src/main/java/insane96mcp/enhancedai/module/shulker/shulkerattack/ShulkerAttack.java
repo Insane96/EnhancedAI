@@ -30,8 +30,8 @@ public class ShulkerAttack extends Feature {
         EXTRA_ATTACK_SPEED = EAIData.ofInt(this.createDataKey("extra_attack_speed"));
     }
 
-    //Lowest priority so other mods can set persistent data
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    //Low priority so other mods can set persistent data
+    @SubscribeEvent(priority = EventPriority.LOW)
     public void eventEntityJoinWorld(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
                 || Spawning.isUnaffectedByFeatures(event.getEntity())

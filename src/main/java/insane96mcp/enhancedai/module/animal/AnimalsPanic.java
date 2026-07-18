@@ -59,8 +59,8 @@ public class AnimalsPanic extends Feature {
                 .forEach(nearbyAnimal -> nearbyAnimal.setLastHurtByMob(attacker));
     }
 
-    //Lowest priority so other mods can set persistent data
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    //Low priority so other mods can set persistent data
+    @SubscribeEvent(priority = EventPriority.LOW)
     public void onEntityJoinLevel(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
                 || Spawning.isUnaffectedByFeatures(event.getEntity())

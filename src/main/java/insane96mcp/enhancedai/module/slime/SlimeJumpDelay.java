@@ -33,7 +33,7 @@ public class SlimeJumpDelay extends Feature {
 		JUMP_DELAY_MAX = EAIData.ofInt(this.createDataKey("jump_delay_max"));
 	}
 
-	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@SubscribeEvent(priority = EventPriority.LOW)
 	public void onEntityJoinLevel(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
 				|| !(event.getEntity() instanceof Slime slime)

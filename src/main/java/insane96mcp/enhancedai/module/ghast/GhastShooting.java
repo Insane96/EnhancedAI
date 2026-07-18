@@ -42,8 +42,8 @@ public class GhastShooting extends Feature {
         SHOOT_WHEN_NOT_SEEN = EAIData.ofBool(this.createDataKey("shoot_when_not_seen"));
     }
 
-    //Lowest priority so other mods can set persistent data
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    //Low priority so other mods can set persistent data
+    @SubscribeEvent(priority = EventPriority.LOW)
     public void onEntityJoinLevel(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
                 || Spawning.isUnaffectedByFeatures(event.getEntity())
