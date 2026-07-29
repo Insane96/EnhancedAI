@@ -13,7 +13,6 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Creeper;
-import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
@@ -33,7 +32,7 @@ public class TNTLike extends Feature {
 		DATA = EAIData.ofBool(this.createDataKey("tnt_like"));
 	}
 
-	@SubscribeEvent(priority = EventPriority.LOW)
+	@SubscribeEvent
 	public void eventEntityJoinWorld(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
                 || Spawning.isUnaffectedByFeatures(event.getEntity())

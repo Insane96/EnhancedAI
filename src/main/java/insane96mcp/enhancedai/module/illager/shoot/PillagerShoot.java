@@ -24,7 +24,6 @@ import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
@@ -54,7 +53,7 @@ public class PillagerShoot extends Feature {
 		INACCURACY = EAIData.ofDouble(this.createDataKey("inaccuracy"));
 	}
 
-	@SubscribeEvent(priority = EventPriority.LOW)
+	@SubscribeEvent
 	public void onEntityJoinLevel(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
                 || Spawning.isUnaffectedByFeatures(event.getEntity())

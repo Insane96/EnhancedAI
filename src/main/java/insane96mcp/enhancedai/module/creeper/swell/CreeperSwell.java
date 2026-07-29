@@ -28,7 +28,6 @@ import net.minecraft.world.entity.ai.goal.SwellGoal;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.EntityLeaveLevelEvent;
@@ -162,7 +161,7 @@ public class CreeperSwell extends Feature {
 	}
 
 	//Low priority so other mods can set persistent data
-	@SubscribeEvent(priority = EventPriority.LOW)
+	@SubscribeEvent
 	public void eventEntityJoinWorld(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
                 || Spawning.isUnaffectedByFeatures(event.getEntity())

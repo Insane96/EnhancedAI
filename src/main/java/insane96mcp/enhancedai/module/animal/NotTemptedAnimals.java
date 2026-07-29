@@ -15,7 +15,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Enemy;
-import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
@@ -37,7 +36,7 @@ public class NotTemptedAnimals extends Feature {
     }
 
     //Low priority so other mods can set persistent data
-    @SubscribeEvent(priority = EventPriority.LOW)
+    @SubscribeEvent
     public void onEntityJoinLevel(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
                 || Spawning.isUnaffectedByFeatures(event.getEntity())

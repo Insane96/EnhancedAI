@@ -10,7 +10,6 @@ import insane96mcp.insanelib.core.feature.Module;
 import insane96mcp.insanelib.core.feature.config.Config;
 import insane96mcp.insanelib.core.feature.config.MinMaxConfig;
 import net.minecraft.world.entity.monster.Shulker;
-import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
@@ -31,7 +30,7 @@ public class ShulkerAttack extends Feature {
     }
 
     //Low priority so other mods can set persistent data
-    @SubscribeEvent(priority = EventPriority.LOW)
+    @SubscribeEvent
     public void eventEntityJoinWorld(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
                 || Spawning.isUnaffectedByFeatures(event.getEntity())

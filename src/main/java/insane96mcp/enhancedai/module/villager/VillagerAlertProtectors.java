@@ -12,7 +12,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.npc.Villager;
-import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
@@ -27,7 +26,7 @@ public class VillagerAlertProtectors extends Feature {
     public static Integer alertRange = 40;
 
     //Low priority so other mods can set persistent data
-    @SubscribeEvent(priority = EventPriority.LOW)
+    @SubscribeEvent
     public void onLivingTick(EntityTickEvent.Pre event) {
         if (!this.isEnabled()
                 || Spawning.isUnaffectedByFeatures(event.getEntity())

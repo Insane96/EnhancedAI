@@ -26,7 +26,6 @@ import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
@@ -126,7 +125,7 @@ public class AnimalScaredAttack extends Feature {
     }
 
     //Low priority so other mods can set persistent data
-    @SubscribeEvent(priority = EventPriority.LOW)
+    @SubscribeEvent
     public void onEntityJoinLevel(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
                 || Spawning.isUnaffectedByFeatures(event.getEntity())

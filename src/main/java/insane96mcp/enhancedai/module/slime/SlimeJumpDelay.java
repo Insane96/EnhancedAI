@@ -12,7 +12,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Slime;
-import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
@@ -33,7 +32,7 @@ public class SlimeJumpDelay extends Feature {
 		JUMP_DELAY_MAX = EAIData.ofInt(this.createDataKey("jump_delay_max"));
 	}
 
-	@SubscribeEvent(priority = EventPriority.LOW)
+	@SubscribeEvent
 	public void onEntityJoinLevel(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
 				|| !(event.getEntity() instanceof Slime slime)

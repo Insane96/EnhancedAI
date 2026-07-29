@@ -11,7 +11,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Creeper;
-import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
@@ -27,7 +26,7 @@ public class DisableFallingSwelling extends Feature {
 		DISABLE_FALLING_SWELLING = EAIData.ofBool(this.createDataKey("disable_falling_swelling"));
 	}
 
-	@SubscribeEvent(priority = EventPriority.LOW)
+	@SubscribeEvent
 	public void eventEntityJoinWorld(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
                 || Spawning.isUnaffectedByFeatures(event.getEntity())

@@ -14,7 +14,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Ghast;
-import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
@@ -43,7 +42,7 @@ public class GhastShooting extends Feature {
     }
 
     //Low priority so other mods can set persistent data
-    @SubscribeEvent(priority = EventPriority.LOW)
+    @SubscribeEvent
     public void onEntityJoinLevel(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
                 || Spawning.isUnaffectedByFeatures(event.getEntity())

@@ -27,7 +27,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.block.Blocks;
-import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
@@ -107,7 +106,7 @@ public class WebThrower extends Feature {
 	}
 
 	//Low priority so other mods can set persistent data
-	@SubscribeEvent(priority = EventPriority.LOW)
+	@SubscribeEvent
 	public void onEntityJoinLevel(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
                 || Spawning.isUnaffectedByFeatures(event.getEntity())

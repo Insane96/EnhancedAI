@@ -21,7 +21,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
-import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
@@ -87,7 +86,7 @@ public class MinerMobs extends Feature {
 	}
 
 	//Low priority so other mods can set persistent data
-	@SubscribeEvent(priority = EventPriority.LOW)
+	@SubscribeEvent
 	public void onEntityJoinLevel(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
                 || Spawning.isUnaffectedByFeatures(event.getEntity())
