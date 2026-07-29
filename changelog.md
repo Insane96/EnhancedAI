@@ -1,6 +1,7 @@
 # Upcoming
 * Removed all the LOW priority on events
   * Other mods can just bump up event priority
+* Llamas, Pandas and Polar Bears no longer break vehicles
 
 # 4.2.1.1
 * Fixed some events having LOWEST priority, making MPR condition fail on reading the data keys
