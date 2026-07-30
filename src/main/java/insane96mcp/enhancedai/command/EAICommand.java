@@ -96,33 +96,48 @@ public class EAICommand {
                             return 1;
                         })
                 )
-				.then(Commands.literal("list_goals")
-						.then(Commands.argument("target", EntityArgument.entity())
-							.executes((ctx) -> {
-								Entity entity = EntityArgument.getEntity(ctx, "target");
-								if (!(entity instanceof Mob mob)) return 0;
-								MutableComponent component = Component.literal("Goals for " + entity.getName().getString());
-								component.append(CommonComponents.NEW_LINE).append(Component.literal("Goal Selector: "));
-								List<WrappedGoal> availableGoals = new ArrayList<>(mob.goalSelector.getAvailableGoals());
-								availableGoals.sort(Comparator.comparingInt(WrappedGoal::getPriority));
-								for (WrappedGoal goal : availableGoals) {
-                                    MutableComponent componentGoal = Component.literal("(" + goal.getPriority() + ") " + goal.getGoal().getClass().getSimpleName() + "  " + goal.getFlags());
-                                    if (goal.isRunning())
-                                        componentGoal.withStyle(ChatFormatting.GREEN);
-                                    component.append(CommonComponents.NEW_LINE).append(CommonComponents.SPACE).append(componentGoal);
-								}
-								component.append(CommonComponents.NEW_LINE).append(CommonComponents.NEW_LINE).append(Component.literal("Target Selector: "));
-								List<WrappedGoal> targetGoals = new ArrayList<>(mob.targetSelector.getAvailableGoals());
-								targetGoals.sort(Comparator.comparingInt(WrappedGoal::getPriority));
-								for (WrappedGoal goal : targetGoals) {
-                                    MutableComponent componentGoal = Component.literal("(" + goal.getPriority() + ") " + goal.getGoal().getClass().getSimpleName() + "  " + goal.getFlags());
-                                    if (goal.isRunning())
-                                        componentGoal.withStyle(ChatFormatting.GREEN);
-                                    component.append(CommonComponents.NEW_LINE).append(CommonComponents.SPACE).append(componentGoal);
-								}
+                .then(Commands.literal("list_goals")
+                        .then(Commands.argument("target", EntityArgument.entity())
+                                .executes((ctx) -> {
+                                    Entity entity = EntityArgument.getEntity(ctx, "target");
+                                    if (!(entity instanceof Mob mob)) return 0;
+                                    MutableComponent component = Component.literal("Goals for " + entity.getName().getString());
+                                    component.append(CommonComponents.NEW_LINE).append(Component.literal("Goal Selector: "));
+                                    List<WrappedGoal> availableGoals = new ArrayList<>(mob.goalSelector.getAvailableGoals());
+                                    availableGoals.sort(Comparator.comparingInt(WrappedGoal::getPriority));
+                                    for (WrappedGoal goal : availableGoals) {
+                                        MutableComponent componentGoal = Component.literal("(" + goal.getPriority() + ") " + goal.getGoal().getClass().getSimpleName() + "  " + goal.getFlags());
+                                        if (goal.isRunning())
+                                            componentGoal.withStyle(ChatFormatting.GREEN);
+                                        component.append(CommonComponents.NEW_LINE).append(CommonComponents.SPACE).append(componentGoal);
+                                    }
+                                    component.append(CommonComponents.NEW_LINE).append(CommonComponents.NEW_LINE).append(Component.literal("Target Selector: "));
+                                    List<WrappedGoal> targetGoals = new ArrayList<>(mob.targetSelector.getAvailableGoals());
+                                    targetGoals.sort(Comparator.comparingInt(WrappedGoal::getPriority));
+                                    for (WrappedGoal goal : targetGoals) {
+                                        MutableComponent componentGoal = Component.literal("(" + goal.getPriority() + ") " + goal.getGoal().getClass().getSimpleName() + "  " + goal.getFlags());
+                                        if (goal.isRunning())
+                                            componentGoal.withStyle(ChatFormatting.GREEN);
+                                        component.append(CommonComponents.NEW_LINE).append(CommonComponents.SPACE).append(componentGoal);
+                                    }
 
-								ctx.getSource().sendSuccess(() -> component, true);
-								return 1;
-							}))));
+                                    ctx.getSource().sendSuccess(() -> component, true);
+                                    return 1;
+                                })))
+                .then(Commands.literal("stop_all_goals")
+                        .then(Commands.argument("target", EntityArgument.entity())
+                                .executes((ctx) -> {
+                                    Entity entity = EntityArgument.getEntity(ctx, "target");
+                                    if (!(entity instanceof Mob mob)) return 0;
+                                    List<WrappedGoal> availableGoals = new ArrayList<>(mob.goalSelector.getAvailableGoals());
+                                    for (WrappedGoal goal : availableGoals)
+                                        goal.stop();
+                                    List<WrappedGoal> targetGoals = new ArrayList<>(mob.targetSelector.getAvailableGoals());
+                                    for (WrappedGoal goal : targetGoals)
+                                        goal.stop();
+
+                                    ctx.getSource().sendSuccess(() -> Component.literal("Stopped all goals for ").append(entity.getName()), true);
+                                    return 1;
+                                }))));
     }
 }
