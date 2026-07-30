@@ -1,18 +1,21 @@
 package insane96mcp.enhancedai.data.mpr.condition;
 
 import insane96mcp.enhancedai.EnhancedAI;
-import insane96mcp.mobspropertiesrandomness.data.json.condition.MPRCondition;
-
-import static insane96mcp.mobspropertiesrandomness.data.json.condition.ConditionsRegistry.CONDITIONS;
+import insane96mcp.mobspropertiesrandomness.event.MPRRegisterEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.common.NeoForge;
 
 public class EAIConditionsRegistry {
-	/// Use your own namespace
-	private static void register(String id, Class<? extends MPRCondition> clazz) {
-		CONDITIONS.put(EnhancedAI.location(id), clazz);
+	public static void init() {
+		NeoForge.EVENT_BUS.register(new EAIConditionsRegistry());
 	}
 
-	public static void init() {
-		register("is_leader", EAIIsLeaderCondition.class);
-		register("data", EAIDataCondition.class);
+	@SubscribeEvent
+	public void onMPRRegister(MPRRegisterEvent event) {
+		if (event.getType() != MPRRegisterEvent.Type.CONDITION)
+			return;
+
+		event.register(EnhancedAI.location("is_leader"), EAIIsLeaderCondition.class);
+		event.register(EnhancedAI.location("data"), EAIDataCondition.class);
 	}
 }
