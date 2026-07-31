@@ -1,3 +1,6 @@
+# 4.2.1.3
+* Fixed compatibility with latest MPR
+
 # 4.2.1.2
 * Removed all the LOW priority on events
   * Other mods can just bump up event priority

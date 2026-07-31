@@ -56,7 +56,7 @@ public class EnhancedAI
         eventBus.addListener(Leaders::onEntityAttributeModification);
 
         if (ModList.get().isLoaded("mobspropertiesrandomness")) {
-            NeoForge.EVENT_BUS.register(new MPRIntegration());
+            new MPRIntegration(eventBus);
         }
     }
 
