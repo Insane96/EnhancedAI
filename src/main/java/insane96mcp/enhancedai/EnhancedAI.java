@@ -4,8 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.logging.LogUtils;
 import insane96mcp.enhancedai.command.EAICommand;
 import insane96mcp.enhancedai.data.PotionEffectList;
-import insane96mcp.enhancedai.data.mpr.condition.EAIConditionsRegistry;
-import insane96mcp.enhancedai.data.mpr.property.EAIPropertiesRegistry;
+import insane96mcp.enhancedai.data.mpr.MPRIntegration;
 import insane96mcp.enhancedai.module.EAIModules;
 import insane96mcp.enhancedai.module.animal.AnimalScaredAttack;
 import insane96mcp.enhancedai.module.mobs.Leaders;
@@ -50,15 +49,14 @@ public class EnhancedAI
         EAIAttributes.ATTRIBUTES.register(eventBus);
         EAIEntities.ENTITIES.register(eventBus);
 
-        eventBus.addListener(MinerMobs::addAttribute);
-        eventBus.addListener(AnimalScaredAttack::attribute);
-        eventBus.addListener(MeleeAttacking::attributeModificationEvent);
-        eventBus.addListener(Targeting::attribute);
-        eventBus.addListener(Leaders::attribute);
+        eventBus.addListener(MinerMobs::onEntityAttributeModification);
+        eventBus.addListener(AnimalScaredAttack::onEntityAttributeModification);
+        eventBus.addListener(MeleeAttacking::onEntityAttributeModification);
+        eventBus.addListener(Targeting::onEntityAttributeModification);
+        eventBus.addListener(Leaders::onEntityAttributeModification);
 
         if (ModList.get().isLoaded("mobspropertiesrandomness")) {
-            EAIPropertiesRegistry.init();
-            EAIConditionsRegistry.init();
+            NeoForge.EVENT_BUS.register(new MPRIntegration());
         }
     }
 

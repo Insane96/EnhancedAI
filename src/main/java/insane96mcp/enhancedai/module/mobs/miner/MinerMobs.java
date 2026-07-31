@@ -72,7 +72,7 @@ public class MinerMobs extends Feature {
 		DIMENSION_WHITELIST = EAIDataList.of(this.createDataKey("dimension_whitelist"), String.class);
 	}
 
-	public static void addAttribute(EntityAttributeModificationEvent event) {
+	public static void onEntityAttributeModification(EntityAttributeModificationEvent event) {
 		for (EntityType<? extends LivingEntity> entityType : event.getTypes()) {
 			if (!event.has(entityType, Attributes.BLOCK_INTERACTION_RANGE))
 				event.add(entityType, Attributes.BLOCK_INTERACTION_RANGE);

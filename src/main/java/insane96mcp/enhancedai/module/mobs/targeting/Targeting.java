@@ -123,7 +123,7 @@ public class Targeting extends Feature {
 		CAN_BE_ALERTED = EAIData.ofBool(this.createDataKey("can_be_alerted"));
 	}
 
-	public static void attribute(EntityAttributeModificationEvent event) {
+	public static void onEntityAttributeModification(EntityAttributeModificationEvent event) {
 		for (EntityType<? extends LivingEntity> entityType : event.getTypes()) {
 			if (!event.has(entityType, EAIAttributes.XRAY_FOLLOW_RANGE))
 				event.add(entityType, EAIAttributes.XRAY_FOLLOW_RANGE, 0d);

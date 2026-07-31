@@ -124,7 +124,7 @@ public class Leaders extends Feature {
         return banner;
     }
 
-    public static void attribute(EntityAttributeModificationEvent event) {
+    public static void onEntityAttributeModification(EntityAttributeModificationEvent event) {
         for (EntityType<? extends LivingEntity> entityType : event.getTypes()) {
             if (event.has(entityType, EAIAttributes.SPAWN_REINFORCEMENTS_CHANCE))
                 continue;

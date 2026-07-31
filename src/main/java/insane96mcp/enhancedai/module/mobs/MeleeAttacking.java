@@ -24,7 +24,7 @@ public class MeleeAttacking extends Feature {
 	@Config(min = 0f, max = 4f, description = "The maximum attack speed a mob can attack with (in attacks per second, 2 is an attack every 0.5 seconds, 1.25 is an attack every 0.8s, 1 is an attack every 1s).")
 	public static Double attackSpeed$maximum = 4d;
 
-	public static void attributeModificationEvent(EntityAttributeModificationEvent event) {
+	public static void onEntityAttributeModification(EntityAttributeModificationEvent event) {
 		for (EntityType<? extends LivingEntity> entityType : event.getTypes()) {
 			if (!event.has(entityType, Attributes.ATTACK_SPEED))
 				event.add(entityType, Attributes.ATTACK_SPEED, 4d);

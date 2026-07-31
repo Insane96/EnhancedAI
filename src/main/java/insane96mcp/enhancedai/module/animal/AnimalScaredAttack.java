@@ -115,7 +115,7 @@ public class AnimalScaredAttack extends Feature {
         VERTICAL_FLEE_DISTANCE = EAIData.ofInt(this.createDataKey("vertical_flee_distance"));
     }
 
-    public static void attribute(EntityAttributeModificationEvent event) {
+    public static void onEntityAttributeModification(EntityAttributeModificationEvent event) {
         for (EntityType<? extends LivingEntity> entityType : event.getTypes()) {
             if (event.has(entityType, Attributes.ATTACK_DAMAGE))
                 continue;
