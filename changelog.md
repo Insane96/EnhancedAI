@@ -1,4 +1,6 @@
 # Upcoming
+* Added 'Patrol'
+  * Iron Golems will now return close to their spawn point when getting too far away
 * Added 'Better Leap at Target Goal'
   * Increases the jump distance when the mob's faster
 * MPR Data Pack
