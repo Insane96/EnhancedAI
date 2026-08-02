@@ -1,4 +1,4 @@
-# Upcoming
+# 4.2.2.0
 * Added 'Patrol'
   * Iron Golems will now return close to their spawn point when getting too far away
 * Added 'Better Leap at Target Goal'
