@@ -1,4 +1,6 @@
 # Upcoming
+* Added 'Better Leap at Target Goal'
+  * Increases the jump distance when the mob's faster
 * MPR Data Pack
   * Wolves no longer have reduced attack speed and increased attack damage
 

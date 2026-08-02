@@ -11,6 +11,7 @@
         "EnderManMixin",
         "EntityMixin",
         "GroundPathNavigationMixin",
+        "LeapAtTargetGoalMixin",
         "LivingEntityMixin",
         "MagmaCubeMixin",
         "MeleeAttackGoalMixin",
