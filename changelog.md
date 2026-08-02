@@ -5,6 +5,7 @@
   * Increases the jump distance when the mob's faster
 * MPR Data Pack
   * Wolves no longer have reduced attack speed and increased attack damage
+* Animals no longer use the Panic on Fire feature
 
 # 4.2.1.3
 * Fixed compatibility with latest MPR

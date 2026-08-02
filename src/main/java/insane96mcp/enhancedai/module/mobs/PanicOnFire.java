@@ -40,7 +40,7 @@ public class PanicOnFire extends Feature {
             if (!(mob instanceof PathfinderMob pMob))
                 return;
             if (panicOnFire)
-                mob.goalSelector.addGoal(1, new EAIPanicGoal(pMob, 1.25));
+                mob.goalSelector.addGoal(1, new EAIPanicOnFireGoal(pMob, 1.25));
         });
     }
 
@@ -55,7 +55,7 @@ public class PanicOnFire extends Feature {
         PANIC_ON_FIRE.applyIfAbsent(mob, mob.getRandom().nextDouble() < chance);
 	}
 
-    public static class EAIPanicGoal extends Goal {
+    public static class EAIPanicOnFireGoal extends Goal {
         protected final PathfinderMob mob;
         protected final double speedModifier;
         protected double posX;
@@ -63,7 +63,7 @@ public class PanicOnFire extends Feature {
         protected double posZ;
         protected boolean isRunning;
 
-        public EAIPanicGoal(PathfinderMob pMob, double pSpeedModifier) {
+        public EAIPanicOnFireGoal(PathfinderMob pMob, double pSpeedModifier) {
             this.mob = pMob;
             this.speedModifier = pSpeedModifier;
             this.setFlags(EnumSet.of(Goal.Flag.MOVE));

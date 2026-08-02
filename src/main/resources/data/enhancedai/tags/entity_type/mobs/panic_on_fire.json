@@ -3,6 +3,22 @@
         "#enhancedai:all_mobs"
     ],
     "remove": [
-        "minecraft:blaze"
+        "minecraft:blaze",
+        "minecraft:chicken",
+        "minecraft:cow",
+        "minecraft:pig",
+        "minecraft:polar_bear",
+        "minecraft:sheep",
+        "minecraft:horse",
+        "minecraft:donkey",
+        "minecraft:mule",
+        "minecraft:llama",
+        "minecraft:trader_llama",
+        "minecraft:strider",
+        "minecraft:wandering_trader",
+        "minecraft:fox",
+        "minecraft:panda",
+        "minecraft:rabbit",
+        "minecraft:turtle"
     ]
 }
