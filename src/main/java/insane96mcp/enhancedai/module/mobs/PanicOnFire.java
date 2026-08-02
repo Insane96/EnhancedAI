@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 
 @LoadFeature(module = EAIModules.MOBS, description = "Makes mobs panic when on fire.")
-public class Panic extends Feature {
+public class PanicOnFire extends Feature {
     public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/panic_on_fire"));
 
     @Config(min = 0d, max = 1d, description = "Chance for a mob to get the panic on fire AI")
