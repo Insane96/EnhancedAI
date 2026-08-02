@@ -1,3 +1,7 @@
+# Upcoming
+* MPR Data Pack
+  * Wolves no longer have reduced attack speed. Instead, they have reduced attack damage
+
 # 4.2.1.3
 * Fixed compatibility with latest MPR
 

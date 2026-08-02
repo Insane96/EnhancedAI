@@ -17,9 +17,9 @@
         },
         {
             "property": "attribute_modifier",
-            "attribute": "minecraft:generic.attack_speed",
-            "id": "enhancedai:wolves_attack_speed_nerf",
-            "amount": -0.5,
+            "attribute": "minecraft:generic.attack_damage",
+            "id": "enhancedai:wolves_attack_damage_nerf",
+            "amount": -0.4,
             "operation": "add_multiplied_base"
         }
     ]
