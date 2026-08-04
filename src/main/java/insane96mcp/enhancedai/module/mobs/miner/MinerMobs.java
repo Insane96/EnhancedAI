@@ -32,7 +32,7 @@ public class MinerMobs extends Feature {
 	public static final TagKey<EntityType<?>> CAN_BE_MINER = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/can_mine"));
 	public static final TagKey<Block> BLOCK_BLACKLIST = TagKey.create(Registries.BLOCK, EnhancedAI.location("miner_blacklist"));
 
-	@Config(min = 0d, max = 1d, description = "Chance for a mob in the entity type tag enhancedai:can_be_miner to spawn with the miner ability")
+	@Config(min = 0d, max = 1d, description = "Chance for a mob in the entity type tag enhancedai:mobs/can_mine to spawn with the miner ability")
 	public static Double minerChance = 0.07d;
 	@Config(description = "NONE: No item is required. ANY_TOOL: Any item that can break blocks in the off-hand is required. CORRECT_TOOL_FOR_REQUIRED: The mob is able to mine any blocks that don't require a tool, and require a tool for blocks that require it (e.g. can always mine dirt but can't mine stone). CORRECT_TOOL_FOR_ANY_BLOCK: The mob can only mine blocks if the tool is the right one for the block (e.g. can mine dirt only with a shovel).")
 	public static ToolRequirement toolRequirement = ToolRequirement.CORRECT_TOOL_FOR_REQUIRED;
@@ -44,7 +44,7 @@ public class MinerMobs extends Feature {
 	public static Double timeToBreakMultiplier = 1.25d;
 	@Config(description = "Dimensions where mobs can mine.")
 	public static List<String> dimensionWhitelist = List.of("minecraft:overworld", "minecraft:the_nether", "minecraft:the_end");
-	@Config(description = "If true, the block tag `enhancedai:miner_mobs/blacklist` will be treated as a whitelist instead of blacklist")
+	@Config(description = "If true, the block tag enhancedai:miner_blacklist will be treated as a whitelist instead of blacklist")
 	public static Boolean blockBlacklistAsWhitelist = false;
 	@Config(description = "Mobs with Miner AI will not be able to break tile entities")
 	public static Boolean blacklistTileEntities = true;

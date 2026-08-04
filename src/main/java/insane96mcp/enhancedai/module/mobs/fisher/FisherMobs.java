@@ -27,7 +27,7 @@ public class FisherMobs extends Feature {
 	public static final TagKey<EntityType<?>> CAN_EQUIP_FISHING_ROD = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/can_equip_fishing_rod"));
     public static final TagKey<Item> FISHER_RODS = TagKey.create(Registries.ITEM, EnhancedAI.location("valid_fisher_rods"));
 
-	@Config(min = 0d, max = 1d, description = "Chance for entity types in the enhancedai:fisher_mobs/can_equip_rod tag to spawn with a Fishing Rod in the offhand.\nIf you require more control, use Mobs Properties Randomness")
+	@Config(min = 0d, max = 1d, description = "Chance for entity types in the enhancedai:mobs/can_equip_fishing_rod tag to spawn with a Fishing Rod in the offhand.\nIf you require more control, use Mobs Properties Randomness")
 	public static Double equipFishingRodChance = 0.07;
 
 	@Config(min = 0d, max = 1d, description = "Chance for a fisher mob to steal an entity item in the hands instead of reeling the player.")

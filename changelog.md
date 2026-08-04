@@ -1,3 +1,6 @@
+# 4.2.2.1
+* Fixed config options descriptions mentioning outdated tags
+
 # 4.2.2.0
 * Added 'Patrol'
   * Iron Golems will now return close to their spawn point when getting too far away

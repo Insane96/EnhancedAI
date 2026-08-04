@@ -17,7 +17,7 @@ import net.minecraft.world.entity.monster.Blaze;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
-@LoadFeature(module = EAIModules.BLAZE, description = "Make blazes fire faster/more fireballs. Only mobs in enhancedai:blaze/change_attack entity type tag are affected by this feature.")
+@LoadFeature(module = EAIModules.BLAZE, description = "Make blazes fire faster/more fireballs. Only mobs in enhancedai:blaze_attack/change_attack entity type tag are affected by this feature.")
 public class BlazeAttack extends Feature {
     public static final TagKey<EntityType<?>> CHANGE_ATTACK = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("blaze_attack/change_attack"));
 
