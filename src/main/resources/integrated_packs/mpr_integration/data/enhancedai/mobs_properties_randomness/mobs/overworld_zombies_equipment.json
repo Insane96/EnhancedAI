@@ -87,6 +87,26 @@
                     "weight": 1
                 },
                 {
+                    "item": "insanesurvivaloverhaul:wooden_dagger",
+                    "weight": 90
+                },
+                {
+                    "item": "insanesurvivaloverhaul:copper_dagger",
+                    "weight": 50
+                },
+                {
+                    "item": "insanesurvivaloverhaul:iron_dagger",
+                    "weight": 10
+                },
+                {
+                    "item": "insanesurvivaloverhaul:golden_dagger",
+                    "weight": 30
+                },
+                {
+                    "item": "insanesurvivaloverhaul:diamond_dagger",
+                    "weight": 1
+                },
+                {
                     "item": "minecraft:wooden_axe",
                     "weight": 90
                 },

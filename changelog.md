@@ -1,3 +1,6 @@
+# Upcoming
+* MPR Data Pack Integration with ISOs Daggers
+
 # 4.2.2.1
 * Fixed config options descriptions mentioning outdated tags
 
