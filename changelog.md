@@ -1,5 +1,7 @@
 # Upcoming
 * MPR Data Pack Integration with ISOs Daggers
+* Tentative fix for animals getting stuck no longer moving (but still attacking)
+  * This hopefully also fixes the issue with modded mobs ... even tho they shouldn't be affected
 
 # 4.2.2.1
 * Fixed config options descriptions mentioning outdated tags
