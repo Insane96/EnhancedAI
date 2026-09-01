@@ -25,7 +25,7 @@ public class SprintGoal extends Goal {
 		this.target = this.goalOwner.getTarget();
 		if (this.target == null)
 			return false;
-		return this.goalOwner.distanceToSqr(this.target) < 256;
+		return this.goalOwner.distanceToSqr(this.target) < 100;
 	}
 
 	@Override
