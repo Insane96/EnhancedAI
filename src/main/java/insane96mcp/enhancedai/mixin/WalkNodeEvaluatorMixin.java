@@ -15,7 +15,7 @@ public class WalkNodeEvaluatorMixin {
     private static boolean enhancedai$preventWalkingOnOpenTrapdoor(boolean original, @Local BlockState blockstate) {
         if (!Pathfinding.shouldFixWalkingOverOpenTrapdoors()
                 || !original)
-            return false;
+            return original;
         return !blockstate.getValue(TrapDoorBlock.OPEN);
     }
 }

@@ -1,6 +1,7 @@
 # Upcoming
 * Sprinting mobs now sprint closer to the player (16 -> 10 blocks)
   * Also creepers can now sprint
+* Hopefully fixed disabling 'Fix Walking Over Open Trapdoors' not working
 
 # 4.2.2.2
 * MPR Data Pack Integration with ISOs Daggers
