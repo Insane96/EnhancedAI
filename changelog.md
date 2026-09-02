@@ -1,3 +1,6 @@
+# 4.2.2.4
+* Fixed enums not working with `enhancedai:change_data` property for MPR (need to use `string_value`)
+
 # 4.2.2.3
 * Sprinting mobs now sprint closer to the player (16 -> 10 blocks)
   * Also creepers can now sprint

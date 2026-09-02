@@ -52,7 +52,7 @@ public class EAIChangeDataProperty extends MPRProperty {
                 EAIData.apply(data, mob, this.value.getDoubleBetween(living));
         }
         else if (this.stringValue != null)
-            EAIData.apply(data, mob, this.stringValue);
+            EAIData.apply(data, mob, data.parse(this.stringValue));
         return true;
     }
 
