@@ -1,3 +1,6 @@
+# 4.2.2.5
+* Lists now work with `enhancedai:change_data` property (still need to use `string_value`)
+
 # 4.2.2.4
 * Fixed enums not working with `enhancedai:change_data` property for MPR (need to use `string_value`)
 

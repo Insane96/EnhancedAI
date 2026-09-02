@@ -40,16 +40,16 @@ public class EAIChangeDataProperty extends MPRProperty {
             return false;
 
         EAIData<?> data = optData.get();
-        if (data.type() == List.class)
-            throw new UnsupportedOperationException("List Data are not supported by change_data property");
 
         if (this.value != null) {
             if (data.type() == Boolean.class)
                 EAIData.apply(data, mob, this.value.getDoubleBetween(living) >= 1d);
             else if (data.type() == Integer.class)
                 EAIData.apply(data, mob, this.value.getIntBetween(living));
-            else
+            else if (data.type() == Double.class)
                 EAIData.apply(data, mob, this.value.getDoubleBetween(living));
+            else
+                throw new UnsupportedOperationException("value cannot be used to change this type of data, use string_value instead for enums and lists");
         }
         else if (this.stringValue != null)
             EAIData.apply(data, mob, data.parse(this.stringValue));
