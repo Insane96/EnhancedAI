@@ -14,11 +14,18 @@ public class Pathfinding extends Feature {
     @Config
     public static Boolean fixWalkingOverOpenTrapdoors = true;
 
+    @Config(description = "If true, mobs can freely pathfind over rails even when not already walking on one (by default only mobs already standing on a rail can walk over other rails)")
+    public static Boolean mobsCanWalkOnRails = true;
+
     public static boolean shouldPathfindToStandingPosition() {
         return Feature.isEnabled(Pathfinding.class) && pathfindToStandingPosition;
     }
 
     public static boolean shouldFixWalkingOverOpenTrapdoors() {
         return Feature.isEnabled(Pathfinding.class) && fixWalkingOverOpenTrapdoors;
+    }
+
+    public static boolean shouldMobsWalkOnRails() {
+        return Feature.isEnabled(Pathfinding.class) && mobsCanWalkOnRails;
     }
 }
