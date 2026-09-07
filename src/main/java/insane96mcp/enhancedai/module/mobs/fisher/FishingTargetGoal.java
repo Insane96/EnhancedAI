@@ -30,23 +30,24 @@ public class FishingTargetGoal extends Goal {
 
 	public boolean canUse() {
 		this.target = this.fisher.getTarget();
-		if (this.target == null
-                || this.target.isDeadOrDying())
-			return false;
+        if (this.target == null
+                || this.target.isDeadOrDying()
+				|| !this.fisher.isHolding(stack -> stack.is(FisherMobs.FISHER_RODS))
+				|| this.fisher.isUnderWater())
+            return false;
 
-		if (!this.fisher.isHolding(stack -> stack.is(FisherMobs.FISHER_RODS)))
-			return false;
-
-		if (this.fisher.isUnderWater())
-			return false;
-
-		double attackRange = FisherMobs.ATTACK_RANGE.get(this.fisher);
+        double attackRange = FisherMobs.ATTACK_RANGE.get(this.fisher);
 		if (this.fisher.distanceToSqr(this.target) < attackRange * attackRange)
 			return false;
 		return this.fisher.getSensing().hasLineOfSight(this.target);
     }
 
-    private double getFishRangeSqr() {
+	@Override
+	public boolean canContinueToUse() {
+		return this.target != null && this.target.isAlive() && this.fisher.isHolding(stack -> stack.is(FisherMobs.FISHER_RODS)) && !this.fisher.isUnderWater();
+	}
+
+	private double getFishRangeSqr() {
         double range = FisherMobs.FISH_RANGE.get(this.fisher);
         range *= range;
         return range;
