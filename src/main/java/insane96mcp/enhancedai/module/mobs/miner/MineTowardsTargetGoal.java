@@ -59,7 +59,7 @@ public class MineTowardsTargetGoal extends Goal {
 	public boolean canUse() {
 		if (!MinerMobs.isValidDimension(this.miner)
 				|| !this.miner.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)
-				|| (MinerMobs.TOOL_REQUIREMENT.get(this.miner) == MinerMobs.ToolRequirement.ANY_TOOL && !(this.miner.getOffhandItem().getItem() instanceof DiggerItem))
+				|| (MinerMobs.TOOL_REQUIREMENT.get(this.miner) == MinerMobs.ToolRequirement.ANY_TOOL && !(this.getToolStack().getItem() instanceof DiggerItem))
 				|| this.miner.getTarget() == null)
 			return false;
 		float maxTargetDistance = MinerMobs.MAX_TARGET_DISTANCE.get(this.miner);
@@ -123,17 +123,17 @@ public class MineTowardsTargetGoal extends Goal {
 			this.miner.level().destroyBlockProgress(this.miner.getId(), pos, this.prevBreakProgress);
 		}
 		if (this.breakingTick % 6 == 0) {
-			this.miner.swing(InteractionHand.MAIN_HAND);
+			this.miner.swing(this.getToolHand());
 		}
 		if (this.breakingTick % 4 == 0) {
 			SoundType soundType = this.blockState.getSoundType(this.miner.level(), pos, this.miner);
 			this.miner.level().playSound(null, pos, soundType.getHitSound(), SoundSource.BLOCKS, (soundType.getVolume() + 1.0F) / 8.0F, soundType.getPitch() * 0.5F);
 		}
 		if (this.breakingTick >= this.tickToBreak && this.miner.level() instanceof ServerLevel level) {
-			if (EventHooks.onEntityDestroyBlock(this.miner, this.targetBlocks.get(0), this.blockState) && this.miner.level().destroyBlock(pos, false, this.miner) && (!this.blockState.requiresCorrectToolForDrops() || this.miner.getItemBySlot(EquipmentSlot.OFFHAND).isCorrectToolForDrops(this.blockState))) {
+			if (EventHooks.onEntityDestroyBlock(this.miner, this.targetBlocks.get(0), this.blockState) && this.miner.level().destroyBlock(pos, false, this.miner) && (!this.blockState.requiresCorrectToolForDrops() || this.getToolStack().isCorrectToolForDrops(this.blockState))) {
 				BlockEntity blockentity = this.blockState.hasBlockEntity() ? this.miner.level().getBlockEntity(pos) : null;
-				LootParams.Builder lootparams$builder = (new LootParams.Builder(level)).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos)).withParameter(LootContextParams.TOOL, this.miner.getOffhandItem()).withOptionalParameter(LootContextParams.BLOCK_ENTITY, blockentity).withOptionalParameter(LootContextParams.THIS_ENTITY, this.miner);
-				this.blockState.spawnAfterBreak(level, pos, this.miner.getOffhandItem(), false);
+				LootParams.Builder lootparams$builder = (new LootParams.Builder(level)).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos)).withParameter(LootContextParams.TOOL, this.getToolStack()).withOptionalParameter(LootContextParams.BLOCK_ENTITY, blockentity).withOptionalParameter(LootContextParams.THIS_ENTITY, this.miner);
+				this.blockState.spawnAfterBreak(level, pos, this.getToolStack(), false);
 				this.blockState.getDrops(lootparams$builder).forEach((itemStack) -> level.addFreshEntity(new ItemEntity(level, pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f, itemStack)));
 			}
 			this.miner.level().destroyBlockProgress(this.miner.getId(), pos, -1);
@@ -209,7 +209,7 @@ public class MineTowardsTargetGoal extends Goal {
 	}
 
 	private float getDigSpeed() {
-		float digSpeed = this.miner.getOffhandItem().getDestroySpeed(this.blockState);
+		float digSpeed = this.getToolStack().getDestroySpeed(this.blockState);
 		if (digSpeed > 1.0F) {
 			digSpeed += (float) this.miner.getAttributeValue(Attributes.MINING_EFFICIENCY);
 		}
@@ -243,7 +243,7 @@ public class MineTowardsTargetGoal extends Goal {
 		if ((toolRequirement == MinerMobs.ToolRequirement.CORRECT_TOOL_FOR_REQUIRED) && !this.blockState.requiresCorrectToolForDrops())
 			return true;
 
-		ItemStack stack = this.miner.getOffhandItem();
+		ItemStack stack = this.getToolStack();
 		if (stack.isEmpty())
 			return false;
 
@@ -254,10 +254,22 @@ public class MineTowardsTargetGoal extends Goal {
 		if (!this.blockState.requiresCorrectToolForDrops())
 			return true;
 
-		ItemStack stack = this.miner.getOffhandItem();
+		ItemStack stack = this.getToolStack();
 		if (stack.isEmpty())
 			return false;
 
 		return stack.isCorrectToolForDrops(this.blockState);
+	}
+
+	private EquipmentSlot getToolSlot() {
+		return MinerMobs.OFFHAND.get(this.miner) ? EquipmentSlot.OFFHAND : EquipmentSlot.MAINHAND;
+	}
+
+	private InteractionHand getToolHand() {
+		return MinerMobs.OFFHAND.get(this.miner) ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
+	}
+
+	private ItemStack getToolStack() {
+		return this.miner.getItemBySlot(this.getToolSlot());
 	}
 }

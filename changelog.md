@@ -1,6 +1,7 @@
-# Upcoming
+# 4.2.3.0
 * Pathfinding
   * Mobs can now freely pathfind over rails even when not already walking on one (by default, only mobs already standing on a rail can walk over other rails)
+* Miner mobs can now use both main and off-hand to mine (requires changing the `offhand` data key, defaults to true)
 * Fixed Pearler AI not applied if not equipping pearls
 * Fixed Fisher AI stopping if losing line of sight of the target
 

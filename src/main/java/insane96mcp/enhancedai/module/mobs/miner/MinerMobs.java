@@ -27,7 +27,7 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
 import java.util.List;
 
-@LoadFeature(module = EAIModules.MOBS, description = "Mobs can mine blocks to reach the target. Uses offhand item to mine. Only mobs in the entity type tag enhancedai:mobs/can_mine can spawn with the ability to mine and blocks in the tag enhancedai:miner_blacklist cannot be mined. This feature also adds the block reach attribute to all entities.")
+@LoadFeature(module = EAIModules.MOBS, description = "Mobs can mine blocks to reach the target. Uses off-hand item to mine by default, can be changed with Data Keys. Only mobs in the entity type tag enhancedai:mobs/can_mine can spawn with the ability to mine and blocks in the tag enhancedai:miner_blacklist cannot be mined. This feature also adds the block reach attribute to all entities.")
 public class MinerMobs extends Feature {
 	public static final TagKey<EntityType<?>> CAN_BE_MINER = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/can_mine"));
 	public static final TagKey<Block> BLOCK_BLACKLIST = TagKey.create(Registries.BLOCK, EnhancedAI.location("miner_blacklist"));
@@ -48,7 +48,7 @@ public class MinerMobs extends Feature {
 	public static Boolean blockBlacklistAsWhitelist = false;
 	@Config(description = "Mobs with Miner AI will not be able to break tile entities")
 	public static Boolean blacklistTileEntities = true;
-	@Config(description = "Mobs with Miner AI will spawn with a Stone Pickaxe that never drops.")
+	@Config(description = "Mobs with Miner AI will spawn with a Stone Pickaxe in the off-hand that never drops.")
 	public static Boolean equipStonePick = true;
 
 	public static EAIData<Boolean> MINER;
@@ -57,6 +57,7 @@ public class MinerMobs extends Feature {
 	public static EAIData<Integer> MAX_TARGET_DISTANCE;
 	public static EAIData<Double> TIME_TO_BREAK_MULTIPLIER;
 	public static EAIDataList<String> DIMENSION_WHITELIST;
+	public static EAIData<Boolean> OFFHAND;
 
 	public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super.init(module, enabledByDefault, canBeDisabled);
@@ -70,6 +71,7 @@ public class MinerMobs extends Feature {
 		MAX_TARGET_DISTANCE = EAIData.ofInt(this.createDataKey("max_target_distance"));
 		TIME_TO_BREAK_MULTIPLIER = EAIData.ofDouble(this.createDataKey("time_to_break_multiplier"));
 		DIMENSION_WHITELIST = EAIDataList.of(this.createDataKey("dimension_whitelist"), String.class);
+		OFFHAND = EAIData.ofBool(this.createDataKey("offhand"));
 	}
 
 	public static void onEntityAttributeModification(EntityAttributeModificationEvent event) {
@@ -107,6 +109,7 @@ public class MinerMobs extends Feature {
 		MAX_TARGET_DISTANCE.applyIfAbsent(mob, maxTargetDistance);
 		TIME_TO_BREAK_MULTIPLIER.applyIfAbsent(mob, timeToBreakMultiplier);
 		DIMENSION_WHITELIST.applyIfAbsent(mob, dimensionWhitelist);
+		OFFHAND.applyIfAbsent(mob, true);
 	}
 
 	public static boolean isValidDimension(Mob mob) {
