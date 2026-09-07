@@ -1,6 +1,7 @@
 # Upcoming
 * Pathfinding
   * Mobs can now freely pathfind over rails even when not already walking on one (by default, only mobs already standing on a rail can walk over other rails)
+* Fixed Pearler AI not applied if not equipping pearls
 
 # 4.2.2.5
 * Lists now work with `enhancedai:change_data` property (still need to use `string_value`)

@@ -1,5 +1,6 @@
 package insane96mcp.enhancedai.module.mobs.pearler;
 
+import insane96mcp.enhancedai.utils.MCUtils;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -18,8 +19,6 @@ public class PearlUseGoal extends Goal {
 	private final Mob pearler;
 	private LivingEntity target;
 	private int cooldown = this.adjustedTickDelay(50);
-
-	ThrownEnderpearl thrownEnderPearl;
 
 	public PearlUseGoal(Mob pearler){
 		this.pearler = pearler;
@@ -43,19 +42,21 @@ public class PearlUseGoal extends Goal {
 		if (--this.cooldown > 0)
 			return false;
 
-		return this.pearler.getMainHandItem().getItem() == Items.ENDER_PEARL || this.pearler.getOffhandItem().getItem() == Items.ENDER_PEARL;
+		return this.pearler.isHolding(Items.ENDER_PEARL);
 	}
 
 	public boolean canContinueToUse() {
-		return this.thrownEnderPearl != null && this.thrownEnderPearl.isAlive();
+		return false;
 	}
 
 	public void start() {
 		this.target = this.pearler.getTarget();
-		EquipmentSlot slot = this.pearler.getMainHandItem().getItem() == Items.ENDER_PEARL ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
+		EquipmentSlot slot = MCUtils.getEquipmentSlot(this.pearler, Items.ENDER_PEARL);
+		if (slot == null)
+			return;
 		this.pearler.level().playSound(null, this.pearler.getX(), this.pearler.getY(), this.pearler.getZ(), SoundEvents.ENDER_PEARL_THROW, SoundSource.HOSTILE, 1F, 0.4F / (this.pearler.getRandom().nextFloat() * 0.4F + 0.8F));
 		ItemStack stack = this.pearler.getItemBySlot(slot);
-		this.thrownEnderPearl = new ThrownEnderpearl(this.pearler.level(), this.pearler);
+		ThrownEnderpearl thrownEnderPearl = new ThrownEnderpearl(this.pearler.level(), this.pearler);
 		thrownEnderPearl.setPos(this.pearler.getEyePosition(1f).x, this.pearler.getEyePosition(1f).y, this.pearler.getEyePosition(1f).z);
 		thrownEnderPearl.setItem(stack);
 		Vec3 vector3d = this.pearler.getEyePosition(1f);
@@ -73,7 +74,5 @@ public class PearlUseGoal extends Goal {
 
 	public void stop() {
 		this.target = null;
-		this.thrownEnderPearl = null;
-		this.pearler.getNavigation().stop();
 	}
 }

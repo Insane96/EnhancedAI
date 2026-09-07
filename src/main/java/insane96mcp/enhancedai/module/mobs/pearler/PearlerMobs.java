@@ -21,7 +21,7 @@ import net.minecraft.world.item.Items;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
-@LoadFeature(module = EAIModules.MOBS, description = "Let mobs use ender pearls as long as they have them in the off hand and when far enough from the target. Only mobs in the enhancedai:mobs/can_equip_pearl entity type tag will try to be equipped ender pearls.")
+@LoadFeature(module = EAIModules.MOBS, description = "Let mobs use ender pearls as long as they have them in the either hands and when far enough from the target. Only mobs in the enhancedai:mobs/can_equip_pearl entity type tag will try to be equipped ender pearls.")
 public class PearlerMobs extends Feature {
 	public static final TagKey<EntityType<?>> CAN_EQUIP_PEARL = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/can_equip_pearl"));
 
@@ -47,11 +47,10 @@ public class PearlerMobs extends Feature {
                 || Spawning.isUnaffectedByFeatures(event.getEntity())
 				|| event.getLevel().isClientSide
 				|| !(event.getEntity() instanceof Mob mob)
-				|| !mob.getType().is(CAN_EQUIP_PEARL)
 				|| ModNBTData.get(mob, HAS_ENDER_PEARL_BEEN_GIVEN, Boolean.class))
 			return;
 
-		if (mob.getOffhandItem().isEmpty() && mob.getRandom().nextDouble() < equipEnderPearlChance)
+		if (mob.getOffhandItem().isEmpty() && mob.getRandom().nextDouble() < equipEnderPearlChance && mob.getType().is(CAN_EQUIP_PEARL))
 			mob.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.ENDER_PEARL, enderPearlAmount.getIntRandBetween(mob.getRandom())));
 
 		ModNBTData.put(mob, HAS_ENDER_PEARL_BEEN_GIVEN, true);

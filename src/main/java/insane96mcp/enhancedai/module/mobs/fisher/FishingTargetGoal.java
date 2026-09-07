@@ -34,7 +34,7 @@ public class FishingTargetGoal extends Goal {
                 || this.target.isDeadOrDying())
 			return false;
 
-		if (!this.fisher.getMainHandItem().is(FisherMobs.FISHER_RODS) && !this.fisher.getOffhandItem().is(FisherMobs.FISHER_RODS))
+		if (!this.fisher.isHolding(stack -> stack.is(FisherMobs.FISHER_RODS)))
 			return false;
 
 		if (this.fisher.isUnderWater())
