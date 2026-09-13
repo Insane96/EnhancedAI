@@ -2,8 +2,13 @@
 	{
 		"condition": "chance",
 		"chance": {
-			"value": 0.10,
+			"value": 0.5,
 			"modifiers": [
+				{
+					"modifier": "difficulty",
+					"operation": "add",
+					"hard": 0.25
+				},
 				{
 					"modifier": "condition",
 					"operation": "add",

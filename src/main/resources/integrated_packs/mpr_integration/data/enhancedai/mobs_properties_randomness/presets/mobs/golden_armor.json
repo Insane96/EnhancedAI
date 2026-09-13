@@ -9,19 +9,7 @@
                 }
             ],
             "conditions": [
-                {
-                    "condition": "chance",
-                    "chance": {
-                        "value": 0.5,
-                        "modifiers": [
-                            {
-                                "modifier": "difficulty",
-                                "operation": "add",
-                                "hard": 0.25
-                            }
-                        ]
-                    }
-                }
+                { "preset": "enhancedai:chance_to_wear_armor_piece" }
             ]
         },
         {
@@ -33,19 +21,7 @@
                 }
             ],
             "conditions": [
-                {
-                    "condition": "chance",
-                    "chance": {
-                        "value": 0.5,
-                        "modifiers": [
-                            {
-                                "modifier": "difficulty",
-                                "operation": "add",
-                                "hard": 0.25
-                            }
-                        ]
-                    }
-                }
+                { "preset": "enhancedai:chance_to_wear_armor_piece" }
             ]
         },
         {
@@ -57,19 +33,7 @@
                 }
             ],
             "conditions": [
-                {
-                    "condition": "chance",
-                    "chance": {
-                        "value": 0.5,
-                        "modifiers": [
-                            {
-                                "modifier": "difficulty",
-                                "operation": "add",
-                                "hard": 0.25
-                            }
-                        ]
-                    }
-                }
+                { "preset": "enhancedai:chance_to_wear_armor_piece" }
             ]
         },
         {
@@ -81,19 +45,7 @@
                 }
             ],
             "conditions": [
-                {
-                    "condition": "chance",
-                    "chance": {
-                        "value": 0.5,
-                        "modifiers": [
-                            {
-                                "modifier": "difficulty",
-                                "operation": "add",
-                                "hard": 0.25
-                            }
-                        ]
-                    }
-                }
+                { "preset": "enhancedai:chance_to_wear_armor_piece" }
             ]
         }
     ]

@@ -22,11 +22,51 @@
                 },
                 {
                     "preset": "enhancedai:iron_armor",
-                    "weight": 8
+                    "weight": {
+                        "value": 8,
+                        "modifiers": [
+                            {
+                                "modifier": "condition",
+                                "operation": "add",
+                                "value": 8,
+                                "conditions": [
+                                    { "condition": "moon_phase", "phases": [ "full_moon" ] },
+                                    { "condition": "light_level", "light_level": { "min": 12, "max": 15 }, "type": "sky" }
+                                ]
+                            },
+                            {
+                                "modifier": "deepness",
+                                "operation": "add",
+                                "amount_per_step": 8,
+                                "step": 64,
+                                "starting_y": 64
+                            }
+                        ]
+                    }
                 },
                 {
                     "preset": "enhancedai:diamond_armor",
-                    "weight": 1
+                    "weight": {
+                        "value": 1,
+                        "modifiers": [
+                            {
+                                "modifier": "condition",
+                                "operation": "add",
+                                "value": 1,
+                                "conditions": [
+                                    { "condition": "moon_phase", "phases": [ "full_moon" ] },
+                                    { "condition": "light_level", "light_level": { "min": 12, "max": 15 }, "type": "sky" }
+                                ]
+                            },
+                            {
+                                "modifier": "deepness",
+                                "operation": "add",
+                                "amount_per_step": 1,
+                                "step": 64,
+                                "starting_y": 64
+                            }
+                        ]
+                    }
                 }
 
             ],

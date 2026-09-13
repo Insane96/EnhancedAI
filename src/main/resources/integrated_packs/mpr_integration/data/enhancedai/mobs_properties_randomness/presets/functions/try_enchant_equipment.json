@@ -51,7 +51,7 @@
 						{
 							"modifier": "condition",
 							"operation": "add",
-							"value": 0.10,
+							"value": 0.20,
 							"conditions": [
 								{
 									"condition": "moon_phase",
@@ -68,19 +68,11 @@
 							]
 						},
 						{
-							"modifier": "condition",
+							"modifier": "deepness",
 							"operation": "add",
-							"value": 0.10,
-							"conditions": [
-								{
-									"condition": "light_level",
-									"light_level": {
-										"min": 0,
-										"max": 12
-									},
-									"type": "sky"
-								}
-							]
+							"amount_per_step": 0.10,
+							"step": 64,
+							"starting_y": 64
 						}
 					]
 				}

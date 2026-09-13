@@ -1,3 +1,10 @@
+# Upcoming
+* MPR Data Pack
+  * Chance to equip mobs with armor (both the chance to attempt a full set and the chance per armor piece) now scales with depth, up to +20% at the bottom of the world, instead of a flat bonus below light level 12
+  * Full moon bonus to that same chance raised from +10% to +20%, to match the new depth bonus cap
+  * Same depth scaling (up to +20%) and full moon bonus (+20%) now also apply to the chance of equipment (weapons, tools, armor) getting enchanted
+  * Iron and Diamond armor are now more likely to be picked over weaker materials when underground or during a full moon
+
 # 4.2.3.0
 * Pathfinding
   * Mobs can now freely pathfind over rails even when not already walking on one (by default, only mobs already standing on a rail can walk over other rails)
