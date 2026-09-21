@@ -32,7 +32,7 @@ import java.util.UUID;
 
 @LoadFeature(module = Modules.Ids.MOBS, description = "Makes mobs pick up targets to drown them. Only entity types in the enhancedai:mobs/drowning_targets tag are affected by this feature.")
 public class DrowningTargets extends Feature {
-	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/drowning_targets"));
+    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/drowning_targets"));
     private static final UUID ATTACK_DAMAGE_UUID = UUID.fromString("8993201c-00fc-489e-a18c-1ebc94ba983f");
 
     public static EAIData<Boolean> DROWNING_TARGETS;
@@ -121,6 +121,9 @@ public class DrowningTargets extends Feature {
         @Override
         public void stop() {
             this.mob.getAttribute(Attributes.ATTACK_DAMAGE).removeModifier(ATTACK_DAMAGE_UUID);
+            for (Entity passenger : this.mob.getPassengers()) {
+                passenger.stopRiding();
+            }
         }
 
         protected boolean closeToNextPos() {
