@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.3.7.4
+* Fixed respawning after dying while riding a drowned getting stuck on it client side
+
 ## 3.3.7.3
 * Hopefully fixed broken Alex Mobs
 
