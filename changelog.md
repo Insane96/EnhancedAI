@@ -1,4 +1,6 @@
 # Upcoming
+* Fixed 'Blow up on death' not working correctly
+  * Issue #250
 * MPR Data Pack
   * Chance to equip mobs with armor (both the chance to attempt a full set and the chance per armor piece) now scales with depth, up to +20% at the bottom of the world, instead of a flat bonus below light level 12
   * Full moon bonus to that same chance raised from +10% to +20%, to match the new depth bonus cap
