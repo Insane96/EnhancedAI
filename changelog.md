@@ -1,4 +1,4 @@
-# Upcoming
+# 4.2.4.0
 * Fixed 'Blow up on death' not working correctly
   * Issue #250
 * MPR Data Pack
