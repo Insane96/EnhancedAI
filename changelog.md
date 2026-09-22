@@ -8,6 +8,7 @@
   * Iron and Diamond armor are now more likely to be picked over weaker materials when underground or during a full moon
 * Enderman can no longer teleport targets farther than their follow range
 * Fixed fisher mobs no longer attacking and ignoring line of sight
+* Fixed Better Drowning Swimming Up not swimming up
 
 # 4.2.3.0
 * Pathfinding
