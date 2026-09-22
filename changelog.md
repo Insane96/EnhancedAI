@@ -6,6 +6,7 @@
   * Full moon bonus to that same chance raised from +10% to +20%, to match the new depth bonus cap
   * Same depth scaling (up to +20%) and full moon bonus (+20%) now also apply to the chance of equipment (weapons, tools, armor) getting enchanted
   * Iron and Diamond armor are now more likely to be picked over weaker materials when underground or during a full moon
+* Enderman can no longer teleport targets farther than their follow range
 
 # 4.2.3.0
 * Pathfinding

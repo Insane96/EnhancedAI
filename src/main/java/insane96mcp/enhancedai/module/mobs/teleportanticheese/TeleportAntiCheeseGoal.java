@@ -5,6 +5,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
@@ -25,7 +26,8 @@ public class TeleportAntiCheeseGoal extends Goal {
         this.target = this.mob.getTarget();
         if (this.target == null
                 || this.target.getType().is(TeleportAntiCheese.CANT_BE_TELEPORTED)
-                || !this.mob.getNavigation().isDone())
+                || !this.mob.getNavigation().isDone()
+                || this.target.distanceTo(this.mob) > this.mob.getAttributeValue(Attributes.FOLLOW_RANGE))
             return false;
 
         if (this.target.distanceToSqr(this.mob) >= 2d || !this.mob.hasLineOfSight(this.target)) {
