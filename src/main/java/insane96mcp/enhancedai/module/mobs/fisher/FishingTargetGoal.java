@@ -30,14 +30,14 @@ public class FishingTargetGoal extends Goal {
 
 	public boolean canUse() {
 		this.target = this.fisher.getTarget();
-		if (!isTargetValid() || isTargetInAttackRange())
+		if (!isTargetValid() || isTargetInAttackRange() || this.fisher.isUnderWater())
 			return false;
 		return this.fisher.getSensing().hasLineOfSight(this.target);
 	}
 
 	@Override
 	public boolean canContinueToUse() {
-		if (this.fishingHook == null && !this.fisher.getSensing().hasLineOfSight(this.target))
+		if (this.fishingHook == null && (!this.fisher.getSensing().hasLineOfSight(this.target) || this.fisher.isUnderWater()))
 			return false;
 		if (isTargetInAttackRange())
 			return false;
@@ -45,7 +45,7 @@ public class FishingTargetGoal extends Goal {
 	}
 
 	private boolean isTargetValid() {
-		return this.target != null && this.target.isAlive() && this.fisher.isHolding(stack -> stack.is(FisherMobs.FISHER_RODS)) && !this.fisher.isUnderWater();
+		return this.target != null && this.target.isAlive() && this.fisher.isHolding(stack -> stack.is(FisherMobs.FISHER_RODS));
 	}
 
 	private boolean isTargetInAttackRange() {
