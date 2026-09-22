@@ -2,6 +2,7 @@ package insane96mcp.enhancedai.modules.creeper.swell;
 
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.data.EAIData;
+import insane96mcp.enhancedai.data.EAIDataEnum;
 import insane96mcp.enhancedai.modules.Modules;
 import insane96mcp.enhancedai.modules.mobs.Spawning;
 import insane96mcp.enhancedai.setup.EAISounds;
@@ -12,11 +13,13 @@ import insane96mcp.insanelib.base.Module;
 import insane96mcp.insanelib.base.config.Config;
 import insane96mcp.insanelib.module.base.TagsFeature;
 import insane96mcp.insanelib.network.message.MessageCreeperDataSync;
+import insane96mcp.insanelib.util.ModNBTData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -41,6 +44,8 @@ import java.util.function.Supplier;
 @LoadFeature(module = Modules.Ids.CREEPER, description = "Various changes to Creepers exploding. Ignoring Walls, Walking Fuse and smarter exploding based off explosion size. Only creepers in the enhancedai:creeper/change_swell entity type tag are affected by this feature.")
 public class CreeperSwell extends Feature {
 	public static final TagKey<EntityType<?>> CHANGE_CREEPER_SWELL = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("creeper/change_swell"));
+
+	private static ResourceLocation BLOW_UP_ON_DEATH_GUARD;
 
 	@Config(min = 0d, max = 1d, description = "Percentage chance for a Creeper to keep walking while exploding. This is overwritten if the creeper has the beta property.")
 	public static Double walkingFuse$chance = 0.1d;
@@ -73,7 +78,7 @@ public class CreeperSwell extends Feature {
 	@Config(min = 0d, max = 12d, description = "Explosion power of Angry Creeper")
 	public static Double angry$explosionPower = 4d;
 	@Config(description = "Makes creepers blow up on death like when they were added back in 0.30")
-	public static BlowUpOnDeath blowUpOnDeath = BlowUpOnDeath.NONE;
+	public static BlowUpOnDeath blowUpOnDeath = BlowUpOnDeath.NO;
 	@Config(description = "If Insane's Survival Overhaul is installed and Explosion Overhaul feature is enabled, Angry creeper will deal more knockback and break more blocks, breaching creepers will break more blocks")
 	public static Boolean insaneSurvivalOverhaulIntegration = true;
 
@@ -84,7 +89,7 @@ public class CreeperSwell extends Feature {
     public static EAIData<Double> BREACH_HORIZONTAL_RANGE;
     public static EAIData<Boolean> BETA_STRAFE;
     public static EAIData<Boolean> BETA_LEFT_STRAFE;
-    public static EAIData<Boolean> BLOW_UP_ON_DEATH;
+    public static EAIDataEnum<BlowUpOnDeath> BLOW_UP_ON_DEATH;
     public static EAIData<Boolean> FORCE_EXPLODE;
     public static EAIData<Boolean> ANGRY;
     public static EAIData<String> EXPLOSION_SOUND;
@@ -102,7 +107,7 @@ public class CreeperSwell extends Feature {
 			GoalHelper.getGoal(mob.goalSelector, EAICreeperSwellGoal.class).ifPresent(eaCreeperSwellGoal -> eaCreeperSwellGoal.setBetaStrafe(beta));
 		});
 		BETA_LEFT_STRAFE = EAIData.ofBool(this.createDataKey("beta_left_strafe"));
-		BLOW_UP_ON_DEATH = EAIData.ofBool(this.createDataKey("blow_up_on_death"));
+		BLOW_UP_ON_DEATH = EAIDataEnum.of(this.createDataKey("blow_up_on_death"), BlowUpOnDeath.class);
 		FORCE_EXPLODE = EAIData.ofBool(this.createDataKey("force_explode"));
 		ANGRY = EAIData.ofBool(this.createDataKey("angry"), (mob, angry) -> {
 			if (!(mob instanceof Creeper creeper))
@@ -140,11 +145,12 @@ public class CreeperSwell extends Feature {
 					FORCE_EXPLODE.apply(creeper, false);
 				EXPLOSION_SOUND.apply(creeper, FuseExplodeSounds.NONE.name);
 			}
-			BLOW_UP_ON_DEATH.apply(creeper, blowUpOnDeath == BlowUpOnDeath.ALL || (blowUpOnDeath == BlowUpOnDeath.CHARGED && creeper.isPowered()) || (ANGRY.get(creeper) && angry$explodeOnDeath));
 			creeper.readAdditionalSaveData(compoundNBT);
 			MessageCreeperDataSync.syncCreeperToPlayers(creeper);
 		});
 		EXPLOSION_SOUND = EAIData.ofString(this.createDataKey("explosion_sound"));
+
+		BLOW_UP_ON_DEATH_GUARD = this.createDataKey("blow_up_on_death_guard");
 	}
 
 	@SubscribeEvent
@@ -186,7 +192,7 @@ public class CreeperSwell extends Feature {
 		BETA_STRAFE.applyIfAbsent(creeper, creeper.getRandom().nextDouble() < betaStrafe$chance);
         BETA_LEFT_STRAFE.apply(creeper, creeper.getRandom().nextBoolean());
 		ANGRY.applyIfAbsent(creeper, creeper.getRandom().nextDouble() < angry$chance);
-		BLOW_UP_ON_DEATH.applyIfAbsent(creeper, blowUpOnDeath == BlowUpOnDeath.ALL || (blowUpOnDeath == BlowUpOnDeath.CHARGED && creeper.isPowered()) || (ANGRY.get(creeper) && angry$explodeOnDeath));
+		BLOW_UP_ON_DEATH.applyIfAbsent(creeper, blowUpOnDeath);
 	}
 
 	@SubscribeEvent
@@ -195,10 +201,17 @@ public class CreeperSwell extends Feature {
 				|| !(event.getEntity() instanceof Creeper creeper)
 				|| !creeper.isDeadOrDying()
 				|| creeper.level().isClientSide
-				|| !BLOW_UP_ON_DEATH.get(creeper))
+				|| ModNBTData.get(creeper, BLOW_UP_ON_DEATH_GUARD, Boolean.class))
 			return;
 
-		BLOW_UP_ON_DEATH.apply(creeper, false);
+		BlowUpOnDeath mode = BLOW_UP_ON_DEATH.get(creeper);
+		boolean shouldExplode = mode == BlowUpOnDeath.YES
+				|| (mode == BlowUpOnDeath.CHARGED_ONLY && creeper.isPowered())
+				|| (ANGRY.get(creeper) && angry$explodeOnDeath);
+		if (!shouldExplode)
+			return;
+		//Prevent stack overflow since Creeper#explode calls #remove
+		ModNBTData.put(creeper, BLOW_UP_ON_DEATH_GUARD, true);
 		creeper.explodeCreeper();
 	}
 
@@ -259,8 +272,8 @@ public class CreeperSwell extends Feature {
 	}
 
 	public enum BlowUpOnDeath {
-		NONE,
-		CHARGED,
-		ALL
+		NO,
+		CHARGED_ONLY,
+		YES
 	}
 }

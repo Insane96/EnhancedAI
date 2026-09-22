@@ -1,59 +1,61 @@
-# Changelog
+# 3.3.7.5
+* Fixed 'Blow up on death' not working correctly
+  * Issue #250
 
-## 3.3.7.4
+# 3.3.7.4
 * Fixed respawning after dying while riding a drowned getting stuck on it client side
 
-## 3.3.7.3
+# 3.3.7.3
 * Hopefully fixed broken Alex Mobs
 
-## 3.3.7.2
+# 3.3.7.2
 * Removed "Miner mobs' blocks broken can now regenerate back"
   * Was causing many issues when disabled
 
-## 3.3.7.1
+# 3.3.7.1
 * Fixed tamed wolves attacking sheep and baby turtles
 * Fixed angry creepers not blowing up on death
 
-## 3.3.7.0
+# 3.3.7.0
 * Miner mobs' blocks broken can now regenerate back (disabled by default)
   * Tool requirement is now "ANY_TOOL" by default
 
-## 3.3.6.4
+# 3.3.6.4
 * Crash fix with MPR change_data when applying an enum value (e.g. `enhancedai:miner_mobs/tool_requirement`)
 
-## 3.3.6.3
+# 3.3.6.3
 * Fixed angry creepers not blowing up on death
 
-## 3.3.6.2
+# 3.3.6.2
 * Fixed error with MPR when setting integer data
 
-## 3.3.6.1
+# 3.3.6.1
 * Ghasts no longer have their follow range overridden
 * Falling Shockwave now only applies if the mob falls for at least 3 blocks
 
-## 3.3.6
+# 3.3.6
 * Fixed change_data property not working with booleans
 
-## 3.3.5
+# 3.3.5
 * Blazes no longer panic on fire. Fixes failing to shoot
 * Fixed compatibility with latest MPR
 
-## 3.3.4
+# 3.3.4
 * Melee Attacking feature now only affects vanilla mobs by default
   * Use `enhancedai:mobs/melee_attacking` entity type tag to add more mobs
   * Now also checks for `enhancedai:unaffected_by_features` NBT
 
-## 3.3.3
+# 3.3.3
 * Fixed mounting 2 or more drowned at the same time
 * Fixed stuck on drowned on respawn
 * Fixed vindicators attacking anything
 
-## 3.3.2
+# 3.3.2
 * Increased default despawn distance (96 -> 112) 
 * Minor updates to config comments
 * Fixed crash with Random Stroll and Twilight Forest's Naga
 
-## 3.3.1
+# 3.3.1
 * Added a config option to make mobs not affected by (most of) Enhanced AI features based off their spawn type
   * This adds a new NBT `enhancedai:unaffected_by_features` that if true will prevent the mob from getting any changes from Enhanced AI features
 * Targeting has been upgraded
@@ -61,7 +63,7 @@
 * Sprinting mobs now sprint to reach the target faster, but will stop sprinting when 2 blocks away from them
 * Fixed Dark art witches triggering when targeting allied monsters
 
-## Beta 3.3.0
+# Beta 3.3.0
 * Added Villager Alert Protectors
   * Villagers will now alert nearby iron golems about nearby hostiles
 * Added Push Resistance
@@ -87,10 +89,10 @@
 * Fixed slow passive healing from MPR Data Pack being 20x slower than intended
 * Minor angry creeper fix
 
-## Beta 3.2.1
+# Beta 3.2.1
 * Crash fix with Leader mobs
 
-## Beta 3.2.0
+# Beta 3.2.0
 * Added Leader mobs
   * Zombies and skeletons now have a 5% chance to spawn as a leader
   * Leader mobs have heavily increased health and high armor and have 100% chance to spawn reinforcements when hit
@@ -104,7 +106,7 @@
 * Fisher mobs pulling items from inventory no longer launches them into the farlands
 * Halved shockwave jump cooldown
 
-## Beta 3.1.0
+# Beta 3.1.0
 * Added Pick up and Throw feature
   * Zombies are now able to pick up some mobs and throw them at you
 * Added Teleport to target feature
@@ -154,17 +156,17 @@
 * Fixed prevent infighting not working
 * Fixed skeletons still having the Bow Goal even without a bow
 
-## Alpha 3.0.3
+# Alpha 3.0.3
 * Halved the default time Drowned are sun-resistant
 * Fixed mobs with ranged attack AI trying to parkour
 * Fixed player blocking hits when wielding a shield
 * Fixed shield being given to mobs outside the entity type tag
 
-## Alpha 3.0.2
+# Alpha 3.0.2
 * Finished porting witches
 * Decided to not port custom attack and flee for now, will see in the future
 
-## Alpha 3.0.1
+# Alpha 3.0.1
 This version has no Witches (except for dark arts and fleeing) as they are WIP
 * Attribute renamed: `enhancedai:generic.xray_follow_range` -> `enhancedai:xray_follow_range`
 * Many features have been split into multiple features
@@ -177,12 +179,12 @@ This version has no Witches (except for dark arts and fleeing) as they are WIP
 * Fixed command not accepting strings correctly (you have to surround them with quotes)
 * Fixed anti-cheese probably not working
 
-### Not yet Ported
+## Not yet Ported
 * Witches: everything except dark art requires a full rewrite to make it less aggressive in changing vanilla code
 * Custom Flee: requires a bit of thought to make it work with the new AI data
 * Custom Targeting: requires a bit of thought to make it work with the new AI data
 
-## Alpha 3.0.0
+# Alpha 3.0.0
 You are able to change AI at runtime without having to reload the world thanks to the new tech: AI Data, which lets you change parameters per mob, without having to reload the world.  
 AI Data is defined as a resource location (`<namespace>:<id>`), by default the namespace is obviously `enhancedai`.  
 Due how the vanilla AI works, the goals already present in the mob can't be changed with this system without a huge amount of work. E.g. For the "Animals not temped" feature they already have the Tempt AI, so it's impossible to add it back if it's removed.  
@@ -226,12 +228,12 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
 * Fixed fisher mobs canceling the fishing rod cast if they can't see the target
 * Fixed dark art witches dropping the equipped spawn egg
 
-## 2.7.1
+# 2.7.1
 * Villagers no longer use target changes
 * Cats no longer use animal changes
   * You weren't able to tame them due to always fleeing
 
-## 2.7.0
+# 2.7.0
 **Config options might have been renamed, thus reset. Backup your config file.**
 
 * Snow Golems' snowballs damage and freeze are now configurable
@@ -241,16 +243,16 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
 * Fixed Iron Golem's "fire tick faster" not working as intended
 * Fixed Ravager feature not working
 
-## 2.6.13
+# 2.6.13
 * Drowned leaps now have a fixed force instead of being based on the target's distance
 
-## 2.6.12
+# 2.6.12
 * Fixed nearest attackable target not using the correct follow range if changed after the goal has been applied
 
-## 2.6.11
+# 2.6.11
 * Fixed drowned swimming like crazy
 
-## 2.6.10
+# 2.6.10
 * Drowned can now attack again in daytime if can't reach water
     * Mojang says it works as intended, but it's stupid they just stand still doing nothing and probably die
 * Drowned now have a much easier time getting out of water
@@ -260,51 +262,51 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
     * Breaks xray follow range
 * Hopefully fixed mobs standing still when hurt by target instead of approaching them again
 
-## 2.6.9
+# 2.6.9
 * Added a new item tag for what items count as a fishing rod for Fisher Mobs
     * `enhancedai:fisher_rods`
     * Already contains Tide's fishing rods
 
-## 2.6.8
+# 2.6.8
 * Monsters can now forget their target
 * Fishing min and max distance can now be changed
 
-## 2.6.7
+# 2.6.7
 * Fixed a huge bug that made animals fleeing very performance heavy
 
-## 2.6.6
+# 2.6.6
 * Bosses can no longer be teleported by the Over Here feature
     * Added a new Entity Type Tag `enhancedai:get_over_here_teleport_blacklist`
 
-## 2.6.5
+# 2.6.5
 * Fixed compat with latest InsaneLib
 
-## 2.6.4
+# 2.6.4
 * Lowered Blaze Attack stats
 * Update for latest InsaneLib
 
-## 2.6.3
+# 2.6.3
 * Jumping mobs now take into account jump boost
 * Animals baby born (so usually from breeding) can no longer be hostile
 * Fixed Fisher mobs no longer attacking when target was close enough
 
-## 2.6.2
+# 2.6.2
 * Fixed possible crash with Hurt By Target
 
-## 2.6.1
+# 2.6.1
 * Fixed some wonkyness with the new fisher mobs
 * Fixed Universal Anger breaking Hurt By Target
     * I have no idea what is this check, so I've removed it
 * Breaching creepers should blow up less randomly
 
-## 2.6.0
+# 2.6.0
 * Mini rework Fisher Mobs
     * They no longer approach the target if farther than 4 blocks, they'll just reel it in
 * Endermen disrupting items no longer throws them away, but simply under the player with a pickup delay of 1.5s
 * Fixed a bug that made jumping mobs reset the mob's attack cooldown
 * Fixed Angry Creeper.Forced Explosion being duplicated
 
-## 2.5.8
+# 2.5.8
 * Warden
     * Added Listen range multiplier
         * Increases range at which vibrations reach Wardens
@@ -312,7 +314,7 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
         * Makes warden step up blocks like horses without needing to jump
     * Temporarily disabled "Increase sonic boom range" as was crashing the game
 
-## 2.5.7
+# 2.5.7
 * Animals now have a small chance to be hostile
     * `enhancedai:can_fight_back` entity type tag has been renamed to `enhancedai:can_be_neutral`
     * New `enhancedai:can_be_hostile` entity type tag
@@ -320,12 +322,12 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
     * Damage types in this tag will not trigger biting mobs
 * Halved the chance for silverfish to call other silverfish
 
-## 2.5.6
+# 2.5.6
 * Requires InsaneLib 1.18.3 and Forge 47.4.0
 * Wolves are no longer affected by biting mobs
 * Caverns and Chasms Mimes now have most of the AI changes applied
 
-## 2.5.5
+# 2.5.5
 * Fisher mobs
     * Now only hooks main or off-hand items
     * Items reeling now works on any entity not only players
@@ -334,7 +336,7 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
 * Added Caverns and Chasms Deepers to many entity type tags
 * Fixed Animals attacking if they had an owner
 
-## 2.5.4
+# 2.5.4
 * Item Disruption now has a 10 seconds cooldown
 * Reduced lag caused by the Animal Attack AI with many baby animals
 * Environmental ducks now can flee and fight back
@@ -343,7 +345,7 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
 * Added a new entity type tag `enhancedai:can_creeper_launch` which defines which creepers can launch (by default only vanilla creepers)
 * Creepers can no longer attack villagers and iron golems
 
-## 2.5.3
+# 2.5.3
 * Fixed mobs attack speed being doubled
     * Mojang's melee attack goal uses a method that halves the attack speed cooldown ... for no reason
 * Mobs max attack speed is now 2 instead of 1.25
@@ -351,19 +353,19 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
 * Decreased skeleton's shooting cooldown
     * Also, hard mode no longer makes skeletons shoot faster
 
-## 2.5.2
+# 2.5.2
 * Witches, Skeletons and Pillagers now actually flee from the target instead of running away from any Player
     * This should increase the performance of the features since they don't have to get the nearest entity anymore
 * Wolves can now heal like Horses: 1 in 900 chance each tick
 * When Webber spiders now hit the target, the web cooldown is now increased by 5 seconds
 * Tamable animals no longer flee from players
 
-## 2.5.1
+# 2.5.1
 * Requires InsaneLib 1.15.0
 * Mobs no longer jump if the target is more than 6 blocks away
 * Pillagers, Skeletons and Piglin have been removed from the `allow_jumping` entity type tag (they can no longer jump)
 
-## 2.5.0
+# 2.5.0
 * Added Jump feature
     * If the mob is below the target by a few blocks, he will jump trying to hit him
 * Added a new explosion sound for Angry Creepers. It's now the default
@@ -372,19 +374,19 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
 * Added a config option for Better Hurt by target to prefer players to other entities
 * Performance improvement for fisher mobs
 
-## 2.4.10
+# 2.4.10
 * Removed `use_follow_range_changes` entity type tag
     * Replaced with `change_follow_range` that applies only the follow range override
     * Also with `apply_xray` that applies only the xray range override
 * Added "Block Blacklist as Whitelist" for Miner Mobs
 
-## 2.4.9
+# 2.4.9
 * Fixed Beta creepers ignoring movement speed changes
 * Fixed mobs no longer pathfinding to target if no longer seen
 * Fixed mobs trying to ride entities not on ground
 * Added russian lang
 
-## 2.4.8
+# 2.4.8
 * Added a config option to allow targeting changes to work on non-players target (e.g. Zombies targeting Villagers)
 * Breaching creepers can now breach from 24 blocks instead of the radius times 5
     * Added config option
@@ -395,29 +397,29 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
 * Reduced max slime sizes spawn
 * Fixed Launching Creepers launching to the target without cooldown when can't see the target
 
-## 2.4.7
+# 2.4.7
 * Fixed mobs staying at close distance but not reaching for attacking
     * The previous version fix increased the chance for mobs to stay at close distance but not moving to get close to attack
 * Fixed mobs neglecting to use the melee attack goal if too close to the entity
     * Not sure if this does anything, but I missed changing this when porting the melee attack range from 1.20.2
 
-## 2.4.6
+# 2.4.6
 * [MC-198068](https://bugs.mojang.com/browse/MC-198068) again
     * Fixed attack rate resetting when mobs were hit. I've removed the `followingTargetEvenIfNotSeen` check in `canContinueToUse`
 
-## 2.4.5
+# 2.4.5
 * Angry creepers now blow up after death like 0.30 creepers
     * Configurable to also make charged creepers only or any creeper to behave the same
 * Pearler and Fisher Mobs can now use the item as long as they are not underwater (they couldn't use them if touching water)
 * Pearler mobs no longer use the pearl if they can't see the target
 * Pearler mobs cooldown to throw a pearl increased
 
-## 2.4.4
+# 2.4.4
 * 'Stop mounting if too much suffocation' is now reset when dismounting
 * Fixed Breaching Creeper Explosions ignoring block hardness, making the explosion break **any** block
 * Fixed 'Stop mounting if too much suffocation' affecting players too
 
-## 2.4.3
+# 2.4.3
 * Miner mobs no longer drop experience from blocks broken
 * Fixed breaching creepers with ITR making huge holes when not breaching
 * Fixed miner mobs LivingDestroyBlockEvent getting called too many times
@@ -426,16 +428,16 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
 * Fixed llamas attacking indefinitely (removed from `use_target_changes` tag)
 * Fixed breaching creepers not working most of the time
 
-## 2.4.2
+# 2.4.2
 * Lowered cooldown from skeleton shooting in Easy and Normal
 * If Iguana Tweaks Reborn is installed, Breaching creepers now have bigger explosions
 * Fixed mobs not dismounting correctly when taking suffocation damage
 
-## 2.4.1
+# 2.4.1
 * Fixed some mobs losing the ability to attack, like phantoms and wolves
 * Fixed Darkness range multiplier not being applied
 
-## 2.4.0
+# 2.4.0
 * Added Warden
     * Increased sonic boom range and darkness range
 * Added Beta Creepers
@@ -443,10 +445,10 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
 * Slightly slowed down miner mobs
 * Fixed Angry creeper integration with ITR
 
-## 2.3.1
+# 2.3.1
 * Potential fix for [MC-198068](https://bugs.mojang.com/browse/MC-198068)
 
-## 2.3.0
+# 2.3.0
 * All features are now opt-in
     * Anti-Cheese `ignore_anti_cheese` tag is now `can_use_anti_cheese`
     * Avoid Explosions `no_run_from_explosion` tag is now `can_run_from_explosion`
@@ -456,21 +458,21 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
 * Snowman attack speed can now be configured
 * Miner mobs no longer mine if mobGriefing is set to false
 
-## 2.2.2
+# 2.2.2
 * Fixed pillagers Attack When Avoiding completely breaking Flee
 * Fixed fishing hook not rendering for non-zombie entities
 * The pillager attack goal will no longer reset the target
 * Phantoms are no longer affected by targeting changes
 * Fixed climbing mobs always playing ladder sound
 
-## 2.2.1
+# 2.2.1
 * Creepers no longer alert their vehicle
 * Pigs are no longer eligible to be ridden
     * Can't figure out why they stop moving
 * Fixed mobs having a lower priority Hurt By Target Goal not switching target
 * Fixed Custom Flee and Custom Hostile ignoring chance
 
-## 2.2.0
+# 2.2.0
 * Added Silverfish feature
     * They now call more friends when hurt
 * Added a custom flee config
@@ -481,7 +483,7 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
 * Added a new sound for Angry Creepers 😏
 * Fixed pillagers features having wrong priority making it not possible to use NBT to change the data
 
-## 2.1.0
+# 2.1.0
 * Added Pillager shoot
     * Pillagers can now shoot from farther away
     * Inaccuracy and shooting cooldown is now configurable
@@ -499,32 +501,32 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
 * Fixed miner mobs breaking blocks way faster than they should've
     * With this, Time to break multiplier has been set back to 1
 
-## 2.0.5
+# 2.0.5
 * Added Dimension Blacklist for miner mobs
 * Fixed "Better hurt by target" "alert others" not working
 * Fixed Miner Mobs crashing the game
 * Fixed server hanging if skeletons distance from target was 0
 
-## 2.0.4
+# 2.0.4
 * Fixed "Better hurt by target" removing the "alert others" feature
 * Hopefully fixed Dark Art Witches crashing with some other mod
 * Fixed mobs no longer running from creepers
 * Fixed launching creepers no longer launching vertical
 * Fixed miner mobs not breaking blocks if too close to target but can't see it
 
-## 2.0.3
+# 2.0.3
 * Mobs that run from explosions will now also dismount to run away
 * Miner mobs are now set "aggressive" when mining (zombies and vindicators should rise their hands)
 * Increased default riding chance
 * Fixed vindicators not being able to open doors
 
-## 2.0.2
+# 2.0.2
 * Miner mobs will no longer mine if the `LivingDestroyBlockEvent` is canceled
 * Better targeting when hit
     * Mobs will now switch target if the entity that hit them is closer
     * Will also prefer targeting players over other entities (e.g. if a zombie is attacking a golem, will always switch to players)
 
-## 2.0.1
+# 2.0.1
 * Item disruption
     * No longer only for endermen (but by default only for them)
     * Chance is now saved in the mob (and can be changed)
@@ -538,7 +540,7 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
 * Launch creeper explosion radius override can now be disabled
 * Fixed creeper starting exploding after up to 0.75 seconds
 
-## 2.0.0
+# 2.0.0
 * Backported 1.20.2 mob attack reach change [(Minecraft Wiki)](https://minecraft.wiki/w/Java_Edition_1.20.2#Mobs)
     * This is automatically applied if the Attacking feature is enabled
     * Melee Attacks Attribute Based is now enabled by default as it works much better thanks to the backport
@@ -610,23 +612,23 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
 * Fixed reloading the world giving zombies ender pearls or fishing rods
 * Fixed neutral mobs not working
 
-## 1.15.4
+# 1.15.4
 * Fixed world freezing when a Wither Skeleton loaded
 
-## 1.15.3
+# 1.15.3
 * Biting zombies now have a higher chance to bite in hard
 * Fishing zombies now dismount entities
 * Fixed modded creepers exploding even if they aren't supposed to
 * Fixed launching creepers no longer launching
 
-## 1.15.2
+# 1.15.2
 * Now requires InsaneLib 1.11.1
 
-## 1.15.1
+# 1.15.1
 * Mobs maximum attack speed can now be set (and has been lowered (2 attacks/sec -> 1.25))
 * Digger zombies: Block breaking sound is now the same as player breaking
 
-## 1.15.0
+# 1.15.0
 * Added Attacking>Melee Attack Speed Based
     * Makes melee mobs attack rate based off attack speed (reduced by 60%/50%/40% on Easy/Normal/Hard compared to players)
 * Added 'Wearden Interactions'
@@ -636,52 +638,52 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
     * Decreased mining speed and made them require a tool to mine (zombies with a fishing rod will no longer mine)
 * Slightly lowered fisher zombie pull force
 
-## 1.14.2
+# 1.14.2
 * Skeletons
     * Skeletons now shoot slower if the target is farther away
     * Increased shooting cooldown
 * Fixed vanilla bug MC-198068 (mobs randomly stop targeting entities)
 * Fixed vanilla bug where mobs switch target when hit even if the target is the same
 
-## 1.14.1
+# 1.14.1
 * Fixed and nerfed Witches
     * No longer use Invisibility and Slow Falling if drinking a potion
     * Fixed vanilla potions dropping as "Uncraftable Potion"
     * Drinkable and throwable potions list in the config now accepts vanilla potions
 
-## 1.14.0
+# 1.14.0
 * Added Shulker Bullets
     * Changed duration and amplifier of Levitation (10 seconds I -> 10/5/2.5 seconds II/IV/VIII in easy/normal/hard)
 * Slowed down explosion avoid flee speed
 * Added config options for cena forced explosion
 
-## 1.13.2
+# 1.13.2
 * Nerfed Witches a little bit
 * Fixed some target goal selectors not being copied to mod's target goal
     * This might fix some mobs attacking for no reason
 
-## 1.13.1
+# 1.13.1
 * MC 1.20.1
 * Fixed ranged targets attacking out of range
 
-## 1.13.0
+# 1.13.0
 * Port to 1.20
 * Dark art withches now stop the ritual if moved too far from the villager
 * Snow golems no longer attack if out of range
 
-## 1.12.2
+# 1.12.2
 * Launch creepers now have a smaller explosion
 * Launch creepers have now reduced particles
 * Fisher and Pearler zombies no longer use the item if in water
 * Fisher zombies cooldown reduced
 * Mobs no longer flee from TNTs
 
-## 1.12.1
+# 1.12.1
 * Spawning feature (renamed from Base) can now be disabled
 * Creeper cena now also breaks more blocks if SR is present
 * Rebalanced some default values
 
-## 1.12.0
+# 1.12.0
 * Added Biting Zombies feature
     * When a player attacks a mob with no weapon, has a chance to get bitten
 * Added Wither Skeletons feature
@@ -694,7 +696,7 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
     * Snowballs heal snow golems
 * Creepers no longer swell when falling
 
-## 1.11.0
+# 1.11.0
 * Added Iron Golem feature
     * Iron Golems now have an innate 40% damage resistance and are kept less time on fire
 * Added Zombified Piglins
@@ -703,11 +705,11 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
 * Heavily reduced neutral mobs chances (~~60%/25%/10%~~ -> 25%/10%/4%)
 * Halved Animals knockback
 
-## 1.10.4
+# 1.10.4
 * 60%/25%/10% of mobs can now spawn neutral
 * Food no longer tempts 50% of animals
 
-## 1.10.3
+# 1.10.3
 * Skeletons attack cooldown and charge time can now be configured
 * Reduced witches Resistance when performing dark arts
 * Fisher zombies now fish closer to targets
@@ -716,7 +718,7 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
     * Witches that will throw random potions, even wrong ones
 * Nerfed Spammer skeletons
 
-## 1.10.2
+# 1.10.2
 * 40% of animals now flee from players
 * Animals no longer flee if they can attack back
 * Digger zombies no longer drop items from blocks mined
@@ -724,14 +726,14 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
 * Fixed zombies stopping mining mid block
 * Fixed digger zombies ignoring the 'Blacklist Tile Entities' config option
 
-## 1.10.1
+# 1.10.1
 * Launching creepers inaccuracy can now be configured
 * Skeleton Spammers now spam less, deal less damage and can be spawned with "enhancedai:spammer" tag
 
-## 1.10.0
+# 1.10.0
 * Updated to 1.19.4
 
-## 1.9.2
+# 1.9.2
 * Walking fuse creepers now slowdown when exploding
 * Reduced animals base attack damage (4 -> 3)
 * Animals now scare only animals of the same species
@@ -739,7 +741,7 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
 * Reduced xray distance (16~32 -> 12~24)
 * Reduced Throwing Web Spiders range and slowness applied
 
-## 1.9.1
+# 1.9.1
 * Only 20% of animals are now able to fight back, the others will just scatter
 * Skeleton inaccuracy is now loaded from tag "enhancedai:inaccuracy"
 * Spiders Web Throwers
@@ -747,12 +749,12 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
     * Fixed stackSlowness = false not working correctly
 * Fixed XRay mobs targeting players from far, far away
 
-## 1.9.0
+# 1.9.0
 * The update in the number is just to keep 1.19.2 and 1.19.3 separated
 * Requires InsaneLib 1.7.4
 * Creeper Cena inflating animation now matches with the Fuse time
 
-## 1.8.1
+# 1.8.1
 * Updated to 1.19.3
 * Creeper
     * Creeper Cena now emits particles when players are close enough
@@ -764,7 +766,7 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
     * Witches summoned by Dark Art Witches can no longer be Dark Art Witches
     * Fixed Dark art Witches failing to spawn a villager, causing a crash
 
-## 1.8.0
+# 1.8.0
 * Added Prevent Infighting. Mobs no longer attack each-other
 * Villagers Attacking
     * No longer attack enemies (can be configured)
@@ -783,10 +785,10 @@ The tags have been moved to their folders (e.g. `enhancedai:can_be_miner` -> `en
 * Animal knockback can now be configured
 * Added italian (by me) and portuguese translations (thanks to https://github.com/FITFC)
 
-## Beta 1.7.1
+# Beta 1.7.1
 * Requires InsaneLib 1.7.1
 
-## Beta 1.7.0
+# Beta 1.7.0
 * Ported to 1.19.1+, requires InsaneLib 1.7.0
 * Added Shielding Feature (mobs will rise shields when the target is near them), disabled by default
 * Decreased run speed when running from explosions
