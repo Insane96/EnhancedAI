@@ -18,6 +18,8 @@ public class SprintGoal extends Goal {
 
 	@Override
 	public boolean canUse() {
+		if (this.goalOwner.isInWater())
+			return false;
 		if (this.sprintTicks < 0) {
 			++this.sprintTicks;
 			return false;
