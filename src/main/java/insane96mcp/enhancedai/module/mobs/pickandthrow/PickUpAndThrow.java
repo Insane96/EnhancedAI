@@ -60,7 +60,6 @@ public class PickUpAndThrow extends Feature {
                 || event.getLevel().isClientSide
                 || !(event.getEntity() instanceof Mob mob)
                 || !mob.getType().is(CAN_PICK_UP)
-                || CAN_PICK_UP_DATA.has(mob)
                 || mob.isBaby())
             return;
 

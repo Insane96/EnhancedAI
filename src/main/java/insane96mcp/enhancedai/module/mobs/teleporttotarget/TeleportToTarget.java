@@ -46,7 +46,6 @@ public class TeleportToTarget extends Feature {
                 || event.getLevel().isClientSide
                 || !(event.getEntity() instanceof Mob mob)
                 || !mob.getType().is(CAN_TELEPORT)
-                || CAN_TELEPORT_DATA.has(mob)
                 || mob.isBaby())
             return;
 
