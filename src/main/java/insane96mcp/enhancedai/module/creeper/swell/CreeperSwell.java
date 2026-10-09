@@ -112,10 +112,10 @@ public class CreeperSwell extends Feature {
 			if (!(mob instanceof Creeper creeper))
 				return;
 			CompoundTag compoundNBT = new CompoundTag();
+			creeper.addAdditionalSaveData(compoundNBT);
 			boolean angryApplied = compoundNBT.getShort("Fuse") == 36;
 			if (angry == angryApplied)
 				return;
-			creeper.addAdditionalSaveData(compoundNBT);
 			if (angry) {
 				compoundNBT.putShort("Fuse", (short) 36);
 				compoundNBT.putByte("ExplosionRadius", angry$explosionPower.byteValue());
