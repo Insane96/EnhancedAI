@@ -10,6 +10,9 @@
   * Fixed 'Charge per spawn' being inverted (increasing instead of decreasing)
   * Fixed 'Charge per spawn' being applied only once
 * Fixed Slimes outside the `enhancedai:slime/jump_rate` entity type tag jumping with no delay
+* Melee Attacking fixes
+  * Fixed mobs outside the `enhancedai:mobs/melee_attacking` entity type tag still using the attack speed based off attribute
+  * Fixed mobs with 0 attack speed never attacking anymore
 
 # 4.2.4.0
 * Fixed 'Blow up on death' not working correctly

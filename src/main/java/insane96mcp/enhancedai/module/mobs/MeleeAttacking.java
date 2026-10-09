@@ -31,8 +31,8 @@ public class MeleeAttacking extends Feature {
 		}
 	}
 
-	public static Boolean shouldUseAttackSpeedAttribute() {
-		return isEnabled(MeleeAttacking.class) && attackSpeed$attributeBased;
+	public static Boolean shouldUseAttackSpeedAttribute(LivingEntity attacker) {
+		return attackSpeed$attributeBased && shouldBeAffectedByFeature(attacker);
 	}
 
 	public static Boolean shouldBeAffectedByFeature(LivingEntity attacker) {
