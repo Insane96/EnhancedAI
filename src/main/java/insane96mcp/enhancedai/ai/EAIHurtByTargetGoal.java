@@ -145,12 +145,12 @@ public class EAIHurtByTargetGoal extends TargetGoal {
 	}
 
 	public void preventInfighting() {
-		if (ArrayUtils.contains(this.toIgnoreDamage, Enemy.class))
-			this.toIgnoreDamage = ArrayUtils.removeElement(this.toIgnoreDamage, Enemy.class);
+		if (!ArrayUtils.contains(this.toIgnoreDamage, Enemy.class))
+			this.toIgnoreDamage = ArrayUtils.add(this.toIgnoreDamage, Enemy.class);
 	}
 
 	public void allowInfighting() {
-		if (!ArrayUtils.contains(this.toIgnoreDamage, Enemy.class))
-			this.toIgnoreDamage = ArrayUtils.add(this.toIgnoreDamage, Enemy.class);
+		if (ArrayUtils.contains(this.toIgnoreDamage, Enemy.class))
+			this.toIgnoreDamage = ArrayUtils.removeElement(this.toIgnoreDamage, Enemy.class);
 	}
 }

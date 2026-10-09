@@ -73,7 +73,7 @@ public class Targeting extends Feature {
 	public static Boolean betterHurtByTarget$playerOnly = false;
 	@Config(description = "Mobs will prefer to attack players instead of other mobs (Note that 'Prevent infighting' should be disabled).")
 	public static Boolean betterHurtByTarget$preferPlayers = false;
-	@Config(min = 0d, max = 1d, description = "Change for a mob to not attack other mobs when hit.")
+	@Config(min = 0d, max = 1d, description = "Chance for a mob to not attack other mobs when hit.")
 	public static Double betterHurtByTarget$preventInfighting = 0.9d;
 
 	@Config(min = 0, description = "Mobs in the entity type tag `enhancedai:mobs/targeting/alert_nearby` will alert nearby mobs in this range and target the player.")
