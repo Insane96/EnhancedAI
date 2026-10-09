@@ -5,6 +5,7 @@ import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.module.EAIModules;
 import insane96mcp.enhancedai.module.mobs.Spawning;
 import insane96mcp.enhancedai.utils.GoalHelper;
+import insane96mcp.insanelib.core.ModNBTData;
 import insane96mcp.insanelib.core.feature.Feature;
 import insane96mcp.insanelib.core.feature.LoadFeature;
 import insane96mcp.insanelib.core.feature.Module;
@@ -14,6 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.npc.Villager;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
@@ -37,24 +39,34 @@ public class DarkArt extends Feature {
         super.init(module, enabledByDefault, canBeDisabled);
 		PERFORMING_DARK_ARTS = this.createDataKey("performing_dark_arts");
 		DARK_ARTS = EAIData.ofBool(this.createDataKey("dark_arts"), (witch, darkArt) -> {
+			ModNBTData.remove(witch, PERFORMING_DARK_ARTS);
+			witch.setGlowingTag(false);
 			GoalHelper.removeGoal(witch.goalSelector, DarkArtWitchGoal.class);
 			if (darkArt)
 				witch.goalSelector.addGoal(1, new DarkArtWitchGoal(witch));
 		});
     }
 
-    //Low priority so other mods can set persistent data
-    @SubscribeEvent
-    public void onEntityJoinLevel(EntityJoinLevelEvent event) {
-        if (!this.isEnabled()
-                || Spawning.isUnaffectedByFeatures(event.getEntity())
-                || event.getLevel().isClientSide
+	@SubscribeEvent
+	public void onEntityJoinLevel(EntityJoinLevelEvent event) {
+		if (!this.isEnabled()
+				|| Spawning.isUnaffectedByFeatures(event.getEntity())
+				|| event.getLevel().isClientSide
 				|| !(event.getEntity() instanceof Mob mob)
-                || !mob.getType().is(AFFECTED_ENTITY_TYPES))
-            return;
+				|| !mob.getType().is(AFFECTED_ENTITY_TYPES))
+			return;
 
 		DARK_ARTS.applyIfAbsent(mob, mob.getRandom().nextDouble() < chance);
-    }
+	}
+
+	@SubscribeEvent
+	public void onVillagerJoinLevel(EntityJoinLevelEvent event) {
+		if (!(event.getEntity() instanceof Villager villager)
+				|| !ModNBTData.contains(villager, PERFORMING_DARK_ARTS))
+			return;
+
+		event.setCanceled(true);
+	}
 
     @SubscribeEvent
     public void onDeath(LivingDeathEvent event) {

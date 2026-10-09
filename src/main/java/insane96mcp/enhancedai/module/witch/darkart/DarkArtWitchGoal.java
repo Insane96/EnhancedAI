@@ -133,6 +133,7 @@ public class DarkArtWitchGoal extends Goal {
                 goal.villager.getLookControl().setLookAt(goal.mob);
                 goal.villager.setInvulnerable(true);
                 goal.villager.setNoAi(true);
+                ModNBTData.put(goal.villager, DarkArt.PERFORMING_DARK_ARTS, true);
                 goal.mob.level().addFreshEntity(goal.villager);
                 goal.phase = LOOK_AT_VILLAGER;
             }

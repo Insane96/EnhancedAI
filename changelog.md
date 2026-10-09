@@ -29,6 +29,7 @@
 * Fixed beta strafe left/right consistency
 * Fixed Panic on Fire not removing the goal when disabled
 * Fixed (again) not dismounting drowneds on Goal stop
+* Fixed possible leftovers Dark Art tags or invulnerable villagers
 * Other fixes I might have forgot to write
 
 # 4.2.4.0
