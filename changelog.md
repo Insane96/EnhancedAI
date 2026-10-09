@@ -1,5 +1,7 @@
 # Upcoming
 * Enhanced performance of Pick Up and Throw and Teleport to Target adding the Goal to any mob, not only the 'chosen ones'
+* Snow Golem Healed by Snowballs -> Healed by Snowballs (no longer limited to Snow Golems)
+  * Fixed `enhancedai:snow_golem/healed_by_snowballs` (now `enhancedai:mobs/healed_by_snowballs`) not checked (was hardcoded to snow golems)
 * Fixed 'Prevent infighting' working the other way around (with config set to 0.9, only 10% would not fight back)
 * Fixed Angry Creepers data getting re-applied every creeper load
 * Fixed all the animals losing the HurtByTargetGoal
