@@ -3,6 +3,7 @@ package insane96mcp.enhancedai.module.mobs;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.module.EAIModules;
+import insane96mcp.enhancedai.utils.GoalHelper;
 import insane96mcp.insanelib.core.feature.Feature;
 import insane96mcp.insanelib.core.feature.LoadFeature;
 import insane96mcp.insanelib.core.feature.Module;
@@ -39,6 +40,7 @@ public class PanicOnFire extends Feature {
         PANIC_ON_FIRE = EAIData.ofBool(this.createDataKey("panic_on_fire"), (mob, panicOnFire) -> {
             if (!(mob instanceof PathfinderMob pMob))
                 return;
+            GoalHelper.removeGoal(pMob.goalSelector, EAIPanicOnFireGoal.class);
             if (panicOnFire)
                 mob.goalSelector.addGoal(1, new EAIPanicOnFireGoal(pMob, 1.25));
         });

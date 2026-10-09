@@ -27,6 +27,7 @@
 * Fixed Pick Up and Throw and Teleport to target re-applying every time the mob is reloaded
 * Fixed non-miner mobs getting pickaxe on reload
 * Fixed beta strafe left/right consistency
+* Fixed Panic on Fire not removing the goal when disabled
 
 # 4.2.4.0
 * Fixed 'Blow up on death' not working correctly
