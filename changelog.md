@@ -17,6 +17,7 @@
 * Fixed Witches throwing bad potions at players only (e.g. they would buff Iron Golems) 
 * Fixed not being able to dismount dead drowneds
 * Fixed dupe with mobs hooking other mobs inventory
+* Fixed item disruption removing the first item found in the inventory instead of the selected slot
 
 # 4.2.4.0
 * Fixed 'Blow up on death' not working correctly

@@ -65,21 +65,30 @@ public class ItemDisruption extends Feature {
         if (mainHandItem.isEmpty() && offHandItem.isEmpty())
             return;
 
+        InteractionHand hand;
+
         if (!mainHandItem.isEmpty()) {
-            if (!offHandItem.isEmpty())
-                stack = mob.getRandom().nextBoolean() ? mainHandItem.copy() : offHandItem.copy();
+            if (!offHandItem.isEmpty()) {
+                if (mob.getRandom().nextBoolean())
+                    hand = InteractionHand.MAIN_HAND;
+                else
+                    hand = InteractionHand.OFF_HAND;
+            }
             else
-                stack = mainHandItem.copy();
+                hand = InteractionHand.MAIN_HAND;
+
         }
+        else
+            hand = InteractionHand.OFF_HAND;
+        if (hand == InteractionHand.MAIN_HAND)
+            stack = mainHandItem.copy();
         else
             stack = offHandItem.copy();
 
         event.setNewDamage(0);
         player.level().playSound(null, player, SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1.0f, 0.5f);
         Inventory inventory = player.getInventory();
-        int slot = inventory.findSlotMatchingItem(stack);
-        if (slot == -1)
-            slot = Inventory.SLOT_OFFHAND;
+        int slot = hand == InteractionHand.OFF_HAND ? Inventory.SLOT_OFFHAND : player.getInventory().selected;
         inventory.removeItem(slot, stack.getCount());
         if (player.getUseItem() == stack && stack.getCount() == 1)
             player.stopUsingItem(); // Forge: fix MC-231097 on the serverside
