@@ -118,8 +118,8 @@ public class FallingShockwave extends Feature {
                 || !mob.getType().is(AFFECTED_ENTITY_TYPES))
             return;
 
-        JUMP_STRENGTH.applyIfAbsent(mob, jumpStrength);
         JUMP_COOLDOWN.applyIfAbsent(mob, jumpCooldown);
+        JUMP_STRENGTH.applyIfAbsent(mob, jumpStrength);
         MIN_FALL_DISTANCE.applyIfAbsent(mob, minFallDistance);
         DAMAGE_PER_BLOCK.applyIfAbsent(mob, damagePerBlock);
         KNOCKUP_STRENGTH_RATIO.applyIfAbsent(mob, knockUpStrengthRatio);
