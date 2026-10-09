@@ -30,6 +30,7 @@
 * Fixed Panic on Fire not removing the goal when disabled
 * Fixed (again) not dismounting drowneds on Goal stop
 * Fixed possible leftovers Dark Art tags or invulnerable villagers
+* Fixed melee attack speed multiplier being possible set to 0 in config
 * Other fixes I might have forgot to write
 
 # 4.2.4.0

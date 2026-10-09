@@ -19,9 +19,9 @@ public class MeleeAttacking extends Feature {
 
 	@Config(description = "If true melee monsters (zombies, etc) attack speed is 4 (like the player) and will be based off the `minecraft:generic.attack_speed` attribute.")
 	public static Boolean attackSpeed$attributeBased = true;
-	@Config(min = 0d, max = 4d, description = "Multiplies the attack speed of monsters by this value.")
+	@Config(min = 0.01d, max = 4d, description = "Multiplies the attack speed of monsters by this value.")
 	public static DifficultyBasedConfig attackSpeed$multiplier = new DifficultyBasedConfig(0.25d, 0.25d, 0.25d);
-	@Config(min = 0f, max = 4f, description = "The maximum attack speed a mob can attack with (in attacks per second, 2 is an attack every 0.5 seconds, 1.25 is an attack every 0.8s, 1 is an attack every 1s).")
+	@Config(min = 0.01f, max = 4f, description = "The maximum attack speed a mob can attack with (in attacks per second, 2 is an attack every 0.5 seconds, 1.25 is an attack every 0.8s, 1 is an attack every 1s).")
 	public static Double attackSpeed$maximum = 4d;
 
 	public static void onEntityAttributeModification(EntityAttributeModificationEvent event) {
