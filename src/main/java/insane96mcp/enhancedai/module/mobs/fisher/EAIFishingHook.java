@@ -189,6 +189,8 @@ public class EAIFishingHook extends Projectile {
                     this.level().addFreshEntity(itemEntity);
                     if (living instanceof Player player)
                         player.getInventory().removeItem(slot == EquipmentSlot.OFFHAND ? Inventory.SLOT_OFFHAND : player.getInventory().selected, 256);
+                    else
+                        living.getItemBySlot(slot).shrink(1);
                 }
             }
             else {

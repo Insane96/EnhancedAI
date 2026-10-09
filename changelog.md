@@ -16,6 +16,7 @@
 * Fixed min monster despawn distance being applied to all mobs categories and not monsters only
 * Fixed Witches throwing bad potions at players only (e.g. they would buff Iron Golems) 
 * Fixed not being able to dismount dead drowneds
+* Fixed dupe with mobs hooking other mobs inventory
 
 # 4.2.4.0
 * Fixed 'Blow up on death' not working correctly
