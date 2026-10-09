@@ -142,9 +142,12 @@ public class AnimalScaredAttack extends Feature {
         }
 
         ATTACK_MOVEMENT_SPEED_MODIFIER.applyIfAbsent(animal, speedModifier);
-        NEUTRAL.applyIfAbsent(animal, animal.getType().is(CAN_BE_NEUTRAL) && animal.getRandom().nextDouble() < neutralChance);
-        HOSTILE.applyIfAbsent(animal, animal.getType().is(CAN_BE_HOSTILE) && animal.getRandom().nextDouble() < hostileChance);
-        PLAYER_SCARED.applyIfAbsent(animal, !HOSTILE.get(animal) && animal.getType().is(SCARED_BY_PLAYERS) && animal.getRandom().nextDouble() < playersScaredChance);
+        if (animal.getType().is(CAN_BE_NEUTRAL))
+            NEUTRAL.applyIfAbsent(animal, animal.getRandom().nextDouble() < neutralChance);
+        if (animal.getType().is(CAN_BE_HOSTILE))
+            HOSTILE.applyIfAbsent(animal, animal.getRandom().nextDouble() < hostileChance);
+        if (animal.getType().is(SCARED_BY_PLAYERS))
+            PLAYER_SCARED.applyIfAbsent(animal, !HOSTILE.get(animal)  && animal.getRandom().nextDouble() < playersScaredChance);
         FLEE_DISTANCE_FAR.applyIfAbsent(animal, fleeDistanceFar);
         FLEE_DISTANCE_NEAR.applyIfAbsent(animal, fleeDistanceNear);
         FLEE_SPEED_FAR.applyIfAbsent(animal, fleeSpeedFar);
