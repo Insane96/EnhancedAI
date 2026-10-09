@@ -4,6 +4,7 @@
 * Fixed all the animals losing the HurtByTargetGoal
 * Fixed if blindness expires mobs would not lose the follow range penalty
 * Fixed TeleportToTargetGoal not showing back the mob and the target mob if the goal stopped
+* Fixed pearler mobs losing the PearlUseGoal when reloaded
 
 # 4.2.4.0
 * Fixed 'Blow up on death' not working correctly

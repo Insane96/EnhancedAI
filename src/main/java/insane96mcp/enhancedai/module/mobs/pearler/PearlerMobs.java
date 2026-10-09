@@ -46,11 +46,10 @@ public class PearlerMobs extends Feature {
 		if (!this.isEnabled()
                 || Spawning.isUnaffectedByFeatures(event.getEntity())
 				|| event.getLevel().isClientSide
-				|| !(event.getEntity() instanceof Mob mob)
-				|| ModNBTData.get(mob, HAS_ENDER_PEARL_BEEN_GIVEN, Boolean.class))
+				|| !(event.getEntity() instanceof Mob mob))
 			return;
 
-		if (mob.getOffhandItem().isEmpty() && mob.getRandom().nextDouble() < equipEnderPearlChance && mob.getType().is(CAN_EQUIP_PEARL))
+		if (mob.getOffhandItem().isEmpty() && mob.getRandom().nextDouble() < equipEnderPearlChance && mob.getType().is(CAN_EQUIP_PEARL) && !ModNBTData.get(mob, HAS_ENDER_PEARL_BEEN_GIVEN, Boolean.class))
 			mob.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.ENDER_PEARL, enderPearlAmount.getIntRandBetween(mob.getRandom())));
 
 		ModNBTData.put(mob, HAS_ENDER_PEARL_BEEN_GIVEN, true);
