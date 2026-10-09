@@ -17,7 +17,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.EntityMountEvent;
 
-@LoadFeature(module = EAIModules.MOBS, name = "Anti-Cheese", description = "Allows mobs to break vehicles to escape.")
+@LoadFeature(module = EAIModules.MOBS, description = "Allows mobs to break vehicles to escape.")
 public class VehicleAntiCheese extends Feature {
     public static final TagKey<EntityType<?>> PREVENT_VEHICLE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/vehicle_anti_cheese/prevent_riding"));
     public static final TagKey<EntityType<?>> CAN_BREAK_VEHICLE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/vehicle_anti_cheese/break_vehicle"));
@@ -46,7 +46,8 @@ public class VehicleAntiCheese extends Feature {
     public void onMount(EntityMountEvent event) {
         if (!this.isEnabled()
                 || !(event.getEntityBeingMounted().getType().is(VALID_VEHICLES))
-                || !PREVENT_RIDING.get(event.getEntity()))
+                || !PREVENT_RIDING.get(event.getEntity())
+                || event.isDismounting())
             return;
 
         event.setCanceled(true);
