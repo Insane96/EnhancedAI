@@ -62,21 +62,21 @@ public abstract class MeleeAttackGoalMixin extends Goal {
 	public int onGetAttackCooldown(int original) {
 		if (!MeleeAttacking.shouldUseAttackSpeedAttribute(this.mob))
             return original;
-        return this.enhancedAI$getTicksUntilNextAttack(original);
+        return this.enhancedAI$getTicksUntilNextAttack();
     }
 
 	@ModifyExpressionValue(method = "resetAttackCooldown", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/goal/MeleeAttackGoal;adjustedTickDelay(I)I"))
 	public int onResetAttackCooldown(int original) {
 		if (!MeleeAttacking.shouldUseAttackSpeedAttribute(this.mob))
             return original;
-        return this.enhancedAI$getTicksUntilNextAttack(original);
+        return this.enhancedAI$getTicksUntilNextAttack();
     }
 
 	@Unique
-	private int enhancedAI$getTicksUntilNextAttack(int original) {
+	private int enhancedAI$getTicksUntilNextAttack() {
 		double attackSpeed = this.mob.getAttributeValue(Attributes.ATTACK_SPEED);
 		if (attackSpeed <= 0f)
-			attackSpeed = original / 20d;
+			attackSpeed = 4d;
 		attackSpeed *= MeleeAttacking.attackSpeed$multiplier.getByDifficulty(this.mob.level());
 		if (attackSpeed > MeleeAttacking.attackSpeed$maximum)
 			attackSpeed = MeleeAttacking.attackSpeed$maximum;
