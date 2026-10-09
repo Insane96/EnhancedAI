@@ -214,9 +214,11 @@ public class Leaders extends Feature {
             double currentCharge = 0;
             if (modifier != null)
                 currentCharge = modifier.amount();
-            double newCharge = currentCharge - chargePerSpawn;
-            MCUtils.applyModifier(mob, EAIAttributes.SPAWN_REINFORCEMENTS_CHANCE, REINFORCEMENT_CALLED_CHARGE_ID, -newCharge, AttributeModifier.Operation.ADD_VALUE);
-            MCUtils.applyModifier(reinforcement, EAIAttributes.SPAWN_REINFORCEMENTS_CHANCE, REINFORCEMENT_CALLED_CHARGE_ID, -newCharge, AttributeModifier.Operation.ADD_VALUE);
+            double newCharge = currentCharge - CHARGE_PER_SPAWN.get(mob);
+            MCUtils.removeModifier(mob, EAIAttributes.SPAWN_REINFORCEMENTS_CHANCE, REINFORCEMENT_CALLED_CHARGE_ID);
+            MCUtils.removeModifier(reinforcement, EAIAttributes.SPAWN_REINFORCEMENTS_CHANCE, REINFORCEMENT_CALLED_CHARGE_ID);
+            MCUtils.applyModifier(mob, EAIAttributes.SPAWN_REINFORCEMENTS_CHANCE, REINFORCEMENT_CALLED_CHARGE_ID, newCharge, AttributeModifier.Operation.ADD_VALUE);
+            MCUtils.applyModifier(reinforcement, EAIAttributes.SPAWN_REINFORCEMENTS_CHANCE, REINFORCEMENT_CALLED_CHARGE_ID, newCharge, AttributeModifier.Operation.ADD_VALUE);
             break;
         }
     }

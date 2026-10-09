@@ -5,6 +5,10 @@
 * Fixed if blindness expires mobs would not lose the follow range penalty
 * Fixed TeleportToTargetGoal not showing back the mob and the target mob if the goal stopped
 * Fixed pearler mobs losing the PearlUseGoal when reloaded
+* Leaders fixes
+  * Fixed 'Charge per spawn' read from the config and not the Mob's Data
+  * Fixed 'Charge per spawn' being inverted (increasing instead of decreasing)
+  * Fixed 'Charge per spawn' being applied only once
 
 # 4.2.4.0
 * Fixed 'Blow up on death' not working correctly
