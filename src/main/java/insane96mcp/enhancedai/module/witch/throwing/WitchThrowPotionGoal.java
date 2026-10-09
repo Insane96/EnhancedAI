@@ -5,8 +5,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Witch;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.Potions;
@@ -72,7 +72,7 @@ public class WitchThrowPotionGoal extends Goal {
 
     private void throwPotionAtTarget() {
         List<PotionOrMobEffect> listToLoop = WitchPotionThrowing.goodPotionsList.entries;
-		if (this.target instanceof Player)
+		if (!(this.target instanceof Enemy))
 			listToLoop = WitchPotionThrowing.badPotionsList.entries;
 		boolean apprentice = WitchPotionThrowing.APPRENTICE.get(this.witch);
 		if (apprentice) {
