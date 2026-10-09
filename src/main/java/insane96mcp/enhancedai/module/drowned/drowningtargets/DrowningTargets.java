@@ -4,6 +4,7 @@ import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.module.EAIModules;
 import insane96mcp.enhancedai.module.mobs.Spawning;
+import insane96mcp.enhancedai.utils.GoalHelper;
 import insane96mcp.insanelib.core.feature.Feature;
 import insane96mcp.insanelib.core.feature.LoadFeature;
 import insane96mcp.insanelib.core.feature.Module;
@@ -69,7 +70,8 @@ public class DrowningTargets extends Feature {
                 || !(event.getEntityMounting() instanceof Player player)
                 || player.isCreative()
                 || !DROWNING_TARGETS.get(drowned)
-                || !player.isAlive())
+                || !player.isAlive()
+                || !GoalHelper.isRunning(drowned.goalSelector, DrownTargetGoal.class))
             return;
 
         event.setCanceled(true);
