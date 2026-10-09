@@ -23,13 +23,13 @@ public class HealedBySnowballs extends Feature {
 	@SubscribeEvent
 	public void onProjectileImpactSnowGolemEvent(ProjectileImpactEvent event) {
 		if (!this.isEnabled()
-                || Spawning.isUnaffectedByFeatures(event.getEntity())
 				|| !(event.getProjectile() instanceof Snowball)
 				|| !(event.getRayTraceResult() instanceof EntityHitResult entityHitResult)
-				|| !(entityHitResult.getEntity() instanceof LivingEntity livingEntity)
-				|| !livingEntity.getType().is(AFFECTED_ENTITY_TYPES))
+				|| !(entityHitResult.getEntity() instanceof LivingEntity hitEntity)
+				|| Spawning.isUnaffectedByFeatures(hitEntity)
+				|| !hitEntity.getType().is(AFFECTED_ENTITY_TYPES))
 			return;
 
-		livingEntity.heal(amount.floatValue());
+		hitEntity.heal(amount.floatValue());
 	}
 }
