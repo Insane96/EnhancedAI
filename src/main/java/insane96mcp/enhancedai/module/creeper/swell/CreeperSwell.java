@@ -190,8 +190,8 @@ public class CreeperSwell extends Feature {
 		IGNORE_WALLS.applyIfAbsent(creeper, creeper.getRandom().nextDouble() < ignoreWallsChance);
 		BREACH.applyIfAbsent(creeper, creeper.getRandom().nextDouble() < breach$chance);
 		BREACH_HORIZONTAL_RANGE.applyIfAbsent(creeper, breach$horizontalRange.doubleValue());
+		BETA_LEFT_STRAFE.apply(creeper, creeper.getRandom().nextBoolean());
 		BETA_STRAFE.applyIfAbsent(creeper, creeper.getRandom().nextDouble() < betaStrafe$chance);
-        BETA_LEFT_STRAFE.apply(creeper, creeper.getRandom().nextBoolean());
 		ANGRY.applyIfAbsent(creeper, creeper.getRandom().nextDouble() < angry$chance);
 		BLOW_UP_ON_DEATH.applyIfAbsent(creeper, blowUpOnDeath);
 	}
