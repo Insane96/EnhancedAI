@@ -81,9 +81,11 @@ public class TeleportToTargetGoal extends Goal {
 
     @Override
     public void stop() {
-        show(this.mob);
-        if (this.toTeleport != null)
-            show(this.toTeleport);
+        if (this.teleportTick > 0) {
+            show(this.mob);
+            if (this.toTeleport != null)
+                show(this.toTeleport);
+        }
         this.toTeleport = null;
         this.unreachableTime = 0;
     }
