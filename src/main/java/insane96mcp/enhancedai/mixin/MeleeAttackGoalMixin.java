@@ -76,7 +76,7 @@ public abstract class MeleeAttackGoalMixin extends Goal {
 	private int enhancedAI$getTicksUntilNextAttack(int original) {
 		double attackSpeed = this.mob.getAttributeValue(Attributes.ATTACK_SPEED);
 		if (attackSpeed <= 0f)
-			attackSpeed = original;
+			attackSpeed = original / 20d;
 		attackSpeed *= MeleeAttacking.attackSpeed$multiplier.getByDifficulty(this.mob.level());
 		if (attackSpeed > MeleeAttacking.attackSpeed$maximum)
 			attackSpeed = MeleeAttacking.attackSpeed$maximum;
