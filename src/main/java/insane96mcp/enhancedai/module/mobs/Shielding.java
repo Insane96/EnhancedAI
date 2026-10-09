@@ -105,7 +105,7 @@ public class Shielding extends JsonFeature {
 			return;
 		if (attacked.getRandom().nextDouble() < chance) {
 			event.setCanceled(true);
-			offHandItem.hurtAndBreak((int) event.getAmount(), attacker, EquipmentSlot.OFFHAND);
+			offHandItem.hurtAndBreak((int) event.getAmount(), attacked, EquipmentSlot.OFFHAND);
             if (attacker.getMainHandItem().is(ItemTags.AXES)) {
                 ModNBTData.put(attacked, LAST_HURT_BY_AXE, attacked.level().getGameTime());
                 attacked.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.8F + attacked.level().random.nextFloat() * 0.4F);

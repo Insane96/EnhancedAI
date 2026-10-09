@@ -18,6 +18,7 @@
 * Fixed not being able to dismount dead drowneds
 * Fixed dupe with mobs hooking other mobs inventory
 * Fixed item disruption removing the first item found in the inventory instead of the selected slot
+* Fixed hurt shields in Shielding not applying wielder things (e.g. enchantments)
 
 # 4.2.4.0
 * Fixed 'Blow up on death' not working correctly
