@@ -171,7 +171,7 @@ public class Leaders extends Feature {
 
             boolean foundSpawnPosition = true;
             if (y1 < worldHeight) {
-                while (SpawnPlacements.isSpawnPositionOk(entitytype, mob.level(), blockPos)
+                while (!SpawnPlacements.isSpawnPositionOk(entitytype, mob.level(), blockPos)
                         || !SpawnPlacements.checkSpawnRules(entitytype, serverLevel, MobSpawnType.REINFORCEMENT, blockPos, mob.level().random)
                         || !mob.level().isUnobstructed(reinforcement)
                         || !mob.level().noCollision(reinforcement)

@@ -28,6 +28,7 @@
 * Fixed non-miner mobs getting pickaxe on reload
 * Fixed beta strafe left/right consistency
 * Fixed Panic on Fire not removing the goal when disabled
+* Other fixes I might have forgot to write
 
 # 4.2.4.0
 * Fixed 'Blow up on death' not working correctly
