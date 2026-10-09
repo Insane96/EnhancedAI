@@ -86,6 +86,7 @@ public class TeleportToTargetGoal extends Goal {
             if (this.toTeleport != null)
                 show(this.toTeleport);
         }
+        this.teleportTick = 0;
         this.toTeleport = null;
         this.unreachableTime = 0;
     }
