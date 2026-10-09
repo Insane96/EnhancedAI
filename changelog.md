@@ -9,6 +9,7 @@
   * Fixed 'Charge per spawn' read from the config and not the Mob's Data
   * Fixed 'Charge per spawn' being inverted (increasing instead of decreasing)
   * Fixed 'Charge per spawn' being applied only once
+* Fixed Slimes outside the `enhancedai:slime/jump_rate` entity type tag jumping with no delay
 
 # 4.2.4.0
 * Fixed 'Blow up on death' not working correctly

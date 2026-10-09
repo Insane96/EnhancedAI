@@ -50,7 +50,8 @@ public abstract class SlimeMixin extends Mob {
 
     @Inject(method = "getJumpDelay", at = @At("RETURN"), cancellable = true)
     public void onJumpDelay(CallbackInfoReturnable<Integer> cir) {
-        if (!Feature.isEnabled(SlimeJumpDelay.class))
+        if (!Feature.isEnabled(SlimeJumpDelay.class)
+                || !this.getType().is(SlimeJumpDelay.AFFECTED_ENTITY_TYPES))
             return;
 
         cir.setReturnValue(Mth.nextInt(this.random, SlimeJumpDelay.JUMP_DELAY_MIN.get(this), SlimeJumpDelay.JUMP_DELAY_MAX.get(this)));
