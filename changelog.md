@@ -13,6 +13,7 @@
 * Melee Attacking fixes
   * Fixed mobs outside the `enhancedai:mobs/melee_attacking` entity type tag still using the attack speed based off attribute
   * Fixed mobs with 0 attack speed never attacking anymore
+* Fixed min monster despawn distance being applied to all mobs categories and not monsters only
 
 # 4.2.4.0
 * Fixed 'Blow up on death' not working correctly

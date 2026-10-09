@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MobCategoryMixin {
 	@Inject(at = @At(value = "RETURN"), method = "getNoDespawnDistance()I", cancellable = true)
 	public void getNoDespawnDistance(CallbackInfoReturnable<Integer> callbackInfo) {
-		if (Feature.isEnabled(Spawning.class))
+		if (Feature.isEnabled(Spawning.class) && (Object) this == MobCategory.MONSTER)
 			callbackInfo.setReturnValue(Spawning.minMonstersDespawningDistance);
 	}
 }
