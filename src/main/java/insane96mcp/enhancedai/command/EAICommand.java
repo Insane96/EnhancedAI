@@ -58,9 +58,12 @@ public class EAICommand {
                                                     }
 
 													Entity entity = EntityArgument.getEntity(ctx, "target");
-													if (entity instanceof Mob mob)
-														EAIData.apply(data, mob, parsed);
-                                                    ctx.getSource().sendSuccess(() -> Component.literal("Changed %s to %s".formatted(data.id(), parsed)), true);
+													if (entity instanceof Mob mob) {
+                                                        EAIData.apply(data, mob, parsed);
+                                                        ctx.getSource().sendSuccess(() -> Component.literal("Changed %s to %s".formatted(data.id(), parsed)), true);
+                                                    }
+                                                    else
+                                                        ctx.getSource().sendFailure(Component.literal("Target is not a mob"));
                                                     return 1;
                                                 })
                 ))))
