@@ -15,6 +15,7 @@
   * Fixed mobs with 0 attack speed never attacking anymore
 * Fixed min monster despawn distance being applied to all mobs categories and not monsters only
 * Fixed Witches throwing bad potions at players only (e.g. they would buff Iron Golems) 
+* Fixed not being able to dismount dead drowneds
 
 # 4.2.4.0
 * Fixed 'Blow up on death' not working correctly

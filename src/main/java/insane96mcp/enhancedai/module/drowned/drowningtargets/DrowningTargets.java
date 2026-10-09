@@ -64,6 +64,7 @@ public class DrowningTargets extends Feature {
         if (!this.isEnabled()
                 || !event.isDismounting()
                 || !(event.getEntityBeingMounted() instanceof Drowned drowned)
+                || drowned.isDeadOrDying()
                 || !event.getEntityBeingMounted().isAlive()
                 || !(event.getEntityMounting() instanceof Player player)
                 || player.isCreative()
