@@ -116,7 +116,7 @@ public abstract class EAIRangedAttackGoal<T extends Mob> extends Goal {
 	}
 
 	protected boolean canStrafe() {
-		return this.canStrafe.get(this.mob) && !GoalHelper.isRunning(this.mob.goalSelector, EAIAvoidEntityGoal.class);
+		return this.canStrafe.get(this.mob) && !GoalHelper.isRunning(this.mob.goalSelector, EAIAvoidEntityGoal.class) && !GoalHelper.isRunning(this.mob.goalSelector, EAIAvoidTargetGoal.class);
 	}
 
 	protected abstract void attackTick(LivingEntity target, double distanceFromTarget, boolean canSeeTarget);
