@@ -60,6 +60,7 @@ public class EAINearestAttackableTarget<T extends LivingEntity> extends ILNeares
         return super.canContinueToUse();
     }
 
+    /// Returns true if the mob can directly see the target in range or if has xray and is in range or if can see glowing entities in range
     public boolean canSenseTarget(LivingEntity target) {
         if (this.mob.getSensing().hasLineOfSight(target))
             return true;

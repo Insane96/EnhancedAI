@@ -24,8 +24,6 @@ public class CustomHostileData {
     public ObjTag<EntityType<?>> attacker;
     public ObjTag<EntityType<?>> target;
     public double chance;
-    //TODO replace with mustSense
-    public boolean mustSee;
     public boolean addAttackGoal;
 
     public CustomHostileData(int priority, ObjTag<EntityType<?>> attacker, ObjTag<EntityType<?>> target) {
@@ -33,17 +31,11 @@ public class CustomHostileData {
         this.attacker = attacker;
         this.target = target;
         this.chance = 1d;
-        this.mustSee = true;
         this.addAttackGoal = false;
     }
 
     public CustomHostileData chance(double chance) {
         this.chance = chance;
-        return this;
-    }
-
-    public CustomHostileData mustSee(boolean mustSee) {
-        this.mustSee = mustSee;
         return this;
     }
 
@@ -87,7 +79,6 @@ public class CustomHostileData {
 
             return new CustomHostileData(priority, attacker, target)
                     .chance(GsonHelper.getAsDouble(jObject, "chance", 1f))
-                    .mustSee(GsonHelper.getAsBoolean(jObject, "requires_line_of_sight", true))
                     .addAttackGoal(GsonHelper.getAsBoolean(jObject, "add_attack_goal", false));
         }
 
@@ -99,8 +90,6 @@ public class CustomHostileData {
             jObject.add("target", context.serialize(src.target));
             if (src.chance < 1f)
                 jObject.addProperty("chance", src.chance);
-            if (!src.mustSee)
-                jObject.addProperty("requires_line_of_sight", false);
             if (src.addAttackGoal)
                 jObject.addProperty("add_attack_goal", true);
             return jObject;
