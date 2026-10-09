@@ -17,6 +17,9 @@ public class PatrolGoal extends Goal {
 
     @Override
     public boolean canUse() {
+        if (!Patrol.POS.has(this.owner)
+                || !Patrol.RANGE.has(this.owner))
+            return false;
         this.pos = Vec3.atCenterOf(Patrol.POS.get(this.owner));
         double range = Patrol.RANGE.get(this.owner);
         range *= range;
