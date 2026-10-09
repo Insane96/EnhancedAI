@@ -23,6 +23,7 @@
 * Fixed Vehicle Anti-Cheese not preventing mobs from dismounting vehicles
   * Also fixed feature name in config
 * Fixed Pick Up and Throw and Teleport to target re-applying every time the mob is reloaded
+* Fixed non-miner mobs getting pickaxe on reload
 
 # 4.2.4.0
 * Fixed 'Blow up on death' not working correctly

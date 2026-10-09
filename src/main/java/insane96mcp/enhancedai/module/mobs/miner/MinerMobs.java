@@ -99,7 +99,7 @@ public class MinerMobs extends Feature {
 
 		boolean isMiner = mob.getRandom().nextDouble() < minerChance;
 		MINER.applyIfAbsent(mob, isMiner);
-		if (isMiner && equipStonePick && mob.getOffhandItem().isEmpty())
+		if (MINER.get(mob) && equipStonePick && mob.getOffhandItem().isEmpty())
 		{
 			mob.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.STONE_PICKAXE));
 			mob.setDropChance(EquipmentSlot.OFFHAND, -1f);
