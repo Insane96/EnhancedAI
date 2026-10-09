@@ -21,6 +21,7 @@
 * Fixed hurt shields in Shielding not applying wielder things (e.g. enchantments)
 * Fixed Vehicle Anti-Cheese not preventing mobs from dismounting vehicles
   * Also fixed feature name in config
+* Fixed pick up and throw re-applying every time the mob is reloaded
 
 # 4.2.4.0
 * Fixed 'Blow up on death' not working correctly
