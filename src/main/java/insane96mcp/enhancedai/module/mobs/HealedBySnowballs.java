@@ -14,7 +14,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.ProjectileImpactEvent;
 
-@LoadFeature(module = EAIModules.MOBS, description = "Snow golems are healed when hit by snowballs. Only entity types in enhancedai:mobs/healed_by_snowballs tag are affected by this feature.")
+@LoadFeature(module = EAIModules.MOBS, description = "Mobs are healed when hit by snowballs. Only entity types in enhancedai:mobs/healed_by_snowballs tag are affected by this feature.")
 public class HealedBySnowballs extends Feature {
     public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/healed_by_snowballs"));
     @Config(min = 0)
