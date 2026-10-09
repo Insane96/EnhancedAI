@@ -1,4 +1,5 @@
 # Upcoming
+* Enhanced performance of Pick Up and Throw and Teleport to Target adding the Goal to any mob, not only the 'chosen ones'
 * Fixed 'Prevent infighting' working the other way around (with config set to 0.9, only 10% would not fight back)
 * Fixed Angry Creepers data getting re-applied every creeper load
 * Fixed all the animals losing the HurtByTargetGoal
@@ -21,7 +22,7 @@
 * Fixed hurt shields in Shielding not applying wielder things (e.g. enchantments)
 * Fixed Vehicle Anti-Cheese not preventing mobs from dismounting vehicles
   * Also fixed feature name in config
-* Fixed pick up and throw re-applying every time the mob is reloaded
+* Fixed Pick Up and Throw and Teleport to target re-applying every time the mob is reloaded
 
 # 4.2.4.0
 * Fixed 'Blow up on death' not working correctly

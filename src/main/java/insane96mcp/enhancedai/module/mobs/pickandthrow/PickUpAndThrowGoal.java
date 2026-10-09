@@ -34,7 +34,7 @@ public class PickUpAndThrowGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (!PickUpAndThrow.CAN_PICK_UP_DATA.has(this.mob)
+        if (PickUpAndThrow.CAN_PICK_UP_DATA.get(this.mob).isEmpty()
                 || this.mob.getTarget() == null
                 || this.mob.getTarget().distanceTo(this.mob) < PickUpAndThrow.MIN_DISTANCE_TO_PICK_UP.get(this.mob)
                 || --this.cooldown > 0)

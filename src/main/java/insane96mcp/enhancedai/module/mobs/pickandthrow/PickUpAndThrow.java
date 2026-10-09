@@ -4,6 +4,7 @@ import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.module.EAIModules;
 import insane96mcp.enhancedai.module.mobs.Spawning;
+import insane96mcp.enhancedai.utils.GoalHelper;
 import insane96mcp.insanelib.core.feature.Feature;
 import insane96mcp.insanelib.core.feature.LoadFeature;
 import insane96mcp.insanelib.core.feature.Module;
@@ -41,7 +42,11 @@ public class PickUpAndThrow extends Feature {
 	@Override
 	public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super.init(module, enabledByDefault, canBeDisabled);
-		CAN_PICK_UP_DATA = EAIData.ofString(this.createDataKey("can_pick_up"));
+		CAN_PICK_UP_DATA = EAIData.ofString(this.createDataKey("can_pick_up"), (mob, canPickUpData) -> {
+            GoalHelper.removeGoal(mob.goalSelector, PickUpAndThrowGoal.class);
+            if (!canPickUpData.isEmpty())
+                mob.goalSelector.addGoal(0, new PickUpAndThrowGoal(mob));
+        });
         MIN_DISTANCE_TO_PICK_UP = EAIData.ofInt(this.createDataKey("min_distance_to_pick_up"));
         MAX_DISTANCE_TO_THROW = EAIData.ofInt(this.createDataKey("max_distance_to_throw"));
         SPEED_MODIFIER_TO_PICK_UP = EAIData.ofDouble(this.createDataKey("speed_modifier_to_pick_up"));
@@ -67,6 +72,5 @@ public class PickUpAndThrow extends Feature {
         MAX_DISTANCE_TO_THROW.applyIfAbsent(mob, maxDistanceToThrow);
         SPEED_MODIFIER_TO_PICK_UP.applyIfAbsent(mob, speedModifierToPickUp);
         COOLDOWN.applyIfAbsent(mob, cooldown);
-		mob.targetSelector.addGoal(0, new PickUpAndThrowGoal(mob));
     }
 }

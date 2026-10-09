@@ -4,6 +4,7 @@ import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.module.EAIModules;
 import insane96mcp.enhancedai.module.mobs.Spawning;
+import insane96mcp.enhancedai.utils.GoalHelper;
 import insane96mcp.insanelib.core.feature.Feature;
 import insane96mcp.insanelib.core.feature.LoadFeature;
 import insane96mcp.insanelib.core.feature.Module;
@@ -31,7 +32,11 @@ public class TeleportToTarget extends Feature {
 	@Override
 	public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super.init(module, enabledByDefault, canBeDisabled);
-		CAN_TELEPORT_DATA = EAIData.ofString(this.createDataKey("can_teleport"));
+		CAN_TELEPORT_DATA = EAIData.ofString(this.createDataKey("can_teleport"), (mob, canTeleportData) -> {
+            GoalHelper.removeGoal(mob.goalSelector, TeleportToTargetGoal.class);
+            if (!canTeleportData.isEmpty())
+                mob.goalSelector.addGoal(0, new TeleportToTargetGoal(mob));
+        });
 	}
 
 	@SubscribeEvent
@@ -41,6 +46,7 @@ public class TeleportToTarget extends Feature {
                 || event.getLevel().isClientSide
                 || !(event.getEntity() instanceof Mob mob)
                 || !mob.getType().is(CAN_TELEPORT)
+                || CAN_TELEPORT_DATA.has(mob)
                 || mob.isBaby())
             return;
 
@@ -48,6 +54,5 @@ public class TeleportToTarget extends Feature {
             CAN_TELEPORT_DATA.applyIfAbsent(mob, CAN_BE_TELEPORTED.location().toString());
         else
             CAN_TELEPORT_DATA.applyIfAbsent(mob, "");
-		mob.targetSelector.addGoal(0, new TeleportToTargetGoal(mob));
     }
 }
