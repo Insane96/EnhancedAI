@@ -90,4 +90,15 @@ public class ActualBlindness extends Feature {
 
 		event.getEntity().getAttribute(Attributes.FOLLOW_RANGE).removeModifier(BLINDNESS_FOLLOW_RANGE_ID);
 	}
+
+	@SubscribeEvent
+	public void onBlindnessRemove(MobEffectEvent.Expired event) {
+		if (!this.isEnabled()
+				|| event.getEffectInstance() == null
+				|| event.getEffectInstance().getEffect() != MobEffects.BLINDNESS
+				|| event.getEntity().getAttribute(Attributes.FOLLOW_RANGE) == null)
+			return;
+
+		event.getEntity().getAttribute(Attributes.FOLLOW_RANGE).removeModifier(BLINDNESS_FOLLOW_RANGE_ID);
+	}
 }

@@ -2,6 +2,7 @@
 * Fixed 'Prevent infighting' working the other way around (with config set to 0.9, only 10% would not fight back)
 * Fixed Angry Creepers data getting re-applied every creeper load
 * Fixed all the animals losing the HurtByTargetGoal
+* Fixed if blindness expires mobs would not lose the follow range penalty
 
 # 4.2.4.0
 * Fixed 'Blow up on death' not working correctly
