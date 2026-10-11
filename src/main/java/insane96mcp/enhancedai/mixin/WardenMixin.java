@@ -16,7 +16,7 @@ public abstract class WardenMixin extends Monster {
 		super(pEntityType, pLevel);
 	}
 
-	@ModifyConstant(method = "customServerAiStep", constant = {@Constant(intValue = 20)})
+	@ModifyConstant(method = "customServerAiStep", constant = {@Constant(intValue = 20, ordinal = 0)})
 	private int onCustomServerAiStep(int range) {
 		return (int) WardenDarknessRange.changeRange((Warden) (Object) this, range);
 	}

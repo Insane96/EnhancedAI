@@ -31,6 +31,10 @@
 * Fixed (again) not dismounting drowneds on Goal stop
 * Fixed possible leftovers Dark Art tags or invulnerable villagers
 * Fixed melee attack speed multiplier being possible set to 0 in config
+* Warden fixes
+  * Fixed Darkness Range also slowing down the anger update rate (anger decreased 2.5x slower with default config)
+  * Fixed crash with wardens without the Darkness Range data (e.g. blacklisted from Spawning or already present when the feature is enabled)
+  * Fixed wardens without the Sonic Boom Range data never using the sonic boom
 * Other fixes I might have forgot to write
 
 # 4.2.4.0

@@ -14,7 +14,7 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 @LoadFeature(module = EAIModules.WARDEN, description = "Change the distance at which the darkness effect is applied.")
 public class WardenDarknessRange extends Feature {
 
-    @Config(description = "Vanilla is 20")
+    @Config(min = 1, description = "Vanilla is 20")
     public static Integer range = 50;
 
 	public static EAIData<Integer> RANGE;
@@ -35,7 +35,8 @@ public class WardenDarknessRange extends Feature {
     }
 
     public static double changeRange(Warden warden, double originalRange) {
-        if (!Feature.isEnabled(WardenDarknessRange.class))
+        if (!Feature.isEnabled(WardenDarknessRange.class)
+                || !RANGE.has(warden))
             return originalRange;
         return RANGE.get(warden);
     }

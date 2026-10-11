@@ -14,7 +14,7 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 @LoadFeature(module = EAIModules.WARDEN, description = "Change the max distance from target where warden can use the sonic boom. Vanilla is 15 horizontal and 20 vertical.")
 public class WardenSonicBoomRange extends Feature {
 
-    @Config(description = "Vanilla is 15 horizontal and 20 vertical")
+    @Config(min = 1, description = "Vanilla is 15 horizontal and 20 vertical")
     public static Integer range = 50;
 
 	public static EAIData<Integer> RANGE;
@@ -35,7 +35,8 @@ public class WardenSonicBoomRange extends Feature {
     }
 
     public static double changeRange(Warden warden, double originalRange) {
-        if (!Feature.isEnabled(WardenSonicBoomRange.class))
+        if (!Feature.isEnabled(WardenSonicBoomRange.class)
+                || !RANGE.has(warden))
             return originalRange;
         return RANGE.get(warden);
     }
