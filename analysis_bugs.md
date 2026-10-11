@@ -9,17 +9,7 @@ I punti marcati *(verifica)* dipendono da come è scritto il codice vanilla 1.21
 
 ## Gravità alta
 
-### 2. La sostituzione dei target goal fa perdere la logica delle sottoclassi vanilla *(verifica)*
-**File:** `module/mobs/targeting/Targeting.java` (`processTargetGoal`, `createTargetGoal`)
-
-Ogni `NearestAttackableTargetGoal` dei mob nel tag `better_nearby_targeting` viene sostituito da un `EAINearestAttackableTarget` generico. Si conservano solo `targetConditions`, cioè il selettore. Le condizioni scritte negli override di `canUse` si perdono.
-
-- **Orsi polari:** `PolarBearAttackPlayersGoal` attacca i giocatori solo se c'è un cucciolo nel raggio di 8 blocchi (e mai se l'orso stesso è un cucciolo). Con il goal generico, tutti gli orsi adulti attaccano qualsiasi giocatore nel raggio, tranne il 5–15% che diventa neutrale.
-- **Streghe nei raid:** `NearestHealableRaiderTargetGoal` (cooldown e 50% di probabilità) e `NearestAttackableWitchTargetGoal` (`setCanAttack`, alternato da `Witch.aiStep`) perdono il meccanismo di alternanza. La strega non si alterna più correttamente tra curare i raider e attaccare i giocatori. `Witch.aiStep` continua a chiamare `setCanAttack` sul goal originale, che però è stato rimosso.
-
-Gli altri mob del tag (lupi, api, iron golem, volpi, snow golem) passano la condizione tramite il predicato, quindi il comportamento si conserva.
-
-**Correzione suggerita:** aggiungere a `isGoalBlacklistedFromReplace` almeno `PolarBear.PolarBearAttackPlayersGoal`, `NearestHealableRaiderTargetGoal` e `NearestAttackableWitchTargetGoal`. Ancora meglio: sostituire solo le classi esattamente `NearestAttackableTargetGoal` e lasciare stare le sottoclassi, a parte quelle gestite esplicitamente (Spider, Vindicator Johnny, Shulker).
+Nessun punto aperto.
 
 ---
 

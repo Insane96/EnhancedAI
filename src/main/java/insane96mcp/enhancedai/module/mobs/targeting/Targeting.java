@@ -27,11 +27,16 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.ai.goal.target.NonTameRandomTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableWitchTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestHealableRaiderTargetGoal;
+import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.animal.Fox;
+import net.minecraft.world.entity.animal.PolarBear;
 import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.monster.Vindicator;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.raid.Raider;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
@@ -212,12 +217,36 @@ public class Targeting extends Feature {
             else if (goal instanceof Shulker.ShulkerDefenseAttackGoal)
                 newTargetGoal = new EAIShulkerNearestDefenseTargetGoal<>(shulker, goal.targetType, true, goal.targetConditions);
         }
+        else if (mob instanceof PolarBear polarBear && goal instanceof PolarBear.PolarBearAttackPlayersGoal)
+            newTargetGoal = new EAIPolarBearAttackPlayersGoal(polarBear, true, goal.targetConditions);
+        else if (mob instanceof Bee bee && goal instanceof Bee.BeeBecomeAngryTargetGoal)
+            newTargetGoal = new EAIBeeBecomeAngryTargetGoal(bee, true, goal.targetConditions);
+        else if (mob instanceof Fox fox && goal instanceof Fox.DefendTrustedTargetGoal)
+            newTargetGoal = new EAIFoxDefendTrustedTargetGoal(fox, true, goal.targetConditions);
+        else if (mob instanceof Raider raider) {
+            if (goal instanceof NearestHealableRaiderTargetGoal<?> healGoal)
+                newTargetGoal = new EAINearestHealableRaiderTargetGoal<>(raider, goal.targetType, true, goal.targetConditions, healGoal);
+            else if (goal instanceof NearestAttackableWitchTargetGoal<?> witchGoal)
+                newTargetGoal = new EAINearestAttackableWitchTargetGoal<>(raider, goal.targetType, true, goal.targetConditions, witchGoal);
+        }
 
         return newTargetGoal;
     }
 
+	/**
+	 * Only plain NearestAttackableTargetGoal and the subclasses handled in createTargetGoal are replaced, as other subclasses have custom logic that would be lost
+	 */
 	private static boolean isGoalBlacklistedFromReplace(NearestAttackableTargetGoal<?> goal) {
-		return goal instanceof NonTameRandomTargetGoal<?>;
+		return goal.getClass() != NearestAttackableTargetGoal.class
+				&& !(goal instanceof Spider.SpiderTargetGoal<?>)
+				&& !(goal instanceof Vindicator.VindicatorJohnnyAttackGoal)
+				&& !(goal instanceof Shulker.ShulkerNearestAttackGoal)
+				&& !(goal instanceof Shulker.ShulkerDefenseAttackGoal)
+				&& !(goal instanceof PolarBear.PolarBearAttackPlayersGoal)
+				&& !(goal instanceof Bee.BeeBecomeAngryTargetGoal)
+				&& !(goal instanceof Fox.DefendTrustedTargetGoal)
+				&& !(goal instanceof NearestHealableRaiderTargetGoal<?>)
+				&& !(goal instanceof NearestAttackableWitchTargetGoal<?>);
 	}
 
     private void processHurtByGoal(Mob mob) {

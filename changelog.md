@@ -35,7 +35,12 @@
   * Fixed Darkness Range also slowing down the anger update rate (anger decreased 2.5x slower with default config)
   * Fixed crash with wardens without the Darkness Range data (e.g. blacklisted from Spawning or already present when the feature is enabled)
   * Fixed wardens without the Sonic Boom Range data never using the sonic boom
-* Other fixes I might have forgot to write
+* Fixed Better Nearby Targeting losing vanilla target goals custom logic, now Polar Bears, Witches, Foxes and Bees have their own target goals and custom target goals from other mods are no longer replaced
+  * Polar bears attacked players even without cubs nearby
+  * Witches no longer alternated between healing raiders and attacking players
+  * Foxes attacked any entity that hurt something, instead of only who hurt their trusted players
+  * Bees kept targeting after stinging
+* Other fixes I might have forgotten to write
 
 # 4.2.4.0
 * Fixed 'Blow up on death' not working correctly
