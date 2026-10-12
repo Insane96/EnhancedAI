@@ -15,18 +15,6 @@ Nessun punto aperto.
 
 ## Gravità media
 
-### 3. Shielding sovrascrive la mano secondaria
-**File:** `module/mobs/Shielding.java`
-
-```java
-if (mob.getRandom().nextDouble() < chanceToEquip)
-    mob.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.SHIELD));   // nessun controllo isEmpty()
-```
-
-Miner, Pearler e Fisher mettono il loro oggetto nella mano secondaria, ma solo se è vuota. Shielding non controlla e lo sostituisce, con un esito che dipende dall'ordine degli handler di `EntityJoinLevelEvent`. Il caso peggiore è un miner che perde il piccone: con `CORRECT_TOOL_FOR_REQUIRED`, il valore predefinito, non riesce più a scavare la pietra.
-
-**Correzione suggerita:** `&& mob.getOffhandItem().isEmpty()`.
-
 ### 4. ShulkerBullets: levitazione di durata 0
 **File:** `module/shulker/ShulkerBullets.java`
 

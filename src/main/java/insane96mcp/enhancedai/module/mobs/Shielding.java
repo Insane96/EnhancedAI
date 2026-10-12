@@ -74,7 +74,7 @@ public class Shielding extends JsonFeature {
 				|| !mob.getType().is(AFFECTED_ENTITY_TYPES))
 			return;
 
-		if (mob.getRandom().nextDouble() < chanceToEquip)
+		if (mob.getRandom().nextDouble() < chanceToEquip && mob.getOffhandItem().isEmpty())
 			mob.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.SHIELD));
 		ModNBTData.put(mob, HAS_SHIELD_BEEN_GIVEN, true);
 	}

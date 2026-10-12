@@ -40,6 +40,7 @@
   * Witches no longer alternated between healing raiders and attacking players
   * Foxes attacked any entity that hurt something, instead of only who hurt their trusted players
   * Bees kept targeting after stinging
+* Fixed Shielding replacing the off-hand item (e.g. miners losing their pickaxe)
 * Other fixes I might have forgotten to write
 
 # 4.2.4.0
