@@ -21,6 +21,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
@@ -64,7 +65,8 @@ public class Shielding extends JsonFeature {
 		return EnhancedAI.CONFIG_FOLDER;
 	}
 
-	@SubscribeEvent
+	//Low priority so other features (e.g. Miners) can equip the off-hand first
+	@SubscribeEvent(priority = EventPriority.LOW)
 	public void onEntityJoinLevel(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
                 || Spawning.isUnaffectedByFeatures(event.getEntity())

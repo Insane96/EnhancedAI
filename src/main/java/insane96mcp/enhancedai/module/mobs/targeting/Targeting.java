@@ -222,7 +222,7 @@ public class Targeting extends Feature {
         else if (mob instanceof Bee bee && goal instanceof Bee.BeeBecomeAngryTargetGoal)
             newTargetGoal = new EAIBeeBecomeAngryTargetGoal(bee, true, goal.targetConditions);
         else if (mob instanceof Fox fox && goal instanceof Fox.DefendTrustedTargetGoal)
-            newTargetGoal = new EAIFoxDefendTrustedTargetGoal(fox, true, goal.targetConditions);
+            newTargetGoal = new EAIFoxDefendTrustedTargetGoal(fox, false, goal.targetConditions);
         else if (mob instanceof Raider raider) {
             if (goal instanceof NearestHealableRaiderTargetGoal<?> healGoal)
                 newTargetGoal = new EAINearestHealableRaiderTargetGoal<>(raider, goal.targetType, true, goal.targetConditions, healGoal);

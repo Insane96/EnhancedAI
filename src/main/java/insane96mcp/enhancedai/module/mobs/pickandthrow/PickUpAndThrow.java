@@ -43,9 +43,10 @@ public class PickUpAndThrow extends Feature {
 	public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super.init(module, enabledByDefault, canBeDisabled);
 		CAN_PICK_UP_DATA = EAIData.ofString(this.createDataKey("can_pick_up"), (mob, canPickUpData) -> {
-            GoalHelper.removeGoal(mob.goalSelector, PickUpAndThrowGoal.class);
+            //Must stay in the targetSelector, as when a mob is picked up the goalSelector MOVE and LOOK flags get disabled (Mob#updateControlFlags)
+            GoalHelper.removeGoal(mob.targetSelector, PickUpAndThrowGoal.class);
             if (!canPickUpData.isEmpty())
-                mob.goalSelector.addGoal(0, new PickUpAndThrowGoal(mob));
+                mob.targetSelector.addGoal(0, new PickUpAndThrowGoal(mob));
         });
         MIN_DISTANCE_TO_PICK_UP = EAIData.ofInt(this.createDataKey("min_distance_to_pick_up"));
         MAX_DISTANCE_TO_THROW = EAIData.ofInt(this.createDataKey("max_distance_to_throw"));

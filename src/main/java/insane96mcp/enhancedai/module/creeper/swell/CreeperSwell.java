@@ -45,6 +45,7 @@ public class CreeperSwell extends Feature {
 	public static final TagKey<EntityType<?>> CHANGE_CREEPER_SWELL = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("creeper/change_swell"));
 
 	private static ResourceLocation BLOW_UP_ON_DEATH_GUARD;
+	private static ResourceLocation ANGRY_APPLIED;
 
 	@Config(min = 0d, max = 1d, description = "Percentage chance for a Creeper to keep walking while exploding. This is overwritten if the creeper has the beta property.")
 	public static Double walkingFuse$chance = 0.1d;
@@ -111,11 +112,11 @@ public class CreeperSwell extends Feature {
 		ANGRY = EAIData.ofBool(this.createDataKey("angry"), (mob, angry) -> {
 			if (!(mob instanceof Creeper creeper))
 				return;
+			if (angry == ModNBTData.get(creeper, ANGRY_APPLIED, Boolean.class))
+				return;
+			ModNBTData.put(creeper, ANGRY_APPLIED, angry);
 			CompoundTag compoundNBT = new CompoundTag();
 			creeper.addAdditionalSaveData(compoundNBT);
-			boolean angryApplied = compoundNBT.getShort("Fuse") == 36;
-			if (angry == angryApplied)
-				return;
 			if (angry) {
 				compoundNBT.putShort("Fuse", (short) 36);
 				compoundNBT.putByte("ExplosionRadius", angry$explosionPower.byteValue());
@@ -152,6 +153,7 @@ public class CreeperSwell extends Feature {
 		EXPLOSION_SOUND = EAIData.ofString(this.createDataKey("explosion_sound"));
 
 		BLOW_UP_ON_DEATH_GUARD = this.createDataKey("blow_up_on_death_guard");
+		ANGRY_APPLIED = this.createDataKey("angry_applied");
 	}
 
 	@SubscribeEvent

@@ -1,6 +1,7 @@
 # Upcoming
-* Enhanced performance of Pick Up and Throw and Teleport to Target adding the Goal to any mob, not only the 'chosen ones'
+* Enhanced performance of Pick Up and Throw and Teleport to Target by adding the Goal only to the 'chosen ones' instead of any mob
 * Snow Golem Healed by Snowballs -> Healed by Snowballs (no longer limited to Snow Golems)
+  * Moved to the Mobs module, the feature config will be reset
   * Fixed `enhancedai:snow_golem/healed_by_snowballs` (now `enhancedai:mobs/healed_by_snowballs`) not checked (was hardcoded to snow golems)
 * Fixed 'Prevent infighting' working the other way around (with config set to 0.9, only 10% would not fight back)
 * Fixed Angry Creepers data getting re-applied every creeper load
@@ -22,8 +23,8 @@
 * Fixed dupe with mobs hooking other mobs inventory
 * Fixed item disruption removing the first item found in the inventory instead of the selected slot
 * Fixed hurt shields in Shielding not applying wielder things (e.g. enchantments)
-* Fixed Vehicle Anti-Cheese not preventing mobs from dismounting vehicles
-  * Also fixed feature name in config
+* Fixed Vehicle Anti-Cheese preventing mobs from dismounting vehicles
+  * Also fixed feature name in config, the feature config will be reset
 * Fixed Pick Up and Throw and Teleport to target re-applying every time the mob is reloaded
 * Fixed non-miner mobs getting pickaxe on reload
 * Fixed beta strafe left/right consistency

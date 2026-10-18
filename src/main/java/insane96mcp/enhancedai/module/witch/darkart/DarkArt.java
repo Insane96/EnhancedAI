@@ -39,8 +39,9 @@ public class DarkArt extends Feature {
         super.init(module, enabledByDefault, canBeDisabled);
 		PERFORMING_DARK_ARTS = this.createDataKey("performing_dark_arts");
 		DARK_ARTS = EAIData.ofBool(this.createDataKey("dark_arts"), (witch, darkArt) -> {
+			if (ModNBTData.get(witch, PERFORMING_DARK_ARTS, Boolean.class))
+				witch.setGlowingTag(false);
 			ModNBTData.remove(witch, PERFORMING_DARK_ARTS);
-			witch.setGlowingTag(false);
 			GoalHelper.removeGoal(witch.goalSelector, DarkArtWitchGoal.class);
 			if (darkArt)
 				witch.goalSelector.addGoal(1, new DarkArtWitchGoal(witch));
