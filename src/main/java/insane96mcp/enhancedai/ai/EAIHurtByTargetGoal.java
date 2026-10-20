@@ -25,6 +25,7 @@ public class EAIHurtByTargetGoal extends TargetGoal {
 	@Nullable
 	public Class<?>[] toIgnoreAlert;
     private int unseenTicks;
+	private int timestamp;
 
     public EAIHurtByTargetGoal(Mob pMob, Class<?>... pToIgnoreDamage) {
 		super(pMob, true);
@@ -33,10 +34,20 @@ public class EAIHurtByTargetGoal extends TargetGoal {
 	}
 
 	public boolean canUse() {
-		//New check to prevent the mob from switching target if the current target is the same
 		LivingEntity hypotheticalNewMob = this.mob.getLastHurtByMob();
-		if (hypotheticalNewMob == null)
+		int hurtTimestamp = this.mob.getLastHurtByMobTimestamp();
+		if (hypotheticalNewMob == null || hurtTimestamp == this.timestamp)
 			return false;
+		//Each hit is evaluated only once, so a hit ignored now (e.g. the current target is closer) doesn't make the mob switch target later
+		if (!this.shouldTarget(hypotheticalNewMob)) {
+			this.timestamp = hurtTimestamp;
+			return false;
+		}
+		return true;
+	}
+
+	private boolean shouldTarget(LivingEntity hypotheticalNewMob) {
+		//New check to prevent the mob from switching target if the current target is the same
 		LivingEntity currentTarget = this.mob.getTarget();
 		if (currentTarget != null && currentTarget == hypotheticalNewMob)
 			return false;
@@ -101,6 +112,7 @@ public class EAIHurtByTargetGoal extends TargetGoal {
 	public void start() {
 		this.mob.setTarget(this.mob.getLastHurtByMob());
 		this.targetMob = this.mob.getTarget();
+		this.timestamp = this.mob.getLastHurtByMobTimestamp();
 		this.unseenMemoryTicks = 300;
         this.unseenTicks = 0;
 		if (this.alertSameType) {

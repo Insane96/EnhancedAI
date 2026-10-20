@@ -5,6 +5,7 @@
 * Targeting fixes
   * Fixed Better Hurt By Target ignoring other target goals priority (e.g. lower priority target goals could override the revenge target, wolves left their owner's target when hurt)
     * Mobs in `enhancedai:mobs/targeting/allow_target_switch` (creepers and endermen by default) now have the Hurt By Target goal at the highest priority, so they actually switch target when hurt
+  * Fixed Better Hurt By Target making mobs switch to an attacker up to 5 seconds after being hit, even if the hit was ignored (e.g. the current target was closer)
   * Fixed 'Prevent infighting' working the other way around (with config set to 0.9, only 10% would not fight back)
   * Fixed all the animals losing the HurtByTargetGoal
   * Fixed Better Nearby Targeting losing vanilla target goals custom logic, now Polar Bears, Witches, Foxes and Bees have their own target goals and custom target goals from other mods are no longer replaced
