@@ -81,6 +81,9 @@ public class PotionOrMobEffect {
 			if (potion != null) {
 				potionOrMobEffects.add(new PotionOrMobEffect(potion));
 			}
+			else if (isPotionWithDurationOrAmplifier(s)) {
+				EnhancedAI.LOGGER.warn("{} is not valid, potions don't accept duration and amplifier. Use just the potion id (e.g. {}) or a mob effect instance (e.g. minecraft:speed,600,0)", s, s.split(",")[0]);
+			}
 			else {
 				MobEffectInstance mobEffectInstance = MCUtils.parseEffectInstance(s);
 				if (mobEffectInstance != null)
@@ -90,6 +93,16 @@ public class PotionOrMobEffect {
 			}
 		}
 		return potionOrMobEffects;
+	}
+
+	/**
+	 * Returns true if the string is a potion id followed by duration and/or amplifier (e.g. minecraft:healing,600,0) that isn't also a mob effect id
+	 */
+	private static boolean isPotionWithDurationOrAmplifier(String s) {
+		if (!s.contains(","))
+			return false;
+		ResourceLocation id = ResourceLocation.tryParse(s.split(",")[0]);
+		return id != null && BuiltInRegistries.POTION.containsKey(id) && !BuiltInRegistries.MOB_EFFECT.containsKey(id);
 	}
 
 	/**

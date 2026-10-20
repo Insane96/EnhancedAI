@@ -102,6 +102,7 @@
   * Fixed melee attack speed multiplier being possible set to 0 in config
 * Fixed Slimes outside the `enhancedai:slime/jump_rate` entity type tag jumping with no delay
 * Fixed possible crash with apprentice witches if both good and bad potion lists are empty
+* Potion lists now log a clearer warning when a potion has duration or amplifier (e.g. `minecraft:healing,600,0`), as potions don't accept them
 * Fixed pillagers never moving towards the target with a shooting cooldown of 0
 * Fixed miner mobs block entity drops (e.g. containers contents) when tile entities are not blacklisted
 * Fixed Panic on Fire not removing the goal when disabled
