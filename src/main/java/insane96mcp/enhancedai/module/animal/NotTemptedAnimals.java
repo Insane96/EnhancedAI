@@ -39,6 +39,7 @@ public class NotTemptedAnimals extends Feature {
     @SubscribeEvent
     public void onEntityJoinLevel(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
+                || event.getLevel().isClientSide
                 || Spawning.isUnaffectedByFeatures(event.getEntity())
                 || event.getEntity() instanceof Enemy
                 || !(event.getEntity() instanceof Animal animal))

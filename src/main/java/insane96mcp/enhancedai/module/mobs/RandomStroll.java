@@ -34,6 +34,7 @@ public class RandomStroll extends Feature {
     @SubscribeEvent
     public void onEntityJoinLevel(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
+                || event.getLevel().isClientSide
                 || !event.getEntity().getType().is(AFFECTED_BY_FEATURE)
                 || Spawning.isUnaffectedByFeatures(event.getEntity())
                 || !(event.getEntity() instanceof Mob mob))

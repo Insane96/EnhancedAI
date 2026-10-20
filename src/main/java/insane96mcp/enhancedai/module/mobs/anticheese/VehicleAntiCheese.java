@@ -56,6 +56,7 @@ public class VehicleAntiCheese extends Feature {
     @SubscribeEvent
     public void onJoinLevel(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
+                || event.getLevel().isClientSide
                 || Spawning.isUnaffectedByFeatures(event.getEntity())
 				|| !(event.getEntity() instanceof Mob mob))
             return;

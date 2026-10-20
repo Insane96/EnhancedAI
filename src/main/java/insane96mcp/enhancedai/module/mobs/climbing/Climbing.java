@@ -41,6 +41,7 @@ public class Climbing extends Feature {
     @SubscribeEvent
     public void onEntityJoinLevel(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
+                || event.getLevel().isClientSide
                 || Spawning.isUnaffectedByFeatures(event.getEntity())
                 || !(event.getEntity() instanceof Mob mob)
                 || !mob.getType().is(AFFECTED_ENTITY_TYPES))

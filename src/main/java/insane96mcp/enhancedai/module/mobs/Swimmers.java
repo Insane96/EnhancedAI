@@ -34,6 +34,7 @@ public class Swimmers extends Feature {
 	@SubscribeEvent
 	public void onEntityJoinLevel(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
+                || event.getLevel().isClientSide
                 || Spawning.isUnaffectedByFeatures(event.getEntity()))
 			return;
 

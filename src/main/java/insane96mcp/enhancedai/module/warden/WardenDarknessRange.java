@@ -27,6 +27,7 @@ public class WardenDarknessRange extends Feature {
     @SubscribeEvent
     public void onWardenJoinLevel(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
+                || event.getLevel().isClientSide
                 || Spawning.isUnaffectedByFeatures(event.getEntity())
                 || !(event.getEntity() instanceof Warden warden))
             return;

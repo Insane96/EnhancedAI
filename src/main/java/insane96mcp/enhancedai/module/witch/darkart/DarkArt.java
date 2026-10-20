@@ -82,7 +82,8 @@ public class DarkArt extends Feature {
 
 	@SubscribeEvent
 	public void onVillagerJoinLevel(EntityJoinLevelEvent event) {
-		if (!(event.getEntity() instanceof Villager villager)
+		if (event.getLevel().isClientSide
+				|| !(event.getEntity() instanceof Villager villager)
 				|| !ModNBTData.contains(villager, PERFORMING_DARK_ARTS))
 			return;
 

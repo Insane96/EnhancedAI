@@ -100,6 +100,7 @@
 * Fixed animals scared of players not fleeing on first spawn and ignoring flee distance changes
 * Silverfish 'Ticks after hurt to wake up friends' min is now 1, as 0 disabled waking up friends
 * The vanilla `/debugpath` command is now registered only in the development environment
+* Mob data and goals are no longer applied client side, as they're only used by the server
 * Other fixes I might have forgotten to write
 
 # 4.2.4.0

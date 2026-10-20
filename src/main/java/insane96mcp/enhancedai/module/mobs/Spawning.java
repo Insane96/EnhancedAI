@@ -53,6 +53,7 @@ public class Spawning extends Feature {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onEntityJoinLevel(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
+                || event.getLevel().isClientSide
                 || !(event.getEntity() instanceof LivingEntity living))
             return;
 

@@ -56,6 +56,7 @@ public class PillagerShoot extends Feature {
 	@SubscribeEvent
 	public void onEntityJoinLevel(EntityJoinLevelEvent event) {
 		if (!this.isEnabled()
+                || event.getLevel().isClientSide
                 || Spawning.isUnaffectedByFeatures(event.getEntity())
 				|| !(event.getEntity() instanceof Pillager pillager)
 				|| !event.getEntity().getType().is(BETTER_PILLAGER_SHOOT))
