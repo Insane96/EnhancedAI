@@ -26,6 +26,10 @@
 * Fixed Vehicle Anti-Cheese preventing mobs from dismounting vehicles
   * Also fixed feature name in config, the feature config will be reset
 * Fixed Pick Up and Throw and Teleport to target re-applying every time the mob is reloaded
+* Riding fixes
+  * Fixed the chance to ride mobs being re-rolled every time the mob is reloaded (over time most mobs would become riders)
+  * Enhanced performance by adding the Goal only to the mobs that can ride
+  * Fixed mobs changing the mob to ride while going to ride one
 * Fixed non-miner mobs getting pickaxe on reload
 * Fixed beta strafe left/right consistency
 * Fixed Panic on Fire not removing the goal when disabled

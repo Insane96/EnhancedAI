@@ -4,6 +4,7 @@ import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.module.EAIModules;
 import insane96mcp.enhancedai.module.mobs.Spawning;
+import insane96mcp.enhancedai.utils.GoalHelper;
 import insane96mcp.insanelib.core.ModNBTData;
 import insane96mcp.insanelib.core.feature.Feature;
 import insane96mcp.insanelib.core.feature.LoadFeature;
@@ -37,7 +38,11 @@ public class Riding extends Feature {
 	public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
 		super.init(module, enabledByDefault, canBeDisabled);
 		SUFFOCATION_WHILE_RIDING = this.createDataKey("suffocation_while_riding");
-		CAN_MOUNT_DATA = EAIData.ofString(this.createDataKey("can_mount"));
+		CAN_MOUNT_DATA = EAIData.ofString(this.createDataKey("can_mount"), (mob, canMountData) -> {
+			GoalHelper.removeGoal(mob.targetSelector, SearchMountGoal.class);
+			if (!canMountData.isEmpty())
+				mob.targetSelector.addGoal(1, new SearchMountGoal(mob));
+		});
 	}
 
 	@SubscribeEvent
@@ -51,7 +56,8 @@ public class Riding extends Feature {
 
 		if (mob.getRandom().nextDouble() < chance.getByDifficulty(mob.level()))
 			CAN_MOUNT_DATA.applyIfAbsent(mob, CAN_BE_MOUNTED.location().toString());
-		mob.targetSelector.addGoal(1, new SearchMountGoal(mob));
+		else
+			CAN_MOUNT_DATA.applyIfAbsent(mob, "");
     }
 
     @SubscribeEvent

@@ -48,6 +48,14 @@ public class SearchMountGoal extends Goal {
     }
 
     @Override
+    public boolean canContinueToUse() {
+        return this.mount != null
+                && this.mount.isAlive()
+                && !this.mount.isVehicle()
+                && this.mob.getVehicle() == null;
+    }
+
+    @Override
     public void start() {
         this.mob.getNavigation().stop();
     }
