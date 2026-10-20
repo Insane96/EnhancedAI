@@ -61,7 +61,8 @@
   * Fixed (again) not dismounting drowneds on Goal stop
   * Fixed drowneds dealing no damage forever if unloaded while drowning a target
   * Fixed Sun Resistant time possibly going negative while in water
-* Shielding fixes
+* Shielding
+  * The chance to block now works like vanilla shields: only damage coming from the front can be blocked, but projectiles and explosions can be blocked too (piercing arrows can't)
   * Fixed Shielding replacing the off-hand item (e.g. miners losing their pickaxe)
   * Fixed hurt shields not applying wielder things (e.g. enchantments)
 * Fixed Patrol making mobs stuck forever (not attacking or moving) if the patrol position was unreachable or too far away

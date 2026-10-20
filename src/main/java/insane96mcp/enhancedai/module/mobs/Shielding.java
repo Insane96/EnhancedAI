@@ -14,13 +14,16 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
@@ -29,7 +32,7 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-@LoadFeature(module = EAIModules.MOBS, description = "Gives mobs a chance to negate damage when equipped with a shield. Only entity types in `enhancedai:mobs/can_equip_shield` tag will be equipped a shield.")
+@LoadFeature(module = EAIModules.MOBS, description = "Gives mobs a chance to negate damage coming from the front (like a shield) when equipped with a shield. Only entity types in `enhancedai:mobs/can_equip_shield` tag will be equipped a shield.")
 public class Shielding extends JsonFeature {
 	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/can_equip_shield"));
 
@@ -87,8 +90,8 @@ public class Shielding extends JsonFeature {
 		if (!this.isEnabled()
 				|| event.getSource().is(DamageTypeTags.BYPASSES_SHIELD)
                 || !(event.getEntity() instanceof Mob)
-                || !(event.getSource().getDirectEntity() instanceof LivingEntity attacker)
-				|| attacked.level().isClientSide)
+				|| attacked.level().isClientSide
+				|| !canBlock(attacked, event.getSource()))
             return;
 
         long lastHurtByAxe = ModNBTData.get(attacked, LAST_HURT_BY_AXE, Long.class);
@@ -108,7 +111,7 @@ public class Shielding extends JsonFeature {
 		if (attacked.getRandom().nextDouble() < chance) {
 			event.setCanceled(true);
 			offHandItem.hurtAndBreak((int) event.getAmount(), attacked, EquipmentSlot.OFFHAND);
-            if (attacker.getMainHandItem().is(ItemTags.AXES)) {
+            if (event.getSource().getDirectEntity() instanceof LivingEntity attacker && attacker.getMainHandItem().is(ItemTags.AXES)) {
                 ModNBTData.put(attacked, LAST_HURT_BY_AXE, attacked.level().getGameTime());
                 attacked.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.8F + attacked.level().random.nextFloat() * 0.4F);
             }
@@ -117,4 +120,19 @@ public class Shielding extends JsonFeature {
             }
 		}
     }
+
+	/**
+	 * Same as vanilla shield blocking: blocks only damage coming from the front (melee, projectiles, explosions, etc.) and not piercing arrows
+	 */
+	private static boolean canBlock(LivingEntity attacked, DamageSource source) {
+		if (source.getDirectEntity() instanceof AbstractArrow arrow && arrow.getPierceLevel() > 0)
+			return false;
+		Vec3 sourcePosition = source.getSourcePosition();
+		if (sourcePosition == null)
+			return false;
+		Vec3 lookDirection = attacked.calculateViewVector(0f, attacked.getYHeadRot());
+		Vec3 sourceToAttacked = sourcePosition.vectorTo(attacked.position());
+		sourceToAttacked = new Vec3(sourceToAttacked.x, 0d, sourceToAttacked.z).normalize();
+		return sourceToAttacked.dot(lookDirection) < 0d;
+	}
 }
