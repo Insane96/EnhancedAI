@@ -254,6 +254,8 @@ public class Targeting extends Feature {
 				|| !mob.getType().is(BETTER_HURT_BY))
 			return;
 
+		//Mobs allowed to switch target get the hurt by goal at the highest priority, so it takes over the other target goals (e.g. creepers have the player target goal before the hurt by one)
+		boolean allowTargetSwitch = mob.getType().is(ALLOW_TARGET_SWITCH);
 		List<HurtByTargetGoal> toRemove = new ArrayList<>();
 		List<WrappedGoal> toAdd = new ArrayList<>();
 		for (WrappedGoal prioritizedGoal : mob.targetSelector.getAvailableGoals()) {
@@ -265,16 +267,16 @@ public class Targeting extends Feature {
 			EAIHurtByTargetGoal newGoal = new EAIHurtByTargetGoal(mob, toIgnoreDamage.toArray(Class[]::new));
 			if (goal.toIgnoreAlert != null)
 				newGoal.setAlertOthers(goal.toIgnoreAlert);
-			toAdd.add(new WrappedGoal(prioritizedGoal.getPriority(), newGoal));
+			toAdd.add(new WrappedGoal(allowTargetSwitch ? 0 : prioritizedGoal.getPriority(), newGoal));
 		}
 
 		toAdd.forEach(wrappedGoal -> mob.targetSelector.addGoal(wrappedGoal.getPriority(), wrappedGoal.getGoal()));
 		if (!toRemove.isEmpty())
 			toRemove.forEach(mob.targetSelector::removeGoal);
 		//If I can't find a hurt by goal, add one to mobs that are now allowed switch target
-		else if (mob.getType().is(ALLOW_TARGET_SWITCH)) {
+		else if (allowTargetSwitch) {
 			EAIHurtByTargetGoal newGoal = new EAIHurtByTargetGoal(mob);
-			mob.targetSelector.addGoal(1, newGoal);
+			mob.targetSelector.addGoal(0, newGoal);
 		}
 
 		HURT_BY_PREFER_PLAYERS.applyIfAbsent(mob, betterHurtByTarget$preferPlayers);

@@ -14,6 +14,7 @@ import net.minecraft.world.scores.Team;
 import org.apache.commons.lang3.ArrayUtils;
 
 import javax.annotation.Nullable;
+import java.util.EnumSet;
 import java.util.List;
 
 public class EAIHurtByTargetGoal extends TargetGoal {
@@ -28,6 +29,7 @@ public class EAIHurtByTargetGoal extends TargetGoal {
     public EAIHurtByTargetGoal(Mob pMob, Class<?>... pToIgnoreDamage) {
 		super(pMob, true);
 		this.toIgnoreDamage = pToIgnoreDamage;
+		this.setFlags(EnumSet.of(Flag.TARGET));
 	}
 
 	public boolean canUse() {

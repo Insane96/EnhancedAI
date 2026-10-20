@@ -50,6 +50,8 @@
   * Fixed mobs possibly teleporting the other mob inside walls
   * Fixed mobs left floating if unloaded while hidden
   * Fixed the goal possibly stopping while hidden, without teleporting
+* Fixed Better Hurt By Target ignoring other target goals priority (e.g. lower priority target goals could override the revenge target, wolves left their owner's target when hurt)
+  * Mobs in `enhancedai:mobs/targeting/allow_target_switch` (creepers and endermen by default) now have the Hurt By Target goal at the highest priority, so they actually switch target when hurt
 * Other fixes I might have forgotten to write
 
 # 4.2.4.0
