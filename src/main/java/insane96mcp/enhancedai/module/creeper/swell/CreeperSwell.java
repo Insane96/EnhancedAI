@@ -28,6 +28,8 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.SwellGoal;
+import net.minecraft.world.entity.ai.goal.WrappedGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.phys.Vec3;
@@ -47,13 +49,16 @@ public class CreeperSwell extends Feature {
 	private static ResourceLocation BLOW_UP_ON_DEATH_GUARD;
 	private static ResourceLocation ANGRY_APPLIED;
 
+	private static final int VANILLA_UNSEEN_MEMORY_TICKS = 60;
+	private static final int BREACH_UNSEEN_MEMORY_TICKS = 300;
+
 	@Config(min = 0d, max = 1d, description = "Percentage chance for a Creeper to keep walking while exploding. This is overwritten if the creeper has the beta property.")
 	public static Double walkingFuse$chance = 0.1d;
 	@Config(min = -1d, max = 64d, description = "Speed modifier when a walking fuse creeper is swelling.")
 	public static Double walkingFuse$speedModifier = -0.5d;
 	@Config(min = 0d, max = 1d, description = "Percentage chance for a Creeper to ignore walls while targeting a player. This means that a creeper will be able to explode if it's in the correct range from a player even if there's a wall between.")
 	public static Double ignoreWallsChance = 0.65d;
-	@Config(min = 0d, max = 1d, description = "Breaching creepers will try to open a hole in the wall to let mobs in.")
+	@Config(min = 0d, max = 1d, description = "Breaching creepers will try to open a hole in the wall to let mobs in. Without Mobs > Targeting, creepers must see the target first and breaching range is limited by their follow range (16 in vanilla).")
 	public static Double breach$chance = 0.075d;
 	@Config(min = 0, description = "How far away (horizontally) from the target breaching creepers can breach.")
 	public static Integer breach$horizontalRange = 24;
@@ -101,7 +106,13 @@ public class CreeperSwell extends Feature {
 		});
 		WALKING_FUSE_SPEED_MODIFIER = EAIData.ofDouble(this.createDataKey("walking_fuse_speed_modifier"));
 		IGNORE_WALLS = EAIData.ofBool(this.createDataKey("ignore_walls"));
-		BREACH = EAIData.ofBool(this.createDataKey("breach"));
+		BREACH = EAIData.ofBool(this.createDataKey("breach"), (mob, breach) -> {
+			//Vanilla target goal forgets targets not seen for 3 seconds, too few for breaching. Targeting's goal replaces it and doesn't need to see the target
+			for (WrappedGoal wrappedGoal : mob.targetSelector.getAvailableGoals()) {
+				if (wrappedGoal.getGoal() instanceof NearestAttackableTargetGoal<?> goal)
+					goal.setUnseenMemoryTicks(breach ? BREACH_UNSEEN_MEMORY_TICKS : VANILLA_UNSEEN_MEMORY_TICKS);
+			}
+		});
 		BREACH_HORIZONTAL_RANGE = EAIData.ofDouble(this.createDataKey("breach_horizontal_range"));
 		BETA_STRAFE = EAIData.ofBool(this.createDataKey("beta_strafe"), (mob, beta) -> {
 			GoalHelper.getGoal(mob.goalSelector, EAICreeperSwellGoal.class).ifPresent(eaCreeperSwellGoal -> eaCreeperSwellGoal.setBetaStrafe(beta));

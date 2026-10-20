@@ -65,6 +65,7 @@
 * Fixed Teleport Anti-Cheese teleporting the target even when the mob was already in melee range
 * Fixed Vehicle Anti-Cheese preventing mobs from dismounting vehicles
 * Fixed forced explosion creepers stopping swelling if the target was lost
+* Fixed breaching creepers barely working with Mobs > Targeting disabled, as they forgot the target 3 seconds after losing sight of it (now 15 seconds)
 * Fixed Angry Creepers data getting re-applied every creeper load
 * Fixed Creeper Launch timing having no randomness
 * Fixed pearler mobs losing the PearlUseGoal when reloaded

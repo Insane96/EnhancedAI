@@ -16,7 +16,7 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-@LoadFeature(module = EAIModules.MOBS)
+@LoadFeature(module = EAIModules.MOBS, description = "You can also list any entity from getting any feature by giving them the 'NeoForgeData.enhancedai.spawning.unaffected_by_features' boolean nbt tag")
 public class Spawning extends Feature {
 
 	@Config(min = 0, max = 128, description = "How far away from any player monsters will instantly despawn? Vanilla is 128. Reducing this makes mobs more crowded around players.")
