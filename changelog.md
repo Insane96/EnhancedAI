@@ -42,6 +42,9 @@
   * Foxes attacked any entity that hurt something, instead of only who hurt their trusted players
   * Bees kept targeting after stinging
 * Fixed Shielding replacing the off-hand item (e.g. miners losing their pickaxe)
+* Actual Blindness fixes
+  * Fixed possible crash when visibility is checked without a looking entity (e.g. Ender Dragon when an End Crystal is destroyed)
+  * Fixed blindness range multiplier being applied twice (with default config the follow range was multiplied by 0.0225 instead of 0.15)
 * Other fixes I might have forgotten to write
 
 # 4.2.4.0

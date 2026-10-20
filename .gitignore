@@ -27,3 +27,6 @@ repo
 
 # Claude Code
 .claude
+
+# Claude reports
+report_*.md

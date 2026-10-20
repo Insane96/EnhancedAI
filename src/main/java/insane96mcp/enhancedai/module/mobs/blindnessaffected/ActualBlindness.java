@@ -14,14 +14,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
-import net.neoforged.neoforge.event.entity.living.LivingEvent;
 import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 
 @LoadFeature(module = EAIModules.MOBS, description = "Makes mobs follow range actually affected by blindness effect. Only entity types in `enhancedai:mobs/blindness_range_multiplier` tag will be affected by this.")
@@ -57,17 +55,6 @@ public class ActualBlindness extends Feature {
 		if (!mob.getType().is(BLINDNESS_RANGE_MULTIPLIER))
 			return;
 		BLINDNESS_RANGE_MULTIPLIER_DATA.applyIfAbsent(mob, blindnessRangeMultiplier);
-	}
-
-	@SubscribeEvent
-	public void onTargetDistanceMultiplier(LivingEvent.LivingVisibilityEvent event) {
-		if (!this.isEnabled()
-				|| !BLINDNESS_RANGE_MULTIPLIER_DATA.has(event.getLookingEntity())
-				|| !(event.getLookingEntity() instanceof LivingEntity livingEntity)
-				|| !livingEntity.hasEffect(MobEffects.BLINDNESS))
-			return;
-
-		event.modifyVisibility(BLINDNESS_RANGE_MULTIPLIER_DATA.get(livingEntity));
 	}
 
 	@SubscribeEvent
