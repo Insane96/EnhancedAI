@@ -27,15 +27,17 @@ public class WardenListenRange extends Feature {
     public void onWardenJoinLevel(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
                 || Spawning.isUnaffectedByFeatures(event.getEntity())
+                || event.getLevel().isClientSide
                 || !(event.getEntity() instanceof Warden warden))
             return;
 
 		RANGE.applyIfAbsent(warden, range);
     }
 
-    public static int changeRange(int range) {
-        if (!Feature.isEnabled(WardenListenRange.class))
+    public static int changeRange(Warden warden, int range) {
+        if (!Feature.isEnabled(WardenListenRange.class)
+                || !RANGE.has(warden))
             return range;
-        return WardenListenRange.range;
+        return RANGE.get(warden);
     }
 }

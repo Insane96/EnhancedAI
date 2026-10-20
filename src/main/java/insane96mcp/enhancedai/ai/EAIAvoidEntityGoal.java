@@ -59,6 +59,8 @@ public class EAIAvoidEntityGoal<T extends LivingEntity> extends Goal {
 
     @Override
     public boolean canUse() {
+        //Update the range as the data might have changed (e.g. applied after the goal or changed by commands)
+        this.builtTargetSelector.range(this.avoidDistanceFar.get(this.goalOwner));
         this.avoidTarget = this.goalOwner.level().getNearestEntity(
                 this.classToAvoid,
                 this.builtTargetSelector,

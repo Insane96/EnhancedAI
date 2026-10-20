@@ -61,7 +61,7 @@ public class SunResistantDrowned extends Feature {
 
 		int sunResistantTime = ModNBTData.get(drowned, TIME, Integer.class);
 		if (drowned.isInWater() && sunResistantTime > 0) {
-			sunResistantTime -= 4;
+			sunResistantTime = Math.max(0, sunResistantTime - 4);
 		}
 		else if (sunResistantTime <= sunResistantTicks && !drowned.isInFluidType() && drowned.level().isDay() && drowned.level().canSeeSky(drowned.blockPosition())) {
 			if (++sunResistantTime < sunResistantTicks)

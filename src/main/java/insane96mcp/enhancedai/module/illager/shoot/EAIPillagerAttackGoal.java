@@ -82,7 +82,7 @@ public class EAIPillagerAttackGoal extends Goal {
 
         double distance = this.mob.distanceToSqr(livingentity);
         double attackRadius = PillagerShoot.SHOOTING_RANGE.get(this.mob);
-        boolean isOutOfRangeOrCantSee = (distance > attackRadius * attackRadius || this.seeTime < 5) && this.attackDelay == 0;
+        boolean isOutOfRangeOrCantSee = (distance > attackRadius * attackRadius || this.seeTime < 5) && this.attackDelay <= 0;
         if (isOutOfRangeOrCantSee) {
             --this.updatePathDelay;
             if (this.updatePathDelay <= 0) {

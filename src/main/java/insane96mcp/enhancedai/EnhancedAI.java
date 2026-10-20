@@ -26,6 +26,7 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 
@@ -69,7 +70,9 @@ public class EnhancedAI
 
     @SubscribeEvent
     public void registerCommands(RegisterCommandsEvent event) {
-        DebugPathCommand.register(event.getDispatcher());
+        //Vanilla debug command, only useful in dev
+        if (!FMLEnvironment.production)
+            DebugPathCommand.register(event.getDispatcher());
     }
 
     private static void registerConfigTypes() {

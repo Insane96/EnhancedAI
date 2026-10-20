@@ -97,16 +97,6 @@ public class EAIData<T> {
         return data;
     }
 
-	public static EAIData<List<String>> ofStringList(ResourceLocation id) {
-		return ofStringList(id, (mob, value) -> {});
-	}
-
-	public static EAIData<List<String>> ofStringList(ResourceLocation id, BiConsumer<Mob, List<String>> onChange) {
-		var data = new EAIData<>(id, onChange, (Class<List<String>>) (Class<?>) List.class);
-		DATA.add(data);
-		return data;
-	}
-
     public T get(Entity entity) {
         return ModNBTData.get(entity, this.id, this.type);
     }

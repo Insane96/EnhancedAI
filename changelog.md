@@ -12,6 +12,8 @@
     * Witches no longer alternated between healing raiders and attacking players
     * Foxes attacked any entity that hurt something, instead of only who hurt their trusted players
     * Bees kept targeting after stinging
+  * Fixed mobs possibly forgetting a new target too early if they lost the previous one while not sensing it
+  * Moved 'Player Only' and 'Target Chance' from Better Hurt By Target to Better Nearby Targeting config, as they only affect nearby targeting. These config options will be reset
 * Teleport to Target fixes
   * Enhanced performance by adding the Goal only to the 'chosen ones' instead of any mob
   * Fixed the chance being re-applied every time the mob is reloaded
@@ -44,18 +46,25 @@
   * Fixed Darkness Range also slowing down the anger update rate (anger decreased 2.5x slower with default config)
   * Fixed crash with wardens without the Darkness Range data (e.g. blacklisted from Spawning or already present when the feature is enabled)
   * Fixed wardens without the Sonic Boom Range data never using the sonic boom
+  * Fixed Listen Range using the config value instead of the Warden's Data
 * Witch fixes
   * Fixed Witches throwing bad potions at players only (e.g. they would buff Iron Golems)
   * Fixed possible leftovers Dark Art tags or invulnerable villagers
   * Fixed Thirsty Witches without data (e.g. blacklisted from Spawning) always drinking speed potions and never healing
+  * Fixed possible crash with apprentice witches if both good and bad potion lists are empty
+  * Fixed Dark Art particles not showing
 * Drowned fixes
   * Fixed not being able to dismount dead drowneds
   * Fixed (again) not dismounting drowneds on Goal stop
   * Fixed drowneds dealing no damage forever if unloaded while drowning a target
+  * Fixed Sun Resistant time possibly going negative while in water
 * Shielding fixes
   * Fixed Shielding replacing the off-hand item (e.g. miners losing their pickaxe)
   * Fixed hurt shields not applying wielder things (e.g. enchantments)
 * Fixed Patrol making mobs stuck forever (not attacking or moving) if the patrol position was unreachable or too far away
+* Fisher Mobs fixes
+  * Fixed fisher mobs reeling in twice as fast as configured
+  * Fixed fisher mobs not stopping when starting the goal in fishing range
 * Fixed Teleport Anti-Cheese teleporting the target even when the mob was already in melee range
 * Fixed forced explosion creepers stopping swelling if the target was lost
 * Fixed skeletons not being able to shoot with modded bows
@@ -74,6 +83,16 @@
 * Fixed min monster despawn distance being applied to all mobs categories and not monsters only
 * Fixed Panic on Fire not removing the goal when disabled
 * Fixed beta strafe left/right consistency
+* Fixed Creeper Launch timing having no randomness
+* Fixed pillagers never moving towards the target with a shooting cooldown of 0
+* Fixed ghasts possibly shooting fireballs endlessly if the fireballs shot data is lowered while shooting
+* Fixed Item Disruption not stopping the player from using the disrupted item
+* Fixed Snow Golems Damaging Snowballs ignoring the Spawning blacklist
+* Fixed Slime Size spawning size 1 slimes twice as often
+* Fixed miner mobs block entity drops (e.g. containers contents) when tile entities are not blacklisted
+* Fixed animals scared of players not fleeing on first spawn and ignoring flee distance changes
+* Silverfish 'Ticks after hurt to wake up friends' min is now 1, as 0 disabled waking up friends
+* The vanilla `/debugpath` command is now registered only in the development environment
 * Other fixes I might have forgotten to write
 
 # 4.2.4.0

@@ -67,7 +67,7 @@ public class GhastShootFireballGoal extends Goal {
                     this.fireballsShot++;
                     this.cooldownBetweenFireballs = 5;
                 }
-                if (this.fireballsShot == fireballsToShot) {
+                if (this.fireballsShot >= fireballsToShot) {
                     this.chargeTime = -GhastShooting.ATTACK_COOLDOWN.get(this.ghast);
                     if (ignoreLineOfSight && !this.ghast.hasLineOfSight(target))
                         this.chargeTime /= 4;

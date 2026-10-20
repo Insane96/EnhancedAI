@@ -15,7 +15,7 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 @LoadFeature(module = EAIModules.BUGS, description = "Let them swarm.")
 public class SilverfishWakeUpFriends extends Feature {
 
-	@Config(min = 0, description = "Vanilla is 20.")
+	@Config(min = 1, description = "Vanilla is 20.")
 	public static Integer ticksAfterHurtToWakeUpFriends = 10;
 	@Config(min = 1, description = "In vanilla everytime a silverfish is woken up there is 1 in 2 chance to stop waking up more silverfish. This changes the 1 in x chance.")
 	public static Integer chanceToStopWakingUpFriends = 5;

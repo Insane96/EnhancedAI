@@ -165,7 +165,7 @@ public class DarkArtWitchGoal extends Goal {
             public void tick(DarkArtWitchGoal goal) {
                 if (goal.phaseTick < LEVITATE_TICK) {
                     goal.mob.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 2, 1));
-                    goal.mob.level().addParticle(ParticleTypes.ANGRY_VILLAGER, true, goal.mob.getX(), goal.mob.getY(), goal.mob.getZ(), 0.1, 0.1, 0.1);
+                    ((ServerLevel) goal.mob.level()).sendParticles(ParticleTypes.ANGRY_VILLAGER, goal.mob.getX(), goal.mob.getY(), goal.mob.getZ(), 1, 0.1, 0.1, 0.1, 0);
                     goal.mob.getLookControl().setLookAt(goal.villager, 180, 180);
                 }
                 else {

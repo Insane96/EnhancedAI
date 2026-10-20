@@ -74,8 +74,6 @@ public class Targeting extends Feature {
 
 	@Config(description = "Mobs will actually switch target when attacked unless it's the same or if the current one it's closer. Only entity types in the entity type tag `enhancedai:mobs/targeting/better_hurt_by` tag will be affected by this. Use the entity type tag `enhancedai:mobs/targeting/allow_target_switch` to allow more entity types to switch targets (e.g. creepers in vanilla can't switch targets).")
 	public static Boolean betterHurtByTarget$enable = true;
-	@Config(description = "Setting this to true allows overriding target AI only for players.")
-	public static Boolean betterHurtByTarget$playerOnly = false;
 	@Config(description = "Mobs will prefer to attack players instead of other mobs (Note that 'Prevent infighting' should be disabled).")
 	public static Boolean betterHurtByTarget$preferPlayers = false;
 	@Config(min = 0d, max = 1d, description = "Chance for a mob to not attack other mobs when hit.")
@@ -88,8 +86,10 @@ public class Targeting extends Feature {
 
 	@Config(description = "Mobs NearestAttackableTargetGoal will be replaced with mod's one for better configuration and targeting.")
 	public static Boolean betterNearbyTargeting$enable = true;
+	@Config(description = "Setting this to true allows overriding target AI only for players.")
+	public static Boolean betterNearbyTargeting$playerOnly = false;
 	@Config(description = "1 in x chance every other tick for a mob to target a nearby entity. Vanilla is 10. Setting to 0 will make the mob instantly target entities. The higher the more time will take mobs to target entities.")
-	public static Integer betterHurtByTarget$targetChance = 7;
+	public static Integer betterNearbyTargeting$targetChance = 7;
 	@Config(min = 0d, max = 1d, description = "Chances for a mob to spawn neutral (so will not attack players until provoked)")
 	public static DifficultyBasedConfig betterNearbyTargeting$neutralChances = new DifficultyBasedConfig(0.15d, 0.10d, 0.05d);
 
@@ -183,7 +183,7 @@ public class Targeting extends Feature {
 					|| isGoalBlacklistedFromReplace(goal))
 				continue;
 
-			if (goal.targetType != Player.class && betterHurtByTarget$playerOnly)
+			if (goal.targetType != Player.class && betterNearbyTargeting$playerOnly)
 				continue;
 
 			toRemove.add(goal);
@@ -199,7 +199,7 @@ public class Targeting extends Feature {
 		toRemove.forEach(mob.targetSelector::removeGoal);
 		toAdd.forEach(wrappedGoal ->
 				mob.targetSelector.addGoal(wrappedGoal.getPriority(), wrappedGoal.getGoal()));
-		TARGET_CHANCE.applyIfAbsent(mob, betterHurtByTarget$targetChance);
+		TARGET_CHANCE.applyIfAbsent(mob, betterNearbyTargeting$targetChance);
 		MUST_SENSE_TARGET.applyIfAbsent(mob, mob.getRandom().nextFloat() < mustSenseTarget);
 		UNSENSED_FORGET_TICKS.applyIfAbsent(mob, unsensedForgetTick);
 	}

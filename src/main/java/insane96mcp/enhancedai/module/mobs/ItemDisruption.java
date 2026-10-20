@@ -89,8 +89,9 @@ public class ItemDisruption extends Feature {
         player.level().playSound(null, player, SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1.0f, 0.5f);
         Inventory inventory = player.getInventory();
         int slot = hand == InteractionHand.OFF_HAND ? Inventory.SLOT_OFFHAND : player.getInventory().selected;
+        boolean wasUsingItem = player.isUsingItem() && player.getUsedItemHand() == hand;
         inventory.removeItem(slot, stack.getCount());
-        if (player.getUseItem() == stack && stack.getCount() == 1)
+        if (wasUsingItem)
             player.stopUsingItem(); // Forge: fix MC-231097 on the serverside
         player.containerMenu.findSlot(inventory, slot).ifPresent((i) -> {
             player.containerMenu.setRemoteSlot(i, inventory.getItem(i));

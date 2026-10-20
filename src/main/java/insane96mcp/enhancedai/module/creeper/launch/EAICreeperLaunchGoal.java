@@ -83,7 +83,7 @@ public class EAICreeperLaunchGoal extends Goal {
 			inaccuracy = 0.15f;
 		if (this.launchingCreeper.level().getDifficulty() == Difficulty.HARD)
 			inaccuracy = 0.05f;
-		this.ticksBeforeLaunching = (int) Math.max((50 - distance) * Mth.randomBetween(this.launchingCreeper.getRandom(), 0.25f + inaccuracy, 0.25f + inaccuracy), 1);
+		this.ticksBeforeLaunching = (int) Math.max((50 - distance) * Mth.randomBetween(this.launchingCreeper.getRandom(), 0.25f - inaccuracy, 0.25f + inaccuracy), 1);
 	}
 
 	public boolean canContinueToUse() {

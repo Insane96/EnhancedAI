@@ -35,8 +35,8 @@ public class SnowGolemsDamagingSnowballs extends Feature {
     @SubscribeEvent
     public void onProjectileImpactEvent(ProjectileImpactEvent event) {
         if (!this.isEnabled()
-                || Spawning.isUnaffectedByFeatures(event.getEntity())
                 || !(event.getProjectile().getOwner() instanceof SnowGolem snowGolem)
+                || Spawning.isUnaffectedByFeatures(snowGolem)
                 || !(event.getRayTraceResult() instanceof EntityHitResult entityHitResult)
                 || !(entityHitResult.getEntity() instanceof LivingEntity entityHit)
                 || entityHitResult.getEntity() instanceof SnowGolem)
@@ -56,6 +56,7 @@ public class SnowGolemsDamagingSnowballs extends Feature {
     @SubscribeEvent
     public void onEntityJoinLevel(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
+                || Spawning.isUnaffectedByFeatures(event.getEntity())
                 || event.getLevel().isClientSide
                 || !(event.getEntity() instanceof SnowGolem snowGolem)
 				|| !snowGolem.getType().is(AFFECTED_ENTITY_TYPES))

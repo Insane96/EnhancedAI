@@ -45,7 +45,7 @@ public abstract class SlimeMixin extends Mob {
                 || !this.getType().is(SlimeSize.AFFECTED_ENTITY_TYPES))
             return size;
 
-        return this.getRandom().nextInt(SlimeSize.maxSpawnSize + 1);
+        return 1 + this.getRandom().nextInt(SlimeSize.maxSpawnSize);
     }
 
     @Inject(method = "getJumpDelay", at = @At("RETURN"), cancellable = true)

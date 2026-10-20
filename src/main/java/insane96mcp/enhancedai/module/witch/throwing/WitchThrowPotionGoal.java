@@ -82,6 +82,8 @@ public class WitchThrowPotionGoal extends Goal {
 
         PotionOrMobEffect potionOrMobEffect = null;
         if (apprentice) {
+            if (listToLoop.isEmpty())
+                return;
             potionOrMobEffect = listToLoop.get(witch.getRandom().nextInt(listToLoop.size()));
         }
         else {

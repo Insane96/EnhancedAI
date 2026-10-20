@@ -60,7 +60,7 @@ public class FishingTargetGoal extends Goal {
     }
 
 	public void start() {
-        if (this.fisher.distanceTo(this.target) <= getFishRangeSqr())
+        if (this.fisher.distanceToSqr(this.target) <= getFishRangeSqr())
             this.fisher.getNavigation().stop();
     }
 
@@ -98,7 +98,6 @@ public class FishingTargetGoal extends Goal {
         }
 
 		if (this.fishingHook != null && (this.fishingHook.getHookedIn() != null || --this.fishingHookLifetime <= 0 || this.fishingHook.onGround())) {
-			--this.reel;
 			if (--this.reel <= 0) {
 				if (this.fishingHook.getHookedIn() != null)
 					this.hasHookedEntity = true;
