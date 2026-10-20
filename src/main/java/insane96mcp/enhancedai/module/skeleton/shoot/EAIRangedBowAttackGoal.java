@@ -10,7 +10,6 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 
 public class EAIRangedBowAttackGoal extends EAIRangedAttackGoal<AbstractSkeleton> {
 
@@ -75,7 +74,7 @@ public class EAIRangedBowAttackGoal extends EAIRangedAttackGoal<AbstractSkeleton
 			}
 		}
 		else if (--this.attackTime <= 0 && this.seeTime >= -60) {
-			this.mob.startUsingItem(ProjectileUtil.getWeaponHoldingHand(this.mob, item -> item == Items.BOW));
+			this.mob.startUsingItem(ProjectileUtil.getWeaponHoldingHand(this.mob, item -> item instanceof BowItem));
 		}
 	}
 
@@ -89,8 +88,8 @@ public class EAIRangedBowAttackGoal extends EAIRangedAttackGoal<AbstractSkeleton
 	}
 
 	protected void attackEntityWithRangedAttack(AbstractSkeleton entity, LivingEntity target, int chargeTicks) {
-		ItemStack weapon = entity.getItemInHand(ProjectileUtil.getWeaponHoldingHand(entity, item -> item instanceof net.minecraft.world.item.BowItem));
-		ItemStack projectileStack = entity.getProjectile(entity.getItemInHand(ProjectileUtil.getWeaponHoldingHand(entity, item -> item == Items.BOW)));
+		ItemStack weapon = entity.getItemInHand(ProjectileUtil.getWeaponHoldingHand(entity, item -> item instanceof BowItem));
+		ItemStack projectileStack = entity.getProjectile(weapon);
 		double distance = entity.distanceTo(target);
 		double distanceY = target.getY() - entity.getY();
 		float f = 1; //distanceFactor / 20.0F;

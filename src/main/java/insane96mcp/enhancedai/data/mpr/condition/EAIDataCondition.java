@@ -45,8 +45,9 @@ public class EAIDataCondition extends MPRCondition {
             else if (value instanceof Boolean b)
                 return this.value.isBetween(living, b ? 1 : 0);
         }
-        else if (value instanceof String && this.stringValue != null)
-            return value.equals(this.stringValue);
+        //Parsed the same way as change_data, so it works with any data type (e.g. enums and lists)
+        else if (this.stringValue != null)
+            return value.equals(data.parse(this.stringValue));
         return false;
     }
 
@@ -57,7 +58,16 @@ public class EAIDataCondition extends MPRCondition {
             Optional<EAIData<?>> optData = EAIData.DATA.stream().filter(d -> d.id().equals(data)).findFirst();
             if (optData.isEmpty())
                 throw new JsonParseException("Defined data does not exist: " + data);
-            return new EAIDataCondition(data, GsonHelper.getAsString(jObject, "string_value", null), GsonHelper.getAsObject(jObject, "value", null, context, MPRRange.class), MPRCondition.deserializeInverted(jObject));
+            String stringValue = GsonHelper.getAsString(jObject, "string_value", null);
+            if (stringValue != null) {
+                try {
+                    optData.get().parse(stringValue);
+                }
+                catch (RuntimeException e) {
+                    throw new JsonParseException("Invalid string_value '%s' for data %s: %s".formatted(stringValue, data, e.getMessage()));
+                }
+            }
+            return new EAIDataCondition(data, stringValue, GsonHelper.getAsObject(jObject, "value", null, context, MPRRange.class), MPRCondition.deserializeInverted(jObject));
         }
 
         public JsonElement serialize(EAIDataCondition src, Type typeOfSrc, JsonSerializationContext context) {

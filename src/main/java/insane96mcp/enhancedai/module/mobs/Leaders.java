@@ -144,7 +144,8 @@ public class Leaders extends Feature {
         if (chance <= 0)
             return;
         if (spawnReinforcementsChanceDamageScaled > 0)
-            chance *= (event.getNewDamage() / spawnReinforcementsChanceDamageScaled);
+            //Damage before resistances, excluding the damage blocked by shields
+            chance *= ((event.getOriginalDamage() - event.getContainer().getBlockedDamage()) / spawnReinforcementsChanceDamageScaled);
         if (mob.getRandom().nextDouble() >= chance)
             return;
         int x = mob.getBlockX();

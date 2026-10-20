@@ -20,6 +20,6 @@ public abstract class LivingEntityMixin extends Entity {
     public boolean enhancedai$isOnClimbable(boolean original) {
         if (!Climbing.CAN_CLIMB_WALLS_DATA.get(this))
             return original;
-        return this.horizontalCollision;
+        return original || this.horizontalCollision;
     }
 }

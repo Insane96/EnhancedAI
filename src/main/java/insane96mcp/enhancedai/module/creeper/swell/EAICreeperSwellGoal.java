@@ -56,8 +56,9 @@ public class EAICreeperSwellGoal extends Goal {
 		}
 
 		this.creeperAttackTarget = this.swellingCreeper.getTarget();
+		//Forced explosions keep swelling even if the target is lost
 		if (creeperAttackTarget == null)
-			return false;
+			return this.swellingCreeper.getSwellDir() > 0 && CreeperSwell.FORCE_EXPLODE.get(this.swellingCreeper);
 
 		this.isBreaching = CreeperSwell.BREACH.get(this.swellingCreeper) && canBreach(this.creeperAttackTarget);
 
@@ -73,7 +74,8 @@ public class EAICreeperSwellGoal extends Goal {
         else
             this.swellingCreeper.getNavigation().stop();
         this.swellingCreeper.setSwellDir(1);
-		this.swellingCreeper.lookAt(this.creeperAttackTarget, 30f, 30f);
+		if (this.creeperAttackTarget != null)
+			this.swellingCreeper.lookAt(this.creeperAttackTarget, 30f, 30f);
         if (this.betaStrafe != null)
             this.betaStrafe.start();
 		//Update the explosion size in case the creeper becomes charged

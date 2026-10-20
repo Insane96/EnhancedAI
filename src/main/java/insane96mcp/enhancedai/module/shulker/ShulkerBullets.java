@@ -41,6 +41,9 @@ public class ShulkerBullets extends Feature {
 
         if (!(owner instanceof Mob mob))
             return new MobEffectInstance(MobEffects.LEVITATION, (int) levitationDuration.getByDifficulty(level), (int) levitationAmplifier.getByDifficulty(level));
+        //Shulkers without data (e.g. blacklisted from Spawning) keep vanilla levitation
+        else if (!LEVITATION_DURATION.has(mob))
+            return originalValue;
         else return new MobEffectInstance(MobEffects.LEVITATION, LEVITATION_DURATION.get(mob), LEVITATION_AMPLIFIER.get(mob));
     }
 

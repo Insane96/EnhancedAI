@@ -63,14 +63,15 @@ public abstract class WitchMixin extends Raider {
 	}
 
 	@Unique
-	private ItemStack enhancedai$stackToUse;
+	private ItemStack enhancedai$stackToUse = ItemStack.EMPTY;
 
 	@Definition(id = "holder", local = @Local(type = Holder.class))
 	@Expression("holder != null")
 	@ModifyExpressionValue(method = "aiStep", at = @At("MIXINEXTRAS:EXPRESSION"))
 	private boolean enhancedai$newUseItem(boolean original) {
 		if (!Feature.isEnabled(ThirstyWitches.class)
-				|| !this.getType().is(ThirstyWitches.AFFECTED_ENTITY_TYPES))
+				|| !this.getType().is(ThirstyWitches.AFFECTED_ENTITY_TYPES)
+				|| !ThirstyWitches.CUSTOM_DRINK_DISTANCE_SAFE.has(this))
 			return original;
 
 		enhancedai$stackToUse = ItemStack.EMPTY;
@@ -115,6 +116,7 @@ public abstract class WitchMixin extends Raider {
 	private ItemStack enhancedai$changeUseItem(Item item, Holder<Potion> holder, Operation<ItemStack> original) {
 		if (!Feature.isEnabled(ThirstyWitches.class)
 				|| !this.getType().is(ThirstyWitches.AFFECTED_ENTITY_TYPES)
+				|| !ThirstyWitches.CUSTOM_DRINK_DISTANCE_SAFE.has(this)
 				|| enhancedai$stackToUse.isEmpty())
 			return original.call(item, holder);
 

@@ -24,13 +24,17 @@ public class TeleportAntiCheeseGoal extends Goal {
     @Override
     public boolean canUse() {
         this.target = this.mob.getTarget();
+        //If the mob is moving it's not stuck, so reset the ticks
+        if (!this.mob.getNavigation().isDone()) {
+            this.awayFromTargetTick = 0;
+            return false;
+        }
         if (this.target == null
                 || this.target.getType().is(TeleportAntiCheese.CANT_BE_TELEPORTED)
-                || !this.mob.getNavigation().isDone()
                 || this.target.distanceTo(this.mob) > this.mob.getAttributeValue(Attributes.FOLLOW_RANGE))
             return false;
 
-        if (this.target.distanceToSqr(this.mob) >= 2d || !this.mob.hasLineOfSight(this.target)) {
+        if (!this.mob.isWithinMeleeAttackRange(this.target) || !this.mob.hasLineOfSight(this.target)) {
             this.awayFromTargetTick++;
         }
         else {

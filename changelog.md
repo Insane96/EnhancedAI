@@ -1,62 +1,79 @@
 # Upcoming
-* Enhanced performance of Pick Up and Throw and Teleport to Target by adding the Goal only to the 'chosen ones' instead of any mob
 * Snow Golem Healed by Snowballs -> Healed by Snowballs (no longer limited to Snow Golems)
   * Moved to the Mobs module, the feature config will be reset
   * Fixed `enhancedai:snow_golem/healed_by_snowballs` (now `enhancedai:mobs/healed_by_snowballs`) not checked (was hardcoded to snow golems)
-* Fixed 'Prevent infighting' working the other way around (with config set to 0.9, only 10% would not fight back)
-* Fixed Angry Creepers data getting re-applied every creeper load
-* Fixed all the animals losing the HurtByTargetGoal
-* Fixed if blindness expires mobs would not lose the follow range penalty
-* Fixed TeleportToTargetGoal not showing back the mob and the target mob if the goal stopped
-* Fixed pearler mobs losing the PearlUseGoal when reloaded
+* Targeting fixes
+  * Fixed Better Hurt By Target ignoring other target goals priority (e.g. lower priority target goals could override the revenge target, wolves left their owner's target when hurt)
+    * Mobs in `enhancedai:mobs/targeting/allow_target_switch` (creepers and endermen by default) now have the Hurt By Target goal at the highest priority, so they actually switch target when hurt
+  * Fixed 'Prevent infighting' working the other way around (with config set to 0.9, only 10% would not fight back)
+  * Fixed all the animals losing the HurtByTargetGoal
+  * Fixed Better Nearby Targeting losing vanilla target goals custom logic, now Polar Bears, Witches, Foxes and Bees have their own target goals and custom target goals from other mods are no longer replaced
+    * Polar bears attacked players even without cubs nearby
+    * Witches no longer alternated between healing raiders and attacking players
+    * Foxes attacked any entity that hurt something, instead of only who hurt their trusted players
+    * Bees kept targeting after stinging
+* Teleport to Target fixes
+  * Enhanced performance by adding the Goal only to the 'chosen ones' instead of any mob
+  * Fixed the chance being re-applied every time the mob is reloaded
+  * Fixed mobs never teleporting unless the destination was inside a block
+  * Fixed mobs possibly teleporting the other mob inside walls
+  * Fixed the mob and the target mob not showing back if the goal stopped
+  * Fixed mobs left floating if unloaded while hidden
+  * Fixed the goal possibly stopping while hidden, without teleporting
+* Pick Up and Throw fixes
+  * Enhanced performance by adding the Goal only to the 'chosen ones' instead of any mob
+  * Fixed the chance being re-applied every time the mob is reloaded
+* Riding fixes
+  * Enhanced performance by adding the Goal only to the mobs that can ride
+  * Fixed the chance to ride mobs being re-rolled every time the mob is reloaded (over time most mobs would become riders)
+  * Fixed mobs changing the mob to ride while going to ride one
+* Actual Blindness fixes
+  * Fixed possible crash when visibility is checked without a looking entity (e.g. Ender Dragon when an End Crystal is destroyed)
+  * Fixed blindness range multiplier being applied twice (with default config the follow range was multiplied by 0.0225 instead of 0.15)
+  * Fixed mobs not losing the follow range penalty when blindness expires
+* Melee Attacking fixes
+  * Fixed mobs outside the `enhancedai:mobs/melee_attacking` entity type tag still using the attack speed based off attribute
+  * Fixed mobs with 0 attack speed never attacking anymore
+  * Fixed melee attack speed multiplier being possible set to 0 in config
 * Leaders fixes
   * Fixed 'Charge per spawn' read from the config and not the Mob's Data
   * Fixed 'Charge per spawn' being inverted (increasing instead of decreasing)
   * Fixed 'Charge per spawn' being applied only once
-* Fixed Slimes outside the `enhancedai:slime/jump_rate` entity type tag jumping with no delay
-* Melee Attacking fixes
-  * Fixed mobs outside the `enhancedai:mobs/melee_attacking` entity type tag still using the attack speed based off attribute
-  * Fixed mobs with 0 attack speed never attacking anymore
-* Fixed min monster despawn distance being applied to all mobs categories and not monsters only
-* Fixed Witches throwing bad potions at players only (e.g. they would buff Iron Golems) 
-* Fixed not being able to dismount dead drowneds
-* Fixed dupe with mobs hooking other mobs inventory
-* Fixed item disruption removing the first item found in the inventory instead of the selected slot
-* Fixed hurt shields in Shielding not applying wielder things (e.g. enchantments)
-* Fixed Vehicle Anti-Cheese preventing mobs from dismounting vehicles
-  * Also fixed feature name in config, the feature config will be reset
-* Fixed Pick Up and Throw and Teleport to target re-applying every time the mob is reloaded
-* Riding fixes
-  * Fixed the chance to ride mobs being re-rolled every time the mob is reloaded (over time most mobs would become riders)
-  * Enhanced performance by adding the Goal only to the mobs that can ride
-  * Fixed mobs changing the mob to ride while going to ride one
-* Fixed Patrol making mobs stuck forever (not attacking or moving) if the patrol position was unreachable or too far away
-* Fixed non-miner mobs getting pickaxe on reload
-* Fixed beta strafe left/right consistency
-* Fixed Panic on Fire not removing the goal when disabled
-* Fixed (again) not dismounting drowneds on Goal stop
-* Fixed possible leftovers Dark Art tags or invulnerable villagers
-* Fixed melee attack speed multiplier being possible set to 0 in config
+  * Fixed reinforcements chance scaling with the damage after armor and enchantments instead of before, as stated in the config (leaders spawned far less reinforcements)
 * Warden fixes
   * Fixed Darkness Range also slowing down the anger update rate (anger decreased 2.5x slower with default config)
   * Fixed crash with wardens without the Darkness Range data (e.g. blacklisted from Spawning or already present when the feature is enabled)
   * Fixed wardens without the Sonic Boom Range data never using the sonic boom
-* Fixed Better Nearby Targeting losing vanilla target goals custom logic, now Polar Bears, Witches, Foxes and Bees have their own target goals and custom target goals from other mods are no longer replaced
-  * Polar bears attacked players even without cubs nearby
-  * Witches no longer alternated between healing raiders and attacking players
-  * Foxes attacked any entity that hurt something, instead of only who hurt their trusted players
-  * Bees kept targeting after stinging
-* Fixed Shielding replacing the off-hand item (e.g. miners losing their pickaxe)
-* Actual Blindness fixes
-  * Fixed possible crash when visibility is checked without a looking entity (e.g. Ender Dragon when an End Crystal is destroyed)
-  * Fixed blindness range multiplier being applied twice (with default config the follow range was multiplied by 0.0225 instead of 0.15)
-* Teleport to Target fixes
-  * Fixed mobs never teleporting unless the destination was inside a block
-  * Fixed mobs possibly teleporting the other mob inside walls
-  * Fixed mobs left floating if unloaded while hidden
-  * Fixed the goal possibly stopping while hidden, without teleporting
-* Fixed Better Hurt By Target ignoring other target goals priority (e.g. lower priority target goals could override the revenge target, wolves left their owner's target when hurt)
-  * Mobs in `enhancedai:mobs/targeting/allow_target_switch` (creepers and endermen by default) now have the Hurt By Target goal at the highest priority, so they actually switch target when hurt
+* Witch fixes
+  * Fixed Witches throwing bad potions at players only (e.g. they would buff Iron Golems)
+  * Fixed possible leftovers Dark Art tags or invulnerable villagers
+  * Fixed Thirsty Witches without data (e.g. blacklisted from Spawning) always drinking speed potions and never healing
+* Drowned fixes
+  * Fixed not being able to dismount dead drowneds
+  * Fixed (again) not dismounting drowneds on Goal stop
+  * Fixed drowneds dealing no damage forever if unloaded while drowning a target
+* Shielding fixes
+  * Fixed Shielding replacing the off-hand item (e.g. miners losing their pickaxe)
+  * Fixed hurt shields not applying wielder things (e.g. enchantments)
+* Fixed Patrol making mobs stuck forever (not attacking or moving) if the patrol position was unreachable or too far away
+* Fixed Teleport Anti-Cheese teleporting the target even when the mob was already in melee range
+* Fixed forced explosion creepers stopping swelling if the target was lost
+* Fixed skeletons not being able to shoot with modded bows
+* Fixed shulkers without data (e.g. blacklisted from Spawning) bullets not applying levitation
+* Fixed mobs that can climb walls no longer being able to climb ladders
+* Fixed MPR `enhancedai:data` condition never matching enums and lists with `string_value`
+  * Invalid `string_value` now throws an error when loading the data pack
+* Fixed Vehicle Anti-Cheese preventing mobs from dismounting vehicles
+  * Also fixed feature name in config, the feature config will be reset
+* Fixed Angry Creepers data getting re-applied every creeper load
+* Fixed pearler mobs losing the PearlUseGoal when reloaded
+* Fixed non-miner mobs getting pickaxe on reload
+* Fixed dupe with mobs hooking other mobs inventory
+* Fixed item disruption removing the first item found in the inventory instead of the selected slot
+* Fixed Slimes outside the `enhancedai:slime/jump_rate` entity type tag jumping with no delay
+* Fixed min monster despawn distance being applied to all mobs categories and not monsters only
+* Fixed Panic on Fire not removing the goal when disabled
+* Fixed beta strafe left/right consistency
 * Other fixes I might have forgotten to write
 
 # 4.2.4.0
