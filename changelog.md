@@ -45,6 +45,11 @@
 * Actual Blindness fixes
   * Fixed possible crash when visibility is checked without a looking entity (e.g. Ender Dragon when an End Crystal is destroyed)
   * Fixed blindness range multiplier being applied twice (with default config the follow range was multiplied by 0.0225 instead of 0.15)
+* Teleport to Target fixes
+  * Fixed mobs never teleporting unless the destination was inside a block
+  * Fixed mobs possibly teleporting the other mob inside walls
+  * Fixed mobs left floating if unloaded while hidden
+  * Fixed the goal possibly stopping while hidden, without teleporting
 * Other fixes I might have forgotten to write
 
 # 4.2.4.0
