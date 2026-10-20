@@ -173,7 +173,7 @@ public class EAICreeperSwellGoal extends Goal {
 	}
 
 	/**
-	 * Returns true if the creeper has been stuck in the same spot (radius 1.5 blocks) for more than 3 seconds
+	 * Returns true if the creeper has been stuck in the same spot (radius 1 block) for 2 seconds
 	 */
 	public boolean isStuck() {
 		if (this.swellingCreeper.getTarget() == null)
@@ -183,7 +183,7 @@ public class EAICreeperSwellGoal extends Goal {
 			this.lastPosition = this.swellingCreeper.position();
 			this.lastPositionTickstamp = this.swellingCreeper.tickCount;
 		}
-		return this.swellingCreeper.getNavigation().isDone() || this.swellingCreeper.tickCount - this.lastPositionTickstamp >= 30;
+		return this.swellingCreeper.getNavigation().isDone() || this.swellingCreeper.tickCount - this.lastPositionTickstamp >= 40;
 	}
 
 	public boolean requiresUpdateEveryTick() {

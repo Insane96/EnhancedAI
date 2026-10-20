@@ -28,7 +28,7 @@ public abstract class EAIRangedAttackGoal<T extends Mob> extends Goal {
 		this.inaccuracy = inaccuracy;
 		this.maxAttackDistance = attackDistance;
 		this.canStrafe = canStrafe;
-		this.setFlags(EnumSet.of(Flag.LOOK));
+		this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
 	}
 
 	/**

@@ -54,6 +54,8 @@
   * Fixed Thirsty Witches without data (e.g. blacklisted from Spawning) always drinking speed potions and never healing
   * Fixed possible crash with apprentice witches if both good and bad potion lists are empty
   * Fixed Dark Art particles not showing
+  * Dark Art is now performed only once per witch, even if interrupted (previously an interrupted ritual was never performed again, but a reloaded witch could perform it again)
+  * Fixed witches keeping the villager spawn egg in hand if the Dark Art was interrupted
 * Drowned fixes
   * Fixed not being able to dismount dead drowneds
   * Fixed (again) not dismounting drowneds on Goal stop
@@ -69,6 +71,7 @@
 * Fixed Teleport Anti-Cheese teleporting the target even when the mob was already in melee range
 * Fixed forced explosion creepers stopping swelling if the target was lost
 * Fixed skeletons not being able to shoot with modded bows
+* Fixed skeletons randomly strolling away while shooting. Skeleton shooting goal now has the same priority as vanilla, so skeletons stop shooting when fleeing the sun or wolves
 * Fixed shulkers without data (e.g. blacklisted from Spawning) bullets not applying levitation
 * Fixed mobs that can climb walls no longer being able to climb ladders
 * Fixed MPR `enhancedai:data` condition never matching enums and lists with `string_value`
@@ -84,6 +87,8 @@
 * Fixed min monster despawn distance being applied to all mobs categories and not monsters only
 * Fixed Panic on Fire not removing the goal when disabled
 * Fixed beta strafe left/right consistency
+* Fixed Parkour and Spider Destuck considering mobs stuck after 1 second instead of 2. Creepers breaching now also wait 2 seconds (was 1.5)
+* Fixed mobs that can bite biting each other endlessly (`enhancedai:bite` is now in the `enhancedai:doesnt_trigger_bite` damage type tag)
 * Fixed Creeper Launch timing having no randomness
 * Fixed pillagers never moving towards the target with a shooting cooldown of 0
 * Fixed ghasts possibly shooting fireballs endlessly if the fireballs shot data is lowered while shooting

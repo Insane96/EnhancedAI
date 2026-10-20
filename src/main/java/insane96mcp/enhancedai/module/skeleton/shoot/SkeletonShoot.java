@@ -58,7 +58,8 @@ public class SkeletonShoot extends Feature {
 		if (GoalHelper.hasGoal(skeleton.goalSelector, skeleton.bowGoal)) {
 			skeleton.goalSelector.removeGoal(skeleton.bowGoal);
 			EAIRangedBowAttackGoal rangedBowAttackGoal = new EAIRangedBowAttackGoal(skeleton, 1.0d, SHOOTING_COOLDOWN, INACCURACY, SHOOTING_RANGE, STRAFE, BOW_CHARGE_TICKS);
-			skeleton.goalSelector.addGoal(2, rangedBowAttackGoal);
+			//Same priority as vanilla, so fleeing sun and wolves can still interrupt it
+			skeleton.goalSelector.addGoal(4, rangedBowAttackGoal);
 		}
 		SHOOTING_COOLDOWN.applyIfAbsent(skeleton, shootingCooldown.getIntRandBetween(skeleton.getRandom()));
 		INACCURACY.applyIfAbsent(skeleton, inaccuracy.getByDifficulty(skeleton.level()));

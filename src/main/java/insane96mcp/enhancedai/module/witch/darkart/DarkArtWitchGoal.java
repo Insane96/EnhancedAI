@@ -68,6 +68,9 @@ public class DarkArtWitchGoal extends Goal {
         this.mob.setGlowingTag(false);
         this.summonSpot = null;
 		this.forceStop();
+		//The ritual is performed only once, even if interrupted
+		this.phase = Phase.END;
+		DarkArt.endDarkArt(this.mob);
     }
 
     @Override

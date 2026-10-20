@@ -114,7 +114,7 @@ public class ParkourGoal extends Goal {
 	}
 
 	/**
-	 * Returns true if the mob has been stuck in the same spot (radius 0.6 blocks) for more than 3 seconds
+	 * Returns true if the mob has been stuck in the same spot (radius 0.6 blocks) for 2 seconds
 	 */
 	public boolean isStuck() {
 		if (this.goalOwner.getTarget() == null
@@ -127,7 +127,7 @@ public class ParkourGoal extends Goal {
 			this.lastPosition = this.goalOwner.position();
 			this.lastPositionTickstamp = this.goalOwner.tickCount;
 		}
-		return /*this.goalOwner.getNavigation().isDone() ||*/ this.goalOwner.tickCount - this.lastPositionTickstamp >= this.adjustedTickDelay(40);
+		return /*this.goalOwner.getNavigation().isDone() ||*/ this.goalOwner.tickCount - this.lastPositionTickstamp >= 40;
 	}
 
 	public void resetLastPosition() {

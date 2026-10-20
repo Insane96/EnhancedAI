@@ -13,9 +13,13 @@ import insane96mcp.insanelib.core.feature.config.Config;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
@@ -39,14 +43,30 @@ public class DarkArt extends Feature {
         super.init(module, enabledByDefault, canBeDisabled);
 		PERFORMING_DARK_ARTS = this.createDataKey("performing_dark_arts");
 		DARK_ARTS = EAIData.ofBool(this.createDataKey("dark_arts"), (witch, darkArt) -> {
-			if (ModNBTData.get(witch, PERFORMING_DARK_ARTS, Boolean.class))
+			//Unloaded while performing the dark art, the ritual counts as interrupted
+			if (ModNBTData.get(witch, PERFORMING_DARK_ARTS, Boolean.class)) {
 				witch.setGlowingTag(false);
+				endDarkArt(witch);
+				darkArt = false;
+			}
 			ModNBTData.remove(witch, PERFORMING_DARK_ARTS);
 			GoalHelper.removeGoal(witch.goalSelector, DarkArtWitchGoal.class);
 			if (darkArt)
 				witch.goalSelector.addGoal(1, new DarkArtWitchGoal(witch));
 		});
     }
+
+	/**
+	 * The dark art can be performed only once, even if interrupted. Also removes the spawn egg if still in hand.
+	 * Doesn't use DARK_ARTS.apply as it would remove the goal while it's running
+	 */
+	public static void endDarkArt(Mob mob) {
+		ModNBTData.put(mob, DARK_ARTS.id(), false);
+		if (mob.getMainHandItem().is(Items.VILLAGER_SPAWN_EGG)) {
+			mob.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+			mob.setDropChance(EquipmentSlot.MAINHAND, 0.085f);
+		}
+	}
 
 	@SubscribeEvent
 	public void onEntityJoinLevel(EntityJoinLevelEvent event) {

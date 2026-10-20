@@ -44,14 +44,14 @@ public class DestuckWallGoal extends Goal {
 	}
 
 	/**
-	 * Returns true if the mob has been stuck in the same spot (radius 0.6 blocks) for more than 3 seconds
+	 * Returns true if the mob has been stuck in the same spot (radius 0.6 blocks) for 2 seconds
 	 */
 	public boolean isStuck() {
 		if (this.lastPosition == null || this.spider.distanceToSqr(this.lastPosition) > 0.36d) {
 			this.lastPosition = this.spider.position();
 			this.lastPositionTickstamp = this.spider.tickCount;
 		}
-		return /*this.goalOwner.getNavigation().isDone() ||*/ this.spider.tickCount - this.lastPositionTickstamp >= reducedTickDelay(40);
+		return /*this.goalOwner.getNavigation().isDone() ||*/ this.spider.tickCount - this.lastPositionTickstamp >= 40;
 	}
 
 	public void resetLastPosition() {
