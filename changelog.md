@@ -1,4 +1,4 @@
-# Upcoming
+# 2.4.5.0
 ## Gameplay
 * Snow Golem Healed by Snowballs -> Healed by Snowballs (no longer limited to Snow Golems)
 * Shielding
