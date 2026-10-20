@@ -30,6 +30,7 @@
   * Fixed the chance to ride mobs being re-rolled every time the mob is reloaded (over time most mobs would become riders)
   * Enhanced performance by adding the Goal only to the mobs that can ride
   * Fixed mobs changing the mob to ride while going to ride one
+* Fixed Patrol making mobs stuck forever (not attacking or moving) if the patrol position was unreachable or too far away
 * Fixed non-miner mobs getting pickaxe on reload
 * Fixed beta strafe left/right consistency
 * Fixed Panic on Fire not removing the goal when disabled

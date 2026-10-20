@@ -44,6 +44,7 @@ public class Patrol extends Feature {
     public void onEntityJoinLevel(EntityJoinLevelEvent event) {
         if (!this.isEnabled()
                 || Spawning.isUnaffectedByFeatures(event.getEntity())
+                || event.getLevel().isClientSide
                 || !(event.getEntity() instanceof Mob mob)
                 || !mob.getType().is(AFFECTED_ENTITY_TYPES))
             return;
