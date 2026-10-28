@@ -57,9 +57,10 @@ public class MineTowardsTargetGoal extends Goal {
 	}
 
 	public boolean canUse() {
+		MinerMobs.ToolRequirement toolRequirement = MinerMobs.TOOL_REQUIREMENT.get(this.miner);
 		if (!MinerMobs.isValidDimension(this.miner)
 				|| !this.miner.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)
-				|| (MinerMobs.TOOL_REQUIREMENT.get(this.miner) == MinerMobs.ToolRequirement.ANY_TOOL && !(this.getToolStack().getItem() instanceof DiggerItem))
+				|| ((toolRequirement == MinerMobs.ToolRequirement.ANY_TOOL || toolRequirement == MinerMobs.ToolRequirement.MATCHING_TOOL) && !this.hasAnyTool())
 				|| this.miner.getTarget() == null)
 			return false;
 		float maxTargetDistance = MinerMobs.MAX_TARGET_DISTANCE.get(this.miner);
@@ -238,17 +239,16 @@ public class MineTowardsTargetGoal extends Goal {
 	}
 
 	private boolean canBreakBlock() {
-		MinerMobs.ToolRequirement toolRequirement = MinerMobs.TOOL_REQUIREMENT.get(this.miner);
-		if (toolRequirement == MinerMobs.ToolRequirement.NONE || toolRequirement == MinerMobs.ToolRequirement.ANY_TOOL)
-			return true;
-		if ((toolRequirement == MinerMobs.ToolRequirement.CORRECT_TOOL_FOR_REQUIRED) && !this.blockState.requiresCorrectToolForDrops())
-			return true;
+		return switch (MinerMobs.TOOL_REQUIREMENT.get(this.miner)) {
+			case NO_TOOL -> true;
+			case ANY_TOOL -> this.hasAnyTool();
+			case HARVEST -> !this.blockState.requiresCorrectToolForDrops() || this.getToolStack().isCorrectToolForDrops(this.blockState);
+			case MATCHING_TOOL -> this.blockState.is(MinerMobs.HAS_CORRECT_TOOL) ? this.getToolStack().isCorrectToolForDrops(this.blockState) : this.hasAnyTool();
+		};
+	}
 
-		ItemStack stack = this.getToolStack();
-		if (stack.isEmpty())
-			return false;
-
-		return stack.isCorrectToolForDrops(this.blockState);
+	private boolean hasAnyTool() {
+		return this.getToolStack().getItem() instanceof DiggerItem;
 	}
 
 	private boolean canHarvestBlock() {

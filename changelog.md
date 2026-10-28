@@ -1,3 +1,10 @@
+# Upcoming
+* Miner Mobs Tool Requirement values renamed: `NONE` -> `NO_TOOL`, `CORRECT_TOOL_FOR_REQUIRED` -> `HARVEST`, `CORRECT_TOOL_FOR_ANY_BLOCK` -> `MATCHING_TOOL`
+  * Old names still work for already spawned mobs and data keys (e.g. MPR), but in the config they're reset to the default (`HARVEST`)
+* Fixed `MATCHING_TOOL` making blocks without a correct tool (e.g. glass, wool) unmineable. They can now be mined with any tool
+  * Added `enhancedai:miner/has_correct_tool` block tag, blocks that require the matching tool (defaults to `minecraft:mineable/*`)
+* Miners with `MATCHING_TOOL` and no tool no longer try to mine
+
 # 4.2.5.0
 ## Gameplay
 * Snow Golem Healed by Snowballs -> Healed by Snowballs (no longer limited to Snow Golems)

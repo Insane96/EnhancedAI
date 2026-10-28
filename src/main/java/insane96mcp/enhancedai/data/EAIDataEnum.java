@@ -38,7 +38,7 @@ public class EAIDataEnum<T extends Enum<T>> extends EAIData<T> {
 			return this.getDefault();
 		String stored = ModNBTData.get(entity, this.id, String.class);
 		try {
-			return Enum.valueOf(enumType, stored);
+			return AliasedEnum.valueOf(enumType, stored);
 		} catch (IllegalArgumentException e) {
 			return this.getDefault();
 		}
@@ -49,7 +49,7 @@ public class EAIDataEnum<T extends Enum<T>> extends EAIData<T> {
 		if (input == null || input.isBlank())
 			return super.parse(input);
 		try {
-			return Enum.valueOf(enumType, input);
+			return AliasedEnum.valueOf(enumType, input);
 		} catch (IllegalArgumentException e) {
 			return super.parse(input);
 		}
