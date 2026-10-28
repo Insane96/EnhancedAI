@@ -39,11 +39,15 @@ public class EnhancedAI
     public static final String CONFIG_FOLDER = "config/" + MOD_ID;
 
     public static ILModConfig CONFIG;
+    public static ILModConfig COMMON_CONFIG;
 
     public EnhancedAI(IEventBus eventBus, ModContainer modContainer) {
         registerConfigTypes();
-        CONFIG = new ILModConfig(MOD_ID, ModConfig.Type.COMMON, eventBus, EAIModules::init, EnhancedAI.class.getClassLoader());
-        modContainer.registerConfig(ModConfig.Type.COMMON, CONFIG.spec, MOD_ID + "/common.toml");
+        EAIModules.init(eventBus);
+        CONFIG = new ILModConfig(MOD_ID, ModConfig.Type.SERVER, eventBus, EnhancedAI.class.getClassLoader());
+        modContainer.registerConfig(ModConfig.Type.SERVER, CONFIG.spec, MOD_ID + "/server.toml");
+        COMMON_CONFIG = new ILModConfig(MOD_ID, ModConfig.Type.COMMON, eventBus, EnhancedAI.class.getClassLoader());
+        modContainer.registerConfig(ModConfig.Type.COMMON, COMMON_CONFIG.spec, MOD_ID + "/common.toml");
 
         NeoForge.EVENT_BUS.register(this);
         EAISounds.SOUND_EVENTS.register(eventBus);

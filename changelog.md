@@ -1,4 +1,9 @@
-# Upcoming
+# 4.2.6.0
+* Requires InsaneLib 2.5.0.0-alpha
+* The config is now a SERVER config (`enhancedai/server.toml`) instead of COMMON, so it's decided by the server and synced to clients, and can be overridden per world in `saves/<world>/serverconfig/`
+  * **All the features' settings in `enhancedai/common.toml` are reset to the default**, copy your changes to `enhancedai/server.toml`
+  * Only the MPR data pack feature stays in `enhancedai/common.toml`, as data packs are loaded before the SERVER config
+  * Changes to the config while the server is running are now reloaded and synced to connected clients
 * Miner Mobs Tool Requirement values renamed: `NONE` -> `NO_TOOL`, `CORRECT_TOOL_FOR_REQUIRED` -> `HARVEST`, `CORRECT_TOOL_FOR_ANY_BLOCK` -> `MATCHING_TOOL`
   * Old names still work for already spawned mobs and data keys (e.g. MPR), but in the config they're reset to the default (`HARVEST`)
 * Fixed `MATCHING_TOOL` making blocks without a correct tool (e.g. glass, wool) unmineable. They can now be mined with any tool
