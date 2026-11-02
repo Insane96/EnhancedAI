@@ -44,8 +44,7 @@ public class Shielding extends JsonFeature {
 			ObjTagValue.of("shieldsplus:iron_shield", 0.40d, Registries.ITEM),
 			ObjTagValue.of("shieldsplus:golden_shield", 0.20d, Registries.ITEM),
 			ObjTagValue.of("shieldsplus:diamond_shield", 0.60d, Registries.ITEM),
-			ObjTagValue.of("shieldsplus:netherite_shield", 0.70d, Registries.ITEM),
-			ObjTagValue.of("shieldsplus:copper_shield", 0.30d, Registries.ITEM)
+			ObjTagValue.of("shieldsplus:netherite_shield", 0.70d, Registries.ITEM)
 	);
 	public static final List<ObjTagValue<Item>> shieldBlockChance = new ArrayList<>();
 
