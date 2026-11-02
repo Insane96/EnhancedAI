@@ -1,3 +1,6 @@
+# Upcoming
+* Doubled shielding chance since they now block only from the front
+
 # 4.2.6.0
 * Requires InsaneLib 2.5.0.0-alpha
 * The config is now a SERVER config (`enhancedai/server.toml`) instead of COMMON, so it's decided by the server and synced to clients, and can be overridden per world in `saves/<world>/serverconfig/`

@@ -37,15 +37,15 @@ public class Shielding extends JsonFeature {
 	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/can_equip_shield"));
 
 	public static final List<ObjTagValue<Item>> DEFAULT_SHIELD_BLOCK_CHANCE = List.of(
-			ObjTagValue.of("minecraft:shield", 0.20d, Registries.ITEM),
-			ObjTagValue.of("shieldsplus:wooden_shield", 0.10d, Registries.ITEM),
-			ObjTagValue.of("shieldsplus:stone_shield", 0.15d, Registries.ITEM),
-			ObjTagValue.of("shieldsplus:copper_shield", 0.15d, Registries.ITEM),
-			ObjTagValue.of("shieldsplus:iron_shield", 0.20d, Registries.ITEM),
-			ObjTagValue.of("shieldsplus:golden_shield", 0.10d, Registries.ITEM),
-			ObjTagValue.of("shieldsplus:diamond_shield", 0.30d, Registries.ITEM),
-			ObjTagValue.of("shieldsplus:netherite_shield", 0.35d, Registries.ITEM),
-			ObjTagValue.of("shieldsplus:copper_shield", 0.15d, Registries.ITEM)
+			ObjTagValue.of("minecraft:shield", 0.40d, Registries.ITEM),
+			ObjTagValue.of("shieldsplus:wooden_shield", 0.20d, Registries.ITEM),
+			ObjTagValue.of("shieldsplus:stone_shield", 0.30d, Registries.ITEM),
+			ObjTagValue.of("shieldsplus:copper_shield", 0.30d, Registries.ITEM),
+			ObjTagValue.of("shieldsplus:iron_shield", 0.40d, Registries.ITEM),
+			ObjTagValue.of("shieldsplus:golden_shield", 0.20d, Registries.ITEM),
+			ObjTagValue.of("shieldsplus:diamond_shield", 0.60d, Registries.ITEM),
+			ObjTagValue.of("shieldsplus:netherite_shield", 0.70d, Registries.ITEM),
+			ObjTagValue.of("shieldsplus:copper_shield", 0.30d, Registries.ITEM)
 	);
 	public static final List<ObjTagValue<Item>> shieldBlockChance = new ArrayList<>();
 
