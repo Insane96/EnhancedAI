@@ -29,7 +29,7 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import java.util.List;
 import java.util.Map;
 
-@LoadFeature(module = EAIModules.MOBS, description = "Mobs can mine blocks to reach the target. Uses off-hand item to mine by default, can be changed with Data Keys. Only mobs in the entity type tag enhancedai:mobs/can_mine can spawn with the ability to mine and blocks in the tag enhancedai:miner_blacklist cannot be mined. This feature also adds the block reach attribute to all entities.")
+@LoadFeature(module = EAIModules.MOBS, description = "Mobs can mine blocks to reach the target. Uses off-hand item to mine by default, can be changed with the config or Data Keys. Only mobs in the entity type tag enhancedai:mobs/can_mine can spawn with the ability to mine and blocks in the tag enhancedai:miner_blacklist cannot be mined. This feature also adds the block reach attribute to all entities.")
 public class MinerMobs extends Feature {
 	public static final TagKey<EntityType<?>> CAN_BE_MINER = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/can_mine"));
 	public static final TagKey<Block> BLOCK_BLACKLIST = TagKey.create(Registries.BLOCK, EnhancedAI.location("miner_blacklist"));
@@ -56,7 +56,9 @@ public class MinerMobs extends Feature {
 	public static Boolean blockBlacklistAsWhitelist = false;
 	@Config(description = "Mobs with Miner AI will not be able to break tile entities")
 	public static Boolean blacklistTileEntities = true;
-	@Config(description = "Mobs with Miner AI will spawn with a Stone Pickaxe in the off-hand that never drops.")
+	@Config(description = "If true, mobs with Miner AI use the item in the off-hand to mine, otherwise the one in the main hand.")
+	public static Boolean offhand = true;
+	@Config(description = "Mobs with Miner AI will spawn with a Stone Pickaxe that never drops in the hand used to mine, if empty.")
 	public static Boolean equipStonePick = true;
 
 	public static EAIData<Boolean> MINER;
@@ -107,17 +109,18 @@ public class MinerMobs extends Feature {
 
 		boolean isMiner = mob.getRandom().nextDouble() < minerChance;
 		MINER.applyIfAbsent(mob, isMiner);
-		if (MINER.get(mob) && equipStonePick && mob.getOffhandItem().isEmpty())
+		OFFHAND.applyIfAbsent(mob, offhand);
+		EquipmentSlot toolSlot = OFFHAND.get(mob) ? EquipmentSlot.OFFHAND : EquipmentSlot.MAINHAND;
+		if (MINER.get(mob) && equipStonePick && mob.getItemBySlot(toolSlot).isEmpty())
 		{
-			mob.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.STONE_PICKAXE));
-			mob.setDropChance(EquipmentSlot.OFFHAND, -1f);
+			mob.setItemSlot(toolSlot, new ItemStack(Items.STONE_PICKAXE));
+			mob.setDropChance(toolSlot, -1f);
 		}
 		TOOL_REQUIREMENT.applyIfAbsent(mob, toolRequirement);
 		MAX_Y.applyIfAbsent(mob, maxY);
 		MAX_TARGET_DISTANCE.applyIfAbsent(mob, maxTargetDistance);
 		TIME_TO_BREAK_MULTIPLIER.applyIfAbsent(mob, timeToBreakMultiplier);
 		DIMENSION_WHITELIST.applyIfAbsent(mob, dimensionWhitelist);
-		OFFHAND.applyIfAbsent(mob, true);
 	}
 
 	public static boolean isValidDimension(Mob mob) {
