@@ -1,4 +1,4 @@
-# Upcoming
+# 4.2.7.0
 * Doubled shielding chance since they now block only from the front
 * Miner Mobs: added `offhand` config option (default `true`). If disabled, miners use the item in the main hand to mine instead of the off-hand one
   * The Stone Pickaxe from `equipStonePick` is now given in the hand used to mine
