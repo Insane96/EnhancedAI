@@ -2,6 +2,7 @@ package insane96mcp.enhancedai.module.animal;
 
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.data.EAIData;
+import insane96mcp.enhancedai.mixin.accessors.LivingEntityAccessor;
 import insane96mcp.enhancedai.mixin.accessors.PanicGoalAccessor;
 import insane96mcp.enhancedai.module.EAIModules;
 import insane96mcp.enhancedai.module.mobs.Spawning;
@@ -55,7 +56,12 @@ public class AnimalsPanic extends Feature {
 						return false;
 					return otherAnimal.distanceTo(animal) < fleeRangeIfSeen;
 				})
-                .forEach(nearbyAnimal -> nearbyAnimal.setLastHurtByMob(attacker));
+                .forEach(nearbyAnimal -> {
+					nearbyAnimal.setLastHurtByMob(attacker);
+					//Since 1.20.5 PanicGoal checks the last damage source instead of the last hurt by mob
+					((LivingEntityAccessor) nearbyAnimal).setLastDamageSource(event.getSource());
+					((LivingEntityAccessor) nearbyAnimal).setLastDamageStamp(nearbyAnimal.level().getGameTime());
+				});
     }
 
     //Low priority so other mods can set persistent data

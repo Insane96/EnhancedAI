@@ -1,5 +1,6 @@
 # Upcoming
 * MPR Data Pack: zombies now spawn with Insane's Survival Overhaul Copper equipment, if installed, instead of the vanilla one
+* Fixed Animals Panic not making nearby animals panic
 
 # 4.2.7.0
 * Doubled shielding chance since they now block only from the front
