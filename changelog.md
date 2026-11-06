@@ -1,3 +1,6 @@
+# Upcoming
+* MPR Data Pack: zombies now spawn with Insane's Survival Overhaul Copper equipment, if installed, instead of the vanilla one
+
 # 4.2.7.0
 * Doubled shielding chance since they now block only from the front
 * Miner Mobs: added `offhand` config option (default `true`). If disabled, miners use the item in the main hand to mine instead of the off-hand one

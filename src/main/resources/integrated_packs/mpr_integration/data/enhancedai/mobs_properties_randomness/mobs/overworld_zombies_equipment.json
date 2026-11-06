@@ -111,8 +111,25 @@
                     "weight": 90
                 },
                 {
+                    "item": "insanesurvivaloverhaul:copper_sword",
+                    "weight": 50,
+                    "conditions": [
+                        {
+                            "condition": "mod_loaded",
+                            "mod_id": "insanesurvivaloverhaul"
+                        }
+                    ]
+                },
+                {
                     "item": "minecraft:copper_sword",
-                    "weight": 50
+                    "weight": 50,
+                    "conditions": [
+                        {
+                            "condition": "mod_loaded",
+                            "mod_id": "insanesurvivaloverhaul",
+                            "inverted": true
+                        }
+                    ]
                 },
                 {
                     "item": "minecraft:iron_sword",
@@ -151,8 +168,25 @@
                     "weight": 90
                 },
                 {
+                    "item": "insanesurvivaloverhaul:copper_axe",
+                    "weight": 50,
+                    "conditions": [
+                        {
+                            "condition": "mod_loaded",
+                            "mod_id": "insanesurvivaloverhaul"
+                        }
+                    ]
+                },
+                {
                     "item": "minecraft:copper_axe",
-                    "weight": 50
+                    "weight": 50,
+                    "conditions": [
+                        {
+                            "condition": "mod_loaded",
+                            "mod_id": "insanesurvivaloverhaul",
+                            "inverted": true
+                        }
+                    ]
                 },
                 {
                     "item": "minecraft:iron_axe",
@@ -171,8 +205,25 @@
                     "weight": 90
                 },
                 {
+                    "item": "insanesurvivaloverhaul:copper_pickaxe",
+                    "weight": 50,
+                    "conditions": [
+                        {
+                            "condition": "mod_loaded",
+                            "mod_id": "insanesurvivaloverhaul"
+                        }
+                    ]
+                },
+                {
                     "item": "minecraft:copper_pickaxe",
-                    "weight": 50
+                    "weight": 50,
+                    "conditions": [
+                        {
+                            "condition": "mod_loaded",
+                            "mod_id": "insanesurvivaloverhaul",
+                            "inverted": true
+                        }
+                    ]
                 },
                 {
                     "item": "minecraft:iron_pickaxe",
@@ -191,8 +242,25 @@
                     "weight": 90
                 },
                 {
+                    "item": "insanesurvivaloverhaul:copper_shovel",
+                    "weight": 50,
+                    "conditions": [
+                        {
+                            "condition": "mod_loaded",
+                            "mod_id": "insanesurvivaloverhaul"
+                        }
+                    ]
+                },
+                {
                     "item": "minecraft:copper_shovel",
-                    "weight": 50
+                    "weight": 50,
+                    "conditions": [
+                        {
+                            "condition": "mod_loaded",
+                            "mod_id": "insanesurvivaloverhaul",
+                            "inverted": true
+                        }
+                    ]
                 },
                 {
                     "item": "minecraft:iron_shovel",
@@ -211,8 +279,25 @@
                     "weight": 90
                 },
                 {
+                    "item": "insanesurvivaloverhaul:copper_hoe",
+                    "weight": 50,
+                    "conditions": [
+                        {
+                            "condition": "mod_loaded",
+                            "mod_id": "insanesurvivaloverhaul"
+                        }
+                    ]
+                },
+                {
                     "item": "minecraft:copper_hoe",
-                    "weight": 50
+                    "weight": 50,
+                    "conditions": [
+                        {
+                            "condition": "mod_loaded",
+                            "mod_id": "insanesurvivaloverhaul",
+                            "inverted": true
+                        }
+                    ]
                 },
                 {
                     "item": "minecraft:iron_hoe",

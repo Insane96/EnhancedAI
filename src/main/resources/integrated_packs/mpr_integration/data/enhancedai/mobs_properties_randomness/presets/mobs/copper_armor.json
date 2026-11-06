@@ -5,7 +5,23 @@
             "slot": "head",
             "items": [
                 {
-                    "item": "minecraft:copper_helmet"
+                    "item": "insanesurvivaloverhaul:copper_helmet",
+                    "conditions": [
+                        {
+                            "condition": "mod_loaded",
+                            "mod_id": "insanesurvivaloverhaul"
+                        }
+                    ]
+                },
+                {
+                    "item": "minecraft:copper_helmet",
+                    "conditions": [
+                        {
+                            "condition": "mod_loaded",
+                            "mod_id": "insanesurvivaloverhaul",
+                            "inverted": true
+                        }
+                    ]
                 }
             ],
             "conditions": [
@@ -17,7 +33,23 @@
             "slot": "chest",
             "items": [
                 {
-                    "item": "minecraft:copper_chestplate"
+                    "item": "insanesurvivaloverhaul:copper_chestplate",
+                    "conditions": [
+                        {
+                            "condition": "mod_loaded",
+                            "mod_id": "insanesurvivaloverhaul"
+                        }
+                    ]
+                },
+                {
+                    "item": "minecraft:copper_chestplate",
+                    "conditions": [
+                        {
+                            "condition": "mod_loaded",
+                            "mod_id": "insanesurvivaloverhaul",
+                            "inverted": true
+                        }
+                    ]
                 }
             ],
             "conditions": [
@@ -29,7 +61,23 @@
             "slot": "legs",
             "items": [
                 {
-                    "item": "minecraft:copper_leggings"
+                    "item": "insanesurvivaloverhaul:copper_leggings",
+                    "conditions": [
+                        {
+                            "condition": "mod_loaded",
+                            "mod_id": "insanesurvivaloverhaul"
+                        }
+                    ]
+                },
+                {
+                    "item": "minecraft:copper_leggings",
+                    "conditions": [
+                        {
+                            "condition": "mod_loaded",
+                            "mod_id": "insanesurvivaloverhaul",
+                            "inverted": true
+                        }
+                    ]
                 }
             ],
             "conditions": [
@@ -41,7 +89,23 @@
             "slot": "feet",
             "items": [
                 {
-                    "item": "minecraft:copper_boots"
+                    "item": "insanesurvivaloverhaul:copper_boots",
+                    "conditions": [
+                        {
+                            "condition": "mod_loaded",
+                            "mod_id": "insanesurvivaloverhaul"
+                        }
+                    ]
+                },
+                {
+                    "item": "minecraft:copper_boots",
+                    "conditions": [
+                        {
+                            "condition": "mod_loaded",
+                            "mod_id": "insanesurvivaloverhaul",
+                            "inverted": true
+                        }
+                    ]
                 }
             ],
             "conditions": [
