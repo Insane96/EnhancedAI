@@ -1,3 +1,6 @@
+# 4.2.7.2
+* Reduced leader banner drop chance to 25% (was guaranteed). It now requires the leader to be killed by a player
+
 # 4.2.7.1
 * MPR Data Pack: zombies now spawn with Insane's Survival Overhaul Copper equipment, if installed, instead of the vanilla one
 * Fixed Animals Panic not making nearby animals panic

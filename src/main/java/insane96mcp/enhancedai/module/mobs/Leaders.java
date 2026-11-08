@@ -87,7 +87,7 @@ public class Leaders extends Feature {
             if (leaderBanner) {
                 if (leader) {
                     mob.setItemSlot(EquipmentSlot.HEAD, getLeaderBannerInstance(mob));
-                    mob.setDropChance(EquipmentSlot.HEAD, 2.0F);
+                    mob.setDropChance(EquipmentSlot.HEAD, 0.25F);
                 }
                 else if (ItemStack.matches(mob.getItemBySlot(EquipmentSlot.HEAD), getLeaderBannerInstance(mob))) {
                     mob.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
