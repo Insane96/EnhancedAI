@@ -1,4 +1,7 @@
 # Upcoming
+* Added Villager Eat to Heal: villagers below 75% health eat food from their inventory to heal when they're not in danger
+  * Healing is based on the food's nutrition, with a 30 seconds cooldown between meals
+  * Added `enhancedai:villager/eats_to_heal` entity type tag and `enhancedai:villager/healing_food` item tag (defaults to bread, carrot, potato and beetroot)
 * Climbing
   * Mobs now walk to a nearby ladder or similar block when the target is higher up and can't be reached.
   * Fixed mobs with a melee attack not actively climbing ladders and similar blocks. They can now also attack while climbing
