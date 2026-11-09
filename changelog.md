@@ -1,5 +1,6 @@
 # Upcoming
 * Climbing
+  * Mobs now walk to a nearby ladder or similar block when the target is higher up and can't be reached.
   * Fixed mobs with a melee attack not actively climbing ladders and similar blocks. They can now also attack while climbing
   * Mobs now climb at about the same speed as players
   * Mobs now stay centered on the block while climbing, so they no longer get stuck under blocks next to the ladder

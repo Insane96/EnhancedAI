@@ -24,18 +24,25 @@ public class Climbing extends Feature {
     public static Double ladderClimbChance = 1d;
     /*@Config(min = 0d, max = 1d)
     public static Double wallClimbChance = 1d;*/
+    @Config(min = 1, max = 16, description = "Horizontal radius in which mobs look for a ladder or similar block to reach a target that's higher up and can't be reached.")
+    public static Integer climbableSearchRadius = 8;
 
 	public static EAIData<Boolean> CAN_CLIMB_LADDERS_DATA;
 	public static EAIData<Boolean> CAN_CLIMB_WALLS_DATA;
+	public static EAIData<Integer> CLIMBABLE_SEARCH_RADIUS;
 
     public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
         super.init(module, enabledByDefault, canBeDisabled);
 		CAN_CLIMB_LADDERS_DATA = EAIData.ofBool(this.createDataKey("can_climb_ladders"), (mob, canClimb) -> {
 			GoalHelper.removeGoal(mob.goalSelector, ClimbClimbableGoal.class);
-			if (canClimb)
+			GoalHelper.removeGoal(mob.goalSelector, MoveToClimbableGoal.class);
+			if (canClimb) {
 				mob.goalSelector.addGoal(3, new ClimbClimbableGoal(mob));
+				mob.goalSelector.addGoal(0, new MoveToClimbableGoal(mob));
+			}
 		});
         CAN_CLIMB_WALLS_DATA = EAIData.ofBool(this.createDataKey("can_climb_walls"));
+		CLIMBABLE_SEARCH_RADIUS = EAIData.ofInt(this.createDataKey("climbable_search_radius"));
     }
 
     @SubscribeEvent
@@ -48,6 +55,7 @@ public class Climbing extends Feature {
             return;
 
 		CAN_CLIMB_LADDERS_DATA.applyIfAbsent(mob, mob.getRandom().nextDouble() < ladderClimbChance);
+		CLIMBABLE_SEARCH_RADIUS.applyIfAbsent(mob, climbableSearchRadius);
         //CAN_CLIMB_WALLS_DATA.applyIfAbsent(mob, mob.getRandom().nextDouble() < wallClimbChance);
     }
 }
