@@ -3,6 +3,7 @@ package insane96mcp.enhancedai.module.mobs.miner;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectUtil;
@@ -82,7 +83,8 @@ public class MineTowardsTargetGoal extends Goal {
 		return this.targetBlocks.get(0).distSqr(this.miner.blockPosition()) < this.reachDistance * this.reachDistance
 				&& this.miner.getNavigation().isDone()
 				&& !this.miner.level().getBlockState(this.targetBlocks.get(0)).isAir()
-				&& this.path != null && (this.path.getDistToTarget() > 1.5d || !this.miner.hasLineOfSight(this.target));
+				//The path is null when the mob is not on the ground (e.g. on a ladder)
+				&& (this.path == null || this.path.getDistToTarget() > 1.5d || !this.miner.hasLineOfSight(this.target));
 	}
 
 	public void start() {
@@ -155,31 +157,43 @@ public class MineTowardsTargetGoal extends Goal {
 	}
 
 	private void fillTargetBlocks() {
-		int mobHeight = Mth.ceil(this.miner.getBbHeight());
-		for (int i = 0; i < mobHeight; i++) {
-			BlockHitResult rayTraceResult = this.miner.level().clip(new ClipContext(this.miner.position().add(0, i + 0.5d, 0), this.target.getEyePosition(1f).add(0, i, 0), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.miner));
-            if (rayTraceResult.getType() == HitResult.Type.MISS
-					|| this.targetBlocks.contains(rayTraceResult.getBlockPos())
-					|| rayTraceResult.getBlockPos().getY() > MinerMobs.MAX_Y.get(this.miner))
-                continue;
-
-            double distance = this.miner.distanceToSqr(rayTraceResult.getLocation());
-			if (distance > this.reachDistance * this.reachDistance)
-				continue;
-
-			BlockState state = this.miner.level().getBlockState(rayTraceResult.getBlockPos());
-
-			if (state.getDestroySpeed(this.miner.level(), rayTraceResult.getBlockPos()) == -1
-					|| (state.hasBlockEntity() && MinerMobs.blacklistTileEntities))
-				continue;
-
-			boolean listed = state.is(MinerMobs.BLOCK_BLACKLIST);
-			if (listed != MinerMobs.blockBlacklistAsWhitelist)
-				continue;
-
-            this.targetBlocks.add(rayTraceResult.getBlockPos());
+		if (this.miner.onClimbable() && this.target.getY() > this.miner.getY()) {
+			//The rays towards the target can miss what's blocking the climb, e.g. a trapdoor when the target is far away
+			Vec3 head = this.miner.position().add(0, this.miner.getBbHeight() - 0.1d, 0);
+			this.tryAddTargetBlock(head, head.add(0, 1.5d, 0));
+			if (!this.targetBlocks.isEmpty())
+				return;
 		}
+		int mobHeight = Mth.ceil(this.miner.getBbHeight());
+		for (int i = 0; i < mobHeight; i++)
+			this.tryAddTargetBlock(this.miner.position().add(0, i + 0.5d, 0), this.target.getEyePosition(1f).add(0, i, 0));
 		Collections.reverse(this.targetBlocks);
+	}
+
+	private void tryAddTargetBlock(Vec3 from, Vec3 to) {
+		BlockHitResult rayTraceResult = this.miner.level().clip(new ClipContext(from, to, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.miner));
+		if (rayTraceResult.getType() == HitResult.Type.MISS
+				|| this.targetBlocks.contains(rayTraceResult.getBlockPos())
+				|| rayTraceResult.getBlockPos().getY() > MinerMobs.MAX_Y.get(this.miner))
+			return;
+
+		double distance = this.miner.distanceToSqr(rayTraceResult.getLocation());
+		if (distance > this.reachDistance * this.reachDistance)
+			return;
+
+		BlockState state = this.miner.level().getBlockState(rayTraceResult.getBlockPos());
+
+		if (state.getDestroySpeed(this.miner.level(), rayTraceResult.getBlockPos()) == -1
+				|| (state.hasBlockEntity() && MinerMobs.blacklistTileEntities)
+				//Prevents mobs from breaking the ladder they're climbing
+				|| (state.is(BlockTags.CLIMBABLE) && this.miner.onClimbable()))
+			return;
+
+		boolean listed = state.is(MinerMobs.BLOCK_BLACKLIST);
+		if (listed != MinerMobs.blockBlacklistAsWhitelist)
+			return;
+
+		this.targetBlocks.add(rayTraceResult.getBlockPos());
 	}
 
 	public boolean requiresUpdateEveryTick() {
