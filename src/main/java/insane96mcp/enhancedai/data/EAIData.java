@@ -105,6 +105,13 @@ public class EAIData<T> {
         return ModNBTData.contains(entity, this.id);
     }
 
+    /**
+     * Use for entities that may not have the data, e.g. if they joined the level while the feature was disabled, as absent data reads as 0
+     */
+    public T getOrDefault(Entity entity, T defaultValue) {
+        return this.has(entity) ? this.get(entity) : defaultValue;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;

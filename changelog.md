@@ -1,4 +1,8 @@
 # Upcoming
+* Added Villager Golem Repair: armorers, toolsmiths and weaponsmiths walk to iron golems below 75% health within 16 blocks and repair them for 25 health, with a 2 seconds cooldown
+  * Villagers repair only while working, idling or meeting, so never at night, during panic or raids, and only when no enemy is within 10 blocks of them or of the golem
+  * Iron golems below 50% health that aren't fighting walk to the closest villager able to repair them within 24 blocks and wait there until they're above 75% health
+  * Added `enhancedai:can_repair_golems` villager profession tag, `enhancedai:villager/can_repair_golems` and `enhancedai:villager/repairable_golems` entity type tags
 * Added Villager Eat to Heal: villagers below 75% health eat food from their inventory to heal when they're not in danger
   * Healing is based on the food's nutrition, with a 30 seconds cooldown between meals
   * Added `enhancedai:villager/eats_to_heal` entity type tag and `enhancedai:villager/healing_food` item tag (defaults to bread, carrot, potato and beetroot)
@@ -11,6 +15,7 @@
 * Miner
   * Fixed mobs not being able to break blocks while climbing (e.g. a trapdoor closed above a ladder)
   * Mobs no longer break ladders and similar blocks while climbing them
+* Fixed `Blacklisted spawn types` config option having no effect
 
 # 4.2.7.2
 * Reduced leader banner drop chance to 25% (was guaranteed). It now requires the leader to be killed by a player

@@ -1,6 +1,5 @@
 package insane96mcp.enhancedai.module.villager.behavior;
 
-import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.module.mobs.Spawning;
 import insane96mcp.enhancedai.module.villager.VillagerEatToHeal;
 import insane96mcp.insanelib.core.feature.Feature;
@@ -47,7 +46,7 @@ public class EatToHealBehavior extends Behavior<Villager> {
                 || !Feature.isEnabled(VillagerEatToHeal.class)
                 || !villager.getType().is(VillagerEatToHeal.AFFECTED_ENTITY_TYPES)
                 || Spawning.isUnaffectedByFeatures(villager)
-                || villager.getHealth() >= villager.getMaxHealth() * dataOrConfig(VillagerEatToHeal.HEALTH_THRESHOLD, villager, VillagerEatToHeal.healthThreshold)
+                || villager.getHealth() >= villager.getMaxHealth() * VillagerEatToHeal.HEALTH_THRESHOLD.getOrDefault(villager, VillagerEatToHeal.healthThreshold)
                 || !isCalm(villager))
             return false;
         //A healing food can be left in hand if the villager was saved while eating
@@ -77,7 +76,7 @@ public class EatToHealBehavior extends Behavior<Villager> {
         if (gameTime >= this.mealEndTime) {
             villager.eat(level, villager.getInventory().getItem(this.foodSlot), this.food);
             villager.heal(healAmount(villager, this.food));
-            this.nextMealTime = gameTime + dataOrConfig(VillagerEatToHeal.MEAL_COOLDOWN, villager, VillagerEatToHeal.mealCooldown);
+            this.nextMealTime = gameTime + VillagerEatToHeal.MEAL_COOLDOWN.getOrDefault(villager, VillagerEatToHeal.mealCooldown);
         }
         else if ((this.mealEndTime - gameTime) % EFFECTS_INTERVAL == 0) {
             this.playEatingEffects(level, villager);
@@ -91,13 +90,6 @@ public class EatToHealBehavior extends Behavior<Villager> {
             villager.setDropChance(EquipmentSlot.MAINHAND, 0.085f);
         }
         this.heldFood = ItemStack.EMPTY;
-    }
-
-    /**
-     * Villagers that joined the level while the feature was disabled have no data, and absent data reads as 0
-     */
-    private static <T> T dataOrConfig(EAIData<T> data, Villager villager, T config) {
-        return data.has(villager) ? data.get(villager) : config;
     }
 
     private static boolean isCalm(Villager villager) {
@@ -144,11 +136,11 @@ public class EatToHealBehavior extends Behavior<Villager> {
         int foodPoints = Villager.FOOD_POINTS.entrySet().stream()
                 .mapToInt(entry -> inventory.countItem(entry.getKey()) * entry.getValue())
                 .sum();
-        return foodPoints - cost >= dataOrConfig(VillagerEatToHeal.MIN_FOOD_POINTS_TO_KEEP, villager, VillagerEatToHeal.minFoodPointsToKeep);
+        return foodPoints - cost >= VillagerEatToHeal.MIN_FOOD_POINTS_TO_KEEP.getOrDefault(villager, VillagerEatToHeal.minFoodPointsToKeep);
     }
 
     private static float healAmount(Villager villager, FoodProperties properties) {
-        return (float) (properties.nutrition() * dataOrConfig(VillagerEatToHeal.HEAL_MULTIPLIER, villager, VillagerEatToHeal.healMultiplier));
+        return (float) (properties.nutrition() * VillagerEatToHeal.HEAL_MULTIPLIER.getOrDefault(villager, VillagerEatToHeal.healMultiplier));
     }
 
     private void playEatingEffects(ServerLevel level, Villager villager) {

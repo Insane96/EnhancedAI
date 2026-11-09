@@ -14,6 +14,7 @@ import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @LoadFeature(module = EAIModules.MOBS, description = "You can also list any entity from getting any feature by giving them the 'NeoForgeData.enhancedai.spawning.unaffected_by_features' boolean nbt tag")
@@ -28,7 +29,7 @@ public class Spawning extends Feature {
 
     @Config(name = "Blacklisted spawn types", description = "Spawn types in this list will not get AI changes. Valid values: NATURAL, CHUNK_GENERATION, SPAWNER, STRUCTURE, BREEDING, MOB_SUMMONED, JOCKEY, EVENT, CONVERSION, REINFORCEMENT, TRIGGERED, BUCKET, SPAWN_EGG, COMMAND, DISPENSER, PATROL.")
     public static List<String> blacklistedSpawnTypesConfig = new ArrayList<>();
-    private static final List<MobSpawnType> blacklistedSpawnTypes = new ArrayList<>();
+    private static List<MobSpawnType> blacklistedSpawnTypes = List.of();
 
     @Override
     public void init(Module module, boolean enabledByDefault, boolean canBeDisabled) {
@@ -37,15 +38,11 @@ public class Spawning extends Feature {
     }
 
     @Override
-    public void loadConfigOptions() {
-        super.loadConfigOptions();
-        blacklistedSpawnTypes.clear();
-        blacklistedSpawnTypes.addAll(blacklistedSpawnTypesConfig.stream().map(MobSpawnType::valueOf).toList());
-    }
-
-    @Override
 	public void readConfig(final ModConfigEvent event) {
 		super.readConfig(event);
+		blacklistedSpawnTypes = Arrays.stream(MobSpawnType.values())
+				.filter(spawnType -> blacklistedSpawnTypesConfig.contains(spawnType.name()))
+				.toList();
 		if (this.isEnabled())
 			MobCategory.MONSTER.despawnDistance = monstersDespawningDistance;
 	}
