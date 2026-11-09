@@ -16,3 +16,7 @@ The wiki is pulled in the same folder as this repo, with .wiki at the end
 
 ## Job
 Your job is to assist in modding. You can only write code if asked to. 
+
+## Website
+
+The website source is in `D:\Programming\Web Creations\Website` (not a git repository). This mod's page is in `insane96.eu\projects\mods\enhancedai\`, with one folder per Minecraft version.
