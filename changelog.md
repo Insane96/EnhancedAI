@@ -1,3 +1,10 @@
+# Upcoming
+* Climbing
+  * Fixed mobs with a melee attack not actively climbing ladders and similar blocks. They can now also attack while climbing
+  * Mobs now climb at about the same speed as players
+  * Mobs now stay centered on the block while climbing, so they no longer get stuck under blocks next to the ladder
+  * The climbing sound now plays like the player's one (same volume and pitch, based on the distance climbed instead of time)
+
 # 4.2.7.2
 * Reduced leader banner drop chance to 25% (was guaranteed). It now requires the leader to be killed by a player
 
