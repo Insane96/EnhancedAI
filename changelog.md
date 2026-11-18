@@ -1,3 +1,6 @@
+# Upcoming
+* Villagers and Wandering Traders no longer get the Follow Range Override
+
 # 4.3.0.0
 * Added Villager Golem Repair: armorers, toolsmiths and weaponsmiths walk to iron golems below 75% health within 16 blocks and repair them for 25 health, with a 2 seconds cooldown
   * Villagers repair only while working, idling or meeting, so never at night, during panic or raids, and only when no enemy is within 10 blocks of them or of the golem
