@@ -19,7 +19,7 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
 @LoadFeature(module = EAIModules.MOBS, description = "Mobs with this feature enabled will move back to the position they spawned in if getting too far away from it.")
 public class Patrol extends Feature {
-    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/can_patrol"));
+    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/can_patrol"));
 
     @Config(min = 0)
     public static Double range = 32d;

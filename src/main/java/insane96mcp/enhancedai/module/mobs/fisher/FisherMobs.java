@@ -24,8 +24,8 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
 @LoadFeature(module = EAIModules.MOBS, description = "Let mobs use Fishing Rods, reeling players in. Either put a Fishing Rod in main or off hand and when near enough from the target they will use it. Only mobs in enhancedai:mobs/can_equip_fishing_rod entity type tag are affected by this feature.")
 public class FisherMobs extends Feature {
-	public static final TagKey<EntityType<?>> CAN_EQUIP_FISHING_ROD = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/can_equip_fishing_rod"));
-    public static final TagKey<Item> FISHER_RODS = TagKey.create(Registries.ITEM, EnhancedAI.location("valid_fisher_rods"));
+	public static final TagKey<EntityType<?>> CAN_EQUIP_FISHING_ROD = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/can_equip_fishing_rod"));
+    public static final TagKey<Item> FISHER_RODS = TagKey.create(Registries.ITEM, EnhancedAI.id("valid_fisher_rods"));
 
 	@Config(min = 0d, max = 1d, description = "Chance for entity types in the enhancedai:mobs/can_equip_fishing_rod tag to spawn with a Fishing Rod in the offhand.\nIf you require more control, use Mobs Properties Randomness")
 	public static Double equipFishingRodChance = 0.07;

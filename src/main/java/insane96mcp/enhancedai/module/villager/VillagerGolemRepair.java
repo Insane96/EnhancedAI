@@ -32,9 +32,9 @@ import java.util.Optional;
 
 @LoadFeature(module = EAIModules.VILLAGER, description = "Smiths walk to nearby damaged iron golems and repair them when no enemy is around, and badly damaged golems walk to the closest smith. Use the enhancedai:can_repair_golems villager profession tag to change which professions repair, the enhancedai:villager/can_repair_golems entity type tag to add more villagers (only works with entities that extend vanilla Villagers) and the enhancedai:villager/repairable_golems entity type tag to add more golems.")
 public class VillagerGolemRepair extends Feature {
-    public static final TagKey<VillagerProfession> REPAIRING_PROFESSIONS = TagKey.create(Registries.VILLAGER_PROFESSION, EnhancedAI.location("can_repair_golems"));
-    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("villager/can_repair_golems"));
-    public static final TagKey<EntityType<?>> REPAIRABLE_GOLEMS = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("villager/repairable_golems"));
+    public static final TagKey<VillagerProfession> REPAIRING_PROFESSIONS = TagKey.create(Registries.VILLAGER_PROFESSION, EnhancedAI.id("can_repair_golems"));
+    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("villager/can_repair_golems"));
+    public static final TagKey<EntityType<?>> REPAIRABLE_GOLEMS = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("villager/repairable_golems"));
 
     @Config(min = 0d, max = 1d, description = "Golems are repaired only when their health is below this percentage of max health")
     public static Double healthThreshold = 0.75d;

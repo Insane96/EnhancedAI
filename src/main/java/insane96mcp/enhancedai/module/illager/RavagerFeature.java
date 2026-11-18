@@ -10,5 +10,5 @@ import net.minecraft.world.level.block.Block;
 
 @LoadFeature(module = EAIModules.ILLAGER, canBeDisabled = false, description = "Adds a new block tag `enhancedai:breakable_by_ravager` for ravager to break (already includes leaves)")
 public class RavagerFeature extends Feature {
-    public static final TagKey<Block> BREAKABLE = TagKey.create(Registries.BLOCK, EnhancedAI.location("breakable_by_ravager"));
+    public static final TagKey<Block> BREAKABLE = TagKey.create(Registries.BLOCK, EnhancedAI.id("breakable_by_ravager"));
 }

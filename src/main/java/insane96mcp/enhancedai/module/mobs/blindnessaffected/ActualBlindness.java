@@ -24,9 +24,9 @@ import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 
 @LoadFeature(module = EAIModules.MOBS, description = "Makes mobs follow range actually affected by blindness effect. Only entity types in `enhancedai:mobs/blindness_range_multiplier` tag will be affected by this.")
 public class ActualBlindness extends Feature {
-	public static final TagKey<EntityType<?>> BLINDNESS_RANGE_MULTIPLIER = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/blindness_range_multiplier"));
+	public static final TagKey<EntityType<?>> BLINDNESS_RANGE_MULTIPLIER = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/blindness_range_multiplier"));
 
-	public static final ResourceLocation BLINDNESS_FOLLOW_RANGE_ID = EnhancedAI.location("blindness_follow_range");
+	public static final ResourceLocation BLINDNESS_FOLLOW_RANGE_ID = EnhancedAI.id("blindness_follow_range");
 
 	@Config(min = 0d, max = 1d, description = "Follow range is multiplied by this value if the mob has blindness.")
 	public static Double blindnessRangeMultiplier = .15d;

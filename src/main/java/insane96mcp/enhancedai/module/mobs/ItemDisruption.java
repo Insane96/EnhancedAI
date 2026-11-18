@@ -27,7 +27,7 @@ import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 
 @LoadFeature(module = EAIModules.MOBS, enabledByDefault = false, description = "Endermen will make the player's item fall from his hands. Add/remove mobs via the enhancedai:mobs/can_disrupt_item entity type tag")
 public class ItemDisruption extends Feature {
-    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/can_disrupt_item"));
+    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/can_disrupt_item"));
 
     @Config(min = 0d, max = 1d)
     public static DifficultyBasedConfig chance = new DifficultyBasedConfig(0.25d, 0.25d, 0.35d);

@@ -21,7 +21,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.EnumSet;
 
 public class TeleportToTargetGoal extends Goal {
-    private static final ResourceLocation MOVEMENT_SPEED_MODIFIER_ID = EnhancedAI.location("teleport_to_target");
+    private static final ResourceLocation MOVEMENT_SPEED_MODIFIER_ID = EnhancedAI.id("teleport_to_target");
 
     final Mob mob;
     final TargetingConditions targetingConditions;

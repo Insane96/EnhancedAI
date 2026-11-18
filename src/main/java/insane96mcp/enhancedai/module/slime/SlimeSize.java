@@ -13,7 +13,7 @@ import net.minecraft.world.entity.monster.Slime;
 
 @LoadFeature(module = EAIModules.SLIME, description = "Only entity types in `enhancedai:slime/spawn_size` tag are affected by this feature.")
 public class SlimeSize extends Feature {
-    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("slime/spawn_size"));
+    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("slime/spawn_size"));
     @Config(min = 0, max = 16, description = "Changes the max size a Slime/Magma cube can spawn as. Vanilla is max 4 with 3 excluded. Set to 0 to disable.")
     public static Integer maxSpawnSize = 5;
 

@@ -15,7 +15,7 @@ import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 
 @LoadFeature(module = EAIModules.MOBS, description = "Changes mobs attacks to use the attack speed attribute. Only entities in the `enhancedai:mobs/melee_attacking` entity type tag will be affected.")
 public class MeleeAttacking extends Feature {
-	public static final TagKey<EntityType<?>> CHANGE_MELEE_ATTACKING = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/melee_attacking"));
+	public static final TagKey<EntityType<?>> CHANGE_MELEE_ATTACKING = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/melee_attacking"));
 
 	@Config(description = "If true melee monsters (zombies, etc) attack speed is 4 (like the player) and will be based off the `minecraft:generic.attack_speed` attribute.")
 	public static Boolean attackSpeed$attributeBased = true;

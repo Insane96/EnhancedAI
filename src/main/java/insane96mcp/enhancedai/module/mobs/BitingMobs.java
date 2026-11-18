@@ -27,10 +27,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @LoadFeature(module = EAIModules.MOBS, description = "Mobs can bite if are attacked with non-weapons. Only mobs in the enhancedai:mobs/biting_mobs/can_bite entity type tag can bite. Entity types in `mobs/biting_mobs/unaffected_by_bite` tag are unaffected by bites. Damage types in `enhancedai:doesnt_trigger_bite` tag don't trigger biting mobs.")
 public class BitingMobs extends Feature {
-	public static final TagKey<EntityType<?>> CAN_BITE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/biting_mobs/can_bite"));
-	public static final TagKey<EntityType<?>> UNAFFECTED_BY_BITE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/biting_mobs/unaffected_by_bite"));
-	public static final TagKey<DamageType> DOESNT_TRIGGER_BITE = TagKey.create(Registries.DAMAGE_TYPE, EnhancedAI.location("doesnt_trigger_bite"));
-	ResourceKey<DamageType> BITE_DAMAGE_TYPE = ResourceKey.create(Registries.DAMAGE_TYPE, EnhancedAI.location("bite"));
+	public static final TagKey<EntityType<?>> CAN_BITE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/biting_mobs/can_bite"));
+	public static final TagKey<EntityType<?>> UNAFFECTED_BY_BITE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/biting_mobs/unaffected_by_bite"));
+	public static final TagKey<DamageType> DOESNT_TRIGGER_BITE = TagKey.create(Registries.DAMAGE_TYPE, EnhancedAI.id("doesnt_trigger_bite"));
+	ResourceKey<DamageType> BITE_DAMAGE_TYPE = ResourceKey.create(Registries.DAMAGE_TYPE, EnhancedAI.id("bite"));
 
 	@Config(min = 0d, max = 1d, description = "Chance for a Mob to bite the attacker")
 	public static DifficultyBasedConfig chance = new DifficultyBasedConfig(0.2d, 0.2d, 0.3d);

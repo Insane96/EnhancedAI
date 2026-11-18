@@ -18,7 +18,7 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
 @LoadFeature(module = EAIModules.MOBS, description = "Only entity types in `enhancedai:mobs/can_open_doors` tag are affected by this feature.")
 public class OpenDoors extends Feature {
-    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/can_open_doors"));
+    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/can_open_doors"));
 
 	public static EAIData<Boolean> CAN_OPEN_DOORS;
 

@@ -45,11 +45,11 @@ import java.util.List;
 
 @LoadFeature(module = EAIModules.MOBS, description = "Allows mobs to call reinforcements (like vanilla zombies can, but better) and have leaders that have a high chance to call reinforcements. Only entity types in the `enhancedai:mobs/leaders` tag can jump. PLEASE NOTE that this feature uses a custom attribute (enhancedai:spawn_reinforcements_chance) instead of the vanilla one. This feature has also an MPR condition `enhancedai:is_leader` to check if the mob is a leader.")
 public class Leaders extends Feature {
-    private static final ResourceLocation BONUS_STATS_ID = EnhancedAI.location("leader_bonus_stats");
-    private static final ResourceLocation REINFORCEMENT_CALLED_CHARGE_ID = EnhancedAI.location("reinforcement_called_charge");
-    private static final ResourceKey<LootTable> LEADER_LOOT_TABLE = ResourceKey.create(Registries.LOOT_TABLE, EnhancedAI.location("leader_mob"));
+    private static final ResourceLocation BONUS_STATS_ID = EnhancedAI.id("leader_bonus_stats");
+    private static final ResourceLocation REINFORCEMENT_CALLED_CHARGE_ID = EnhancedAI.id("reinforcement_called_charge");
+    private static final ResourceKey<LootTable> LEADER_LOOT_TABLE = ResourceKey.create(Registries.LOOT_TABLE, EnhancedAI.id("leader_mob"));
 
-    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/leaders"));
+    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/leaders"));
 
     @Config(min = 0, max = 1, description = "Chance for a mob to become a leader. Leader mobs have a high chance to spawn reinforcements.")
     public static Double leaderChance = 0.02d;

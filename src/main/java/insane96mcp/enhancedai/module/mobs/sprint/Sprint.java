@@ -18,7 +18,7 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
 @LoadFeature(module = EAIModules.MOBS, description = "Makes mobs be able to sprint when near their target. Only entity types in `enhancedai:mobs/can_sprint` tag are affected by this feature.")
 public class Sprint extends Feature {
-    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/can_sprint"));
+    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/can_sprint"));
 
 	@Config(min = 0, max = 1d)
 	public static Double chance = 0.25d;

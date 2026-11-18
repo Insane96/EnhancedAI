@@ -38,7 +38,7 @@ import java.util.List;
 
 @LoadFeature(module = EAIModules.WITCH, description = "Witches throw potions farther, faster and more potion types. Also no longer chase player if they can't see him. Use the enhancedai:witch/better_potion_throwing entity type tag to add more witches that are affected by this feature.")
 public class WitchPotionThrowing extends Feature {
-    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("witch/better_potion_throwing"));
+    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("witch/better_potion_throwing"));
 
     @Config(name = "Bad Potions List", description = "A list of potions that the witch can throw at enemies. Format is effect_id,duration,amplifier. The potions are thrown in order and witches will not throw a potion if the target has already the effect.")
     public static PotionEffectList badPotionsList = PotionEffectList.of(List.of("minecraft:weakness", "minecraft:slowness", "minecraft:hunger,600,0", "minecraft:mining_fatigue,600,0", "minecraft:poison", "minecraft:blindness,120,0", "minecraft:harming"));

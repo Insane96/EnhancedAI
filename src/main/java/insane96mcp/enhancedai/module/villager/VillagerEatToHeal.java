@@ -18,8 +18,8 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
 @LoadFeature(module = EAIModules.VILLAGER, description = "Wounded villagers eat food from their inventory to heal when they are not in danger. Use the enhancedai:villager/eats_to_heal entity type tag to add more villagers, only works with entities that extend vanilla Villagers. Use the enhancedai:villager/healing_food item tag to change the food they can eat.")
 public class VillagerEatToHeal extends Feature {
-    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("villager/eats_to_heal"));
-    public static final TagKey<Item> HEALING_FOOD = TagKey.create(Registries.ITEM, EnhancedAI.location("villager/healing_food"));
+    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("villager/eats_to_heal"));
+    public static final TagKey<Item> HEALING_FOOD = TagKey.create(Registries.ITEM, EnhancedAI.id("villager/healing_food"));
 
     @Config(min = 0d, max = 1d, description = "Villagers eat only when their health is below this percentage of max health")
     public static Double healthThreshold = 0.75d;

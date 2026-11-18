@@ -23,8 +23,8 @@ import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 
 @LoadFeature(module = EAIModules.MOBS, description = "Makes mobs ride other mobs. Mobs in the `enhancedai:mobs/riding/can_be_mounted` tag will be able to be mounted, while mobs in the `enhancedai:mobs/riding/can_mount` tag will be able to mount other mobs.")
 public class Riding extends Feature {
-    public static final TagKey<EntityType<?>> CAN_BE_MOUNTED = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/riding/can_be_mounted"));
-    public static final TagKey<EntityType<?>> CAN_MOUNT = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/riding/can_mount"));
+    public static final TagKey<EntityType<?>> CAN_BE_MOUNTED = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/riding/can_be_mounted"));
+    public static final TagKey<EntityType<?>> CAN_MOUNT = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/riding/can_mount"));
     @Config(min = 0d, max = 1d, description = "Chance for a mob to have an AI to go and ride mobs.")
     public static DifficultyBasedConfig chance = new DifficultyBasedConfig(0.03d, 0.06d, 0.1d);
 

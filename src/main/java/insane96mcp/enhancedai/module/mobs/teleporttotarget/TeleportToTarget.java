@@ -19,8 +19,8 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
 @LoadFeature(module = EAIModules.MOBS, description = "Makes mobs teleport other mobs close to the target. Mobs in the `enhancedai:mobs/teleport_to_target/can_be_teleported` tag will be able to be picked up, while mobs in the `enhancedai:mobs/teleport_to_target/can_teleport` tag will be able to pick up other mobs.")
 public class TeleportToTarget extends Feature {
-    public static final TagKey<EntityType<?>> CAN_BE_TELEPORTED = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/teleport_to_target/can_be_teleported"));
-    public static final TagKey<EntityType<?>> CAN_TELEPORT = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/teleport_to_target/can_teleport"));
+    public static final TagKey<EntityType<?>> CAN_BE_TELEPORTED = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/teleport_to_target/can_be_teleported"));
+    public static final TagKey<EntityType<?>> CAN_TELEPORT = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/teleport_to_target/can_teleport"));
 
     @Config(min = 0d, max = 1d, description = "Chance for a mob to have an AI to go and pick up and throw mobs.")
     public static DifficultyBasedConfig chance = new DifficultyBasedConfig(0.35d, 0.35d, 0.5d);

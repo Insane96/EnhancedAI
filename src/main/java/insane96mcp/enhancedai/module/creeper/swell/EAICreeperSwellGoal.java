@@ -23,7 +23,7 @@ import java.util.Set;
 
 public class EAICreeperSwellGoal extends Goal {
 
-	private static final ResourceLocation WALKING_FUSE_SPEED_MODIFIER_ID = EnhancedAI.location("walking_fuse_speed_modifier");
+	private static final ResourceLocation WALKING_FUSE_SPEED_MODIFIER_ID = EnhancedAI.id("walking_fuse_speed_modifier");
 
 	protected final Creeper swellingCreeper;
 	private LivingEntity creeperAttackTarget;

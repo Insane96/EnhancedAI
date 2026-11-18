@@ -23,7 +23,7 @@ import java.util.EnumSet;
 
 @LoadFeature(module = EAIModules.MOBS, description = "Makes mobs be able to jump in place when their target is a few blocks above them. Only entity types in the `enhancedai:mobs/can_jump_in_place` tag can jump")
 public class Jump extends Feature {
-    public static final TagKey<EntityType<?>> CAN_JUMP = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/can_jump_in_place"));
+    public static final TagKey<EntityType<?>> CAN_JUMP = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/can_jump_in_place"));
 
 	public static EAIData<Boolean> CAN_JUMP_DATA;
 

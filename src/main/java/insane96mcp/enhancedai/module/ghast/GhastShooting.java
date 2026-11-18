@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 @LoadFeature(module = EAIModules.GHAST, description = "Various changes to ghast shooting. Only ghast in enhancedai:ghast/change_shoot entity type tag are affected by this feature.")
 public class GhastShooting extends Feature {
-    public static final TagKey<EntityType<?>> CHANGE_GHAST_SHOOT = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("ghast/change_shoot"));
+    public static final TagKey<EntityType<?>> CHANGE_GHAST_SHOOT = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("ghast/change_shoot"));
 
     @Config(min = 1, max = 300, description = "How many ticks pass between shooting fireballs. Vanilla is 40")
     public static MinMaxConfig attackCooldown = new MinMaxConfig(40, 50);

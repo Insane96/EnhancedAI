@@ -19,8 +19,8 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
 @LoadFeature(module = EAIModules.WITCH, description = "Witches can throw potions to monsters. Only witches in the `witch/allied_monsters/can_target_monsters` entity type tag will be able to target monsters. The monsters targeted are in the `witch/allied_monsters/eligible_targets` entity type tag.")
 public class AlliedMonsters extends Feature {
-	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("witch/allied_monsters/can_target_monsters"));
-	public static final TagKey<EntityType<?>> ELIGIBLE_TARGETS = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("witch/allied_monsters/eligible_targets"));
+	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("witch/allied_monsters/can_target_monsters"));
+	public static final TagKey<EntityType<?>> ELIGIBLE_TARGETS = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("witch/allied_monsters/eligible_targets"));
 
     public static EAIData<Boolean> ALLIED_MONSTERS;
 

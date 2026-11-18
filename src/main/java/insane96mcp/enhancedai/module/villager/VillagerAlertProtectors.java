@@ -19,8 +19,8 @@ import java.util.List;
 
 @LoadFeature(module = EAIModules.VILLAGER, description = "Villagers will alert Iron Golems and Village Guards when panicking")
 public class VillagerAlertProtectors extends Feature {
-    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("villager/alert_protectors"));
-    public static final TagKey<EntityType<?>> PROTECTORS = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("villager/protectors"));
+    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("villager/alert_protectors"));
+    public static final TagKey<EntityType<?>> PROTECTORS = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("villager/protectors"));
 
     @Config(min = 0)
     public static Integer alertRange = 40;

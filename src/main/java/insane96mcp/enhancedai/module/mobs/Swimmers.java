@@ -20,8 +20,8 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
 @LoadFeature(module = EAIModules.MOBS, description = "Makes drowned swim speed based off swim speed attribute instead of movement speed.")
 public class Swimmers extends Feature {
-    public static final TagKey<EntityType<?>> SWIM_SPEED_MULTIPLIER_AFFECTED = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/swim_speed_multiplier"));
-	final ResourceLocation SWIM_SPEED_MULTIPLIER_ID = EnhancedAI.location("drowned_swim_speed_multiplier");
+    public static final TagKey<EntityType<?>> SWIM_SPEED_MULTIPLIER_AFFECTED = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/swim_speed_multiplier"));
+	final ResourceLocation SWIM_SPEED_MULTIPLIER_ID = EnhancedAI.id("drowned_swim_speed_multiplier");
 
 	@Config(min = 0d, max = 4d, description = "Multiplier for the swim speed of drowned. Note that the swim speed is also changed by the MPR Data Pack feature. Set to 0 to disable the multiplier.")
 	public static Double drowned$swimSpeedMultiplier = 0.3d;

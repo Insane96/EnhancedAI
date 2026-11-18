@@ -17,7 +17,7 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
 @LoadFeature(module = EAIModules.SLIME, description = "Only entity types in `enhancedai:slime/jump_rate` tag are affected by this feature.")
 public class SlimeJumpDelay extends Feature {
-    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("slime/jump_rate"));
+    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("slime/jump_rate"));
 
     @Config
     public static MinMaxConfig jumpDelay = new MinMaxConfig(5, 15);

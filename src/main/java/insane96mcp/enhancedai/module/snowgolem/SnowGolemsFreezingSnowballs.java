@@ -20,7 +20,7 @@ import net.neoforged.neoforge.event.entity.ProjectileImpactEvent;
 
 @LoadFeature(module = EAIModules.SNOW_GOLEM, description = "Snow golems snowballs freeze entities hit. Only entity types in enhancedai:snow_golem/freezing_snowballs tag are affected by this feature.")
 public class SnowGolemsFreezingSnowballs extends Feature {
-    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("snow_golem/freezing_snowballs"));
+    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("snow_golem/freezing_snowballs"));
     @Config(min = 0, description = "How many ticks the entity hit is frozen for.")
     public static Integer ticks = 30;
     @Config

@@ -33,7 +33,7 @@ import javax.annotation.Nullable;
 @LoadFeature(module = EAIModules.ILLAGER, description = "Use the enhancedai:illager/better_shooting entity type tag to add more skeletons that are affected by this feature")
 public class PillagerShoot extends Feature {
 
-	public static final TagKey<EntityType<?>> BETTER_PILLAGER_SHOOT = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("illager/better_shooting"));
+	public static final TagKey<EntityType<?>> BETTER_PILLAGER_SHOOT = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("illager/better_shooting"));
 
 	@Config(min = 1, max = 64, description = "The range from where a pillager will shoot a target")
 	public static MinMaxConfig shootingRange = new MinMaxConfig(24, 32);

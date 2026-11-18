@@ -20,7 +20,7 @@ import java.util.List;
 
 @LoadFeature(module = EAIModules.WITCH, description = "Witches drink more potions.")
 public class ThirstyWitches extends Feature {
-	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("witch/thirsty"));
+	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("witch/thirsty"));
 
 	@Config(name = "Drinkable potions if targeting player", description = "A list of potions that the witch will drink when a player is targeted and it's at least 6 blocks away. Format is potion_id or effect_id,duration,amplifier. The potions are applied in order and witches will not drink the same potion if already has the effect.")
     public static PotionEffectList drinkPotion = PotionEffectList.of(List.of("minecraft:strong_swiftness", "minecraft:regeneration"));

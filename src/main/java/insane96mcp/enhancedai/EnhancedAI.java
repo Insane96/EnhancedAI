@@ -84,7 +84,7 @@ public class EnhancedAI
                 new PotionEffectList.COption(builder, name, annotation.description(), (PotionEffectList) defaultValue));
     }
 
-    public static ResourceLocation location(String path) {
+    public static ResourceLocation id(String path) {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
     }
 }

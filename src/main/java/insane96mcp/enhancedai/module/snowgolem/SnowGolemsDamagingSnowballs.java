@@ -21,7 +21,7 @@ import net.neoforged.neoforge.event.entity.ProjectileImpactEvent;
 
 @LoadFeature(module = EAIModules.SNOW_GOLEM, description = "Snow golems snowballs deal damage. Only entity types in enhancedai:snow_golem/damaging_snowballs tag are affected by this feature.")
 public class SnowGolemsDamagingSnowballs extends Feature {
-    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("snow_golem/damaging_snowballs"));
+    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("snow_golem/damaging_snowballs"));
     @Config(min = 0)
     public static Double damage = 0.5d;
 

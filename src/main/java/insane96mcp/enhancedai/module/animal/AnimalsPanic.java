@@ -25,7 +25,7 @@ import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 
 @LoadFeature(module = EAIModules.ANIMAL, description = "Make animals panic when one is attacked. Only entity types in `enhancedai:animal/can_panic` tag will be affected by this feature.")
 public class AnimalsPanic extends Feature {
-	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("animal/can_panic"));
+	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("animal/can_panic"));
     @Config(min = 1, description = "Range at which an animal alerts other animals to panic/attack.")
     public static Integer fleeRange = 16;
 	@Config(description = "The flee range will be this value if the animal can see the other animals")

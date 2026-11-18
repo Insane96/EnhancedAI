@@ -16,10 +16,10 @@ public class MPRIntegration {
 
     private void onRegister(RegisterEvent event) {
         event.register(ConditionsRegistry.REGISTRY_KEY, helper -> {
-            helper.register(EnhancedAI.location("is_leader"), EAIIsLeaderCondition.class);
-            helper.register(EnhancedAI.location("data"), EAIDataCondition.class);
+            helper.register(EnhancedAI.id("is_leader"), EAIIsLeaderCondition.class);
+            helper.register(EnhancedAI.id("data"), EAIDataCondition.class);
         });
         event.register(PropertiesRegistry.REGISTRY_KEY, helper ->
-                helper.register(EnhancedAI.location("change_data"), EAIChangeDataProperty.class));
+                helper.register(EnhancedAI.id("change_data"), EAIChangeDataProperty.class));
     }
 }

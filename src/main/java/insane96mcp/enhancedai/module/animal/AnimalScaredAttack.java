@@ -32,11 +32,11 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
 @LoadFeature(module = EAIModules.ANIMAL, description = "Make animals fight back or be scared by players. Use the entity type tag enhancedai:animal/scared_attack/can_be_neutral, enhancedai:animal/scared_attack/can_be_hostile, and enhancedai:animal/scared_attack/can_be_scared_by_players to add/remove animals.")
 public class AnimalScaredAttack extends Feature {
-    public static final TagKey<EntityType<?>> CAN_BE_NEUTRAL = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("animal/scared_attack/can_be_neutral"));
-    public static final TagKey<EntityType<?>> CAN_BE_HOSTILE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("animal/scared_attack/can_be_hostile"));
-    public static final TagKey<EntityType<?>> SCARED_BY_PLAYERS = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("animal/scared_attack/can_be_scared_by_players"));
-    public static final ResourceLocation FOLLOW_RANGE_REDUCTION_ID = EnhancedAI.location("follow_range_reduction");
-    public static final ResourceLocation ANIMAL_KNOCKBACK_ID = EnhancedAI.location("animal_knockback");
+    public static final TagKey<EntityType<?>> CAN_BE_NEUTRAL = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("animal/scared_attack/can_be_neutral"));
+    public static final TagKey<EntityType<?>> CAN_BE_HOSTILE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("animal/scared_attack/can_be_hostile"));
+    public static final TagKey<EntityType<?>> SCARED_BY_PLAYERS = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("animal/scared_attack/can_be_scared_by_players"));
+    public static final ResourceLocation FOLLOW_RANGE_REDUCTION_ID = EnhancedAI.id("follow_range_reduction");
+    public static final ResourceLocation ANIMAL_KNOCKBACK_ID = EnhancedAI.id("animal_knockback");
 
     @Config(min = 0d, max = 1d, description = "Animals have this percentage chance to be able to fight back instead of fleeing. Animals have a slightly bigger range to attack. Attack damage can't be changed via config due to limitations so use mods like Mobs Properties Randomness to change the damage. Base damage is 3")
     public static Double neutralChance = 0.35d;

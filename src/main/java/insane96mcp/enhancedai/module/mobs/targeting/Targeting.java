@@ -49,13 +49,13 @@ import java.util.List;
 
 @LoadFeature(module = EAIModules.MOBS, description = "Change how mobs target players. Check the config options below for entity type tags.")
 public class Targeting extends Feature {
-	public static final TagKey<EntityType<?>> CHANGE_FOLLOW_RANGE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/targeting/follow_range_override"));
-	public static final TagKey<EntityType<?>> BETTER_HURT_BY = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/targeting/better_hurt_by"));
-	public static final TagKey<EntityType<?>> BETTER_NEARBY_TARGETING = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/targeting/better_nearby_targeting"));
-	public static final TagKey<EntityType<?>> ALLOW_TARGET_SWITCH = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/targeting/allow_target_switch"));
-	public static final TagKey<EntityType<?>> APPLY_XRAY = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/targeting/apply_xray"));
-	public static final TagKey<EntityType<?>> VISITED_NODES_MULTIPLIER = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/targeting/visited_nodes_multiplier"));
-	public static final TagKey<EntityType<?>> ALERT_NEARBY = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/targeting/alert_nearby"));
+	public static final TagKey<EntityType<?>> CHANGE_FOLLOW_RANGE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/targeting/follow_range_override"));
+	public static final TagKey<EntityType<?>> BETTER_HURT_BY = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/targeting/better_hurt_by"));
+	public static final TagKey<EntityType<?>> BETTER_NEARBY_TARGETING = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/targeting/better_nearby_targeting"));
+	public static final TagKey<EntityType<?>> ALLOW_TARGET_SWITCH = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/targeting/allow_target_switch"));
+	public static final TagKey<EntityType<?>> APPLY_XRAY = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/targeting/apply_xray"));
+	public static final TagKey<EntityType<?>> VISITED_NODES_MULTIPLIER = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/targeting/visited_nodes_multiplier"));
+	public static final TagKey<EntityType<?>> ALERT_NEARBY = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/targeting/alert_nearby"));
 
 	@Config(min = 0d, max = 128d, description = "How far away can the mobs see targets. This overrides the vanilla value (16 for most mobs). Setting 'Max' to 0 will leave the follow range as vanilla. Use mods like Mobs Properties Randomness to have more control over the attribute. Only mobs in the entity type tag `enhancedai:mobs/targeting/follow_range_override` will be affected by this override")
 	public static MinMaxConfig followRangeOverride = new MinMaxConfig(32, 48);

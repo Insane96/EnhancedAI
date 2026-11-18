@@ -19,7 +19,7 @@ import net.minecraft.world.entity.monster.AbstractSkeleton;
 @LoadFeature(module = EAIModules.SKELETON, description = "Skeletons are more precise when shooting and can hit a target farther away. Only entity types in `enhancedai:skeleton/better_shooting` tag are affected by this feature")
 public class SkeletonShoot extends Feature {
 
-	public static final TagKey<EntityType<?>> BETTER_SKELETON_SHOOT = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("skeleton/better_shooting"));
+	public static final TagKey<EntityType<?>> BETTER_SKELETON_SHOOT = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("skeleton/better_shooting"));
 
 	@Config(min = 1, max = 64, description = "The range from where a skeleton will shoot a player")
 	public static MinMaxConfig shootingRange = new MinMaxConfig(24, 32);

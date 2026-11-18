@@ -18,8 +18,8 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
 @LoadFeature(module = EAIModules.MOBS, name = "Teleport anti-cheese", description = "Prevent players from abusing water or 2 high gaps to bully endermen.")
 public class TeleportAntiCheese extends Feature {
-    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/teleport_anti_cheese/can_use"));
-    public static final TagKey<EntityType<?>> CANT_BE_TELEPORTED = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/teleport_anti_cheese/cant_be_teleported"));
+    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/teleport_anti_cheese/can_use"));
+    public static final TagKey<EntityType<?>> CANT_BE_TELEPORTED = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/teleport_anti_cheese/cant_be_teleported"));
 
     @Config(min = 0d, max = 1d, description = "Chance for entity types in the enhancedai:mobs/teleport_anti_cheese/can_use tag to get the Teleport Anti-Cheese AI, teleporting the target near them after not being able to reach them. Entity types in the tag enhancedai:mobs/teleport_anti_cheese/cant_be_teleported can't be teleported")
     public static Double chance = 1d;

@@ -19,7 +19,7 @@ import net.minecraft.world.entity.monster.AbstractSkeleton;
 
 @LoadFeature(module = EAIModules.SKELETON, description = "Skeletons try to stay away from the target. Only entity types in `enhancedai:skeleton/can_flee` tag are affected by this feature. This disables itself if Skeleton Shoot feature is disabled")
 public class SkeletonFleeTarget extends Feature {
-    public static final TagKey<EntityType<?>> CAN_FLEE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("skeleton/can_flee"));
+    public static final TagKey<EntityType<?>> CAN_FLEE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("skeleton/can_flee"));
     @Config(min = 0d, max = 1d, description = "Chance for a Skeleton to spawn with the ability to avoid the target")
     public static Double avoidTargetChance = 0.5d;
     @Config(min = 0d, max = 1d, description = "Chance for a Skeleton to be able to shoot while running from the target")

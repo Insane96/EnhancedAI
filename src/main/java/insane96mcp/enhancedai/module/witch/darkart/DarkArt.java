@@ -26,7 +26,7 @@ import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 
 @LoadFeature(module = EAIModules.WITCH, description = "Witches summon Villagers and cast a lightning upon them. Only entity types in the `enhancedai:witch/can_perform_dark_arts` tag will be affected (can be used for any mob, not only witches).")
 public class DarkArt extends Feature {
-	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("witch/can_perform_dark_arts"));
+	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("witch/can_perform_dark_arts"));
     @Config(min = 0d, max = 1d, description = "Chance for a witch to get the Dark Art AI (as soon as they have a target and are less than 10 blocks away from the target will summon a Villager and cast a lightning bolt on them")
     public static Double chance = 0.333d;
 	@Config(min = 0d, description = "At which distance from the witch will she start performing the Dark Art")

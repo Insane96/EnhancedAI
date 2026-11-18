@@ -32,8 +32,8 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
 @LoadFeature(module = EAIModules.MOBS, description = "Makes mobs throw a web at a player, slowing them. Only entity types in the `enhancedai:mobs/throwing_web/can_throw_webs` tag will be affected. Entity types in `enhancedai:mobs/throwing_web/poisonous_webs` will throw poisonous webs and apply poison the same way as when a cave spider attacks an entity.")
 public class WebThrower extends Feature {
-	public static final TagKey<EntityType<?>> CAN_THROW_WEBS = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/throwing_web/can_throw_webs"));
-	public static final TagKey<EntityType<?>> POISONOUS_WEBS = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/throwing_web/poisonous_webs"));
+	public static final TagKey<EntityType<?>> CAN_THROW_WEBS = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/throwing_web/can_throw_webs"));
+	public static final TagKey<EntityType<?>> POISONOUS_WEBS = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/throwing_web/poisonous_webs"));
 
 	@Config(min = 0d, max = 1d, description = "Chance for a mob to spawn with the ability to throw webs at the target. Only entity types in the `enhancedai:mobs/throwing_web/can_throw_webs` tag are affected.")
 	public static Double chance = 0.1d;

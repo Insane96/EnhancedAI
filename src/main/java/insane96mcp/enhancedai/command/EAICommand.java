@@ -28,7 +28,7 @@ import java.util.Optional;
 
 public class EAICommand {
     public static final SuggestionProvider<CommandSourceStack> DATA = SuggestionProviders.register(
-            EnhancedAI.location("data"),
+            EnhancedAI.id("data"),
             (context, builder)
                     -> SharedSuggestionProvider.suggestResource(EAIData.DATA.stream().map(EAIData::id), builder)
     );

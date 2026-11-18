@@ -18,7 +18,7 @@ import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 
 @LoadFeature(module = EAIModules.MOBS, description = "Only entity types in the enhancedai:mobs/air_stealer tag are affected by this feature.")
 public class AirSteal extends Feature {
-    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/air_stealer"));
+    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/air_stealer"));
 
     @Config(min = 0, max = 128, description = "How many ticks of air are stolen from entities when attacked by the mob.")
     public static Integer stolenTicks = 40;

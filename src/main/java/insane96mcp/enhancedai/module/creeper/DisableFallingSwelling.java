@@ -16,7 +16,7 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
 @LoadFeature(module = EAIModules.CREEPER, description = "Creepers will no longer ignite when falling. Only entity types in the enhancedai:creeper/disable_falling_swelling tag will be affected by this feature.")
 public class DisableFallingSwelling extends Feature {
-	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("creeper/disable_falling_swelling"));
+	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("creeper/disable_falling_swelling"));
 
 	public static EAIData<Boolean> DISABLE_FALLING_SWELLING;
 

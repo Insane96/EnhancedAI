@@ -19,8 +19,8 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
 @LoadFeature(module = EAIModules.MOBS, description = "Makes mobs pick up and throw other mobs. Mobs in the `enhancedai:mobs/pick_up_and_throw/can_be_picked_up` tag will be able to be picked up, while mobs in the `enhancedai:mobs/pick_up_and_throw/can_pick_up` tag will be able to pick up other mobs.")
 public class PickUpAndThrow extends Feature {
-    public static final TagKey<EntityType<?>> CAN_BE_PICKED_UP = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/pick_up_and_throw/can_be_picked_up"));
-    public static final TagKey<EntityType<?>> CAN_PICK_UP = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/pick_up_and_throw/can_pick_up"));
+    public static final TagKey<EntityType<?>> CAN_BE_PICKED_UP = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/pick_up_and_throw/can_be_picked_up"));
+    public static final TagKey<EntityType<?>> CAN_PICK_UP = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/pick_up_and_throw/can_pick_up"));
 
     @Config(min = 0d, max = 1d, description = "Chance for a mob to have an AI to go and pick up and throw mobs.")
     public static DifficultyBasedConfig chance = new DifficultyBasedConfig(0.05d, 0.05d, 0.1d);

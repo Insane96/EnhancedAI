@@ -19,9 +19,9 @@ import net.neoforged.neoforge.event.entity.EntityMountEvent;
 
 @LoadFeature(module = EAIModules.MOBS, description = "Allows mobs to break vehicles to escape.")
 public class VehicleAntiCheese extends Feature {
-    public static final TagKey<EntityType<?>> PREVENT_VEHICLE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/vehicle_anti_cheese/prevent_riding"));
-    public static final TagKey<EntityType<?>> CAN_BREAK_VEHICLE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/vehicle_anti_cheese/break_vehicle"));
-    public static final TagKey<EntityType<?>> VALID_VEHICLES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/vehicle_anti_cheese/valid_vehicles"));
+    public static final TagKey<EntityType<?>> PREVENT_VEHICLE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/vehicle_anti_cheese/prevent_riding"));
+    public static final TagKey<EntityType<?>> CAN_BREAK_VEHICLE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/vehicle_anti_cheese/break_vehicle"));
+    public static final TagKey<EntityType<?>> VALID_VEHICLES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/vehicle_anti_cheese/valid_vehicles"));
 
     @Config(description = "If true, entity types in the enhancedai:mobs/vehicle_anti_cheese/prevent_riding tag will not be able to mount vehicles in `enhancedai:mobs/vehicle_anti_cheese/valid_vehicles`.")
     public static Boolean preventRidingVehicles = false;

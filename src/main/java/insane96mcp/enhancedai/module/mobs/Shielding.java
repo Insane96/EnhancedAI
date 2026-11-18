@@ -34,7 +34,7 @@ import java.util.List;
 
 @LoadFeature(module = EAIModules.MOBS, description = "Gives mobs a chance to negate damage coming from the front (like a shield) when equipped with a shield. Only entity types in `enhancedai:mobs/can_equip_shield` tag will be equipped a shield.")
 public class Shielding extends JsonFeature {
-	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/can_equip_shield"));
+	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/can_equip_shield"));
 
 	public static final List<ObjTagValue<Item>> DEFAULT_SHIELD_BLOCK_CHANCE = List.of(
 			ObjTagValue.of("minecraft:shield", 0.40d, Registries.ITEM),

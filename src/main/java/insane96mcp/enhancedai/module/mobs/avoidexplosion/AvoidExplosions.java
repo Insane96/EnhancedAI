@@ -21,7 +21,7 @@ import java.util.List;
 
 @LoadFeature(module = EAIModules.MOBS, description = "Mobs will run away from exploding creepers / TNT. Only entity types in `enhancedai:mobs/can_run_from_explosions` tag will be affected by this feature")
 public class AvoidExplosions extends Feature {
-	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/can_run_from_explosions"));
+	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/can_run_from_explosions"));
 	@Config(min = 0d, max = 1d, description = "Chance for a mob to be able to run from explosions.")
 	public static Double chance = 0.8d;
 	@Config(min = 0d, max = 10d, description = "Speed multiplier when the mob runs from explosions and it's within 7 blocks from him.")

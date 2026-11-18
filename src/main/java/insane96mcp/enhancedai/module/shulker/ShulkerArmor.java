@@ -16,7 +16,7 @@ import net.neoforged.fml.event.config.ModConfigEvent;
 
 @LoadFeature(module = EAIModules.SHULKER, description = "Only entity types in the `enhancedai:shulker/apply_armor_modifiers` tag will be affected by this feature.")
 public class ShulkerArmor extends Feature {
-    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("shulker/apply_armor_modifiers"));
+    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("shulker/apply_armor_modifiers"));
     @Config(min = 0)
     public static Double armorWhenClosed = 24d;
     @Config(min = 0)
@@ -24,7 +24,7 @@ public class ShulkerArmor extends Feature {
     @Config(min = 0)
     public static Double armorWhenOpen = 8d;
 
-    private static final ResourceLocation COVERED_ARMOR_MODIFIER_ID = EnhancedAI.location("covered_armor_bonus");
+    private static final ResourceLocation COVERED_ARMOR_MODIFIER_ID = EnhancedAI.id("covered_armor_bonus");
     public static AttributeModifier CLOSED_MODIFIER;
     public static AttributeModifier PEEK_MODIFIER;
     public static AttributeModifier OPEN_MODIFIER;

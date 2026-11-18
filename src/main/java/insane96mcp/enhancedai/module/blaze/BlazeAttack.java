@@ -19,7 +19,7 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
 @LoadFeature(module = EAIModules.BLAZE, description = "Make blazes fire faster/more fireballs. Only mobs in enhancedai:blaze_attack/change_attack entity type tag are affected by this feature.")
 public class BlazeAttack extends Feature {
-    public static final TagKey<EntityType<?>> CHANGE_ATTACK = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("blaze_attack/change_attack"));
+    public static final TagKey<EntityType<?>> CHANGE_ATTACK = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("blaze_attack/change_attack"));
 
     @Config(min = 1, max = 300, description = "How many ticks pass between shooting fireballs. Vanilla is 6")
     public static MinMaxConfig timeBetweenFireballs = new MinMaxConfig(4, 10);

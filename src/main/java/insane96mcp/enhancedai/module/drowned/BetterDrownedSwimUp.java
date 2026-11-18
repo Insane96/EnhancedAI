@@ -25,7 +25,7 @@ import java.util.EnumSet;
 
 @LoadFeature(module = EAIModules.DROWNED, description = "Replaces the drowned swim up goal with a better one, allowing them to leap out of the water. Only entity types in the enhancedai:drowned/change_swim_up tag are affected by this feature.")
 public class BetterDrownedSwimUp extends Feature {
-	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("drowned/change_swim_up"));
+	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("drowned/change_swim_up"));
 
 	// Number of ticks the leap's push (towards the target) keeps being re-applied for, instead of just once.
 	// This lets the drowned climb over short ledges/walls: it keeps thrusting up (fighting gravity) while also

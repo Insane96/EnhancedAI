@@ -23,7 +23,7 @@ import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
 @LoadFeature(module = EAIModules.CREEPER, description	= "Creepers can ignite and throw themselves at players. Only entity types in the enhancedai:creeper/can_launch tag will be affected by this feature.")
 public class CreeperLaunch extends Feature {
-	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("creeper/can_launch"));
+	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("creeper/can_launch"));
 
 	@Config(min = 0d, max = 1d, description = "Launching creepers will try ignite and throw themselves at the player. Only creepers in the enhancedai:creeper/can_launch")
 	public static Double chance = 0.05d;

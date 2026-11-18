@@ -21,7 +21,7 @@ import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
 @LoadFeature(module = EAIModules.DROWNED, description = "Makes drowned immune to sunlight for a couple of seconds before starting to burn. Only entity types in the enhancedai:drowned/sun_resistant tag are affected by this feature.")
 public class SunResistantDrowned extends Feature {
-	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("drowned/sun_resistant"));
+	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("drowned/sun_resistant"));
 
 	@Config(min = 1, description = "Drowned are sun resistant for this amount of ticks until the water in their body evaporates. During this time, they will not seek water")
 	public static Integer sunResistant = 300;

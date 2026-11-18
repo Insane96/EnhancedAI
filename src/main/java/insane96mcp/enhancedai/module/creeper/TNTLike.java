@@ -19,7 +19,7 @@ import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 
 @LoadFeature(module = EAIModules.CREEPER, name = "Tnt like creepers", description = "Creepers will ignite when they take explosion damage. Only entity types in the enhancedai:creeper/tnt_like tag will be affected by this feature.")
 public class TNTLike extends Feature {
-	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("creeper/tnt_like"));
+	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("creeper/tnt_like"));
 
 	@Config(min = 0, max = 1d)
 	public static Double chance = 0.25d;

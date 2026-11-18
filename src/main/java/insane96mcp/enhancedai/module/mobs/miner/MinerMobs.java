@@ -31,9 +31,9 @@ import java.util.Map;
 
 @LoadFeature(module = EAIModules.MOBS, description = "Mobs can mine blocks to reach the target. Uses off-hand item to mine by default, can be changed with the config or Data Keys. Only mobs in the entity type tag enhancedai:mobs/can_mine can spawn with the ability to mine and blocks in the tag enhancedai:miner_blacklist cannot be mined. This feature also adds the block reach attribute to all entities.")
 public class MinerMobs extends Feature {
-	public static final TagKey<EntityType<?>> CAN_BE_MINER = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/can_mine"));
-	public static final TagKey<Block> BLOCK_BLACKLIST = TagKey.create(Registries.BLOCK, EnhancedAI.location("miner_blacklist"));
-	public static final TagKey<Block> HAS_CORRECT_TOOL = TagKey.create(Registries.BLOCK, EnhancedAI.location("miner/has_correct_tool"));
+	public static final TagKey<EntityType<?>> CAN_BE_MINER = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/can_mine"));
+	public static final TagKey<Block> BLOCK_BLACKLIST = TagKey.create(Registries.BLOCK, EnhancedAI.id("miner_blacklist"));
+	public static final TagKey<Block> HAS_CORRECT_TOOL = TagKey.create(Registries.BLOCK, EnhancedAI.id("miner/has_correct_tool"));
 
 	@Config(min = 0d, max = 1d, description = "Chance for a mob in the entity type tag enhancedai:mobs/can_mine to spawn with the miner ability")
 	public static Double minerChance = 0.07d;

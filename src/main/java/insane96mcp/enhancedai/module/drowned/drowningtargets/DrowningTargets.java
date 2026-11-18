@@ -32,8 +32,8 @@ import java.util.Optional;
 
 @LoadFeature(module = EAIModules.MOBS, description = "Makes mobs pick up targets to drown them. Only entity types in the enhancedai:mobs/drowning_targets tag are affected by this feature.")
 public class DrowningTargets extends Feature {
-	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/drowning_targets"));
-    private static final ResourceLocation ATTACK_DAMAGE_ID = EnhancedAI.location("drowning_attack_damage_removal");
+	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/drowning_targets"));
+    private static final ResourceLocation ATTACK_DAMAGE_ID = EnhancedAI.id("drowning_attack_damage_removal");
 
     public static EAIData<Boolean> DROWNING_TARGETS;
 

@@ -16,7 +16,7 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
 @LoadFeature(module = EAIModules.MOBS, description = "Only entity types in `enhancedai:mobs/random_stroll` tag are affected by this feature.")
 public class RandomStroll extends Feature {
-    public static final TagKey<EntityType<?>> AFFECTED_BY_FEATURE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("mobs/random_stroll"));
+    public static final TagKey<EntityType<?>> AFFECTED_BY_FEATURE = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("mobs/random_stroll"));
 
 	@Config(min = 0d, description = "Multiplies the chance for a mob to randomly stroll by this value. (lower values = higher chance)")
 	public static Double randomStrollChanceMultiplier = 0.65d;

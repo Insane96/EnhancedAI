@@ -21,7 +21,7 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 @LoadFeature(module = EAIModules.ANIMAL, description = "Makes animals not tempted by food. Use the entity type tag enhancedai:animal/can_ignore_food_temptation to change animals. Please note that re-adding the tempt goal to the mob can't be done at runtime by updating the data with the /enhancedai command.")
 public class NotTemptedAnimals extends Feature {
     //TODO Some animals should attack the player with the food in the hand
-    public static final TagKey<EntityType<?>> CAN_IGNORE_FOOD_TEMPTATION = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("animal/can_ignore_food_temptation"));
+    public static final TagKey<EntityType<?>> CAN_IGNORE_FOOD_TEMPTATION = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("animal/can_ignore_food_temptation"));
     public static EAIData<Boolean> NOT_TEMPTED;
 
     @Config(min = 0d, max = 1d, description = "Animals have this percentage chance to not be temped by food.")

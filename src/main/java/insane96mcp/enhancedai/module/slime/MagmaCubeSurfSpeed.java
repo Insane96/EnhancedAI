@@ -13,7 +13,7 @@ import net.minecraft.world.entity.monster.MagmaCube;
 
 @LoadFeature(module = EAIModules.SLIME, description = "Make magma cubes swim in lava faster. Only entity types in `enhancedai:slime/magma_cube_surf_speed` tag are affected by this feature.")
 public class MagmaCubeSurfSpeed extends Feature {
-    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("slime/magma_cube_surf_speed"));
+    public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("slime/magma_cube_surf_speed"));
     @Config(min = 0)
     public static Double speedMultiplier = 3d;
 

@@ -12,7 +12,7 @@ import net.minecraft.world.entity.EntityType;
 
 @LoadFeature(module = EAIModules.DROWNED, description = "Makes drowned able to attack during daytime instead of standing still. Only entity types in the enhancedai:drowned/attack_during_day tag are affected by this feature.")
 public class DrownedAttackDuringDay extends Feature {
-	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("drowned/attack_during_day"));
+	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("drowned/attack_during_day"));
 
 	public static boolean allowAttackDuringDay(Entity entity) {
 		return Feature.isEnabled(DrownedAttackDuringDay.class)
