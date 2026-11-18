@@ -14,6 +14,7 @@ import insane96mcp.insanelib.core.feature.LoadFeature;
 import insane96mcp.insanelib.core.feature.Module;
 import insane96mcp.insanelib.core.feature.config.Config;
 import insane96mcp.insanelib.module.base.NbtTags;
+import insane96mcp.insanelib.util.MCUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -27,6 +28,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.SwellGoal;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
@@ -44,7 +47,7 @@ import java.util.function.Supplier;
 
 @LoadFeature(module = EAIModules.CREEPER, description = "Various changes to Creepers exploding. Ignoring Walls, Walking Fuse and smarter exploding based off explosion size. Only creepers in the enhancedai:creeper/change_swell entity type tag are affected by this feature.")
 public class CreeperSwell extends Feature {
-	public static final TagKey<EntityType<?>> CHANGE_CREEPER_SWELL = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.location("creeper/change_swell"));
+	public static final TagKey<EntityType<?>> CHANGE_CREEPER_SWELL = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("creeper/change_swell"));
 
 	private static ResourceLocation BLOW_UP_ON_DEATH_GUARD;
 	private static ResourceLocation ANGRY_APPLIED;
@@ -143,6 +146,7 @@ public class CreeperSwell extends Feature {
 				if (angry$forceExplosion)
 					FORCE_EXPLODE.apply(creeper, true);
 				EXPLOSION_SOUND.apply(creeper, angry$sounds.name);
+				MCUtils.applyModifier(creeper, Attributes.KNOCKBACK_RESISTANCE, EnhancedAI.id("angry_creeper_knockback_resistance"), 0.5d, AttributeModifier.Operation.ADD_VALUE);
 			}
 			else {
 				compoundNBT.putShort("Fuse", (short) 30);

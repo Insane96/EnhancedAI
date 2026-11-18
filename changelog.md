@@ -1,4 +1,5 @@
 # Upcoming
+* Angry Creepers now have 50% knockback resistance
 * Villagers and Wandering Traders no longer get the Follow Range Override
 
 # 4.3.0.0
