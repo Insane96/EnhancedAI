@@ -5,6 +5,9 @@
     "mixins": [
         "AbstractFishMixin",
         "AbstractSkeletonMixin",
+        "BeeGoToHiveGoalMixin",
+        "BeeMixin",
+        "BeeWanderGoalMixin",
         "CreeperMixin",
         "DrownedGoToWaterGoalMixin",
         "DrownedMixin",
