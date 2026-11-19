@@ -5,6 +5,7 @@ import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import insane96mcp.enhancedai.module.mobs.MeleeAttacking;
+import insane96mcp.enhancedai.module.mobs.lunge.LungeAtTarget;
 import insane96mcp.insanelib.core.feature.Feature;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.PathfinderMob;
@@ -38,6 +39,8 @@ public abstract class MeleeAttackGoalMixin extends Goal {
 
 	@WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/navigation/PathNavigation;moveTo(Lnet/minecraft/world/entity/Entity;D)Z"))
 	public boolean onMoveTo(PathNavigation instance, Entity entity, double speed, Operation<Boolean> original) {
+		if (Feature.isEnabled(LungeAtTarget.class) && LungeAtTarget.isWindingUp(this.mob))
+			return true;
 		if (!Feature.isEnabled(MeleeAttacking.class))
 			return original.call(instance, entity, speed);
 		Path path = this.mob.getNavigation().createPath(entity, 0);

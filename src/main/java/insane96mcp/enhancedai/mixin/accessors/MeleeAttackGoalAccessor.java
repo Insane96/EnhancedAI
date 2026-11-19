@@ -12,4 +12,6 @@ public interface MeleeAttackGoalAccessor {
     @Accessor
     @Mutable
     void setSpeedModifier(double speedModifier);
+    @Accessor
+    void setTicksUntilNextAttack(int ticksUntilNextAttack);
 }

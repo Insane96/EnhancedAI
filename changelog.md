@@ -1,4 +1,8 @@
 # Upcoming
+* Added Lunge at Target: melee mobs lunge at their target when 3 to 5 blocks away
+  * Before lunging, mobs stand still for 8 ticks kicking up running particles, then jump to land right in front of the target. If the target is in reach on landing, they attack immediately
+  * 8/5/4 seconds cooldown (Easy/Normal/Hard) after landing. Mobs only lunge on land, while attacking in melee (e.g. skeletons only with a sword) and when the target is in sight and not more than 1.5 blocks higher or lower
+  * Added `enhancedai:mobs/can_lunge` entity type tag
 * Skeleton and Zombie Horses are no longer hostile towards players
   * Existing configs are not updated. To apply the change, remove the `#enhancedai:config/hostile_horses` entry from `config/enhancedai/Mobs/Custom targeting/custom_hostile.json` or delete the file to regenerate it
 
