@@ -38,7 +38,7 @@ jobs:                                     #The place where you actually tell the
           delimiter="$(openssl rand -hex 8)"
           {
             echo "changelog<<${delimiter}"
-            cat changelog.md
+            awk '/^#+ /{match($0,/^#+/); if(!h){h=RLENGTH} else if(RLENGTH<=h) exit} {print}' changelog.md
             printf '\n'
             echo "${delimiter}"
           } >> "$GITHUB_OUTPUT"
