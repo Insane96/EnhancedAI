@@ -1,3 +1,7 @@
+# Upcoming
+* Skeleton and Zombie Horses are no longer hostile towards players
+  * Existing configs are not updated. To apply the change, remove the `#enhancedai:config/hostile_horses` entry from `config/enhancedai/Mobs/Custom targeting/custom_hostile.json` or delete the file to regenerate it
+
 # 4.3.1.0
 * Added Bee Hive Navigation: bees are less prone to wander away from their hive and get lost
   * Wandering bees head back towards their hive when farther than 12 blocks from it (vanilla is 22), configurable with `wanderHomeDistance`

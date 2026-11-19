@@ -20,8 +20,7 @@ public class CustomTargeting extends JsonFeature {
 
 	public static final List<CustomHostileData> CUSTOM_HOSTILE_DEFAULT_LIST = List.of(
 			new CustomHostileData(2, ObjTag.of("#enhancedai:config/can_attack_villagers", Registries.ENTITY_TYPE), ObjTag.of("minecraft:villager", Registries.ENTITY_TYPE)).chance(0.5f),
-			new CustomHostileData(2, ObjTag.of("#enhancedai:config/can_attack_iron_golem", Registries.ENTITY_TYPE), ObjTag.of("minecraft:iron_golem", Registries.ENTITY_TYPE)).chance(0.5f),
-			new CustomHostileData(1, ObjTag.of("#enhancedai:config/hostile_horses", Registries.ENTITY_TYPE), ObjTag.of("minecraft:player", Registries.ENTITY_TYPE)).addAttackGoal()
+			new CustomHostileData(2, ObjTag.of("#enhancedai:config/can_attack_iron_golem", Registries.ENTITY_TYPE), ObjTag.of("minecraft:iron_golem", Registries.ENTITY_TYPE)).chance(0.5f)
 	);
 
 	public static final List<CustomHostileData> customHostile = new ArrayList<>();
