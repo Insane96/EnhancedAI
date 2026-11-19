@@ -1,11 +1,11 @@
-# Upcoming
+# 4.3.1.0
 * Added Bee Hive Navigation: bees are less prone to wander away from their hive and get lost
   * Wandering bees head back towards their hive when farther than 12 blocks from it (vanilla is 22), configurable with `wanderHomeDistance`
   * Bees forget about their hive when farther than 48 blocks from it (vanilla is 32), configurable with `hiveForgetDistance`. They also forget about it if its chunk is not loaded, instead of force loading it
 * Angry Creepers now have 50% knockback resistance
 * Villagers and Wandering Traders no longer get the Follow Range Override
   * Villagers have a vanilla follow range of 48 and the override could lower it, preventing them from reaching beds and workstations and making breeding fail
-  * Existing villagers keep their overridden value. To restore it, run `/attribute <villager> minecraft:generic.follow_range base set 48` or `/execute as @e[type=minecraft:villager] run attribute @s minecraft:generic.follow_range base set 48`
+  * Existing villagers keep their overridden value. To restore it, run `/attribute <villager> minecraft:generic.follow_range base set 48` or `/execute as @e[type=minecraft:villager] run attribute @s minecraft:generic.follow_range base set 48` for all the loaded villagers
 
 # 4.3.0.0
 * Added Villager Golem Repair: armorers, toolsmiths and weaponsmiths walk to iron golems below 75% health within 16 blocks and repair them for 25 health, with a 2 seconds cooldown
