@@ -1,4 +1,4 @@
-# Upcoming
+# 4.3.2.0-beta
 * Added Lunge at Target: melee mobs lunge at their target when 3 to 5 blocks away
   * Before lunging, mobs stand still for 8 ticks kicking up running particles, then jump to land right in front of the target. If the target is in reach on landing, they attack immediately
   * 8/5/4 seconds cooldown (Easy/Normal/Hard) after landing. Mobs only lunge on land, while attacking in melee (e.g. skeletons only with a sword) and when the target is in sight and not more than 1.5 blocks higher or lower
