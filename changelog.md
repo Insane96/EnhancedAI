@@ -5,6 +5,7 @@
   * Added `enhancedai:mobs/can_lunge` entity type tag
 * Skeleton and Zombie Horses are no longer hostile towards players
   * Existing configs are not updated. To apply the change, remove the `#enhancedai:config/hostile_horses` entry from `config/enhancedai/Mobs/Custom targeting/custom_hostile.json` or delete the file to regenerate it
+* Mobs with Fire Resistance no longer panic when on fire
 
 # 4.3.1.0
 * Added Bee Hive Navigation: bees are less prone to wander away from their hive and get lost

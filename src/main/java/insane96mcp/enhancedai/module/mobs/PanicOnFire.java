@@ -12,6 +12,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
@@ -77,7 +78,8 @@ public class PanicOnFire extends Feature {
          * method as well.
          */
         public boolean canUse() {
-            if (!this.mob.isOnFire())
+            if (!this.mob.isOnFire()
+                    || this.mob.hasEffect(MobEffects.FIRE_RESISTANCE))
                 return false;
 
             BlockPos blockpos = this.lookForWater(this.mob.level(), this.mob, 5);
