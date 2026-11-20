@@ -3,6 +3,10 @@
   * Before lunging, mobs stand still for 8 ticks kicking up running particles, then jump to land right in front of the target. If the target is in reach on landing, they attack immediately
   * 8/5/4 seconds cooldown (Easy/Normal/Hard) after landing. Mobs only lunge on land, while attacking in melee (e.g. skeletons only with a sword) and when the target is in sight and not more than 1.5 blocks higher or lower
   * Added `enhancedai:mobs/can_lunge` entity type tag
+* Added Grabbing Phantoms: phantoms grab the entities they hit and carry them in the air until the grabbed entity hits them (also with projectiles)
+  * Grabbed entities hang below the phantom, can't dismount and take no damage from the phantom while carried
+  * Phantoms give 10 seconds of Slow Falling on hit and when they release the grabbed entity
+  * Added `enhancedai:phantom/grab_targets` entity type tag
 * Skeleton and Zombie Horses are no longer hostile towards players
   * Existing configs are not updated. To apply the change, remove the `#enhancedai:config/hostile_horses` entry from `config/enhancedai/Mobs/Custom targeting/custom_hostile.json` or delete the file to regenerate it
 * Mobs with Fire Resistance no longer panic when on fire

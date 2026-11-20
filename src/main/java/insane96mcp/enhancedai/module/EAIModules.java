@@ -15,6 +15,7 @@ public class EAIModules {
 	public static final String GHAST      = "enhancedai:ghast";
 	public static final String ILLAGER    = "enhancedai:illager";
 	public static final String MOBS       = "enhancedai:mobs";
+	public static final String PHANTOM    = "enhancedai:phantom";
 	public static final String SHULKER    = "enhancedai:shulker";
 	public static final String SKELETON   = "enhancedai:skeleton";
 	public static final String SLIME      = "enhancedai:slime";
@@ -34,6 +35,7 @@ public class EAIModules {
 		create(GHAST,      "Ghast",       eventBus);
 		create(ILLAGER,    "Illagers",    eventBus);
 		create(MOBS,       "Mobs",        eventBus);
+		create(PHANTOM,    "Phantoms",    eventBus);
 		create(SHULKER,    "Shulkers",    eventBus);
 		create(SKELETON,   "Skeletons",   eventBus);
 		create(SLIME,      "Slimes",      eventBus);
