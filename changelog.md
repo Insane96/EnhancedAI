@@ -1,4 +1,7 @@
 # Upcoming
+* Added Stay Near Dismount: tamed horses, donkeys, mules and llamas no longer wander farther than 10 blocks (configurable with `range`) from where the player dismounted them
+  * If they end up out of range (e.g. pushed away) they walk back. Mounting them again removes the limit. While leashed the vanilla leash behaviour applies and the anchor point becomes where they get unleashed
+  * Added `enhancedai:animal/stay_near_dismount` entity type tag
 * MPR Integration
   * Mobs in water no longer count as being in an Overworld cave (`enhancedai:in_overworld_cave` condition preset). Guardians, Elder Guardians and other aquatic mobs no longer get the deepness max health and X-Ray follow range bonuses, and zombies spawning in water no longer have the depth-based chance to become miners
 
