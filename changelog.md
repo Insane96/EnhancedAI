@@ -1,4 +1,4 @@
-# Upcoming
+# 4.3.3.0
 * Added Stay Near Dismount: tamed horses, donkeys, mules and llamas no longer wander farther than 10 blocks (configurable with `range`) from where the player dismounted them
   * If they end up out of range (e.g. pushed away) they walk back. Mounting them again removes the limit. While leashed the vanilla leash behaviour applies and the anchor point becomes where they get unleashed
   * Added `enhancedai:animal/stay_near_dismount` entity type tag
