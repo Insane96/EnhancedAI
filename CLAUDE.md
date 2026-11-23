@@ -17,6 +17,10 @@ The wiki is pulled in the same folder as this repo, with .wiki at the end
 ## Job
 Your job is to assist in modding. You can only write code if asked to. 
 
+## Mixins
+
+Use MixinExtras injectors (`@ModifyExpressionValue`, `@WrapOperation`, `@WrapWithCondition`, `@ModifyReturnValue`, `@Local`, ...) wherever possible instead of plain Mixin ones (`@Redirect`, `@ModifyVariable`, `@Inject` with `cancellable`, `@Overwrite`), as they're compatible with other mods' mixins on the same target.
+
 ## Website & Wiki
 
 The website source (if any) is in `D:\Programming\Web Creations\Website\insane96.eu` (git repository, remote `Insane96/Website`). This mod's page is in `projects\mods\<modid>\`, with one folder per Minecraft version.  

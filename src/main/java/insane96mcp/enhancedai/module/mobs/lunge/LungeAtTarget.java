@@ -30,9 +30,9 @@ public class LungeAtTarget extends Feature {
 	@Config(min = 0d, max = 6000d, description = "Ticks after landing before the mob can lunge again. Set when the mob spawns, based on the difficulty.")
 	public static DifficultyBasedConfig cooldown = new DifficultyBasedConfig(160, 100, 80);
 	@Config(min = 0, max = 100, description = "Ticks the mob stands still before lunging. Set to 0 to lunge immediately.")
-	public static Integer windUpTicks = 8;
+	public static Integer windUpTicks = 6;
 	@Config(min = 0d, max = 10d, description = "Horizontal strength is calculated so that the mob lands in front of the target, then multiplied by this value.")
-	public static Double horizontalStrengthMultiplier = 1d;
+	public static Double horizontalStrengthMultiplier = 2d;
 	@Config(min = 0d, max = 4d, description = "Vertical speed of the lunge")
 	public static Double verticalStrength = 0.35d;
 
