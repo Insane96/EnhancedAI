@@ -25,3 +25,7 @@ Use MixinExtras injectors (`@ModifyExpressionValue`, `@WrapOperation`, `@WrapWit
 
 The website source (if any) is in `D:\Programming\Web Creations\Website\insane96.eu` (git repository, remote `Insane96/Website`). This mod's page is in `projects\mods\<modid>\`, with one folder per Minecraft version.  
 The wiki source (if any) is in this repo's parent folder under `<mod_name>.wiki`.
+
+## Changelog
+
+Don't mention config option names in `changelog.md`: describe the change in gameplay terms only (e.g. "now get 2 sockets by default", not "`defaultSockets` config option").
