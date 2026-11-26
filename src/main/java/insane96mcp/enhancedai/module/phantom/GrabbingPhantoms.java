@@ -27,9 +27,11 @@ public class GrabbingPhantoms extends Feature {
 	public static final TagKey<EntityType<?>> AFFECTED_ENTITY_TYPES = TagKey.create(Registries.ENTITY_TYPE, EnhancedAI.id("phantom/grab_targets"));
 
 	@Config(min = 0d, max = 1d, description = "Chance for a phantom to be able to grab targets. Rolled when the phantom spawns.")
-	public static Double chance = 1d;
+	public static Double chance = 0.75d;
 	@Config(min = 0, max = 6000, description = "Ticks of Slow Falling given to the entities hit and released by the phantom. Set to 0 to disable.")
 	public static Integer slowFallingDuration = 200;
+	@Config(description = "If true, grabbed entities will hang from below the phantom instead of sitting on top")
+	public static Boolean hangFromBelow = true;
 
 	public static EAIData<Boolean> GRAB_TARGETS;
 	public static EAIData<Integer> SLOW_FALLING_DURATION;
@@ -159,6 +161,7 @@ public class GrabbingPhantoms extends Feature {
 	/// True if the phantom's passengers should hang below it. Used client side too, so it doesn't rely on data attachments.
 	public static boolean shouldHangBelow(Phantom phantom) {
 		return Feature.isEnabled(GrabbingPhantoms.class)
-				&& phantom.getType().is(AFFECTED_ENTITY_TYPES);
+				&& phantom.getType().is(AFFECTED_ENTITY_TYPES)
+				&& hangFromBelow;
 	}
 }

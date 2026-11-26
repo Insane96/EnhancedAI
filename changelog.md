@@ -1,5 +1,6 @@
 # Upcoming
 * Phantoms now look for players within their follow range horizontally (vanilla is 16 blocks), so they no longer keep circling without attacking when the player is far from them
+* Grabbed entities from Phantoms' can now be configured to hang from below or sit on top like on any other mob
 
 # 4.3.3.1
 * Doubled Lunge horizontal strength due to ground resistance applying on the lunge
