@@ -1,4 +1,4 @@
-# Upcoming
+# 4.3.4.0
 * Phantoms now look for players within their follow range horizontally (vanilla is 16 blocks), so they no longer keep circling without attacking when the player is far from them
 * Grabbed entities from Phantoms' can now be configured to hang from below or sit on top like on any other mob
 * Fixed Angry and Breaching creepers integration not working: it now hooks into Explosion Overhaul (Angry creepers deal more knockback and break more blocks, breaching creepers break more blocks)
