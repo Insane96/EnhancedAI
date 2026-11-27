@@ -3,6 +3,7 @@ package insane96mcp.enhancedai.module.creeper.swell;
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.data.EAIData;
 import insane96mcp.enhancedai.data.EAIDataEnum;
+import insane96mcp.enhancedai.integration.ExplosionOverhaulIntegration;
 import insane96mcp.enhancedai.mixin.accessors.CreeperAccessor;
 import insane96mcp.enhancedai.module.EAIModules;
 import insane96mcp.enhancedai.module.mobs.Spawning;
@@ -87,8 +88,8 @@ public class CreeperSwell extends Feature {
 	public static Double angry$explosionPower = 4d;
 	@Config(description = "Makes creepers blow up on death like when they were added back in 0.30")
 	public static BlowUpOnDeath blowUpOnDeath = BlowUpOnDeath.NO;
-	@Config(description = "If Insane's Survival Overhaul is installed and Explosion Overhaul feature is enabled, Angry creeper will deal more knockback and break more blocks, breaching creepers will break more blocks")
-	public static Boolean insaneSurvivalOverhaulIntegration = true;
+	@Config(description = "If Explosion Overhaul is installed, Angry creeper will deal more knockback and break more blocks, breaching creepers will break more blocks")
+	public static Boolean explosionOverhaulIntegration = true;
 
     public static EAIData<Boolean> WALKING_FUSE;
     public static EAIData<Double> WALKING_FUSE_SPEED_MODIFIER;
@@ -139,9 +140,9 @@ public class CreeperSwell extends Feature {
 				else
 					creeper.setCustomName(null);
 				NbtTags.setExplosionCausesFire(angry$fire, creeper);
-				if (insaneSurvivalOverhaulIntegration) {
-					creeper.getPersistentData().putFloat("iguanatweaksreborn:explosion_knockback_multiplier", 2f);
-					creeper.getPersistentData().putFloat("iguanatweaksreborn:explosion_ray_strength_multiplier", 0.01f);
+				if (explosionOverhaulIntegration) {
+					ExplosionOverhaulIntegration.setKnockbackMultiplier(creeper, 2f);
+					ExplosionOverhaulIntegration.setRayStrengthMultiplier(creeper, 0.01f);
 				}
 				if (angry$forceExplosion)
 					FORCE_EXPLODE.apply(creeper, true);
@@ -155,9 +156,9 @@ public class CreeperSwell extends Feature {
 					creeper.setCustomName(null);
 				if (angry$fire)
 					NbtTags.setExplosionCausesFire(false, creeper);
-				if (insaneSurvivalOverhaulIntegration) {
-					creeper.getPersistentData().remove("iguanatweaksreborn:explosion_knockback_multiplier");
-					creeper.getPersistentData().remove("iguanatweaksreborn:explosion_ray_strength_multiplier");
+				if (explosionOverhaulIntegration) {
+					ExplosionOverhaulIntegration.resetKnockbackMultiplier(creeper);
+					ExplosionOverhaulIntegration.resetRayStrengthMultiplier(creeper);
 				}
 				if (angry$forceExplosion)
 					FORCE_EXPLODE.apply(creeper, false);

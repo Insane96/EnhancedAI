@@ -37,3 +37,10 @@ config="${mod_id}.mixins.json"
     versionRange="${insanelib_version_range}"
     ordering="NONE"
     side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="explosionoverhaul"
+    type="optional"
+    versionRange="[1.0.0.1,)"
+    ordering="NONE"
+    side="BOTH"

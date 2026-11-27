@@ -4,14 +4,14 @@
         {
             "property": "attribute_modifier",
             "attribute": "minecraft:generic.follow_range",
-            "id": "survivalreimagined:follow_range_nerf",
+            "id": "enhancedai:outside_follow_range_nerf",
             "amount": -0.25,
             "operation": "add_multiplied_base"
         },
         {
             "property": "attribute_modifier",
             "attribute": "enhancedai:xray_follow_range",
-            "id": "survivalreimagined:xray_nerf",
+            "id": "enhancedai:outside_xray_nerf",
             "amount": -0.25,
             "operation": "add_multiplied_base"
         }

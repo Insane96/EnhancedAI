@@ -2,6 +2,7 @@ package insane96mcp.enhancedai.module.creeper.swell;
 
 import insane96mcp.enhancedai.EnhancedAI;
 import insane96mcp.enhancedai.ai.BetaStrafe;
+import insane96mcp.enhancedai.integration.ExplosionOverhaulIntegration;
 import insane96mcp.enhancedai.module.creeper.CreeperUtils;
 import insane96mcp.enhancedai.module.mobs.avoidexplosion.AvoidExplosionGoal;
 import insane96mcp.insanelib.util.MCUtils;
@@ -81,8 +82,8 @@ public class EAICreeperSwellGoal extends Goal {
 		//Update the explosion size in case the creeper becomes charged
 		explosionSize = CreeperUtils.getExplosionSize(this.swellingCreeper);
 		explosionSizeSqr = explosionSize * explosionSize;
-		if (CreeperSwell.insaneSurvivalOverhaulIntegration)
-			this.swellingCreeper.getPersistentData().putFloat("iguanatweaksreborn:explosion_ray_strength_multiplier", this.isBreaching ? 0.01f : 0.3f);
+		if (CreeperSwell.explosionOverhaulIntegration)
+			ExplosionOverhaulIntegration.setRayStrengthMultiplier(this.swellingCreeper, this.isBreaching || CreeperSwell.ANGRY.get(this.swellingCreeper) ? 0.01f : 0.3f);
 	}
 
 	public void stop() {
